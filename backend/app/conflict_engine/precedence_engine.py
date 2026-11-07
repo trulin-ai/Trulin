@@ -184,10 +184,9 @@ class PrecedenceEngine:
         # Enterprise contracts / exceptions co-exist with general baseline policies
         tier_exception_keywords = [
             "enterprise", "exception", "upon vp approval", "enterprise tier",
-            "gold", "rewards gold", "footwear", "holiday", "tents", "camping",
-            "sleeping bags", "cooling-off", "statutory", "receipt-less", "keep it",
-            "vip", "platinum", "custom contract", "case studies", "revision history",
-            "summary at a glance", "policy summary", "written approval", "prior approval"
+            "premium tier", "specialty items", "cooling-off", "statutory",
+            "receipt-less", "keep it", "vip", "platinum", "custom contract",
+            "written approval", "prior approval"
         ]
         baseline_keywords = [
             "standard", "standard automated", "general tier", "baseline",

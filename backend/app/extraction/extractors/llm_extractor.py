@@ -91,18 +91,9 @@ class LLMSemanticExtractor:
                         raw_s = DeonticClassifier.strip_markdown(c.subject or doc_title)
                         norm_subject, _ = SubjectNormalizer.normalize(raw_s, context=context_str)
 
-                        # Disambiguate case study subjects
+                        # Case-study subjects: keep LLM-assigned subject as-is; flag as example non-canonical
                         if is_case:
-                            if any(w in s_lower for w in ("case b", "daniel", "tent", "zipper")):
-                                norm_subject = "Case B: Defective tent zipper"
-                            elif any(w in s_lower for w in ("case c", "priya", "day 52", "boots", "gold member")):
-                                norm_subject = "Case C: Late return, Gold member"
-                            elif any(w in s_lower for w in ("case d", "final sale", "sleeping bag")):
-                                norm_subject = "Case D: Final Sale item"
-                            elif any(w in s_lower for w in ("case f", "international", "eur 18", "vat")):
-                                norm_subject = "Case F: International return"
-                            elif any(w in s_lower for w in ("case a", "wrong size", "113.05")):
-                                norm_subject = "Case A: Wrong size, within window"
+                            pass  # norm_subject retained from LLM extraction; canonicality set below
                         else:
                             if norm_subject.lower().startswith("case "):
                                 if any(w in s_lower for w in ("video course", "video", "digital", "download")):

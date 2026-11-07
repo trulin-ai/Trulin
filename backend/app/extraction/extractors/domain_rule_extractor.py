@@ -2394,30 +2394,6 @@ class DomainRuleExtractor:
                 claims.append(c)
                 continue
 
-            # Check 3E-13: Gold FAQ deduplication (#224)
-            if "gold" in clean_s.lower() and "60 days" in clean_s.lower() and (getattr(unit, "content_role", None) in (ContentRole.FAQ, ContentRole.FAQ_QUESTION) or any(w in context_prefix.lower() for w in ("faq", "frequently asked"))):
-                c = CandidateClaim.create(
-                    envelope_id=unit.envelope_id,
-                    unit_id=unit.unit_id,
-                    asset_id=unit.asset_id,
-                    claim_text=clean_s,
-                    subject="Gold members",
-                    predicate="has_return_window",
-                    object_="60 days",
-                    evidence_text_span=sentence,
-                    modal_operator="have",
-                    modality="OBLIGATION",
-                    claim_type="FAQ_ANSWER",
-                    content_role=ContentRole.FAQ,
-                    is_canonical=False,
-                    extraction_strategy=ExtractionStrategyType.DOMAIN_RULES,
-                    locator={**loc, "sentence_index": s_idx},
-                    structured_values={"raw_sentence": sentence, "is_faq_duplicate": True},
-                    confidence=0.90,
-                )
-                claims.append(c)
-                continue
-
             # Check 3E-14: Stolen package reporting requirement (#225)
             if any(w in clean_s.lower() for w in ("stolen package", "stolen packages", "package theft", "stolen")) and any(w in clean_s.lower() for w in ("police report", "file police")) and any(w in clean_s.lower() for w in ("14 days", "within 14 days")):
                 c = CandidateClaim.create(
@@ -3374,41 +3350,20 @@ class DomainRuleExtractor:
                             is_return_policy
                             or any(w in context_prefix.lower() for w in ("case stud", "sample case", "20.2", "illustrative scenario", "worked example"))
                             or bool(re.search(r"\bcase\s+[a-f][\s:\-–—]", s_lower))
-                            or any(w in s_lower for w in ("daniel", "tent zipper", "priya", "boots on day 52", "vat was refunded", "refund issued: $113.05"))
                         )
                         and (
                             unit_role == ContentRole.EXAMPLE
                             or any(w in context_prefix.lower() for w in ("case stud", "sample case", "20.2", "illustrative"))
                             or bool(re.search(r"\bcase\s+[a-f][\s:\-–—]", s_lower))
                             or bool(re.search(r"^case\s+[a-f]\b", s_lower))
-                            or any(w in s_lower for w in ("daniel", "tent zipper", "priya", "boots on day 52", "vat was refunded", "refund issued: $113.05"))
                         )
                         and not any(w in s_lower for w in ("video course", "video courses", "corrupt", "inaccessible", "currency follows", "exchange difference", "exchange differences", "exchange rate differences", "currency conversion"))
                     )
                     if is_case_study:
                         unit_role = ContentRole.EXAMPLE
                         unit_canonical = False
-                        # Direct sentence matching takes precedence over context prefix
-                        if any(w in s_lower for w in ("daniel", "tent zipper", "$349")):
-                            subject_val = "Case B: Defective tent zipper"
-                        elif any(w in s_lower for w in ("priya", "day 52", "boots")):
-                            subject_val = "Case C: Late return, Gold member"
-                        elif any(w in s_lower for w in ("final sale", "sleeping bag")):
-                            subject_val = "Case D: Final Sale item"
-                        elif any(w in s_lower for w in ("eur 18", "vat was refunded", "return shipping of eur")):
-                            subject_val = "Case F: International return"
-                        elif any(w in s_lower for w in ("wrong size", "113.05", "$113.05")):
-                            subject_val = "Case A: Wrong size, within window"
-                        elif re.search(r"\bcase\s+b[\s:\-–—]|\bcase\s+b$", s_lower) or re.search(r"\bcase\s+b\b", context_prefix.lower()):
-                            subject_val = "Case B: Defective tent zipper"
-                        elif re.search(r"\bcase\s+c[\s:\-–—]|\bcase\s+c$", s_lower) or re.search(r"\bcase\s+c\b", context_prefix.lower()):
-                            subject_val = "Case C: Late return, Gold member"
-                        elif re.search(r"\bcase\s+d[\s:\-–—]|\bcase\s+d$", s_lower) or re.search(r"\bcase\s+d\b", context_prefix.lower()):
-                            subject_val = "Case D: Final Sale item"
-                        elif re.search(r"\bcase\s+f[\s:\-–—]|\bcase\s+f$", s_lower) or re.search(r"\bcase\s+f\b", context_prefix.lower()):
-                            subject_val = "Case F: International return"
-                        elif re.search(r"\bcase\s+a[\s:\-–—]|\bcase\s+a$", s_lower) or re.search(r"\bcase\s+a\b", context_prefix.lower()):
-                            subject_val = "Case A: Wrong size, within window"
+                        # Case-study subjects are extracted generically from sentence grammar
+                        # downstream; no document-specific subject assignment here.
                     else:
                         # Non-case study content must NEVER be assigned a Case Study subject
                         if subject_val.lower().startswith("case "):
@@ -3547,40 +3502,20 @@ class DomainRuleExtractor:
                         is_return_policy
                         or any(w in context_prefix.lower() for w in ("case stud", "sample case", "20.2", "illustrative scenario", "worked example"))
                         or bool(re.search(r"\bcase\s+[a-f][\s:\-–—]", s_lower))
-                        or any(w in s_lower for w in ("daniel", "tent zipper", "priya", "boots on day 52", "vat was refunded", "refund issued: $113.05"))
                     )
                     and (
                         unit_role == ContentRole.EXAMPLE
                         or any(w in context_prefix.lower() for w in ("case stud", "sample case", "20.2", "illustrative"))
                         or bool(re.search(r"\bcase\s+[a-f][\s:\-–—]", s_lower))
                         or bool(re.search(r"^case\s+[a-f]\b", s_lower))
-                        or any(w in s_lower for w in ("daniel", "tent zipper", "priya", "boots on day 52", "vat was refunded", "refund issued: $113.05"))
                     )
                     and not any(w in s_lower for w in ("video course", "video courses", "corrupt", "inaccessible", "currency follows", "exchange difference", "exchange differences", "exchange rate differences", "currency conversion"))
                 )
                 if is_case_study:
                     unit_role = ContentRole.EXAMPLE
                     unit_canonical = False
-                    if any(w in s_lower for w in ("daniel", "tent zipper", "$349")):
-                        subject = "Case B: Defective tent zipper"
-                    elif any(w in s_lower for w in ("priya", "day 52", "boots")):
-                        subject = "Case C: Late return, Gold member"
-                    elif any(w in s_lower for w in ("final sale", "sleeping bag")):
-                        subject = "Case D: Final Sale item"
-                    elif any(w in s_lower for w in ("eur 18", "vat was refunded", "return shipping of eur")):
-                        subject = "Case F: International return"
-                    elif any(w in s_lower for w in ("wrong size", "113.05", "$113.05")):
-                        subject = "Case A: Wrong size, within window"
-                    elif re.search(r"\bcase\s+b[\s:\-–—]|\bcase\s+b$", s_lower) or re.search(r"\bcase\s+b\b", context_prefix.lower()):
-                        subject = "Case B: Defective tent zipper"
-                    elif re.search(r"\bcase\s+c[\s:\-–—]|\bcase\s+c$", s_lower) or re.search(r"\bcase\s+c\b", context_prefix.lower()):
-                        subject = "Case C: Late return, Gold member"
-                    elif re.search(r"\bcase\s+d[\s:\-–—]|\bcase\s+d$", s_lower) or re.search(r"\bcase\s+d\b", context_prefix.lower()):
-                        subject = "Case D: Final Sale item"
-                    elif re.search(r"\bcase\s+f[\s:\-–—]|\bcase\s+f$", s_lower) or re.search(r"\bcase\s+f\b", context_prefix.lower()):
-                        subject = "Case F: International return"
-                    elif re.search(r"\bcase\s+a[\s:\-–—]|\bcase\s+a$", s_lower) or re.search(r"\bcase\s+a\b", context_prefix.lower()):
-                        subject = "Case A: Wrong size, within window"
+                    # Case-study subjects are extracted generically from sentence grammar
+                    # downstream; no document-specific subject assignment here.
 
                 # Check if it has colon or title prefix (e.g. "Full & Final Settlement Deductions: Covers deductions...")
                 colon_parts = clean_s.split(":", 1)

@@ -386,11 +386,6 @@ class MockLLMProvider(BaseLLMProvider):
             r"\bcase\s+[a-f]\b",
             r"\bsample\s+case\b",
             r"\bcase\s+[a-f]\s*-\b",
-            r"\bmaria\b",
-            r"\bdaniel\b",
-            r"\bpriya\b",
-            r"\blena\b",
-            r"\bhans\s+in\s+germany\b",
         ]
         if any(re.search(p, a_lower) for p in illustrative_patterns) or any(re.search(p, b_lower) for p in illustrative_patterns):
             return ContradictionResult(
@@ -490,9 +485,9 @@ class MockLLMProvider(BaseLLMProvider):
             )
 
         # Pillar 5: Hierarchical Exceptions within the same domain (Lex Specialis)
-        # E.g. Standard merchandise (30d) vs Gold loyalty tier (60d) or Footwear (45d)
-        is_tier_exception_a = any(k in a_lower for k in ["gold", "footwear", "holiday", "tents", "camping", "sleeping bags", "rest of world", "statutory", "receipt-less", "keep it"])
-        is_tier_exception_b = any(k in b_lower for k in ["gold", "footwear", "holiday", "tents", "camping", "sleeping bags", "rest of world", "statutory", "receipt-less", "keep it"])
+        # E.g. Standard merchandise (30d) vs Premium loyalty tier (60d) or Specialty items (45d)
+        is_tier_exception_a = any(k in a_lower for k in ["exception", "upon vp approval", "enterprise tier", "premium tier", "specialty items", "rest of world", "statutory", "receipt-less", "keep it", "vip", "platinum", "custom contract"])
+        is_tier_exception_b = any(k in b_lower for k in ["exception", "upon vp approval", "enterprise tier", "premium tier", "specialty items", "rest of world", "statutory", "receipt-less", "keep it", "vip", "platinum", "custom contract"])
         is_baseline_a = any(k in a_lower for k in ["standard merchandise", "most items", "standard return policy"])
         is_baseline_b = any(k in b_lower for k in ["standard merchandise", "most items", "standard return policy"])
 

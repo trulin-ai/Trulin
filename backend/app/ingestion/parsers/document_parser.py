@@ -50,7 +50,7 @@ class DocumentParser:
         # 1. Illustrative Examples and Case Studies (Prioritized before Revision History for hybrid sections like '20. Revision History and Sample Case Studies')
         if any(w in context_lower for w in ("sample case", "sample cases", "case stud", "case study", "illustrative scenario", "worked example", "hypothetical scenario", "examples", "example")):
             return ContentRole.EXAMPLE
-        if re.match(r"^case\s+[a-z]\b", text_lower) or any(text_lower.startswith(w) for w in ("for example", "example:", "e.g.", "scenario:", "sample calculation:", "case a", "case b", "case c", "case d", "case e", "case f")):
+        if re.match(r"^case\s+[a-z]\b", text_lower) or any(text_lower.startswith(w) for w in ("for example", "example:", "e.g.", "scenario:", "sample calculation:")):
             return ContentRole.EXAMPLE
 
         # 2. Contact Information and Escalation Channels
