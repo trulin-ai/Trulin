@@ -30,6 +30,7 @@ export default function MillionScaleClaimsGrid({
 }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDomain, setSelectedDomain] = useState('all');
+  const [selectedDocumentId, setSelectedDocumentId] = useState('all');
   const [statusFilter, setStatusFilter] = useState('all');
   const [trustTierFilter, setTrustTierFilter] = useState('all'); // 'all' | 'high' | 'med' | 'low'
   const [sortBy, setSortBy] = useState('newest'); // 'newest' | 'trust_desc' | 'trust_asc' | 'subject_asc'
@@ -118,6 +119,13 @@ export default function MillionScaleClaimsGrid({
         if (dom !== selectedDomain) return false;
       }
 
+      // 1b. Document-wise filter
+      if (selectedDocumentId !== 'all') {
+        const claimDoc = docMap.get(claim.document_id || claim.document_version?.document_id);
+        const matchId = claim.document_id === selectedDocumentId || claimDoc?.id === selectedDocumentId;
+        if (!matchId) return false;
+      }
+
       // 2. Status filter
       if (statusFilter !== 'all') {
         const st = (claim.status || '').toLowerCase();
@@ -125,7 +133,10 @@ export default function MillionScaleClaimsGrid({
       }
 
       // 3. Trust Score Tier
-      const score = Number(claim.trust_scores?.[0]?.overall_score || claim.trust_score || 0.95);
+      const rawScore = claim.trust_scores?.[0]?.overall_score ?? claim.trust_score;
+      const score = (rawScore !== undefined && rawScore !== null && !isNaN(Number(rawScore)))
+        ? Number(rawScore)
+        : 0.0;
       if (trustTierFilter === 'high' && score < 0.9) return false;
       if (trustTierFilter === 'med' && (score < 0.7 || score >= 0.9)) return false;
       if (trustTierFilter === 'low' && score >= 0.7) return false;
@@ -144,8 +155,10 @@ export default function MillionScaleClaimsGrid({
 
       return true;
     }).sort((a, b) => {
-      const scoreA = Number(a.trust_scores?.[0]?.overall_score || a.trust_score || 0.95);
-      const scoreB = Number(b.trust_scores?.[0]?.overall_score || b.trust_score || 0.95);
+      const rawScoreA = a.trust_scores?.[0]?.overall_score ?? a.trust_score;
+      const rawScoreB = b.trust_scores?.[0]?.overall_score ?? b.trust_score;
+      const scoreA = (rawScoreA !== undefined && rawScoreA !== null && !isNaN(Number(rawScoreA))) ? Number(rawScoreA) : 0.0;
+      const scoreB = (rawScoreB !== undefined && rawScoreB !== null && !isNaN(Number(rawScoreB))) ? Number(rawScoreB) : 0.0;
 
       if (sortBy === 'trust_desc') return scoreB - scoreA;
       if (sortBy === 'trust_asc') return scoreA - scoreB;
@@ -155,7 +168,7 @@ export default function MillionScaleClaimsGrid({
       const dateB = new Date(b.created_at || 0).getTime();
       return dateB - dateA;
     });
-  }, [claims, selectedDomain, statusFilter, trustTierFilter, searchQuery, sortBy]);
+  }, [claims, selectedDomain, selectedDocumentId, docMap, statusFilter, trustTierFilter, searchQuery, sortBy]);
 
   // Pagination calculation
   const totalPages = Math.max(1, Math.ceil(filteredClaims.length / pageSize));
@@ -402,6 +415,35 @@ export default function MillionScaleClaimsGrid({
 
         {/* Right: Dropdowns & View Switcher */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+          {/* Document Dropdown */}
+          {documents && documents.length > 0 && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#64748B' }}>Document:</span>
+              <select
+                value={selectedDocumentId}
+                onChange={e => { setSelectedDocumentId(e.target.value); setCurrentPage(1); }}
+                style={{
+                  padding: '6px 10px',
+                  fontSize: '0.78rem',
+                  borderRadius: '6px',
+                  border: '1px solid var(--border-subtle)',
+                  background: '#FFFFFF',
+                  color: '#0F172A',
+                  fontWeight: 600,
+                  maxWidth: '190px',
+                  textOverflow: 'ellipsis'
+                }}
+              >
+                <option value="all">All Documents ({documents.length})</option>
+                {documents.map(d => (
+                  <option key={d.id} value={d.id}>
+                    {d.title || d.label || d.name || d.id.slice(0, 8)}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+
           {/* Status Dropdown */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
             <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#64748B' }}>Status:</span>
@@ -537,10 +579,12 @@ export default function MillionScaleClaimsGrid({
               </thead>
               <tbody>
                 {currentClaims.map((claim, idx) => {
-                  const score = Number(claim.trust_scores?.[0]?.overall_score || claim.trust_score || 0.95);
-                  const pct = (score * 100).toFixed(0);
-                  const isHigh = score >= 0.9;
-                  const isMed = score >= 0.7 && score < 0.9;
+                  const rawScore = claim.trust_scores?.[0]?.overall_score ?? claim.trust_score;
+                  const hasScore = rawScore !== undefined && rawScore !== null && !isNaN(Number(rawScore));
+                  const score = hasScore ? Number(rawScore) : null;
+                  const pct = score !== null ? (score * 100).toFixed(0) : '—';
+                  const isHigh = score !== null && score >= 0.9;
+                  const isMed = score !== null && score >= 0.7 && score < 0.9;
                   const domain = getClaimDomain(claim);
                   const parentDoc = docMap.get(claim.document_version_id) || docMap.get(claim.document_id);
 
@@ -703,10 +747,12 @@ export default function MillionScaleClaimsGrid({
         /* ======================================================= */
         <div style={{ display: 'grid', gap: '12px' }}>
           {currentClaims.map((claim, idx) => {
-            const score = Number(claim.trust_scores?.[0]?.overall_score || claim.trust_score || 0.95);
-            const pct = (score * 100).toFixed(0);
-            const isHigh = score >= 0.9;
-            const isMed = score >= 0.7 && score < 0.9;
+            const rawScore = claim.trust_scores?.[0]?.overall_score ?? claim.trust_score;
+            const hasScore = rawScore !== undefined && rawScore !== null && !isNaN(Number(rawScore));
+            const score = hasScore ? Number(rawScore) : null;
+            const pct = score !== null ? (score * 100).toFixed(0) : '—';
+            const isHigh = score !== null && score >= 0.9;
+            const isMed = score !== null && score >= 0.7 && score < 0.9;
             const parentDoc = docMap.get(claim.document_version_id) || docMap.get(claim.document_id);
 
             return (

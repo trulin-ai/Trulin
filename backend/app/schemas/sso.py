@@ -29,6 +29,8 @@ class SSOCallbackRequest(BaseModel):
     # Developer sandbox override parameters for instant testing
     mock_email: Optional[str] = None
     mock_name: Optional[str] = None
+    mock_avatar: Optional[str] = None
+    avatar_url: Optional[str] = None
     device_id: Optional[str] = None
 
 

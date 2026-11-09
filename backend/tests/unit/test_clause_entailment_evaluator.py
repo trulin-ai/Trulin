@@ -143,3 +143,32 @@ def test_evaluate_claim_v3_wires_gate():
     assert verdict.clause_entails_claim is True
     assert claim.gates.clause_entails_claim is True
     assert claim.evidence.entailment_score >= 0.85
+
+
+def test_polarity_inversion_cancellation_not_charged():
+    """Candidate #38 protection: 'will not be charged' cannot entail affirmative fee/charge duty."""
+    verdict = ClauseEntailmentEvaluator.evaluate(
+        premise_clause="If you cancel before the trial ends, you will not be charged any subscription fee.",
+        subject="Customer",
+        modality="MAY",
+        predicate="has_cancellation_fee_policy",
+        object_text="be charged subscription fee",
+    )
+    assert verdict.clause_entails_claim is False
+    assert verdict.label == EntailmentLabel.CONTRADICTION
+    assert verdict.deontic_alignment == "POLARITY_INVERSION"
+
+
+def test_polarity_inversion_final_sale_cannot_return():
+    """Candidate #4 protection: 'cannot be returned' cannot entail affirmative refund eligibility."""
+    verdict = ClauseEntailmentEvaluator.evaluate(
+        premise_clause="Items marked 'Final Sale' at the time of purchase cannot be returned or exchanged.",
+        subject="Customer",
+        modality="MAY",
+        predicate="has_refund_eligibility",
+        object_text="Final Sale items for refund",
+    )
+    assert verdict.clause_entails_claim is False
+    assert verdict.label == EntailmentLabel.CONTRADICTION
+    assert verdict.deontic_alignment == "POLARITY_INVERSION"
+

@@ -68,7 +68,13 @@ class PredicateRegistryService:
     @classmethod
     def exists(cls, predicate_id: str) -> bool:
         pid = (predicate_id or "").strip().lower()
-        return pid in cls.get_instance()._predicates
+        if pid in cls.get_instance()._predicates:
+            return True
+        try:
+            from app.extraction.predicate_registry import PredicateRegistry
+            return PredicateRegistry.is_canonical(pid)
+        except Exception:
+            return False
 
     @classmethod
     def validate_roles(

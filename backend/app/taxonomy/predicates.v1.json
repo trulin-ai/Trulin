@@ -658,6 +658,146 @@
       "default_modality": "MAY",
       "requires_condition": true,
       "risk_level": "MEDIUM"
+    },
+    {
+      "predicate_id": "offers_store_credit_bonus",
+      "label": "Offers store credit bonus incentive for choosing store credit over original payment refund",
+      "action_category": "REFUND",
+      "allowed_subject_roles": ["VENDOR", "CUSTOMER", "ANY_PARTY"],
+      "allowed_object_roles": ["STORE_CREDIT", "BONUS", "ANY_OBJECT"],
+      "default_modality": "ENTITLED_TO",
+      "requires_condition": true,
+      "risk_level": "LOW"
+    },
+    {
+      "predicate_id": "has_return_freight_deduction",
+      "label": "Imposes a return freight fee deduction from refund",
+      "action_category": "SHIPPING",
+      "allowed_subject_roles": ["PRODUCT", "OVERSIZE_ITEMS", "CUSTOMER", "ANY_PARTY"],
+      "allowed_object_roles": ["FEE", "SHIPPING", "ANY_OBJECT"],
+      "default_modality": "MUST",
+      "requires_condition": true,
+      "risk_level": "LOW"
+    },
+    {
+      "predicate_id": "requires_receipt_retention",
+      "label": "Requires retaining drop-off or carrier receipt until refund confirmation",
+      "action_category": "PROCEDURAL",
+      "allowed_subject_roles": ["CUSTOMER", "ANY_PARTY"],
+      "allowed_object_roles": ["RECEIPT", "DOCUMENTATION", "ANY_OBJECT"],
+      "default_modality": "MUST",
+      "requires_condition": false,
+      "risk_level": "LOW"
+    },
+    {
+      "predicate_id": "uses_original_charge_currency",
+      "label": "Issues refund in the currency of the original transaction charge",
+      "action_category": "PAYMENT",
+      "allowed_subject_roles": ["REFUND", "INTERNATIONAL_REFUND", "VENDOR", "ANY_PARTY"],
+      "allowed_object_roles": ["CURRENCY", "ANY_OBJECT"],
+      "default_modality": "MUST",
+      "requires_condition": false,
+      "risk_level": "LOW"
+    },
+    {
+      "predicate_id": "is_responsible_for_duty_drawback",
+      "label": "Assigns responsibility for filing customs duty drawback claims",
+      "action_category": "COMPLIANCE",
+      "allowed_subject_roles": ["CUSTOMER", "ANY_PARTY"],
+      "allowed_object_roles": ["CUSTOMS", "DUTY_DRAWBACK", "ANY_OBJECT"],
+      "default_modality": "MUST",
+      "requires_condition": true,
+      "risk_level": "LOW"
+    },
+    {
+      "predicate_id": "is_required_for_refund_request",
+      "label": "Specifies mandatory form field, documentation, or photographic proof for refund request",
+      "action_category": "PROCEDURAL",
+      "allowed_subject_roles": ["FIELD", "DOCUMENTATION", "PHOTOS", "ANY_PARTY"],
+      "allowed_object_roles": ["REQUIREMENT", "REFUND_REQUEST", "ANY_OBJECT"],
+      "default_modality": "MUST",
+      "requires_condition": false,
+      "risk_level": "LOW"
+    },
+    {
+      "predicate_id": "has_refund_rule",
+      "label": "Specifies subscription or product refund terms, schedule, or conditions",
+      "action_category": "REFUND",
+      "allowed_subject_roles": ["SUBSCRIPTION", "PRODUCT", "ANY_PARTY"],
+      "allowed_object_roles": ["REFUND_TERMS", "SCHEDULE", "ANY_OBJECT"],
+      "default_modality": "MUST",
+      "requires_condition": false,
+      "risk_level": "LOW"
+    },
+    {
+      "predicate_id": "has_revision_history",
+      "label": "Document version log entry and policy revision details",
+      "action_category": "DOCUMENTATION",
+      "allowed_subject_roles": ["POLICY", "DOCUMENT", "ANY_PARTY"],
+      "allowed_object_roles": ["VERSION", "CHANGELOG", "ANY_OBJECT"],
+      "default_modality": "MUST",
+      "requires_condition": false,
+      "risk_level": "LOW"
+    },
+    {
+      "predicate_id": "receives_store_credit_bonus",
+      "label": "Receives store credit bonus incentive for choosing store credit over original payment refund",
+      "action_category": "COMMERCIAL",
+      "allowed_subject_roles": ["CUSTOMER", "BUYER", "ANY_PARTY"],
+      "allowed_object_roles": ["BONUS", "STORE_CREDIT", "ANY_OBJECT"],
+      "default_modality": "MAY",
+      "requires_condition": true,
+      "risk_level": "LOW"
+    },
+    {
+      "predicate_id": "has_posting_duration",
+      "label": "Specifies banking or card network posting timeline for processed refunds",
+      "action_category": "FINANCIAL",
+      "allowed_subject_roles": ["REFUND", "IN_STORE_REFUNDS", "PAYMENT_METHOD", "ANY_PARTY"],
+      "allowed_object_roles": ["TIMELINE", "DURATION", "ANY_OBJECT"],
+      "default_modality": "POLICY_FACT",
+      "requires_condition": false,
+      "risk_level": "LOW"
+    },
+    {
+      "predicate_id": "has_price_adjustment_window",
+      "label": "Specifies price drop guarantee window and one-time difference refund terms",
+      "action_category": "POLICY_REMEDY",
+      "allowed_subject_roles": ["PRICE_ADJUSTMENT", "PRICE_ADJUSTMENTS", "CUSTOMER", "ANY_PARTY"],
+      "allowed_object_roles": ["WINDOW", "TIMELINE", "REFUND_TERMS", "ANY_OBJECT"],
+      "default_modality": "POLICY_FACT",
+      "requires_condition": true,
+      "risk_level": "LOW"
+    },
+    {
+      "predicate_id": "may_request_first_charge_refund",
+      "label": "Permits requesting courtesy refund of first renewal charge if cancellation was forgotten within grace window",
+      "action_category": "POLICY_REMEDY",
+      "allowed_subject_roles": ["CUSTOMER", "FREE_TRIALS", "SUBSCRIBER", "ANY_PARTY"],
+      "allowed_object_roles": ["REFUND", "TIMELINE", "ANY_OBJECT"],
+      "default_modality": "MAY",
+      "requires_condition": true,
+      "risk_level": "LOW"
+    },
+    {
+      "predicate_id": "can_pause_subscription",
+      "label": "Permits subscriber to pause recurring subscription for up to allowed duration and frequency",
+      "action_category": "SUBSCRIPTION_OPERATION",
+      "allowed_subject_roles": ["SUBSCRIBER", "CUSTOMER", "SUBSCRIPTION", "ANY_PARTY"],
+      "allowed_object_roles": ["PAUSE_TERMS", "DURATION", "ANY_OBJECT"],
+      "default_modality": "MAY",
+      "requires_condition": false,
+      "risk_level": "LOW"
+    },
+    {
+      "predicate_id": "has_cancellation_window",
+      "label": "Specifies order cancellation timeline, self-service window, and authorization release terms",
+      "action_category": "ORDER_LIFECYCLE",
+      "allowed_subject_roles": ["ORDER", "ORDER_CANCELLATION", "CUSTOMER", "ANY_PARTY"],
+      "allowed_object_roles": ["WINDOW", "TIMELINE", "CANCELLATION_TERMS", "ANY_OBJECT"],
+      "default_modality": "POLICY_FACT",
+      "requires_condition": false,
+      "risk_level": "LOW"
     }
   ]
 }

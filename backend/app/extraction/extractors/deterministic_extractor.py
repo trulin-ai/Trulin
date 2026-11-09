@@ -614,7 +614,7 @@ class DeterministicSchemaExtractor:
                         subject=final_subject,
                         predicate=normalized["predicate"],
                         object_=normalized["object"],
-                        evidence_text_span=f"{' | '.join([f'{sk}: {cols[sk]}' for sk in scope_keys])} | {k}: {v}",
+                        evidence_text_span=s_data.get("raw_row_line") or f"{' | '.join([f'{sk}: {cols[sk]}' for sk in scope_keys])} | {k}: {v}",
                         value=scalar_val,
                         unit=unit_val,
                         time_basis=typed_val.time_basis if typed_val else None,

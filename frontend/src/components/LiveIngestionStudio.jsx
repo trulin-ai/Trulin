@@ -1,4 +1,4 @@
-import React, { useState, useRef, useMemo } from 'react';
+import React, { useState, useRef, useMemo, useEffect } from 'react';
 import {
   UploadCloud,
   FileText,
@@ -281,7 +281,13 @@ function FolderTreeItem({ node, depth = 0, onRemoveFile }) {
   );
 }
 
-export default function LiveIngestionStudio({ activeOrg, activePersona, onClaimExtracted, showToast }) {
+export default function LiveIngestionStudio({
+  activeOrg,
+  activePersona,
+  onClaimExtracted,
+  showToast,
+  onNavigateToVaultClaims
+}) {
   const { user, token, hasPermission } = useAuth();
   const fileInputRef = useRef(null);
   const folderInputRef = useRef(null);
@@ -301,6 +307,30 @@ export default function LiveIngestionStudio({ activeOrg, activePersona, onClaimE
   const [pipelineStage, setPipelineStage] = useState(0); // 0: Idle, 1..11: L1..L11, 12: Sealed & Done
   const [pipelineResult, setPipelineResult] = useState(null);
   const [history, setHistory] = useState([]);
+
+  const [folders, setFolders] = useState([]);
+  const [selectedFolderId, setSelectedFolderId] = useState('');
+
+  useEffect(() => {
+    let isMounted = true;
+    const fetchFolders = async () => {
+      try {
+        const headers = {};
+        if (token) headers['Authorization'] = `Bearer ${token}`;
+        if (activeOrg?.id) headers['X-Organization-Id'] = activeOrg.id;
+        const orgParam = activeOrg?.id ? `?organization_id=${activeOrg.id}` : '';
+        const res = await fetch(`/v1/folders${orgParam}`, { credentials: 'include', headers });
+        if (res.ok) {
+          const data = await res.json();
+          if (isMounted) setFolders(Array.isArray(data) ? data : []);
+        }
+      } catch (err) {
+        console.warn('Failed to load folders for Ingestion Studio:', err);
+      }
+    };
+    fetchFolders();
+    return () => { isMounted = false; };
+  }, [activeOrg?.id, token]);
 
   // Compute folder hierarchy tree
   const fileTreeRoot = useMemo(() => buildFileTree(stagedFiles), [stagedFiles]);
@@ -455,13 +485,18 @@ export default function LiveIngestionStudio({ activeOrg, activePersona, onClaimE
       setStagedFiles((prev) => prev.map((f, idx) => idx === i ? { ...f, status: 'processing' } : f));
       setPipelineStage(1);
 
-      // Progressive stage animations
+      // Progressive stage animations (text-by-text stream)
       const stageTimers = [
-        setTimeout(() => setPipelineStage(3), 120),
-        setTimeout(() => setPipelineStage(5), 280),
-        setTimeout(() => setPipelineStage(7), 450),
-        setTimeout(() => setPipelineStage(9), 620),
-        setTimeout(() => setPipelineStage(11), 800),
+        setTimeout(() => setPipelineStage(2), 100),
+        setTimeout(() => setPipelineStage(3), 220),
+        setTimeout(() => setPipelineStage(4), 350),
+        setTimeout(() => setPipelineStage(5), 480),
+        setTimeout(() => setPipelineStage(6), 620),
+        setTimeout(() => setPipelineStage(7), 760),
+        setTimeout(() => setPipelineStage(8), 900),
+        setTimeout(() => setPipelineStage(9), 1040),
+        setTimeout(() => setPipelineStage(10), 1180),
+        setTimeout(() => setPipelineStage(11), 1320),
       ];
 
       try {
@@ -469,6 +504,9 @@ export default function LiveIngestionStudio({ activeOrg, activePersona, onClaimE
         formData.append('file', item.file);
         formData.append('relative_path', item.relativePath);
         formData.append('organization_id', activeOrg?.id || '11111111-1111-1111-1111-111111111111');
+        if (selectedFolderId) {
+          formData.append('folder_id', selectedFolderId);
+        }
         formData.append('document_type', documentType);
         formData.append('provider', extractionEngine);
         formData.append('use_mock', extractionEngine === 'mock' ? 'true' : 'false');
@@ -507,6 +545,7 @@ export default function LiveIngestionStudio({ activeOrg, activePersona, onClaimE
           setHistory((prev) => [
             {
               filename: item.name,
+              documentId: data.document?.id,
               title: data.document?.title || item.name,
               relativePath: item.relativePath,
               targetFolder: data.folder_name || 'Inbox',
@@ -535,9 +574,8 @@ export default function LiveIngestionStudio({ activeOrg, activePersona, onClaimE
       setPipelineResult({
         ...lastPipelineRes,
         claims_extracted_count: totalClaimsExtracted,
-        claims: allExtractedClaims.length > 0 ? allExtractedClaims : lastPipelineRes.claims,
       });
-      setActiveRightTab('claims');
+      // Claims are kept out of this view and routed to Context Vault
     }
 
     showToast?.(`✓ Ingestion Complete: Processed ${stagedFiles.length} file(s) into folder structure with ${totalClaimsExtracted} atomic claims sealed.`);
@@ -787,6 +825,35 @@ export default function LiveIngestionStudio({ activeOrg, activePersona, onClaimE
               </div>
             </div>
 
+            {/* Destination Workspace Folder */}
+            <div>
+              <label style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.70rem', fontWeight: 700, color: 'var(--text-muted)', marginBottom: '5px', textTransform: 'uppercase' }}>
+                <Folder size={11} color="#2563EB" />
+                <span>Destination Folder</span>
+              </label>
+              <select
+                value={selectedFolderId}
+                onChange={(e) => setSelectedFolderId(e.target.value)}
+                className="sim-input-control"
+                style={{
+                  width: '100%',
+                  fontSize: '0.78rem',
+                  height: '34px',
+                  padding: '0 8px',
+                  background: selectedFolderId ? '#EFF6FF' : '#F8FAFC',
+                  borderColor: selectedFolderId ? '#3B82F6' : undefined,
+                  fontWeight: selectedFolderId ? 600 : 400
+                }}
+              >
+                <option value="">✨ Smart Auto-Route (Domain & Topic Driven)</option>
+                {folders.map((f) => (
+                  <option key={f.id} value={f.id}>
+                    {f.is_system ? '🏛️ ' : '📁 '} {f.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
             {/* Extraction Engine */}
             <div>
               <label style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.70rem', fontWeight: 700, color: 'var(--text-muted)', marginBottom: '5px', textTransform: 'uppercase' }}>
@@ -877,85 +944,130 @@ export default function LiveIngestionStudio({ activeOrg, activePersona, onClaimE
           </button>
         </div>
 
-        {/* Right: 11-Layer Progressive Monitor & Staged Folder Structure */}
+        {/* Right: Compact Progressive Pipeline Text Stream & Staged Folder Structure */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', width: '100%', minWidth: 0 }}>
 
-          {/* 11-Layer Progressive Pipeline Tracker */}
-          <div className="ingest-progressive-pipeline-card">
-            <div className="ingest-progressive-header">
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Activity size={15} color="#EA580C" />
-                <span style={{ fontSize: '0.78rem', fontWeight: 800, color: 'var(--text-main)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                  11-Layer Universal Trust Pipeline
-                </span>
-                <span style={{ fontSize: '0.72rem', color: '#64748B' }}>
-                  {pipelineStage === 0
-                    ? '• Standby'
-                    : pipelineStage === 12
-                    ? '• Complete (All 11 Layers Sealed & Verified)'
-                    : `• Executing Layer ${pipelineStage} of 11: ${ELEVEN_LAYERS[pipelineStage - 1]?.short || ''}...`}
-                </span>
+          {/* Sleek, Compact Text-by-Text Progressive Pipeline Log (Only shown when running or complete) */}
+          {pipelineStage > 0 && (
+            <div style={{
+              background: '#0F172A',
+              borderRadius: '10px',
+              border: '1px solid #1E293B',
+              padding: '12px 16px',
+              color: '#E2E8F0',
+              fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+              fontSize: '0.74rem',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '6px',
+              boxShadow: '0 4px 14px rgba(0,0,0,0.1)'
+            }}>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                borderBottom: '1px solid #334155',
+                paddingBottom: '8px',
+                marginBottom: '4px'
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <Terminal size={14} color="#38BDF8" />
+                  <span style={{ fontWeight: 700, color: '#F8FAFC', letterSpacing: '0.04em' }}>
+                    11-LAYER UNIVERSAL TRUST PIPELINE
+                  </span>
+                  {isProcessing && (
+                    <span style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#F59E0B', fontSize: '0.68rem' }}>
+                      <RefreshCw size={10} className="animate-spin" />
+                      <span>Processing Layer {Math.min(pipelineStage, 11)}/11...</span>
+                    </span>
+                  )}
+                  {pipelineStage === 12 && (
+                    <span style={{ color: '#10B981', fontWeight: 700, fontSize: '0.68rem', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <CheckCircle2 size={12} />
+                      <span>11 Layers Verified & Sealed</span>
+                    </span>
+                  )}
+                </div>
+
+                {pipelineStage === 12 && onNavigateToVaultClaims && (
+                  <button
+                    type="button"
+                    onClick={() => onNavigateToVaultClaims()}
+                    style={{
+                      background: '#2563EB',
+                      color: '#FFFFFF',
+                      border: 'none',
+                      borderRadius: '5px',
+                      padding: '4px 10px',
+                      fontSize: '0.68rem',
+                      fontWeight: 700,
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '4px'
+                    }}
+                  >
+                    <span>View Claims in Vault</span>
+                    <ArrowRight size={11} />
+                  </button>
+                )}
               </div>
 
-              {pipelineStage === 12 && (
-                <span className="badge badge-verified" style={{ fontSize: '0.66rem', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                  <CheckCircle2 size={11} />
-                  <span>11-Layer Enterprise Gate Sealed</span>
-                </span>
-              )}
-            </div>
-
-            {/* Horizontal stream of the 11 progressive layers */}
-            <div className="ingest-layers-stream">
-              {ELEVEN_LAYERS.map((st) => {
-                const isDone = pipelineStage > st.id || pipelineStage === 12;
-                const isCurrent = pipelineStage === st.id;
-
-                return (
-                  <div
-                    key={st.id}
-                    className={`ingest-layer-chip ${isDone ? 'done' : isCurrent ? 'current' : 'pending'}`}
-                    title={`${st.label}: ${st.desc}`}
-                  >
-                    <span className="ingest-layer-chip-num">
-                      {isDone ? (
-                        <Check size={11} strokeWidth={3} />
-                      ) : isCurrent ? (
-                        <RefreshCw size={10} className="animate-spin" />
-                      ) : (
-                        st.id
+              {/* Progressive text-by-text entries */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', maxHeight: '180px', overflowY: 'auto' }}>
+                {ELEVEN_LAYERS.filter(layer => pipelineStage >= layer.id).map(layer => {
+                  const isDone = pipelineStage > layer.id || pipelineStage === 12;
+                  return (
+                    <div
+                      key={layer.id}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        color: isDone ? '#94A3B8' : '#38BDF8',
+                        lineHeight: 1.4
+                      }}
+                    >
+                      <span style={{ color: isDone ? '#10B981' : '#F59E0B', width: '14px', textAlign: 'center' }}>
+                        {isDone ? '✓' : '▶'}
+                      </span>
+                      <span style={{ color: isDone ? '#F1F5F9' : '#38BDF8', fontWeight: 600 }}>
+                        {layer.label}:
+                      </span>
+                      <span style={{ color: isDone ? '#94A3B8' : '#CBD5E1' }}>
+                        {layer.desc}
+                      </span>
+                      {isDone && (
+                        <span style={{ marginLeft: 'auto', fontSize: '0.64rem', color: '#10B981', fontWeight: 600 }}>
+                          [PASSED]
+                        </span>
                       )}
+                    </div>
+                  );
+                })}
+
+                {pipelineStage === 12 && (
+                  <div style={{
+                    marginTop: '6px',
+                    paddingTop: '6px',
+                    borderTop: '1px dashed #334155',
+                    color: '#10B981',
+                    fontWeight: 700,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px'
+                  }}>
+                    <span>✔ Complete:</span>
+                    <span style={{ color: '#E2E8F0', fontWeight: 500 }}>
+                      All claims normalized and safely committed to Context Vault (Atomic Claims).
                     </span>
-                    <span>{st.short}</span>
                   </div>
-                );
-              })}
+                )}
+              </div>
             </div>
+          )}
 
-            {/* Active Stage Callout Subline */}
-            <div style={{
-              fontSize: '0.70rem',
-              color: pipelineStage > 0 && pipelineStage < 12 ? '#C2410C' : '#475569',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              background: pipelineStage > 0 && pipelineStage < 12 ? '#FFF7ED' : '#F8FAFC',
-              padding: '5px 10px',
-              borderRadius: '6px',
-              border: `1px solid ${pipelineStage > 0 && pipelineStage < 12 ? '#FED7AA' : '#E2E8F0'}`
-            }}>
-              <Sparkles size={12} color={pipelineStage > 0 && pipelineStage < 12 ? '#EA580C' : '#94A3B8'} />
-              <span>
-                {pipelineStage === 0
-                  ? "Standby: Select a folder or document files to launch the 11-Layer Universal Trust Pipeline."
-                  : pipelineStage === 12
-                  ? `Sealed: Batch verified across all 11 governance, extraction, TEVV, and MCP layers.`
-                  : `Active Stage ${pipelineStage}/11: ${ELEVEN_LAYERS[pipelineStage - 1]?.label} — ${ELEVEN_LAYERS[pipelineStage - 1]?.desc}`}
-              </span>
-            </div>
-          </div>
-
-          {/* Main Right Container: Staged Folder Structure / Extracted Claims Matrix */}
+          {/* Main Right Container: Staged Folder Structure */}
           <div style={{
             background: 'var(--bg-surface)',
             border: '1px solid var(--border-color)',
@@ -968,26 +1080,37 @@ export default function LiveIngestionStudio({ activeOrg, activePersona, onClaimE
             boxShadow: '0 2px 10px rgba(0, 0, 0, 0.02)'
           }}>
 
-            {/* Header with Navigation Tabs */}
+            {/* Header with Folder Structure Title & Vault Action */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid var(--border-color)', paddingBottom: '12px', flexWrap: 'wrap', gap: '8px' }}>
-              <div className="ingest-preview-tabs">
-                <button
-                  type="button"
-                  onClick={() => setActiveRightTab('structure')}
-                  className={`ingest-preview-tab-btn ${activeRightTab === 'structure' ? 'active' : ''}`}
-                >
-                  <FolderTree size={14} color="#2563EB" />
-                  <span>Staged Folder Structure ({stagedFiles.length})</span>
-                </button>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <FolderTree size={16} color="#2563EB" />
+                <span style={{ fontSize: '0.86rem', fontWeight: 800, color: 'var(--text-main)' }}>
+                  Staged Folder Structure ({stagedFiles.length})
+                </span>
 
-                {pipelineResult && (
+                {pipelineResult && (pipelineResult.claims_extracted_count > 0 || (pipelineResult.claims && pipelineResult.claims.length > 0)) && (
                   <button
                     type="button"
-                    onClick={() => setActiveRightTab('claims')}
-                    className={`ingest-preview-tab-btn ${activeRightTab === 'claims' ? 'active' : ''}`}
+                    onClick={() => onNavigateToVaultClaims ? onNavigateToVaultClaims() : null}
+                    style={{
+                      background: '#F0FDF4',
+                      border: '1px solid #BBF7D0',
+                      borderRadius: '6px',
+                      padding: '3px 9px',
+                      fontSize: '0.72rem',
+                      fontWeight: 700,
+                      color: '#166534',
+                      cursor: 'pointer',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '5px',
+                      marginLeft: '6px'
+                    }}
+                    title="View claims in Context Vault"
                   >
-                    <ShieldCheck size={14} color="#059669" />
-                    <span>Extracted Claims ({pipelineResult.claims_extracted_count || pipelineResult.claims?.length || 0})</span>
+                    <ShieldCheck size={12} color="#166534" />
+                    <span>{pipelineResult.claims_extracted_count || pipelineResult.claims?.length || 0} Claims in Vault</span>
+                    <ArrowRight size={10} />
                   </button>
                 )}
               </div>
@@ -1024,348 +1147,107 @@ export default function LiveIngestionStudio({ activeOrg, activePersona, onClaimE
               )}
             </div>
 
-            {/* TAB 1: STAGED FOLDER STRUCTURE EXPLORER */}
-            {activeRightTab === 'structure' && (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', flex: 1 }}>
-                {stagedFiles.length === 0 ? (
-                  /* Standby / No Files Selected */
+            {/* STAGED FOLDER STRUCTURE EXPLORER */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', flex: 1 }}>
+              {stagedFiles.length === 0 ? (
+                /* Standby / No Files Selected */
+                <div style={{
+                  flex: 1,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  textAlign: 'center',
+                  padding: '46px 20px',
+                  gap: '14px',
+                  background: '#FAFAF9',
+                  borderRadius: '10px',
+                  border: '1px dashed #CBD5E1'
+                }}>
                   <div style={{
-                    flex: 1,
+                    width: '54px',
+                    height: '54px',
+                    borderRadius: '14px',
+                    background: 'linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%)',
+                    border: '1px solid #BFDBFE',
                     display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
                     alignItems: 'center',
-                    textAlign: 'center',
-                    padding: '46px 20px',
-                    gap: '14px',
-                    background: '#FAFAF9',
-                    borderRadius: '10px',
-                    border: '1px dashed #CBD5E1'
+                    justifyContent: 'center',
+                    color: '#2563EB'
                   }}>
-                    <div style={{
-                      width: '54px',
-                      height: '54px',
-                      borderRadius: '14px',
-                      background: 'linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%)',
-                      border: '1px solid #BFDBFE',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      color: '#2563EB'
-                    }}>
-                      <FolderTree size={26} />
-                    </div>
-
-                    <div>
-                      <h4 style={{ margin: 0, fontSize: '0.92rem', fontWeight: 800, color: 'var(--text-main)' }}>
-                        Folder Structure Ingestion Canvas
-                      </h4>
-                      <p style={{ margin: '6px 0 0 0', fontSize: '0.76rem', color: 'var(--text-muted)', maxWidth: '460px', lineHeight: 1.5 }}>
-                        Upload an entire folder containing nested subfolders or choose multiple individual documents.
-                        Trulin recreates your exact folder hierarchy in the repository and files each document accordingly.
-                      </p>
-                    </div>
-
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', justifyContent: 'center', marginTop: '4px' }}>
-                      <span className="sim-chip-tag" style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', color: '#475569' }}>
-                        📁 Subfolder Preservation
-                      </span>
-                      <span className="sim-chip-tag" style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', color: '#475569' }}>
-                        ⚡ Batch 11-Layer Ingestion
-                      </span>
-                      <span className="sim-chip-tag" style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', color: '#475569' }}>
-                        🔒 SHA-256 Envelope Seal
-                      </span>
-                    </div>
-                  </div>
-                ) : (
-                  /* Files Staged: Hierarchy Tree View */
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                    {/* Folder Structure Path Bar */}
-                    <div style={{
-                      background: '#F0F9FF',
-                      border: '1px solid #BAE6FD',
-                      borderRadius: '8px',
-                      padding: '8px 12px',
-                      fontSize: '0.74rem',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between'
-                    }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                        <FolderCheck size={15} color="#0284C7" />
-                        <span style={{ color: '#0369A1', fontWeight: 700 }}>
-                          Hierarchy Staging:
-                        </span>
-                        <span style={{ color: '#0F172A', fontWeight: 600 }}>
-                          {totalFoldersCount > 0
-                            ? `${totalFoldersCount} folder(s) mapped with ${stagedFiles.length} file(s)`
-                            : `${stagedFiles.length} file(s) staged in root position`}
-                        </span>
-                      </div>
-                      <span style={{ fontSize: '0.66rem', background: '#BAE6FD', color: '#0369A1', padding: '1px 7px', borderRadius: '4px', fontWeight: 700 }}>
-                        Auto-Routing Intact
-                      </span>
-                    </div>
-
-                    {/* Tree View Container */}
-                    <div style={{
-                      maxHeight: '480px',
-                      overflowY: 'auto',
-                      border: '1px solid #E2E8F0',
-                      borderRadius: '8px',
-                      padding: '10px',
-                      background: '#FAFAF9'
-                    }}>
-                      <FolderTreeItem
-                        node={fileTreeRoot}
-                        depth={0}
-                        onRemoveFile={isProcessing ? null : handleRemoveStaged}
-                      />
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* TAB 2: EXTRACTED ASSERTION GROUNDING MATRIX (WHEN AVAILABLE) */}
-            {activeRightTab === 'claims' && pipelineResult && (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                
-                {/* Layer 1 - 4 Telemetry Strip */}
-                {pipelineResult.layers && (
-                  <div style={{
-                    background: 'linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%)',
-                    border: '1px solid #E2E8F0',
-                    borderRadius: '10px',
-                    padding: '12px 14px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '8px'
-                  }}>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                        <span className="layer-title-badge l3">L3 Envelope</span>
-                        <span className="layer-hash-pill" title={pipelineResult.layers.layer_3_envelope?.content_hash}>
-                          SHA-256: {pipelineResult.layers.layer_3_envelope?.content_hash ? `${pipelineResult.layers.layer_3_envelope.content_hash.slice(0, 16)}...` : 'calc_hash'}
-                        </span>
-                      </div>
-
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                        <span className="badge badge-verified" style={{ fontSize: '0.64rem', padding: '2px 6px' }}>
-                          ✓ Sealed & Tamper Intact
-                        </span>
-                        <span className="layer-title-badge l4">
-                          {pipelineResult.layers.layer_4_evidence?.parser_name || 'DocumentParser'}
-                        </span>
-                      </div>
-                    </div>
-
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.70rem', color: '#64748B', flexWrap: 'wrap', gap: '6px' }}>
-                      <span>
-                        <strong>Family:</strong> <span style={{ color: '#0F172A', textTransform: 'capitalize' }}>{pipelineResult.layers.layer_1_governance?.source_family || sourceFamily}</span> &bull; 
-                        <strong> Intent:</strong> <span style={{ color: '#0F172A' }}>{pipelineResult.layers.layer_1_governance?.source_intent || sourceIntent}</span>
-                      </span>
-                      <span>
-                        <strong>Evidence Units:</strong> <span style={{ color: '#0F172A', fontWeight: 700 }}>{pipelineResult.layers.layer_4_evidence?.total_units || 1} units</span> (100% complete)
-                      </span>
-                    </div>
-                  </div>
-                )}
-
-                {/* Layer 5: Strategy Router & Completeness Ledger Ribbon */}
-                {pipelineResult.layers?.layer_5_extraction && (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                    <div className="layer-ledger-strip">
-                      <div className="layer-ledger-item">
-                        <span className="layer-ledger-item-label">L5 Strategy</span>
-                        <div style={{ display: 'flex', gap: '4px', marginTop: '2px' }}>
-                          <span style={{ fontSize: '0.66rem', background: '#334155', color: '#F8FAFC', padding: '1px 6px', borderRadius: '4px', fontWeight: 600 }}>
-                            {pipelineResult.layers.layer_5_extraction.candidates?.[0]?.extraction_strategy || pipelineResult.layers.layer_5_extraction.candidates?.[0]?.strategy || 'table_aware'}
-                          </span>
-                        </div>
-                      </div>
-
-                      <div style={{ width: '1px', height: '24px', background: '#334155' }} />
-
-                      <div className="layer-ledger-item">
-                        <span className="layer-ledger-item-label">Claims Extracted</span>
-                        <span className="layer-ledger-item-val" style={{ color: '#4ADE80' }}>
-                          {pipelineResult.layers.layer_5_extraction.claims_extracted || pipelineResult.claims_extracted_count}
-                        </span>
-                      </div>
-
-                      <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                        <span className="badge badge-verified" style={{ background: '#064E3B', color: '#6EE7B7', borderColor: '#059669', fontSize: '0.66rem' }}>
-                          Ledger: 100.0% Accounted (0 Missed)
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* Layer 6: Validation Gate Matrix Results */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                      <span className="layer-title-badge l6">Layer 6: Validation Gate</span>
-                      <span style={{ fontSize: '0.72rem', color: '#64748B' }}>
-                        6-Dimensional Decision Matrix & Enterprise Persistence
-                      </span>
-                    </div>
-                    {pipelineResult.layers?.layer_6_validation_gate && (
-                      <span style={{ fontSize: '0.70rem', fontWeight: 700, color: '#059669' }}>
-                        {pipelineResult.layers.layer_6_validation_gate.claims_approved} Approved &bull; {pipelineResult.layers.layer_6_validation_gate.claims_queued_for_review} Review &bull; {pipelineResult.layers.layer_6_validation_gate.claims_rejected} Rejected
-                      </span>
-                    )}
+                    <FolderTree size={26} />
                   </div>
 
-                  {/* Cards List: Evaluations from Layer 6 or Claims from pipelineResult */}
-                  {(pipelineResult.layers?.layer_6_validation_gate?.evaluations?.length > 0
-                    ? pipelineResult.layers.layer_6_validation_gate.evaluations
-                    : (pipelineResult.claims || [])
-                  ).map((item, idx) => {
-                    const isEval = !!item.lifecycle_decision;
-                    const rawClaimText = item.claim_text || '';
-                    const claimText = rawClaimText.replace(/\*\*([^*]+)\*\*/g, '$1').replace(/`([^`]+)`/g, '$1');
-                    const decision = isEval ? item.lifecycle_decision : 'approve';
-                    const trustScore = isEval ? item.composite_trust_score : ((item.trust_score || 95) / 100);
-                    const dims = isEval ? item.dimensions : null;
-                    const claimObj = pipelineResult.claims?.[idx] || item;
+                  <div>
+                    <h4 style={{ margin: 0, fontSize: '0.92rem', fontWeight: 800, color: 'var(--text-main)' }}>
+                      Folder Structure Ingestion Canvas
+                    </h4>
+                    <p style={{ margin: '6px 0 0 0', fontSize: '0.76rem', color: 'var(--text-muted)', maxWidth: '460px', lineHeight: 1.5 }}>
+                      Upload an entire folder containing nested subfolders or choose multiple individual documents.
+                      Trulin recreates your exact folder hierarchy in the repository and files each document accordingly.
+                    </p>
+                  </div>
 
-                    const subject = item.subject || claimObj.subject || 'Enterprise';
-                    const predicate = item.predicate || claimObj.predicate || 'asserts';
-                    const objectVal = item.object || claimObj.object || claimText;
-                    const claimType = item.claim_type || claimObj.claim_type || 'policy';
-                    const modalOp = item.modal_operator || claimObj.modal_operator || '';
-                    const isSubjectMismatch = Boolean(dims?.meaning?.details?.subject_unsupported || dims?.meaning?.reason?.includes('Subject-Evidence mismatch'));
-
-                    const mod = (item.modality || claimObj.modality || 'POLICY_FACT').toUpperCase();
-                    const modStyles = {
-                      OBLIGATION: { bg: '#EFF6FF', text: '#1D4ED8', border: '#BFDBFE', label: 'MUST' },
-                      REQUIRED: { bg: '#EFF6FF', text: '#1D4ED8', border: '#BFDBFE', label: 'MUST' },
-                      PROHIBITION: { bg: '#FEF2F2', text: '#DC2626', border: '#FECACA', label: 'PROHIBITION' },
-                      PROHIBITED: { bg: '#FEF2F2', text: '#DC2626', border: '#FECACA', label: 'PROHIBITION' },
-                      PERMISSION: { bg: '#ECFDF5', text: '#047857', border: '#A7F3D0', label: 'MAY / RIGHT' },
-                      PERMITTED: { bg: '#ECFDF5', text: '#047857', border: '#A7F3D0', label: 'MAY / RIGHT' },
-                      POLICY_FACT: { bg: '#F8FAFC', text: '#334155', border: '#CBD5E1', label: 'POLICY_FACT' },
-                      BENEFIT: { bg: '#F0F9FF', text: '#0284C7', border: '#BAE6FD', label: 'BENEFIT' },
-                    }[mod] || { bg: '#F8FAFC', text: '#334155', border: '#CBD5E1', label: mod };
-
-                    return (
-                      <div
-                        key={idx}
-                        className="layer-arch-card"
-                        style={isSubjectMismatch ? { borderColor: '#FCA5A5', background: '#FFFDFD' } : undefined}
-                      >
-                        <div className="layer-header-strip">
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
-                            <span className="sim-chip-tag" style={{ background: '#FFF7ED', color: '#EA580C', border: '1px solid rgba(234,88,12,0.25)', fontWeight: 800 }}>
-                              Claim #{idx + 1}
-                            </span>
-                            <span style={{
-                              fontSize: '0.64rem',
-                              fontWeight: 800,
-                              padding: '2px 6px',
-                              borderRadius: '4px',
-                              background: modStyles.bg,
-                              color: modStyles.text,
-                              border: `1px solid ${modStyles.border}`,
-                              letterSpacing: '0.02em',
-                            }}>
-                              {modStyles.label}
-                            </span>
-                            {claimType === 'payroll_deduction_policy' && (
-                              <span style={{ fontSize: '0.62rem', fontWeight: 700, padding: '2px 6px', borderRadius: '4px', background: '#ECFDF5', color: '#059669', border: '1px solid #A7F3D0' }}>
-                                DEDUCTION RULE
-                              </span>
-                            )}
-                          </div>
-
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                            {decision === 'approve' ? (
-                              <span className="badge" style={{ background: '#ECFDF5', color: '#047857', border: '1px solid #A7F3D0', fontSize: '0.66rem', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '4px' }}>
-                                <CheckCircle2 size={11} />
-                                <span>✓ APPROVED FOR REPOSITORY</span>
-                              </span>
-                            ) : decision === 'review' ? (
-                              <span className="badge" style={{ background: '#FEF9C3', color: '#A16207', border: '1px solid #FDE047', fontSize: '0.66rem', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '4px' }}>
-                                <AlertCircle size={11} />
-                                <span>⚠ REVIEW REQUIRED</span>
-                              </span>
-                            ) : (
-                              <span className="badge" style={{ background: '#FEE2E2', color: '#B91C1C', border: '1px solid #FCA5A5', fontSize: '0.66rem', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '4px' }}>
-                                <X size={11} />
-                                <span>✕ REJECTED</span>
-                              </span>
-                            )}
-
-                            <span style={{ fontSize: '0.74rem', fontWeight: 800, color: trustScore >= 0.85 ? '#059669' : '#EA580C' }}>
-                              {Math.round(trustScore * 100)}% Trust
-                            </span>
-                          </div>
-                        </div>
-
-                        {/* Claim Text */}
-                        <p style={{ margin: 0, fontSize: '0.82rem', color: '#0F172A', fontWeight: 700, lineHeight: 1.45 }}>
-                          "{claimText}"
-                        </p>
-
-                        {/* Extracted Scalar Values & Preconditions */}
-                        {((claimObj.value !== undefined && claimObj.value !== null) || (item.value !== undefined && item.value !== null) || (claimObj.conditions && claimObj.conditions.length > 0) || (item.conditions && item.conditions.length > 0)) && (
-                          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', alignItems: 'center' }}>
-                            {((claimObj.value !== undefined && claimObj.value !== null) || (item.value !== undefined && item.value !== null)) && (
-                              <span style={{ fontSize: '0.68rem', fontWeight: 700, background: '#EFF6FF', color: '#1D4ED8', border: '1px solid #BFDBFE', padding: '2px 7px', borderRadius: '4px' }}>
-                                Scalar Value: <strong>{formatValueDisplay(claimObj.value ?? item.value)} {claimObj.unit || item.unit || ''}</strong>
-                              </span>
-                            )}
-                            {((claimObj.conditions && claimObj.conditions.length > 0) ? claimObj.conditions : (item.conditions || [])).map((cond, cIdx) => (
-                              <span key={cIdx} style={{ fontSize: '0.68rem', fontWeight: 600, background: '#F5F3FF', color: '#6D28D9', border: '1px solid #DDD6FE', padding: '2px 7px', borderRadius: '4px' }}>
-                                Condition: <strong>{formatConditionDisplay(cond)}</strong>
-                              </span>
-                            ))}
-                          </div>
-                        )}
-
-                        {/* S-P-O Triplet breakdown */}
-                        <div style={{ background: '#F8FAFC', borderRadius: '6px', padding: '8px 10px', fontSize: '0.68rem', display: 'flex', flexDirection: 'column', gap: '4px', border: '1px solid #F1F5F9' }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
-                            <span style={{ color: '#64748B', fontWeight: 700 }}>Subject:</span>
-                            <span style={{ color: '#0F172A', fontWeight: 700, background: '#FFFFFF', padding: '1px 6px', borderRadius: '4px', border: '1px solid #E2E8F0' }}>
-                              {typeof subject === 'object' && subject !== null ? JSON.stringify(subject) : subject}
-                            </span>
-                            {modalOp && modalOp !== 'specifies' && (
-                              <>
-                                <span style={{ color: '#64748B', fontWeight: 700 }}>Modal:</span>
-                                <span style={{ color: '#7C3AED', fontWeight: 700, background: '#F5F3FF', padding: '1px 6px', borderRadius: '4px', border: '1px solid #DDD6FE' }}>
-                                  {modalOp}
-                                </span>
-                              </>
-                            )}
-                            <span style={{ color: '#64748B', fontWeight: 700 }}>Predicate:</span>
-                            <span style={{ color: '#2563EB', fontWeight: 700, background: '#EFF6FF', padding: '1px 6px', borderRadius: '4px', border: '1px solid #DBEAFE' }}>
-                              {typeof predicate === 'object' && predicate !== null ? JSON.stringify(predicate) : predicate}
-                            </span>
-                          </div>
-                          <div>
-                            <strong style={{ color: '#64748B' }}>Object:</strong>{' '}
-                            <span style={{ color: '#059669', fontWeight: 600 }}>
-                              {typeof objectVal === 'object' && objectVal !== null ? JSON.stringify(objectVal) : objectVal}
-                            </span>
-                          </div>
-                        </div>
-
-                        {/* Footer subline */}
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid #F1F5F9', paddingTop: '6px', fontSize: '0.68rem', color: '#64748B' }}>
-                          <span>Scope: <strong style={{ color: '#0F172A' }}>{documentScope}</strong></span>
-                          <span style={{ color: '#059669', fontWeight: 700 }}>● Merkle Root: {pipelineResult.document?.content_hash ? `${pipelineResult.document.content_hash.slice(0, 10)}...` : 'Verified'}</span>
-                        </div>
-                      </div>
-                    );
-                  })}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', justifyContent: 'center', marginTop: '4px' }}>
+                    <span className="sim-chip-tag" style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', color: '#475569' }}>
+                      📁 Subfolder Preservation
+                    </span>
+                    <span className="sim-chip-tag" style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', color: '#475569' }}>
+                      ⚡ 11-Layer Progressive Ingestion
+                    </span>
+                    <span className="sim-chip-tag" style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', color: '#475569' }}>
+                      🔒 SHA-256 Envelope Seal
+                    </span>
+                  </div>
                 </div>
-              </div>
-            )}
+              ) : (
+                /* Files Staged: Hierarchy Tree View */
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                  {/* Folder Structure Path Bar */}
+                  <div style={{
+                    background: '#F0F9FF',
+                    border: '1px solid #BAE6FD',
+                    borderRadius: '8px',
+                    padding: '8px 12px',
+                    fontSize: '0.74rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between'
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <FolderCheck size={15} color="#0284C7" />
+                      <span style={{ color: '#0369A1', fontWeight: 700 }}>
+                        Hierarchy Staging:
+                      </span>
+                      <span style={{ color: '#0F172A', fontWeight: 600 }}>
+                        {totalFoldersCount > 0
+                          ? `${totalFoldersCount} folder(s) mapped with ${stagedFiles.length} file(s)`
+                          : `${stagedFiles.length} file(s) staged in root position`}
+                      </span>
+                    </div>
+                    <span style={{ fontSize: '0.66rem', background: '#BAE6FD', color: '#0369A1', padding: '1px 7px', borderRadius: '4px', fontWeight: 700 }}>
+                      Auto-Routing Intact
+                    </span>
+                  </div>
+
+                  {/* Tree View Container */}
+                  <div style={{
+                    maxHeight: '480px',
+                    overflowY: 'auto',
+                    border: '1px solid #E2E8F0',
+                    borderRadius: '8px',
+                    padding: '10px',
+                    background: '#FAFAF9'
+                  }}>
+                    <FolderTreeItem
+                      node={fileTreeRoot}
+                      depth={0}
+                      onRemoveFile={isProcessing ? null : handleRemoveStaged}
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
 
           </div>
         </div>
@@ -1440,8 +1322,33 @@ export default function LiveIngestionStudio({ activeOrg, activePersona, onClaimE
                         {item.scope || 'Enterprise'}
                       </span>
                     </td>
-                    <td style={{ padding: '8px 12px', fontWeight: 700, color: '#EA580C' }}>
-                      {item.claimsCount} claims
+                    <td style={{ padding: '8px 12px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <span style={{ fontWeight: 700, color: '#059669' }}>{item.claimsCount} claims</span>
+                        {onNavigateToVaultClaims && (
+                          <button
+                            type="button"
+                            onClick={() => onNavigateToVaultClaims(item.documentId || item.title)}
+                            style={{
+                              background: '#EFF6FF',
+                              border: '1px solid #BFDBFE',
+                              borderRadius: '4px',
+                              padding: '2px 7px',
+                              fontSize: '0.64rem',
+                              color: '#1D4ED8',
+                              cursor: 'pointer',
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '3px',
+                              fontWeight: 700
+                            }}
+                            title="View in Context Vault"
+                          >
+                            <span>Vault</span>
+                            <ExternalLink size={10} />
+                          </button>
+                        )}
+                      </div>
                     </td>
                     <td style={{ padding: '8px 12px', color: '#64748B' }}>
                       {item.durationMs}ms

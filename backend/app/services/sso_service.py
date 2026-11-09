@@ -1,3 +1,4 @@
+import logging
 import re
 import secrets
 import urllib.parse
@@ -8,6 +9,8 @@ from fastapi import HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
+
+logger = logging.getLogger(__name__)
 
 from app.core.config import settings
 from app.core.security import create_access_token, create_refresh_token, get_password_hash
@@ -194,6 +197,9 @@ class SSOService:
         elif req.mock_email:
             email = req.mock_email.strip().lower()
             name = req.mock_name or email.split("@")[0].replace(".", " ").title()
+            avatar_url = req.avatar_url or req.mock_avatar
+            if provider == "google" and not avatar_url:
+                avatar_url = f"https://ui-avatars.com/api/?name={urllib.parse.quote(name)}&background=4285F4&color=fff&size=256&bold=true"
         elif req.code and not req.code.startswith("mock_"):
             # Live OIDC code exchange
             if provider == "google" and settings.google_client_id and settings.google_client_secret:
@@ -204,17 +210,21 @@ class SSOService:
                 # Local fallback when live code exchange cannot be fulfilled
                 email = f"{provider}.user@ssfa.com"
                 name = f"SSO {provider.capitalize()} User"
+                avatar_url = req.avatar_url or req.mock_avatar
         else:
             # Default sandbox fallback for instant UI clicks
             if provider == "google":
                 email = "sarah.chen@google.com"
                 name = "Sarah Chen (Google Workspace)"
+                avatar_url = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150"
             elif provider == "microsoft":
                 email = "marcus.vance@microsoft.com"
                 name = "Marcus Vance (Microsoft Entra)"
+                avatar_url = "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150"
             else:
                 email = f"user@{provider}.corp"
                 name = f"Enterprise {provider.capitalize()} User"
+                avatar_url = f"https://api.dicebear.com/7.x/bottts/svg?seed={provider}"
 
         if not email:
             raise HTTPException(
@@ -222,14 +232,24 @@ class SSOService:
                 detail="Unable to resolve user email from SSO identity token.",
             )
 
-        return await cls._resolve_or_create_tenant_and_user(
-            db=db,
-            email=email,
-            name=name or email.split("@")[0].title(),
-            avatar_url=avatar_url,
-            provider=provider,
-            device_id=req.device_id,
-        )
+        try:
+            return await cls._resolve_or_create_tenant_and_user(
+                db=db,
+                email=email,
+                name=name or email.split("@")[0].title(),
+                avatar_url=avatar_url,
+                provider=provider,
+                device_id=req.device_id,
+            )
+        except HTTPException:
+            raise
+        except Exception as db_err:
+            if "10054" in str(db_err) or "connection" in str(db_err).lower() or "refused" in str(db_err).lower():
+                raise HTTPException(
+                    status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                    detail="Database connection failed: PostgreSQL container is offline or unreachable on port 5433. Please run: docker rm -f context-trust-postgres && docker compose up -d postgres",
+                )
+            raise
 
     @classmethod
     async def sandbox_login(
@@ -316,7 +336,10 @@ class SSOService:
         domain = email.split("@")[-1] if "@" in email else "enterprise.local"
 
         if not avatar_url:
-            avatar_url = f"https://api.dicebear.com/7.x/bottts/svg?seed={name.replace(' ', '')}"
+            if provider == "google":
+                avatar_url = f"https://ui-avatars.com/api/?name={urllib.parse.quote(name)}&background=4285F4&color=fff&size=256&bold=true"
+            else:
+                avatar_url = f"https://api.dicebear.com/7.x/bottts/svg?seed={name.replace(' ', '')}"
 
         # 1. Query existing User records across all organizations
         user_stmt = (
@@ -371,13 +394,24 @@ class SSOService:
                 slug=org_slug,
                 status=OrganizationStatus.ACTIVE,
                 setup_completed=False,
-                governance_config={},
+                governance_config={
+                    "workspaces": [{
+                        "id": f"ws_{secrets.token_hex(5)}",
+                        "name": "General Workspace",
+                        "domain": "governance",
+                        "created_at": datetime.now(timezone.utc).isoformat(),
+                    }]
+                },
             )
             db.add(new_org)
             await db.flush()
 
             # The user is the Admin of their new workspace
             user_role = explicit_role or UserRole.ADMIN
+            user_prefs = {}
+            if provider == "google" and avatar_url:
+                user_prefs["google_avatar_url"] = avatar_url
+
             active_user = User(
                 id=uuid.uuid4(),
                 organization_id=new_org.id,
@@ -387,8 +421,9 @@ class SSOService:
                 status=RecordStatus.ACTIVE,
                 is_verified=True,
                 avatar_url=avatar_url,
-                title=f"Corporate SSO ({provider.capitalize()})",
+                title="Workspace Lead" if provider == "google" else f"Corporate SSO ({provider.capitalize()})",
                 department="AI Governance & Operations",
+                user_preferences=user_prefs,
                 hashed_password=get_password_hash(uuid.uuid4().hex),
             )
             db.add(active_user)
@@ -399,7 +434,13 @@ class SSOService:
             # EXISTING USER: Select primary active membership
             active_user = existing_memberships[0]
             active_user.is_verified = True
-            if avatar_url and not active_user.avatar_url:
+            if provider == "google" and avatar_url:
+                # Update with Google mail profile photo on sign in
+                active_user.avatar_url = avatar_url
+                prefs = dict(active_user.user_preferences or {})
+                prefs["google_avatar_url"] = avatar_url
+                active_user.user_preferences = prefs
+            elif avatar_url and not active_user.avatar_url:
                 active_user.avatar_url = avatar_url
             await db.flush()
 
@@ -492,6 +533,18 @@ class SSOService:
                         return user_info.get("email"), user_info.get("name"), user_info.get("picture")
                 else:
                     logger.warning(f"Google code exchange returned HTTP {token_resp.status_code}: {token_resp.text}")
+                    err_msg = token_resp.text
+                    try:
+                        err_json = token_resp.json()
+                        err_msg = err_json.get("error_description") or err_json.get("error") or token_resp.text
+                    except Exception:
+                        pass
+                    raise HTTPException(
+                        status_code=status.HTTP_400_BAD_REQUEST,
+                        detail=f"Google OAuth exchange failed ({err_msg}). If the authorization code was already used or expired, please initiate sign-in again.",
+                    )
+        except HTTPException:
+            raise
         except Exception as e:
             logger.warning(f"Google live code exchange error: {e}")
 

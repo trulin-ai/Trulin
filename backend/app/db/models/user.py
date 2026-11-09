@@ -98,7 +98,7 @@ class User(Base):
     )
 
     avatar_url: Mapped[str | None] = mapped_column(
-        String(500),
+        Text,
         nullable=True,
     )
 

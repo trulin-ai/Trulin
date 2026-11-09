@@ -1,12 +1,13 @@
 import uuid
 from collections.abc import Sequence
 
-from sqlalchemy import select, update
+from sqlalchemy import func, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
 from app.db.models.document import Document
 from app.db.models.document_version import DocumentVersion
+from app.db.enums import RecordStatus
 from app.db.repositories.base import BaseRepository
 
 
@@ -46,8 +47,13 @@ class DocumentRepository(BaseRepository[Document]):
         source_id: uuid.UUID | None = None,
         limit: int = 50,
         offset: int = 0,
+        include_archived: bool = False,
     ) -> Sequence[Document]:
         stmt = select(Document).where(Document.organization_id == organization_id)
+        if not include_archived:
+            stmt = stmt.where(
+                Document.status.notin_([RecordStatus.INACTIVE, RecordStatus.DELETED])
+            )
         if source_id and isinstance(source_id, uuid.UUID):
             stmt = stmt.where(Document.source_id == source_id)
         stmt = (
@@ -78,12 +84,86 @@ class DocumentRepository(BaseRepository[Document]):
             - is_changed is False if the document already exists with identical content_hash.
         """
         document = None
+        # 1. Exact match by (organization_id, source_id, external_id)
         if external_id:
             document = await self.get_by_external_id(
                 organization_id=organization_id,
                 source_id=source_id,
                 external_id=external_id,
             )
+
+        # 2. Match by (organization_id, external_id) across sources
+        if not document and external_id:
+            stmt = (
+                select(Document)
+                .where(
+                    Document.organization_id == organization_id,
+                    Document.external_id == external_id,
+                )
+                .order_by(Document.created_at.asc())
+                .limit(1)
+            )
+            res = await self.session.execute(stmt)
+            document = res.scalar_one_or_none()
+
+        # 3. Match within target folder by normalized title or content_hash
+        if not document and folder_id:
+            if title:
+                stmt = (
+                    select(Document)
+                    .where(
+                        Document.organization_id == organization_id,
+                        Document.folder_id == folder_id,
+                        func.lower(func.trim(Document.title)) == title.strip().lower(),
+                    )
+                    .order_by(Document.created_at.asc())
+                    .limit(1)
+                )
+                res = await self.session.execute(stmt)
+                document = res.scalar_one_or_none()
+
+            if not document and content_hash:
+                stmt = (
+                    select(Document)
+                    .where(
+                        Document.organization_id == organization_id,
+                        Document.folder_id == folder_id,
+                        Document.content_hash == content_hash,
+                    )
+                    .order_by(Document.created_at.asc())
+                    .limit(1)
+                )
+                res = await self.session.execute(stmt)
+                document = res.scalar_one_or_none()
+
+        # 4. Organization-wide match by title and content_hash
+        if not document and title and content_hash:
+            stmt = (
+                select(Document)
+                .where(
+                    Document.organization_id == organization_id,
+                    func.lower(func.trim(Document.title)) == title.strip().lower(),
+                    Document.content_hash == content_hash,
+                )
+                .order_by(Document.created_at.asc())
+                .limit(1)
+            )
+            res = await self.session.execute(stmt)
+            document = res.scalar_one_or_none()
+
+        # 5. Organization-wide match by content_hash alone
+        if not document and content_hash:
+            stmt = (
+                select(Document)
+                .where(
+                    Document.organization_id == organization_id,
+                    Document.content_hash == content_hash,
+                )
+                .order_by(Document.created_at.asc())
+                .limit(1)
+            )
+            res = await self.session.execute(stmt)
+            document = res.scalar_one_or_none()
 
         if not document:
             # Brand new document
@@ -119,10 +199,16 @@ class DocumentRepository(BaseRepository[Document]):
             document.owner_id = owner_id
             await self.session.flush()
 
-        # Existing document: Assign folder_id if not set and passed
-        if folder_id and not document.folder_id:
+        # Existing document: Assign or update folder_id if passed
+        if folder_id and document.folder_id != folder_id:
             document.folder_id = folder_id
             await self.session.flush()
+
+        # Existing document: Clean up title if previously contaminated by path
+        if title and document.title != title:
+            if "/" in document.title or "\\" in document.title:
+                document.title = title
+                await self.session.flush()
 
         # Existing document: Check current active version
         current_version = await self.get_current_version(document.id)
@@ -212,6 +298,7 @@ class DocumentRepository(BaseRepository[Document]):
         organization_id: uuid.UUID,
         folder_ids: list[uuid.UUID],
         status_filter: str | None = None,
+        include_archived: bool = False,
         limit: int = 50,
         offset: int = 0,
     ) -> Sequence[Document]:
@@ -221,6 +308,10 @@ class DocumentRepository(BaseRepository[Document]):
         )
         if status_filter:
             stmt = stmt.where(Document.status == status_filter)
+        elif not include_archived:
+            stmt = stmt.where(
+                Document.status.notin_([RecordStatus.INACTIVE, RecordStatus.DELETED])
+            )
         stmt = (
             stmt.order_by(Document.updated_at.desc())
             .offset(offset)
@@ -235,6 +326,7 @@ class DocumentRepository(BaseRepository[Document]):
         organization_id: uuid.UUID,
         folder_ids: list[uuid.UUID],
         status_filter: str | None = None,
+        include_archived: bool = False,
     ) -> int:
         from sqlalchemy import func
         stmt = select(func.count(Document.id)).where(
@@ -243,5 +335,9 @@ class DocumentRepository(BaseRepository[Document]):
         )
         if status_filter:
             stmt = stmt.where(Document.status == status_filter)
+        elif not include_archived:
+            stmt = stmt.where(
+                Document.status.notin_([RecordStatus.INACTIVE, RecordStatus.DELETED])
+            )
         result = await self.session.execute(stmt)
         return result.scalar() or 0

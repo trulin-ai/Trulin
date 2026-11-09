@@ -297,16 +297,34 @@ class UnifiedExtractionPipeline:
                     repaired_claim_text=clean_sentence,
                 )
             else:
+                hdg_context = cand.locator.get("heading_path") or cand.locator.get("section_context") or []
+                grid_hdr = cand.locator.get("table_grid", {}).get("col_header") if cand.locator.get("table_grid") else ""
+                context_parts = []
+                if isinstance(hdg_context, list) and hdg_context:
+                    context_parts.append(" > ".join(str(h) for h in hdg_context))
+                if grid_hdr:
+                    context_parts.append(f"Header: {grid_hdr}")
+                if raw_span or cand.claim_text:
+                    context_parts.append(raw_span or cand.claim_text)
+                surrounding_clause_text = " | ".join(context_parts) if context_parts else (raw_span or cand.claim_text)
+
+                role_str = getattr(cand.content_role, "value", str(cand.content_role or "policy_rule")).lower()
                 gate_res = UniversalGateEvaluator.evaluate(
                     claim_text=cand.claim_text,
                     subject=clean_subj,
                     predicate=clean_pred,
                     object_text=clean_obj,
-                    claim_type="RULE",
+                    claim_type=cand.claim_type or "rule",
                     evidence=span,
                     source_content=content_text or canonical_env.parsed_content,
-                    clause_text=raw_span or cand.claim_text,
+                    clause_text=surrounding_clause_text,
                     existing_signatures=seen_signatures,
+                    metadata={
+                        "table_grid": cand.locator.get("table_grid"),
+                        "in_table": bool(cand.locator.get("table_grid") or getattr(cand, "table_binding", None)),
+                        "content_role": role_str,
+                        "is_list": bool(cand.locator.get("is_list") or cand.claim_text.strip().startswith(("- ", "* ", "1. ", "2. ", "3. ", "• "))),
+                    },
                 )
 
             if gate_res.is_canonical:
@@ -326,7 +344,11 @@ class UnifiedExtractionPipeline:
                 cand.is_canonical = False
                 cand.status = "candidate"
                 decision = ClaimLifecycleDecision.REVIEW
-                if not gate_res.predicate_valid:
+                if any("table" in r.lower() for r in gate_res.rejection_reasons):
+                    decision_code = DecisionCode.REVIEW_SCORE_BELOW_THRESHOLD
+                elif not gate_res.clause_entails_claim:
+                    decision_code = DecisionCode.DEONTIC_MODALITY_MISMATCH
+                elif not gate_res.predicate_valid:
                     decision_code = DecisionCode.WEAK_PREDICATE
                 elif not gate_res.counterparty_resolved:
                     decision_code = DecisionCode.SUBJECT_CONTAMINATION
@@ -341,9 +363,8 @@ class UnifiedExtractionPipeline:
                 decision_code = DecisionCode.META_RULE_NOT_ATOMIC
                 composite_score = 0.50
             elif tier == "NON_RULE":
-                cand.claim_type = "non_rule"
                 cand.is_canonical = False
-                cand.status = "rejected"
+                cand.status = "context"
                 decision = ClaimLifecycleDecision.REJECT
                 decision_code = DecisionCode.REJECT_DESCRIPTIVE_PURPOSE
                 composite_score = 0.50
@@ -365,6 +386,8 @@ class UnifiedExtractionPipeline:
                     decision_code = DecisionCode.FRAGMENT_ASSERTION_DISCARDED
                 elif not gate_res.subject_valid:
                     decision_code = DecisionCode.SUBJECT_NORMALIZATION_FAILED
+                elif not gate_res.clause_entails_claim:
+                    decision_code = DecisionCode.DEONTIC_MODALITY_MISMATCH
                 else:
                     decision_code = DecisionCode.REJECT_SEMANTIC_MISMATCH
                 composite_score = 0.0
@@ -424,9 +447,9 @@ class UnifiedExtractionPipeline:
             )
 
             decision_reason = (
-                "; ".join(gate_res.rejection_reasons)
+                f"[{decision_code.value}] " + "; ".join(gate_res.rejection_reasons)
                 if gate_res.rejection_reasons
-                else f"UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: {gate_res.certification_tier}."
+                else f"[{decision_code.value}] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: {gate_res.certification_tier}."
             )
 
             candidate_eval = CandidateGateEvaluation(

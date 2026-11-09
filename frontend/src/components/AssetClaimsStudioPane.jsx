@@ -40,13 +40,73 @@ export function getClaimClassification(cl, allConflictedClaimIds = new Set()) {
   const certTier = (cl.certification_tier || cl.data?.certification_tier || '').toUpperCase().trim();
   const decisionStr = (cl.decision || cl.data?.decision || cl.validation_status || '').toUpperCase().trim();
   const decisionCode = (cl.decision_code || cl.data?.decision_code || '').toUpperCase().trim();
+  const decisionReason = (cl.decision_reason || cl.data?.decision_reason || '').toLowerCase();
 
   const gates = cl.gates || cl.data?.gates || {};
   const hasGates = Object.keys(gates).length > 0;
   const allGatesPassed = cl.all_9_gates_passed === true || cl.data?.all_9_gates_passed === true ||
     (hasGates && Object.values(gates).every(v => v === true));
 
-  // 1. Quarantined compound rules
+  // 1. Non-Rules: definitions, descriptions, contact info, examples, revision history
+  const isDef = claimType === 'definition' || contentRole === 'definition' || decisionCode.includes('DEFINITION');
+  if (isDef) {
+    return {
+      category: 'non_rule',
+      badgeLabel: '📖 Definition',
+      badgeBg: '#F3E8FF',
+      badgeColor: '#6B21A8',
+      badgeBorder: '#D8B4FE',
+    };
+  }
+
+  const isContact = claimType.includes('contact') || contentRole.includes('contact');
+  if (isContact) {
+    return {
+      category: 'non_rule',
+      badgeLabel: '📞 Contact Info',
+      badgeBg: '#EFF6FF',
+      badgeColor: '#1D4ED8',
+      badgeBorder: '#93C5FD',
+    };
+  }
+
+  const isExample = claimType === 'example' || contentRole === 'example' || claimType.includes('case_study');
+  if (isExample) {
+    return {
+      category: 'non_rule',
+      badgeLabel: '💡 Example / Case Study',
+      badgeBg: '#F0FDF4',
+      badgeColor: '#166534',
+      badgeBorder: '#BBF7D0',
+    };
+  }
+
+  const isHistory = claimType.includes('revision') || contentRole.includes('revision') || contentRole.includes('history');
+  if (isHistory) {
+    return {
+      category: 'non_rule',
+      badgeLabel: '📜 Revision History',
+      badgeBg: '#F1F5F9',
+      badgeColor: '#475569',
+      badgeBorder: '#CBD5E1',
+    };
+  }
+
+  const isNonRule = certTier === 'NON_RULE'
+    || ['description', 'reference', 'responsibility', 'non_rule'].includes(claimType)
+    || ['description', 'reference', 'responsibility'].includes(contentRole)
+    || decisionCode.includes('DESCRIPTIVE');
+  if (isNonRule) {
+    return {
+      category: 'non_rule',
+      badgeLabel: '📖 Non-Rule Context',
+      badgeBg: '#F3E8FF',
+      badgeColor: '#6B21A8',
+      badgeBorder: '#D8B4FE',
+    };
+  }
+
+  // 2. Quarantined compound rules
   if (certTier === 'QUARANTINED' || claimType === 'quarantined' || decisionCode.includes('META_RULE')) {
     return {
       category: 'quarantined',
@@ -57,7 +117,40 @@ export function getClaimClassification(cl, allConflictedClaimIds = new Set()) {
     };
   }
 
-  // 2. Rejected: fragments, duplicates, explicit rejections
+  // 3. Review Required: missing table context, weak predicate, or below threshold
+  const isReview = certTier === 'REVIEW_REQUIRED'
+    || status === 'candidate'
+    || status === 'review'
+    || decisionStr === 'REVIEW';
+  if (isReview && !allGatesPassed) {
+    if (decisionReason.includes('table') || decisionReason.includes('header')) {
+      return {
+        category: 'review',
+        badgeLabel: '⚠️ Review (Missing Context)',
+        badgeBg: '#FEF9C3',
+        badgeColor: '#854D0E',
+        badgeBorder: '#FDE047',
+      };
+    }
+    if (decisionCode.includes('WEAK_PREDICATE') || decisionReason.includes('predicate')) {
+      return {
+        category: 'review',
+        badgeLabel: '⚠️ Review (Unmapped Predicate)',
+        badgeBg: '#FEF9C3',
+        badgeColor: '#854D0E',
+        badgeBorder: '#FDE047',
+      };
+    }
+    return {
+      category: 'review',
+      badgeLabel: '⚠️ Review Required',
+      badgeBg: '#FEF9C3',
+      badgeColor: '#854D0E',
+      badgeBorder: '#FDE047',
+    };
+  }
+
+  // 4. Rejected: duplicate, contradiction, or boundary violation
   const isRejected = certTier === 'REJECTED'
     || status === 'rejected'
     || decisionStr === 'REJECT'
@@ -66,40 +159,56 @@ export function getClaimClassification(cl, allConflictedClaimIds = new Set()) {
     || decisionCode.includes('SUBJECT_CONTAMINATION');
   if (isRejected) {
     const isDup = claimType === 'duplicate' || decisionCode.includes('DUPLICATE');
+    if (isDup) {
+      return {
+        category: 'rejected',
+        badgeLabel: '📑 Duplicate (Collapsed)',
+        badgeBg: '#FEE2E2',
+        badgeColor: '#B91C1C',
+        badgeBorder: '#FCA5A5',
+      };
+    }
+    if (decisionReason.includes('contradiction') || decisionReason.includes('polarity')) {
+      return {
+        category: 'rejected',
+        badgeLabel: '❌ Semantic Contradiction',
+        badgeBg: '#FEE2E2',
+        badgeColor: '#B91C1C',
+        badgeBorder: '#FCA5A5',
+      };
+    }
+    if (decisionReason.includes('boundary') || decisionReason.includes('threshold') || decisionReason.includes('relaxation')) {
+      return {
+        category: 'rejected',
+        badgeLabel: '❌ Boundary Violation',
+        badgeBg: '#FEE2E2',
+        badgeColor: '#B91C1C',
+        badgeBorder: '#FCA5A5',
+      };
+    }
+    if (decisionCode.includes('FRAGMENT') || decisionReason.includes('ellipsis') || decisionReason.includes('truncated')) {
+      return {
+        category: 'rejected',
+        badgeLabel: '⛔ Syntactic Fragment',
+        badgeBg: '#FEE2E2',
+        badgeColor: '#B91C1C',
+        badgeBorder: '#FCA5A5',
+      };
+    }
     return {
       category: 'rejected',
-      badgeLabel: isDup ? '📑 Duplicate (Collapsed)' : '⛔ Rejected Fragment',
+      badgeLabel: '⛔ Rejected Rule',
       badgeBg: '#FEE2E2',
       badgeColor: '#B91C1C',
       badgeBorder: '#FCA5A5',
     };
   }
 
-  // 3. Non-Rules: definitions, descriptions, references, responsibilities
-  const isNonRule = certTier === 'NON_RULE'
-    || ['definition', 'description', 'reference', 'responsibility', 'non_rule'].includes(claimType)
-    || ['definition', 'description', 'reference', 'responsibility'].includes(contentRole)
-    || decisionCode.includes('DESCRIPTIVE');
-  if (isNonRule) {
-    let sublabel = '📖 Non-Rule Context';
-    if (claimType === 'definition' || contentRole === 'definition') sublabel = '📖 Non-Rule (Def)';
-    else if (claimType === 'description' || contentRole === 'description') sublabel = 'ℹ️ Non-Rule (Desc)';
-    else if (claimType === 'reference' || contentRole === 'reference') sublabel = '🔗 Non-Rule (Ref)';
-    else if (claimType === 'responsibility' || contentRole === 'responsibility') sublabel = '👥 Non-Rule (Resp)';
-    return {
-      category: 'non_rule',
-      badgeLabel: sublabel,
-      badgeBg: '#F3E8FF',
-      badgeColor: '#6B21A8',
-      badgeBorder: '#D8B4FE',
-    };
-  }
-
-  // 4. Canonical v3 (Automated-Certified / Human-Certified)
+  // 5. Canonical v3 (Automated-Certified / Human-Certified)
   const isHumanCertified = certTier === 'HUMAN_CERTIFIED';
   const isCanon = (cl.is_canonical === true || cl.data?.is_canonical === true || allGatesPassed || decisionStr === 'APPROVE')
     && (status === 'verified' || status === 'active' || decisionStr === 'APPROVE')
-    && (['rule', 'policy_rule', 'policy'].includes(claimType) || !claimType);
+    && (['rule', 'policy_rule', 'policy', 'table_rule', 'table_row', 'policy_matrix'].includes(claimType) || !claimType);
   if (isCanon) {
     return {
       category: 'canonical',
@@ -110,13 +219,12 @@ export function getClaimClassification(cl, allConflictedClaimIds = new Set()) {
     };
   }
 
-  // 5. Review required: unverified or failed semantic gates
   return {
     category: 'review',
-    badgeLabel: '🔍 Review Required',
-    badgeBg: '#E0F2FE',
-    badgeColor: '#0369A1',
-    badgeBorder: '#BAE6FD',
+    badgeLabel: '⚠️ Review Required',
+    badgeBg: '#FEF9C3',
+    badgeColor: '#854D0E',
+    badgeBorder: '#FDE047',
   };
 }
 
@@ -167,17 +275,14 @@ export default function AssetClaimsStudioPane({
       const isSummary = cl.claim_type === 'derived_summary' || cl.content_role === 'summary';
       if (isSummary) summaryCount++;
 
-      const score = Number(
-        cl.trustScore ??
-        cl.data?.trustScore ??
-        cl.data?.confidence ??
-        cl.data?.trust_score ??
-        0.95
-      );
+      const rawScore = cl.trustScore ?? cl.data?.trustScore ?? cl.data?.confidence ?? cl.data?.trust_score;
+      const score = (rawScore !== undefined && rawScore !== null && !isNaN(Number(rawScore)))
+        ? Number(rawScore)
+        : 0.0;
       totalScore += score;
     });
 
-    const avgScore = totalClaims > 0 ? Math.round((totalScore / totalClaims) * 100) : 95;
+    const avgScore = totalClaims > 0 ? Math.round((totalScore / totalClaims) * 100) : 0;
     const verifiedPct = totalClaims > 0 ? Math.round((canonicalCount / totalClaims) * 100) : 100;
 
     return {
@@ -210,13 +315,10 @@ export default function AssetClaimsStudioPane({
       if (statusFilter === 'conflicted' && cat !== 'conflicted') return false;
 
       // Trust tier filter
-      const score = Number(
-        cl.trustScore ??
-        cl.data?.trustScore ??
-        cl.data?.confidence ??
-        cl.data?.trust_score ??
-        0.95
-      );
+      const rawScore = cl.trustScore ?? cl.data?.trustScore ?? cl.data?.confidence ?? cl.data?.trust_score;
+      const score = (rawScore !== undefined && rawScore !== null && !isNaN(Number(rawScore)))
+        ? Number(rawScore)
+        : 0.0;
       if (trustTierFilter === 'high' && score < 0.9) return false;
       if (trustTierFilter === 'med' && (score < 0.7 || score >= 0.9)) return false;
       if (trustTierFilter === 'low' && score >= 0.7) return false;
@@ -237,8 +339,8 @@ export default function AssetClaimsStudioPane({
 
       return true;
     }).sort((a, b) => {
-      const scoreA = Number(a.trustScore ?? a.data?.trustScore ?? a.data?.confidence ?? a.data?.trust_score ?? 0.95);
-      const scoreB = Number(b.trustScore ?? b.data?.trustScore ?? b.data?.confidence ?? b.data?.trust_score ?? 0.95);
+      const scoreA = Number(a.trustScore ?? a.data?.trustScore ?? a.data?.confidence ?? a.data?.trust_score ?? 0.0);
+      const scoreB = Number(b.trustScore ?? b.data?.trustScore ?? b.data?.confidence ?? b.data?.trust_score ?? 0.0);
 
       if (sortBy === 'trust_desc') return scoreB - scoreA;
       if (sortBy === 'trust_asc') return scoreA - scoreB;
@@ -591,14 +693,10 @@ export default function AssetClaimsStudioPane({
         }}>
           {paginatedClaims.map((cl, idx) => {
             const isConf = allConflictedClaimIds.has(cl.id) || cl.status === 'conflicted';
-            const trustVal = Number(
-              cl.trustScore ??
-              cl.data?.trustScore ??
-              cl.data?.confidence ??
-              cl.data?.trust_score ??
-              0.95
-            );
-            const trustPercent = Math.round(trustVal * 100);
+            const rawTrust = cl.trustScore ?? cl.data?.trustScore ?? cl.data?.confidence ?? cl.data?.trust_score;
+            const hasScore = rawTrust !== undefined && rawTrust !== null && !isNaN(Number(rawTrust));
+            const trustVal = hasScore ? Number(rawTrust) : null;
+            const trustPercent = trustVal !== null ? Math.round(trustVal * 100) : null;
             const isSummary = cl.claim_type === 'derived_summary' || 
                               cl.claim_type === 'summary_non_canonical' ||
                               cl.data?.claim_type === 'derived_summary' ||
@@ -681,9 +779,17 @@ export default function AssetClaimsStudioPane({
                       <span style={{
                         fontSize: '0.68rem',
                         fontWeight: 800,
-                        color: trustPercent >= 90 ? '#059669' : trustPercent >= 70 ? '#D97706' : '#DC2626'
+                        color: (cat === 'canonical' && trustPercent !== null)
+                          ? (trustPercent >= 90 ? '#059669' : trustPercent >= 70 ? '#D97706' : '#DC2626')
+                          : '#64748B'
                       }}>
-                        Trust: {trustPercent}%
+                        {cat === 'canonical' && trustPercent !== null
+                          ? `Trust: ${trustPercent}%`
+                          : cat === 'rejected'
+                          ? 'Confidence: Uncalibrated (Rejected)'
+                          : cat === 'non_rule'
+                          ? 'Contextual (Non-Rule)'
+                          : 'Confidence: Uncalibrated'}
                       </span>
                     </div>
                   </div>
@@ -780,6 +886,27 @@ export default function AssetClaimsStudioPane({
                       </div>
                     );
                   })()}
+
+                  {/* Gate Failure Reason / Provenance Diagnostic */}
+                  {(cl.decision_reason || cl.data?.decision_reason || cat === 'rejected' || cat === 'review') && (
+                    <div style={{
+                      marginTop: '8px',
+                      padding: '6px 8px',
+                      borderRadius: '5px',
+                      background: cat === 'rejected' ? '#FEF2F2' : '#FEFCE8',
+                      border: `1px solid ${cat === 'rejected' ? '#FECACA' : '#FEF08A'}`,
+                      fontSize: '0.65rem',
+                      lineHeight: 1.35,
+                      color: cat === 'rejected' ? '#991B1B' : '#713F12',
+                    }}>
+                      <div style={{ fontWeight: 700, marginBottom: '2px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        <span>{cat === 'rejected' ? '⛔ Rejection Reason:' : '⚠️ Adjudication Notice:'}</span>
+                      </div>
+                      <div>
+                        {cl.decision_reason || cl.data?.decision_reason || (cat === 'rejected' ? 'Candidate does not satisfy normative certification gates.' : 'Manual adjudication review required before production routing.')}
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {/* Card Actions Footer */}
@@ -897,14 +1024,10 @@ export default function AssetClaimsStudioPane({
             <tbody>
               {paginatedClaims.map((cl, idx) => {
                 const isConf = allConflictedClaimIds.has(cl.id) || cl.status === 'conflicted';
-                const trustVal = Number(
-                  cl.trustScore ??
-                  cl.data?.trustScore ??
-                  cl.data?.confidence ??
-                  cl.data?.trust_score ??
-                  0.95
-                );
-                const trustPercent = Math.round(trustVal * 100);
+                const rawTrust = cl.trustScore ?? cl.data?.trustScore ?? cl.data?.confidence ?? cl.data?.trust_score;
+                const hasScore = rawTrust !== undefined && rawTrust !== null && !isNaN(Number(rawTrust));
+                const trustVal = hasScore ? Number(rawTrust) : null;
+                const trustPercent = trustVal !== null ? Math.round(trustVal * 100) : null;
                 const subject = cl.subject || cl.data?.subject || '—';
                 const predicate = cl.predicate || cl.data?.predicate || '—';
                 const claimText = cl.fullText || cl.label || cl.data?.claim_text || '';
@@ -938,7 +1061,7 @@ export default function AssetClaimsStudioPane({
                     </td>
                     <td 
                       style={{ padding: '8px 12px', cursor: 'help' }}
-                      title={`Validation Breakdown (${trustPercent}%):
+                      title={`Validation Breakdown (${trustPercent !== null ? trustPercent : 0}%):
 • Evidence Support: ${Math.round((cl.trustScores?.evidence_score ?? cl.data?.evidence_score ?? 1.0) * 100)}%
 • Source Fidelity: ${Math.round((cl.trustScores?.source_score ?? cl.data?.source_score ?? 1.0) * 100)}%
 • Semantic Completeness: ${Math.round((cl.trustScores?.consistency_score ?? cl.data?.consistency_score ?? 1.0) * 100)}%
@@ -946,8 +1069,12 @@ export default function AssetClaimsStudioPane({
 • Quality Gates: SCHEMA_VALID | EVIDENCE_SUPPORTED | PREDICATE_CANONICAL | CONFLICT_CHECKED`}
                     >
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                        <span style={{ fontWeight: 800, fontSize: '0.78rem', color: trustPercent >= 90 ? '#059669' : trustPercent >= 70 ? '#D97706' : '#DC2626' }}>
-                          {trustPercent}%
+                        <span style={{
+                          fontWeight: 800,
+                          fontSize: '0.78rem',
+                          color: trustPercent !== null ? (trustPercent >= 90 ? '#059669' : trustPercent >= 70 ? '#D97706' : '#DC2626') : '#94A3B8'
+                        }}>
+                          {trustPercent !== null ? `${trustPercent}%` : '—'}
                         </span>
                         <div style={{ display: 'flex', gap: '3px', alignItems: 'center' }}>
                           <span title="Evidence Support: 100%" style={{ width: '4px', height: '4px', borderRadius: '50%', background: '#059669', display: 'inline-block' }} />

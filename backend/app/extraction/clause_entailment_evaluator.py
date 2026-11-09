@@ -234,17 +234,42 @@ class ClauseEntailmentEvaluator:
         has_premise_permissive = any(re.search(p, premise_lower) for p in PERMISSIVE_MARKERS)
         has_premise_entitlement = any(re.search(p, premise_lower) for p in ENTITLEMENT_MARKERS)
 
-        # Contradiction: Premise prohibits the action, but claim asserts permission or affirmative obligation
-        if mod_upper in ("PERMISSION", "MAY", "OBLIGATION", "MUST"):
-            pred_tokens = [w for w in predicate.lower().split("_") if len(w) > 3 and w not in ("must", "shall", "will", "party", "either", "each")]
+        # Contradiction: Premise prohibits the action or specifies non-charge/non-return, but claim asserts permission, affirmative obligation, or affirmative fact
+        claim_full_str = f"{predicate} {object_text} {' '.join(cond_list)}".lower()
+        claim_has_negation = bool(re.search(r"\b(not|no|cannot|prohibited|non-|exempt|free)\b", claim_full_str))
+
+        if not claim_has_negation:
+            pred_tokens = [w for w in predicate.lower().split("_") if len(w) > 3 and w not in ("must", "shall", "will", "party", "either", "each", "have", "policy")]
+            obj_tokens = [w for w in re.sub(r"[^\w\s]", "", (object_text or "").lower()).split() if len(w) > 3 and w not in ("this", "that", "these", "those", "their", "item", "items", "customer", "support", "members")]
+            candidate_tokens = list(set(pred_tokens + obj_tokens))
+            prohibition_markers = (
+                r"\bmust not\b", r"\bmay not\b", r"\bcannot\b", r"\bshall not\b",
+                r"\bis prohibited from\b", r"\bnot licensed to\b", r"\bwill not\b",
+                r"\bwon't\b", r"\bnot be\b", r"\bno fee\b", r"\bfree of charge\b",
+                r"\bwithout charge\b", r"\bnot eligible\b", r"\bnon-refundable\b",
+                r"\bnon-returnable\b", r"\bno refund\b", r"\bno returns\b"
+            )
             prohibition_governs_action = False
-            for marker in (r"\bmust not\b", r"\bmay not\b", r"\bcannot\b", r"\bshall not\b", r"\bis prohibited from\b", r"\bnot licensed to\b"):
-                for token in pred_tokens:
-                    if re.search(rf"{marker}\s+(?:\w+\s+){{0,4}}{re.escape(token)}", premise_lower):
+            for marker in prohibition_markers:
+                for token in candidate_tokens:
+                    stem = token.rstrip("s").rstrip("ed").rstrip("ing")
+                    tok_pat = rf"(?:{re.escape(token)}|{re.escape(stem)}\w*)" if len(stem) >= 3 else re.escape(token)
+                    if re.search(rf"{marker}\s+(?:\w+\s+){{0,4}}{tok_pat}", premise_lower):
                         prohibition_governs_action = True
                         break
                 if prohibition_governs_action:
                     break
+
+            # Domain-specific polarity checks:
+            if not prohibition_governs_action:
+                if re.search(r"\b(cannot be returned|not eligible for (?:refund|return)|no refunds?|non-refundable|non-returnable|not permitted to return)\b", premise_lower):
+                    if any(w in claim_full_str for w in ("refund", "return", "has_return_window", "can_initiate_return")):
+                        prohibition_governs_action = True
+
+            if not prohibition_governs_action:
+                if re.search(r"\b(will not be charged|won't be charged|not be charged|no charge|free of charge|without charge|no fee)\b", premise_lower):
+                    if any(w in claim_full_str for w in ("charged", "fee", "pay", "payment")):
+                        prohibition_governs_action = True
 
             if prohibition_governs_action:
                 return EntailmentVerdict(
@@ -252,7 +277,7 @@ class ClauseEntailmentEvaluator:
                     label=EntailmentLabel.CONTRADICTION,
                     confidence_score=0.95,
                     is_overstatement=True,
-                    overstatement_reason="Polarity contradiction: source clause explicitly prohibits action, but claim asserts right or affirmative duty.",
+                    overstatement_reason="Polarity contradiction: source clause explicitly negates or prohibits action/charge, but claim asserts right, fee, or affirmative duty.",
                     premise_text=premise,
                     hypothesis_text=hypothesis,
                     deontic_alignment="POLARITY_INVERSION",
@@ -303,6 +328,21 @@ class ClauseEntailmentEvaluator:
                     condition_coverage=0.0,
                     missing_conditions=missing_conditions,
                 )
+
+        # Gate Check 3b: Threshold Boundary Relaxation (e.g. exclusive 'over $X' weakened to inclusive '>=')
+        for cond in cond_list:
+            if ">=" in cond or "at least" in cond.lower():
+                if re.search(r"\b(?:over|exceeding|greater than|more than)\s*\$\s*(\d+(?:\.\d+)?)\b", premise_lower) and not re.search(r"\b(?:at least|or more|minimum of)\b", premise_lower):
+                    return EntailmentVerdict(
+                        clause_entails_claim=False,
+                        label=EntailmentLabel.CONTRADICTION,
+                        confidence_score=0.95,
+                        is_overstatement=True,
+                        overstatement_reason="Threshold relaxation contradiction: premise specifies strict exclusive threshold ('over $150'), but claim specifies inclusive boundary ('>=' or 'at least').",
+                        premise_text=premise,
+                        hypothesis_text=hypothesis,
+                        deontic_alignment="THRESHOLD_INVERSION",
+                    )
 
         # ---------------------------------------------------------------------
         # Gate Check 4: Semantic Lexical Grounding
@@ -453,3 +493,30 @@ class ClauseEntailmentEvaluator:
             evidence.entailment_score = verdict.confidence_score
 
         return verdict
+
+    @classmethod
+    def evaluate_threshold_condition(cls, condition_str: str, test_value: float) -> bool:
+        """
+        Evaluates a numerical threshold condition against a test value.
+        Preserves strict mathematical boundaries (e.g. exclusive > vs inclusive >=).
+        Example:
+            'order_value > 150 USD' with 149.99 -> False
+            'order_value > 150 USD' with 150.00 -> False
+            'order_value > 150 USD' with 150.01 -> True
+        """
+        m = re.search(r"(>=|<=|>|<|==)\s*(\d+(?:\.\d+)?)", condition_str)
+        if not m:
+            return False
+        op = m.group(1)
+        thresh = float(m.group(2))
+        if op == ">":
+            return test_value > thresh
+        elif op == ">=":
+            return test_value >= thresh
+        elif op == "<":
+            return test_value < thresh
+        elif op == "<=":
+            return test_value <= thresh
+        elif op == "==":
+            return abs(test_value - thresh) < 1e-6
+        return False

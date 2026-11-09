@@ -1,0 +1,266 @@
+{
+  "1": {
+    "order_index": 1,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:31:48559f1f672a:90aa5a77e1",
+    "subject": "Custom corporate agreements",
+    "predicate": "may_override_standard_terms",
+    "object": "Standard policy terms",
+    "conditions": [
+      "applies to business customers on standard accounts when custom contracts exist"
+    ],
+    "claim_type": "rule",
+    "content_role": "policy_rule",
+    "status": "verified",
+    "is_canonical": true,
+    "claim_text": "\u007f  Business customers on standard accounts (custom contracts may override these terms).",
+    "verbatim_source_quote": "\u007f  Business customers on standard accounts (custom contracts may override these terms).",
+    "lifecycle_decision": "approve",
+    "decision_code": "APPROVE_ALL_PASSED",
+    "decision_reason": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED.",
+    "composite_trust_score": 0.99,
+    "gates": {
+      "source_match": true,
+      "meaning": true,
+      "completeness": true,
+      "scope": true
+    }
+  },
+  "8": {
+    "order_index": 8,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:42:638fa80324be:05f344f0d9",
+    "subject": "Return",
+    "predicate": "has_definition",
+    "object": "Sending a purchased item back to Northwind by mail or in-store drop-off.",
+    "conditions": [
+      "Table Column: Definition"
+    ],
+    "claim_type": "definition",
+    "content_role": "definition",
+    "status": "context",
+    "is_canonical": false,
+    "claim_text": "| Return | Sending a purchased item back to Northwind by mail or in-store drop-off. |",
+    "verbatim_source_quote": "| Return | Sending a purchased item back to Northwind by mail or in-store drop-off. |",
+    "lifecycle_decision": "reject",
+    "decision_code": "REJECT_DESCRIPTIVE_PURPOSE",
+    "decision_reason": "[REJECT_DESCRIPTIVE_PURPOSE] Claim type failure: 'definition' is a non-rule type (definition, reference, or description).",
+    "composite_trust_score": 0.5,
+    "gates": {
+      "source_match": true,
+      "meaning": true,
+      "completeness": true,
+      "scope": false
+    }
+  },
+  "26": {
+    "order_index": 26,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:75:64e372a4a48a:322da7cdcd",
+    "subject": "Opened packaging, item unused",
+    "predicate": "has_refund_percentage",
+    "object": "100%",
+    "conditions": [
+      "Table Column: Refund amount"
+    ],
+    "claim_type": "rule",
+    "content_role": "policy_rule",
+    "status": "verified",
+    "is_canonical": true,
+    "claim_text": "| Opened packaging, item unused | 100% |",
+    "verbatim_source_quote": "| Opened packaging, item unused | 100% |",
+    "lifecycle_decision": "approve",
+    "decision_code": "APPROVE_ALL_PASSED",
+    "decision_reason": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED.",
+    "composite_trust_score": 0.99,
+    "gates": {
+      "source_match": true,
+      "meaning": true,
+      "completeness": true,
+      "scope": true
+    }
+  },
+  "92": {
+    "order_index": 92,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:158:1e10965ca521:05aae6b5e2",
+    "subject": "Order",
+    "predicate": "has_return_shipping_rule",
+    "object": "No",
+    "conditions": [
+      "Table Column: Original shipping refunded?",
+      "order_value > 150 USD",
+      "return_reason: any reason"
+    ],
+    "claim_type": "rule",
+    "content_role": "policy_rule",
+    "status": "verified",
+    "is_canonical": true,
+    "claim_text": "| Order over $150, any reason | No | Free |",
+    "verbatim_source_quote": "| Order over $150, any reason | No | Free |",
+    "lifecycle_decision": "approve",
+    "decision_code": "APPROVE_ALL_PASSED",
+    "decision_reason": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED.",
+    "composite_trust_score": 0.99,
+    "gates": {
+      "source_match": true,
+      "meaning": true,
+      "completeness": true,
+      "scope": true
+    }
+  },
+  "93": {
+    "order_index": 93,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:158:1e10965ca521:def86bf564",
+    "subject": "Order",
+    "predicate": "has_return_label_cost",
+    "object": "Free",
+    "conditions": [
+      "Table Column: Return label cost",
+      "order_value > 150 USD",
+      "return_reason: any reason"
+    ],
+    "claim_type": "rule",
+    "content_role": "policy_rule",
+    "status": "verified",
+    "is_canonical": true,
+    "claim_text": "| Order over $150, any reason | No | Free |",
+    "verbatim_source_quote": "| Order over $150, any reason | No | Free |",
+    "lifecycle_decision": "approve",
+    "decision_code": "APPROVE_ALL_PASSED",
+    "decision_reason": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED.",
+    "composite_trust_score": 0.99,
+    "gates": {
+      "source_match": true,
+      "meaning": true,
+      "completeness": true,
+      "scope": true
+    }
+  },
+  "105": {
+    "order_index": 105,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:177:dd611bcaa1c8:903c128dd4",
+    "subject": "Keep It policy",
+    "predicate": "has_stage_duration",
+    "object": "Immediate",
+    "conditions": [
+      "Table Column: Timeline"
+    ],
+    "claim_type": "rule",
+    "content_role": "policy_rule",
+    "status": "verified",
+    "is_canonical": true,
+    "claim_text": "| Partial refund (keep item) | Offered for minor cosmetic flaws | Immediate |",
+    "verbatim_source_quote": "| Partial refund (keep item) | Offered for minor cosmetic flaws | Immediate |",
+    "lifecycle_decision": "approve",
+    "decision_code": "APPROVE_ALL_PASSED",
+    "decision_reason": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED.",
+    "composite_trust_score": 0.99,
+    "gates": {
+      "source_match": true,
+      "meaning": true,
+      "completeness": true,
+      "scope": true
+    }
+  },
+  "120": {
+    "order_index": 120,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:189:91a93cf08ec3:07184e4337",
+    "subject": "Northwind We",
+    "predicate": "cancel",
+    "object": "an order for reasons including stock errors, pricing errors, suspected fraud, or inability to verify payment",
+    "conditions": [],
+    "claim_type": "rule",
+    "content_role": "policy_rule",
+    "status": "candidate",
+    "is_canonical": false,
+    "claim_text": "Northwind We may cancel an order for reasons including stock errors, pricing errors, suspected fraud, or inability to verify payment.",
+    "verbatim_source_quote": "Northwind We may cancel an order for reasons including stock errors, pricing errors, suspected fraud, or inability to verify payment.",
+    "lifecycle_decision": "review",
+    "decision_code": "WEAK_PREDICATE",
+    "decision_reason": "[WEAK_PREDICATE] Predicate failure: Predicate 'cancel' is not present in versioned taxonomy registry.",
+    "composite_trust_score": 0.85,
+    "gates": {
+      "source_match": true,
+      "meaning": true,
+      "completeness": true,
+      "scope": false
+    }
+  },
+  "130": {
+    "order_index": 130,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:199:a5aeba23b922:4db1e8c340",
+    "subject": "Subscriber",
+    "predicate": "can_cancel_before_trial_ends",
+    "object": "without charge",
+    "conditions": [
+      "you cancel before the trial ends",
+      "before trial ends"
+    ],
+    "claim_type": "rule",
+    "content_role": "policy_rule",
+    "status": "verified",
+    "is_canonical": true,
+    "claim_text": "If you cancel before the trial ends, you will not be charged.",
+    "verbatim_source_quote": "If you cancel before the trial ends, you will not be charged.",
+    "lifecycle_decision": "approve",
+    "decision_code": "APPROVE_ALL_PASSED",
+    "decision_reason": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED.",
+    "composite_trust_score": 0.99,
+    "gates": {
+      "source_match": true,
+      "meaning": true,
+      "completeness": true,
+      "scope": true
+    }
+  },
+  "181": {
+    "order_index": 181,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:248:8ce08a2be4ff:319970724d",
+    "subject": "Northwind",
+    "predicate": "provides_documentation_upon_request",
+    "object": "commercial invoice and proof of return",
+    "conditions": [
+      "request",
+      "upon customer request"
+    ],
+    "claim_type": "rule",
+    "content_role": "policy_rule",
+    "status": "verified",
+    "is_canonical": true,
+    "claim_text": "Northwind will provide a commercial invoice and proof of return upon request.",
+    "verbatim_source_quote": "Northwind will provide a commercial invoice and proof of return upon request.",
+    "lifecycle_decision": "approve",
+    "decision_code": "APPROVE_ALL_PASSED",
+    "decision_reason": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED.",
+    "composite_trust_score": 0.99,
+    "gates": {
+      "source_match": true,
+      "meaning": true,
+      "completeness": true,
+      "scope": true
+    }
+  },
+  "225": {
+    "order_index": 225,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:320:367813884b24:f587d3a3c3",
+    "subject": "First response by email",
+    "predicate": "has_target",
+    "object": "24 hours",
+    "conditions": [
+      "Table Column: Target"
+    ],
+    "claim_type": "rule",
+    "content_role": "policy_rule",
+    "status": "candidate",
+    "is_canonical": false,
+    "claim_text": "| First response by email | 24 hours |",
+    "verbatim_source_quote": "| First response by email | 24 hours |",
+    "lifecycle_decision": "review",
+    "decision_code": "WEAK_PREDICATE",
+    "decision_reason": "[WEAK_PREDICATE] Predicate failure: Predicate 'has_target' is not present in versioned taxonomy registry.",
+    "composite_trust_score": 0.85,
+    "gates": {
+      "source_match": true,
+      "meaning": true,
+      "completeness": true,
+      "scope": false
+    }
+  }
+}

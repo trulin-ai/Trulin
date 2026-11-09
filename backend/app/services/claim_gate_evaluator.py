@@ -135,6 +135,9 @@ ALLOWED_RULE_CLAIM_TYPES = {
     "rule",
     "policy_rule",
     "policy",
+    "table_rule",
+    "table_row",
+    "policy_matrix",
 }
 
 # Text markers that indicate navigational cross-references rather than operative policy rules
@@ -498,7 +501,32 @@ class ClaimGateEvaluator:
                     break
 
         # 10c. Modal/operative verb preservation in normative rules
-        if is_text_integrity and ct_clean in ALLOWED_RULE_CLAIM_TYPES:
+        # Exempt table rows, list items, declarative constraints, and non-rule context
+        is_table_rule = bool(
+            (metadata and (metadata.get("table_grid") or metadata.get("in_table") or metadata.get("is_table")))
+            or ct_clean in {"table_rule", "table_row", "policy_matrix"}
+            or "|" in text_clean
+            or "\t" in text_clean
+        )
+        is_list_item = bool(
+            re.match(r"^\s*(?:[-*•]|\d+[\.\)])\s+", text_clean)
+            or (metadata and (metadata.get("is_list") or metadata.get("evidence_structure") == "list_item"))
+        )
+        is_declarative_constraint = bool(
+            re.search(
+                r"\b(?:approval|approved by|manager approval|tier \d+|lead approval|director approval|"
+                r"required|requires|requirement|eligible|eligibility|not eligible|valid|validity|"
+                r"condition|subject to|applies to|minimum|maximum|limit|limited to|threshold|"
+                r"fee|fees|deposit|non-refundable|non-returnable|deadline|within \d+|per \d+|per customer)\b",
+                text_lower,
+            )
+            or any(k in subj_lower for k in ("approval", "threshold", "returns without", "refund approval", "tier", "return window", "refund speed", "return shipping", "restocking fee", "processing", "warranty", "shipping"))
+            or any(k in pred_lower for k in ("requires_", "has_refund_", "has_stage_", "has_identity_", "has_posting_", "has_default_", "has_return_", "has_summary", "has_warranty_", "applies_to", "is_required"))
+        )
+        content_role_clean = str((metadata.get("content_role") if metadata else None) or kwargs.get("content_role") or "").lower()
+        is_non_rule_context = ct_clean in NON_RULE_CLAIM_TYPES or content_role_clean in {"definition", "contact_info", "example", "revision_history"}
+
+        if is_text_integrity and ct_clean in ALLOWED_RULE_CLAIM_TYPES and not (is_table_rule or is_list_item or is_declarative_constraint or is_non_rule_context):
             if not re.search(MODAL_OPERATIVE_PATTERN, text_lower):
                 is_text_integrity = False
                 reasons.append("Text integrity failure: Normative rule is missing an operative modal verb ('may', 'must', 'will', 'shall', etc.).")
@@ -548,16 +576,16 @@ class ClaimGateEvaluator:
             tier = "AUTOMATED_CERTIFIED"
             is_canon = True
             agent_acc = True
-        elif st_clean == "rejected" or not is_not_duplicate or ct_clean in ("fragment", "duplicate") or not is_span_exists or not is_text_integrity:
+        elif st_clean == "rejected" or not is_not_duplicate or ct_clean in ("fragment", "duplicate") or not is_span_exists:
             tier = "REJECTED"
+            is_canon = False
+            agent_acc = False
+        elif not is_type_allowed or is_non_rule_context or ct_clean in ("definition", "description", "reference", "responsibility", "example", "summary", "contact_information", "form_field_specification", "non_rule"):
+            tier = "NON_RULE"
             is_canon = False
             agent_acc = False
         elif not is_atomic or ct_clean == "quarantined":
             tier = "QUARANTINED"
-            is_canon = False
-            agent_acc = False
-        elif not is_type_allowed or ct_clean in ("definition", "description", "reference", "responsibility", "example", "summary"):
-            tier = "NON_RULE"
             is_canon = False
             agent_acc = False
         else:

@@ -32,7 +32,8 @@ async def init_db_schema():
         "ALTER TABLE organizations ADD COLUMN IF NOT EXISTS allowed_auth_methods JSONB DEFAULT '[]'::jsonb;",
         "ALTER TABLE organizations ADD COLUMN IF NOT EXISTS governance_config JSONB DEFAULT '{}'::jsonb;",
         "ALTER TABLE organizations ADD COLUMN IF NOT EXISTS setup_completed BOOLEAN DEFAULT FALSE;",
-        "ALTER TABLE users ADD COLUMN IF NOT EXISTS avatar_url VARCHAR(500);",
+        "ALTER TABLE users ADD COLUMN IF NOT EXISTS avatar_url TEXT;",
+        "ALTER TABLE users ALTER COLUMN avatar_url TYPE TEXT;",
         "ALTER TABLE users ADD COLUMN IF NOT EXISTS title VARCHAR(100);",
         "ALTER TABLE users ADD COLUMN IF NOT EXISTS department VARCHAR(100);",
         "ALTER TABLE users ADD COLUMN IF NOT EXISTS phone VARCHAR(50);",
@@ -52,6 +53,41 @@ async def init_db_schema():
         "ALTER TABLE data_sources ADD COLUMN IF NOT EXISTS capabilities JSONB DEFAULT '{}'::jsonb;",
         "ALTER TABLE documents ADD COLUMN IF NOT EXISTS domain VARCHAR(100) DEFAULT 'General';",
         "ALTER TABLE documents ADD COLUMN IF NOT EXISTS owner_id UUID REFERENCES users(id) ON DELETE SET NULL;",
+        """
+        CREATE TABLE IF NOT EXISTS folders (
+            id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+            organization_id UUID NOT NULL REFERENCES organizations(id) ON DELETE CASCADE,
+            parent_id UUID,
+            name VARCHAR(255) NOT NULL,
+            depth INTEGER NOT NULL DEFAULT 0,
+            is_system BOOLEAN NOT NULL DEFAULT FALSE,
+            folder_type VARCHAR(50) NOT NULL DEFAULT 'general',
+            icon VARCHAR(50),
+            color VARCHAR(50),
+            created_by UUID REFERENCES users(id) ON DELETE SET NULL,
+            created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+            updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+            CONSTRAINT uq_folders_org_id UNIQUE (organization_id, id),
+            CONSTRAINT chk_folders_depth CHECK (depth >= 0 AND depth <= 6)
+        );
+        """,
+        "CREATE INDEX IF NOT EXISTS idx_folders_org_parent ON folders(organization_id, parent_id);",
+        "CREATE INDEX IF NOT EXISTS idx_folders_org_depth ON folders(organization_id, depth);",
+        """
+        DO $$
+        BEGIN
+            IF NOT EXISTS (
+                SELECT 1 FROM pg_constraint WHERE conname = 'fk_folders_parent_same_tenant'
+            ) THEN
+                ALTER TABLE folders 
+                ADD CONSTRAINT fk_folders_parent_same_tenant 
+                FOREIGN KEY (organization_id, parent_id) 
+                REFERENCES folders(organization_id, id) ON DELETE RESTRICT;
+            END IF;
+        END $$;
+        """,
+        "ALTER TABLE documents ADD COLUMN IF NOT EXISTS folder_id UUID REFERENCES folders(id) ON DELETE SET NULL;",
+        "CREATE INDEX IF NOT EXISTS idx_documents_org_folder ON documents(organization_id, folder_id);",
         """
         CREATE TABLE IF NOT EXISTS chat_sessions (
             id UUID PRIMARY KEY DEFAULT gen_random_uuid(),

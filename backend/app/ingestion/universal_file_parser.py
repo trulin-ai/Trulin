@@ -79,13 +79,11 @@ def repair_ocr_text(raw_text: str) -> str:
         line = line.replace("《", " ").replace("》", " ").replace("“", '"').replace("”", '"').replace("’", "'")
         line = re.sub(r"([a-zA-Z])'s([a-zA-Z])", r"\1's \2", line)
 
-        # 1. Punctuation spacing: comma, period, parens, colon, semicolon
+        # 1. Punctuation spacing: comma, parens, colon, semicolon (guarded)
         line = re.sub(r'([a-zA-Z])\(', r'\1 (', line)
         line = re.sub(r'\)([a-zA-Z])', r') \1', line)
         line = re.sub(r',([a-zA-Z])', r', \1', line)
-        line = re.sub(r':([a-zA-Z])', r': \1', line)
         line = re.sub(r';([a-zA-Z])', r'; \1', line)
-        line = re.sub(r'\.([A-Za-z])', r'. \1', line)
 
         # 2. Letter to digit / digit to letter transitions (e.g. next30days -> next 30 days)
         # Note: Protected tokens (AES256, TLS1.3, 15th, etc.) are masked as __PROT_TOK_N__ and preserved
@@ -109,14 +107,21 @@ def repair_ocr_text(raw_text: str) -> str:
                 repaired_tokens.append(token)
                 continue
 
+            # Letter-to-digit and digit-to-letter transitions for words with 3+ letters
+            # (e.g. within30days -> within 30 days)
+            if re.search(r'[a-zA-Z]{3,}\d+', word):
+                word = re.sub(r'([a-zA-Z]{3,})(\d+)', r'\1 \2', word)
+            if re.search(r'\d+[a-zA-Z]{3,}', word):
+                word = re.sub(r'(\d+)([a-zA-Z]{3,})', r'\1 \2', word)
+
             # CamelCase splitting (e.g. SafeDrinkingWaterAct -> Safe Drinking Water Act)
             camel_parts = re.findall(r'[A-Z]+(?=[A-Z][a-z]|\d|\W|$)|[A-Z]?[a-z]+|\d+', word)
             if len(camel_parts) > 1 and all(len(p) >= 2 for p in camel_parts):
                 repaired_tokens.append(prefix + " ".join(camel_parts) + suffix)
-            elif len(word) >= 5 and wordsegment is not None and not any(c.isdigit() for c in word):
+            elif len(word) >= 7 and wordsegment is not None and not any(c.isdigit() for c in word):
                 try:
                     segs = wordsegment.segment(word.lower())
-                    if len(segs) > 1 and all(len(s) >= 2 for s in segs):
+                    if len(segs) > 1 and all(len(s) >= 3 for s in segs):
                         if word[0].isupper():
                             segs[0] = segs[0].capitalize()
                         repaired_tokens.append(prefix + " ".join(segs) + suffix)
@@ -239,6 +244,9 @@ class _HTMLToTextExtractor(HTMLParser):
         elif self.current_tag == "tr":
             self.in_table = True
             self.table_row = []
+        elif self.current_tag in {"td", "th"}:
+            if self.in_table:
+                self.current_cell_parts = []
         elif self.current_tag == "br":
             self.result.append("\n")
 
@@ -246,6 +254,10 @@ class _HTMLToTextExtractor(HTMLParser):
         t = tag.lower()
         if t in self.ignore_tags:
             self.in_ignore = False
+        elif t in {"td", "th"} and self.in_table:
+            val = "".join(getattr(self, "current_cell_parts", [])).strip()
+            self.table_row.append(val)
+            self.current_cell_parts = []
         elif t == "tr" and self.table_row:
             self.result.append("\n| " + " | ".join(self.table_row) + " |")
             self.table_row = []
@@ -256,11 +268,10 @@ class _HTMLToTextExtractor(HTMLParser):
     def handle_data(self, data):
         if self.in_ignore:
             return
-        cleaned = data.strip()
-        if not cleaned:
-            return
         if self.in_table and self.current_tag in {"td", "th"}:
-            self.table_row.append(cleaned)
+            if not hasattr(self, "current_cell_parts"):
+                self.current_cell_parts = []
+            self.current_cell_parts.append(data)
         else:
             self.result.append(data)
 
@@ -299,11 +310,11 @@ class UniversalFileParser:
         cache_key = None
         try:
             from app.caching.pipeline_cache import default_pipeline_cache
-            config_hash = hashlib.sha256(b"ocr=true,table=true,headings=v2").hexdigest()[:16]
+            config_hash = hashlib.sha256(b"ocr=true,table=true,headings=v2,mode=layout").hexdigest()[:16]
             cache_key = default_pipeline_cache.compute_pipeline_key(
                 stage_name="universal_parser",
                 source_sha256=content_hash,
-                parser_version="v3.3",
+                parser_version="v3.4",
                 parser_config_hash=config_hash,
                 normalizer_version="v1.3",
                 ocr_version="v1.2",
@@ -790,13 +801,17 @@ class UniversalFileParser:
 
             for page_num, page in enumerate(reader.pages, start=1):
                 try:
-                    page_text = page.extract_text() or ""
-                except Exception:
+                    # Prefer layout extraction mode to preserve multi-column tables and spatial geometry
                     page_text = page.extract_text(extraction_mode="layout") or ""
+                    if not page_text.strip():
+                        page_text = page.extract_text() or ""
+                except Exception:
+                    page_text = page.extract_text() or ""
 
                 clean_page_text = page_text.strip()
                 char_count = len(clean_page_text)
                 total_chars += char_count
+                raw_digital_text = clean_page_text
 
                 # Multi-signal check
                 images = getattr(page, "images", [])
@@ -829,6 +844,7 @@ class UniversalFileParser:
                                     warnings.append(f"Page {page_num}: text recovered via OCR ({len(clean_page_text)} chars).")
                     except Exception as ocr_err:
                         logger.warning("OCR processing error on page %d: %s", page_num, ocr_err)
+                        warnings.append(f"Page {page_num}: OCR attempt failed: {str(ocr_err)}")
 
                 if char_count < 20:
                     empty_pages += 1
@@ -846,16 +862,30 @@ class UniversalFileParser:
                         chk = chunk.strip()
                         if not chk:
                             continue
-                        is_table = bool(chk.startswith("|") and "\n|" in chk)
+
+                        # Precise table detection
+                        pipe_lines = [l.strip() for l in chk.split("\n") if l.strip().count("|") >= 2]
+                        is_table = len(pipe_lines) >= 2 or (len(pipe_lines) >= 1 and any(re.search(r"\|:?-+:?\|", l) for l in chk.split("\n")))
+
                         is_hdg = bool(re.match(r"^(#+|Section\s+\d+|Chapter\s+\d+|Article\s+\d+|Rule\s+\d+)", chk, re.IGNORECASE))
                         b_type = ContentBlockType.TABLE if is_table else (ContentBlockType.HEADING if is_hdg else (ContentBlockType.IMAGE_OCR if selected_source == "ocr" else ContentBlockType.PARAGRAPH))
 
                         table_meta = None
                         if is_table:
-                            tbl_lines = [l for l in chk.split("\n") if l.strip().startswith("|")]
+                            tbl_lines = [l for l in chk.split("\n") if l.strip().count("|") >= 2]
                             if len(tbl_lines) >= 2:
-                                hdrs = [c.strip() for c in tbl_lines[0].split("|") if c.strip()]
-                                data_r = [[c.strip() for c in l.split("|") if c.strip()] for l in tbl_lines[2:]]
+                                hdrs = split_markdown_table_row(tbl_lines[0])
+                                data_r = []
+                                start_idx = 1
+                                if len(tbl_lines) > 1:
+                                    cand_sep = split_markdown_table_row(tbl_lines[1])
+                                    if all(re.match(r"^:?-+:?$", c) for c in cand_sep if c):
+                                        start_idx = 2
+                                for l in tbl_lines[start_idx:]:
+                                    row_c = split_markdown_table_row(l)
+                                    if len(row_c) < len(hdrs):
+                                        row_c.extend([""] * (len(hdrs) - len(row_c)))
+                                    data_r.append(row_c[:len(hdrs)])
                                 table_meta = {"headers": hdrs, "rows": data_r, "page_number": page_num}
                                 tables.append(table_meta)
 
@@ -879,7 +909,14 @@ class UniversalFileParser:
                     ocr_text_repaired=ocr_repaired,
                     selected_text_source=selected_source,
                     char_count=char_count,
-                    is_scanned_image=page_is_scanned,
+                    is_scanned_image=ocr_succeeded or (is_likely_scanned and char_count < 40),
+                    is_likely_scanned=is_likely_scanned,
+                    ocr_attempted=ocr_attempted,
+                    ocr_succeeded=ocr_succeeded,
+                    ocr_confidence=round(ocr_confidence, 3),
+                    text_extraction_status=extraction_status,
+                    raw_digital_text=raw_digital_text,
+                    raw_ocr_text=raw_ocr_text,
                     blocks=page_blocks,
                 ))
 
@@ -1004,8 +1041,7 @@ class UniversalFileParser:
             return full_text, [], blocks, tables, warnings
         except Exception as e:
             warnings.append(f"DOCX parser error: {str(e)}")
-            plain = cls._parse_plain_text(raw_bytes, title, filename)
-            return plain, [], [], [], warnings
+            return "", [], [], [], warnings
 
     @classmethod
     def _parse_xlsx_structured(
@@ -1211,18 +1247,23 @@ class UniversalFileParser:
                 f = io.StringIO(decoded)
                 reader = csv.reader(f, delimiter=delimiter) if delimiter else csv.reader(f)
                 rows = []
+                headers = []
                 for idx, row in enumerate(reader):
                     # Preserve all columns and empty cell positions without column shifting
                     clean_row = [c.strip().replace("\n", " ").replace("|", "\\|") for c in row]
                     if any(c for c in clean_row) or idx == 0:
                         rows.append("| " + " | ".join(clean_row) + " |")
-                        if idx == 0:
-                            rows.append("| " + " | ".join(["---"] * len(clean_row)) + " |")
+                        rows.append("| " + " | ".join(["---"] * len(clean_row)) + " |")
+                    else:
+                        # Align row column count with header
+                        if headers and len(clean_row) < len(headers):
+                            clean_row.extend([""] * (len(headers) - len(clean_row)))
+                        rows.append("| " + " | ".join(clean_row[:len(headers)] if headers else clean_row) + " |")
                 if rows:
                     return f"# {title}\n\n" + "\n".join(rows)
             except UnicodeDecodeError:
                 continue
-        return cls._parse_plain_text(raw_bytes, title, "document.csv")
+        return ""
 
     @classmethod
     def _parse_json(cls, raw_bytes: bytes, title: str, is_jsonl: bool = False) -> str:

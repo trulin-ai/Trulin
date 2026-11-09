@@ -13,7 +13,7 @@ class Settings(BaseSettings):
     secret_key: str = "context-trust-master-encryption-secret-key-32b"
     credential_encryption_key: str | None = None
 
-    postgres_server: str = "localhost"
+    postgres_server: str = "127.0.0.1"
     postgres_user: str = "context_user"
     postgres_password: str = "context_password"
     postgres_db: str = "context_trust"

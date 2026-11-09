@@ -117,7 +117,32 @@ async def _ensure_folder_exists(
         if existing:
             return existing
 
-    # 2. Direct manual uploads without a folder selection default strictly to Inbox
+    # 2. Smart domain routing based on doc_type, title, or semantic context if no explicit folder was selected
+    title_lower = (title or "").lower()
+    type_lower = (doc_type or "").lower()
+
+    target_patterns = None
+    if any(w in type_lower or w in title_lower for w in ("policy", "handbook", "standard", "compliance", "mandate")):
+        target_patterns = ("%Policies%", "%Standards%", "%Governance%")
+    elif any(w in type_lower or w in title_lower for w in ("contract", "agreement", "nda", "msa", "supplier", "legal")):
+        target_patterns = ("%Legal%", "%Contract%", "%Customer Contracts%")
+    elif any(w in type_lower or w in title_lower for w in ("hr", "employee", "workplace", "people", "talent", "onboarding")):
+        target_patterns = ("%People%", "%Workplace%", "%HR%")
+    elif any(w in type_lower or w in title_lower for w in ("financial", "invoice", "refund", "finance", "billing", "operations")):
+        target_patterns = ("%Finance%", "%Operations%", "%Billing%")
+
+    if target_patterns:
+        for pat in target_patterns:
+            f_stmt = select(Folder.id).where(
+                Folder.organization_id == organization_id,
+                Folder.name.ilike(pat),
+            ).limit(1)
+            f_res = await db.execute(f_stmt)
+            matched_folder = f_res.scalar_one_or_none()
+            if matched_folder:
+                return matched_folder
+
+    # 3. Direct manual uploads without a folder selection or domain match default to Inbox
     inbox = await folder_service.ensure_system_inbox(organization_id)
     return inbox.id
 
@@ -421,9 +446,11 @@ async def upload_document_file(
     import io
     raw_bytes = await file.read()
     filename = file.filename or "uploaded_doc.txt"
-    doc_title = title or filename.rsplit(".", 1)[0].replace("-", " ").replace("_", " ").title()
+    clean_name = os.path.basename((filename or "uploaded_doc.txt").replace("\\", "/"))
+    doc_title = title or clean_name.rsplit(".", 1)[0].replace("-", " ").replace("_", " ").title()
     doc_title = doc_title.replace("\x00", "").strip()
-    doc_external_id = (external_id or f"file://{relative_path or filename}").replace("\x00", "").strip()
+    base_file_id = os.path.basename((relative_path or filename).replace("\\", "/"))
+    doc_external_id = (external_id or f"file://{base_file_id}").replace("\x00", "").strip()
 
     resolved_folder_id = await _resolve_folder_path(
         db,
@@ -539,9 +566,11 @@ async def upload_and_extract_document(
     start_time = time.time()
     raw_bytes = await file.read()
     filename = file.filename or "uploaded_doc.txt"
-    doc_title = title or filename.rsplit(".", 1)[0].replace("-", " ").replace("_", " ").title()
+    clean_name = os.path.basename((filename or "uploaded_doc.txt").replace("\\", "/"))
+    doc_title = title or clean_name.rsplit(".", 1)[0].replace("-", " ").replace("_", " ").title()
     doc_title = doc_title.replace("\x00", "").strip()
-    doc_external_id = (external_id or f"file://{relative_path or filename}").replace("\x00", "").strip()
+    base_file_id = os.path.basename((relative_path or filename).replace("\\", "/"))
+    doc_external_id = (external_id or f"file://{base_file_id}").replace("\x00", "").strip()
 
     resolved_folder_id = await _resolve_folder_path(
         db,
@@ -1279,6 +1308,10 @@ async def get_document_artifacts(
                 metadata=getattr(c, "claim_metadata", {}) or {},
                 confidence=float(score),
             )
+            is_canon = gate_res.is_canonical and (c.status == ClaimStatus.VERIFIED or c.status == ClaimStatus.ACTIVE or getattr(c.status, "value", None) in ("verified", "active"))
+            tier = gate_res.certification_tier
+            if not is_canon and tier == "AUTOMATED_CERTIFIED":
+                tier = "REVIEW_REQUIRED"
             claims_output.append({
                 "id": str(c.id),
                 "document_version_id": str(c.document_version_id),
@@ -1294,9 +1327,9 @@ async def get_document_artifacts(
                 "created_at": c.created_at.isoformat() if c.created_at else None,
                 "gates": gate_res.gates,
                 "all_9_gates_passed": gate_res.all_9_gates_passed,
-                "is_canonical": gate_res.is_canonical,
-                "agent_accessible": gate_res.agent_accessible,
-                "certification_tier": gate_res.certification_tier,
+                "is_canonical": is_canon,
+                "agent_accessible": is_canon,
+                "certification_tier": tier,
                 "rejection_reasons": gate_res.rejection_reasons,
             })
 
@@ -1341,6 +1374,7 @@ async def list_documents(
         source_id=eff_source_id,
         limit=limit,
         offset=offset,
+        include_archived=include_archived,
     )
     valid_docs = [
         d for d in documents
@@ -1502,6 +1536,13 @@ async def delete_or_decommission_document(
                 "conflicts_purged": len(conflicts),
             },
         )
+        # Clean up physical storage file if present
+        if document.content_uri and os.path.exists(document.content_uri):
+            try:
+                os.remove(document.content_uri)
+            except Exception:
+                pass
+
         await db.delete(document)
         await db.commit()
         return {

@@ -60,7 +60,8 @@ export default function AuthLandingView() {
         body: JSON.stringify({
           provider: 'google',
           mock_email: 'prasannasimha5002@gmail.com',
-          mock_name: 'PRASANNA KUMAR SIMHADRI'
+          mock_name: 'PRASANNA KUMAR SIMHADRI',
+          mock_avatar: 'https://ui-avatars.com/api/?name=PRASANNA+KUMAR+SIMHADRI&background=4285F4&color=fff&size=256&bold=true'
         })
       });
       if (fallbackRes.ok) {

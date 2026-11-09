@@ -391,9 +391,13 @@ export default function DocumentWorkspaceExplorer({
 
       if (docsRes.ok) {
         const docsData = await docsRes.json();
-        setAllDocuments(docsData);
+        const activeDocs = (Array.isArray(docsData) ? docsData : []).filter(d => {
+          const st = (d.status || '').toLowerCase();
+          return st !== 'inactive' && st !== 'deleted' && st !== 'archived';
+        });
+        setAllDocuments(activeDocs);
         setSelectedDocId(prev => {
-          if (prev && docsData.some(d => d.id === prev)) return prev;
+          if (prev && activeDocs.some(d => d.id === prev)) return prev;
           return null;
         });
       }
@@ -446,15 +450,28 @@ export default function DocumentWorkspaceExplorer({
 
   // Direct documents for current folder
   const currentFolderDocs = useMemo(() => {
+    let rawDocs = [];
     if (!activeFolderId) {
       const inbox = folders.find(f => f.is_system && f.folder_type === 'inbox');
-      return inbox ? (docsByFolder[inbox.id] || docsByFolder['unassigned'] || []) : allDocuments;
+      rawDocs = inbox ? (docsByFolder[inbox.id] || docsByFolder['unassigned'] || []) : allDocuments;
+    } else {
+      const current = folders.find(f => f.id === activeFolderId);
+      if (current?.is_system && current?.folder_type === 'inbox') {
+        rawDocs = (docsByFolder[activeFolderId] || []).concat(docsByFolder['unassigned'] || []);
+      } else {
+        rawDocs = docsByFolder[activeFolderId] || [];
+      }
     }
-    const current = folders.find(f => f.id === activeFolderId);
-    if (current?.is_system && current?.folder_type === 'inbox') {
-      return (docsByFolder[activeFolderId] || []).concat(docsByFolder['unassigned'] || []);
+    // Deduplicate by unique document id and title/content_hash to prevent duplicate table rows
+    const seenIds = new Set();
+    const uniqueDocs = [];
+    for (const d of rawDocs) {
+      if (!d || !d.id) continue;
+      if (seenIds.has(d.id)) continue;
+      seenIds.add(d.id);
+      uniqueDocs.push(d);
     }
-    return docsByFolder[activeFolderId] || [];
+    return uniqueDocs;
   }, [activeFolderId, folders, docsByFolder, allDocuments]);
 
   // Handler for intelligent auto-organize
@@ -668,14 +685,22 @@ export default function DocumentWorkspaceExplorer({
       const res = await fetch(`/v1/folders/${folderId}/documents?organization_id=${orgId}&recursive=false`, { headers });
       if (res.ok) {
         const data = await res.json();
-        const folderDocs = data.items || [];
-        if (folderDocs.length > 0) {
-          setAllDocuments(prev => {
-            const map = new Map(prev.map(d => [d.id, d]));
-            folderDocs.forEach(d => map.set(d.id, d));
-            return Array.from(map.values());
-          });
-        }
+        const folderDocs = (data.items || []).filter(d => {
+          const st = (d.status || '').toLowerCase();
+          return st !== 'inactive' && st !== 'deleted' && st !== 'archived';
+        });
+        setAllDocuments(prev => {
+          const map = new Map(
+            prev
+              .filter(d => {
+                const st = (d.status || '').toLowerCase();
+                return st !== 'inactive' && st !== 'deleted' && st !== 'archived';
+              })
+              .map(d => [d.id, d])
+          );
+          folderDocs.forEach(d => map.set(d.id, d));
+          return Array.from(map.values());
+        });
       }
     } catch (err) {
       console.error('Error fetching documents for folder:', folderId, err);
@@ -902,6 +927,7 @@ export default function DocumentWorkspaceExplorer({
 
   // Delete document handler
   const handleDeleteDocument = async (doc) => {
+    if (!doc || !doc.id) return;
     if (!window.confirm(`Are you sure you want to delete document '${doc.title}'?`)) {
       return;
     }
@@ -911,7 +937,11 @@ export default function DocumentWorkspaceExplorer({
       if (token) headers['Authorization'] = `Bearer ${token}`;
       headers['X-Organization-Id'] = orgId;
 
-      const res = await fetch(`/v1/documents/${doc.id}`, {
+      const userRole = user?.role || 'admin';
+      const userName = user?.name || 'Administrator';
+      const userId = user?.id || '';
+
+      const res = await fetch(`/v1/documents/${doc.id}?mode=permanent&user_role=${encodeURIComponent(userRole)}&user_name=${encodeURIComponent(userName)}&user_id=${encodeURIComponent(userId)}`, {
         method: 'DELETE',
         headers
       });
@@ -920,10 +950,14 @@ export default function DocumentWorkspaceExplorer({
         showToast?.(`Document '${doc.title}' deleted.`);
         if (selectedDocId === doc.id) {
           setSelectedDocId(null);
+          setSelectedDocDetails(null);
+          setSelectedDocArtifacts(null);
         }
-        await fetchData();
+        // Immediately remove from allDocuments so folder structure and files list update instantly
+        setAllDocuments(prev => prev.filter(d => d.id !== doc.id));
+        await fetchData(true);
       } else {
-        const err = await res.json();
+        const err = await res.json().catch(() => ({}));
         showToast?.(err.detail || 'Delete failed', 'error');
       }
     } catch (err) {
@@ -1708,6 +1742,33 @@ export default function DocumentWorkspaceExplorer({
                     <Sparkles size={12} />
                     <span>360° Studio</span>
                   </button>
+
+                  {!readOnly && (
+                    <button
+                      type="button"
+                      onClick={() => handleDeleteDocument(selectedDocDetails)}
+                      style={{
+                        padding: '4px 10px',
+                        fontSize: '0.72rem',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '4px',
+                        background: '#FEF2F2',
+                        color: '#DC2626',
+                        border: '1px solid #FECACA',
+                        borderRadius: '6px',
+                        cursor: 'pointer',
+                        fontWeight: 600,
+                        transition: 'all 0.15s ease'
+                      }}
+                      onMouseEnter={e => { e.currentTarget.style.background = '#FEE2E2'; e.currentTarget.style.borderColor = '#FCA5A5'; }}
+                      onMouseLeave={e => { e.currentTarget.style.background = '#FEF2F2'; e.currentTarget.style.borderColor = '#FECACA'; }}
+                      title="Permanently delete document"
+                    >
+                      <Trash2 size={12} style={{ color: '#DC2626' }} />
+                      <span>Delete</span>
+                    </button>
+                  )}
 
                   <button
                     type="button"
@@ -3032,6 +3093,20 @@ export default function DocumentWorkspaceExplorer({
                                   title="Move to another folder"
                                 >
                                   <Move size={11} />
+                                </button>
+                              )}
+                              {!readOnly && (
+                                <button
+                                  type="button"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleDeleteDocument(doc);
+                                  }}
+                                  className="btn btn-secondary"
+                                  style={{ padding: '2px 6px', fontSize: '0.70rem', background: '#FEF2F2', border: '1px solid #FECACA', color: '#DC2626', cursor: 'pointer' }}
+                                  title="Delete document"
+                                >
+                                  <Trash2 size={11} style={{ color: '#DC2626' }} />
                                 </button>
                               )}
                             </div>

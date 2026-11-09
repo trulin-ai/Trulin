@@ -293,6 +293,22 @@ class DeonticClassifier:
         subj_lower = subject.lower()
         active_qualifiers = list(qualifiers or [])
 
+        # Preserve exclusive threshold and condition cues from row label / subject (e.g. "Order over $150, any reason")
+        conditions = list(conditions or [])
+        thresh_m = re.search(r"\b(?:over|exceeding|greater than|more than)\s*\$?\s*(\d+(?:\.\d+)?)\b", subject, re.IGNORECASE)
+        if thresh_m:
+            val_num = float(thresh_m.group(1))
+            val_str = f"{int(val_num) if val_num.is_integer() else val_num}"
+            thresh_cond = f"order_value > {val_str} USD"
+            if thresh_cond not in conditions:
+                conditions.append(thresh_cond)
+        if re.search(r"\bany\s+reason\b", subject, re.IGNORECASE):
+            if "return_reason: any reason" not in conditions:
+                conditions.append("return_reason: any reason")
+        if thresh_m and re.match(r"^orders?\b", subject, re.IGNORECASE):
+            subject = "Order"
+            subj_lower = "order"
+
         # Detect soft qualifiers (NIST AI RMF)
         combined_text = f"{clean_rule_key} {clean_val} {subject} {' '.join(conditions or [])}".lower()
         if "typical" in combined_text and "typical" not in active_qualifiers:

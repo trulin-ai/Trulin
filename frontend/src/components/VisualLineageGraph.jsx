@@ -32,7 +32,8 @@ import {
   Clock,
   Info,
   Trash2,
-  GripVertical
+  GripVertical,
+  Server
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import VisualClaimExtractionStudio from './VisualClaimExtractionStudio';
@@ -84,6 +85,7 @@ export default function VisualLineageGraph({
 
   useEffect(() => {
     if (initialAssetId) {
+      setVaultDocumentFilter(initialAssetId);
       const rawId = initialAssetId;
       const matchedNode = graphData?.nodes?.find(n =>
         n.id === rawId ||
@@ -132,6 +134,8 @@ export default function VisualLineageGraph({
   const [vaultSearch, setVaultSearch] = useState('');
   const [vaultConflictFilter, setVaultConflictFilter] = useState('all'); // 'all' | 'active' | 'resolved'
   const [vaultClaimFilter, setVaultClaimFilter] = useState('all'); // 'all' | 'verified' | 'conflicted' | 'decisions'
+  const [vaultDocumentFilter, setVaultDocumentFilter] = useState(initialAssetId || 'all');
+  const [vaultSourceFilter, setVaultSourceFilter] = useState('all');
   const [openedAssetId, setOpenedAssetId] = useState(initialAssetId || null); // null = show full List of Documents/Connectors; non-null = open Split View (Original Document + All Facilities beside it)
   const [isFileViewerOpen, setIsFileViewerOpen] = useState(true); // Toggle to show or collapse document viewer and expand facilities to full width
   const [docReaderSearch, setDocReaderSearch] = useState('');
@@ -6024,171 +6028,285 @@ export default function VisualLineageGraph({
       {/* ========================================================= */}
       {/* SUB-TAB 5: ATOMIC CLAIMS & AI DECISIONS CATALOG           */}
       {/* ========================================================= */}
-      {vaultSubTab === 'claims' && (
-        <div style={{
-          background: '#FFFFFF',
-          border: '1px solid #E2E8F0',
-          borderRadius: '12px',
-          padding: '18px 20px',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '14px'
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px', borderBottom: '1px solid #F1F5F9', paddingBottom: '10px' }}>
-            <div>
-              <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 800, color: '#0F172A' }}>
-                ⚡ Extracted Atomic Claims & Evaluated AI Decisions
-              </h3>
-              <p style={{ margin: '3px 0 0 0', fontSize: '0.76rem', color: '#64748B' }}>
-                Search atomic assertions and governance verdicts. Click <strong>Visualize in DAG</strong> to trace any claim or decision on the lineage canvas.
-              </p>
+      {vaultSubTab === 'claims' && (() => {
+        // Resolve parent document and source for any claim
+        const resolveClaimProvenance = (cl) => {
+          const clDocId = cl.document_id || cl.data?.document_id || cl.data?.doc_id;
+          const docEdge = graphData?.edges?.find(e =>
+            (e.target === cl.id || e.target === `cl_${cl.id}`) && e.source.startsWith('doc_')
+          );
+          const resolvedDocId = docEdge
+            ? docEdge.source.replace(/^doc_/, '')
+            : (clDocId ? String(clDocId).replace(/^doc_/, '') : null);
+
+          const parentDoc = (resolvedDocId
+            ? documentsList.find(d => String(d.id).replace(/^doc_/, '') === resolvedDocId)
+            : null) || (docEdge ? graphData?.nodes?.find(n => n.id === docEdge.source) : null);
+
+          const parentDocSrcId = parentDoc?.data?.source_id || parentDoc?.source_id;
+          const srcEdge = parentDoc
+            ? graphData?.edges?.find(e => (e.target === parentDoc.id || e.target === `doc_${parentDoc.id}`) && e.source.startsWith('src_'))
+            : null;
+          const resolvedSrcId = srcEdge
+            ? srcEdge.source.replace(/^src_/, '')
+            : (parentDocSrcId ? String(parentDocSrcId).replace(/^src_/, '') : null);
+          const clSrcId = cl.source_id || cl.data?.source_id;
+
+          const parentSrc = (resolvedSrcId
+            ? sourcesList.find(s => String(s.id).replace(/^src_/, '') === resolvedSrcId)
+            : null) || (srcEdge ? graphData?.nodes?.find(n => n.id === srcEdge.source) : null)
+            || (clSrcId ? sourcesList.find(s => String(s.id).replace(/^src_/, '') === String(clSrcId).replace(/^src_/, '')) : null);
+
+          return { parentDoc, parentSrc, resolvedDocId, resolvedSrcId };
+        };
+
+        const filteredClaims = allClaimsRaw.filter(cl => {
+          const isConf = allConflictedClaimIds.has(cl.id);
+          if (vaultClaimFilter === 'verified' && isConf) return false;
+          if (vaultClaimFilter === 'conflicted' && !isConf) return false;
+
+          const { parentDoc, parentSrc, resolvedDocId, resolvedSrcId } = resolveClaimProvenance(cl);
+
+          // Document filter
+          if (vaultDocumentFilter !== 'all') {
+            const targetDocClean = String(vaultDocumentFilter).replace(/^doc_/, '');
+            const matchDocId = resolvedDocId === targetDocClean || String(parentDoc?.id || '').replace(/^doc_/, '') === targetDocClean;
+            if (!matchDocId) return false;
+          }
+
+          // Connection / Source filter
+          if (vaultSourceFilter !== 'all') {
+            const targetSrcClean = String(vaultSourceFilter).replace(/^src_/, '');
+            const matchSrcId = resolvedSrcId === targetSrcClean || String(parentSrc?.id || '').replace(/^src_/, '') === targetSrcClean;
+            if (!matchSrcId) return false;
+          }
+
+          // Search query
+          if (vaultSearch.trim()) {
+            const q = vaultSearch.toLowerCase();
+            const text = `${cl.fullText || cl.label || ''} ${cl.subject || ''} ${cl.predicate || ''} ${cl.object || ''} ${parentDoc?.label || ''} ${parentSrc?.label || ''}`.toLowerCase();
+            if (!text.includes(q)) return false;
+          }
+
+          return true;
+        });
+
+        const hasActiveFilters = vaultDocumentFilter !== 'all' || vaultSourceFilter !== 'all' || vaultClaimFilter !== 'all' || Boolean(vaultSearch.trim());
+
+        return (
+          <div style={{
+            background: '#FFFFFF',
+            border: '1px solid #E2E8F0',
+            borderRadius: '12px',
+            padding: '18px 20px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '14px'
+          }}>
+            {/* Header: Title and Status Chips */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px', borderBottom: '1px solid #F1F5F9', paddingBottom: '12px' }}>
+              <div>
+                <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 800, color: '#0F172A', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <span>⚡ Extracted Atomic Claims & Evaluated AI Decisions</span>
+                </h3>
+                <p style={{ margin: '3px 0 0 0', fontSize: '0.76rem', color: '#64748B' }}>
+                  Search and inspect normalized atomic assertions. Filter by document or connector provenance, or visualize in the lineage DAG.
+                </p>
+              </div>
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+                {[
+                  { id: 'all', label: `All Claims (${allClaimsRaw.length})` },
+                  { id: 'verified', label: '✅ Verified' },
+                  { id: 'conflicted', label: '⚠️ In Conflict' },
+                  { id: 'decisions', label: `🤖 AI Decisions (${decisionsList.length})` }
+                ].map(f => {
+                  const isSel = vaultClaimFilter === f.id;
+                  return (
+                    <button
+                      key={f.id}
+                      type="button"
+                      onClick={() => setVaultClaimFilter(f.id)}
+                      style={{
+                        padding: '5px 10px',
+                        borderRadius: '6px',
+                        border: isSel ? '1.5px solid #059669' : '1px solid #CBD5E1',
+                        background: isSel ? '#ECFDF5' : '#F8FAFC',
+                        color: isSel ? '#059669' : '#475569',
+                        fontSize: '0.72rem',
+                        fontWeight: isSel ? 800 : 600,
+                        cursor: 'pointer'
+                      }}
+                    >
+                      {f.label}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              {[
-                { id: 'all', label: `All Claims (${allClaimsRaw.length})` },
-                { id: 'verified', label: '✅ Verified Claims' },
-                { id: 'conflicted', label: '⚠️ In Conflict' },
-                { id: 'decisions', label: `🤖 AI Decisions (${decisionsList.length})` }
-              ].map(f => {
-                const isSel = vaultClaimFilter === f.id;
-                return (
-                  <button
-                    key={f.id}
-                    type="button"
-                    onClick={() => setVaultClaimFilter(f.id)}
+            {/* Comprehensive Document & Connection Filter Bar */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              flexWrap: 'wrap',
+              gap: '10px',
+              background: '#F8FAFC',
+              padding: '10px 14px',
+              borderRadius: '8px',
+              border: '1px solid #E2E8F0'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap', flex: 1 }}>
+                {/* Document-Wise Filter */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <FileText size={13} color="#0284C7" />
+                  <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#475569' }}>Document:</span>
+                  <select
+                    value={vaultDocumentFilter}
+                    onChange={e => setVaultDocumentFilter(e.target.value)}
                     style={{
-                      padding: '5px 10px',
+                      padding: '4px 8px',
                       borderRadius: '6px',
-                      border: isSel ? '1.5px solid #059669' : '1px solid #CBD5E1',
-                      background: isSel ? '#ECFDF5' : '#F8FAFC',
-                      color: isSel ? '#059669' : '#475569',
+                      border: '1px solid #CBD5E1',
                       fontSize: '0.72rem',
-                      fontWeight: isSel ? 800 : 600,
+                      background: '#FFFFFF',
+                      color: '#0F172A',
+                      fontWeight: 600,
+                      outline: 'none',
+                      maxWidth: '240px'
+                    }}
+                  >
+                    <option value="all">All Documents ({documentsList.length})</option>
+                    {documentsList.map(doc => (
+                      <option key={doc.id} value={doc.id}>
+                        {doc.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Connection-Wise Filter */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <Server size={13} color="#7C3AED" />
+                  <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#475569' }}>Connection:</span>
+                  <select
+                    value={vaultSourceFilter}
+                    onChange={e => setVaultSourceFilter(e.target.value)}
+                    style={{
+                      padding: '4px 8px',
+                      borderRadius: '6px',
+                      border: '1px solid #CBD5E1',
+                      fontSize: '0.72rem',
+                      background: '#FFFFFF',
+                      color: '#0F172A',
+                      fontWeight: 600,
+                      outline: 'none',
+                      maxWidth: '220px'
+                    }}
+                  >
+                    <option value="all">All Connections ({sourcesList.length})</option>
+                    {sourcesList.map(src => (
+                      <option key={src.id} value={src.id}>
+                        {src.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Search within Claims */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', minWidth: '180px', flex: 1 }}>
+                  <Search size={13} color="#94A3B8" />
+                  <input
+                    type="text"
+                    placeholder="Search claims text, subject, predicate..."
+                    value={vaultSearch}
+                    onChange={e => setVaultSearch(e.target.value)}
+                    style={{
+                      width: '100%',
+                      padding: '4px 8px',
+                      borderRadius: '6px',
+                      border: '1px solid #CBD5E1',
+                      fontSize: '0.72rem',
+                      background: '#FFFFFF',
+                      outline: 'none'
+                    }}
+                  />
+                </div>
+
+                {/* Reset Filters */}
+                {hasActiveFilters && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setVaultDocumentFilter('all');
+                      setVaultSourceFilter('all');
+                      setVaultClaimFilter('all');
+                      setVaultSearch('');
+                    }}
+                    style={{
+                      background: '#FEE2E2',
+                      border: '1px solid #FCA5A5',
+                      borderRadius: '6px',
+                      padding: '3px 8px',
+                      fontSize: '0.68rem',
+                      fontWeight: 700,
+                      color: '#B91C1C',
                       cursor: 'pointer'
                     }}
                   >
-                    {f.label}
+                    Reset Filters ✕
                   </button>
-                );
-              })}
-            </div>
-          </div>
+                )}
+              </div>
 
-          {vaultClaimFilter === 'decisions' ? (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: '12px' }}>
-              {decisionsList
-                .filter(d => !vaultSearch.trim() || (d.label || '').toLowerCase().includes(vaultSearch.toLowerCase()))
-                .map(dec => (
-                  <div
-                    key={dec.id}
-                    style={{
-                      border: '1px solid #DDD6FE',
-                      borderRadius: '10px',
-                      padding: '12px 14px',
-                      background: '#FAF5FF',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      justifyContent: 'space-between',
-                      gap: '8px'
-                    }}
-                  >
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <span style={{ fontSize: '0.64rem', fontWeight: 800, color: '#7C3AED', background: '#EDE9FE', padding: '2px 7px', borderRadius: '4px' }}>
-                        🤖 AI GOVERNANCE DECISION
-                      </span>
-                      <span className={dec.verdict === 'ALLOW' ? 'badge badge-verified' : 'badge badge-warning'} style={{ fontSize: '0.66rem' }}>
-                        {dec.verdict || 'EVALUATED'}
-                      </span>
-                    </div>
-                    <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#0F172A' }}>
-                      {dec.label}
-                    </div>
-                    <div style={{ display: 'flex', justifyContent: 'flex-end', borderTop: '1px solid #E9D5FF', paddingTop: '6px' }}>
-                      <button
-                        type="button"
-                        onClick={() => visualizeNodeInDag(dec.id, dec.label)}
-                        style={{
-                          padding: '4px 10px',
-                          borderRadius: '6px',
-                          border: '1px solid #7C3AED',
-                          background: '#7C3AED',
-                          color: '#FFFFFF',
-                          fontSize: '0.7rem',
-                          fontWeight: 700,
-                          cursor: 'pointer'
-                        }}
-                      >
-                        🕸️ Visualize in DAG
-                      </button>
-                    </div>
-                  </div>
-                ))}
+              {/* Claims Matched Counter */}
+              <div style={{ fontSize: '0.72rem', color: '#64748B', fontWeight: 600, whiteSpace: 'nowrap' }}>
+                Showing <strong style={{ color: '#0F172A' }}>{vaultClaimFilter === 'decisions' ? decisionsList.length : filteredClaims.length}</strong> of {vaultClaimFilter === 'decisions' ? decisionsList.length : allClaimsRaw.length} {vaultClaimFilter === 'decisions' ? 'decisions' : 'claims'}
+              </div>
             </div>
-          ) : (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(400px, 1fr))', gap: '10px' }}>
-              {allClaimsRaw
-                .filter(cl => {
-                  const isConf = allConflictedClaimIds.has(cl.id);
-                  if (vaultClaimFilter === 'verified') return !isConf;
-                  if (vaultClaimFilter === 'conflicted') return isConf;
-                  return true;
-                })
-                .filter(cl => !vaultSearch.trim() || (cl.fullText || cl.label || '').toLowerCase().includes(vaultSearch.toLowerCase()))
-                .map(cl => {
-                  const isConf = allConflictedClaimIds.has(cl.id);
-                  const docEdge = graphData?.edges?.find(e => e.target === cl.id && e.source.startsWith('doc_'));
-                  const parentDoc = graphData?.nodes?.find(n => n.id === docEdge?.source);
 
-                  return (
+            {/* Claims / Decisions Cards Grid */}
+            {vaultClaimFilter === 'decisions' ? (
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: '12px' }}>
+                {decisionsList
+                  .filter(d => !vaultSearch.trim() || (d.label || '').toLowerCase().includes(vaultSearch.toLowerCase()))
+                  .map(dec => (
                     <div
-                      key={cl.id}
+                      key={dec.id}
                       style={{
-                        border: isConf ? '1.5px solid #FED7AA' : '1px solid #E2E8F0',
-                        background: isConf ? '#FFF7ED' : '#F8FAFC',
-                        borderRadius: '9px',
+                        border: '1px solid #DDD6FE',
+                        borderRadius: '10px',
                         padding: '12px 14px',
+                        background: '#FAF5FF',
                         display: 'flex',
                         flexDirection: 'column',
                         justifyContent: 'space-between',
                         gap: '8px'
                       }}
                     >
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '6px' }}>
-                        <span style={{ fontSize: '0.66rem', fontWeight: 700, color: '#0284C7' }}>
-                          📄 {parentDoc?.label || 'Policy Document'}
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <span style={{ fontSize: '0.64rem', fontWeight: 800, color: '#7C3AED', background: '#EDE9FE', padding: '2px 7px', borderRadius: '4px' }}>
+                          🤖 AI GOVERNANCE DECISION
                         </span>
-                        <div style={{ display: 'flex', gap: '6px' }}>
-                          <span className={isConf ? 'badge badge-warning' : 'badge badge-verified'} style={{ fontSize: '0.62rem' }}>
-                            {isConf ? '⚠️ In Conflict' : '✅ Verified'}
-                          </span>
-                          <span className="badge badge-verified" style={{ fontSize: '0.62rem' }}>
-                            {((cl.trustScore || 0.92) * 100).toFixed(0)}% Trust
-                          </span>
-                        </div>
+                        <span className={dec.verdict === 'ALLOW' ? 'badge badge-verified' : 'badge badge-warning'} style={{ fontSize: '0.66rem' }}>
+                          {dec.verdict || 'EVALUATED'}
+                        </span>
                       </div>
-
-                      <p style={{ margin: 0, fontSize: '0.78rem', color: '#1E293B', lineHeight: 1.4, fontWeight: 500 }}>
-                        "{cl.fullText || cl.label}"
-                      </p>
-
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid #E2E8F0', paddingTop: '6px' }}>
-                        <span style={{ fontSize: '0.64rem', color: '#64748B' }}>
-                          ID: <code>{cl.id.slice(0, 12)}</code>
-                        </span>
+                      <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#0F172A' }}>
+                        {dec.label}
+                      </div>
+                      <div style={{ display: 'flex', justifyContent: 'flex-end', borderTop: '1px solid #E9D5FF', paddingTop: '6px' }}>
                         <button
                           type="button"
-                          onClick={() => {
-                            setLineageGranularity('claim');
-                            visualizeNodeInDag(cl.id, cl.label);
-                          }}
+                          onClick={() => visualizeNodeInDag(dec.id, dec.label)}
                           style={{
-                            padding: '3px 9px',
-                            borderRadius: '5px',
-                            border: '1px solid #059669',
-                            background: '#059669',
+                            padding: '4px 10px',
+                            borderRadius: '6px',
+                            border: '1px solid #7C3AED',
+                            background: '#7C3AED',
                             color: '#FFFFFF',
-                            fontSize: '0.68rem',
+                            fontSize: '0.7rem',
                             fontWeight: 700,
                             cursor: 'pointer'
                           }}
@@ -6197,12 +6315,166 @@ export default function VisualLineageGraph({
                         </button>
                       </div>
                     </div>
-                  );
-                })}
-            </div>
-          )}
-        </div>
-      )}
+                  ))}
+              </div>
+            ) : (
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(380px, 1fr))', gap: '10px' }}>
+                {filteredClaims.length === 0 ? (
+                  <div style={{
+                    padding: '40px 20px',
+                    textAlign: 'center',
+                    background: '#F8FAFC',
+                    borderRadius: '8px',
+                    border: '1px dashed #CBD5E1',
+                    gridColumn: '1 / -1'
+                  }}>
+                    <ShieldCheck size={28} color="#94A3B8" style={{ margin: '0 auto 8px auto' }} />
+                    <div style={{ fontSize: '0.86rem', fontWeight: 700, color: '#334155' }}>
+                      No atomic claims match the selected filters
+                    </div>
+                    <p style={{ fontSize: '0.76rem', color: '#64748B', margin: '4px 0 12px 0' }}>
+                      Try selecting "All Documents", "All Connections", or clearing search terms.
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setVaultDocumentFilter('all');
+                        setVaultSourceFilter('all');
+                        setVaultClaimFilter('all');
+                        setVaultSearch('');
+                      }}
+                      className="btn btn-secondary"
+                      style={{ padding: '6px 14px', fontSize: '0.74rem' }}
+                    >
+                      Clear All Filters
+                    </button>
+                  </div>
+                ) : (
+                  filteredClaims.map(cl => {
+                    const isConf = allConflictedClaimIds.has(cl.id);
+                    const { parentDoc, parentSrc } = resolveClaimProvenance(cl);
+
+                    return (
+                      <div
+                        key={cl.id}
+                        style={{
+                          border: isConf ? '1.5px solid #FED7AA' : '1px solid #E2E8F0',
+                          background: isConf ? '#FFF7ED' : '#F8FAFC',
+                          borderRadius: '9px',
+                          padding: '12px 14px',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          justifyContent: 'space-between',
+                          gap: '8px',
+                          boxShadow: '0 1px 3px rgba(0,0,0,0.02)'
+                        }}
+                      >
+                        {/* Card Header: Document Badge & Connection Badge + Status */}
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '6px', flexWrap: 'wrap' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '5px', flexWrap: 'wrap' }}>
+                            {parentDoc ? (
+                              <button
+                                type="button"
+                                onClick={() => setVaultDocumentFilter(parentDoc.id)}
+                                style={{
+                                  background: '#EFF6FF',
+                                  border: '1px solid #BFDBFE',
+                                  color: '#0284C7',
+                                  fontSize: '0.64rem',
+                                  fontWeight: 700,
+                                  padding: '2px 6px',
+                                  borderRadius: '4px',
+                                  cursor: 'pointer',
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                  gap: '4px'
+                                }}
+                                title="Filter by this document"
+                              >
+                                <FileText size={10} />
+                                <span>{parentDoc.label}</span>
+                              </button>
+                            ) : (
+                              <span style={{ fontSize: '0.64rem', color: '#64748B', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                                <FileText size={10} />
+                                <span>Policy Document</span>
+                              </span>
+                            )}
+
+                            {parentSrc && (
+                              <button
+                                type="button"
+                                onClick={() => setVaultSourceFilter(parentSrc.id)}
+                                style={{
+                                  background: '#FAF5FF',
+                                  border: '1px solid #DDD6FE',
+                                  color: '#7C3AED',
+                                  fontSize: '0.64rem',
+                                  fontWeight: 700,
+                                  padding: '2px 6px',
+                                  borderRadius: '4px',
+                                  cursor: 'pointer',
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                  gap: '4px'
+                                }}
+                                title="Filter by this connection"
+                              >
+                                <Server size={10} />
+                                <span>{parentSrc.label}</span>
+                              </button>
+                            )}
+                          </div>
+
+                          <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+                            <span className={isConf ? 'badge badge-warning' : 'badge badge-verified'} style={{ fontSize: '0.62rem' }}>
+                              {isConf ? '⚠️ In Conflict' : '✅ Verified'}
+                            </span>
+                            <span className="badge badge-verified" style={{ fontSize: '0.62rem' }}>
+                              {((cl.trustScore || 0.92) * 100).toFixed(0)}% Trust
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Claim Text */}
+                        <p style={{ margin: 0, fontSize: '0.78rem', color: '#1E293B', lineHeight: 1.4, fontWeight: 500 }}>
+                          "{cl.fullText || cl.label}"
+                        </p>
+
+                        {/* Card Footer */}
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid #E2E8F0', paddingTop: '6px' }}>
+                          <span style={{ fontSize: '0.64rem', color: '#64748B' }}>
+                            ID: <code>{cl.id.slice(0, 12)}</code>
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setLineageGranularity('claim');
+                              visualizeNodeInDag(cl.id, cl.label);
+                            }}
+                            style={{
+                              padding: '3px 9px',
+                              borderRadius: '5px',
+                              border: '1px solid #059669',
+                              background: '#059669',
+                              color: '#FFFFFF',
+                              fontSize: '0.68rem',
+                              fontWeight: 700,
+                              cursor: 'pointer'
+                            }}
+                          >
+                            🕸️ Visualize in DAG
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })
+                )}
+              </div>
+            )}
+          </div>
+        );
+      })()}
 
       {/* 5. Slide-Out All Claims Explorer Drawer */}
       {isDrawerOpen && (
