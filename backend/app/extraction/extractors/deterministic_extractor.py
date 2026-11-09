@@ -7,7 +7,7 @@ Provides 100% deterministic, zero-hallucination, sub-millisecond extraction with
 from __future__ import annotations
 
 import logging
-from typing import Any, List
+from typing import Any, List, Optional
 
 from app.extraction.models import CandidateClaim, ExtractionStrategyType, TableGridBinding, TypedValue
 from app.extraction.subject_normalizer import SubjectNormalizer
