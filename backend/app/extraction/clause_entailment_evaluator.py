@@ -330,6 +330,40 @@ class ClauseEntailmentEvaluator:
             )
 
         # ---------------------------------------------------------------------
+        # Gate Check 5: DeBERTa-v3 Neural NLI Cross-Encoder (Phase 6)
+        # ---------------------------------------------------------------------
+        try:
+            from app.core.nlp_manager import NLPManager
+            nli_result = NLPManager.evaluate_nli(premise, hypothesis)
+            if nli_result is not None:
+                nli_label, nli_conf = nli_result
+                if nli_label == "CONTRADICTION" and nli_conf >= 0.75:
+                    return EntailmentVerdict(
+                        clause_entails_claim=False,
+                        label=EntailmentLabel.CONTRADICTION,
+                        confidence_score=round(nli_conf, 4),
+                        is_overstatement=True,
+                        overstatement_reason=f"DeBERTa-v3 cross-encoder detected contradiction ({nli_conf*100:.1f}% confidence).",
+                        premise_text=premise,
+                        hypothesis_text=hypothesis,
+                        deontic_alignment="POLARITY_INVERSION",
+                    )
+                elif nli_label == "NEUTRAL" and nli_conf >= 0.85 and missing_conditions:
+                    return EntailmentVerdict(
+                        clause_entails_claim=False,
+                        label=EntailmentLabel.NEUTRAL,
+                        confidence_score=round(nli_conf, 4),
+                        is_overstatement=True,
+                        overstatement_reason=f"DeBERTa-v3 cross-encoder classified claim as neutral with uncaptured conditions ({nli_conf*100:.1f}% confidence).",
+                        premise_text=premise,
+                        hypothesis_text=hypothesis,
+                        condition_coverage=0.5,
+                        missing_conditions=missing_conditions,
+                    )
+        except Exception as nli_err:
+            pass
+
+        # ---------------------------------------------------------------------
         # Verdict: All Entailment Checks Passed
         # ---------------------------------------------------------------------
         confidence = round(min(0.99, 0.85 + (overlap_ratio * 0.14)), 4)

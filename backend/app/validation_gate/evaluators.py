@@ -439,6 +439,33 @@ class CompletenessEvaluator:
                 details={"unsupported_conditions": unsupported_conditions, **details_dict},
             )
 
+        # Condition Preservation Gate (Phase 6):
+        # Flags claims when enclosing evidence imposes restrictive conditions that were dropped
+        span_lower = span.lower()
+        if not getattr(candidate, "conditions", None) and len(span.split()) > 8:
+            dropped_restrictive = []
+            for pat, c_name in (
+                (r"\bsolely in connection with\b", "solely in connection with"),
+                (r"\bonly if\b", "only if"),
+                (r"\bon the condition that\b", "on the condition that"),
+                (r"\bcompleted at least \d+\s*(?:months?|years?)\b", "prior service qualification"),
+                (r"\bsubject to\s+[a-z]+ approval\b", "approval requirement"),
+            ):
+                if re.search(pat, span_lower):
+                    claim_obj_lower = (str(candidate.object or "") + " " + str(candidate.claim_text or "")).lower()
+                    if c_name not in claim_obj_lower:
+                        dropped_restrictive.append(c_name)
+
+            if dropped_restrictive:
+                return DimensionEvaluation(
+                    dimension_name="completeness",
+                    status=CompletenessStatus.PARTIAL.value,
+                    score=0.70,
+                    passed=False,
+                    reason=f"Condition preservation failure: evidence contains qualifying condition ({', '.join(dropped_restrictive)}), but structured claim omitted it.",
+                    details={"dropped_conditions": dropped_restrictive, **details_dict},
+                )
+
         return DimensionEvaluation(
             dimension_name="completeness",
             status=CompletenessStatus.COMPLETE.value,

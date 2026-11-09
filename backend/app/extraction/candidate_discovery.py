@@ -135,6 +135,7 @@ class CandidateDiscoveryEngine:
         # Exceptions: discover explicit policy exemptions
         if unit_role == ContentRole.EXCEPTION or (
             b_type in ("clause", "paragraph", "exception")
+            and not re.search(r"\bwithout\s+exceptions?\b|\bwith\s+no\s+exceptions?\b", text, re.IGNORECASE)
             and bool(re.search(r"\b(?:exception|exemptions?|unless|except for|excluding)\b", text, re.IGNORECASE))
             and len(text.split()) > 3
         ):

@@ -80,8 +80,8 @@ class LLMSemanticExtractor:
                             claim_role = ContentRole.CONTACT_INFO
                             claim_canon = False
                             claim_type_out = "CONTACT_INFORMATION"
-                        elif unit_role == ContentRole.SUMMARY or "summary" in (c.claim_type or "").lower():
-                            claim_role = ContentRole.SUMMARY
+                        elif unit_role == getattr(ContentRole, "SUMMARY", ContentRole.DOCUMENT_METADATA) or "summary" in (c.claim_type or "").lower():
+                            claim_role = getattr(ContentRole, "SUMMARY", ContentRole.DOCUMENT_METADATA)
                             claim_canon = False
                             claim_type_out = "SUMMARY"
                         else:

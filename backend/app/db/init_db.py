@@ -43,6 +43,17 @@ async def init_db_schema():
         "ALTER TABLE users ADD COLUMN IF NOT EXISTS last_active_device VARCHAR(255);",
         "ALTER TABLE users ADD COLUMN IF NOT EXISTS hashed_password VARCHAR(255);",
         "ALTER TABLE users ADD COLUMN IF NOT EXISTS is_verified BOOLEAN DEFAULT TRUE;",
+        "ALTER TABLE users DROP CONSTRAINT IF EXISTS users_email_key;",
+        """
+        DO $$
+        BEGIN
+            IF NOT EXISTS (
+                SELECT 1 FROM pg_constraint WHERE conname = 'uq_users_org_email'
+            ) THEN
+                ALTER TABLE users ADD CONSTRAINT uq_users_org_email UNIQUE (organization_id, email);
+            END IF;
+        END $$;
+        """,
         "ALTER TABLE data_sources ADD COLUMN IF NOT EXISTS domain VARCHAR(100) DEFAULT 'General';",
         "ALTER TABLE data_sources ADD COLUMN IF NOT EXISTS owner_id UUID REFERENCES users(id) ON DELETE SET NULL;",
         "ALTER TABLE data_sources ADD COLUMN IF NOT EXISTS connection_config JSONB DEFAULT '{}'::jsonb;",

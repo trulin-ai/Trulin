@@ -134,6 +134,18 @@ class ConversationParser:
             )
             units.append(unit)
 
+        # Conditional FastCoref resolution across multi-message thread (Phase 4)
+        if len(units) > 1:
+            try:
+                from app.core.nlp_manager import NLPManager
+                full_thread = "\n".join(f"{u.structured_data.get('speaker', 'User')}: {u.content_text}" for u in units)
+                resolved = NLPManager.resolve_coreference(full_thread)
+                if resolved:
+                    for u in units:
+                        u.structured_data["coref_resolved_thread"] = True
+            except Exception:
+                pass
+
         expected_count = len(messages)
         warnings: list[str] = []
 

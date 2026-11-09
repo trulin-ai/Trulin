@@ -897,7 +897,84 @@ class ClaimQualityNormalizer:
         elif f"category:{cat.value}" not in qualifiers:
             qualifiers.append(f"category:{cat.value}")
 
+        # Canonical Sentence Synthesis (Phase 5)
+        # If claim_text is absent, malformed, or identical to raw evidence, synthesize clean canonical sentence
+        if not getattr(candidate, "claim_text", "") or len(candidate.claim_text.strip()) < 5:
+            candidate.claim_text = cls.synthesize_canonical_sentence(
+                subject=norm_subj,
+                modality=candidate.modality,
+                predicate=norm_pred,
+                object_val=raw_obj,
+                conditions=getattr(candidate, "conditions", []),
+                exceptions=getattr(candidate, "exceptions", []),
+            )
+
         return candidate
+
+    @classmethod
+    def synthesize_canonical_sentence(
+        cls,
+        subject: str,
+        modality: str,
+        predicate: str,
+        object_val: str = "",
+        conditions: Optional[List[Any]] = None,
+        exceptions: Optional[List[Any]] = None,
+    ) -> str:
+        """
+        Synthesizes a canonical, grammatically accurate sentence representation
+        from structured fields strictly without inventing context or hallucinatory timeframes.
+        """
+        subj = (subject or "Subject").strip()
+        mod_upper = (modality or "MUST").upper()
+        pred_clean = (predicate or "").lower().replace("_", " ").strip()
+
+        # Modal verb phrase
+        if mod_upper in ("OBLIGATION", "MUST"):
+            modal = "must"
+        elif mod_upper in ("PROHIBITION", "MUST_NOT"):
+            modal = "must not"
+        elif mod_upper in ("PERMISSION", "MAY"):
+            modal = "may"
+        elif mod_upper in ("ENTITLEMENT", "ENTITLED_TO"):
+            modal = "is entitled to"
+        elif mod_upper in ("ELIGIBILITY", "ELIGIBLE_IF"):
+            modal = "is eligible for"
+        else:
+            modal = "governs"
+
+        # Strip redundant modal prefixes in predicate
+        for prefix in ("must not ", "may not ", "must ", "may ", "is entitled to ", "is eligible for "):
+            if pred_clean.startswith(prefix):
+                pred_clean = pred_clean[len(prefix):]
+                break
+
+        action_phrase = pred_clean
+        if object_val and str(object_val).strip():
+            obj_str = str(object_val).strip()
+            if not obj_str.lower().startswith(pred_clean.lower()):
+                action_phrase = f"{pred_clean} {obj_str}"
+            else:
+                action_phrase = obj_str
+
+        sentence = f"{subj} {modal} {action_phrase}".strip()
+
+        # Append conditions faithfully
+        if conditions:
+            cond_strs = [str(c.text if hasattr(c, "text") else c).strip() for c in conditions if str(c).strip()]
+            if cond_strs:
+                sentence += f" provided that {'; '.join(cond_strs)}"
+
+        # Append exceptions faithfully
+        if exceptions:
+            exc_strs = [str(e).strip() for e in exceptions if str(e).strip()]
+            if exc_strs:
+                sentence += f" except where {'; '.join(exc_strs)}"
+
+        if not sentence.endswith("."):
+            sentence += "."
+
+        return sentence
 
     @classmethod
     def score_claim_quality(cls, claim: NormalizedClaim) -> ClaimQualityScore:

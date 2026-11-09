@@ -356,6 +356,73 @@ class SubjectNormalizer:
         return EntityType.PRODUCT_SCOPE.value
 
     @classmethod
+    def resolve_entity_cascaded(cls, text: str) -> Dict[str, Any]:
+        """
+        Three-Tier Entity Extraction Cascade (Phase 4):
+        Tier 1: Deterministic Regex for dates, currencies, thresholds, IDs.
+        Tier 2: spaCy NER for standard categories (ORG, PERSON, DATE, MONEY).
+        Tier 3: GLiNER for domain-specific zero-shot roles.
+        """
+        entities: Dict[str, Any] = {"raw_text": text, "entities": []}
+        if not text or not text.strip():
+            return entities
+
+        # Tier 1: Deterministic regex patterns
+        # 1A. Currencies & monetary amounts
+        money_matches = re.findall(r"(?:[\$€£₹]\s*\d+(?:,\d{3})*(?:\.\d+)?|\b\d+(?:,\d{3})*(?:\.\d+)?\s*(?:USD|EUR|GBP|INR)\b)", text, re.IGNORECASE)
+        for m in money_matches:
+            entities["entities"].append({"text": m.strip(), "label": "MONEY", "tier": 1, "source": "regex"})
+
+        # 1B. Durations & temporal windows
+        time_matches = re.findall(r"\b\d+\s*(?:calendar\s+days?|business\s+days?|days?|months?|years?|hours?|weeks?)\b", text, re.IGNORECASE)
+        for t in time_matches:
+            entities["entities"].append({"text": t.strip(), "label": "DURATION", "tier": 1, "source": "regex"})
+
+        # 1C. Percentages
+        pct_matches = re.findall(r"\b\d+(?:\.\d+)?%", text)
+        for p in pct_matches:
+            entities["entities"].append({"text": p.strip(), "label": "PERCENTAGE", "tier": 1, "source": "regex"})
+
+        # Tier 2: spaCy NER (when available)
+        try:
+            from app.core.nlp_manager import NLPManager
+            spacy_nlp = NLPManager.get_spacy()
+            if spacy_nlp is not None:
+                doc = spacy_nlp(text[:500])
+                for ent in getattr(doc, "ents", []):
+                    if ent.label_ in ("ORG", "PERSON", "DATE", "GPE", "MONEY"):
+                        # Avoid duplicates from Tier 1
+                        if not any(e["text"] == ent.text for e in entities["entities"]):
+                            entities["entities"].append({"text": ent.text, "label": ent.label_, "tier": 2, "source": "spacy"})
+        except Exception:
+            pass
+
+        # Tier 3: GLiNER Zero-Shot Fallback (when available)
+        # Activated when no domain role or governing org is found in Tier 1/2
+        has_role_or_org = any(e["label"] in ("ORG", "PERSON") for e in entities["entities"])
+        if not has_role_or_org:
+            try:
+                from app.core.nlp_manager import NLPManager
+                gliner_preds = NLPManager.extract_domain_entities(
+                    text,
+                    labels=["approver_role", "employee_type", "governing_entity", "jurisdiction", "department", "vendor", "customer"],
+                    threshold=0.55,
+                )
+                for pred in gliner_preds:
+                    if not any(e["text"] == pred["text"] for e in entities["entities"]):
+                        entities["entities"].append({
+                            "text": pred["text"],
+                            "label": pred["label"],
+                            "tier": 3,
+                            "source": "gliner",
+                            "score": pred.get("score", 1.0),
+                        })
+            except Exception:
+                pass
+
+        return entities
+
+    @classmethod
     def normalize_to_object(cls, raw_subject: str, context: Optional[str] = None) -> SubjectObject:
         """
         Normalizes a raw subject into a typed, validated SubjectObject.

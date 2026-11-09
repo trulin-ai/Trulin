@@ -35,6 +35,7 @@ class ContentRole(str, Enum):
     CONTACT_INFO = "contact_info"         # Support desk, HR email, contact phone number, address
     INTRODUCTORY_CONTEXT = "introductory_context" # Descriptive preface, non-normative framing
     DOCUMENT_METADATA = "document_metadata" # Document title, author, scope metadata
+    SUMMARY = "summary"                   # Executive summary, document synopsis
     FORM_SPECIFICATION = "form_specification" # Form field requirements
     REFERENCE_CITATION = "reference_citation" # Citation of external statutes, regulatory references, or documentation links
     COMMUNICATION = "communication"       # Chat message, email, comment stream, discussion note
