@@ -170,11 +170,19 @@ class UnifiedExtractionPipeline:
         )
         raw_candidates = l5_result.candidates
 
+        # Step 4.2: Pass 2 - Selective NLP Semantic Refinement (Coreference, Entity Disambiguation & S-P-O Dependency Parse)
+        from app.extraction.nlp_refiner import NLPSemanticRefiner
+
+        nlp_refined_candidates = NLPSemanticRefiner.refine_candidates(
+            candidates=raw_candidates,
+            source_text=content_text or canonical_env.parsed_content or "",
+        )
+
         # Step 4.5: Universal Claim Quality Normalization
         from app.extraction.claim_quality_normalizer import ClaimQualityNormalizer
 
         normalized_candidates: List[CandidateClaim] = []
-        for c in raw_candidates:
+        for c in nlp_refined_candidates:
             norm_c = ClaimQualityNormalizer.normalize_candidate_claim(c)
             normalized_candidates.append(norm_c if norm_c is not None else c)
 

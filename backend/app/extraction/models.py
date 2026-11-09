@@ -159,6 +159,7 @@ class CandidateClaim(BaseModel):
     duplicate_of: Optional[str] = Field(default=None, description="Primary candidate ID if this is a duplicate occurrence")
     duplicate_occurrences: List[dict[str, Any]] = Field(default_factory=list, description="Separate evidence occurrences of the same claim")
     is_duplicate: bool = Field(default=False, description="Flagged true if this is a duplicate occurrence of an earlier candidate")
+    nlp_enrichment: dict[str, Any] = Field(default_factory=dict, description="Metadata and scores from selective NLP enrichment (NER, coref, NLI, syntactic parse)")
 
     @classmethod
     def create(
@@ -214,6 +215,7 @@ class CandidateClaim(BaseModel):
         duplicate_of: Optional[str] = None,
         duplicate_occurrences: Optional[List[dict[str, Any]]] = None,
         is_duplicate: bool = False,
+        nlp_enrichment: Optional[dict[str, Any]] = None,
     ) -> CandidateClaim:
         text_clean = claim_text.strip()
         hash_input = f"{asset_id}:{subject}:{predicate}:{object_}:{value}:{unit}:{evidence_text_span}:{source_version or ''}:{json.dumps(structured_values or {}, sort_keys=True, default=str)}"
@@ -334,6 +336,7 @@ class CandidateClaim(BaseModel):
             duplicate_of=duplicate_of,
             duplicate_occurrences=duplicate_occurrences or [],
             is_duplicate=is_duplicate,
+            nlp_enrichment=nlp_enrichment or {},
         )
 
     @classmethod
