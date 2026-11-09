@@ -1,0 +1,2153 @@
+{
+  "baseline_candidate_count": 229,
+  "exported_candidate_count": 230,
+  "retained_exact_count": 199,
+  "revised_semantics_count": 30,
+  "newly_recovered_count": 1,
+  "retained_exact": [
+    {
+      "baseline_order": 2,
+      "export_order": 2,
+      "subject": "Return window",
+      "predicate": "has_summary",
+      "verbatim_source_quote": "| Return window | 30 days from delivery (60 days for Northwind Rewards Gold memb",
+      "decision": "review"
+    },
+    {
+      "baseline_order": 3,
+      "export_order": 3,
+      "subject": "Refund speed",
+      "predicate": "has_summary",
+      "verbatim_source_quote": "| Refund speed | 3-5 business days after we receive and inspect the return |",
+      "decision": "review"
+    },
+    {
+      "baseline_order": 4,
+      "export_order": 4,
+      "subject": "Return shipping",
+      "predicate": "has_summary",
+      "verbatim_source_quote": "| Return shipping | Free for defective or incorrect items; $6.95 deducted otherw",
+      "decision": "review"
+    },
+    {
+      "baseline_order": 5,
+      "export_order": 5,
+      "subject": "Restocking fee",
+      "predicate": "has_summary",
+      "verbatim_source_quote": "| Restocking fee | None on most items; 15% on special-order and bulk items |",
+      "decision": "review"
+    },
+    {
+      "baseline_order": 6,
+      "export_order": 6,
+      "subject": "Final sale items",
+      "predicate": "has_summary",
+      "verbatim_source_quote": "| Final sale items | Not eligible for refund or exchange |",
+      "decision": "review"
+    },
+    {
+      "baseline_order": 7,
+      "export_order": 7,
+      "subject": "Refund",
+      "predicate": "has_definition",
+      "verbatim_source_quote": "| Refund | Return of money to the original payment method or store credit follow",
+      "decision": "reject"
+    },
+    {
+      "baseline_order": 8,
+      "export_order": 8,
+      "subject": "Return",
+      "predicate": "has_definition",
+      "verbatim_source_quote": "| Return | Sending a purchased item back to Northwind by mail or in-store drop-o",
+      "decision": "reject"
+    },
+    {
+      "baseline_order": 9,
+      "export_order": 9,
+      "subject": "Exchange",
+      "predicate": "has_definition",
+      "verbatim_source_quote": "| Exchange | Replacing an item with a different size, colour or product of equal",
+      "decision": "reject"
+    },
+    {
+      "baseline_order": 10,
+      "export_order": 10,
+      "subject": "Store Credit",
+      "predicate": "has_definition",
+      "verbatim_source_quote": "| Store Credit | A balance issued to a customer account, redeemable online and i",
+      "decision": "reject"
+    },
+    {
+      "baseline_order": 11,
+      "export_order": 11,
+      "subject": "RMA",
+      "predicate": "has_definition",
+      "verbatim_source_quote": "| RMA | Return Merchandise Authorization number, e.g. RMA-2026-004815, required ",
+      "decision": "reject"
+    },
+    {
+      "baseline_order": 12,
+      "export_order": 12,
+      "subject": "Customer",
+      "predicate": "has_refund_eligibility",
+      "verbatim_source_quote": "Final Sale                     Items marked 'Final Sale' at the time of purchase",
+      "decision": "review"
+    },
+    {
+      "baseline_order": 13,
+      "export_order": 13,
+      "subject": "Standard merchandise",
+      "predicate": "has_return_window",
+      "verbatim_source_quote": "| Standard merchandise | 30 days |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 14,
+      "export_order": 14,
+      "subject": "Northwind Rewards Gold members",
+      "predicate": "has_return_window",
+      "verbatim_source_quote": "| Northwind Rewards Gold members | 60 days |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 15,
+      "export_order": 15,
+      "subject": "Holiday purchases (Nov 1 - Dec 24)",
+      "predicate": "has_return_deadline",
+      "verbatim_source_quote": "| Holiday purchases (Nov 1 - Dec 24) | Until January 31 of the following year |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 16,
+      "export_order": 16,
+      "subject": "Footwear (worn indoors only)",
+      "predicate": "has_return_window",
+      "verbatim_source_quote": "| Footwear (worn indoors only) | 45 days |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 17,
+      "export_order": 17,
+      "subject": "Camping tents and sleeping bags (unused)",
+      "predicate": "has_return_window",
+      "verbatim_source_quote": "| Camping tents and sleeping bags (unused) | 60 days |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 18,
+      "export_order": 18,
+      "subject": "Defective items",
+      "predicate": "has_resolution_path",
+      "verbatim_source_quote": "| Defective items | Covered by warranty - see Section 14 |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 19,
+      "export_order": 19,
+      "subject": "Returns without a receipt",
+      "predicate": "has_return_channel_eligibility",
+      "verbatim_source_quote": "Returns without proof of purchase are accepted in-store only, for store credit a",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 20,
+      "export_order": 20,
+      "subject": "Returns without a receipt",
+      "predicate": "has_identity_verification_requirement",
+      "verbatim_source_quote": "A government-issued photo ID is required and scanned.",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 21,
+      "export_order": 21,
+      "subject": "Returns without a receipt",
+      "predicate": "has_refund_eligibility",
+      "verbatim_source_quote": "A limit of three receipt-less returns per customer per 12-month period applies.",
+      "decision": "review"
+    },
+    {
+      "baseline_order": 22,
+      "export_order": 22,
+      "subject": "Support agents",
+      "predicate": "must_verify_refund_conditions",
+      "verbatim_source_quote": "Support agents must verify each condition before approving a refund over $50.00.",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 23,
+      "export_order": 23,
+      "subject": "Refund request",
+      "predicate": "has_purchase_verification_requirement",
+      "verbatim_source_quote": "\u007f  The order number or proof of purchase can be verified in our systems.",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 24,
+      "export_order": 24,
+      "subject": "Partial refunds A partial refund",
+      "predicate": "has_validity_rule",
+      "verbatim_source_quote": "1 Partial refunds A partial refund may be issued when an item shows signs of use",
+      "decision": "review"
+    },
+    {
+      "baseline_order": 25,
+      "export_order": 25,
+      "subject": "Like new, tags attached",
+      "predicate": "has_refund_percentage",
+      "verbatim_source_quote": "| Like new, tags attached | 100% |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 26,
+      "export_order": 26,
+      "subject": "Opened packaging, item unused",
+      "predicate": "has_refund_percentage",
+      "verbatim_source_quote": "| Opened packaging, item unused | 100% |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 27,
+      "export_order": 27,
+      "subject": "Missing original box (non-fragile)",
+      "predicate": "has_refund_percentage",
+      "verbatim_source_quote": "| Missing original box (non-fragile) | 90% |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 28,
+      "export_order": 28,
+      "subject": "Missing accessories or free gift",
+      "predicate": "has_refund_rule",
+      "verbatim_source_quote": "| Missing accessories or free gift | Refund minus gift value |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 29,
+      "export_order": 29,
+      "subject": "Light wear or signs of use",
+      "predicate": "has_refund_percentage",
+      "verbatim_source_quote": "| Light wear or signs of use | 50% - 75% |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 30,
+      "export_order": 30,
+      "subject": "Customer",
+      "predicate": "has_refund_percentage",
+      "verbatim_source_quote": "| Damaged by customer / heavy use | 0% - 25% (agent discretion, manager approval",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 31,
+      "export_order": 31,
+      "subject": "Washed, altered or stained",
+      "predicate": "has_refund_eligibility",
+      "verbatim_source_quote": "| Washed, altered or stained | Not eligible |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 32,
+      "export_order": 32,
+      "subject": "Refund approval",
+      "predicate": "requires_approval_role",
+      "verbatim_source_quote": "2 Manager approval thresholds \u007f  Up to $100: Tier 1 agent may approve.",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 33,
+      "export_order": 33,
+      "subject": "Refund approval",
+      "predicate": "requires_approval_role",
+      "verbatim_source_quote": "\u007f  $100.01 - $500: Tier 2 agent or team lead approval required.",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 34,
+      "export_order": 34,
+      "subject": "Refund approval",
+      "predicate": "requires_approval_role",
+      "verbatim_source_quote": "\u007f  Over $500: Customer Experience Manager approval required.",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 35,
+      "export_order": 35,
+      "subject": "Refund approval",
+      "predicate": "requires_approval_role",
+      "verbatim_source_quote": "\u007f  Over $2,000: Finance Director approval and fraud review required.",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 36,
+      "export_order": 36,
+      "subject": "Refund approval",
+      "predicate": "requires_fraud_review",
+      "verbatim_source_quote": "\u007f  Over $2,000: Finance Director approval and fraud review required.",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 37,
+      "export_order": 37,
+      "subject": "Customer",
+      "predicate": "has_refund_eligibility",
+      "verbatim_source_quote": "\u007f  Perishable goods such as freeze-dried meals past 14 days from delivery.",
+      "decision": "review"
+    },
+    {
+      "baseline_order": 38,
+      "export_order": 38,
+      "subject": "Customer",
+      "predicate": "has_refund_eligibility",
+      "verbatim_source_quote": "\u007f  Items returned more than 90 days after delivery.",
+      "decision": "review"
+    },
+    {
+      "baseline_order": 39,
+      "export_order": 39,
+      "subject": "Customer",
+      "predicate": "has_validity_rule",
+      "verbatim_source_quote": "Custom products are made specifically for the customer and cannot be resold.",
+      "decision": "review"
+    },
+    {
+      "baseline_order": 40,
+      "export_order": 40,
+      "subject": "Even for non-refundable items, a full refund or replacement",
+      "predicate": "will_issue_refund",
+      "verbatim_source_quote": "Even for non-refundable items, a full refund or replacement will be provided if ",
+      "decision": "review"
+    },
+    {
+      "baseline_order": 45,
+      "export_order": 46,
+      "subject": "Item SKU / name",
+      "predicate": "has_example_value",
+      "verbatim_source_quote": "| Item SKU / name | TNT-4P-GRN / Summit 4-Person Tent | Yes |",
+      "decision": "reject"
+    },
+    {
+      "baseline_order": 46,
+      "export_order": 47,
+      "subject": "Item SKU / name",
+      "predicate": "is_required_for_refund_request",
+      "verbatim_source_quote": "| Item SKU / name | TNT-4P-GRN / Summit 4-Person Tent | Yes |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 47,
+      "export_order": 48,
+      "subject": "Reason for return",
+      "predicate": "has_example_value",
+      "verbatim_source_quote": "| Reason for return | Wrong size | Yes |",
+      "decision": "reject"
+    },
+    {
+      "baseline_order": 48,
+      "export_order": 49,
+      "subject": "Reason for return",
+      "predicate": "is_required_for_refund_request",
+      "verbatim_source_quote": "| Reason for return | Wrong size | Yes |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 49,
+      "export_order": 50,
+      "subject": "Photos",
+      "predicate": "has_example_value",
+      "verbatim_source_quote": "| Photos | Damage close-up | If damaged |",
+      "decision": "reject"
+    },
+    {
+      "baseline_order": 50,
+      "export_order": 51,
+      "subject": "Photos",
+      "predicate": "is_required_for_refund_request",
+      "verbatim_source_quote": "| Photos | Damage close-up | If damaged |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 51,
+      "export_order": 52,
+      "subject": "Preferred resolution",
+      "predicate": "has_example_value",
+      "verbatim_source_quote": "| Preferred resolution | Refund to card | Yes |",
+      "decision": "reject"
+    },
+    {
+      "baseline_order": 52,
+      "export_order": 53,
+      "subject": "Preferred resolution",
+      "predicate": "is_required_for_refund_request",
+      "verbatim_source_quote": "| Preferred resolution | Refund to card | Yes |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 53,
+      "export_order": 54,
+      "subject": "RMA issued after request",
+      "predicate": "has_stage_duration",
+      "verbatim_source_quote": "| RMA issued after request | Instantly online; up to 1 hour by phone |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 54,
+      "export_order": 55,
+      "subject": "Return transit to warehouse",
+      "predicate": "has_stage_duration",
+      "verbatim_source_quote": "| Return transit to warehouse | 3-7 business days (domestic) |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 55,
+      "export_order": 56,
+      "subject": "Warehouse receipt and inspection",
+      "predicate": "has_stage_duration",
+      "verbatim_source_quote": "| Warehouse receipt and inspection | 1-2 business days |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 56,
+      "export_order": 57,
+      "subject": "Refund approved and issued",
+      "predicate": "has_stage_duration",
+      "verbatim_source_quote": "| Refund approved and issued | Within 1 business day of inspection |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 57,
+      "export_order": 58,
+      "subject": "Credit card refund posted by bank",
+      "predicate": "has_posting_duration",
+      "verbatim_source_quote": "| Credit card refund posted by bank | 3-5 business days |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 58,
+      "export_order": 59,
+      "subject": "Debit card / bank transfer",
+      "predicate": "has_posting_duration",
+      "verbatim_source_quote": "| Debit card / bank transfer | 5-10 business days |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 59,
+      "export_order": 60,
+      "subject": "PayPal",
+      "predicate": "has_posting_duration",
+      "verbatim_source_quote": "| PayPal | Within 24 hours of issue |",
+      "decision": "review"
+    },
+    {
+      "baseline_order": 60,
+      "export_order": 61,
+      "subject": "Store credit",
+      "predicate": "has_posting_duration",
+      "verbatim_source_quote": "| Store credit | Immediate |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 61,
+      "export_order": 62,
+      "subject": "Check (by request, over $1,000)",
+      "predicate": "has_posting_duration",
+      "verbatim_source_quote": "| Check (by request, over $1,000) | 10-15 business days |",
+      "decision": "review"
+    },
+    {
+      "baseline_order": 62,
+      "export_order": 63,
+      "subject": "Visa / Mastercard / Amex",
+      "predicate": "has_refund_method",
+      "verbatim_source_quote": "| Visa / Mastercard / Amex | Original card | 3-5 business days to post |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 63,
+      "export_order": 64,
+      "subject": "Visa / Mastercard / Amex",
+      "predicate": "has_posting_duration",
+      "verbatim_source_quote": "| Visa / Mastercard / Amex | Original card | 3-5 business days to post |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 64,
+      "export_order": 65,
+      "subject": "Debit card",
+      "predicate": "has_refund_method",
+      "verbatim_source_quote": "| Debit card | Original card | Up to 10 business days |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 65,
+      "export_order": 66,
+      "subject": "Debit card",
+      "predicate": "has_posting_duration",
+      "verbatim_source_quote": "| Debit card | Original card | Up to 10 business days |",
+      "decision": "review"
+    },
+    {
+      "baseline_order": 66,
+      "export_order": 67,
+      "subject": "PayPal",
+      "predicate": "has_refund_method",
+      "verbatim_source_quote": "| PayPal | PayPal balance | Usually within 24 hours |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 67,
+      "export_order": 68,
+      "subject": "PayPal",
+      "predicate": "has_posting_duration",
+      "verbatim_source_quote": "| PayPal | PayPal balance | Usually within 24 hours |",
+      "decision": "review"
+    },
+    {
+      "baseline_order": 70,
+      "export_order": 71,
+      "subject": "Buy Now Pay Later (e.g. Klarna)",
+      "predicate": "has_refund_method",
+      "verbatim_source_quote": "| Buy Now Pay Later (e.g. Klarna) | Provider reduces balance | Provider timeline",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 71,
+      "export_order": 72,
+      "subject": "Buy Now Pay Later (e.g. Klarna)",
+      "predicate": "has_provider_governed_timeline",
+      "verbatim_source_quote": "| Buy Now Pay Later (e.g. Klarna) | Provider reduces balance | Provider timeline",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 72,
+      "export_order": 73,
+      "subject": "Gift cards",
+      "predicate": "has_refund_method",
+      "verbatim_source_quote": "| Gift card | New gift card or store credit | Instant |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 73,
+      "export_order": 74,
+      "subject": "Gift cards",
+      "predicate": "has_posting_duration",
+      "verbatim_source_quote": "| Gift card | New gift card or store credit | Instant |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 74,
+      "export_order": 75,
+      "subject": "Cash (in-store)",
+      "predicate": "has_refund_method",
+      "verbatim_source_quote": "| Cash (in-store) | Cash up to $50, then store credit/card | ID required over $5",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 75,
+      "export_order": 76,
+      "subject": "Cash (in-store)",
+      "predicate": "has_identity_verification_requirement",
+      "verbatim_source_quote": "| Cash (in-store) | Cash up to $50, then store credit/card | ID required over $5",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 76,
+      "export_order": 77,
+      "subject": "Split payments",
+      "predicate": "has_refund_method",
+      "verbatim_source_quote": "| Split payments | Proportionally to each method | Gift card portion first |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 77,
+      "export_order": 78,
+      "subject": "Split payments",
+      "predicate": "has_refund_allocation_rule",
+      "verbatim_source_quote": "| Split payments | Proportionally to each method | Gift card portion first |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 79,
+      "export_order": 80,
+      "subject": "Bonus credit",
+      "predicate": "has_validity_rule",
+      "verbatim_source_quote": "Bonus credit cannot be applied retroactively once a refund has been issued to th",
+      "decision": "review"
+    },
+    {
+      "baseline_order": 80,
+      "export_order": 81,
+      "subject": "Defective or damaged",
+      "predicate": "has_return_shipping_rule",
+      "verbatim_source_quote": "| Defective or damaged | Yes, in full | Free |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 81,
+      "export_order": 82,
+      "subject": "Defective or damaged",
+      "predicate": "has_return_label_cost",
+      "verbatim_source_quote": "| Defective or damaged | Yes, in full | Free |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 82,
+      "export_order": 83,
+      "subject": "Wrong item sent",
+      "predicate": "has_return_shipping_rule",
+      "verbatim_source_quote": "| Wrong item sent | Yes, in full | Free |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 83,
+      "export_order": 84,
+      "subject": "Wrong item sent",
+      "predicate": "has_return_label_cost",
+      "verbatim_source_quote": "| Wrong item sent | Yes, in full | Free |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 84,
+      "export_order": 85,
+      "subject": "Not as described",
+      "predicate": "has_return_shipping_rule",
+      "verbatim_source_quote": "| Not as described | Yes, in full | Free |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 85,
+      "export_order": 86,
+      "subject": "Not as described",
+      "predicate": "has_return_label_cost",
+      "verbatim_source_quote": "| Not as described | Yes, in full | Free |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 86,
+      "export_order": 87,
+      "subject": "Changed mind / wrong size",
+      "predicate": "has_return_shipping_rule",
+      "verbatim_source_quote": "| Changed mind / wrong size | No | $6.95 deducted from refund |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 87,
+      "export_order": 88,
+      "subject": "Changed mind / wrong size",
+      "predicate": "has_return_label_cost",
+      "verbatim_source_quote": "| Changed mind / wrong size | No | $6.95 deducted from refund |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 88,
+      "export_order": 89,
+      "subject": "Gold member, any reason",
+      "predicate": "has_return_shipping_rule",
+      "verbatim_source_quote": "| Gold member, any reason | No | Free |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 89,
+      "export_order": 90,
+      "subject": "Gold member, any reason",
+      "predicate": "has_return_label_cost",
+      "verbatim_source_quote": "| Gold member, any reason | No | Free |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 90,
+      "export_order": 91,
+      "subject": "Exchange",
+      "predicate": "has_return_shipping_rule",
+      "verbatim_source_quote": "| Exchange | N/A | Free both ways |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 91,
+      "export_order": 92,
+      "subject": "Exchange",
+      "predicate": "has_return_label_cost",
+      "verbatim_source_quote": "| Exchange | N/A | Free both ways |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 92,
+      "export_order": 93,
+      "subject": "Order",
+      "predicate": "has_return_shipping_rule",
+      "verbatim_source_quote": "| Order over $150, any reason | No | Free |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 93,
+      "export_order": 94,
+      "subject": "Order",
+      "predicate": "has_return_label_cost",
+      "verbatim_source_quote": "| Order over $150, any reason | No | Free |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 95,
+      "export_order": 96,
+      "subject": "Freight pickups",
+      "predicate": "scheduled",
+      "verbatim_source_quote": "Freight pickups must be scheduled with our logistics team at least 3 business da",
+      "decision": "review"
+    },
+    {
+      "baseline_order": 96,
+      "export_order": 97,
+      "subject": "Customer",
+      "predicate": "has_return_shipping_rule",
+      "verbatim_source_quote": "Customers may use their own carrier.",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 97,
+      "export_order": 98,
+      "subject": "Carrier",
+      "predicate": "limited_to",
+      "verbatim_source_quote": "Reimbursement for carrier costs is limited to $12.00 and only for approved defec",
+      "decision": "review"
+    },
+    {
+      "baseline_order": 98,
+      "export_order": 99,
+      "subject": "Prepaid labels",
+      "predicate": "has_validity_rule",
+      "verbatim_source_quote": "Prepaid labels can be dropped at over 15,000 carrier locations and all Northwind",
+      "decision": "review"
+    },
+    {
+      "baseline_order": 100,
+      "export_order": 101,
+      "subject": "Replacement",
+      "predicate": "has_resolution_option_details",
+      "verbatim_source_quote": "| Replacement | Same item shipped with free expedited shipping | 2-3 business da",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 101,
+      "export_order": 102,
+      "subject": "Replacement",
+      "predicate": "has_stage_duration",
+      "verbatim_source_quote": "| Replacement | Same item shipped with free expedited shipping | 2-3 business da",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 102,
+      "export_order": 103,
+      "subject": "Full refund",
+      "predicate": "has_resolution_option_details",
+      "verbatim_source_quote": "| Full refund | Item price plus shipping and tax | 3-5 business days |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 103,
+      "export_order": 104,
+      "subject": "Full refund",
+      "predicate": "has_stage_duration",
+      "verbatim_source_quote": "| Full refund | Item price plus shipping and tax | 3-5 business days |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 106,
+      "export_order": 106,
+      "subject": "Repair",
+      "predicate": "has_resolution_option_details",
+      "verbatim_source_quote": "| Repair | For eligible products under warranty | 7-14 business days |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 107,
+      "export_order": 107,
+      "subject": "Repair",
+      "predicate": "has_stage_duration",
+      "verbatim_source_quote": "| Repair | For eligible products under warranty | 7-14 business days |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 109,
+      "export_order": 109,
+      "subject": "This is",
+      "predicate": "limited_to",
+      "verbatim_source_quote": "This is limited to two instances per customer per year.",
+      "decision": "review"
+    },
+    {
+      "baseline_order": 110,
+      "export_order": 110,
+      "subject": "Customer",
+      "predicate": "has_refund_eligibility",
+      "verbatim_source_quote": "Once an order has shipped, it must be handled as a return.",
+      "decision": "review"
+    },
+    {
+      "baseline_order": 112,
+      "export_order": 112,
+      "subject": "Shipped",
+      "predicate": "has_attempted_not_guaranteed",
+      "verbatim_source_quote": "| Shipped | No | Refuse delivery or return |",
+      "decision": "review"
+    },
+    {
+      "baseline_order": 113,
+      "export_order": 113,
+      "subject": "Shipped",
+      "predicate": "has_full_refund_if_stopped_else_return",
+      "verbatim_source_quote": "| Shipped | No | Refuse delivery or return |",
+      "decision": "review"
+    },
+    {
+      "baseline_order": 114,
+      "export_order": 114,
+      "subject": "Delivered",
+      "predicate": "has_attempted_not_guaranteed",
+      "verbatim_source_quote": "| Delivered | No | Standard return policy |",
+      "decision": "review"
+    },
+    {
+      "baseline_order": 115,
+      "export_order": 115,
+      "subject": "Delivered",
+      "predicate": "has_full_refund_if_stopped_else_return",
+      "verbatim_source_quote": "| Delivered | No | Standard return policy |",
+      "decision": "review"
+    },
+    {
+      "baseline_order": 116,
+      "export_order": 116,
+      "subject": "Order",
+      "predicate": "has_attempted_not_guaranteed",
+      "verbatim_source_quote": "| Pre-order | Yes, until 7 days before release | Full refund |",
+      "decision": "review"
+    },
+    {
+      "baseline_order": 117,
+      "export_order": 117,
+      "subject": "Order",
+      "predicate": "has_full_refund_if_stopped_else_return",
+      "verbatim_source_quote": "| Pre-order | Yes, until 7 days before release | Full refund |",
+      "decision": "review"
+    },
+    {
+      "baseline_order": 118,
+      "export_order": 118,
+      "subject": "Backordered",
+      "predicate": "has_attempted_not_guaranteed",
+      "verbatim_source_quote": "| Backordered | Yes, anytime | Full refund |",
+      "decision": "review"
+    },
+    {
+      "baseline_order": 119,
+      "export_order": 119,
+      "subject": "Backordered",
+      "predicate": "has_full_refund_if_stopped_else_return",
+      "verbatim_source_quote": "| Backordered | Yes, anytime | Full refund |",
+      "decision": "review"
+    },
+    {
+      "baseline_order": 120,
+      "export_order": 120,
+      "subject": "Northwind We",
+      "predicate": "cancel",
+      "verbatim_source_quote": "Northwind We may cancel an order for reasons including stock errors, pricing err",
+      "decision": "review"
+    },
+    {
+      "baseline_order": 132,
+      "export_order": 133,
+      "subject": "Company",
+      "predicate": "will_issue_refund",
+      "verbatim_source_quote": "If you did not receive a reminder due to an invalid email address, we will treat",
+      "decision": "review"
+    },
+    {
+      "baseline_order": 135,
+      "export_order": 136,
+      "subject": "Product",
+      "predicate": "has_refund_window",
+      "verbatim_source_quote": "If a file is corrupt or inaccessible, we will provide a working copy or a full r",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 136,
+      "export_order": 137,
+      "subject": "Gift cards",
+      "predicate": "has_refund_eligibility",
+      "verbatim_source_quote": "2 Gift cards \u007f  Gift cards are not refundable for cash, except where required by",
+      "decision": "review"
+    },
+    {
+      "baseline_order": 137,
+      "export_order": 138,
+      "subject": "Gift cards",
+      "predicate": "has_expiration_and_fee_rule",
+      "verbatim_source_quote": "\u007f  Gift cards never expire and carry no fees.",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 138,
+      "export_order": 139,
+      "subject": "Gift cards",
+      "predicate": "has_replacement_eligibility",
+      "verbatim_source_quote": "\u007f  Lost or stolen gift cards can be replaced if the card number is provided, min",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 139,
+      "export_order": 140,
+      "subject": "Gift cards",
+      "predicate": "can_cancel_before_shipment",
+      "verbatim_source_quote": "\u007f  Gift card purchases cannot be cancelled once the code is delivered by email.",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 140,
+      "export_order": 141,
+      "subject": "Gift receipt",
+      "predicate": "has_refund_method",
+      "verbatim_source_quote": "Gift recipients can return items with a gift receipt for store credit equal to t",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 141,
+      "export_order": 142,
+      "subject": "Gift receipt",
+      "predicate": "has_refund_eligibility",
+      "verbatim_source_quote": "The purchaser is not notified of the return.",
+      "decision": "review"
+    },
+    {
+      "baseline_order": 142,
+      "export_order": 143,
+      "subject": "Gift receipt",
+      "predicate": "may_receive_store_credit",
+      "verbatim_source_quote": "Without a gift receipt, credit is issued at the lowest recent selling price.",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 143,
+      "export_order": 144,
+      "subject": "Tents and shelters",
+      "predicate": "has_warranty_period",
+      "verbatim_source_quote": "| Tents and shelters | 2 years | Repair, replace or refund |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 144,
+      "export_order": 145,
+      "subject": "Tents and shelters",
+      "predicate": "has_warranty_remedy",
+      "verbatim_source_quote": "| Tents and shelters | 2 years | Repair, replace or refund |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 145,
+      "export_order": 146,
+      "subject": "Sleeping bags",
+      "predicate": "has_warranty_period",
+      "verbatim_source_quote": "| Sleeping bags | Lifetime (manufacturing defects) | Repair or replace |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 146,
+      "export_order": 147,
+      "subject": "Sleeping bags",
+      "predicate": "has_warranty_remedy",
+      "verbatim_source_quote": "| Sleeping bags | Lifetime (manufacturing defects) | Repair or replace |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 147,
+      "export_order": 148,
+      "subject": "Backpacks",
+      "predicate": "has_warranty_period",
+      "verbatim_source_quote": "| Backpacks | 5 years | Repair or replace |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 148,
+      "export_order": 149,
+      "subject": "Backpacks",
+      "predicate": "has_warranty_remedy",
+      "verbatim_source_quote": "| Backpacks | 5 years | Repair or replace |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 149,
+      "export_order": 150,
+      "subject": "Footwear",
+      "predicate": "has_warranty_period",
+      "verbatim_source_quote": "| Footwear | 1 year | Replace or refund |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 150,
+      "export_order": 151,
+      "subject": "Footwear",
+      "predicate": "has_warranty_remedy",
+      "verbatim_source_quote": "| Footwear | 1 year | Replace or refund |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 151,
+      "export_order": 152,
+      "subject": "Apparel",
+      "predicate": "has_warranty_period",
+      "verbatim_source_quote": "| Apparel | 1 year | Replace or refund |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 152,
+      "export_order": 153,
+      "subject": "Apparel",
+      "predicate": "has_warranty_remedy",
+      "verbatim_source_quote": "| Apparel | 1 year | Replace or refund |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 153,
+      "export_order": 154,
+      "subject": "Electronics (headlamps, GPS)",
+      "predicate": "has_warranty_period",
+      "verbatim_source_quote": "| Electronics (headlamps, GPS) | 1 year | Repair or replace |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 154,
+      "export_order": 155,
+      "subject": "Electronics (headlamps, GPS)",
+      "predicate": "has_warranty_remedy",
+      "verbatim_source_quote": "| Electronics (headlamps, GPS) | 1 year | Repair or replace |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 155,
+      "export_order": 156,
+      "subject": "Stoves and cookware",
+      "predicate": "has_warranty_period",
+      "verbatim_source_quote": "| Stoves and cookware | 2 years | Repair or replace |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 156,
+      "export_order": 157,
+      "subject": "Stoves and cookware",
+      "predicate": "has_warranty_remedy",
+      "verbatim_source_quote": "| Stoves and cookware | 2 years | Repair or replace |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 157,
+      "export_order": 158,
+      "subject": "Water filters",
+      "predicate": "has_warranty_period",
+      "verbatim_source_quote": "| Water filters | 1 year | Replace |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 158,
+      "export_order": 159,
+      "subject": "Water filters",
+      "predicate": "has_warranty_remedy",
+      "verbatim_source_quote": "| Water filters | 1 year | Replace |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 159,
+      "export_order": 160,
+      "subject": "Marketplace sellers",
+      "predicate": "has_refund_eligibility",
+      "verbatim_source_quote": "Items shipped directly by third-party sellers follow the seller's policy, but No",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 160,
+      "export_order": 161,
+      "subject": "United States",
+      "predicate": "has_return_window",
+      "verbatim_source_quote": "| United States | 30 days | See Section 9 | Included |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 161,
+      "export_order": 162,
+      "subject": "United States",
+      "predicate": "has_internal_policy_reference",
+      "verbatim_source_quote": "| United States | 30 days | See Section 9 | Included |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 162,
+      "export_order": 163,
+      "subject": "United States",
+      "predicate": "has_duties_and_taxes_rule",
+      "verbatim_source_quote": "| United States | 30 days | See Section 9 | Included |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 163,
+      "export_order": 164,
+      "subject": "Canada",
+      "predicate": "has_return_window",
+      "verbatim_source_quote": "| Canada | 30 days | Customer pays unless defective | Duties refunded on approve",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 164,
+      "export_order": 165,
+      "subject": "Canada",
+      "predicate": "has_return_shipping_rule",
+      "verbatim_source_quote": "| Canada | 30 days | Customer pays unless defective | Duties refunded on approve",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 165,
+      "export_order": 166,
+      "subject": "Canada",
+      "predicate": "has_duties_and_taxes_rule",
+      "verbatim_source_quote": "| Canada | 30 days | Customer pays unless defective | Duties refunded on approve",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 166,
+      "export_order": 167,
+      "subject": "UK",
+      "predicate": "has_return_window",
+      "verbatim_source_quote": "| UK | 30 days (14-day statutory minimum) | Customer pays unless defective | VAT",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 167,
+      "export_order": 168,
+      "subject": "UK",
+      "predicate": "has_return_shipping_rule",
+      "verbatim_source_quote": "| UK | 30 days (14-day statutory minimum) | Customer pays unless defective | VAT",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 168,
+      "export_order": 169,
+      "subject": "UK",
+      "predicate": "has_duties_and_taxes_rule",
+      "verbatim_source_quote": "| UK | 30 days (14-day statutory minimum) | Customer pays unless defective | VAT",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 169,
+      "export_order": 170,
+      "subject": "EU",
+      "predicate": "has_return_window",
+      "verbatim_source_quote": "| EU | 30 days (14-day statutory minimum) | Customer pays unless defective | VAT",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 170,
+      "export_order": 171,
+      "subject": "EU",
+      "predicate": "has_return_shipping_rule",
+      "verbatim_source_quote": "| EU | 30 days (14-day statutory minimum) | Customer pays unless defective | VAT",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 171,
+      "export_order": 172,
+      "subject": "EU",
+      "predicate": "has_duties_and_taxes_rule",
+      "verbatim_source_quote": "| EU | 30 days (14-day statutory minimum) | Customer pays unless defective | VAT",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 172,
+      "export_order": 173,
+      "subject": "Australia",
+      "predicate": "has_return_window",
+      "verbatim_source_quote": "| Australia | 30 days | Customer pays unless defective | GST refunded |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 173,
+      "export_order": 174,
+      "subject": "Australia",
+      "predicate": "has_return_shipping_rule",
+      "verbatim_source_quote": "| Australia | 30 days | Customer pays unless defective | GST refunded |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 174,
+      "export_order": 175,
+      "subject": "Australia",
+      "predicate": "has_duties_and_taxes_rule",
+      "verbatim_source_quote": "| Australia | 30 days | Customer pays unless defective | GST refunded |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 175,
+      "export_order": 176,
+      "subject": "Rest of world",
+      "predicate": "has_return_window",
+      "verbatim_source_quote": "| Rest of world | 14 days | Customer pays | Not refundable |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 176,
+      "export_order": 177,
+      "subject": "Rest of world",
+      "predicate": "has_return_shipping_rule",
+      "verbatim_source_quote": "| Rest of world | 14 days | Customer pays | Not refundable |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 177,
+      "export_order": 178,
+      "subject": "Rest of world",
+      "predicate": "has_duties_and_taxes_rule",
+      "verbatim_source_quote": "| Rest of world | 14 days | Customer pays | Not refundable |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 179,
+      "export_order": 180,
+      "subject": "International refund",
+      "predicate": "has_currency_conversion_rule",
+      "verbatim_source_quote": "Exchange rate differences between the purchase and refund date are not compensat",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 182,
+      "export_order": 183,
+      "subject": "Customs and duties",
+      "predicate": "has_refund_eligibility",
+      "verbatim_source_quote": "Refused deliveries at customs are refunded minus outbound and return shipping.",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 183,
+      "export_order": 184,
+      "subject": "Northwind",
+      "predicate": "has_evidence_submission_deadline",
+      "verbatim_source_quote": "\u007f  We submit evidence (order record, delivery confirmation, communications) with",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 184,
+      "export_order": 185,
+      "subject": "Card issuer",
+      "predicate": "has_dispute_decision_timeline",
+      "verbatim_source_quote": "\u007f  The issuer decides within 30-90 days.",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 185,
+      "export_order": 186,
+      "subject": "Dispute loss",
+      "predicate": "has_funds_debit_outcome",
+      "verbatim_source_quote": "\u007f  If the dispute is lost, funds are debited; a $15 administration fee may apply",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 186,
+      "export_order": 187,
+      "subject": "Fraudulent dispute",
+      "predicate": "may_apply_administration_fee",
+      "verbatim_source_quote": "\u007f  If the dispute is lost, funds are debited; a $15 administration fee may apply",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 187,
+      "export_order": 188,
+      "subject": "4853",
+      "predicate": "has_definition",
+      "verbatim_source_quote": "| 4853 | Cardholder dispute / not as described | Refund or evidence submission |",
+      "decision": "reject"
+    },
+    {
+      "baseline_order": 188,
+      "export_order": 189,
+      "subject": "4853",
+      "predicate": "has_typical_resolution",
+      "verbatim_source_quote": "| 4853 | Cardholder dispute / not as described | Refund or evidence submission |",
+      "decision": "review"
+    },
+    {
+      "baseline_order": 189,
+      "export_order": 190,
+      "subject": "4837",
+      "predicate": "has_definition",
+      "verbatim_source_quote": "| 4837 | No cardholder authorisation (fraud) | Fraud investigation |",
+      "decision": "reject"
+    },
+    {
+      "baseline_order": 190,
+      "export_order": 191,
+      "subject": "4837",
+      "predicate": "has_typical_resolution",
+      "verbatim_source_quote": "| 4837 | No cardholder authorisation (fraud) | Fraud investigation |",
+      "decision": "review"
+    },
+    {
+      "baseline_order": 191,
+      "export_order": 192,
+      "subject": "4855",
+      "predicate": "has_definition",
+      "verbatim_source_quote": "| 4855 | Goods or services not provided | Provide tracking proof or refund |",
+      "decision": "reject"
+    },
+    {
+      "baseline_order": 192,
+      "export_order": 193,
+      "subject": "4855",
+      "predicate": "has_typical_resolution",
+      "verbatim_source_quote": "| 4855 | Goods or services not provided | Provide tracking proof or refund |",
+      "decision": "review"
+    },
+    {
+      "baseline_order": 193,
+      "export_order": 194,
+      "subject": "4834",
+      "predicate": "has_definition",
+      "verbatim_source_quote": "| 4834 | Duplicate processing | Verify and refund duplicate |",
+      "decision": "reject"
+    },
+    {
+      "baseline_order": 194,
+      "export_order": 195,
+      "subject": "4834",
+      "predicate": "has_typical_resolution",
+      "verbatim_source_quote": "| 4834 | Duplicate processing | Verify and refund duplicate |",
+      "decision": "review"
+    },
+    {
+      "baseline_order": 195,
+      "export_order": 196,
+      "subject": "4841",
+      "predicate": "has_definition",
+      "verbatim_source_quote": "| 4841 | Cancelled recurring transaction | Check cancellation record |",
+      "decision": "reject"
+    },
+    {
+      "baseline_order": 196,
+      "export_order": 197,
+      "subject": "4841",
+      "predicate": "has_typical_resolution",
+      "verbatim_source_quote": "| 4841 | Cancelled recurring transaction | Check cancellation record |",
+      "decision": "review"
+    },
+    {
+      "baseline_order": 197,
+      "export_order": 198,
+      "subject": "Notice",
+      "predicate": "has_trigger",
+      "verbatim_source_quote": "| Notice | Return rate 30-40% | Email reminder of policy |",
+      "decision": "review"
+    },
+    {
+      "baseline_order": 198,
+      "export_order": 199,
+      "subject": "Notice",
+      "predicate": "has_action",
+      "verbatim_source_quote": "| Notice | Return rate 30-40% | Email reminder of policy |",
+      "decision": "review"
+    },
+    {
+      "baseline_order": 199,
+      "export_order": 200,
+      "subject": "Restricted",
+      "predicate": "has_trigger",
+      "verbatim_source_quote": "| Restricted | Return rate over 40% or one confirmed abuse case | Store credit o",
+      "decision": "review"
+    },
+    {
+      "baseline_order": 200,
+      "export_order": 201,
+      "subject": "Restricted",
+      "predicate": "has_action",
+      "verbatim_source_quote": "| Restricted | Return rate over 40% or one confirmed abuse case | Store credit o",
+      "decision": "review"
+    },
+    {
+      "baseline_order": 201,
+      "export_order": 202,
+      "subject": "Suspended",
+      "predicate": "has_trigger",
+      "verbatim_source_quote": "| Suspended | Multiple confirmed abuse cases | Account suspended for 12 months |",
+      "decision": "review"
+    },
+    {
+      "baseline_order": 202,
+      "export_order": 203,
+      "subject": "Suspended",
+      "predicate": "has_action",
+      "verbatim_source_quote": "| Suspended | Multiple confirmed abuse cases | Account suspended for 12 months |",
+      "decision": "review"
+    },
+    {
+      "baseline_order": 203,
+      "export_order": 204,
+      "subject": "Permanent",
+      "predicate": "has_trigger",
+      "verbatim_source_quote": "| Permanent | Fraud or counterfeit return | Account closed; referral to law enfo",
+      "decision": "review"
+    },
+    {
+      "baseline_order": 204,
+      "export_order": 205,
+      "subject": "Permanent",
+      "predicate": "has_action",
+      "verbatim_source_quote": "| Permanent | Fraud or counterfeit return | Account closed; referral to law enfo",
+      "decision": "review"
+    },
+    {
+      "baseline_order": 205,
+      "export_order": 206,
+      "subject": "Customer",
+      "predicate": "appeal",
+      "verbatim_source_quote": "Customers may appeal restrictions in writing to appeals@northwind-demo.example w",
+      "decision": "review"
+    },
+    {
+      "baseline_order": 206,
+      "export_order": 207,
+      "subject": "Privacy",
+      "predicate": "has_refund_eligibility",
+      "verbatim_source_quote": "Return history is stored per our Privacy Policy, retained for 7 years for audit ",
+      "decision": "review"
+    },
+    {
+      "baseline_order": 207,
+      "export_order": 208,
+      "subject": "Standard returns",
+      "predicate": "has_return_window",
+      "verbatim_source_quote": "Standard returns must be requested within 30 days.",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 208,
+      "export_order": 209,
+      "subject": "Unused item returned after standard return window",
+      "predicate": "may_receive_store_credit",
+      "verbatim_source_quote": "After that we may offer store credit at a manager's discretion for unused items ",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 209,
+      "export_order": 210,
+      "subject": "Items bought in-store",
+      "predicate": "has_return_channel_eligibility",
+      "verbatim_source_quote": "Items bought in-store can be returned in any store or by mail using the RMA proc",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 210,
+      "export_order": 211,
+      "subject": "Stolen package",
+      "predicate": "has_courtesy_replacement_rule",
+      "verbatim_source_quote": "We offer one courtesy replacement per customer per year for packages under $200.",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 211,
+      "export_order": 212,
+      "subject": "Phone (US/Canada)",
+      "predicate": "has_contact_phone",
+      "verbatim_source_quote": "| Phone (US/Canada) | 1-800-555-0142 | Mon-Fri 8am-8pm; Sat 9am-5pm |",
+      "decision": "reject"
+    },
+    {
+      "baseline_order": 212,
+      "export_order": 213,
+      "subject": "Phone (US/Canada)",
+      "predicate": "has_contact_hours",
+      "verbatim_source_quote": "| Phone (US/Canada) | 1-800-555-0142 | Mon-Fri 8am-8pm; Sat 9am-5pm |",
+      "decision": "reject"
+    },
+    {
+      "baseline_order": 213,
+      "export_order": 214,
+      "subject": "Phone (UK)",
+      "predicate": "has_contact_phone",
+      "verbatim_source_quote": "| Phone (UK) | +44 20 7946 0142 | Mon-Fri 9am-5pm GMT |",
+      "decision": "reject"
+    },
+    {
+      "baseline_order": 214,
+      "export_order": 215,
+      "subject": "Phone (UK)",
+      "predicate": "has_contact_hours",
+      "verbatim_source_quote": "| Phone (UK) | +44 20 7946 0142 | Mon-Fri 9am-5pm GMT |",
+      "decision": "reject"
+    },
+    {
+      "baseline_order": 215,
+      "export_order": 216,
+      "subject": "Email",
+      "predicate": "has_contact_email",
+      "verbatim_source_quote": "| Email | support@northwind-demo.example | Response within 24 hours |",
+      "decision": "reject"
+    },
+    {
+      "baseline_order": 216,
+      "export_order": 217,
+      "subject": "Email",
+      "predicate": "has_contact_hours",
+      "verbatim_source_quote": "| Email | support@northwind-demo.example | Response within 24 hours |",
+      "decision": "reject"
+    },
+    {
+      "baseline_order": 217,
+      "export_order": 218,
+      "subject": "Live chat",
+      "predicate": "has_contact_channel",
+      "verbatim_source_quote": "| Live chat | northwind-demo.example/chat | Daily 7am-10pm |",
+      "decision": "reject"
+    },
+    {
+      "baseline_order": 218,
+      "export_order": 219,
+      "subject": "Live chat",
+      "predicate": "has_contact_hours",
+      "verbatim_source_quote": "| Live chat | northwind-demo.example/chat | Daily 7am-10pm |",
+      "decision": "reject"
+    },
+    {
+      "baseline_order": 219,
+      "export_order": 220,
+      "subject": "Refund status line",
+      "predicate": "has_contact_phone",
+      "verbatim_source_quote": "| Refund status line | 1-800-555-0177 | 24/7 automated |",
+      "decision": "reject"
+    },
+    {
+      "baseline_order": 220,
+      "export_order": 221,
+      "subject": "Refund status line",
+      "predicate": "has_contact_hours",
+      "verbatim_source_quote": "| Refund status line | 1-800-555-0177 | 24/7 automated |",
+      "decision": "reject"
+    },
+    {
+      "baseline_order": 221,
+      "export_order": 222,
+      "subject": "Mail",
+      "predicate": "has_resolution_option_details",
+      "verbatim_source_quote": "| Mail | Returns Dept., 200 Cascade Way, Portland, OR 97201, USA | N/A |",
+      "decision": "reject"
+    },
+    {
+      "baseline_order": 222,
+      "export_order": 223,
+      "subject": "Mail",
+      "predicate": "has_contact_hours",
+      "verbatim_source_quote": "| Mail | Returns Dept., 200 Cascade Way, Portland, OR 97201, USA | N/A |",
+      "decision": "reject"
+    },
+    {
+      "baseline_order": 223,
+      "export_order": 224,
+      "subject": "Escalations",
+      "predicate": "has_contact_email",
+      "verbatim_source_quote": "| Escalations | escalations@northwind-demo.example | Response within 2 business ",
+      "decision": "reject"
+    },
+    {
+      "baseline_order": 224,
+      "export_order": 225,
+      "subject": "Escalations",
+      "predicate": "has_contact_hours",
+      "verbatim_source_quote": "| Escalations | escalations@northwind-demo.example | Response within 2 business ",
+      "decision": "reject"
+    },
+    {
+      "baseline_order": 225,
+      "export_order": 226,
+      "subject": "First response by email",
+      "predicate": "has_target",
+      "verbatim_source_quote": "| First response by email | 24 hours |",
+      "decision": "review"
+    },
+    {
+      "baseline_order": 226,
+      "export_order": 227,
+      "subject": "First response by chat",
+      "predicate": "has_target",
+      "verbatim_source_quote": "| First response by chat | Under 2 minutes |",
+      "decision": "review"
+    },
+    {
+      "baseline_order": 227,
+      "export_order": 228,
+      "subject": "Resolution of standard refund query",
+      "predicate": "has_target",
+      "verbatim_source_quote": "| Resolution of standard refund query | Within 3 business days |",
+      "decision": "review"
+    },
+    {
+      "baseline_order": 228,
+      "export_order": 229,
+      "subject": "Escalated complaint resolution",
+      "predicate": "has_target",
+      "verbatim_source_quote": "| Escalated complaint resolution | 10 business days |",
+      "decision": "review"
+    },
+    {
+      "baseline_order": 229,
+      "export_order": 230,
+      "subject": "Aug 15, 2025 Added Gear Care",
+      "predicate": "has_resolution_path",
+      "verbatim_source_quote": "0             Mar 1, 2025                Gold member window raised from 45 to 60",
+      "decision": "reject"
+    }
+  ],
+  "revised_semantics": [
+    {
+      "baseline_order": 1,
+      "export_order": 1,
+      "before": {
+        "subject": "Customer",
+        "modality": "PERMISSION",
+        "predicate": "may_override_standard_terms",
+        "object": "override these terms)"
+      },
+      "after": {
+        "subject": "Custom corporate agreements",
+        "modality": "PERMISSION",
+        "predicate": "may_override_standard_terms",
+        "object": "Standard policy terms"
+      },
+      "verbatim_source_quote": "\u007f  Business customers on standard accounts (custom contracts may override these ",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 41,
+      "export_order": 41,
+      "before": {
+        "subject": "In store",
+        "modality": "PERMISSION",
+        "predicate": "has_return_window",
+        "object": "In-store refunds to the original card are processed immediat"
+      },
+      "after": {
+        "subject": "In-store refunds",
+        "modality": "POLICY_FACT",
+        "predicate": "has_posting_duration",
+        "object": "processed immediately; bank may take 3-5 days to post the cr"
+      },
+      "verbatim_source_quote": "In-store refunds to the original card are processed immediately; the bank may ta",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 42,
+      "export_order": 42,
+      "before": {
+        "subject": "Order",
+        "modality": "PERMISSION",
+        "predicate": "has_example_value",
+        "object": "NW-10482391"
+      },
+      "after": {
+        "subject": "Order number",
+        "modality": "PERMISSION",
+        "predicate": "has_example_value",
+        "object": "NW-10482391"
+      },
+      "verbatim_source_quote": "| Order number | NW-10482391 | Yes |",
+      "decision": "reject"
+    },
+    {
+      "baseline_order": 42,
+      "export_order": 43,
+      "before": {
+        "subject": "Order",
+        "modality": "PERMISSION",
+        "predicate": "has_example_value",
+        "object": "NW-10482391"
+      },
+      "after": {
+        "subject": "Order number",
+        "modality": "PERMISSION",
+        "predicate": "is_required_for_refund_request",
+        "object": "Yes"
+      },
+      "verbatim_source_quote": "| Order number | NW-10482391 | Yes |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 44,
+      "export_order": 44,
+      "before": {
+        "subject": "Order",
+        "modality": "PERMISSION",
+        "predicate": "has_example_value",
+        "object": "jane.doe@example.com"
+      },
+      "after": {
+        "subject": "Email on order",
+        "modality": "PERMISSION",
+        "predicate": "has_example_value",
+        "object": "jane.doe@example.com"
+      },
+      "verbatim_source_quote": "| Email on order | jane.doe@example.com | Yes |",
+      "decision": "reject"
+    },
+    {
+      "baseline_order": 44,
+      "export_order": 45,
+      "before": {
+        "subject": "Order",
+        "modality": "PERMISSION",
+        "predicate": "has_example_value",
+        "object": "jane.doe@example.com"
+      },
+      "after": {
+        "subject": "Email on order",
+        "modality": "PERMISSION",
+        "predicate": "is_required_for_refund_request",
+        "object": "Yes"
+      },
+      "verbatim_source_quote": "| Email on order | jane.doe@example.com | Yes |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 68,
+      "export_order": 69,
+      "before": {
+        "subject": "Google",
+        "modality": "PERMISSION",
+        "predicate": "has_refund_method",
+        "object": "Underlying card"
+      },
+      "after": {
+        "subject": "Apple Pay / Google Pay",
+        "modality": "PERMISSION",
+        "predicate": "has_refund_method",
+        "object": "Underlying card"
+      },
+      "verbatim_source_quote": "| Apple Pay / Google Pay | Underlying card | Same as card |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 68,
+      "export_order": 70,
+      "before": {
+        "subject": "Google",
+        "modality": "PERMISSION",
+        "predicate": "has_refund_method",
+        "object": "Underlying card"
+      },
+      "after": {
+        "subject": "Apple Pay / Google Pay",
+        "modality": "PERMISSION",
+        "predicate": "has_stage_duration",
+        "object": "Same as card"
+      },
+      "verbatim_source_quote": "| Apple Pay / Google Pay | Underlying card | Same as card |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 78,
+      "export_order": 79,
+      "before": {
+        "subject": "Refund",
+        "modality": "OBLIGATION",
+        "predicate": "has_default_refund_destination",
+        "object": "Original payment method whenever possible"
+      },
+      "after": {
+        "subject": "Customer",
+        "modality": "MAY",
+        "predicate": "receives_store_credit_bonus",
+        "object": "5% bonus on credit value, maximum bonus $25.00 per return"
+      },
+      "verbatim_source_quote": "Customers who choose store credit instead of a refund to the original payment me",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 94,
+      "export_order": 95,
+      "before": {
+        "subject": "Oversize items",
+        "modality": "POLICY_FACT",
+        "predicate": "has_refund_eligibility",
+        "object": "Return freight for change-of-mind returns is a flat $49.00, "
+      },
+      "after": {
+        "subject": "Oversize items",
+        "modality": "MUST",
+        "predicate": "has_return_freight_deduction",
+        "object": "$49.00 flat return freight fee deducted from refund"
+      },
+      "verbatim_source_quote": "Return freight for change-of-mind returns is a flat $49.00, deducted from the re",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 99,
+      "export_order": 100,
+      "before": {
+        "subject": "Drop-off locations",
+        "modality": "POLICY_FACT",
+        "predicate": "has_refund_eligibility",
+        "object": "Keep the drop-off receipt until your refund has been confirm"
+      },
+      "after": {
+        "subject": "Customer",
+        "modality": "MUST",
+        "predicate": "requires_receipt_retention",
+        "object": "drop-off receipt until refund has been confirmed"
+      },
+      "verbatim_source_quote": "Keep the drop-off receipt until your refund has been confirmed.",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 104,
+      "export_order": 105,
+      "before": {
+        "subject": "Keep It policy",
+        "modality": "POLICY_FACT",
+        "predicate": "has_resolution_option_details",
+        "object": "Offered for minor cosmetic flaws"
+      },
+      "after": {
+        "subject": "Partial refund for cosmetic flaws",
+        "modality": "MAY",
+        "predicate": "has_resolution_option_details",
+        "object": "Offered for minor cosmetic flaws"
+      },
+      "verbatim_source_quote": "| Partial refund (keep item) | Offered for minor cosmetic flaws | Immediate |",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 108,
+      "export_order": 108,
+      "before": {
+        "subject": "Damaged item valued under $40",
+        "modality": "PERMISSION",
+        "predicate": "may_issue_refund_without_return",
+        "object": "Damaged items under $40 may be refunded without return"
+      },
+      "after": {
+        "subject": "Damaged item under $40",
+        "modality": "MAY",
+        "predicate": "may_issue_refund_without_return",
+        "object": "refund without requiring item return ('Keep It' policy)"
+      },
+      "verbatim_source_quote": "For damaged items valued under $40.00, we may issue a refund without requiring t",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 111,
+      "export_order": 111,
+      "before": {
+        "subject": "Customer",
+        "modality": "ENTITLEMENT",
+        "predicate": "has_return_window",
+        "object": "Refund Pending (within 1 hour) Yes - self-service Full refun"
+      },
+      "after": {
+        "subject": "Order cancellation",
+        "modality": "POLICY_FACT",
+        "predicate": "has_cancellation_window",
+        "object": "Refund Pending (within 1 hour) self-service full refund and "
+      },
+      "verbatim_source_quote": "Refund Pending (within 1 hour)                Yes - self-service                ",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 121,
+      "export_order": 121,
+      "before": {
+        "subject": "Price adjustments",
+        "modality": "POLICY_FACT",
+        "predicate": "has_return_window",
+        "object": "If an item you purchased drops in price within 14 days of pu"
+      },
+      "after": {
+        "subject": "Price adjustments",
+        "modality": "POLICY_FACT",
+        "predicate": "has_price_adjustment_window",
+        "object": "14 days of purchase for one-time refund of difference"
+      },
+      "verbatim_source_quote": "If an item you purchased drops in price within 14 days of purchase, contact us f",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 122,
+      "export_order": 122,
+      "before": {
+        "subject": "Subscription",
+        "modality": "PERMISSION",
+        "predicate": "has_billing_schedule",
+        "object": "Monthly, 1st of month"
+      },
+      "after": {
+        "subject": "Trailhead Box subscription",
+        "modality": "POLICY_FACT",
+        "predicate": "has_cancellation_rule",
+        "object": "Monthly, 1st of month"
+      },
+      "verbatim_source_quote": "| Trailhead Box | Monthly, 1st of month | Anytime before the 25th | Full refund ",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 122,
+      "export_order": 123,
+      "before": {
+        "subject": "Subscription",
+        "modality": "PERMISSION",
+        "predicate": "has_billing_schedule",
+        "object": "Monthly, 1st of month"
+      },
+      "after": {
+        "subject": "Trailhead Box subscription",
+        "modality": "POLICY_FACT",
+        "predicate": "has_cancellation_rule",
+        "object": "Anytime before the 25th"
+      },
+      "verbatim_source_quote": "| Trailhead Box | Monthly, 1st of month | Anytime before the 25th | Full refund ",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 122,
+      "export_order": 124,
+      "before": {
+        "subject": "Subscription",
+        "modality": "PERMISSION",
+        "predicate": "has_billing_schedule",
+        "object": "Monthly, 1st of month"
+      },
+      "after": {
+        "subject": "Trailhead Box subscription",
+        "modality": "POLICY_FACT",
+        "predicate": "has_cancellation_rule",
+        "object": "Full refund if cancelled within 48 hours of renewal and box "
+      },
+      "verbatim_source_quote": "| Trailhead Box | Monthly, 1st of month | Anytime before the 25th | Full refund ",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 125,
+      "export_order": 125,
+      "before": {
+        "subject": "Subscription",
+        "modality": "PERMISSION",
+        "predicate": "has_billing_schedule",
+        "object": "Annual"
+      },
+      "after": {
+        "subject": "Rewards Plus subscription",
+        "modality": "POLICY_FACT",
+        "predicate": "has_refund_rule",
+        "object": "Annual"
+      },
+      "verbatim_source_quote": "| Rewards Plus | Annual | Anytime | Pro-rated refund within 30 days of renewal; ",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 125,
+      "export_order": 126,
+      "before": {
+        "subject": "Subscription",
+        "modality": "PERMISSION",
+        "predicate": "has_billing_schedule",
+        "object": "Annual"
+      },
+      "after": {
+        "subject": "Rewards Plus subscription",
+        "modality": "POLICY_FACT",
+        "predicate": "has_refund_rule",
+        "object": "Anytime"
+      },
+      "verbatim_source_quote": "| Rewards Plus | Annual | Anytime | Pro-rated refund within 30 days of renewal; ",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 125,
+      "export_order": 127,
+      "before": {
+        "subject": "Subscription",
+        "modality": "PERMISSION",
+        "predicate": "has_billing_schedule",
+        "object": "Annual"
+      },
+      "after": {
+        "subject": "Rewards Plus subscription",
+        "modality": "POLICY_FACT",
+        "predicate": "has_refund_rule",
+        "object": "Pro-rated refund within 30 days of renewal; none afterwards"
+      },
+      "verbatim_source_quote": "| Rewards Plus | Annual | Anytime | Pro-rated refund within 30 days of renewal; ",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 128,
+      "export_order": 128,
+      "before": {
+        "subject": "Subscription",
+        "modality": "PERMISSION",
+        "predicate": "has_billing_schedule",
+        "object": "Monthly"
+      },
+      "after": {
+        "subject": "Gear Care Plan subscription",
+        "modality": "POLICY_FACT",
+        "predicate": "has_refund_rule",
+        "object": "Monthly"
+      },
+      "verbatim_source_quote": "| Gear Care Plan | Monthly | Anytime | No refund for current month; cancel effec",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 128,
+      "export_order": 129,
+      "before": {
+        "subject": "Subscription",
+        "modality": "PERMISSION",
+        "predicate": "has_billing_schedule",
+        "object": "Monthly"
+      },
+      "after": {
+        "subject": "Gear Care Plan subscription",
+        "modality": "POLICY_FACT",
+        "predicate": "has_refund_rule",
+        "object": "Anytime"
+      },
+      "verbatim_source_quote": "| Gear Care Plan | Monthly | Anytime | No refund for current month; cancel effec",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 128,
+      "export_order": 130,
+      "before": {
+        "subject": "Subscription",
+        "modality": "PERMISSION",
+        "predicate": "has_billing_schedule",
+        "object": "Monthly"
+      },
+      "after": {
+        "subject": "Gear Care Plan subscription",
+        "modality": "POLICY_FACT",
+        "predicate": "has_refund_rule",
+        "object": "No refund for current month; cancel effective next cycle"
+      },
+      "verbatim_source_quote": "| Gear Care Plan | Monthly | Anytime | No refund for current month; cancel effec",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 130,
+      "export_order": 131,
+      "before": {
+        "subject": "User",
+        "modality": "PERMISSION",
+        "predicate": "can_cancel_before_shipment",
+        "object": "be charged"
+      },
+      "after": {
+        "subject": "Subscriber",
+        "modality": "PERMISSION",
+        "predicate": "can_cancel_before_trial_ends",
+        "object": "without charge"
+      },
+      "verbatim_source_quote": "If you cancel before the trial ends, you will not be charged.",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 131,
+      "export_order": 132,
+      "before": {
+        "subject": "Free trials",
+        "modality": "POLICY_FACT",
+        "predicate": "has_return_window",
+        "object": "If you forget to cancel and are charged, contact us within 7"
+      },
+      "after": {
+        "subject": "Free trials",
+        "modality": "MAY",
+        "predicate": "may_request_first_charge_refund",
+        "object": "within 7 days for a full refund of the first charge"
+      },
+      "verbatim_source_quote": "If you forget to cancel and are charged, contact us within 7 days for a full ref",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 133,
+      "export_order": 134,
+      "before": {
+        "subject": "Trailhead Box subscribers",
+        "modality": "PERMISSION",
+        "predicate": "pause",
+        "object": "for up to 3 months, once per year, from the account page"
+      },
+      "after": {
+        "subject": "Trailhead Box subscription",
+        "modality": "MAY",
+        "predicate": "can_pause_subscription",
+        "object": "for up to 3 months, once per year, from the account page"
+      },
+      "verbatim_source_quote": "Trailhead Box subscribers can pause for up to 3 months, once per year, from the ",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 178,
+      "export_order": 179,
+      "before": {
+        "subject": "International refund",
+        "modality": "POLICY_FACT",
+        "predicate": "has_refund_eligibility",
+        "object": "Refunds are issued in the currency of the original charge."
+      },
+      "after": {
+        "subject": "International refund",
+        "modality": "MUST",
+        "predicate": "uses_original_charge_currency",
+        "object": "currency of the original charge"
+      },
+      "verbatim_source_quote": "Refunds are issued in the currency of the original charge.",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 180,
+      "export_order": 181,
+      "before": {
+        "subject": "Customer",
+        "modality": "PERMISSION",
+        "predicate": "are_responsible_for",
+        "object": "filing customs duty drawback claims where available"
+      },
+      "after": {
+        "subject": "Customer",
+        "modality": "MUST",
+        "predicate": "is_responsible_for_duty_drawback",
+        "object": "filing customs duty drawback claims"
+      },
+      "verbatim_source_quote": "Customers are responsible for filing customs duty drawback claims where availabl",
+      "decision": "approve"
+    },
+    {
+      "baseline_order": 181,
+      "export_order": 182,
+      "before": {
+        "subject": "Northwind",
+        "modality": "OBLIGATION",
+        "predicate": "requires_verifiable_order_or_purchase_proof",
+        "object": "provide a commercial invoice and proof of return upon reques"
+      },
+      "after": {
+        "subject": "Northwind",
+        "modality": "OBLIGATION",
+        "predicate": "provides_documentation_upon_request",
+        "object": "commercial invoice and proof of return"
+      },
+      "verbatim_source_quote": "Northwind will provide a commercial invoice and proof of return upon request.",
+      "decision": "approve"
+    }
+  ],
+  "newly_recovered": [
+    {
+      "export_order": 135,
+      "subject": "Video course",
+      "predicate": "has_refund_window",
+      "object": "7 days if less than 20% viewed",
+      "verbatim_source_quote": "Video courses may be refunded within 7 days if less than 20% of the content has ",
+      "decision": "approve"
+    }
+  ]
+}

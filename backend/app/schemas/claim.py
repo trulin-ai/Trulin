@@ -99,11 +99,16 @@ class ClaimResponse(BaseModel):
             evidence_snippet=ev_snip,
             confidence_or_trust=trust_val,
         )
+        from app.db.enums import ClaimStatus
+        is_canon = res.is_canonical and (self.status == ClaimStatus.VERIFIED or self.status == ClaimStatus.ACTIVE or getattr(self.status, "value", None) in ("verified", "active"))
+        tier = res.certification_tier
+        if not is_canon and tier == "AUTOMATED_CERTIFIED":
+            tier = "REVIEW_REQUIRED"
         self.gates = res.gates
         self.all_9_gates_passed = res.all_9_gates_passed
-        self.is_canonical = res.is_canonical
-        self.agent_accessible = res.agent_accessible
-        self.certification_tier = res.certification_tier
+        self.is_canonical = is_canon
+        self.agent_accessible = is_canon
+        self.certification_tier = tier
         self.rejection_reasons = res.rejection_reasons
         return self
 

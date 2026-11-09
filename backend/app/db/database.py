@@ -9,11 +9,16 @@ from sqlalchemy.ext.asyncio import (
 from app.core.config import settings
 from sqlalchemy.pool import NullPool
 
+connect_args = {}
+if "ssl=" not in (settings.database_url or ""):
+    connect_args["ssl"] = False
+
 engine = create_async_engine(
     settings.database_url,
     echo=False,
     pool_pre_ping=True,
     poolclass=NullPool,
+    connect_args=connect_args,
 )
 
 

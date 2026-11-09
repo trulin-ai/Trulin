@@ -65,9 +65,12 @@ class SubjectNormalizer:
         "customers": "Customers",
         "auto-claim policy": "Auto-claim policy",
         "an auto-claim policy": "Auto-claim policy",
-        # Business customers
-        "business customers on standard accounts (custom contracts": "Business customer with standard account",
-        "business customers on standard accounts (custom contracts may override these terms)": "Business customer with standard account",
+        # Business customers & Custom contracts
+        "custom contracts": "Custom corporate agreements",
+        "custom corporate agreements": "Custom corporate agreements",
+        "custom contracts may override these terms": "Custom corporate agreements",
+        "business customers on standard accounts (custom contracts": "Custom corporate agreements",
+        "business customers on standard accounts (custom contracts may override these terms)": "Custom corporate agreements",
         "business customers on standard accounts": "Business customer with standard account",
         
         # Order / Proof of purchase

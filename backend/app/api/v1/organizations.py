@@ -132,9 +132,29 @@ async def create_organization(
             if data.domain_whitelist:
                 user_org.domain_whitelist = data.domain_whitelist
             current_user.role = UserRole.ADMIN
+
+            gov_cfg = dict(user_org.governance_config or {})
+            if "workspaces" not in gov_cfg or not gov_cfg["workspaces"]:
+                gov_cfg["workspaces"] = [{
+                    "id": f"ws_{user_org.id.hex[:10]}",
+                    "name": f"{user_org.name} Workspace",
+                    "domain": "governance",
+                    "created_at": datetime.now(timezone.utc).isoformat(),
+                }]
+                user_org.governance_config = dict(gov_cfg)
+
             await db.commit()
             await db.refresh(user_org)
             return _build_org_response(user_org, member_count=1)
+
+    init_gov_cfg = dict(data.governance_config or {})
+    if "workspaces" not in init_gov_cfg or not init_gov_cfg["workspaces"]:
+        init_gov_cfg["workspaces"] = [{
+            "id": f"ws_{uuid.uuid4().hex[:10]}",
+            "name": f"{data.name.strip()} Workspace",
+            "domain": "governance",
+            "created_at": datetime.now(timezone.utc).isoformat(),
+        }]
 
     org = Organization(
         id=uuid.uuid4(),
@@ -143,7 +163,7 @@ async def create_organization(
         status=OrganizationStatus.ACTIVE,
         domain_whitelist=data.domain_whitelist or [],
         allowed_auth_methods=data.allowed_auth_methods or ["password", "google", "microsoft", "okta"],
-        governance_config=data.governance_config or {},
+        governance_config=init_gov_cfg,
         setup_completed=True,
     )
     db.add(org)
@@ -723,6 +743,16 @@ async def update_organization_settings(
         org.governance_config = current_cfg
     if data.setup_completed is not None:
         org.setup_completed = data.setup_completed
+        if data.setup_completed:
+            cfg = dict(org.governance_config or {})
+            if "workspaces" not in cfg or not cfg["workspaces"]:
+                cfg["workspaces"] = [{
+                    "id": f"ws_{org.id.hex[:10]}",
+                    "name": f"{org.name} Workspace",
+                    "domain": "governance",
+                    "created_at": datetime.now(timezone.utc).isoformat(),
+                }]
+                org.governance_config = dict(cfg)
 
     await db.commit()
     await db.refresh(org)

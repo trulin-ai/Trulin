@@ -420,14 +420,87 @@ function ServiceLockedGate({
   isOrgReady,
   isWorkspaceReady,
   activeOrg,
+  authToken,
   onOpenOrgModal,
   onOpenWorkspaceModal,
-  onGoHome
+  onGoHome,
+  onOrgCreated,
+  showToast
 }) {
+  const [quickName, setQuickName] = useState(() => {
+    if (activeOrg?.name && activeOrg.name.includes('Pending Setup')) {
+      return activeOrg.name.replace(/\s*\(Pending Setup\)/i, '').trim();
+    }
+    return '';
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
+
+  useEffect(() => {
+    if (activeOrg?.name && !quickName) {
+      const cleaned = activeOrg.name.replace(/\s*\(Pending Setup\)/i, '').trim();
+      if (cleaned) setQuickName(cleaned);
+    }
+  }, [activeOrg?.name]);
+
+  const handleQuickSubmit = async (e) => {
+    e?.preventDefault();
+    const trimmed = quickName.trim();
+    if (!trimmed || isSubmitting) return;
+
+    setIsSubmitting(true);
+    setErrorMsg('');
+
+    try {
+      const slug = trimmed.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+      const token = authToken || localStorage.getItem('token') || localStorage.getItem('access_token');
+
+      let res;
+      if (activeOrg?.id && activeOrg.name?.includes('Pending Setup')) {
+        res = await fetch(`/v1/organizations/${activeOrg.id}/settings`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+          },
+          body: JSON.stringify({ name: trimmed, slug, setup_completed: true })
+        });
+      } else {
+        res = await fetch('/v1/organizations', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+          },
+          body: JSON.stringify({ name: trimmed, slug, setup_completed: true })
+        });
+      }
+
+      if (res.ok) {
+        const saved = await res.json();
+        saved.setup_completed = true;
+        if (onOrgCreated) {
+          await onOrgCreated(saved);
+        } else if (onOpenOrgModal) {
+          onOpenOrgModal();
+        }
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setErrorMsg(data.detail || 'Could not set up organization.');
+      }
+    } catch (err) {
+      setErrorMsg('Network connection error. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const isWorkspaceGate = isOrgReady && !isWorkspaceReady;
+
   return (
     <div style={{
-      maxWidth: '740px',
-      margin: '40px auto',
+      maxWidth: '520px',
+      margin: '60px auto',
       padding: '0 20px',
       display: 'flex',
       flexDirection: 'column',
@@ -437,167 +510,159 @@ function ServiceLockedGate({
       <div className="clean-panel" style={{
         width: '100%',
         padding: '36px 32px',
-        position: 'relative',
-        overflow: 'hidden',
-        border: '1px solid rgba(234, 88, 12, 0.25)',
-        boxShadow: '0 12px 36px rgba(0, 0, 0, 0.25)',
+        borderRadius: '16px',
+        border: '1px solid var(--border-color)',
+        boxShadow: '0 10px 30px -10px rgba(0, 0, 0, 0.08)',
         background: 'var(--bg-card)'
       }}>
-        <div style={{
-          position: 'absolute',
-          top: '-40px',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          width: '320px',
-          height: '120px',
-          background: 'radial-gradient(ellipse at center, rgba(234, 88, 12, 0.16) 0%, transparent 70%)',
-          pointerEvents: 'none'
-        }} />
-
         <div style={{
           width: '56px',
           height: '56px',
           borderRadius: '14px',
-          background: 'rgba(234, 88, 12, 0.12)',
-          border: '1px solid rgba(234, 88, 12, 0.3)',
+          background: 'rgba(59, 130, 246, 0.08)',
+          border: '1px solid rgba(59, 130, 246, 0.2)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          margin: '0 auto 16px auto',
-          color: '#EA580C'
+          margin: '0 auto 18px auto',
+          color: '#2563EB'
         }}>
-          <Lock size={26} strokeWidth={2.2} />
-        </div>
-
-        <div style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: '6px',
-          padding: '3px 10px',
-          borderRadius: '999px',
-          background: 'rgba(234, 88, 12, 0.1)',
-          border: '1px solid rgba(234, 88, 12, 0.25)',
-          fontSize: '0.72rem',
-          fontWeight: 700,
-          color: '#EA580C',
-          textTransform: 'uppercase',
-          letterSpacing: '0.06em',
-          marginBottom: '12px'
-        }}>
-          Service Access Restricted
+          {isWorkspaceGate ? (
+            <FolderTree size={26} strokeWidth={2} />
+          ) : (
+            <Building2 size={26} strokeWidth={2} />
+          )}
         </div>
 
         <h2 style={{
           fontSize: '1.35rem',
-          fontWeight: 800,
+          fontWeight: 700,
           color: 'var(--text-main)',
           margin: '0 0 8px 0',
           letterSpacing: '-0.02em'
         }}>
-          Create Your Organization & Workspace to Access {serviceName}
+          {isWorkspaceGate ? 'Create Your Workspace' : 'Set Up Your Organization'}
         </h2>
 
         <p style={{
-          fontSize: '0.85rem',
+          fontSize: '0.88rem',
           color: 'var(--text-secondary)',
-          maxWidth: '540px',
+          maxWidth: '420px',
           margin: '0 auto 24px auto',
-          lineHeight: '1.55'
+          lineHeight: '1.5'
         }}>
-          To ensure strict data boundary isolation, cryptographic provenance, and zero-trust verification,
-          access to this service requires an active enterprise organization and departmental workspace.
+          {isWorkspaceGate
+            ? `Create a workspace to start using ${serviceName || 'this service'}.`
+            : `Enter your organization name to get started with ${serviceName || 'this service'}.`}
         </p>
 
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-          gap: '12px',
-          textAlign: 'left',
-          marginBottom: '26px'
-        }}>
-          <div style={{
-            padding: '14px 16px',
-            borderRadius: '8px',
-            background: isOrgReady ? 'rgba(16, 185, 129, 0.08)' : 'rgba(234, 88, 12, 0.06)',
-            border: isOrgReady ? '1px solid rgba(16, 185, 129, 0.3)' : '1px solid rgba(234, 88, 12, 0.25)'
-          }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
-              <span style={{ fontSize: '0.76rem', fontWeight: 700, color: 'var(--text-main)' }}>
-                1. Organization Tenant
-              </span>
-              <span style={{
-                fontSize: '0.62rem',
-                fontWeight: 700,
-                padding: '1px 6px',
-                borderRadius: '4px',
-                background: isOrgReady ? '#10B981' : '#EA580C',
-                color: '#FFFFFF'
-              }}>
-                {isOrgReady ? 'ACTIVE' : 'ACTION REQUIRED'}
-              </span>
+        {!isWorkspaceGate ? (
+          <form onSubmit={handleQuickSubmit} style={{ width: '100%', maxWidth: '420px', margin: '0 auto' }}>
+            <div style={{ display: 'flex', gap: '8px', marginBottom: errorMsg ? '6px' : '16px' }}>
+              <input
+                type="text"
+                placeholder="Organization name (e.g., Acme Corp)..."
+                value={quickName}
+                onChange={e => {
+                  setQuickName(e.target.value);
+                  if (errorMsg) setErrorMsg('');
+                }}
+                disabled={isSubmitting}
+                style={{
+                  flex: 1,
+                  padding: '10px 14px',
+                  fontSize: '0.88rem',
+                  borderRadius: '8px',
+                  border: '1px solid var(--border-color)',
+                  background: 'var(--bg-input, var(--bg-card))',
+                  color: 'var(--text-main)',
+                  outline: 'none'
+                }}
+                autoFocus
+              />
+              <button
+                type="submit"
+                disabled={!quickName.trim() || isSubmitting}
+                className="btn btn-primary"
+                style={{
+                  padding: '10px 20px',
+                  fontSize: '0.86rem',
+                  fontWeight: 600,
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  whiteSpace: 'nowrap'
+                }}
+              >
+                <Building2 size={15} />
+                <span>{isSubmitting ? 'Creating...' : 'Create'}</span>
+              </button>
             </div>
-            <div style={{ fontSize: '0.73rem', color: 'var(--text-muted)' }}>
-              {isOrgReady ? (activeOrg?.name || 'Configured') : 'Create your organization tenant'}
-            </div>
-          </div>
 
-          <div style={{
-            padding: '14px 16px',
-            borderRadius: '8px',
-            background: isWorkspaceReady ? 'rgba(16, 185, 129, 0.08)' : 'rgba(234, 88, 12, 0.06)',
-            border: isWorkspaceReady ? '1px solid rgba(16, 185, 129, 0.3)' : '1px solid rgba(234, 88, 12, 0.25)'
-          }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
-              <span style={{ fontSize: '0.76rem', fontWeight: 700, color: 'var(--text-main)' }}>
-                2. Department Workspace
-              </span>
-              <span style={{
-                fontSize: '0.62rem',
-                fontWeight: 700,
-                padding: '1px 6px',
-                borderRadius: '4px',
-                background: isWorkspaceReady ? '#10B981' : '#EA580C',
-                color: '#FFFFFF'
+            {errorMsg && (
+              <div style={{
+                color: '#EF4444',
+                fontSize: '0.78rem',
+                marginBottom: '16px',
+                textAlign: 'left'
               }}>
-                {isWorkspaceReady ? 'ACTIVE' : 'ACTION REQUIRED'}
-              </span>
-            </div>
-            <div style={{ fontSize: '0.73rem', color: 'var(--text-muted)' }}>
-              {isWorkspaceReady ? 'Workspace active' : 'Create departmental workspace'}
-            </div>
-          </div>
-        </div>
+                {errorMsg}
+              </div>
+            )}
 
-        <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap' }}>
-          {!isOrgReady ? (
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+              <button
+                type="button"
+                onClick={onGoHome}
+                className="btn btn-secondary"
+                style={{
+                  padding: '8px 18px',
+                  fontSize: '0.82rem',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px'
+                }}
+              >
+                <Home size={14} />
+                <span>Return to Overview</span>
+              </button>
+            </div>
+          </form>
+        ) : (
+          <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap' }}>
             <button
-              onClick={onOpenOrgModal}
-              className="btn btn-primary"
-              style={{ padding: '9px 20px', fontSize: '0.84rem', display: 'flex', alignItems: 'center', gap: '7px' }}
-            >
-              <Building2 size={15} />
-              <span>Create Your Organization</span>
-            </button>
-          ) : !isWorkspaceReady ? (
-            <button
+              type="button"
               onClick={onOpenWorkspaceModal}
               className="btn btn-primary"
-              style={{ padding: '9px 20px', fontSize: '0.84rem', display: 'flex', alignItems: 'center', gap: '7px' }}
+              style={{
+                padding: '9px 20px',
+                fontSize: '0.86rem',
+                fontWeight: 600,
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px'
+              }}
             >
               <Plus size={15} />
-              <span>Create Initial Workspace</span>
+              <span>Create Workspace</span>
             </button>
-          ) : null}
-
-          <button
-            onClick={onGoHome}
-            className="btn btn-secondary"
-            style={{ padding: '9px 18px', fontSize: '0.84rem', display: 'flex', alignItems: 'center', gap: '7px' }}
-          >
-            <Home size={15} />
-            <span>Return to Home Overview</span>
-          </button>
-        </div>
+            <button
+              type="button"
+              onClick={onGoHome}
+              className="btn btn-secondary"
+              style={{
+                padding: '9px 18px',
+                fontSize: '0.84rem',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px'
+              }}
+            >
+              <Home size={14} />
+              <span>Return to Overview</span>
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -1810,6 +1875,21 @@ export default function App() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleOrgCreated = async (created) => {
+    created.setup_completed = true;
+    setOrganizations(prev => {
+      const exists = prev.some(o => o.id === created.id);
+      return exists ? prev.map(o => o.id === created.id ? created : o) : [created, ...prev];
+    });
+    setActiveOrg(created);
+    localStorage.setItem('context_layer_active_org_id', created.id);
+    if (refreshMyOrganizations) {
+      refreshMyOrganizations();
+    }
+    await fetchHealthAndConflicts(created.id);
+    showToast(`Organization '${created.name}' created successfully!`);
   };
 
   const handleCreateOrganization = async (e) => {
@@ -5403,9 +5483,12 @@ export default function App() {
               isOrgReady={isOrgReady}
               isWorkspaceReady={isWorkspaceReady}
               activeOrg={activeOrg}
+              authToken={authToken}
               onOpenOrgModal={() => setShowNewOrgModal(true)}
               onOpenWorkspaceModal={() => setShowNewWorkspaceModal(true)}
               onGoHome={() => setActiveTab('home')}
+              onOrgCreated={handleOrgCreated}
+              showToast={showToast}
             />
           ) : (
             <div style={{ flex: 1, minHeight: 0, height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
@@ -5446,9 +5529,12 @@ export default function App() {
               isOrgReady={isOrgReady}
               isWorkspaceReady={isWorkspaceReady}
               activeOrg={activeOrg}
+              authToken={authToken}
               onOpenOrgModal={() => setShowNewOrgModal(true)}
               onOpenWorkspaceModal={() => setShowNewWorkspaceModal(true)}
               onGoHome={() => setActiveTab('home')}
+              onOrgCreated={handleOrgCreated}
+              showToast={showToast}
             />
           ) : (
           <div>
@@ -7285,6 +7371,13 @@ export default function App() {
                   fetchHealthAndConflicts(activeOrg?.id);
                 }}
                 showToast={showToast}
+                onNavigateToVaultClaims={(targetDocId) => {
+                  setActiveTab('visual_lineage');
+                  setVaultSubTab('claims');
+                  if (targetDocId) {
+                    setSelectedLineageAssetId(targetDocId);
+                  }
+                }}
               />
             )}
 
@@ -7351,9 +7444,12 @@ export default function App() {
               isOrgReady={isOrgReady}
               isWorkspaceReady={isWorkspaceReady}
               activeOrg={activeOrg}
+              authToken={authToken}
               onOpenOrgModal={() => setShowNewOrgModal(true)}
               onOpenWorkspaceModal={() => setShowNewWorkspaceModal(true)}
               onGoHome={() => setActiveTab('home')}
+              onOrgCreated={handleOrgCreated}
+              showToast={showToast}
             />
           ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
@@ -7742,9 +7838,12 @@ export default function App() {
               isOrgReady={isOrgReady}
               isWorkspaceReady={isWorkspaceReady}
               activeOrg={activeOrg}
+              authToken={authToken}
               onOpenOrgModal={() => setShowNewOrgModal(true)}
               onOpenWorkspaceModal={() => setShowNewWorkspaceModal(true)}
               onGoHome={() => setActiveTab('home')}
+              onOrgCreated={handleOrgCreated}
+              showToast={showToast}
             />
           ) : (
           <div>
@@ -7780,9 +7879,12 @@ export default function App() {
               isOrgReady={isOrgReady}
               isWorkspaceReady={isWorkspaceReady}
               activeOrg={activeOrg}
+              authToken={authToken}
               onOpenOrgModal={() => setShowNewOrgModal(true)}
               onOpenWorkspaceModal={() => setShowNewWorkspaceModal(true)}
               onGoHome={() => setActiveTab('home')}
+              onOrgCreated={handleOrgCreated}
+              showToast={showToast}
             />
           ) : (
           <div>
@@ -7810,9 +7912,12 @@ export default function App() {
               isOrgReady={isOrgReady}
               isWorkspaceReady={isWorkspaceReady}
               activeOrg={activeOrg}
+              authToken={authToken}
               onOpenOrgModal={() => setShowNewOrgModal(true)}
               onOpenWorkspaceModal={() => setShowNewWorkspaceModal(true)}
               onGoHome={() => setActiveTab('home')}
+              onOrgCreated={handleOrgCreated}
+              showToast={showToast}
             />
           ) : (
           <div>

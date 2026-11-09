@@ -1,0 +1,1200 @@
+{
+  "summary": {
+    "total_audited_candidates": 46,
+    "bucket_counts": {
+      "bucket_1": 14,
+      "bucket_2": 22,
+      "bucket_3_blocked": 2,
+      "bucket_4_context": 8
+    }
+  },
+  "records": [
+    {
+      "candidate_index": 1,
+      "bucket": "bucket_2",
+      "status_note": "Semantic revision: may_override_standard_terms -> may_override_standard_terms",
+      "baseline": {
+        "subject": "Customer",
+        "predicate": "may_override_standard_terms",
+        "object": "override these terms)",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED"
+      },
+      "slice3_current": {
+        "subject": "Custom corporate agreements",
+        "predicate": "may_override_standard_terms",
+        "object": "Standard policy terms",
+        "conditions": [
+          "applies to business customers on standard accounts when custom contracts exist"
+        ],
+        "evidence_structure": "paragraph",
+        "content_role": "definition",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED",
+        "plain_language_assertion": "Custom corporate agreements [PERMISSION] may_override_standard_terms Standard policy terms WHERE applies to business customers on standard accounts when custom contracts exist",
+        "verbatim_source_quote": "\u007f  Business customers on standard accounts (custom contracts may override these terms)."
+      }
+    },
+    {
+      "candidate_index": 37,
+      "bucket": "bucket_3_blocked",
+      "status_note": "BLOCKED from approval (non-refundable item)",
+      "baseline": {
+        "subject": "Customer",
+        "predicate": "has_refund_eligibility",
+        "object": "\u007f Perishable goods such as freeze-dried meals past 14 days from delivery.",
+        "decision": "reject",
+        "decision_code": "FRAGMENT_ASSERTION_DISCARDED"
+      },
+      "slice3_current": {
+        "subject": "Customer",
+        "predicate": "has_refund_eligibility",
+        "object": "\u007f Perishable goods such as freeze-dried meals past 14 days from delivery.",
+        "conditions": [],
+        "evidence_structure": "paragraph",
+        "content_role": "policy_rule",
+        "decision": "review",
+        "decision_code": "DEONTIC_MODALITY_MISMATCH",
+        "plain_language_assertion": "Customer [PERMISSION] has_refund_eligibility \u007f Perishable goods such as freeze-dried meals past 14 days from delivery.",
+        "verbatim_source_quote": "\u007f  Perishable goods such as freeze-dried meals past 14 days from delivery."
+      }
+    },
+    {
+      "candidate_index": 38,
+      "bucket": "bucket_3_blocked",
+      "status_note": "BLOCKED from approval (non-refundable item)",
+      "baseline": {
+        "subject": "Customer",
+        "predicate": "has_refund_eligibility",
+        "object": "\u007f Items returned more than 90 days after delivery.",
+        "decision": "reject",
+        "decision_code": "FRAGMENT_ASSERTION_DISCARDED"
+      },
+      "slice3_current": {
+        "subject": "Customer",
+        "predicate": "has_refund_eligibility",
+        "object": "\u007f Items returned more than 90 days after delivery.",
+        "conditions": [],
+        "evidence_structure": "paragraph",
+        "content_role": "policy_rule",
+        "decision": "review",
+        "decision_code": "DEONTIC_MODALITY_MISMATCH",
+        "plain_language_assertion": "Customer [PERMISSION] has_refund_eligibility \u007f Items returned more than 90 days after delivery.",
+        "verbatim_source_quote": "\u007f  Items returned more than 90 days after delivery."
+      }
+    },
+    {
+      "candidate_index": 41,
+      "bucket": "bucket_1",
+      "status_note": "Evidence-aware recovery (table fact / duration)",
+      "baseline": {
+        "subject": "In store",
+        "predicate": "has_return_window",
+        "object": "In-store refunds to the original card are processed immediately; the bank may take 3-5 days to post the credit.",
+        "decision": "review",
+        "decision_code": "DEONTIC_MODALITY_MISMATCH"
+      },
+      "slice3_current": {
+        "subject": "In store",
+        "predicate": "has_return_window",
+        "object": "In-store refunds to the original card are processed immediately; the bank may take 3-5 days to post the credit.",
+        "conditions": [],
+        "evidence_structure": "paragraph",
+        "content_role": "policy_rule",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED",
+        "plain_language_assertion": "In store [PERMISSION] has_return_window In-store refunds to the original card are processed immediately; the bank may take 3-5 days to post the credit.",
+        "verbatim_source_quote": "In-store refunds to the original card are processed immediately; the bank may take 3-5 days to post the credit."
+      }
+    },
+    {
+      "candidate_index": 42,
+      "bucket": "bucket_4_context",
+      "status_note": "Contextual non-rule: role=policy_rule",
+      "baseline": {
+        "subject": "Order",
+        "predicate": "has_example_value",
+        "object": "NW-10482391",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED"
+      },
+      "slice3_current": {
+        "subject": "Order",
+        "predicate": "has_example_value",
+        "object": "NW-10482391",
+        "conditions": [
+          "Table Column: Example"
+        ],
+        "evidence_structure": "table_row",
+        "content_role": "policy_rule",
+        "decision": "reject",
+        "decision_code": "REJECT_DESCRIPTIVE_PURPOSE",
+        "plain_language_assertion": "Order [PERMISSION] has_example_value NW-10482391 WHERE Table Column: Example",
+        "verbatim_source_quote": "| Order number | NW-10482391 | Yes |"
+      }
+    },
+    {
+      "candidate_index": 43,
+      "bucket": "bucket_1",
+      "status_note": "Evidence-aware recovery (table fact / duration)",
+      "baseline": {
+        "subject": "Order",
+        "predicate": "is_required_for_refund_request",
+        "object": "Yes",
+        "decision": "review",
+        "decision_code": "WEAK_PREDICATE"
+      },
+      "slice3_current": {
+        "subject": "Order",
+        "predicate": "is_required_for_refund_request",
+        "object": "Yes",
+        "conditions": [
+          "Table Column: Required?"
+        ],
+        "evidence_structure": "table_row",
+        "content_role": "policy_rule",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED",
+        "plain_language_assertion": "Order [PERMISSION] is_required_for_refund_request Yes WHERE Table Column: Required?",
+        "verbatim_source_quote": "| Order number | NW-10482391 | Yes |"
+      }
+    },
+    {
+      "candidate_index": 44,
+      "bucket": "bucket_4_context",
+      "status_note": "Contextual non-rule: role=policy_rule",
+      "baseline": {
+        "subject": "Order",
+        "predicate": "has_example_value",
+        "object": "jane.doe@example.com",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED"
+      },
+      "slice3_current": {
+        "subject": "Order",
+        "predicate": "has_example_value",
+        "object": "jane.doe@example.com",
+        "conditions": [
+          "Table Column: Example"
+        ],
+        "evidence_structure": "table_row",
+        "content_role": "policy_rule",
+        "decision": "reject",
+        "decision_code": "REJECT_DESCRIPTIVE_PURPOSE",
+        "plain_language_assertion": "Order [PERMISSION] has_example_value jane.doe@example.com WHERE Table Column: Example",
+        "verbatim_source_quote": "| Email on order | jane.doe@example.com | Yes |"
+      }
+    },
+    {
+      "candidate_index": 45,
+      "bucket": "bucket_4_context",
+      "status_note": "Contextual non-rule: role=policy_rule",
+      "baseline": {
+        "subject": "Item SKU / name",
+        "predicate": "has_example_value",
+        "object": "TNT-4P-GRN / Summit 4-Person Tent",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED"
+      },
+      "slice3_current": {
+        "subject": "Item SKU / name",
+        "predicate": "has_example_value",
+        "object": "TNT-4P-GRN / Summit 4-Person Tent",
+        "conditions": [
+          "Table Column: Example"
+        ],
+        "evidence_structure": "table_row",
+        "content_role": "policy_rule",
+        "decision": "reject",
+        "decision_code": "REJECT_DESCRIPTIVE_PURPOSE",
+        "plain_language_assertion": "Item SKU / name [POLICY_FACT] has_example_value TNT-4P-GRN / Summit 4-Person Tent WHERE Table Column: Example",
+        "verbatim_source_quote": "| Item SKU / name | TNT-4P-GRN / Summit 4-Person Tent | Yes |"
+      }
+    },
+    {
+      "candidate_index": 46,
+      "bucket": "bucket_1",
+      "status_note": "Evidence-aware recovery (table fact / duration)",
+      "baseline": {
+        "subject": "Item SKU / name",
+        "predicate": "is_required_for_refund_request",
+        "object": "Yes",
+        "decision": "review",
+        "decision_code": "WEAK_PREDICATE"
+      },
+      "slice3_current": {
+        "subject": "Item SKU / name",
+        "predicate": "is_required_for_refund_request",
+        "object": "Yes",
+        "conditions": [
+          "Table Column: Required?"
+        ],
+        "evidence_structure": "table_row",
+        "content_role": "policy_rule",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED",
+        "plain_language_assertion": "Item SKU / name [POLICY_FACT] is_required_for_refund_request Yes WHERE Table Column: Required?",
+        "verbatim_source_quote": "| Item SKU / name | TNT-4P-GRN / Summit 4-Person Tent | Yes |"
+      }
+    },
+    {
+      "candidate_index": 47,
+      "bucket": "bucket_4_context",
+      "status_note": "Contextual non-rule: role=policy_rule",
+      "baseline": {
+        "subject": "Reason for return",
+        "predicate": "has_example_value",
+        "object": "Wrong size",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED"
+      },
+      "slice3_current": {
+        "subject": "Reason for return",
+        "predicate": "has_example_value",
+        "object": "Wrong size",
+        "conditions": [
+          "Table Column: Example"
+        ],
+        "evidence_structure": "table_row",
+        "content_role": "policy_rule",
+        "decision": "reject",
+        "decision_code": "REJECT_DESCRIPTIVE_PURPOSE",
+        "plain_language_assertion": "Reason for return [POLICY_FACT] has_example_value Wrong size WHERE Table Column: Example",
+        "verbatim_source_quote": "| Reason for return | Wrong size | Yes |"
+      }
+    },
+    {
+      "candidate_index": 48,
+      "bucket": "bucket_1",
+      "status_note": "Evidence-aware recovery (table fact / duration)",
+      "baseline": {
+        "subject": "Reason for return",
+        "predicate": "is_required_for_refund_request",
+        "object": "Yes",
+        "decision": "review",
+        "decision_code": "WEAK_PREDICATE"
+      },
+      "slice3_current": {
+        "subject": "Reason for return",
+        "predicate": "is_required_for_refund_request",
+        "object": "Yes",
+        "conditions": [
+          "Table Column: Required?"
+        ],
+        "evidence_structure": "table_row",
+        "content_role": "policy_rule",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED",
+        "plain_language_assertion": "Reason for return [POLICY_FACT] is_required_for_refund_request Yes WHERE Table Column: Required?",
+        "verbatim_source_quote": "| Reason for return | Wrong size | Yes |"
+      }
+    },
+    {
+      "candidate_index": 49,
+      "bucket": "bucket_4_context",
+      "status_note": "Contextual non-rule: role=policy_rule",
+      "baseline": {
+        "subject": "Photos",
+        "predicate": "has_example_value",
+        "object": "Damage close-up",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED"
+      },
+      "slice3_current": {
+        "subject": "Photos",
+        "predicate": "has_example_value",
+        "object": "Damage close-up",
+        "conditions": [
+          "Table Column: Example"
+        ],
+        "evidence_structure": "table_row",
+        "content_role": "policy_rule",
+        "decision": "reject",
+        "decision_code": "REJECT_DESCRIPTIVE_PURPOSE",
+        "plain_language_assertion": "Photos [PERMISSION] has_example_value Damage close-up WHERE Table Column: Example",
+        "verbatim_source_quote": "| Photos | Damage close-up | If damaged |"
+      }
+    },
+    {
+      "candidate_index": 50,
+      "bucket": "bucket_1",
+      "status_note": "Evidence-aware recovery (table fact / duration)",
+      "baseline": {
+        "subject": "Photos",
+        "predicate": "is_required_for_refund_request",
+        "object": "If damaged",
+        "decision": "review",
+        "decision_code": "WEAK_PREDICATE"
+      },
+      "slice3_current": {
+        "subject": "Photos",
+        "predicate": "is_required_for_refund_request",
+        "object": "If damaged",
+        "conditions": [
+          "Table Column: Required?"
+        ],
+        "evidence_structure": "table_row",
+        "content_role": "policy_rule",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED",
+        "plain_language_assertion": "Photos [PERMISSION] is_required_for_refund_request If damaged WHERE Table Column: Required?",
+        "verbatim_source_quote": "| Photos | Damage close-up | If damaged |"
+      }
+    },
+    {
+      "candidate_index": 51,
+      "bucket": "bucket_4_context",
+      "status_note": "Contextual non-rule: role=policy_rule",
+      "baseline": {
+        "subject": "Preferred resolution",
+        "predicate": "has_example_value",
+        "object": "Refund to card",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED"
+      },
+      "slice3_current": {
+        "subject": "Preferred resolution",
+        "predicate": "has_example_value",
+        "object": "Refund to card",
+        "conditions": [
+          "Table Column: Example"
+        ],
+        "evidence_structure": "table_row",
+        "content_role": "policy_rule",
+        "decision": "reject",
+        "decision_code": "REJECT_DESCRIPTIVE_PURPOSE",
+        "plain_language_assertion": "Preferred resolution [POLICY_FACT] has_example_value Refund to card WHERE Table Column: Example",
+        "verbatim_source_quote": "| Preferred resolution | Refund to card | Yes |"
+      }
+    },
+    {
+      "candidate_index": 52,
+      "bucket": "bucket_1",
+      "status_note": "Evidence-aware recovery (table fact / duration)",
+      "baseline": {
+        "subject": "Preferred resolution",
+        "predicate": "is_required_for_refund_request",
+        "object": "Yes",
+        "decision": "review",
+        "decision_code": "WEAK_PREDICATE"
+      },
+      "slice3_current": {
+        "subject": "Preferred resolution",
+        "predicate": "is_required_for_refund_request",
+        "object": "Yes",
+        "conditions": [
+          "Table Column: Required?"
+        ],
+        "evidence_structure": "table_row",
+        "content_role": "policy_rule",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED",
+        "plain_language_assertion": "Preferred resolution [POLICY_FACT] is_required_for_refund_request Yes WHERE Table Column: Required?",
+        "verbatim_source_quote": "| Preferred resolution | Refund to card | Yes |"
+      }
+    },
+    {
+      "candidate_index": 63,
+      "bucket": "bucket_1",
+      "status_note": "Evidence-aware recovery (table fact / duration)",
+      "baseline": {
+        "subject": "Visa / Mastercard / Amex",
+        "predicate": "has_posting_duration",
+        "object": "3-5 business days to post",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED"
+      },
+      "slice3_current": {
+        "subject": "Visa / Mastercard / Amex",
+        "predicate": "has_posting_duration",
+        "object": "3-5 business days to post",
+        "conditions": [
+          "Table Column: Notes"
+        ],
+        "evidence_structure": "table_row",
+        "content_role": "policy_rule",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED",
+        "plain_language_assertion": "Visa / Mastercard / Amex [POLICY_FACT] has_posting_duration 3-5 business days to post WHERE Table Column: Notes",
+        "verbatim_source_quote": "| Visa / Mastercard / Amex | Original card | 3-5 business days to post |"
+      }
+    },
+    {
+      "candidate_index": 64,
+      "bucket": "bucket_1",
+      "status_note": "Evidence-aware recovery (table fact / duration)",
+      "baseline": {
+        "subject": "Debit card",
+        "predicate": "has_refund_method",
+        "object": "Original card",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED"
+      },
+      "slice3_current": {
+        "subject": "Debit card",
+        "predicate": "has_refund_method",
+        "object": "Original card",
+        "conditions": [
+          "Table Column: Refund method"
+        ],
+        "evidence_structure": "table_row",
+        "content_role": "policy_rule",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED",
+        "plain_language_assertion": "Debit card [POLICY_FACT] has_refund_method Original card WHERE Table Column: Refund method",
+        "verbatim_source_quote": "| Debit card | Original card | Up to 10 business days |"
+      }
+    },
+    {
+      "candidate_index": 65,
+      "bucket": "bucket_1",
+      "status_note": "Evidence-aware recovery (table fact / duration)",
+      "baseline": {
+        "subject": "Debit card",
+        "predicate": "has_posting_duration",
+        "object": "Up to 10 business days",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED"
+      },
+      "slice3_current": {
+        "subject": "Debit card",
+        "predicate": "has_posting_duration",
+        "object": "Up to 10 business days",
+        "conditions": [
+          "Table Column: Notes"
+        ],
+        "evidence_structure": "table_row",
+        "content_role": "policy_rule",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED",
+        "plain_language_assertion": "Debit card [POLICY_FACT] has_posting_duration Up to 10 business days WHERE Table Column: Notes",
+        "verbatim_source_quote": "| Debit card | Original card | Up to 10 business days |"
+      }
+    },
+    {
+      "candidate_index": 67,
+      "bucket": "bucket_1",
+      "status_note": "Evidence-aware recovery (table fact / duration)",
+      "baseline": {
+        "subject": "PayPal",
+        "predicate": "has_posting_duration",
+        "object": "Usually within 24 hours",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED"
+      },
+      "slice3_current": {
+        "subject": "PayPal",
+        "predicate": "has_posting_duration",
+        "object": "Usually within 24 hours",
+        "conditions": [
+          "Table Column: Notes"
+        ],
+        "evidence_structure": "table_row",
+        "content_role": "policy_rule",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED",
+        "plain_language_assertion": "PayPal [POLICY_FACT] has_posting_duration Usually within 24 hours WHERE Table Column: Notes",
+        "verbatim_source_quote": "| PayPal | PayPal balance | Usually within 24 hours |"
+      }
+    },
+    {
+      "candidate_index": 68,
+      "bucket": "bucket_2",
+      "status_note": "Semantic revision: has_refund_method -> has_refund_method",
+      "baseline": {
+        "subject": "Google",
+        "predicate": "has_refund_method",
+        "object": "Underlying card",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED"
+      },
+      "slice3_current": {
+        "subject": "Apple Pay / Google Pay",
+        "predicate": "has_refund_method",
+        "object": "Underlying card",
+        "conditions": [
+          "Table Column: Refund method"
+        ],
+        "evidence_structure": "table_row",
+        "content_role": "policy_rule",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED",
+        "plain_language_assertion": "Apple Pay / Google Pay [PERMISSION] has_refund_method Underlying card WHERE Table Column: Refund method",
+        "verbatim_source_quote": "| Apple Pay / Google Pay | Underlying card | Same as card |"
+      }
+    },
+    {
+      "candidate_index": 69,
+      "bucket": "bucket_2",
+      "status_note": "Semantic revision: has_stage_duration -> has_stage_duration",
+      "baseline": {
+        "subject": "Google",
+        "predicate": "has_stage_duration",
+        "object": "Same as card",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED"
+      },
+      "slice3_current": {
+        "subject": "Apple Pay / Google Pay",
+        "predicate": "has_stage_duration",
+        "object": "Same as card",
+        "conditions": [
+          "Table Column: Notes"
+        ],
+        "evidence_structure": "table_row",
+        "content_role": "policy_rule",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED",
+        "plain_language_assertion": "Apple Pay / Google Pay [PERMISSION] has_stage_duration Same as card WHERE Table Column: Notes",
+        "verbatim_source_quote": "| Apple Pay / Google Pay | Underlying card | Same as card |"
+      }
+    },
+    {
+      "candidate_index": 76,
+      "bucket": "bucket_1",
+      "status_note": "Evidence-aware recovery (table fact / duration)",
+      "baseline": {
+        "subject": "Split payments",
+        "predicate": "has_refund_method",
+        "object": "Proportionally to each method",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED"
+      },
+      "slice3_current": {
+        "subject": "Split payments",
+        "predicate": "has_refund_method",
+        "object": "Proportionally to each method",
+        "conditions": [
+          "Table Column: Refund method"
+        ],
+        "evidence_structure": "table_row",
+        "content_role": "policy_rule",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED",
+        "plain_language_assertion": "Split payments [POLICY_FACT] has_refund_method Proportionally to each method WHERE Table Column: Refund method",
+        "verbatim_source_quote": "| Split payments | Proportionally to each method | Gift card portion first |"
+      }
+    },
+    {
+      "candidate_index": 78,
+      "bucket": "bucket_2",
+      "status_note": "Semantic revision: has_default_refund_destination -> offers_store_credit_bonus",
+      "baseline": {
+        "subject": "Refund",
+        "predicate": "has_default_refund_destination",
+        "object": "Original payment method whenever possible",
+        "decision": "reject",
+        "decision_code": "FRAGMENT_ASSERTION_DISCARDED"
+      },
+      "slice3_current": {
+        "subject": "Customer",
+        "predicate": "offers_store_credit_bonus",
+        "object": "5% bonus on credit value, maximum bonus $25.00 per return",
+        "conditions": [
+          "chooses store credit instead of refund to original payment method"
+        ],
+        "evidence_structure": "paragraph",
+        "content_role": "policy_rule",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED",
+        "plain_language_assertion": "Customer [MAY] offers_store_credit_bonus 5% bonus on credit value, maximum bonus $25.00 per return WHERE chooses store credit instead of refund to original payment method",
+        "verbatim_source_quote": "Customers who choose store credit instead of a refund to the original payment method receive a 5% bonus on the credit value, up to $25."
+      }
+    },
+    {
+      "candidate_index": 85,
+      "bucket": "bucket_1",
+      "status_note": "Evidence-aware recovery (table fact / duration)",
+      "baseline": {
+        "subject": "Not as described",
+        "predicate": "has_return_label_cost",
+        "object": "Free",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED"
+      },
+      "slice3_current": {
+        "subject": "Not as described",
+        "predicate": "has_return_label_cost",
+        "object": "Free",
+        "conditions": [
+          "Table Column: Return label cost"
+        ],
+        "evidence_structure": "table_row",
+        "content_role": "policy_rule",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED",
+        "plain_language_assertion": "Not as described [POLICY_FACT] has_return_label_cost Free WHERE Table Column: Return label cost",
+        "verbatim_source_quote": "| Not as described | Yes, in full | Free |"
+      }
+    },
+    {
+      "candidate_index": 92,
+      "bucket": "bucket_2",
+      "status_note": "Semantic revision: has_return_shipping_rule -> has_return_shipping_rule",
+      "baseline": {
+        "subject": "Order",
+        "predicate": "has_return_shipping_rule",
+        "object": "No",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED"
+      },
+      "slice3_current": {
+        "subject": "Order",
+        "predicate": "has_return_shipping_rule",
+        "object": "No",
+        "conditions": [
+          "Table Column: Original shipping refunded?",
+          "order_value > 150 USD",
+          "return_reason: any reason"
+        ],
+        "evidence_structure": "table_row",
+        "content_role": "policy_rule",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED",
+        "plain_language_assertion": "Order [PERMISSION] has_return_shipping_rule No WHERE Table Column: Original shipping refunded?; order_value > 150 USD; return_reason: any reason",
+        "verbatim_source_quote": "| Order over $150, any reason | No | Free |"
+      }
+    },
+    {
+      "candidate_index": 93,
+      "bucket": "bucket_2",
+      "status_note": "Semantic revision: has_return_label_cost -> has_return_label_cost",
+      "baseline": {
+        "subject": "Order",
+        "predicate": "has_return_label_cost",
+        "object": "Free",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED"
+      },
+      "slice3_current": {
+        "subject": "Order",
+        "predicate": "has_return_label_cost",
+        "object": "Free",
+        "conditions": [
+          "Table Column: Return label cost",
+          "order_value > 150 USD",
+          "return_reason: any reason"
+        ],
+        "evidence_structure": "table_row",
+        "content_role": "policy_rule",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED",
+        "plain_language_assertion": "Order [PERMISSION] has_return_label_cost Free WHERE Table Column: Return label cost; order_value > 150 USD; return_reason: any reason",
+        "verbatim_source_quote": "| Order over $150, any reason | No | Free |"
+      }
+    },
+    {
+      "candidate_index": 94,
+      "bucket": "bucket_2",
+      "status_note": "Semantic revision: has_refund_eligibility -> has_return_freight_deduction",
+      "baseline": {
+        "subject": "Oversize items",
+        "predicate": "has_refund_eligibility",
+        "object": "Return freight for change-of-mind returns is a flat $49.00, deducted from the refund.",
+        "decision": "reject",
+        "decision_code": "FRAGMENT_ASSERTION_DISCARDED"
+      },
+      "slice3_current": {
+        "subject": "Oversize items",
+        "predicate": "has_return_freight_deduction",
+        "object": "$49.00 flat return freight fee deducted from refund",
+        "conditions": [
+          "change-of-mind return"
+        ],
+        "evidence_structure": "paragraph",
+        "content_role": "policy_rule",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED",
+        "plain_language_assertion": "Oversize items [MUST] has_return_freight_deduction $49.00 flat return freight fee deducted from refund WHERE change-of-mind return",
+        "verbatim_source_quote": "Return freight for change-of-mind returns is a flat $49.00, deducted from the refund."
+      }
+    },
+    {
+      "candidate_index": 99,
+      "bucket": "bucket_2",
+      "status_note": "Semantic revision: has_refund_eligibility -> requires_receipt_retention",
+      "baseline": {
+        "subject": "Drop-off locations",
+        "predicate": "has_refund_eligibility",
+        "object": "Keep the drop-off receipt until your refund has been confirmed.",
+        "decision": "reject",
+        "decision_code": "FRAGMENT_ASSERTION_DISCARDED"
+      },
+      "slice3_current": {
+        "subject": "Customer",
+        "predicate": "requires_receipt_retention",
+        "object": "drop-off receipt until refund has been confirmed",
+        "conditions": [],
+        "evidence_structure": "paragraph",
+        "content_role": "policy_rule",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED",
+        "plain_language_assertion": "Customer [MUST] requires_receipt_retention drop-off receipt until refund has been confirmed",
+        "verbatim_source_quote": "Keep the drop-off receipt until your refund has been confirmed."
+      }
+    },
+    {
+      "candidate_index": 104,
+      "bucket": "bucket_2",
+      "status_note": "Semantic revision: has_resolution_option_details -> may_issue_refund_without_return",
+      "baseline": {
+        "subject": "Keep It policy",
+        "predicate": "has_resolution_option_details",
+        "object": "Offered for minor cosmetic flaws",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED"
+      },
+      "slice3_current": {
+        "subject": "Damaged item under $40",
+        "predicate": "may_issue_refund_without_return",
+        "object": "refund without requiring item return ('Keep It' policy)",
+        "conditions": [
+          "at agent's discretion",
+          "maximum 2 instances per customer per year"
+        ],
+        "evidence_structure": "table_row",
+        "content_role": "policy_rule",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED",
+        "plain_language_assertion": "Damaged item under $40 [MAY] may_issue_refund_without_return refund without requiring item return ('Keep It' policy) WHERE at agent's discretion; maximum 2 instances per customer per year",
+        "verbatim_source_quote": "| Partial refund (keep item) | Offered for minor cosmetic flaws | Immediate |"
+      }
+    },
+    {
+      "candidate_index": 105,
+      "bucket": "bucket_2",
+      "status_note": "Semantic revision: has_stage_duration -> has_resolution_option_details",
+      "baseline": {
+        "subject": "Keep It policy",
+        "predicate": "has_stage_duration",
+        "object": "Immediate",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED"
+      },
+      "slice3_current": {
+        "subject": "Repair",
+        "predicate": "has_resolution_option_details",
+        "object": "For eligible products under warranty",
+        "conditions": [
+          "Table Column: Details"
+        ],
+        "evidence_structure": "table_row",
+        "content_role": "policy_rule",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED",
+        "plain_language_assertion": "Repair [POLICY_FACT] has_resolution_option_details For eligible products under warranty WHERE Table Column: Details",
+        "verbatim_source_quote": "| Repair | For eligible products under warranty | 7-14 business days |"
+      }
+    },
+    {
+      "candidate_index": 108,
+      "bucket": "bucket_2",
+      "status_note": "Semantic revision: may_issue_refund_without_return -> has_refund_eligibility",
+      "baseline": {
+        "subject": "Damaged item valued under $40",
+        "predicate": "may_issue_refund_without_return",
+        "object": "Damaged items under $40 may be refunded without return",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED"
+      },
+      "slice3_current": {
+        "subject": "Customer",
+        "predicate": "has_refund_eligibility",
+        "object": "Once an order has shipped, it must be handled as a return.",
+        "conditions": [
+          "an order has shipped"
+        ],
+        "evidence_structure": "paragraph",
+        "content_role": "policy_rule",
+        "decision": "review",
+        "decision_code": "DEONTIC_MODALITY_MISMATCH",
+        "plain_language_assertion": "Customer [OBLIGATION] has_refund_eligibility Once an order has shipped, it must be handled as a return. WHERE an order has shipped",
+        "verbatim_source_quote": "Once an order has shipped, it must be handled as a return."
+      }
+    },
+    {
+      "candidate_index": 109,
+      "bucket": "bucket_2",
+      "status_note": "Semantic revision: limited_to -> has_return_window",
+      "baseline": {
+        "subject": "This is",
+        "predicate": "limited_to",
+        "object": "two instances per customer per year",
+        "decision": "review",
+        "decision_code": "WEAK_PREDICATE"
+      },
+      "slice3_current": {
+        "subject": "Customer",
+        "predicate": "has_return_window",
+        "object": "Refund Pending (within 1 hour) Yes - self-service Full refund, immediate release of authorisation Processing Yes - contact support Full refund within 3-5 days",
+        "conditions": [],
+        "evidence_structure": "paragraph",
+        "content_role": "policy_rule",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED",
+        "plain_language_assertion": "Customer [ENTITLEMENT] has_return_window Refund Pending (within 1 hour) Yes - self-service Full refund, immediate release of authorisation Processing Yes - contact support Full refund within 3-5 days",
+        "verbatim_source_quote": "Refund Pending (within 1 hour)                Yes - self-service                         Full refund, immediate release of authorisation Processing                             Yes - contact support                      Full refund within 3-5 days"
+      }
+    },
+    {
+      "candidate_index": 124,
+      "bucket": "bucket_2",
+      "status_note": "Semantic revision: has_refund_rule -> has_refund_rule",
+      "baseline": {
+        "subject": "Subscription",
+        "predicate": "has_refund_rule",
+        "object": "Full refund if cancelled within 48 hours of renewal and box not shipped",
+        "decision": "review",
+        "decision_code": "WEAK_PREDICATE"
+      },
+      "slice3_current": {
+        "subject": "Rewards Plus subscription",
+        "predicate": "has_refund_rule",
+        "object": "Anytime",
+        "conditions": [
+          "Table Column: Cancellation"
+        ],
+        "evidence_structure": "table_row",
+        "content_role": "policy_rule",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED",
+        "plain_language_assertion": "Rewards Plus subscription [POLICY_FACT] has_refund_rule Anytime WHERE Table Column: Cancellation",
+        "verbatim_source_quote": "| Rewards Plus | Annual | Anytime | Pro-rated refund within 30 days of renewal; none afterwards |"
+      }
+    },
+    {
+      "candidate_index": 125,
+      "bucket": "bucket_2",
+      "status_note": "Semantic revision: has_billing_schedule -> has_refund_rule",
+      "baseline": {
+        "subject": "Subscription",
+        "predicate": "has_billing_schedule",
+        "object": "Annual",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED"
+      },
+      "slice3_current": {
+        "subject": "Rewards Plus subscription",
+        "predicate": "has_refund_rule",
+        "object": "Pro-rated refund within 30 days of renewal; none afterwards",
+        "conditions": [
+          "Table Column: Refund rule"
+        ],
+        "evidence_structure": "table_row",
+        "content_role": "policy_rule",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED",
+        "plain_language_assertion": "Rewards Plus subscription [POLICY_FACT] has_refund_rule Pro-rated refund within 30 days of renewal; none afterwards WHERE Table Column: Refund rule",
+        "verbatim_source_quote": "| Rewards Plus | Annual | Anytime | Pro-rated refund within 30 days of renewal; none afterwards |"
+      }
+    },
+    {
+      "candidate_index": 126,
+      "bucket": "bucket_2",
+      "status_note": "Semantic revision: has_cancellation_rule -> has_refund_rule",
+      "baseline": {
+        "subject": "Subscription",
+        "predicate": "has_cancellation_rule",
+        "object": "Anytime",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED"
+      },
+      "slice3_current": {
+        "subject": "Gear Care Plan subscription",
+        "predicate": "has_refund_rule",
+        "object": "Monthly",
+        "conditions": [
+          "Table Column: Billing"
+        ],
+        "evidence_structure": "table_row",
+        "content_role": "policy_rule",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED",
+        "plain_language_assertion": "Gear Care Plan subscription [POLICY_FACT] has_refund_rule Monthly WHERE Table Column: Billing",
+        "verbatim_source_quote": "| Gear Care Plan | Monthly | Anytime | No refund for current month; cancel effective next cycle |"
+      }
+    },
+    {
+      "candidate_index": 127,
+      "bucket": "bucket_2",
+      "status_note": "Semantic revision: has_refund_rule -> has_refund_rule",
+      "baseline": {
+        "subject": "Subscription",
+        "predicate": "has_refund_rule",
+        "object": "Pro-rated refund within 30 days of renewal; none afterwards",
+        "decision": "review",
+        "decision_code": "WEAK_PREDICATE"
+      },
+      "slice3_current": {
+        "subject": "Gear Care Plan subscription",
+        "predicate": "has_refund_rule",
+        "object": "Anytime",
+        "conditions": [
+          "Table Column: Cancellation"
+        ],
+        "evidence_structure": "table_row",
+        "content_role": "policy_rule",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED",
+        "plain_language_assertion": "Gear Care Plan subscription [POLICY_FACT] has_refund_rule Anytime WHERE Table Column: Cancellation",
+        "verbatim_source_quote": "| Gear Care Plan | Monthly | Anytime | No refund for current month; cancel effective next cycle |"
+      }
+    },
+    {
+      "candidate_index": 128,
+      "bucket": "bucket_2",
+      "status_note": "Semantic revision: has_billing_schedule -> has_refund_rule",
+      "baseline": {
+        "subject": "Subscription",
+        "predicate": "has_billing_schedule",
+        "object": "Monthly",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED"
+      },
+      "slice3_current": {
+        "subject": "Gear Care Plan subscription",
+        "predicate": "has_refund_rule",
+        "object": "No refund for current month; cancel effective next cycle",
+        "conditions": [
+          "Table Column: Refund rule"
+        ],
+        "evidence_structure": "table_row",
+        "content_role": "policy_rule",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED",
+        "plain_language_assertion": "Gear Care Plan subscription [POLICY_FACT] has_refund_rule No refund for current month; cancel effective next cycle WHERE Table Column: Refund rule",
+        "verbatim_source_quote": "| Gear Care Plan | Monthly | Anytime | No refund for current month; cancel effective next cycle |"
+      }
+    },
+    {
+      "candidate_index": 129,
+      "bucket": "bucket_2",
+      "status_note": "Semantic revision: has_refund_eligibility -> can_cancel_before_trial_ends",
+      "baseline": {
+        "subject": "Subscription",
+        "predicate": "has_refund_eligibility",
+        "object": "No refund for current month; cancel effective next cycle",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED"
+      },
+      "slice3_current": {
+        "subject": "Subscriber",
+        "predicate": "can_cancel_before_trial_ends",
+        "object": "without charge",
+        "conditions": [
+          "you cancel before the trial ends",
+          "before trial ends"
+        ],
+        "evidence_structure": "paragraph",
+        "content_role": "policy_rule",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED",
+        "plain_language_assertion": "Subscriber [PERMISSION] can_cancel_before_trial_ends without charge WHERE you cancel before the trial ends; before trial ends",
+        "verbatim_source_quote": "If you cancel before the trial ends, you will not be charged."
+      }
+    },
+    {
+      "candidate_index": 131,
+      "bucket": "bucket_2",
+      "status_note": "Semantic revision: has_return_window -> will_issue_refund",
+      "baseline": {
+        "subject": "Free trials",
+        "predicate": "has_return_window",
+        "object": "If you forget to cancel and are charged, contact us within 7 days for a full refund of the first charge.",
+        "decision": "reject",
+        "decision_code": "FRAGMENT_ASSERTION_DISCARDED"
+      },
+      "slice3_current": {
+        "subject": "Company",
+        "predicate": "will_issue_refund",
+        "object": "treat the renewal as accidental and refund in full within 30 days",
+        "conditions": [
+          "you did not receive a reminder due to an invalid email address"
+        ],
+        "evidence_structure": "paragraph",
+        "content_role": "policy_rule",
+        "decision": "review",
+        "decision_code": "WEAK_PREDICATE",
+        "plain_language_assertion": "Company [ENTITLEMENT] will_issue_refund treat the renewal as accidental and refund in full within 30 days WHERE you did not receive a reminder due to an invalid email address",
+        "verbatim_source_quote": "If you did not receive a reminder due to an invalid email address, we will treat the renewal as accidental and refund in full within 30 days."
+      }
+    },
+    {
+      "candidate_index": 134,
+      "bucket": "bucket_2",
+      "status_note": "Semantic revision: has_refund_window -> has_refund_window",
+      "baseline": {
+        "subject": "Video course",
+        "predicate": "has_refund_window",
+        "object": "Refunded within 7 days if under 20% viewed",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED"
+      },
+      "slice3_current": {
+        "subject": "Product",
+        "predicate": "has_refund_window",
+        "object": "Full refund within 14 days for corrupt or inaccessible files",
+        "conditions": [],
+        "evidence_structure": "paragraph",
+        "content_role": "policy_rule",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED",
+        "plain_language_assertion": "Product [ENTITLEMENT] has_refund_window Full refund within 14 days for corrupt or inaccessible files",
+        "verbatim_source_quote": "If a file is corrupt or inaccessible, we will provide a working copy or a full refund within 14 days of purchase."
+      }
+    },
+    {
+      "candidate_index": 158,
+      "bucket": "bucket_1",
+      "status_note": "Evidence-aware recovery (table fact / duration)",
+      "baseline": {
+        "subject": "Water filters",
+        "predicate": "has_warranty_remedy",
+        "object": "Replace",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED"
+      },
+      "slice3_current": {
+        "subject": "Marketplace sellers",
+        "predicate": "has_refund_eligibility",
+        "object": "Items shipped directly by third-party sellers follow the seller's policy, but Northwind's A-to-Z Guarantee ensures a refund if the seller fails to respond within 5 business days.",
+        "conditions": [
+          "the seller fails to respond within 5 business days"
+        ],
+        "evidence_structure": "paragraph",
+        "content_role": "policy_rule",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED",
+        "plain_language_assertion": "Marketplace sellers [POLICY_FACT] has_refund_eligibility Items shipped directly by third-party sellers follow the seller's policy, but Northwind's A-to-Z Guarantee ensures a refund if the seller fails to respond within 5 business days. WHERE the seller fails to respond within 5 business days",
+        "verbatim_source_quote": "Items shipped directly by third-party sellers follow the seller's policy, but Northwind's A-to-Z Guarantee ensures a refund if the seller fails to respond within 5 business days."
+      }
+    },
+    {
+      "candidate_index": 175,
+      "bucket": "bucket_1",
+      "status_note": "Evidence-aware recovery (table fact / duration)",
+      "baseline": {
+        "subject": "Rest of world",
+        "predicate": "has_return_window",
+        "object": "14 days",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED"
+      },
+      "slice3_current": {
+        "subject": "Rest of world",
+        "predicate": "has_return_shipping_rule",
+        "object": "Customer pays",
+        "conditions": [
+          "Table Column: Return shipping"
+        ],
+        "evidence_structure": "table_row",
+        "content_role": "policy_rule",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED",
+        "plain_language_assertion": "Rest of world [POLICY_FACT] has_return_shipping_rule Customer pays WHERE Table Column: Return shipping",
+        "verbatim_source_quote": "| Rest of world | 14 days | Customer pays | Not refundable |"
+      }
+    },
+    {
+      "candidate_index": 178,
+      "bucket": "bucket_2",
+      "status_note": "Semantic revision: has_refund_eligibility -> has_currency_conversion_rule",
+      "baseline": {
+        "subject": "International refund",
+        "predicate": "has_refund_eligibility",
+        "object": "Refunds are issued in the currency of the original charge.",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED"
+      },
+      "slice3_current": {
+        "subject": "International refund",
+        "predicate": "has_currency_conversion_rule",
+        "object": "Refund currency follows original charge; exchange differences are not compensated",
+        "conditions": [],
+        "evidence_structure": "paragraph",
+        "content_role": "revision_history",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED",
+        "plain_language_assertion": "International refund [ENTITLEMENT] has_currency_conversion_rule Refund currency follows original charge; exchange differences are not compensated",
+        "verbatim_source_quote": "Exchange rate differences between the purchase and refund date are not compensated; the bank's rate on the refund date applies."
+      }
+    },
+    {
+      "candidate_index": 180,
+      "bucket": "bucket_2",
+      "status_note": "Semantic revision: are_responsible_for -> provides_documentation_upon_request",
+      "baseline": {
+        "subject": "Customer",
+        "predicate": "are_responsible_for",
+        "object": "filing customs duty drawback claims where available",
+        "decision": "reject",
+        "decision_code": "FRAGMENT_ASSERTION_DISCARDED"
+      },
+      "slice3_current": {
+        "subject": "Northwind",
+        "predicate": "provides_documentation_upon_request",
+        "object": "commercial invoice and proof of return",
+        "conditions": [
+          "request",
+          "upon customer request"
+        ],
+        "evidence_structure": "paragraph",
+        "content_role": "policy_rule",
+        "decision": "approve",
+        "decision_code": "APPROVE_ALL_PASSED",
+        "plain_language_assertion": "Northwind [OBLIGATION] provides_documentation_upon_request commercial invoice and proof of return WHERE request; upon customer request",
+        "verbatim_source_quote": "Northwind will provide a commercial invoice and proof of return upon request."
+      }
+    },
+    {
+      "candidate_index": 210,
+      "bucket": "bucket_4_context",
+      "status_note": "Contextual non-rule: role=contact_info",
+      "baseline": {
+        "subject": "Stolen package",
+        "predicate": "has_courtesy_replacement_rule",
+        "object": "One courtesy replacement per customer per year for packages under $200",
+        "decision": "reject",
+        "decision_code": "FRAGMENT_ASSERTION_DISCARDED"
+      },
+      "slice3_current": {
+        "subject": "Phone (US/Canada)",
+        "predicate": "has_contact_phone",
+        "object": "1-800-555-0142",
+        "conditions": [
+          "Table Column: Details"
+        ],
+        "evidence_structure": "table_row",
+        "content_role": "contact_info",
+        "decision": "reject",
+        "decision_code": "REJECT_DESCRIPTIVE_PURPOSE",
+        "plain_language_assertion": "Phone (US/Canada) [POLICY_FACT] has_contact_phone 1-800-555-0142 WHERE Table Column: Details",
+        "verbatim_source_quote": "| Phone (US/Canada) | 1-800-555-0142 | Mon-Fri 8am-8pm; Sat 9am-5pm |"
+      }
+    },
+    {
+      "candidate_index": 228,
+      "bucket": "bucket_4_context",
+      "status_note": "Contextual non-rule: role=example",
+      "baseline": {
+        "subject": "Escalated complaint resolution",
+        "predicate": "has_target",
+        "object": "10 business days",
+        "decision": "review",
+        "decision_code": "WEAK_PREDICATE"
+      },
+      "slice3_current": {
+        "subject": "Aug 15, 2025 Added Gear Care",
+        "predicate": "has_resolution_path",
+        "object": "4.0 Mar 1, 2025 Gold member window raised from 45 to 60 days",
+        "conditions": [],
+        "evidence_structure": "paragraph",
+        "content_role": "example",
+        "decision": "reject",
+        "decision_code": "REJECT_DESCRIPTIVE_PURPOSE",
+        "plain_language_assertion": "Aug 15, 2025 Added Gear Care [POLICY_FACT] has_resolution_path 4.0 Mar 1, 2025 Gold member window raised from 45 to 60 days",
+        "verbatim_source_quote": "0             Mar 1, 2025                Gold member window raised from 45 to 60 days"
+      }
+    }
+  ]
+}

@@ -1,0 +1,3403 @@
+[
+  {
+    "order_index": 1,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:31:48559f1f672a:90aa5a77e1",
+    "subject": "Custom corporate agreements",
+    "predicate": "may_override_standard_terms",
+    "object": "Standard policy terms",
+    "conditions": [
+      "applies to business customers on standard accounts when custom contracts exist"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "\u007f  Business customers on standard accounts (custom contracts may override these terms).",
+    "verbatim_source_quote": "\u007f  Business customers on standard accounts (custom contracts may override these terms)."
+  },
+  {
+    "order_index": 2,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:33:bc3d3090bd9b:3c0b5511a9",
+    "subject": "Return window",
+    "predicate": "has_summary",
+    "object": "30 days from delivery (60 days for Northwind Rewards Gold members)",
+    "conditions": [
+      "Table Column: Summary"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Predicate failure: Predicate 'has_summary' is not present in versioned taxonomy registry.",
+    "claim_text": "| Return window | 30 days from delivery (60 days for Northwind Rewards Gold members) |",
+    "verbatim_source_quote": "| Return window | 30 days from delivery (60 days for Northwind Rewards Gold members) |"
+  },
+  {
+    "order_index": 3,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:34:49d05393a5e4:c970f3dd4f",
+    "subject": "Refund speed",
+    "predicate": "has_summary",
+    "object": "3-5 business days after we receive and inspect the return",
+    "conditions": [
+      "Table Column: Summary"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Predicate failure: Predicate 'has_summary' is not present in versioned taxonomy registry.",
+    "claim_text": "| Refund speed | 3-5 business days after we receive and inspect the return |",
+    "verbatim_source_quote": "| Refund speed | 3-5 business days after we receive and inspect the return |"
+  },
+  {
+    "order_index": 4,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:35:9d361a13386f:dd55f15b27",
+    "subject": "Return shipping",
+    "predicate": "has_summary",
+    "object": "Free for defective or incorrect items; $6.95 deducted otherwise",
+    "conditions": [
+      "Table Column: Summary"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Predicate failure: Predicate 'has_summary' is not present in versioned taxonomy registry.",
+    "claim_text": "| Return shipping | Free for defective or incorrect items; $6.95 deducted otherwise |",
+    "verbatim_source_quote": "| Return shipping | Free for defective or incorrect items; $6.95 deducted otherwise |"
+  },
+  {
+    "order_index": 5,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:36:fa8173d8dbfe:6efd9c495a",
+    "subject": "Restocking fee",
+    "predicate": "has_summary",
+    "object": "None on most items; 15% on special-order and bulk items",
+    "conditions": [
+      "Table Column: Summary"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Predicate failure: Predicate 'has_summary' is not present in versioned taxonomy registry.",
+    "claim_text": "| Restocking fee | None on most items; 15% on special-order and bulk items |",
+    "verbatim_source_quote": "| Restocking fee | None on most items; 15% on special-order and bulk items |"
+  },
+  {
+    "order_index": 6,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:37:7eebd2ed22d9:072667ea2c",
+    "subject": "Final sale items",
+    "predicate": "has_summary",
+    "object": "Not eligible for refund or exchange",
+    "conditions": [
+      "Table Column: Summary"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Predicate failure: Predicate 'has_summary' is not present in versioned taxonomy registry.",
+    "claim_text": "| Final sale items | Not eligible for refund or exchange |",
+    "verbatim_source_quote": "| Final sale items | Not eligible for refund or exchange |"
+  },
+  {
+    "order_index": 7,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:41:475d04d136f7:367ee5d6d1",
+    "subject": "Refund",
+    "predicate": "has_definition",
+    "object": "Return of money to the original payment method or store credit following an approved return or cancellation.",
+    "conditions": [
+      "Table Column: Definition"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Refund | Return of money to the original payment method or store credit following an approved return or cancellation. |",
+    "verbatim_source_quote": "| Refund | Return of money to the original payment method or store credit following an approved return or cancellation. |"
+  },
+  {
+    "order_index": 8,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:42:638fa80324be:05f344f0d9",
+    "subject": "Return",
+    "predicate": "has_definition",
+    "object": "Sending a purchased item back to Northwind by mail or in-store drop-off.",
+    "conditions": [
+      "Table Column: Definition"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Return | Sending a purchased item back to Northwind by mail or in-store drop-off. |",
+    "verbatim_source_quote": "| Return | Sending a purchased item back to Northwind by mail or in-store drop-off. |"
+  },
+  {
+    "order_index": 9,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:43:6a5f03db4d6b:f25550e461",
+    "subject": "Exchange",
+    "predicate": "has_definition",
+    "object": "Replacing an item with a different size, colour or product of equal or greater value.",
+    "conditions": [
+      "Table Column: Definition"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Exchange | Replacing an item with a different size, colour or product of equal or greater value. |",
+    "verbatim_source_quote": "| Exchange | Replacing an item with a different size, colour or product of equal or greater value. |"
+  },
+  {
+    "order_index": 10,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:44:553d3a6451e7:66e4504fce",
+    "subject": "Store Credit",
+    "predicate": "has_definition",
+    "object": "A balance issued to a customer account, redeemable online and in stores",
+    "conditions": [
+      "Table Column: Definition"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Store Credit | A balance issued to a customer account, redeemable online and in stores, valid for 5 years. |",
+    "verbatim_source_quote": "| Store Credit | A balance issued to a customer account, redeemable online and in stores, valid for 5 years. |"
+  },
+  {
+    "order_index": 11,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:45:69255c8ad3df:770bf91837",
+    "subject": "RMA",
+    "predicate": "has_definition",
+    "object": "Return Merchandise Authorization number, e.g. RMA-2026-004815, required for mailed returns.",
+    "conditions": [
+      "Table Column: Definition"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| RMA | Return Merchandise Authorization number, e.g. RMA-2026-004815, required for mailed returns. |",
+    "verbatim_source_quote": "| RMA | Return Merchandise Authorization number, e.g. RMA-2026-004815, required for mailed returns. |"
+  },
+  {
+    "order_index": 12,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:47:469205411820:947a95c4ee",
+    "subject": "Customer",
+    "predicate": "has_refund_eligibility",
+    "object": "Final Sale Items marked 'Final Sale' at the time of purchase, which cannot be returned.",
+    "conditions": [],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "Final Sale                     Items marked 'Final Sale' at the time of purchase, which cannot be returned.",
+    "verbatim_source_quote": "Final Sale                     Items marked 'Final Sale' at the time of purchase, which cannot be returned."
+  },
+  {
+    "order_index": 13,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:55:cd4aad0e8df3:2644900031",
+    "subject": "Standard merchandise",
+    "predicate": "has_return_window",
+    "object": "30 days",
+    "conditions": [
+      "Table Column: Return Window"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Standard merchandise | 30 days |",
+    "verbatim_source_quote": "| Standard merchandise | 30 days |"
+  },
+  {
+    "order_index": 14,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:56:53249eef5fde:a4adb97832",
+    "subject": "Northwind Rewards Gold members",
+    "predicate": "has_return_window",
+    "object": "60 days",
+    "conditions": [
+      "Table Column: Return Window"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Northwind Rewards Gold members | 60 days |",
+    "verbatim_source_quote": "| Northwind Rewards Gold members | 60 days |"
+  },
+  {
+    "order_index": 15,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:57:8c86d12b5335:1ba40462b4",
+    "subject": "Holiday purchases (Nov 1 - Dec 24)",
+    "predicate": "has_return_deadline",
+    "object": "Until January 31 of the following year",
+    "conditions": [
+      {
+        "field": "purchase_date",
+        "operator": "between",
+        "value": [
+          "11-01",
+          "12-24"
+        ]
+      }
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Holiday purchases (Nov 1 - Dec 24) | Until January 31 of the following year |",
+    "verbatim_source_quote": "| Holiday purchases (Nov 1 - Dec 24) | Until January 31 of the following year |"
+  },
+  {
+    "order_index": 16,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:58:3cf1b5d3c8c9:9f2dda3e4e",
+    "subject": "Footwear (worn indoors only)",
+    "predicate": "has_return_window",
+    "object": "45 days",
+    "conditions": [
+      "Table Column: Return Window"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Footwear (worn indoors only) | 45 days |",
+    "verbatim_source_quote": "| Footwear (worn indoors only) | 45 days |"
+  },
+  {
+    "order_index": 17,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:59:9c86921e84b4:5201bcc22e",
+    "subject": "Camping tents and sleeping bags (unused)",
+    "predicate": "has_return_window",
+    "object": "60 days",
+    "conditions": [
+      "Table Column: Return Window"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Camping tents and sleeping bags (unused) | 60 days |",
+    "verbatim_source_quote": "| Camping tents and sleeping bags (unused) | 60 days |"
+  },
+  {
+    "order_index": 18,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:60:35db5f5800f6:4d6aba9906",
+    "subject": "Defective items",
+    "predicate": "has_resolution_path",
+    "object": "Covered by warranty - see Section 14",
+    "conditions": [
+      "Table Column: Return Window"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Defective items | Covered by warranty - see Section 14 |",
+    "verbatim_source_quote": "| Defective items | Covered by warranty - see Section 14 |"
+  },
+  {
+    "order_index": 19,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:62:a0c531fe8458:ac24a7808e",
+    "subject": "Returns without a receipt",
+    "predicate": "has_return_channel_eligibility",
+    "object": "Returns without proof of purchase are accepted in-store only, for store credit at the lowest price the item was sold in the last 90 days.",
+    "conditions": [],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "Returns without proof of purchase are accepted in-store only, for store credit at the lowest price the item was sold in the last 90 days.",
+    "verbatim_source_quote": "Returns without proof of purchase are accepted in-store only, for store credit at the lowest price the item was sold in the last 90 days."
+  },
+  {
+    "order_index": 20,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:62:a0c531fe8458:27f14f7b6e",
+    "subject": "Returns without a receipt",
+    "predicate": "has_identity_verification_requirement",
+    "object": "A government-issued photo ID is required and scanned",
+    "conditions": [],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "A government-issued photo ID is required and scanned.",
+    "verbatim_source_quote": "A government-issued photo ID is required and scanned."
+  },
+  {
+    "order_index": 21,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:62:a0c531fe8458:16e552c7a7",
+    "subject": "Returns without a receipt",
+    "predicate": "has_refund_eligibility",
+    "object": "A limit of three receipt-less returns per customer per 12-month period applies.",
+    "conditions": [],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "A limit of three receipt-less returns per customer per 12-month period applies.",
+    "verbatim_source_quote": "A limit of three receipt-less returns per customer per 12-month period applies."
+  },
+  {
+    "order_index": 22,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:67:19c2c94e74d7:695baf8697",
+    "subject": "Support agents",
+    "predicate": "must_verify_refund_conditions",
+    "object": "verify each condition before approving a refund over $50.00",
+    "conditions": [],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "Support agents must verify each condition before approving a refund over $50.00.",
+    "verbatim_source_quote": "Support agents must verify each condition before approving a refund over $50.00."
+  },
+  {
+    "order_index": 23,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:71:ecc860ff4e15:979db91929",
+    "subject": "Refund request",
+    "predicate": "has_purchase_verification_requirement",
+    "object": "be verified in our systems",
+    "conditions": [],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "\u007f  The order number or proof of purchase can be verified in our systems.",
+    "verbatim_source_quote": "\u007f  The order number or proof of purchase can be verified in our systems."
+  },
+  {
+    "order_index": 24,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:73:9b6bd53ed573:f5ae537064",
+    "subject": "Partial refunds A partial refund",
+    "predicate": "has_validity_rule",
+    "object": "be issued when an item shows signs of use beyond inspection, is missing parts, or is returned without original packaging",
+    "conditions": [],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Predicate failure: Generic catch-all predicate 'has_validity_rule' is banned; requires normalized action taxonomy.",
+    "claim_text": "1 Partial refunds A partial refund may be issued when an item shows signs of use beyond inspection, is missing parts, or is returned without original packaging.",
+    "verbatim_source_quote": "1 Partial refunds A partial refund may be issued when an item shows signs of use beyond inspection, is missing parts, or is returned without original packaging."
+  },
+  {
+    "order_index": 25,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:74:0d22b8edcb7c:d85d9d17a1",
+    "subject": "Like new, tags attached",
+    "predicate": "has_refund_percentage",
+    "object": "100%",
+    "conditions": [
+      "Table Column: Refund amount"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Like new, tags attached | 100% |",
+    "verbatim_source_quote": "| Like new, tags attached | 100% |"
+  },
+  {
+    "order_index": 26,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:75:64e372a4a48a:322da7cdcd",
+    "subject": "Opened packaging, item unused",
+    "predicate": "has_refund_percentage",
+    "object": "100%",
+    "conditions": [
+      "Table Column: Refund amount"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Opened packaging, item unused | 100% |",
+    "verbatim_source_quote": "| Opened packaging, item unused | 100% |"
+  },
+  {
+    "order_index": 27,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:76:3c97be3ce023:f07ae35c02",
+    "subject": "Missing original box (non-fragile)",
+    "predicate": "has_refund_percentage",
+    "object": "90%",
+    "conditions": [
+      "Table Column: Refund amount"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Missing original box (non-fragile) | 90% |",
+    "verbatim_source_quote": "| Missing original box (non-fragile) | 90% |"
+  },
+  {
+    "order_index": 28,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:77:cc573eaa5e10:8dc4a7f684",
+    "subject": "Missing accessories or free gift",
+    "predicate": "has_refund_rule",
+    "object": "Refund minus gift value",
+    "conditions": [
+      "Table Column: Refund amount"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Predicate failure: Predicate 'has_refund_rule' is not present in versioned taxonomy registry.",
+    "claim_text": "| Missing accessories or free gift | Refund minus gift value |",
+    "verbatim_source_quote": "| Missing accessories or free gift | Refund minus gift value |"
+  },
+  {
+    "order_index": 29,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:78:0751657cc8b8:3c9fdc91ad",
+    "subject": "Light wear or signs of use",
+    "predicate": "has_refund_percentage",
+    "object": "50% - 75%",
+    "conditions": [
+      "Table Column: Refund amount"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Light wear or signs of use | 50% - 75% |",
+    "verbatim_source_quote": "| Light wear or signs of use | 50% - 75% |"
+  },
+  {
+    "order_index": 30,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:79:5fb00c4243a6:5e3795447c",
+    "subject": "Customer",
+    "predicate": "has_refund_percentage",
+    "object": "0% - 25% (agent discretion, manager approval)",
+    "conditions": [
+      "Table Column: Refund amount"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Damaged by customer / heavy use | 0% - 25% (agent discretion, manager approval) |",
+    "verbatim_source_quote": "| Damaged by customer / heavy use | 0% - 25% (agent discretion, manager approval) |"
+  },
+  {
+    "order_index": 31,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:80:243929f2bd36:d780ae0222",
+    "subject": "Washed, altered or stained",
+    "predicate": "has_refund_eligibility",
+    "object": "Not eligible",
+    "conditions": [
+      "Table Column: Refund amount"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Washed, altered or stained | Not eligible |",
+    "verbatim_source_quote": "| Washed, altered or stained | Not eligible |"
+  },
+  {
+    "order_index": 32,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:81:01bdb768e06d:bf914b74e4",
+    "subject": "Refund approval",
+    "predicate": "requires_approval_role",
+    "object": "Tier 1 Customer Support Agent",
+    "conditions": [
+      {
+        "field": "refund_amount",
+        "operator": "<=",
+        "value": 100,
+        "unit": "USD"
+      }
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "2 Manager approval thresholds \u007f  Up to $100: Tier 1 agent may approve.",
+    "verbatim_source_quote": "2 Manager approval thresholds \u007f  Up to $100: Tier 1 agent may approve."
+  },
+  {
+    "order_index": 33,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:82:8ba538d4db5d:45c3591fd1",
+    "subject": "Refund approval",
+    "predicate": "requires_approval_role",
+    "object": "Tier 2 Support Lead",
+    "conditions": [
+      {
+        "field": "refund_amount",
+        "operator": "between",
+        "value": [
+          100.01,
+          500
+        ],
+        "unit": "USD"
+      }
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "\u007f  $100.01 - $500: Tier 2 agent or team lead approval required.",
+    "verbatim_source_quote": "\u007f  $100.01 - $500: Tier 2 agent or team lead approval required."
+  },
+  {
+    "order_index": 34,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:83:69d127e6d9b9:584e5f5a99",
+    "subject": "Refund approval",
+    "predicate": "requires_approval_role",
+    "object": "Customer Experience Manager",
+    "conditions": [
+      {
+        "field": "refund_amount",
+        "operator": ">",
+        "value": 500,
+        "unit": "USD"
+      }
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "\u007f  Over $500: Customer Experience Manager approval required.",
+    "verbatim_source_quote": "\u007f  Over $500: Customer Experience Manager approval required."
+  },
+  {
+    "order_index": 35,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:84:a761f825b9e0:d5d9057aea",
+    "subject": "Refund approval",
+    "predicate": "requires_approval_role",
+    "object": "Finance Director",
+    "conditions": [
+      {
+        "field": "refund_amount",
+        "operator": ">",
+        "value": 2000,
+        "unit": "USD"
+      }
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "\u007f  Over $2,000: Finance Director approval and fraud review required.",
+    "verbatim_source_quote": "\u007f  Over $2,000: Finance Director approval and fraud review required."
+  },
+  {
+    "order_index": 36,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:84:a761f825b9e0:ef4f96027c",
+    "subject": "Refund approval",
+    "predicate": "requires_fraud_review",
+    "object": "Secondary fraud review required",
+    "conditions": [
+      {
+        "field": "refund_amount",
+        "operator": ">",
+        "value": 2000,
+        "unit": "USD"
+      }
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "\u007f  Over $2,000: Finance Director approval and fraud review required.",
+    "verbatim_source_quote": "\u007f  Over $2,000: Finance Director approval and fraud review required."
+  },
+  {
+    "order_index": 37,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:94:b65f3b27b664:992cf7cca2",
+    "subject": "Customer",
+    "predicate": "has_refund_eligibility",
+    "object": "\u007f Perishable goods such as freeze-dried meals past 14 days from delivery.",
+    "conditions": [],
+    "status": "REJECTED",
+    "lifecycle_state": "NON_RULE",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Claim type failure: Unrecognized claim type 'non_rule'.",
+    "claim_text": "\u007f  Perishable goods such as freeze-dried meals past 14 days from delivery.",
+    "verbatim_source_quote": "\u007f  Perishable goods such as freeze-dried meals past 14 days from delivery."
+  },
+  {
+    "order_index": 38,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:96:8be0b6a7095d:3379ed2d81",
+    "subject": "Customer",
+    "predicate": "has_refund_eligibility",
+    "object": "\u007f Items returned more than 90 days after delivery.",
+    "conditions": [],
+    "status": "REJECTED",
+    "lifecycle_state": "NON_RULE",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Claim type failure: Unrecognized claim type 'non_rule'.",
+    "claim_text": "\u007f  Items returned more than 90 days after delivery.",
+    "verbatim_source_quote": "\u007f  Items returned more than 90 days after delivery."
+  },
+  {
+    "order_index": 39,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:97:c12a80515311:ecaa8162d2",
+    "subject": "Customer",
+    "predicate": "has_validity_rule",
+    "object": "be resold",
+    "conditions": [],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Predicate failure: Generic catch-all predicate 'has_validity_rule' is banned; requires normalized action taxonomy.",
+    "claim_text": "Custom products are made specifically for the customer and cannot be resold.",
+    "verbatim_source_quote": "Custom products are made specifically for the customer and cannot be resold."
+  },
+  {
+    "order_index": 40,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:99:23bfe8fedfdf:7331c99880",
+    "subject": "Even for non-refundable items, a full refund or replacement",
+    "predicate": "will_issue_refund",
+    "object": "be provided if the item arrives damaged, is materially different from its description, or was shipped in error",
+    "conditions": [
+      "the item arrives damaged"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Predicate failure: Predicate 'will_issue_refund' is not present in versioned taxonomy registry.",
+    "claim_text": "Even for non-refundable items, a full refund or replacement will be provided if the item arrives damaged, is materially different from its description, or was shipped in error.",
+    "verbatim_source_quote": "Even for non-refundable items, a full refund or replacement will be provided if the item arrives damaged, is materially different from its description, or was shipped in error."
+  },
+  {
+    "order_index": 41,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:111:bb87dedb3bbe:799d37c684",
+    "subject": "In store",
+    "predicate": "has_return_window",
+    "object": "In-store refunds to the original card are processed immediately; the bank may take 3-5 days to post the credit.",
+    "conditions": [],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "In-store refunds to the original card are processed immediately; the bank may take 3-5 days to post the credit.",
+    "verbatim_source_quote": "In-store refunds to the original card are processed immediately; the bank may take 3-5 days to post the credit."
+  },
+  {
+    "order_index": 42,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:113:c9118947eb1c:9a98507be5",
+    "subject": "Order",
+    "predicate": "has_example_value",
+    "object": "NW-10482391",
+    "conditions": [
+      "Table Column: Example"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Order number | NW-10482391 | Yes |",
+    "verbatim_source_quote": "| Order number | NW-10482391 | Yes |"
+  },
+  {
+    "order_index": 43,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:113:c9118947eb1c:77d6cd34e6",
+    "subject": "Order",
+    "predicate": "is_required_for_refund_request",
+    "object": "Yes",
+    "conditions": [
+      "Table Column: Required?"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Predicate failure: Predicate 'is_required_for_refund_request' is not present in versioned taxonomy registry.",
+    "claim_text": "| Order number | NW-10482391 | Yes |",
+    "verbatim_source_quote": "| Order number | NW-10482391 | Yes |"
+  },
+  {
+    "order_index": 44,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:114:d8435ecadf7b:7553df8bc5",
+    "subject": "Order",
+    "predicate": "has_example_value",
+    "object": "jane.doe@example.com",
+    "conditions": [
+      "Table Column: Example"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Email on order | jane.doe@example.com | Yes |",
+    "verbatim_source_quote": "| Email on order | jane.doe@example.com | Yes |"
+  },
+  {
+    "order_index": 45,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:115:f599a9bede39:be7d401a63",
+    "subject": "Item SKU / name",
+    "predicate": "has_example_value",
+    "object": "TNT-4P-GRN / Summit 4-Person Tent",
+    "conditions": [
+      "Table Column: Example"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Item SKU / name | TNT-4P-GRN / Summit 4-Person Tent | Yes |",
+    "verbatim_source_quote": "| Item SKU / name | TNT-4P-GRN / Summit 4-Person Tent | Yes |"
+  },
+  {
+    "order_index": 46,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:115:f599a9bede39:87cdef10bc",
+    "subject": "Item SKU / name",
+    "predicate": "is_required_for_refund_request",
+    "object": "Yes",
+    "conditions": [
+      "Table Column: Required?"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Predicate failure: Predicate 'is_required_for_refund_request' is not present in versioned taxonomy registry.",
+    "claim_text": "| Item SKU / name | TNT-4P-GRN / Summit 4-Person Tent | Yes |",
+    "verbatim_source_quote": "| Item SKU / name | TNT-4P-GRN / Summit 4-Person Tent | Yes |"
+  },
+  {
+    "order_index": 47,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:116:401c999351bc:c804bf16e2",
+    "subject": "Reason for return",
+    "predicate": "has_example_value",
+    "object": "Wrong size",
+    "conditions": [
+      "Table Column: Example"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Reason for return | Wrong size | Yes |",
+    "verbatim_source_quote": "| Reason for return | Wrong size | Yes |"
+  },
+  {
+    "order_index": 48,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:116:401c999351bc:bc279a2071",
+    "subject": "Reason for return",
+    "predicate": "is_required_for_refund_request",
+    "object": "Yes",
+    "conditions": [
+      "Table Column: Required?"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Predicate failure: Predicate 'is_required_for_refund_request' is not present in versioned taxonomy registry.",
+    "claim_text": "| Reason for return | Wrong size | Yes |",
+    "verbatim_source_quote": "| Reason for return | Wrong size | Yes |"
+  },
+  {
+    "order_index": 49,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:117:77b7c138cba7:1d024856ff",
+    "subject": "Photos",
+    "predicate": "has_example_value",
+    "object": "Damage close-up",
+    "conditions": [
+      "Table Column: Example"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Photos | Damage close-up | If damaged |",
+    "verbatim_source_quote": "| Photos | Damage close-up | If damaged |"
+  },
+  {
+    "order_index": 50,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:117:77b7c138cba7:b41f7b67cb",
+    "subject": "Photos",
+    "predicate": "is_required_for_refund_request",
+    "object": "If damaged",
+    "conditions": [
+      "Table Column: Required?"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Predicate failure: Predicate 'is_required_for_refund_request' is not present in versioned taxonomy registry.",
+    "claim_text": "| Photos | Damage close-up | If damaged |",
+    "verbatim_source_quote": "| Photos | Damage close-up | If damaged |"
+  },
+  {
+    "order_index": 51,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:118:a7f54580c413:0b39f7c47a",
+    "subject": "Preferred resolution",
+    "predicate": "has_example_value",
+    "object": "Refund to card",
+    "conditions": [
+      "Table Column: Example"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Preferred resolution | Refund to card | Yes |",
+    "verbatim_source_quote": "| Preferred resolution | Refund to card | Yes |"
+  },
+  {
+    "order_index": 52,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:118:a7f54580c413:029847d3f9",
+    "subject": "Preferred resolution",
+    "predicate": "is_required_for_refund_request",
+    "object": "Yes",
+    "conditions": [
+      "Table Column: Required?"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Predicate failure: Predicate 'is_required_for_refund_request' is not present in versioned taxonomy registry.",
+    "claim_text": "| Preferred resolution | Refund to card | Yes |",
+    "verbatim_source_quote": "| Preferred resolution | Refund to card | Yes |"
+  },
+  {
+    "order_index": 53,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:122:8d70dda81dd3:1fe36b8d8c",
+    "subject": "RMA issued after request",
+    "predicate": "has_stage_duration",
+    "object": "Instantly online; up to 1 hour by phone",
+    "conditions": [
+      "Table Column: Typical Duration"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| RMA issued after request | Instantly online; up to 1 hour by phone |",
+    "verbatim_source_quote": "| RMA issued after request | Instantly online; up to 1 hour by phone |"
+  },
+  {
+    "order_index": 54,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:123:388841c312b2:c589afbf7b",
+    "subject": "Return transit to warehouse",
+    "predicate": "has_stage_duration",
+    "object": "3-7 business days (domestic)",
+    "conditions": [
+      "Table Column: Typical Duration"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Return transit to warehouse | 3-7 business days (domestic) |",
+    "verbatim_source_quote": "| Return transit to warehouse | 3-7 business days (domestic) |"
+  },
+  {
+    "order_index": 55,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:124:1018635149f4:c0610effd5",
+    "subject": "Warehouse receipt and inspection",
+    "predicate": "has_stage_duration",
+    "object": "1-2 business days",
+    "conditions": [
+      "Table Column: Typical Duration"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Warehouse receipt and inspection | 1-2 business days |",
+    "verbatim_source_quote": "| Warehouse receipt and inspection | 1-2 business days |"
+  },
+  {
+    "order_index": 56,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:125:4aee67242e4d:db21f627b5",
+    "subject": "Refund approved and issued",
+    "predicate": "has_stage_duration",
+    "object": "Within 1 business day of inspection",
+    "conditions": [
+      "Table Column: Typical Duration"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Refund approved and issued | Within 1 business day of inspection |",
+    "verbatim_source_quote": "| Refund approved and issued | Within 1 business day of inspection |"
+  },
+  {
+    "order_index": 57,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:126:6ad938cec8bd:70a086d38c",
+    "subject": "Credit card refund posted by bank",
+    "predicate": "has_posting_duration",
+    "object": "3-5 business days",
+    "conditions": [
+      "Table Column: Typical Duration"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Credit card refund posted by bank | 3-5 business days |",
+    "verbatim_source_quote": "| Credit card refund posted by bank | 3-5 business days |"
+  },
+  {
+    "order_index": 58,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:127:33aea93e7bf7:90336f68de",
+    "subject": "Debit card / bank transfer",
+    "predicate": "has_posting_duration",
+    "object": "5-10 business days",
+    "conditions": [
+      "Table Column: Typical Duration"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Debit card / bank transfer | 5-10 business days |",
+    "verbatim_source_quote": "| Debit card / bank transfer | 5-10 business days |"
+  },
+  {
+    "order_index": 59,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:128:9cd458737526:d7a09facba",
+    "subject": "PayPal",
+    "predicate": "has_posting_duration",
+    "object": "Within 24 hours of issue",
+    "conditions": [
+      "Table Column: Typical Duration"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| PayPal | Within 24 hours of issue |",
+    "verbatim_source_quote": "| PayPal | Within 24 hours of issue |"
+  },
+  {
+    "order_index": 60,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:129:90db591535c1:e0c79da6a2",
+    "subject": "Store credit",
+    "predicate": "has_posting_duration",
+    "object": "Immediate",
+    "conditions": [
+      "Table Column: Typical Duration"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Store credit | Immediate |",
+    "verbatim_source_quote": "| Store credit | Immediate |"
+  },
+  {
+    "order_index": 61,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:130:da3baf651943:329163f81d",
+    "subject": "Check (by request, over $1,000)",
+    "predicate": "has_posting_duration",
+    "object": "10-15 business days",
+    "conditions": [
+      "Table Column: Typical Duration",
+      "order_value > 1 USD"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Check (by request, over $1,000) | 10-15 business days |",
+    "verbatim_source_quote": "| Check (by request, over $1,000) | 10-15 business days |"
+  },
+  {
+    "order_index": 62,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:137:72efcda89409:676e07e3b7",
+    "subject": "Visa / Mastercard / Amex",
+    "predicate": "has_refund_method",
+    "object": "Original card",
+    "conditions": [
+      "Table Column: Refund method"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Visa / Mastercard / Amex | Original card | 3-5 business days to post |",
+    "verbatim_source_quote": "| Visa / Mastercard / Amex | Original card | 3-5 business days to post |"
+  },
+  {
+    "order_index": 63,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:137:72efcda89409:0555008ced",
+    "subject": "Visa / Mastercard / Amex",
+    "predicate": "has_posting_duration",
+    "object": "3-5 business days to post",
+    "conditions": [
+      "Table Column: Notes"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Visa / Mastercard / Amex | Original card | 3-5 business days to post |",
+    "verbatim_source_quote": "| Visa / Mastercard / Amex | Original card | 3-5 business days to post |"
+  },
+  {
+    "order_index": 64,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:138:3ac547548e64:7a48a2eeba",
+    "subject": "Debit card",
+    "predicate": "has_refund_method",
+    "object": "Original card",
+    "conditions": [
+      "Table Column: Refund method"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Debit card | Original card | Up to 10 business days |",
+    "verbatim_source_quote": "| Debit card | Original card | Up to 10 business days |"
+  },
+  {
+    "order_index": 65,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:138:3ac547548e64:3e681bfd8f",
+    "subject": "Debit card",
+    "predicate": "has_posting_duration",
+    "object": "Up to 10 business days",
+    "conditions": [
+      "Table Column: Notes"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Debit card | Original card | Up to 10 business days |",
+    "verbatim_source_quote": "| Debit card | Original card | Up to 10 business days |"
+  },
+  {
+    "order_index": 66,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:139:986f465b02ec:cd5baf252f",
+    "subject": "PayPal",
+    "predicate": "has_refund_method",
+    "object": "PayPal balance",
+    "conditions": [
+      "Table Column: Refund method"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| PayPal | PayPal balance | Usually within 24 hours |",
+    "verbatim_source_quote": "| PayPal | PayPal balance | Usually within 24 hours |"
+  },
+  {
+    "order_index": 67,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:139:986f465b02ec:84cbcb5652",
+    "subject": "PayPal",
+    "predicate": "has_posting_duration",
+    "object": "Usually within 24 hours",
+    "conditions": [
+      "Table Column: Notes"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| PayPal | PayPal balance | Usually within 24 hours |",
+    "verbatim_source_quote": "| PayPal | PayPal balance | Usually within 24 hours |"
+  },
+  {
+    "order_index": 68,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:140:afde2d37e4ff:492363b786",
+    "subject": "Google",
+    "predicate": "has_refund_method",
+    "object": "Underlying card",
+    "conditions": [
+      "Table Column: Refund method"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Apple Pay / Google Pay | Underlying card | Same as card |",
+    "verbatim_source_quote": "| Apple Pay / Google Pay | Underlying card | Same as card |"
+  },
+  {
+    "order_index": 69,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:140:afde2d37e4ff:2c9cf67391",
+    "subject": "Google",
+    "predicate": "has_stage_duration",
+    "object": "Same as card",
+    "conditions": [
+      "Table Column: Notes"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Apple Pay / Google Pay | Underlying card | Same as card |",
+    "verbatim_source_quote": "| Apple Pay / Google Pay | Underlying card | Same as card |"
+  },
+  {
+    "order_index": 70,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:141:9e775bff2fa2:fd372332a6",
+    "subject": "Buy Now Pay Later (e.g. Klarna)",
+    "predicate": "has_refund_method",
+    "object": "Provider reduces balance",
+    "conditions": [
+      "Table Column: Refund method"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Buy Now Pay Later (e.g. Klarna) | Provider reduces balance | Provider timelines apply |",
+    "verbatim_source_quote": "| Buy Now Pay Later (e.g. Klarna) | Provider reduces balance | Provider timelines apply |"
+  },
+  {
+    "order_index": 71,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:141:9e775bff2fa2:f5450ba557",
+    "subject": "Buy Now Pay Later (e.g. Klarna)",
+    "predicate": "has_provider_governed_timeline",
+    "object": "Provider timelines apply",
+    "conditions": [
+      "Table Column: Notes"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Buy Now Pay Later (e.g. Klarna) | Provider reduces balance | Provider timelines apply |",
+    "verbatim_source_quote": "| Buy Now Pay Later (e.g. Klarna) | Provider reduces balance | Provider timelines apply |"
+  },
+  {
+    "order_index": 72,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:142:68a728f3e144:4644bd8f12",
+    "subject": "Gift cards",
+    "predicate": "has_refund_method",
+    "object": "New gift card or store credit",
+    "conditions": [
+      "Table Column: Refund method"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Gift card | New gift card or store credit | Instant |",
+    "verbatim_source_quote": "| Gift card | New gift card or store credit | Instant |"
+  },
+  {
+    "order_index": 73,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:142:68a728f3e144:60b53652bd",
+    "subject": "Gift cards",
+    "predicate": "has_posting_duration",
+    "object": "Instant",
+    "conditions": [
+      "Table Column: Notes"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Gift card | New gift card or store credit | Instant |",
+    "verbatim_source_quote": "| Gift card | New gift card or store credit | Instant |"
+  },
+  {
+    "order_index": 74,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:143:372bc48f46e4:907777c983",
+    "subject": "Cash (in-store)",
+    "predicate": "has_refund_method",
+    "object": "Cash up to $50, then store credit/card",
+    "conditions": [
+      "Table Column: Refund method"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Cash (in-store) | Cash up to $50, then store credit/card | ID required over $50 |",
+    "verbatim_source_quote": "| Cash (in-store) | Cash up to $50, then store credit/card | ID required over $50 |"
+  },
+  {
+    "order_index": 75,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:143:372bc48f46e4:acec40603b",
+    "subject": "Cash (in-store)",
+    "predicate": "has_identity_verification_requirement",
+    "object": "ID required over $50",
+    "conditions": [
+      "Table Column: Notes"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Cash (in-store) | Cash up to $50, then store credit/card | ID required over $50 |",
+    "verbatim_source_quote": "| Cash (in-store) | Cash up to $50, then store credit/card | ID required over $50 |"
+  },
+  {
+    "order_index": 76,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:144:1bf29e8a21d7:c72109fd7c",
+    "subject": "Split payments",
+    "predicate": "has_refund_method",
+    "object": "Proportionally to each method",
+    "conditions": [
+      "Table Column: Refund method"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Split payments | Proportionally to each method | Gift card portion first |",
+    "verbatim_source_quote": "| Split payments | Proportionally to each method | Gift card portion first |"
+  },
+  {
+    "order_index": 77,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:144:1bf29e8a21d7:db3cfd680a",
+    "subject": "Split payments",
+    "predicate": "has_refund_allocation_rule",
+    "object": "Gift card portion first",
+    "conditions": [
+      "Table Column: Notes"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Split payments | Proportionally to each method | Gift card portion first |",
+    "verbatim_source_quote": "| Split payments | Proportionally to each method | Gift card portion first |"
+  },
+  {
+    "order_index": 78,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:146:d2060256ff89:36c1774757",
+    "subject": "Refund",
+    "predicate": "has_default_refund_destination",
+    "object": "Original payment method whenever possible",
+    "conditions": [],
+    "status": "REJECTED",
+    "lifecycle_state": "NON_RULE",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Claim type failure: Unrecognized claim type 'non_rule'.",
+    "claim_text": "Customers who choose store credit instead of a refund to the original payment method receive a 5% bonus on the credit value, up to $25.",
+    "verbatim_source_quote": "Customers who choose store credit instead of a refund to the original payment method receive a 5% bonus on the credit value, up to $25."
+  },
+  {
+    "order_index": 79,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:146:d2060256ff89:2fdd867fa4",
+    "subject": "Bonus credit",
+    "predicate": "has_validity_rule",
+    "object": "be applied retroactively once a refund has been issued to the card",
+    "conditions": [],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Predicate failure: Generic catch-all predicate 'has_validity_rule' is banned; requires normalized action taxonomy.",
+    "claim_text": "Bonus credit cannot be applied retroactively once a refund has been issued to the card.",
+    "verbatim_source_quote": "Bonus credit cannot be applied retroactively once a refund has been issued to the card."
+  },
+  {
+    "order_index": 80,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:152:a34c7fb06191:2fe196ef5b",
+    "subject": "Defective or damaged",
+    "predicate": "has_return_shipping_rule",
+    "object": "Yes, in full",
+    "conditions": [
+      "Table Column: Original shipping refunded?"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Defective or damaged | Yes, in full | Free |",
+    "verbatim_source_quote": "| Defective or damaged | Yes, in full | Free |"
+  },
+  {
+    "order_index": 81,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:152:a34c7fb06191:630793b5e4",
+    "subject": "Defective or damaged",
+    "predicate": "has_return_label_cost",
+    "object": "Free",
+    "conditions": [
+      "Table Column: Return label cost"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Defective or damaged | Yes, in full | Free |",
+    "verbatim_source_quote": "| Defective or damaged | Yes, in full | Free |"
+  },
+  {
+    "order_index": 82,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:153:04d7f130a4fc:7539642c88",
+    "subject": "Wrong item sent",
+    "predicate": "has_return_shipping_rule",
+    "object": "Yes, in full",
+    "conditions": [
+      "Table Column: Original shipping refunded?"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Wrong item sent | Yes, in full | Free |",
+    "verbatim_source_quote": "| Wrong item sent | Yes, in full | Free |"
+  },
+  {
+    "order_index": 83,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:153:04d7f130a4fc:97b9830d6a",
+    "subject": "Wrong item sent",
+    "predicate": "has_return_label_cost",
+    "object": "Free",
+    "conditions": [
+      "Table Column: Return label cost"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Wrong item sent | Yes, in full | Free |",
+    "verbatim_source_quote": "| Wrong item sent | Yes, in full | Free |"
+  },
+  {
+    "order_index": 84,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:154:7f4b543eb35a:f99c7cbf65",
+    "subject": "Not as described",
+    "predicate": "has_return_shipping_rule",
+    "object": "Yes, in full",
+    "conditions": [
+      "Table Column: Original shipping refunded?"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Not as described | Yes, in full | Free |",
+    "verbatim_source_quote": "| Not as described | Yes, in full | Free |"
+  },
+  {
+    "order_index": 85,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:154:7f4b543eb35a:8f88a84786",
+    "subject": "Not as described",
+    "predicate": "has_return_label_cost",
+    "object": "Free",
+    "conditions": [
+      "Table Column: Return label cost"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Not as described | Yes, in full | Free |",
+    "verbatim_source_quote": "| Not as described | Yes, in full | Free |"
+  },
+  {
+    "order_index": 86,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:155:7c50f7e1ab56:54155959bc",
+    "subject": "Changed mind / wrong size",
+    "predicate": "has_return_shipping_rule",
+    "object": "No",
+    "conditions": [
+      "Table Column: Original shipping refunded?"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Changed mind / wrong size | No | $6.95 deducted from refund |",
+    "verbatim_source_quote": "| Changed mind / wrong size | No | $6.95 deducted from refund |"
+  },
+  {
+    "order_index": 87,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:155:7c50f7e1ab56:3b89999f98",
+    "subject": "Changed mind / wrong size",
+    "predicate": "has_return_label_cost",
+    "object": "$6.95 deducted from refund",
+    "conditions": [
+      "Table Column: Return label cost"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Changed mind / wrong size | No | $6.95 deducted from refund |",
+    "verbatim_source_quote": "| Changed mind / wrong size | No | $6.95 deducted from refund |"
+  },
+  {
+    "order_index": 88,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:156:8060c07eb03f:fe33459461",
+    "subject": "Gold member, any reason",
+    "predicate": "has_return_shipping_rule",
+    "object": "No",
+    "conditions": [
+      "Table Column: Original shipping refunded?",
+      "return_reason: any reason"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Gold member, any reason | No | Free |",
+    "verbatim_source_quote": "| Gold member, any reason | No | Free |"
+  },
+  {
+    "order_index": 89,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:156:8060c07eb03f:9132ff1ec5",
+    "subject": "Gold member, any reason",
+    "predicate": "has_return_label_cost",
+    "object": "Free",
+    "conditions": [
+      "Table Column: Return label cost",
+      "return_reason: any reason"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Gold member, any reason | No | Free |",
+    "verbatim_source_quote": "| Gold member, any reason | No | Free |"
+  },
+  {
+    "order_index": 90,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:157:1269450975ff:0ced5b829c",
+    "subject": "Exchange",
+    "predicate": "has_return_shipping_rule",
+    "object": "N/A",
+    "conditions": [
+      "Table Column: Original shipping refunded?"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Exchange | N/A | Free both ways |",
+    "verbatim_source_quote": "| Exchange | N/A | Free both ways |"
+  },
+  {
+    "order_index": 91,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:157:1269450975ff:31e1c0d65b",
+    "subject": "Exchange",
+    "predicate": "has_return_label_cost",
+    "object": "Free both ways",
+    "conditions": [
+      "Table Column: Return label cost"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Exchange | N/A | Free both ways |",
+    "verbatim_source_quote": "| Exchange | N/A | Free both ways |"
+  },
+  {
+    "order_index": 92,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:158:1e10965ca521:05aae6b5e2",
+    "subject": "Order",
+    "predicate": "has_return_shipping_rule",
+    "object": "No",
+    "conditions": [
+      "Table Column: Original shipping refunded?",
+      "order_value > 150 USD",
+      "return_reason: any reason"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Order over $150, any reason | No | Free |",
+    "verbatim_source_quote": "| Order over $150, any reason | No | Free |"
+  },
+  {
+    "order_index": 93,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:158:1e10965ca521:def86bf564",
+    "subject": "Order",
+    "predicate": "has_return_label_cost",
+    "object": "Free",
+    "conditions": [
+      "Table Column: Return label cost",
+      "order_value > 150 USD",
+      "return_reason: any reason"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Order over $150, any reason | No | Free |",
+    "verbatim_source_quote": "| Order over $150, any reason | No | Free |"
+  },
+  {
+    "order_index": 94,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:160:5c7041a7d3aa:e334b208a5",
+    "subject": "Oversize items",
+    "predicate": "has_refund_eligibility",
+    "object": "Return freight for change-of-mind returns is a flat $49.00, deducted from the refund.",
+    "conditions": [],
+    "status": "REJECTED",
+    "lifecycle_state": "NON_RULE",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Claim type failure: Unrecognized claim type 'non_rule'.",
+    "claim_text": "Return freight for change-of-mind returns is a flat $49.00, deducted from the refund.",
+    "verbatim_source_quote": "Return freight for change-of-mind returns is a flat $49.00, deducted from the refund."
+  },
+  {
+    "order_index": 95,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:160:5c7041a7d3aa:488c3ab59c",
+    "subject": "Freight pickups",
+    "predicate": "scheduled",
+    "object": "with our logistics team at least 3 business days in advance",
+    "conditions": [],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Predicate failure: Predicate 'scheduled' is not present in versioned taxonomy registry.",
+    "claim_text": "Freight pickups must be scheduled with our logistics team at least 3 business days in advance.",
+    "verbatim_source_quote": "Freight pickups must be scheduled with our logistics team at least 3 business days in advance."
+  },
+  {
+    "order_index": 96,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:162:266249fc8f6a:b4421480b7",
+    "subject": "Customer",
+    "predicate": "has_return_shipping_rule",
+    "object": "their own carrier",
+    "conditions": [],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "Customers may use their own carrier.",
+    "verbatim_source_quote": "Customers may use their own carrier."
+  },
+  {
+    "order_index": 97,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:162:266249fc8f6a:c05d638b45",
+    "subject": "Carrier",
+    "predicate": "limited_to",
+    "object": "$12.00 and only for approved defective returns, with a receipt",
+    "conditions": [],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Predicate failure: Predicate 'limited_to' is not present in versioned taxonomy registry.",
+    "claim_text": "Reimbursement for carrier costs is limited to $12.00 and only for approved defective returns, with a receipt.",
+    "verbatim_source_quote": "Reimbursement for carrier costs is limited to $12.00 and only for approved defective returns, with a receipt."
+  },
+  {
+    "order_index": 98,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:164:9ad8389a2d33:e80e3af672",
+    "subject": "Prepaid labels",
+    "predicate": "has_validity_rule",
+    "object": "be dropped at over 15,000 carrier locations and all Northwind stores",
+    "conditions": [],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Predicate failure: Generic catch-all predicate 'has_validity_rule' is banned; requires normalized action taxonomy.",
+    "claim_text": "Prepaid labels can be dropped at over 15,000 carrier locations and all Northwind stores.",
+    "verbatim_source_quote": "Prepaid labels can be dropped at over 15,000 carrier locations and all Northwind stores."
+  },
+  {
+    "order_index": 99,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:164:9ad8389a2d33:cb5871be1e",
+    "subject": "Drop-off locations",
+    "predicate": "has_refund_eligibility",
+    "object": "Keep the drop-off receipt until your refund has been confirmed.",
+    "conditions": [],
+    "status": "REJECTED",
+    "lifecycle_state": "NON_RULE",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Claim type failure: Unrecognized claim type 'non_rule'.",
+    "claim_text": "Keep the drop-off receipt until your refund has been confirmed.",
+    "verbatim_source_quote": "Keep the drop-off receipt until your refund has been confirmed."
+  },
+  {
+    "order_index": 100,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:175:951480eb4b41:a9c463b6a0",
+    "subject": "Replacement",
+    "predicate": "has_resolution_option_details",
+    "object": "Same item shipped with free expedited shipping",
+    "conditions": [
+      "Table Column: Details"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Replacement | Same item shipped with free expedited shipping | 2-3 business days |",
+    "verbatim_source_quote": "| Replacement | Same item shipped with free expedited shipping | 2-3 business days |"
+  },
+  {
+    "order_index": 101,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:175:951480eb4b41:7c0647451f",
+    "subject": "Replacement",
+    "predicate": "has_stage_duration",
+    "object": "2-3 business days",
+    "conditions": [
+      "Table Column: Timeline"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Replacement | Same item shipped with free expedited shipping | 2-3 business days |",
+    "verbatim_source_quote": "| Replacement | Same item shipped with free expedited shipping | 2-3 business days |"
+  },
+  {
+    "order_index": 102,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:176:b238f30585fa:6446ebf4d9",
+    "subject": "Full refund",
+    "predicate": "has_resolution_option_details",
+    "object": "Item price plus shipping and tax",
+    "conditions": [
+      "Table Column: Details"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Full refund | Item price plus shipping and tax | 3-5 business days |",
+    "verbatim_source_quote": "| Full refund | Item price plus shipping and tax | 3-5 business days |"
+  },
+  {
+    "order_index": 103,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:176:b238f30585fa:4a83ad6913",
+    "subject": "Full refund",
+    "predicate": "has_stage_duration",
+    "object": "3-5 business days",
+    "conditions": [
+      "Table Column: Timeline"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Full refund | Item price plus shipping and tax | 3-5 business days |",
+    "verbatim_source_quote": "| Full refund | Item price plus shipping and tax | 3-5 business days |"
+  },
+  {
+    "order_index": 104,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:177:dd611bcaa1c8:83acd7961d",
+    "subject": "Keep It policy",
+    "predicate": "has_resolution_option_details",
+    "object": "Offered for minor cosmetic flaws",
+    "conditions": [
+      "Table Column: Details"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Partial refund (keep item) | Offered for minor cosmetic flaws | Immediate |",
+    "verbatim_source_quote": "| Partial refund (keep item) | Offered for minor cosmetic flaws | Immediate |"
+  },
+  {
+    "order_index": 105,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:177:dd611bcaa1c8:903c128dd4",
+    "subject": "Keep It policy",
+    "predicate": "has_stage_duration",
+    "object": "Immediate",
+    "conditions": [
+      "Table Column: Timeline"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Partial refund (keep item) | Offered for minor cosmetic flaws | Immediate |",
+    "verbatim_source_quote": "| Partial refund (keep item) | Offered for minor cosmetic flaws | Immediate |"
+  },
+  {
+    "order_index": 106,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:178:0089f503cdd6:f5e9924b07",
+    "subject": "Repair",
+    "predicate": "has_resolution_option_details",
+    "object": "For eligible products under warranty",
+    "conditions": [
+      "Table Column: Details"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Repair | For eligible products under warranty | 7-14 business days |",
+    "verbatim_source_quote": "| Repair | For eligible products under warranty | 7-14 business days |"
+  },
+  {
+    "order_index": 107,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:178:0089f503cdd6:4efde9d847",
+    "subject": "Repair",
+    "predicate": "has_stage_duration",
+    "object": "7-14 business days",
+    "conditions": [
+      "Table Column: Timeline"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Repair | For eligible products under warranty | 7-14 business days |",
+    "verbatim_source_quote": "| Repair | For eligible products under warranty | 7-14 business days |"
+  },
+  {
+    "order_index": 108,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:179:3d0c401efe83:8c38ca72f9",
+    "subject": "Damaged item valued under $40",
+    "predicate": "may_issue_refund_without_return",
+    "object": "Damaged items under $40 may be refunded without return",
+    "conditions": [],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "For damaged items valued under $40.00, we may issue a refund without requiring the item to be returned (\"Keep It\" policy), at the agent's discretion.",
+    "verbatim_source_quote": "For damaged items valued under $40.00, we may issue a refund without requiring the item to be returned (\"Keep It\" policy), at the agent's discretion."
+  },
+  {
+    "order_index": 109,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:179:3d0c401efe83:ffdf9667bd",
+    "subject": "This is",
+    "predicate": "limited_to",
+    "object": "two instances per customer per year",
+    "conditions": [],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Predicate failure: Predicate 'limited_to' is not present in versioned taxonomy registry.",
+    "claim_text": "This is limited to two instances per customer per year.",
+    "verbatim_source_quote": "This is limited to two instances per customer per year."
+  },
+  {
+    "order_index": 110,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:182:4b37106d99e5:daaebcdbd6",
+    "subject": "Customer",
+    "predicate": "has_refund_eligibility",
+    "object": "Once an order has shipped, it must be handled as a return.",
+    "conditions": [
+      "an order has shipped"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "Once an order has shipped, it must be handled as a return.",
+    "verbatim_source_quote": "Once an order has shipped, it must be handled as a return."
+  },
+  {
+    "order_index": 111,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:183:5113e21c5be4:212f0ae941",
+    "subject": "Customer",
+    "predicate": "has_return_window",
+    "object": "Refund Pending (within 1 hour) Yes - self-service Full refund, immediate release of authorisation Processing Yes - contact support Full refund within 3-5 days",
+    "conditions": [],
+    "status": "REJECTED",
+    "lifecycle_state": "NON_RULE",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Claim type failure: Unrecognized claim type 'non_rule'.",
+    "claim_text": "Refund Pending (within 1 hour)                Yes - self-service                         Full refund, immediate release of authorisation Processing                             Yes - contact support                      Full refund within 3-5 days",
+    "verbatim_source_quote": "Refund Pending (within 1 hour)                Yes - self-service                         Full refund, immediate release of authorisation Processing                             Yes - contact support                      Full refund within 3-5 days"
+  },
+  {
+    "order_index": 112,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:184:703eb233a6e6:0e41cdd290",
+    "subject": "Shipped",
+    "predicate": "has_attempted_not_guaranteed",
+    "object": "No",
+    "conditions": [
+      "Table Column: Attempted - not guaranteed"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Predicate failure: Predicate 'has_attempted_not_guaranteed' is not present in versioned taxonomy registry.",
+    "claim_text": "| Shipped | No | Refuse delivery or return |",
+    "verbatim_source_quote": "| Shipped | No | Refuse delivery or return |"
+  },
+  {
+    "order_index": 113,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:184:703eb233a6e6:73fda33bc1",
+    "subject": "Shipped",
+    "predicate": "has_full_refund_if_stopped_else_return",
+    "object": "Refuse delivery or return",
+    "conditions": [
+      "Table Column: Full refund if stopped, else return"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Predicate failure: Predicate 'has_full_refund_if_stopped_else_return' is not present in versioned taxonomy registry.",
+    "claim_text": "| Shipped | No | Refuse delivery or return |",
+    "verbatim_source_quote": "| Shipped | No | Refuse delivery or return |"
+  },
+  {
+    "order_index": 114,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:185:dc058e669c44:fdb5def059",
+    "subject": "Delivered",
+    "predicate": "has_attempted_not_guaranteed",
+    "object": "No",
+    "conditions": [
+      "Table Column: Attempted - not guaranteed"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Predicate failure: Predicate 'has_attempted_not_guaranteed' is not present in versioned taxonomy registry.",
+    "claim_text": "| Delivered | No | Standard return policy |",
+    "verbatim_source_quote": "| Delivered | No | Standard return policy |"
+  },
+  {
+    "order_index": 115,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:185:dc058e669c44:5a08367474",
+    "subject": "Delivered",
+    "predicate": "has_full_refund_if_stopped_else_return",
+    "object": "Standard return policy",
+    "conditions": [
+      "Table Column: Full refund if stopped, else return"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Predicate failure: Predicate 'has_full_refund_if_stopped_else_return' is not present in versioned taxonomy registry.",
+    "claim_text": "| Delivered | No | Standard return policy |",
+    "verbatim_source_quote": "| Delivered | No | Standard return policy |"
+  },
+  {
+    "order_index": 116,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:186:8b6d59893ceb:da920a42f2",
+    "subject": "Order",
+    "predicate": "has_attempted_not_guaranteed",
+    "object": "Yes, until 7 days before release",
+    "conditions": [
+      "Table Column: Attempted - not guaranteed"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Predicate failure: Predicate 'has_attempted_not_guaranteed' is not present in versioned taxonomy registry.",
+    "claim_text": "| Pre-order | Yes, until 7 days before release | Full refund |",
+    "verbatim_source_quote": "| Pre-order | Yes, until 7 days before release | Full refund |"
+  },
+  {
+    "order_index": 117,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:186:8b6d59893ceb:3ab31ee46f",
+    "subject": "Order",
+    "predicate": "has_full_refund_if_stopped_else_return",
+    "object": "Full refund",
+    "conditions": [
+      "Table Column: Full refund if stopped, else return"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Predicate failure: Predicate 'has_full_refund_if_stopped_else_return' is not present in versioned taxonomy registry.",
+    "claim_text": "| Pre-order | Yes, until 7 days before release | Full refund |",
+    "verbatim_source_quote": "| Pre-order | Yes, until 7 days before release | Full refund |"
+  },
+  {
+    "order_index": 118,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:187:e6c648293efb:9fa500c840",
+    "subject": "Backordered",
+    "predicate": "has_attempted_not_guaranteed",
+    "object": "Yes, anytime",
+    "conditions": [
+      "Table Column: Attempted - not guaranteed"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Predicate failure: Predicate 'has_attempted_not_guaranteed' is not present in versioned taxonomy registry.",
+    "claim_text": "| Backordered | Yes, anytime | Full refund |",
+    "verbatim_source_quote": "| Backordered | Yes, anytime | Full refund |"
+  },
+  {
+    "order_index": 119,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:187:e6c648293efb:ae1aec390a",
+    "subject": "Backordered",
+    "predicate": "has_full_refund_if_stopped_else_return",
+    "object": "Full refund",
+    "conditions": [
+      "Table Column: Full refund if stopped, else return"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Predicate failure: Predicate 'has_full_refund_if_stopped_else_return' is not present in versioned taxonomy registry.",
+    "claim_text": "| Backordered | Yes, anytime | Full refund |",
+    "verbatim_source_quote": "| Backordered | Yes, anytime | Full refund |"
+  },
+  {
+    "order_index": 120,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:189:91a93cf08ec3:07184e4337",
+    "subject": "Northwind We",
+    "predicate": "cancel",
+    "object": "an order for reasons including stock errors, pricing errors, suspected fraud, or inability to verify payment",
+    "conditions": [],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Predicate failure: Predicate 'cancel' is not present in versioned taxonomy registry.",
+    "claim_text": "Northwind We may cancel an order for reasons including stock errors, pricing errors, suspected fraud, or inability to verify payment.",
+    "verbatim_source_quote": "Northwind We may cancel an order for reasons including stock errors, pricing errors, suspected fraud, or inability to verify payment."
+  },
+  {
+    "order_index": 121,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:191:c0ba7b1b3cf1:563fd13d7a",
+    "subject": "Price adjustments",
+    "predicate": "has_return_window",
+    "object": "If an item you purchased drops in price within 14 days of purchase, contact us for a one-time price adjustment refund of the difference.",
+    "conditions": [
+      "an item you purchased drops in price within 14 days of purchase"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "NON_RULE",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Claim type failure: Unrecognized claim type 'non_rule'.",
+    "claim_text": "If an item you purchased drops in price within 14 days of purchase, contact us for a one-time price adjustment refund of the difference.",
+    "verbatim_source_quote": "If an item you purchased drops in price within 14 days of purchase, contact us for a one-time price adjustment refund of the difference."
+  },
+  {
+    "order_index": 122,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:195:d912e62369ac:4e1b02140e",
+    "subject": "Subscription",
+    "predicate": "has_billing_schedule",
+    "object": "Monthly, 1st of month",
+    "conditions": [
+      "Table Column: Billing"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Trailhead Box | Monthly, 1st of month | Anytime before the 25th | Full refund if cancelled within 48 hours of renewal and box not shipped |",
+    "verbatim_source_quote": "| Trailhead Box | Monthly, 1st of month | Anytime before the 25th | Full refund if cancelled within 48 hours of renewal and box not shipped |"
+  },
+  {
+    "order_index": 123,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:195:d912e62369ac:a29ebc959c",
+    "subject": "Subscription",
+    "predicate": "has_cancellation_rule",
+    "object": "Anytime before the 25th",
+    "conditions": [
+      "Table Column: Cancellation"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Trailhead Box | Monthly, 1st of month | Anytime before the 25th | Full refund if cancelled within 48 hours of renewal and box not shipped |",
+    "verbatim_source_quote": "| Trailhead Box | Monthly, 1st of month | Anytime before the 25th | Full refund if cancelled within 48 hours of renewal and box not shipped |"
+  },
+  {
+    "order_index": 124,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:195:d912e62369ac:87f7a3311b",
+    "subject": "Subscription",
+    "predicate": "has_refund_rule",
+    "object": "Full refund if cancelled within 48 hours of renewal and box not shipped",
+    "conditions": [
+      {
+        "field": "cancellation_time",
+        "operator": "<=",
+        "value": 48,
+        "unit": "hours_after_renewal"
+      },
+      {
+        "field": "box_status",
+        "operator": "!=",
+        "value": "shipped"
+      }
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Predicate failure: Predicate 'has_refund_rule' is not present in versioned taxonomy registry.",
+    "claim_text": "| Trailhead Box | Monthly, 1st of month | Anytime before the 25th | Full refund if cancelled within 48 hours of renewal and box not shipped |",
+    "verbatim_source_quote": "| Trailhead Box | Monthly, 1st of month | Anytime before the 25th | Full refund if cancelled within 48 hours of renewal and box not shipped |"
+  },
+  {
+    "order_index": 125,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:196:da364f4785fb:cc57c9841b",
+    "subject": "Subscription",
+    "predicate": "has_billing_schedule",
+    "object": "Annual",
+    "conditions": [
+      "Table Column: Billing"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Rewards Plus | Annual | Anytime | Pro-rated refund within 30 days of renewal; none afterwards |",
+    "verbatim_source_quote": "| Rewards Plus | Annual | Anytime | Pro-rated refund within 30 days of renewal; none afterwards |"
+  },
+  {
+    "order_index": 126,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:196:da364f4785fb:61c79d676b",
+    "subject": "Subscription",
+    "predicate": "has_cancellation_rule",
+    "object": "Anytime",
+    "conditions": [
+      "Table Column: Cancellation"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Rewards Plus | Annual | Anytime | Pro-rated refund within 30 days of renewal; none afterwards |",
+    "verbatim_source_quote": "| Rewards Plus | Annual | Anytime | Pro-rated refund within 30 days of renewal; none afterwards |"
+  },
+  {
+    "order_index": 127,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:196:da364f4785fb:502c6c333c",
+    "subject": "Subscription",
+    "predicate": "has_refund_rule",
+    "object": "Pro-rated refund within 30 days of renewal; none afterwards",
+    "conditions": [
+      "Table Column: Refund rule"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Predicate failure: Predicate 'has_refund_rule' is not present in versioned taxonomy registry.",
+    "claim_text": "| Rewards Plus | Annual | Anytime | Pro-rated refund within 30 days of renewal; none afterwards |",
+    "verbatim_source_quote": "| Rewards Plus | Annual | Anytime | Pro-rated refund within 30 days of renewal; none afterwards |"
+  },
+  {
+    "order_index": 128,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:197:3a15a267c8f1:dd42fcf4cb",
+    "subject": "Subscription",
+    "predicate": "has_billing_schedule",
+    "object": "Monthly",
+    "conditions": [
+      "Table Column: Billing"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Gear Care Plan | Monthly | Anytime | No refund for current month; cancel effective next cycle |",
+    "verbatim_source_quote": "| Gear Care Plan | Monthly | Anytime | No refund for current month; cancel effective next cycle |"
+  },
+  {
+    "order_index": 129,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:197:3a15a267c8f1:8312fe140a",
+    "subject": "Subscription",
+    "predicate": "has_refund_eligibility",
+    "object": "No refund for current month; cancel effective next cycle",
+    "conditions": [
+      "Table Column: Refund rule"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Gear Care Plan | Monthly | Anytime | No refund for current month; cancel effective next cycle |",
+    "verbatim_source_quote": "| Gear Care Plan | Monthly | Anytime | No refund for current month; cancel effective next cycle |"
+  },
+  {
+    "order_index": 130,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:199:a5aeba23b922:4db1e8c340",
+    "subject": "Subscriber",
+    "predicate": "can_cancel_before_trial_ends",
+    "object": "without charge",
+    "conditions": [
+      "you cancel before the trial ends",
+      "before trial ends"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "If you cancel before the trial ends, you will not be charged.",
+    "verbatim_source_quote": "If you cancel before the trial ends, you will not be charged."
+  },
+  {
+    "order_index": 131,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:199:a5aeba23b922:75e7e6abce",
+    "subject": "Free trials",
+    "predicate": "has_return_window",
+    "object": "If you forget to cancel and are charged, contact us within 7 days for a full refund of the first charge.",
+    "conditions": [
+      "you forget to cancel and are charged"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "NON_RULE",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Claim type failure: Unrecognized claim type 'non_rule'.",
+    "claim_text": "If you forget to cancel and are charged, contact us within 7 days for a full refund of the first charge.",
+    "verbatim_source_quote": "If you forget to cancel and are charged, contact us within 7 days for a full refund of the first charge."
+  },
+  {
+    "order_index": 132,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:201:9c06edd5041e:17bd3a6e58",
+    "subject": "Company",
+    "predicate": "will_issue_refund",
+    "object": "treat the renewal as accidental and refund in full within 30 days",
+    "conditions": [
+      "you did not receive a reminder due to an invalid email address"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Predicate failure: Predicate 'will_issue_refund' is not present in versioned taxonomy registry.",
+    "claim_text": "If you did not receive a reminder due to an invalid email address, we will treat the renewal as accidental and refund in full within 30 days.",
+    "verbatim_source_quote": "If you did not receive a reminder due to an invalid email address, we will treat the renewal as accidental and refund in full within 30 days."
+  },
+  {
+    "order_index": 133,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:203:37ee51f31f54:51cd3f0e39",
+    "subject": "Trailhead Box subscribers",
+    "predicate": "pause",
+    "object": "for up to 3 months, once per year, from the account page",
+    "conditions": [],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Predicate failure: Predicate 'pause' is not present in versioned taxonomy registry.",
+    "claim_text": "Trailhead Box subscribers can pause for up to 3 months, once per year, from the account page.",
+    "verbatim_source_quote": "Trailhead Box subscribers can pause for up to 3 months, once per year, from the account page."
+  },
+  {
+    "order_index": 134,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:208:732a25bc5fcb:96eccf76e4",
+    "subject": "Video course",
+    "predicate": "has_refund_window",
+    "object": "Refunded within 7 days if under 20% viewed",
+    "conditions": [
+      "Under 20% viewed"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "Digital goods such as trail guides (PDF), camping-skills video courses, and map packs are non-refundable after download or streaming begins.",
+    "verbatim_source_quote": "Digital goods such as trail guides (PDF), camping-skills video courses, and map packs are non-refundable after download or streaming begins."
+  },
+  {
+    "order_index": 135,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:208:732a25bc5fcb:a2fc054303",
+    "subject": "Product",
+    "predicate": "has_refund_window",
+    "object": "Full refund within 14 days for corrupt or inaccessible files",
+    "conditions": [],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "If a file is corrupt or inaccessible, we will provide a working copy or a full refund within 14 days of purchase.",
+    "verbatim_source_quote": "If a file is corrupt or inaccessible, we will provide a working copy or a full refund within 14 days of purchase."
+  },
+  {
+    "order_index": 136,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:210:4eb670ed1aef:363b1b594f",
+    "subject": "Gift cards",
+    "predicate": "has_refund_eligibility",
+    "object": "13.2 Gift cards \u007f Gift cards are not refundable for cash, except where required by law (e.g. California, balances under $10).",
+    "conditions": [
+      "required by law (e"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "2 Gift cards \u007f  Gift cards are not refundable for cash, except where required by law (e.g. California, balances under $10).",
+    "verbatim_source_quote": "2 Gift cards \u007f  Gift cards are not refundable for cash, except where required by law (e.g. California, balances under $10)."
+  },
+  {
+    "order_index": 137,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:211:e094a9f8b622:f662113a7b",
+    "subject": "Gift cards",
+    "predicate": "has_expiration_and_fee_rule",
+    "object": "\u007f Gift cards never expire and carry no fees.",
+    "conditions": [],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "\u007f  Gift cards never expire and carry no fees.",
+    "verbatim_source_quote": "\u007f  Gift cards never expire and carry no fees."
+  },
+  {
+    "order_index": 138,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:212:d3c08807686a:0be3201a3b",
+    "subject": "Gift cards",
+    "predicate": "has_replacement_eligibility",
+    "object": "Replaced with original proof of purchase and remaining balance verifiable",
+    "conditions": [],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "\u007f  Lost or stolen gift cards can be replaced if the card number is provided, minus any used balance.",
+    "verbatim_source_quote": "\u007f  Lost or stolen gift cards can be replaced if the card number is provided, minus any used balance."
+  },
+  {
+    "order_index": 139,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:213:3f9910bb757a:179637c7b2",
+    "subject": "Gift cards",
+    "predicate": "can_cancel_before_shipment",
+    "object": "be cancelled once the code is delivered by email",
+    "conditions": [],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "\u007f  Gift card purchases cannot be cancelled once the code is delivered by email.",
+    "verbatim_source_quote": "\u007f  Gift card purchases cannot be cancelled once the code is delivered by email."
+  },
+  {
+    "order_index": 140,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:216:7a27f9e58d51:9679468007",
+    "subject": "Gift receipt",
+    "predicate": "has_refund_method",
+    "object": "return items with a gift receipt for store credit equal to the price paid, or exchange for another item",
+    "conditions": [],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "Gift recipients can return items with a gift receipt for store credit equal to the price paid, or exchange for another item.",
+    "verbatim_source_quote": "Gift recipients can return items with a gift receipt for store credit equal to the price paid, or exchange for another item."
+  },
+  {
+    "order_index": 141,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:216:7a27f9e58d51:66e2a3e745",
+    "subject": "Gift receipt",
+    "predicate": "has_refund_eligibility",
+    "object": "The purchaser is not notified of the return.",
+    "conditions": [],
+    "status": "REJECTED",
+    "lifecycle_state": "NON_RULE",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Claim type failure: Unrecognized claim type 'non_rule'.",
+    "claim_text": "The purchaser is not notified of the return.",
+    "verbatim_source_quote": "The purchaser is not notified of the return."
+  },
+  {
+    "order_index": 142,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:216:7a27f9e58d51:4a8b1de391",
+    "subject": "Gift receipt",
+    "predicate": "may_receive_store_credit",
+    "object": "Without a gift receipt, credit is issued at the lowest recent selling price.",
+    "conditions": [],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "Without a gift receipt, credit is issued at the lowest recent selling price.",
+    "verbatim_source_quote": "Without a gift receipt, credit is issued at the lowest recent selling price."
+  },
+  {
+    "order_index": 143,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:222:1f81b8ecc20e:c560f9f44e",
+    "subject": "Tents and shelters",
+    "predicate": "has_warranty_period",
+    "object": "2 years",
+    "conditions": [
+      "Table Column: Warranty period"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Tents and shelters | 2 years | Repair, replace or refund |",
+    "verbatim_source_quote": "| Tents and shelters | 2 years | Repair, replace or refund |"
+  },
+  {
+    "order_index": 144,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:222:1f81b8ecc20e:39344e8723",
+    "subject": "Tents and shelters",
+    "predicate": "has_warranty_remedy",
+    "object": "Repair, replace or refund",
+    "conditions": [
+      "Table Column: Remedy"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Tents and shelters | 2 years | Repair, replace or refund |",
+    "verbatim_source_quote": "| Tents and shelters | 2 years | Repair, replace or refund |"
+  },
+  {
+    "order_index": 145,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:223:60b870050112:e8b1ce62c3",
+    "subject": "Sleeping bags",
+    "predicate": "has_warranty_period",
+    "object": "Lifetime (manufacturing defects)",
+    "conditions": [
+      "Table Column: Warranty period"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Sleeping bags | Lifetime (manufacturing defects) | Repair or replace |",
+    "verbatim_source_quote": "| Sleeping bags | Lifetime (manufacturing defects) | Repair or replace |"
+  },
+  {
+    "order_index": 146,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:223:60b870050112:3fdd5328c2",
+    "subject": "Sleeping bags",
+    "predicate": "has_warranty_remedy",
+    "object": "Repair or replace",
+    "conditions": [
+      "Table Column: Remedy"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Sleeping bags | Lifetime (manufacturing defects) | Repair or replace |",
+    "verbatim_source_quote": "| Sleeping bags | Lifetime (manufacturing defects) | Repair or replace |"
+  },
+  {
+    "order_index": 147,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:224:fc40d7a29491:43a93c0770",
+    "subject": "Backpacks",
+    "predicate": "has_warranty_period",
+    "object": "5 years",
+    "conditions": [
+      "Table Column: Warranty period"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Backpacks | 5 years | Repair or replace |",
+    "verbatim_source_quote": "| Backpacks | 5 years | Repair or replace |"
+  },
+  {
+    "order_index": 148,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:224:fc40d7a29491:3ee95facce",
+    "subject": "Backpacks",
+    "predicate": "has_warranty_remedy",
+    "object": "Repair or replace",
+    "conditions": [
+      "Table Column: Remedy"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Backpacks | 5 years | Repair or replace |",
+    "verbatim_source_quote": "| Backpacks | 5 years | Repair or replace |"
+  },
+  {
+    "order_index": 149,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:225:b52b6fea5a40:882711a7f0",
+    "subject": "Footwear",
+    "predicate": "has_warranty_period",
+    "object": "1 year",
+    "conditions": [
+      "Table Column: Warranty period"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Footwear | 1 year | Replace or refund |",
+    "verbatim_source_quote": "| Footwear | 1 year | Replace or refund |"
+  },
+  {
+    "order_index": 150,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:225:b52b6fea5a40:2857aaa0b7",
+    "subject": "Footwear",
+    "predicate": "has_warranty_remedy",
+    "object": "Replace or refund",
+    "conditions": [
+      "Table Column: Remedy"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Footwear | 1 year | Replace or refund |",
+    "verbatim_source_quote": "| Footwear | 1 year | Replace or refund |"
+  },
+  {
+    "order_index": 151,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:226:c0fb9f1a1625:85e24f0e0d",
+    "subject": "Apparel",
+    "predicate": "has_warranty_period",
+    "object": "1 year",
+    "conditions": [
+      "Table Column: Warranty period"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Apparel | 1 year | Replace or refund |",
+    "verbatim_source_quote": "| Apparel | 1 year | Replace or refund |"
+  },
+  {
+    "order_index": 152,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:226:c0fb9f1a1625:10a03e07fe",
+    "subject": "Apparel",
+    "predicate": "has_warranty_remedy",
+    "object": "Replace or refund",
+    "conditions": [
+      "Table Column: Remedy"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Apparel | 1 year | Replace or refund |",
+    "verbatim_source_quote": "| Apparel | 1 year | Replace or refund |"
+  },
+  {
+    "order_index": 153,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:227:fc1b64d5def8:414f848b09",
+    "subject": "Electronics (headlamps, GPS)",
+    "predicate": "has_warranty_period",
+    "object": "1 year",
+    "conditions": [
+      "Table Column: Warranty period"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Electronics (headlamps, GPS) | 1 year | Repair or replace |",
+    "verbatim_source_quote": "| Electronics (headlamps, GPS) | 1 year | Repair or replace |"
+  },
+  {
+    "order_index": 154,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:227:fc1b64d5def8:04a9cedb8e",
+    "subject": "Electronics (headlamps, GPS)",
+    "predicate": "has_warranty_remedy",
+    "object": "Repair or replace",
+    "conditions": [
+      "Table Column: Remedy"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Electronics (headlamps, GPS) | 1 year | Repair or replace |",
+    "verbatim_source_quote": "| Electronics (headlamps, GPS) | 1 year | Repair or replace |"
+  },
+  {
+    "order_index": 155,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:228:30da9a6caa12:05f2366a49",
+    "subject": "Stoves and cookware",
+    "predicate": "has_warranty_period",
+    "object": "2 years",
+    "conditions": [
+      "Table Column: Warranty period"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Stoves and cookware | 2 years | Repair or replace |",
+    "verbatim_source_quote": "| Stoves and cookware | 2 years | Repair or replace |"
+  },
+  {
+    "order_index": 156,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:228:30da9a6caa12:b941112a0d",
+    "subject": "Stoves and cookware",
+    "predicate": "has_warranty_remedy",
+    "object": "Repair or replace",
+    "conditions": [
+      "Table Column: Remedy"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Stoves and cookware | 2 years | Repair or replace |",
+    "verbatim_source_quote": "| Stoves and cookware | 2 years | Repair or replace |"
+  },
+  {
+    "order_index": 157,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:229:34d8115dd3a4:223dbf3977",
+    "subject": "Water filters",
+    "predicate": "has_warranty_period",
+    "object": "1 year",
+    "conditions": [
+      "Table Column: Warranty period"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Water filters | 1 year | Replace |",
+    "verbatim_source_quote": "| Water filters | 1 year | Replace |"
+  },
+  {
+    "order_index": 158,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:229:34d8115dd3a4:9612e4ae42",
+    "subject": "Water filters",
+    "predicate": "has_warranty_remedy",
+    "object": "Replace",
+    "conditions": [
+      "Table Column: Remedy"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Water filters | 1 year | Replace |",
+    "verbatim_source_quote": "| Water filters | 1 year | Replace |"
+  },
+  {
+    "order_index": 159,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:235:b6ca0f38e9e1:47af89e674",
+    "subject": "Marketplace sellers",
+    "predicate": "has_refund_eligibility",
+    "object": "Items shipped directly by third-party sellers follow the seller's policy, but Northwind's A-to-Z Guarantee ensures a refund if the seller fails to respond within 5 business days.",
+    "conditions": [
+      "the seller fails to respond within 5 business days"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "NON_RULE",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Claim type failure: Unrecognized claim type 'non_rule'.",
+    "claim_text": "Items shipped directly by third-party sellers follow the seller's policy, but Northwind's A-to-Z Guarantee ensures a refund if the seller fails to respond within 5 business days.",
+    "verbatim_source_quote": "Items shipped directly by third-party sellers follow the seller's policy, but Northwind's A-to-Z Guarantee ensures a refund if the seller fails to respond within 5 business days."
+  },
+  {
+    "order_index": 160,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:239:05fa37f43fdb:7d0e7dabc6",
+    "subject": "United States",
+    "predicate": "has_return_window",
+    "object": "30 days",
+    "conditions": [
+      "Table Column: Return window"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| United States | 30 days | See Section 9 | Included |",
+    "verbatim_source_quote": "| United States | 30 days | See Section 9 | Included |"
+  },
+  {
+    "order_index": 161,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:239:05fa37f43fdb:0d5ff64ad3",
+    "subject": "United States",
+    "predicate": "has_internal_policy_reference",
+    "object": "See Section 9",
+    "conditions": [
+      "Table Column: Return shipping"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| United States | 30 days | See Section 9 | Included |",
+    "verbatim_source_quote": "| United States | 30 days | See Section 9 | Included |"
+  },
+  {
+    "order_index": 162,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:239:05fa37f43fdb:541e99b9f1",
+    "subject": "United States",
+    "predicate": "has_duties_and_taxes_rule",
+    "object": "Included",
+    "conditions": [
+      "Table Column: Duties and taxes"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| United States | 30 days | See Section 9 | Included |",
+    "verbatim_source_quote": "| United States | 30 days | See Section 9 | Included |"
+  },
+  {
+    "order_index": 163,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:240:65da565fb6ca:3c1992e94a",
+    "subject": "Canada",
+    "predicate": "has_return_window",
+    "object": "30 days",
+    "conditions": [
+      "Table Column: Return window"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Canada | 30 days | Customer pays unless defective | Duties refunded on approved returns |",
+    "verbatim_source_quote": "| Canada | 30 days | Customer pays unless defective | Duties refunded on approved returns |"
+  },
+  {
+    "order_index": 164,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:240:65da565fb6ca:9b61ef4afb",
+    "subject": "Canada",
+    "predicate": "has_return_shipping_rule",
+    "object": "Customer pays unless defective",
+    "conditions": [
+      "Table Column: Return shipping"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Canada | 30 days | Customer pays unless defective | Duties refunded on approved returns |",
+    "verbatim_source_quote": "| Canada | 30 days | Customer pays unless defective | Duties refunded on approved returns |"
+  },
+  {
+    "order_index": 165,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:240:65da565fb6ca:5d2d418874",
+    "subject": "Canada",
+    "predicate": "has_duties_and_taxes_rule",
+    "object": "Duties refunded on approved returns",
+    "conditions": [
+      "Table Column: Duties and taxes"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Canada | 30 days | Customer pays unless defective | Duties refunded on approved returns |",
+    "verbatim_source_quote": "| Canada | 30 days | Customer pays unless defective | Duties refunded on approved returns |"
+  },
+  {
+    "order_index": 166,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:241:8380806252cf:7784bfc39f",
+    "subject": "UK",
+    "predicate": "has_return_window",
+    "object": "30 days (14-day statutory minimum)",
+    "conditions": [
+      "Table Column: Return window"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| UK | 30 days (14-day statutory minimum) | Customer pays unless defective | VAT refunded, duty via customs claim |",
+    "verbatim_source_quote": "| UK | 30 days (14-day statutory minimum) | Customer pays unless defective | VAT refunded, duty via customs claim |"
+  },
+  {
+    "order_index": 167,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:241:8380806252cf:62c6fad193",
+    "subject": "UK",
+    "predicate": "has_return_shipping_rule",
+    "object": "Customer pays unless defective",
+    "conditions": [
+      "Table Column: Return shipping"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| UK | 30 days (14-day statutory minimum) | Customer pays unless defective | VAT refunded, duty via customs claim |",
+    "verbatim_source_quote": "| UK | 30 days (14-day statutory minimum) | Customer pays unless defective | VAT refunded, duty via customs claim |"
+  },
+  {
+    "order_index": 168,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:241:8380806252cf:322b7fb682",
+    "subject": "UK",
+    "predicate": "has_duties_and_taxes_rule",
+    "object": "VAT refunded, duty via customs claim",
+    "conditions": [
+      "Table Column: Duties and taxes"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| UK | 30 days (14-day statutory minimum) | Customer pays unless defective | VAT refunded, duty via customs claim |",
+    "verbatim_source_quote": "| UK | 30 days (14-day statutory minimum) | Customer pays unless defective | VAT refunded, duty via customs claim |"
+  },
+  {
+    "order_index": 169,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:242:a6f2e6adc31c:d666b8abb7",
+    "subject": "EU",
+    "predicate": "has_return_window",
+    "object": "30 days (14-day statutory minimum)",
+    "conditions": [
+      "Table Column: Return window"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| EU | 30 days (14-day statutory minimum) | Customer pays unless defective | VAT refunded |",
+    "verbatim_source_quote": "| EU | 30 days (14-day statutory minimum) | Customer pays unless defective | VAT refunded |"
+  },
+  {
+    "order_index": 170,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:242:a6f2e6adc31c:9d278efebb",
+    "subject": "EU",
+    "predicate": "has_return_shipping_rule",
+    "object": "Customer pays unless defective",
+    "conditions": [
+      "Table Column: Return shipping"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| EU | 30 days (14-day statutory minimum) | Customer pays unless defective | VAT refunded |",
+    "verbatim_source_quote": "| EU | 30 days (14-day statutory minimum) | Customer pays unless defective | VAT refunded |"
+  },
+  {
+    "order_index": 171,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:242:a6f2e6adc31c:5cf8f813be",
+    "subject": "EU",
+    "predicate": "has_duties_and_taxes_rule",
+    "object": "VAT refunded",
+    "conditions": [
+      "Table Column: Duties and taxes"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| EU | 30 days (14-day statutory minimum) | Customer pays unless defective | VAT refunded |",
+    "verbatim_source_quote": "| EU | 30 days (14-day statutory minimum) | Customer pays unless defective | VAT refunded |"
+  },
+  {
+    "order_index": 172,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:243:85585df488c7:7f87e9d147",
+    "subject": "Australia",
+    "predicate": "has_return_window",
+    "object": "30 days",
+    "conditions": [
+      "Table Column: Return window"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Australia | 30 days | Customer pays unless defective | GST refunded |",
+    "verbatim_source_quote": "| Australia | 30 days | Customer pays unless defective | GST refunded |"
+  },
+  {
+    "order_index": 173,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:243:85585df488c7:e9b410746c",
+    "subject": "Australia",
+    "predicate": "has_return_shipping_rule",
+    "object": "Customer pays unless defective",
+    "conditions": [
+      "Table Column: Return shipping"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Australia | 30 days | Customer pays unless defective | GST refunded |",
+    "verbatim_source_quote": "| Australia | 30 days | Customer pays unless defective | GST refunded |"
+  },
+  {
+    "order_index": 174,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:243:85585df488c7:25ce36c9ad",
+    "subject": "Australia",
+    "predicate": "has_duties_and_taxes_rule",
+    "object": "GST refunded",
+    "conditions": [
+      "Table Column: Duties and taxes"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Australia | 30 days | Customer pays unless defective | GST refunded |",
+    "verbatim_source_quote": "| Australia | 30 days | Customer pays unless defective | GST refunded |"
+  },
+  {
+    "order_index": 175,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:244:01d8d3c3ef41:a0c3212968",
+    "subject": "Rest of world",
+    "predicate": "has_return_window",
+    "object": "14 days",
+    "conditions": [
+      "Table Column: Return window"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Rest of world | 14 days | Customer pays | Not refundable |",
+    "verbatim_source_quote": "| Rest of world | 14 days | Customer pays | Not refundable |"
+  },
+  {
+    "order_index": 176,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:244:01d8d3c3ef41:6451418b60",
+    "subject": "Rest of world",
+    "predicate": "has_return_shipping_rule",
+    "object": "Customer pays",
+    "conditions": [
+      "Table Column: Return shipping"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Rest of world | 14 days | Customer pays | Not refundable |",
+    "verbatim_source_quote": "| Rest of world | 14 days | Customer pays | Not refundable |"
+  },
+  {
+    "order_index": 177,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:244:01d8d3c3ef41:affc4377f5",
+    "subject": "Rest of world",
+    "predicate": "has_duties_and_taxes_rule",
+    "object": "Not refundable",
+    "conditions": [
+      "Table Column: Duties and taxes"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Rest of world | 14 days | Customer pays | Not refundable |",
+    "verbatim_source_quote": "| Rest of world | 14 days | Customer pays | Not refundable |"
+  },
+  {
+    "order_index": 178,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:246:e7823c09f89f:a0966355ef",
+    "subject": "International refund",
+    "predicate": "has_refund_eligibility",
+    "object": "Refunds are issued in the currency of the original charge.",
+    "conditions": [],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "Refunds are issued in the currency of the original charge.",
+    "verbatim_source_quote": "Refunds are issued in the currency of the original charge."
+  },
+  {
+    "order_index": 179,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:246:e7823c09f89f:23503e325d",
+    "subject": "International refund",
+    "predicate": "has_currency_conversion_rule",
+    "object": "Refund currency follows original charge; exchange differences are not compensated",
+    "conditions": [],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "Exchange rate differences between the purchase and refund date are not compensated; the bank's rate on the refund date applies.",
+    "verbatim_source_quote": "Exchange rate differences between the purchase and refund date are not compensated; the bank's rate on the refund date applies."
+  },
+  {
+    "order_index": 180,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:248:8ce08a2be4ff:20254f798d",
+    "subject": "Customer",
+    "predicate": "are_responsible_for",
+    "object": "filing customs duty drawback claims where available",
+    "conditions": [
+      "available"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "NON_RULE",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Predicate failure: Predicate 'are_responsible_for' is not present in versioned taxonomy registry.; Claim type failure: Unrecognized claim type 'non_rule'.",
+    "claim_text": "Customers are responsible for filing customs duty drawback claims where available.",
+    "verbatim_source_quote": "Customers are responsible for filing customs duty drawback claims where available."
+  },
+  {
+    "order_index": 181,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:248:8ce08a2be4ff:319970724d",
+    "subject": "Northwind",
+    "predicate": "provides_documentation_upon_request",
+    "object": "commercial invoice and proof of return",
+    "conditions": [
+      "request",
+      "upon customer request"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "Northwind will provide a commercial invoice and proof of return upon request.",
+    "verbatim_source_quote": "Northwind will provide a commercial invoice and proof of return upon request."
+  },
+  {
+    "order_index": 182,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:248:8ce08a2be4ff:c8180db167",
+    "subject": "Customs and duties",
+    "predicate": "has_refund_eligibility",
+    "object": "Refused deliveries at customs are refunded minus outbound and return shipping.",
+    "conditions": [],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "Refused deliveries at customs are refunded minus outbound and return shipping.",
+    "verbatim_source_quote": "Refused deliveries at customs are refunded minus outbound and return shipping."
+  },
+  {
+    "order_index": 183,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:254:59760d086c44:79f0bc3ce8",
+    "subject": "Northwind",
+    "predicate": "has_evidence_submission_deadline",
+    "object": "Submits dispute evidence within 7 days",
+    "conditions": [],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "\u007f  We submit evidence (order record, delivery confirmation, communications) within 7 days.",
+    "verbatim_source_quote": "\u007f  We submit evidence (order record, delivery confirmation, communications) within 7 days."
+  },
+  {
+    "order_index": 184,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:255:907404336f13:6571552cd0",
+    "subject": "Card issuer",
+    "predicate": "has_dispute_decision_timeline",
+    "object": "Decides dispute outcome within 30\u201390 days",
+    "conditions": [],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "\u007f  The issuer decides within 30-90 days.",
+    "verbatim_source_quote": "\u007f  The issuer decides within 30-90 days."
+  },
+  {
+    "order_index": 185,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:256:37b2fd6fe641:abe164b5ab",
+    "subject": "Dispute loss",
+    "predicate": "has_funds_debit_outcome",
+    "object": "Transaction funds are debited from Northwind account",
+    "conditions": [],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "\u007f  If the dispute is lost, funds are debited; a $15 administration fee may apply for fraudulent claims.",
+    "verbatim_source_quote": "\u007f  If the dispute is lost, funds are debited; a $15 administration fee may apply for fraudulent claims."
+  },
+  {
+    "order_index": 186,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:256:37b2fd6fe641:aa3ab307fb",
+    "subject": "Fraudulent dispute",
+    "predicate": "may_apply_administration_fee",
+    "object": "$15 administration fee may apply for fraudulent claims",
+    "conditions": [
+      "For fraudulent claims"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "\u007f  If the dispute is lost, funds are debited; a $15 administration fee may apply for fraudulent claims.",
+    "verbatim_source_quote": "\u007f  If the dispute is lost, funds are debited; a $15 administration fee may apply for fraudulent claims."
+  },
+  {
+    "order_index": 187,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:260:031e504b4242:36b517ce5f",
+    "subject": "4853",
+    "predicate": "has_definition",
+    "object": "Cardholder dispute / not as described",
+    "conditions": [
+      "Table Column: Meaning"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| 4853 | Cardholder dispute / not as described | Refund or evidence submission |",
+    "verbatim_source_quote": "| 4853 | Cardholder dispute / not as described | Refund or evidence submission |"
+  },
+  {
+    "order_index": 188,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:260:031e504b4242:626561c240",
+    "subject": "4853",
+    "predicate": "has_typical_resolution",
+    "object": "Refund or evidence submission",
+    "conditions": [
+      "Table Column: Typical resolution"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Predicate failure: Predicate 'has_typical_resolution' is not present in versioned taxonomy registry.",
+    "claim_text": "| 4853 | Cardholder dispute / not as described | Refund or evidence submission |",
+    "verbatim_source_quote": "| 4853 | Cardholder dispute / not as described | Refund or evidence submission |"
+  },
+  {
+    "order_index": 189,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:261:7e91fae61902:83a0c57db6",
+    "subject": "4837",
+    "predicate": "has_definition",
+    "object": "No cardholder authorisation (fraud)",
+    "conditions": [
+      "Table Column: Meaning"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| 4837 | No cardholder authorisation (fraud) | Fraud investigation |",
+    "verbatim_source_quote": "| 4837 | No cardholder authorisation (fraud) | Fraud investigation |"
+  },
+  {
+    "order_index": 190,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:261:7e91fae61902:64f495fd50",
+    "subject": "4837",
+    "predicate": "has_typical_resolution",
+    "object": "Fraud investigation",
+    "conditions": [
+      "Table Column: Typical resolution"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Predicate failure: Predicate 'has_typical_resolution' is not present in versioned taxonomy registry.",
+    "claim_text": "| 4837 | No cardholder authorisation (fraud) | Fraud investigation |",
+    "verbatim_source_quote": "| 4837 | No cardholder authorisation (fraud) | Fraud investigation |"
+  },
+  {
+    "order_index": 191,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:262:43192f38fc52:4c43b99bff",
+    "subject": "4855",
+    "predicate": "has_definition",
+    "object": "Goods or services not provided",
+    "conditions": [
+      "Table Column: Meaning"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| 4855 | Goods or services not provided | Provide tracking proof or refund |",
+    "verbatim_source_quote": "| 4855 | Goods or services not provided | Provide tracking proof or refund |"
+  },
+  {
+    "order_index": 192,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:262:43192f38fc52:68b122a7f9",
+    "subject": "4855",
+    "predicate": "has_typical_resolution",
+    "object": "Provide tracking proof or refund",
+    "conditions": [
+      "Table Column: Typical resolution"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Predicate failure: Predicate 'has_typical_resolution' is not present in versioned taxonomy registry.",
+    "claim_text": "| 4855 | Goods or services not provided | Provide tracking proof or refund |",
+    "verbatim_source_quote": "| 4855 | Goods or services not provided | Provide tracking proof or refund |"
+  },
+  {
+    "order_index": 193,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:263:910a7b1bf66b:51f1aa5b58",
+    "subject": "4834",
+    "predicate": "has_definition",
+    "object": "Duplicate processing",
+    "conditions": [
+      "Table Column: Meaning"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| 4834 | Duplicate processing | Verify and refund duplicate |",
+    "verbatim_source_quote": "| 4834 | Duplicate processing | Verify and refund duplicate |"
+  },
+  {
+    "order_index": 194,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:263:910a7b1bf66b:da02f4c77f",
+    "subject": "4834",
+    "predicate": "has_typical_resolution",
+    "object": "Verify and refund duplicate",
+    "conditions": [
+      "Table Column: Typical resolution"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Predicate failure: Predicate 'has_typical_resolution' is not present in versioned taxonomy registry.",
+    "claim_text": "| 4834 | Duplicate processing | Verify and refund duplicate |",
+    "verbatim_source_quote": "| 4834 | Duplicate processing | Verify and refund duplicate |"
+  },
+  {
+    "order_index": 195,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:264:14ac8a795437:57badaca06",
+    "subject": "4841",
+    "predicate": "has_definition",
+    "object": "Cancelled recurring transaction",
+    "conditions": [
+      "Table Column: Meaning"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| 4841 | Cancelled recurring transaction | Check cancellation record |",
+    "verbatim_source_quote": "| 4841 | Cancelled recurring transaction | Check cancellation record |"
+  },
+  {
+    "order_index": 196,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:264:14ac8a795437:07a52e4510",
+    "subject": "4841",
+    "predicate": "has_typical_resolution",
+    "object": "Check cancellation record",
+    "conditions": [
+      "Table Column: Typical resolution"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Predicate failure: Predicate 'has_typical_resolution' is not present in versioned taxonomy registry.",
+    "claim_text": "| 4841 | Cancelled recurring transaction | Check cancellation record |",
+    "verbatim_source_quote": "| 4841 | Cancelled recurring transaction | Check cancellation record |"
+  },
+  {
+    "order_index": 197,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:275:e8e83126127d:2b4ef44132",
+    "subject": "Notice",
+    "predicate": "has_trigger",
+    "object": "Return rate 30-40%",
+    "conditions": [
+      "Table Column: Trigger"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Predicate failure: Predicate 'has_trigger' is not present in versioned taxonomy registry.",
+    "claim_text": "| Notice | Return rate 30-40% | Email reminder of policy |",
+    "verbatim_source_quote": "| Notice | Return rate 30-40% | Email reminder of policy |"
+  },
+  {
+    "order_index": 198,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:275:e8e83126127d:b4ffefbd0e",
+    "subject": "Notice",
+    "predicate": "has_action",
+    "object": "Email reminder of policy",
+    "conditions": [
+      "Table Column: Action"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Predicate failure: Predicate 'has_action' is not present in versioned taxonomy registry.",
+    "claim_text": "| Notice | Return rate 30-40% | Email reminder of policy |",
+    "verbatim_source_quote": "| Notice | Return rate 30-40% | Email reminder of policy |"
+  },
+  {
+    "order_index": 199,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:276:300b27b931e6:601f890c2d",
+    "subject": "Restricted",
+    "predicate": "has_trigger",
+    "object": "Return rate over 40% or one confirmed abuse case",
+    "conditions": [
+      "Table Column: Trigger"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Predicate failure: Predicate 'has_trigger' is not present in versioned taxonomy registry.",
+    "claim_text": "| Restricted | Return rate over 40% or one confirmed abuse case | Store credit only; returns need manager approval |",
+    "verbatim_source_quote": "| Restricted | Return rate over 40% or one confirmed abuse case | Store credit only; returns need manager approval |"
+  },
+  {
+    "order_index": 200,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:276:300b27b931e6:fba5331923",
+    "subject": "Restricted",
+    "predicate": "has_action",
+    "object": "Store credit only; returns need manager approval",
+    "conditions": [
+      "Table Column: Action"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Predicate failure: Predicate 'has_action' is not present in versioned taxonomy registry.",
+    "claim_text": "| Restricted | Return rate over 40% or one confirmed abuse case | Store credit only; returns need manager approval |",
+    "verbatim_source_quote": "| Restricted | Return rate over 40% or one confirmed abuse case | Store credit only; returns need manager approval |"
+  },
+  {
+    "order_index": 201,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:277:379d3b38bbe4:e4dd5d3982",
+    "subject": "Suspended",
+    "predicate": "has_trigger",
+    "object": "Multiple confirmed abuse cases",
+    "conditions": [
+      "Table Column: Trigger"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Predicate failure: Predicate 'has_trigger' is not present in versioned taxonomy registry.",
+    "claim_text": "| Suspended | Multiple confirmed abuse cases | Account suspended for 12 months |",
+    "verbatim_source_quote": "| Suspended | Multiple confirmed abuse cases | Account suspended for 12 months |"
+  },
+  {
+    "order_index": 202,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:277:379d3b38bbe4:5681e475bf",
+    "subject": "Suspended",
+    "predicate": "has_action",
+    "object": "Account suspended for 12 months",
+    "conditions": [
+      "Table Column: Action"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Predicate failure: Predicate 'has_action' is not present in versioned taxonomy registry.",
+    "claim_text": "| Suspended | Multiple confirmed abuse cases | Account suspended for 12 months |",
+    "verbatim_source_quote": "| Suspended | Multiple confirmed abuse cases | Account suspended for 12 months |"
+  },
+  {
+    "order_index": 203,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:278:c4bbb4251ffb:b1670c802a",
+    "subject": "Permanent",
+    "predicate": "has_trigger",
+    "object": "Fraud or counterfeit return",
+    "conditions": [
+      "Table Column: Trigger"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Predicate failure: Predicate 'has_trigger' is not present in versioned taxonomy registry.",
+    "claim_text": "| Permanent | Fraud or counterfeit return | Account closed; referral to law enforcement where appropriate |",
+    "verbatim_source_quote": "| Permanent | Fraud or counterfeit return | Account closed; referral to law enforcement where appropriate |"
+  },
+  {
+    "order_index": 204,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:278:c4bbb4251ffb:f400ffc687",
+    "subject": "Permanent",
+    "predicate": "has_action",
+    "object": "Account closed; referral to law enforcement where appropriate",
+    "conditions": [
+      "Table Column: Action"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Predicate failure: Predicate 'has_action' is not present in versioned taxonomy registry.",
+    "claim_text": "| Permanent | Fraud or counterfeit return | Account closed; referral to law enforcement where appropriate |",
+    "verbatim_source_quote": "| Permanent | Fraud or counterfeit return | Account closed; referral to law enforcement where appropriate |"
+  },
+  {
+    "order_index": 205,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:280:e3b2be1d1aa5:78caf66a46",
+    "subject": "Customer",
+    "predicate": "appeal",
+    "object": "restrictions in writing to appeals@northwind-demo.example within 30 days",
+    "conditions": [],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Predicate failure: Predicate 'appeal' is not present in versioned taxonomy registry.",
+    "claim_text": "Customers may appeal restrictions in writing to appeals@northwind-demo.example within 30 days.",
+    "verbatim_source_quote": "Customers may appeal restrictions in writing to appeals@northwind-demo.example within 30 days."
+  },
+  {
+    "order_index": 206,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:283:e24d2a3aa07f:4a793c501f",
+    "subject": "Privacy",
+    "predicate": "has_refund_eligibility",
+    "object": "Return history is stored per our Privacy Policy, retained for 7 years for audit purposes, and never sold to third parties.",
+    "conditions": [],
+    "status": "REJECTED",
+    "lifecycle_state": "NON_RULE",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Claim type failure: Unrecognized claim type 'non_rule'.",
+    "claim_text": "Return history is stored per our Privacy Policy, retained for 7 years for audit purposes, and never sold to third parties.",
+    "verbatim_source_quote": "Return history is stored per our Privacy Policy, retained for 7 years for audit purposes, and never sold to third parties."
+  },
+  {
+    "order_index": 207,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:287:cf7ca3026c81:fd716fd1a9",
+    "subject": "Standard returns",
+    "predicate": "has_return_window",
+    "object": "requested within 30 days",
+    "conditions": [],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "Standard returns must be requested within 30 days.",
+    "verbatim_source_quote": "Standard returns must be requested within 30 days."
+  },
+  {
+    "order_index": 208,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:287:cf7ca3026c81:70b42a408c",
+    "subject": "Unused item returned after standard return window",
+    "predicate": "may_receive_store_credit",
+    "object": "offer store credit at a manager's discretion for unused items within 90 days",
+    "conditions": [],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "After that we may offer store credit at a manager's discretion for unused items within 90 days.",
+    "verbatim_source_quote": "After that we may offer store credit at a manager's discretion for unused items within 90 days."
+  },
+  {
+    "order_index": 209,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:295:e368b91d2ac4:27e836a24f",
+    "subject": "Items bought in-store",
+    "predicate": "has_return_channel_eligibility",
+    "object": "be returned in any store or by mail using the RMA process with your receipt or loyalty account lookup",
+    "conditions": [],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "Items bought in-store can be returned in any store or by mail using the RMA process with your receipt or loyalty account lookup.",
+    "verbatim_source_quote": "Items bought in-store can be returned in any store or by mail using the RMA process with your receipt or loyalty account lookup."
+  },
+  {
+    "order_index": 210,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:300:2fc3a3c486dc:7f502aab54",
+    "subject": "Stolen package",
+    "predicate": "has_courtesy_replacement_rule",
+    "object": "One courtesy replacement per customer per year for packages under $200",
+    "conditions": [],
+    "status": "REJECTED",
+    "lifecycle_state": "NON_RULE",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Claim type failure: Unrecognized claim type 'non_rule'.",
+    "claim_text": "We offer one courtesy replacement per customer per year for packages under $200.",
+    "verbatim_source_quote": "We offer one courtesy replacement per customer per year for packages under $200."
+  },
+  {
+    "order_index": 211,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:308:749c73a65263:9a0632bf49",
+    "subject": "Phone (US/Canada)",
+    "predicate": "has_contact_phone",
+    "object": "1-800-555-0142",
+    "conditions": [
+      "Table Column: Details"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Phone (US/Canada) | 1-800-555-0142 | Mon-Fri 8am-8pm; Sat 9am-5pm |",
+    "verbatim_source_quote": "| Phone (US/Canada) | 1-800-555-0142 | Mon-Fri 8am-8pm; Sat 9am-5pm |"
+  },
+  {
+    "order_index": 212,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:308:749c73a65263:5b0c2c9b48",
+    "subject": "Phone (US/Canada)",
+    "predicate": "has_contact_hours",
+    "object": "Mon-Fri 8am-8pm; Sat 9am-5pm",
+    "conditions": [
+      "Table Column: Hours (Pacific Time)"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Phone (US/Canada) | 1-800-555-0142 | Mon-Fri 8am-8pm; Sat 9am-5pm |",
+    "verbatim_source_quote": "| Phone (US/Canada) | 1-800-555-0142 | Mon-Fri 8am-8pm; Sat 9am-5pm |"
+  },
+  {
+    "order_index": 213,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:309:289269e55340:d4120aa316",
+    "subject": "Phone (UK)",
+    "predicate": "has_contact_phone",
+    "object": "+44 20 7946 0142",
+    "conditions": [
+      "Table Column: Details"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Phone (UK) | +44 20 7946 0142 | Mon-Fri 9am-5pm GMT |",
+    "verbatim_source_quote": "| Phone (UK) | +44 20 7946 0142 | Mon-Fri 9am-5pm GMT |"
+  },
+  {
+    "order_index": 214,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:309:289269e55340:0f90f824fe",
+    "subject": "Phone (UK)",
+    "predicate": "has_contact_hours",
+    "object": "Mon-Fri 9am-5pm GMT",
+    "conditions": [
+      "Table Column: Hours (Pacific Time)"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Phone (UK) | +44 20 7946 0142 | Mon-Fri 9am-5pm GMT |",
+    "verbatim_source_quote": "| Phone (UK) | +44 20 7946 0142 | Mon-Fri 9am-5pm GMT |"
+  },
+  {
+    "order_index": 215,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:310:de9e8167ae62:0298a8d032",
+    "subject": "Email",
+    "predicate": "has_contact_email",
+    "object": "support@northwind-demo.example",
+    "conditions": [
+      "Table Column: Details"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Email | support@northwind-demo.example | Response within 24 hours |",
+    "verbatim_source_quote": "| Email | support@northwind-demo.example | Response within 24 hours |"
+  },
+  {
+    "order_index": 216,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:310:de9e8167ae62:8f3e24c8dc",
+    "subject": "Email",
+    "predicate": "has_contact_hours",
+    "object": "Response within 24 hours",
+    "conditions": [
+      "Table Column: Hours (Pacific Time)"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Email | support@northwind-demo.example | Response within 24 hours |",
+    "verbatim_source_quote": "| Email | support@northwind-demo.example | Response within 24 hours |"
+  },
+  {
+    "order_index": 217,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:311:8907b8a5a35d:04c338a28d",
+    "subject": "Live chat",
+    "predicate": "has_contact_channel",
+    "object": "northwind-demo.example/chat",
+    "conditions": [
+      "Table Column: Details"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Live chat | northwind-demo.example/chat | Daily 7am-10pm |",
+    "verbatim_source_quote": "| Live chat | northwind-demo.example/chat | Daily 7am-10pm |"
+  },
+  {
+    "order_index": 218,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:311:8907b8a5a35d:af4ecb28d9",
+    "subject": "Live chat",
+    "predicate": "has_contact_hours",
+    "object": "Daily 7am-10pm",
+    "conditions": [
+      "Table Column: Hours (Pacific Time)"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Live chat | northwind-demo.example/chat | Daily 7am-10pm |",
+    "verbatim_source_quote": "| Live chat | northwind-demo.example/chat | Daily 7am-10pm |"
+  },
+  {
+    "order_index": 219,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:312:45ae48c845f5:a79f3ee657",
+    "subject": "Refund status line",
+    "predicate": "has_contact_phone",
+    "object": "1-800-555-0177",
+    "conditions": [
+      "Table Column: Details"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Refund status line | 1-800-555-0177 | 24/7 automated |",
+    "verbatim_source_quote": "| Refund status line | 1-800-555-0177 | 24/7 automated |"
+  },
+  {
+    "order_index": 220,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:312:45ae48c845f5:42f7493afb",
+    "subject": "Refund status line",
+    "predicate": "has_contact_hours",
+    "object": "24/7 automated",
+    "conditions": [
+      "Table Column: Hours (Pacific Time)"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Refund status line | 1-800-555-0177 | 24/7 automated |",
+    "verbatim_source_quote": "| Refund status line | 1-800-555-0177 | 24/7 automated |"
+  },
+  {
+    "order_index": 221,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:313:3c5725e9872e:d393f913f1",
+    "subject": "Mail",
+    "predicate": "has_resolution_option_details",
+    "object": "Returns Dept., 200 Cascade Way, Portland, OR 97201, USA",
+    "conditions": [
+      "Table Column: Details"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "NON_RULE",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Text integrity failure: Claim text contains unstripped postal address artifact.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Claim type failure: Unrecognized claim type 'non_rule'.",
+    "claim_text": "| Mail | Returns Dept., 200 Cascade Way, Portland, OR 97201, USA | N/A |",
+    "verbatim_source_quote": "| Mail | Returns Dept., 200 Cascade Way, Portland, OR 97201, USA | N/A |"
+  },
+  {
+    "order_index": 222,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:313:3c5725e9872e:f121853a88",
+    "subject": "Mail",
+    "predicate": "has_contact_hours",
+    "object": "N/A",
+    "conditions": [
+      "Table Column: Hours (Pacific Time)"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "NON_RULE",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Text integrity failure: Claim text contains unstripped postal address artifact.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Claim type failure: Unrecognized claim type 'non_rule'.",
+    "claim_text": "| Mail | Returns Dept., 200 Cascade Way, Portland, OR 97201, USA | N/A |",
+    "verbatim_source_quote": "| Mail | Returns Dept., 200 Cascade Way, Portland, OR 97201, USA | N/A |"
+  },
+  {
+    "order_index": 223,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:314:9eab8b9823a7:b784e9749f",
+    "subject": "Escalations",
+    "predicate": "has_contact_email",
+    "object": "escalations@northwind-demo.example",
+    "conditions": [
+      "Table Column: Details"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Escalations | escalations@northwind-demo.example | Response within 2 business days |",
+    "verbatim_source_quote": "| Escalations | escalations@northwind-demo.example | Response within 2 business days |"
+  },
+  {
+    "order_index": 224,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:314:9eab8b9823a7:065c699f39",
+    "subject": "Escalations",
+    "predicate": "has_contact_hours",
+    "object": "Response within 2 business days",
+    "conditions": [
+      "Table Column: Hours (Pacific Time)"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+    "claim_text": "| Escalations | escalations@northwind-demo.example | Response within 2 business days |",
+    "verbatim_source_quote": "| Escalations | escalations@northwind-demo.example | Response within 2 business days |"
+  },
+  {
+    "order_index": 225,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:320:367813884b24:f587d3a3c3",
+    "subject": "First response by email",
+    "predicate": "has_target",
+    "object": "24 hours",
+    "conditions": [
+      "Table Column: Target"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Predicate failure: Predicate 'has_target' is not present in versioned taxonomy registry.",
+    "claim_text": "| First response by email | 24 hours |",
+    "verbatim_source_quote": "| First response by email | 24 hours |"
+  },
+  {
+    "order_index": 226,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:321:3be5633b64db:2f045f6b86",
+    "subject": "First response by chat",
+    "predicate": "has_target",
+    "object": "Under 2 minutes",
+    "conditions": [
+      "Table Column: Target"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Predicate failure: Predicate 'has_target' is not present in versioned taxonomy registry.",
+    "claim_text": "| First response by chat | Under 2 minutes |",
+    "verbatim_source_quote": "| First response by chat | Under 2 minutes |"
+  },
+  {
+    "order_index": 227,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:322:eb0bd67c044e:922014f736",
+    "subject": "Resolution of standard refund query",
+    "predicate": "has_target",
+    "object": "Within 3 business days",
+    "conditions": [
+      "Table Column: Target"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Predicate failure: Predicate 'has_target' is not present in versioned taxonomy registry.",
+    "claim_text": "| Resolution of standard refund query | Within 3 business days |",
+    "verbatim_source_quote": "| Resolution of standard refund query | Within 3 business days |"
+  },
+  {
+    "order_index": 228,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:323:9006d3ec9900:a4b39b429d",
+    "subject": "Escalated complaint resolution",
+    "predicate": "has_target",
+    "object": "10 business days",
+    "conditions": [
+      "Table Column: Target"
+    ],
+    "status": "REJECTED",
+    "lifecycle_state": "REJECTED",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Predicate failure: Predicate 'has_target' is not present in versioned taxonomy registry.",
+    "claim_text": "| Escalated complaint resolution | 10 business days |",
+    "verbatim_source_quote": "| Escalated complaint resolution | 10 business days |"
+  },
+  {
+    "order_index": 229,
+    "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:331:fda96f9aef62:38c844a5e9",
+    "subject": "Aug 15, 2025 Added Gear Care",
+    "predicate": "has_resolution_path",
+    "object": "4.0 Mar 1, 2025 Gold member window raised from 45 to 60 days",
+    "conditions": [],
+    "status": "REJECTED",
+    "lifecycle_state": "NON_RULE",
+    "decision_reason": "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Claim type failure: Unrecognized claim type 'non_rule'.",
+    "claim_text": "0             Mar 1, 2025                Gold member window raised from 45 to 60 days",
+    "verbatim_source_quote": "0             Mar 1, 2025                Gold member window raised from 45 to 60 days"
+  }
+]

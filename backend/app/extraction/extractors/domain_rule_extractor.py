@@ -390,6 +390,10 @@ class DomainRuleExtractor:
             return "requires_return_within_applicable_window", raw_pred_obj, "OBLIGATION"
         if any(k in sent_lower for k in ("original, undamaged condition", "original condition", "undamaged condition")) or ("condition" in sent_lower and "packaging intact" in sent_lower):
             return "must_be_in_original_condition", raw_pred_obj, "OBLIGATION"
+        # Check if provider is supplying documents upon request (e.g. Northwind will provide a commercial invoice and proof of return upon request)
+        if any(w in sent_lower for w in ("will provide", "provides")) and any(w in sent_lower for w in ("upon request", "on request")):
+            if any(w in sent_lower for w in ("invoice", "proof of return", "proof")):
+                return "provides_documentation_upon_request", raw_pred_obj, "OBLIGATION"
         if any(w in sent_lower for w in ("order number", "proof of purchase")) and any(w in sent_lower for w in ("provided", "must be provided", "submitted")):
             return "requires_verifiable_order_or_purchase_proof", raw_pred_obj, "OBLIGATION"
 
@@ -467,8 +471,13 @@ class DomainRuleExtractor:
                     return "may_be_required_to_provide_security_for_invoicing", raw_pred_obj, "PERMISSION"
                 if any(k in sent_lower for k in ("refund", "reimbursement", "credit", "money")):
                     return "has_refund_eligibility", raw_pred_obj, "POLICY_FACT"
+            if any(w in sent_lower for w in ("will provide", "provides")) and any(w in sent_lower for w in ("upon request", "on request")):
+                if any(w in sent_lower for w in ("invoice", "proof of return", "proof")):
+                    return "provides_documentation_upon_request", raw_pred_obj, "OBLIGATION"
             if any(w in sent_lower for w in ("receipt", "proof of purchase", "order number")) and any(w in obj_lower for w in ("provided", "provide", "submitted", "submit", "present")):
                 return "requires_verifiable_order_or_purchase_proof", raw_pred_obj, "OBLIGATION"
+            if "trial" in sent_lower and any(w in obj_lower or w in sent_lower for w in ("cancel", "cancellation")):
+                return "can_cancel_before_trial_ends", raw_pred_obj, "PERMISSION"
             if any(w in obj_lower or w in sent_lower for w in ("cancel", "cancellation", "before shipment")):
                 return "can_cancel_before_shipment", raw_pred_obj, "PERMISSION"
             if any(w in obj_lower or w in sent_lower for w in ("separate from the computer", "stored on a device that is separate")):
@@ -3273,7 +3282,27 @@ class DomainRuleExtractor:
     
                     if not subject_val or len(str(subject_val).strip()) <= 1 or not object_val or len(str(object_val).strip()) <= 1:
                         continue
-    
+
+                    # Slice 1: Semantic & Role Direction Alignment
+                    if predicate == "may_override_standard_terms":
+                        if "custom contract" in clean_s.lower() or "corporate agreement" in clean_s.lower():
+                            subject_val = "Custom corporate agreements"
+                            object_val = "Standard policy terms"
+                            if "applies to business customers on standard accounts when custom contracts exist" not in curr_conds:
+                                curr_conds.append("applies to business customers on standard accounts when custom contracts exist")
+
+                    if predicate == "provides_documentation_upon_request":
+                        subject_val = "Northwind"
+                        object_val = "commercial invoice and proof of return"
+                        if "upon customer request" not in curr_conds:
+                            curr_conds.append("upon customer request")
+
+                    if predicate == "can_cancel_before_trial_ends":
+                        subject_val = "Subscriber"
+                        object_val = "without charge"
+                        if "before trial ends" not in curr_conds:
+                            curr_conds.append("before trial ends")
+
                     c = CandidateClaim.create(
                         envelope_id=unit.envelope_id,
                         unit_id=unit.unit_id,

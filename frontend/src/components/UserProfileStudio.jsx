@@ -1,29 +1,152 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Building2,
-  FolderGit2,
   Shield,
   ShieldCheck,
   Check,
-  ExternalLink,
   Plus,
   Settings,
   Mail,
-  Key,
-  Calendar,
   Lock,
-  ArrowRight,
-  ArrowLeft,
-  Layers,
   Sparkles,
-  Globe,
-  User,
-  Phone,
-  Clock,
   Save,
-  CheckCircle2
+  CheckCircle2,
+  Camera,
+  Upload,
+  X
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+
+// Curated Instant Avatars across professional styles
+const INSTANT_AVATARS = [
+  // 1. Executive & Modern (Clean Notionist style)
+  {
+    id: 'exec-1',
+    name: 'Sarah - Governance Lead',
+    category: 'executive',
+    url: 'https://api.dicebear.com/7.x/notionists/svg?seed=Sarah&backgroundColor=e2e8f0'
+  },
+  {
+    id: 'exec-2',
+    name: 'Marcus - Data Steward',
+    category: 'executive',
+    url: 'https://api.dicebear.com/7.x/notionists/svg?seed=Marcus&backgroundColor=cbd5e1'
+  },
+  {
+    id: 'exec-3',
+    name: 'Aria - Compliance Officer',
+    category: 'executive',
+    url: 'https://api.dicebear.com/7.x/notionists/svg?seed=Aria&backgroundColor=f1f5f9'
+  },
+  {
+    id: 'exec-4',
+    name: 'Felix - Risk Architect',
+    category: 'executive',
+    url: 'https://api.dicebear.com/7.x/notionists/svg?seed=Felix&backgroundColor=e0e7ff'
+  },
+  {
+    id: 'exec-5',
+    name: 'Zara - Platform Director',
+    category: 'executive',
+    url: 'https://api.dicebear.com/7.x/notionists/svg?seed=Zara&backgroundColor=fef3c7'
+  },
+  {
+    id: 'exec-6',
+    name: 'Elena - Auditor General',
+    category: 'executive',
+    url: 'https://api.dicebear.com/7.x/notionists/svg?seed=Elena&backgroundColor=dcfce7'
+  },
+
+  // 2. AI & Robotics Stewards (Bottts 3D & Cyber)
+  {
+    id: 'bot-1',
+    name: 'Titan - Decision Arbiter',
+    category: 'robotics',
+    url: 'https://api.dicebear.com/7.x/bottts/svg?seed=Titan&backgroundColor=0f172a'
+  },
+  {
+    id: 'bot-2',
+    name: 'Nexus - Context Engine',
+    category: 'robotics',
+    url: 'https://api.dicebear.com/7.x/bottts/svg?seed=Nexus&backgroundColor=1e293b'
+  },
+  {
+    id: 'bot-3',
+    name: 'Aegis - Gate Sentinel',
+    category: 'robotics',
+    url: 'https://api.dicebear.com/7.x/bottts/svg?seed=Aegis&backgroundColor=047857'
+  },
+  {
+    id: 'bot-4',
+    name: 'Vertex - Lineage Tracer',
+    category: 'robotics',
+    url: 'https://api.dicebear.com/7.x/bottts/svg?seed=Vertex&backgroundColor=1d4ed8'
+  },
+  {
+    id: 'bot-5',
+    name: 'Cyber - Claim Extractor',
+    category: 'robotics',
+    url: 'https://api.dicebear.com/7.x/bottts/svg?seed=Cyber&backgroundColor=4338ca'
+  },
+  {
+    id: 'bot-6',
+    name: 'Steward - Trust Observer',
+    category: 'robotics',
+    url: 'https://api.dicebear.com/7.x/bottts/svg?seed=Steward&backgroundColor=334155'
+  },
+
+  // 3. Professional Personas (Avataaars)
+  {
+    id: 'pro-1',
+    name: 'David - Enterprise Ops',
+    category: 'professional',
+    url: 'https://api.dicebear.com/7.x/avataaars/svg?seed=David'
+  },
+  {
+    id: 'pro-2',
+    name: 'Aisha - Senior AI Engineer',
+    category: 'professional',
+    url: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Aisha'
+  },
+  {
+    id: 'pro-3',
+    name: 'Devin - Policy Analyst',
+    category: 'professional',
+    url: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Devin'
+  },
+  {
+    id: 'pro-4',
+    name: 'Chloe - Legal Counsel',
+    category: 'professional',
+    url: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Chloe'
+  },
+
+  // 4. Geometric Trust Badges (Shapes & Monograms)
+  {
+    id: 'geo-1',
+    name: 'Trulin Alpha Matrix',
+    category: 'geometric',
+    url: 'https://api.dicebear.com/7.x/shapes/svg?seed=TrulinAlpha&backgroundColor=0f172a'
+  },
+  {
+    id: 'geo-2',
+    name: 'Trust Shield Node',
+    category: 'geometric',
+    url: 'https://api.dicebear.com/7.x/shapes/svg?seed=TrustShield&backgroundColor=047857'
+  },
+  {
+    id: 'geo-3',
+    name: 'Quantum Governance Core',
+    category: 'geometric',
+    url: 'https://api.dicebear.com/7.x/shapes/svg?seed=QuantumGate&backgroundColor=1e1b4b'
+  },
+  {
+    id: 'geo-4',
+    name: 'Data Horizon Vault',
+    category: 'geometric',
+    url: 'https://api.dicebear.com/7.x/shapes/svg?seed=DataHorizon&backgroundColor=0369a1'
+  }
+];
 
 export default function UserProfileStudio({
   activeOrg,
@@ -59,8 +182,13 @@ export default function UserProfileStudio({
   const [editTimezone, setEditTimezone] = useState('UTC');
   const [editPhone, setEditPhone] = useState('');
   const [editBio, setEditBio] = useState('');
+  const [editAvatarUrl, setEditAvatarUrl] = useState('');
+  const [isAvatarModalOpen, setIsAvatarModalOpen] = useState(false);
+  const [selectedAvatarCategory, setSelectedAvatarCategory] = useState('all');
   const [isSavingProfile, setIsSavingProfile] = useState(false);
   const [profileSavedMsg, setProfileSavedMsg] = useState(false);
+
+  const fileInputRef = useRef(null);
 
   // Sync initial user details into edit form
   useEffect(() => {
@@ -70,6 +198,7 @@ export default function UserProfileStudio({
     const currentTz = authUser?.timezone || 'UTC';
     const currentPhone = authUser?.phone || '';
     const currentBio = authUser?.bio || 'Enterprise security and compliance administrator for autonomous AI decision gates.';
+    const currentAvatar = authUser?.avatar_url || authUser?.picture || activePersona?.avatar_url || '';
 
     setEditName(currentName);
     setEditTitle(currentTitle);
@@ -77,7 +206,8 @@ export default function UserProfileStudio({
     setEditTimezone(currentTz);
     setEditPhone(currentPhone);
     setEditBio(currentBio);
-  }, [authUser, activePersona]);
+    setEditAvatarUrl(prev => prev || currentAvatar);
+  }, [authUser?.id, authUser?.email, activePersona?.id]);
 
   // Register Company Form state
   const [newCompanyName, setNewCompanyName] = useState('');
@@ -109,6 +239,100 @@ export default function UserProfileStudio({
     }
   };
 
+  const isCurrentAvatarGoogle = Boolean(
+    editAvatarUrl && (
+      editAvatarUrl.includes('googleusercontent.com') ||
+      editAvatarUrl.includes('background=4285F4')
+    )
+  );
+
+  // Apply & immediately persist avatar update across UI and backend
+  const applyAndPersistAvatar = async (newAvatarUrl, message = 'Profile photo updated!') => {
+    setEditAvatarUrl(newAvatarUrl);
+    setIsAvatarModalOpen(false);
+
+    if (updateUser) {
+      updateUser({ avatar_url: newAvatarUrl });
+    }
+
+    const targetUserId = authUser?.id || activePersona?.id;
+    if (targetUserId) {
+      try {
+        const patchRes = await fetch(`/v1/users/${targetUserId}`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+          },
+          body: JSON.stringify({
+            avatar_url: newAvatarUrl
+          })
+        });
+        if (!patchRes.ok) {
+          const errData = await patchRes.json().catch(() => ({}));
+          console.warn('Failed to persist avatar to backend:', errData);
+        }
+      } catch (err) {
+        console.warn('Network error saving avatar to backend:', err);
+      }
+    }
+
+    if (showToast) {
+      showToast(message, 'success');
+    }
+  };
+
+  // File Upload Handler (with instant client-side canvas downscale & immediate persist)
+  const handleFileUpload = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 10 * 1024 * 1024) {
+      if (showToast) showToast('File too large (max 10MB). Please choose a smaller image.', 'error');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (uploadEvent) => {
+      const dataUrlRaw = uploadEvent.target?.result;
+      if (!dataUrlRaw) return;
+      const img = new Image();
+      img.onload = () => {
+        try {
+          const canvas = document.createElement('canvas');
+          const MAX_SIZE = 256;
+          let width = img.width;
+          let height = img.height;
+          if (width > height) {
+            if (width > MAX_SIZE) {
+              height = Math.round(height * (MAX_SIZE / width));
+              width = MAX_SIZE;
+            }
+          } else {
+            if (height > MAX_SIZE) {
+              width = Math.round(width * (MAX_SIZE / height));
+              height = MAX_SIZE;
+            }
+          }
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+          const dataUrl = canvas.toDataURL('image/jpeg', 0.9);
+          applyAndPersistAvatar(dataUrl, 'Custom photo uploaded & applied!');
+        } catch (err) {
+          console.warn('Canvas optimization fallback:', err);
+          applyAndPersistAvatar(dataUrlRaw, 'Custom photo uploaded & applied!');
+        }
+      };
+      img.onerror = () => {
+        applyAndPersistAvatar(dataUrlRaw, 'Custom photo uploaded & applied!');
+      };
+      img.src = dataUrlRaw;
+    };
+    reader.readAsDataURL(file);
+    e.target.value = '';
+  };
+
   const handleSaveProfileSubmit = async (e) => {
     e.preventDefault();
     if (!editName.trim()) {
@@ -123,12 +347,14 @@ export default function UserProfileStudio({
       department: editDepartment.trim(),
       timezone: editTimezone,
       phone: editPhone.trim(),
-      bio: editBio.trim()
+      bio: editBio.trim(),
+      avatar_url: editAvatarUrl || null,
     };
 
-    if (authUser?.id) {
+    const targetUserId = authUser?.id || activePersona?.id;
+    if (targetUserId) {
       try {
-        await fetch(`/v1/users/${authUser.id}`, {
+        await fetch(`/v1/users/${targetUserId}`, {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
@@ -137,7 +363,11 @@ export default function UserProfileStudio({
           body: JSON.stringify({
             name: editName.trim(),
             title: editTitle.trim(),
-            department: editDepartment.trim()
+            department: editDepartment.trim(),
+            avatar_url: editAvatarUrl || null,
+            phone: editPhone.trim(),
+            bio: editBio.trim(),
+            timezone: editTimezone,
           })
         });
       } catch (err) {
@@ -147,10 +377,6 @@ export default function UserProfileStudio({
 
     if (updateUser) {
       updateUser(updatedUser);
-    }
-
-    if (onSelectPersona && activePersona) {
-      onSelectPersona({ ...activePersona, ...updatedUser });
     }
 
     setProfileSavedMsg(true);
@@ -166,7 +392,7 @@ export default function UserProfileStudio({
 
   const displayName = authUser?.name || activePersona?.name || editName || 'Authorized User';
   const displayEmail = authUser?.email || activePersona?.email || 'user@enterprise.com';
-  const avatarUrl = authUser?.avatar_url || authUser?.picture || activePersona?.avatar_url;
+  const activeAvatarUrl = editAvatarUrl || authUser?.avatar_url || authUser?.picture || activePersona?.avatar_url;
   const userInitials = displayName
     ? displayName.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()
     : 'U';
@@ -177,6 +403,10 @@ export default function UserProfileStudio({
         !o.name.includes('Default Org')
       )
     : (activeOrg ? [activeOrg] : []);
+
+  const filteredAvatars = selectedAvatarCategory === 'all'
+    ? INSTANT_AVATARS
+    : INSTANT_AVATARS.filter(a => a.category === selectedAvatarCategory);
 
   const handleRegisterCompanySubmit = async (e) => {
     e.preventDefault();
@@ -232,36 +462,53 @@ export default function UserProfileStudio({
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '22px', maxWidth: '1280px', margin: '0 auto' }}>
+      
+      {/* Hidden File Input for Avatar Upload */}
+      <input
+        type="file"
+        ref={fileInputRef}
+        onChange={handleFileUpload}
+        accept="image/png, image/jpeg, image/jpg, image/webp, image/svg+xml"
+        style={{ display: 'none' }}
+      />
+
       {/* 1. Profile Header Hero (Dedicated to User Profile view) */}
       {activeSubSection === 'user_profile' && (
         <div style={{
-          padding: '10px 4px 16px 4px',
-          background: 'transparent',
-          border: 'none',
-          borderRadius: '0'
+          padding: '16px 20px',
+          background: '#FFFFFF',
+          border: '1px solid #E2E8F0',
+          borderRadius: '14px',
+          boxShadow: '0 1px 3px rgba(0, 0, 0, 0.04)'
         }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '20px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '18px' }}>
-              {/* Signed-in Profile Avatar */}
-              <div style={{
-                width: '64px',
-                height: '64px',
-                borderRadius: '50%',
-                backgroundColor: '#0F172A',
-                color: '#FFFFFF',
-                fontSize: '1.25rem',
-                fontWeight: 700,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
-                border: '1px solid #E2E8F0',
-                overflow: 'hidden',
-                flexShrink: 0
-              }}>
-                {avatarUrl ? (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+              {/* Profile Avatar with click-to-change */}
+              <div
+                onClick={() => setIsAvatarModalOpen(true)}
+                title="Click to change photo"
+                style={{
+                  position: 'relative',
+                  width: '74px',
+                  height: '74px',
+                  borderRadius: '50%',
+                  backgroundColor: '#0F172A',
+                  color: '#FFFFFF',
+                  fontSize: '1.4rem',
+                  fontWeight: 700,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
+                  border: isCurrentAvatarGoogle ? '2.5px solid #4285F4' : '2px solid #E2E8F0',
+                  overflow: 'hidden',
+                  flexShrink: 0,
+                  cursor: 'pointer'
+                }}
+              >
+                {activeAvatarUrl ? (
                   <img
-                    src={avatarUrl}
+                    src={activeAvatarUrl}
                     alt={displayName}
                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                     onError={(e) => { e.currentTarget.style.display = 'none'; }}
@@ -272,19 +519,59 @@ export default function UserProfileStudio({
               </div>
 
               <div>
-                <h1 style={{ fontSize: '1.45rem', fontWeight: 800, color: 'var(--text-main)', margin: 0, letterSpacing: '-0.02em' }}>
-                  {displayName}
-                </h1>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+                  <h1 style={{ fontSize: '1.45rem', fontWeight: 800, color: '#0F172A', margin: 0, letterSpacing: '-0.02em' }}>
+                    {displayName}
+                  </h1>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginTop: '6px', fontSize: '0.82rem', color: 'var(--text-secondary)', flexWrap: 'wrap' }}>
+                  <button
+                    type="button"
+                    onClick={() => setIsAvatarModalOpen(true)}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '5px',
+                      padding: '4px 10px',
+                      borderRadius: '6px',
+                      background: '#F1F5F9',
+                      border: '1px solid #CBD5E1',
+                      color: '#0F172A',
+                      fontSize: '0.74rem',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      transition: 'all 0.15s ease'
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.background = '#E2E8F0'}
+                    onMouseLeave={(e) => e.currentTarget.style.background = '#F1F5F9'}
+                  >
+                    <Camera size={13} />
+                    <span>Change Photo</span>
+                  </button>
+                </div>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginTop: '6px', fontSize: '0.82rem', color: '#64748B', flexWrap: 'wrap' }}>
                   <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
-                    <Building2 size={13} style={{ color: 'var(--text-muted)' }} />
+                    <Building2 size={13} style={{ color: '#94A3B8' }} />
                     {activeOrg?.name || 'Enterprise Workspace'}
                   </span>
                   <span>•</span>
                   <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
-                    <Mail size={13} style={{ color: 'var(--text-muted)' }} />
+                    <Mail size={13} style={{ color: '#94A3B8' }} />
                     {displayEmail}
+                  </span>
+                  <span>•</span>
+                  <span style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                    fontWeight: 700,
+                    color: '#047857',
+                    background: 'rgba(4, 120, 87, 0.08)',
+                    padding: '1px 8px',
+                    borderRadius: '4px'
+                  }}>
+                    <Shield size={11} />
+                    {(effectiveRole || 'ADMIN').toUpperCase()}
                   </span>
                 </div>
               </div>
@@ -293,14 +580,14 @@ export default function UserProfileStudio({
         </div>
       )}
 
-      {/* 2. SUB-SECTION: MY USER PROFILE (EDITABLE NON-CONFIDENTIAL DATA) */}
+      {/* 2. SUB-SECTION: EDITABLE USER PROFILE FORM (CLEAN & NEAT) */}
       {activeSubSection === 'user_profile' && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', maxWidth: '820px' }}>
           <div>
-            <h2 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-main)', margin: 0 }}>
+            <h2 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#0F172A', margin: 0 }}>
               User Profile & Account Information
             </h2>
-            <p style={{ margin: '4px 0 0 0', fontSize: '0.82rem', color: 'var(--text-muted)' }}>
+            <p style={{ margin: '4px 0 0 0', fontSize: '0.82rem', color: '#64748B' }}>
               Manage and customize your non-confidential operational profile and identity attributes.
             </p>
           </div>
@@ -325,7 +612,7 @@ export default function UserProfileStudio({
                 alignItems: 'center',
                 gap: '8px',
                 padding: '10px 14px',
-                borderRadius: '6px',
+                borderRadius: '8px',
                 backgroundColor: '#F0FDF4',
                 border: '1px solid #DCFCE7',
                 color: '#15803D',
@@ -488,7 +775,7 @@ export default function UserProfileStudio({
               gap: '12px'
             }}>
               <div style={{ fontSize: '0.74rem', fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                Authentication & Confidential Credentials (Managed by Single Sign-On)
+                Authentication & Governance Role (Managed by Identity Provider)
               </div>
 
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '14px' }}>
@@ -542,8 +829,8 @@ export default function UserProfileStudio({
                 disabled={isSavingProfile}
                 className="btn btn-primary"
                 style={{
-                  padding: '9px 24px',
-                  fontSize: '0.84rem',
+                  padding: '10px 26px',
+                  fontSize: '0.86rem',
                   fontWeight: 700,
                   borderRadius: '8px',
                   background: '#0F172A',
@@ -557,10 +844,292 @@ export default function UserProfileStudio({
                 }}
               >
                 {isSavingProfile ? <Sparkles size={14} className="spinning" /> : <Save size={14} />}
-                <span>{isSavingProfile ? 'Saving...' : 'Save Profile Changes'}</span>
+                <span>{isSavingProfile ? 'Saving Changes...' : 'Save Profile Changes'}</span>
               </button>
             </div>
           </form>
+        </div>
+      )}
+
+      {/* 3. CHANGE PHOTO MODAL (ONLY AVATARS AND UPLOAD OPTION) */}
+      {isAvatarModalOpen && (
+        <div style={{
+          position: 'fixed',
+          inset: 0,
+          backgroundColor: 'rgba(15, 23, 42, 0.65)',
+          backdropFilter: 'blur(4px)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 9999,
+          padding: '16px'
+        }}>
+          <div style={{
+            background: '#FFFFFF',
+            borderRadius: '16px',
+            width: '100%',
+            maxWidth: '560px',
+            maxHeight: '90vh',
+            display: 'flex',
+            flexDirection: 'column',
+            boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 8px 10px -6px rgba(0, 0, 0, 0.1)',
+            border: '1px solid #E2E8F0',
+            overflow: 'hidden'
+          }}>
+            {/* Modal Header */}
+            <div style={{
+              padding: '18px 22px',
+              borderBottom: '1px solid #E2E8F0',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between'
+            }}>
+              <div>
+                <h3 style={{ margin: 0, fontSize: '1.08rem', fontWeight: 800, color: '#0F172A' }}>
+                  Change Profile Photo
+                </h3>
+                <p style={{ margin: '3px 0 0 0', fontSize: '0.78rem', color: '#64748B' }}>
+                  Choose an avatar for instant setup or upload your own photo.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsAvatarModalOpen(false)}
+                style={{
+                  background: 'transparent',
+                  border: 'none',
+                  color: '#64748B',
+                  cursor: 'pointer',
+                  padding: '6px',
+                  borderRadius: '6px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div style={{ padding: '20px 22px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              
+              {/* Upload Button */}
+              <div style={{
+                padding: '14px 16px',
+                background: '#F8FAFC',
+                border: '1px solid #E2E8F0',
+                borderRadius: '12px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: '12px'
+              }}>
+                <div>
+                  <div style={{ fontSize: '0.84rem', fontWeight: 700, color: '#0F172A' }}>
+                    Upload Custom Photo
+                  </div>
+                  <div style={{ fontSize: '0.74rem', color: '#64748B', marginTop: '2px' }}>
+                    Select a JPG, PNG, WEBP, or SVG file from your computer.
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    padding: '8px 16px',
+                    borderRadius: '8px',
+                    background: '#0F172A',
+                    color: '#FFFFFF',
+                    fontSize: '0.8rem',
+                    fontWeight: 700,
+                    border: 'none',
+                    cursor: 'pointer',
+                    flexShrink: 0
+                  }}
+                >
+                  <Upload size={14} />
+                  <span>Upload Photo</span>
+                </button>
+              </div>
+
+              {/* Avatars Section */}
+              <div>
+                <div style={{ fontSize: '0.84rem', fontWeight: 700, color: '#0F172A', marginBottom: '10px' }}>
+                  Choose an Avatar
+                </div>
+
+                {/* Category Tabs */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap', marginBottom: '14px' }}>
+                  {[
+                    { id: 'all', label: 'All' },
+                    { id: 'executive', label: 'Executive' },
+                    { id: 'robotics', label: 'AI & Robotics' },
+                    { id: 'professional', label: 'Professional' },
+                    { id: 'geometric', label: 'Geometric' },
+                  ].map((cat) => {
+                    const isActive = selectedAvatarCategory === cat.id;
+                    return (
+                      <button
+                        key={cat.id}
+                        type="button"
+                        onClick={() => setSelectedAvatarCategory(cat.id)}
+                        style={{
+                          padding: '4px 12px',
+                          borderRadius: '20px',
+                          fontSize: '0.74rem',
+                          fontWeight: isActive ? 700 : 500,
+                          background: isActive ? '#0F172A' : '#F1F5F9',
+                          color: isActive ? '#FFFFFF' : '#475569',
+                          border: 'none',
+                          cursor: 'pointer',
+                          transition: 'all 0.15s ease'
+                        }}
+                      >
+                        {cat.label}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Avatars Grid */}
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fill, minmax(84px, 1fr))',
+                  gap: '10px',
+                  maxHeight: '260px',
+                  overflowY: 'auto',
+                  padding: '2px'
+                }}>
+                  {filteredAvatars.map((item) => {
+                    const isSelected = editAvatarUrl === item.url;
+                    return (
+                      <button
+                        key={item.id}
+                        type="button"
+                        onClick={() => {
+                          applyAndPersistAvatar(item.url, `Avatar "${item.name.split(' - ')[0]}" applied!`);
+                        }}
+                        title={item.name}
+                        style={{
+                          position: 'relative',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: 'center',
+                          gap: '6px',
+                          padding: '8px 4px',
+                          borderRadius: '10px',
+                          background: isSelected ? 'rgba(4, 120, 87, 0.08)' : '#F8FAFC',
+                          border: isSelected ? '2px solid #047857' : '1px solid #E2E8F0',
+                          cursor: 'pointer',
+                          outline: 'none',
+                          transition: 'all 0.15s ease'
+                        }}
+                      >
+                        <div style={{
+                          width: '48px',
+                          height: '48px',
+                          borderRadius: '50%',
+                          overflow: 'hidden',
+                          backgroundColor: '#E2E8F0'
+                        }}>
+                          <img
+                            src={item.url}
+                            alt={item.name}
+                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                          />
+                        </div>
+                        <span style={{
+                          fontSize: '0.64rem',
+                          fontWeight: 600,
+                          color: isSelected ? '#047857' : '#475569',
+                          textAlign: 'center',
+                          maxWidth: '74px',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap'
+                        }}>
+                          {item.name.split(' - ')[0]}
+                        </span>
+                        {isSelected && (
+                          <span style={{
+                            position: 'absolute',
+                            top: '3px',
+                            right: '3px',
+                            width: '16px',
+                            height: '16px',
+                            borderRadius: '50%',
+                            background: '#047857',
+                            color: '#FFFFFF',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                          }}>
+                            <Check size={10} strokeWidth={3} />
+                          </span>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div style={{
+              padding: '14px 22px',
+              borderTop: '1px solid #E2E8F0',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'flex-end',
+              gap: '8px'
+            }}>
+              <button
+                type="button"
+                onClick={() => setIsAvatarModalOpen(false)}
+                className="btn btn-secondary"
+                style={{
+                  padding: '7px 16px',
+                  fontSize: '0.8rem',
+                  fontWeight: 600,
+                  borderRadius: '6px',
+                  background: '#FFFFFF',
+                  border: '1px solid #CBD5E1',
+                  color: '#475569',
+                  cursor: 'pointer'
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  if (editAvatarUrl) {
+                    applyAndPersistAvatar(editAvatarUrl, 'Profile photo updated!');
+                  } else {
+                    setIsAvatarModalOpen(false);
+                  }
+                }}
+                className="btn btn-primary"
+                style={{
+                  padding: '7px 18px',
+                  fontSize: '0.8rem',
+                  fontWeight: 700,
+                  borderRadius: '6px',
+                  background: '#0F172A',
+                  color: '#FFFFFF',
+                  border: 'none',
+                  cursor: 'pointer'
+                }}
+              >
+                Done
+              </button>
+            </div>
+          </div>
         </div>
       )}
 

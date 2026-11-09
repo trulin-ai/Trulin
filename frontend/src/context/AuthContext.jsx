@@ -343,6 +343,7 @@ export function AuthProvider({ children }) {
           } else {
             const err = await res.json().catch(() => ({}));
             console.error('OAuth callback failed:', err);
+            window.history.replaceState({}, document.title, window.location.pathname);
           }
         } catch (err) {
           console.error('OAuth callback network error:', err);

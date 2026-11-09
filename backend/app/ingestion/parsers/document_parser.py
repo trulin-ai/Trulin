@@ -322,6 +322,7 @@ class DocumentParser:
                             "row_index": table_row_count,
                             "is_ambiguous": is_ambiguous,
                             "ambiguity_reason": ambiguity_reason,
+                            "raw_row_line": line_str,
                         },
                         locator={
                             "line_start": line_num,

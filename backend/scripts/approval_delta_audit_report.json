@@ -1,0 +1,1481 @@
+[
+  {
+    "baseline_order_index": 2,
+    "category": "Bucket 7: Legitimate review queue item (unconstrained summary predicate)",
+    "source_evidence_quote": "| Return window | 30 days from delivery (60 days for Northwind Rewards Gold members) |",
+    "baseline": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:33:bc3d3090bd9b:3c0b5511a9",
+      "subject": "Return window",
+      "predicate": "has_summary",
+      "object": "30 days from delivery (60 days for Northwind Rewards Gold members)",
+      "conditions": [
+        "Table Column: Summary"
+      ],
+      "lifecycle_decision": "review",
+      "decision_code": "WEAK_PREDICATE",
+      "plain_assertion": "Return window [POLICY_FACT] has_summary -> 30 days from delivery (60 days for Northwind Rewards Gold members) [CONDITION: Table Column: Summary]"
+    },
+    "exported": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:33:bc3d3090bd9b:3c0b5511a9",
+      "subject": "Return window",
+      "predicate": "has_summary",
+      "object": "30 days from delivery (60 days for Northwind Rewards Gold members)",
+      "conditions": [
+        "Table Column: Summary"
+      ],
+      "lifecycle_decision": "review",
+      "decision_code": "WEAK_PREDICATE",
+      "plain_assertion": "Return window [POLICY_FACT] has_summary -> 30 days from delivery (60 days for Northwind Rewards Gold members) [CONDITION: Table Column: Summary]"
+    },
+    "transition": "review -> review",
+    "reasons": "[WEAK_PREDICATE] Predicate failure: Predicate 'has_summary' is not present in versioned taxonomy registry."
+  },
+  {
+    "baseline_order_index": 3,
+    "category": "Bucket 7: Legitimate review queue item (unconstrained summary predicate)",
+    "source_evidence_quote": "| Refund speed | 3-5 business days after we receive and inspect the return |",
+    "baseline": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:34:49d05393a5e4:c970f3dd4f",
+      "subject": "Refund speed",
+      "predicate": "has_summary",
+      "object": "3-5 business days after we receive and inspect the return",
+      "conditions": [
+        "Table Column: Summary"
+      ],
+      "lifecycle_decision": "review",
+      "decision_code": "WEAK_PREDICATE",
+      "plain_assertion": "Refund speed [POLICY_FACT] has_summary -> 3-5 business days after we receive and inspect the return [CONDITION: Table Column: Summary]"
+    },
+    "exported": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:34:49d05393a5e4:c970f3dd4f",
+      "subject": "Refund speed",
+      "predicate": "has_summary",
+      "object": "3-5 business days after we receive and inspect the return",
+      "conditions": [
+        "Table Column: Summary"
+      ],
+      "lifecycle_decision": "review",
+      "decision_code": "WEAK_PREDICATE",
+      "plain_assertion": "Refund speed [POLICY_FACT] has_summary -> 3-5 business days after we receive and inspect the return [CONDITION: Table Column: Summary]"
+    },
+    "transition": "review -> review",
+    "reasons": "[WEAK_PREDICATE] Predicate failure: Predicate 'has_summary' is not present in versioned taxonomy registry."
+  },
+  {
+    "baseline_order_index": 4,
+    "category": "Bucket 7: Legitimate review queue item (unconstrained summary predicate)",
+    "source_evidence_quote": "| Return shipping | Free for defective or incorrect items; $6.95 deducted otherwise |",
+    "baseline": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:35:9d361a13386f:dd55f15b27",
+      "subject": "Return shipping",
+      "predicate": "has_summary",
+      "object": "Free for defective or incorrect items; $6.95 deducted otherwise",
+      "conditions": [
+        "Table Column: Summary"
+      ],
+      "lifecycle_decision": "review",
+      "decision_code": "WEAK_PREDICATE",
+      "plain_assertion": "Return shipping [POLICY_FACT] has_summary -> Free for defective or incorrect items; $6.95 deducted otherwise [CONDITION: Table Column: Summary]"
+    },
+    "exported": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:35:9d361a13386f:dd55f15b27",
+      "subject": "Return shipping",
+      "predicate": "has_summary",
+      "object": "Free for defective or incorrect items; $6.95 deducted otherwise",
+      "conditions": [
+        "Table Column: Summary"
+      ],
+      "lifecycle_decision": "review",
+      "decision_code": "WEAK_PREDICATE",
+      "plain_assertion": "Return shipping [POLICY_FACT] has_summary -> Free for defective or incorrect items; $6.95 deducted otherwise [CONDITION: Table Column: Summary]"
+    },
+    "transition": "review -> review",
+    "reasons": "[WEAK_PREDICATE] Predicate failure: Predicate 'has_summary' is not present in versioned taxonomy registry."
+  },
+  {
+    "baseline_order_index": 5,
+    "category": "Bucket 7: Legitimate review queue item (unconstrained summary predicate)",
+    "source_evidence_quote": "| Restocking fee | None on most items; 15% on special-order and bulk items |",
+    "baseline": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:36:fa8173d8dbfe:6efd9c495a",
+      "subject": "Restocking fee",
+      "predicate": "has_summary",
+      "object": "None on most items; 15% on special-order and bulk items",
+      "conditions": [
+        "Table Column: Summary"
+      ],
+      "lifecycle_decision": "review",
+      "decision_code": "WEAK_PREDICATE",
+      "plain_assertion": "Restocking fee [POLICY_FACT] has_summary -> None on most items; 15% on special-order and bulk items [CONDITION: Table Column: Summary]"
+    },
+    "exported": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:36:fa8173d8dbfe:6efd9c495a",
+      "subject": "Restocking fee",
+      "predicate": "has_summary",
+      "object": "None on most items; 15% on special-order and bulk items",
+      "conditions": [
+        "Table Column: Summary"
+      ],
+      "lifecycle_decision": "review",
+      "decision_code": "WEAK_PREDICATE",
+      "plain_assertion": "Restocking fee [POLICY_FACT] has_summary -> None on most items; 15% on special-order and bulk items [CONDITION: Table Column: Summary]"
+    },
+    "transition": "review -> review",
+    "reasons": "[WEAK_PREDICATE] Predicate failure: Predicate 'has_summary' is not present in versioned taxonomy registry."
+  },
+  {
+    "baseline_order_index": 6,
+    "category": "Bucket 7: Legitimate review queue item (unconstrained summary predicate)",
+    "source_evidence_quote": "| Final sale items | Not eligible for refund or exchange |",
+    "baseline": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:37:7eebd2ed22d9:072667ea2c",
+      "subject": "Final sale items",
+      "predicate": "has_summary",
+      "object": "Not eligible for refund or exchange",
+      "conditions": [
+        "Table Column: Summary"
+      ],
+      "lifecycle_decision": "review",
+      "decision_code": "WEAK_PREDICATE",
+      "plain_assertion": "Final sale items [POLICY_FACT] has_summary -> Not eligible for refund or exchange [CONDITION: Table Column: Summary]"
+    },
+    "exported": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:37:7eebd2ed22d9:072667ea2c",
+      "subject": "Final sale items",
+      "predicate": "has_summary",
+      "object": "Not eligible for refund or exchange",
+      "conditions": [
+        "Table Column: Summary"
+      ],
+      "lifecycle_decision": "review",
+      "decision_code": "WEAK_PREDICATE",
+      "plain_assertion": "Final sale items [POLICY_FACT] has_summary -> Not eligible for refund or exchange [CONDITION: Table Column: Summary]"
+    },
+    "transition": "review -> review",
+    "reasons": "[WEAK_PREDICATE] Predicate failure: Predicate 'has_summary' is not present in versioned taxonomy registry."
+  },
+  {
+    "baseline_order_index": 13,
+    "category": "Bucket 1: Correct evidence-aware recovery (table return window)",
+    "source_evidence_quote": "| Standard merchandise | 30 days |",
+    "baseline": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:55:cd4aad0e8df3:2644900031",
+      "subject": "Standard merchandise",
+      "predicate": "has_return_window",
+      "object": "30 days",
+      "conditions": [
+        "Table Column: Return Window"
+      ],
+      "lifecycle_decision": "approve",
+      "decision_code": "APPROVE_ALL_PASSED",
+      "plain_assertion": "Standard merchandise [POLICY_FACT] has_return_window -> 30 days [CONDITION: Table Column: Return Window]"
+    },
+    "exported": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:55:cd4aad0e8df3:2644900031",
+      "subject": "Standard merchandise",
+      "predicate": "has_return_window",
+      "object": "30 days",
+      "conditions": [
+        "Table Column: Return Window"
+      ],
+      "lifecycle_decision": "approve",
+      "decision_code": "APPROVE_ALL_PASSED",
+      "plain_assertion": "Standard merchandise [POLICY_FACT] has_return_window -> 30 days [CONDITION: Table Column: Return Window]"
+    },
+    "transition": "approve -> approve",
+    "reasons": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED."
+  },
+  {
+    "baseline_order_index": 14,
+    "category": "Bucket 1: Correct evidence-aware recovery (table return window)",
+    "source_evidence_quote": "| Northwind Rewards Gold members | 60 days |",
+    "baseline": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:56:53249eef5fde:a4adb97832",
+      "subject": "Northwind Rewards Gold members",
+      "predicate": "has_return_window",
+      "object": "60 days",
+      "conditions": [
+        "Table Column: Return Window"
+      ],
+      "lifecycle_decision": "approve",
+      "decision_code": "APPROVE_ALL_PASSED",
+      "plain_assertion": "Northwind Rewards Gold members [POLICY_FACT] has_return_window -> 60 days [CONDITION: Table Column: Return Window]"
+    },
+    "exported": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:56:53249eef5fde:a4adb97832",
+      "subject": "Northwind Rewards Gold members",
+      "predicate": "has_return_window",
+      "object": "60 days",
+      "conditions": [
+        "Table Column: Return Window"
+      ],
+      "lifecycle_decision": "approve",
+      "decision_code": "APPROVE_ALL_PASSED",
+      "plain_assertion": "Northwind Rewards Gold members [POLICY_FACT] has_return_window -> 60 days [CONDITION: Table Column: Return Window]"
+    },
+    "transition": "approve -> approve",
+    "reasons": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED."
+  },
+  {
+    "baseline_order_index": 15,
+    "category": "Bucket 1: Correct evidence-aware recovery (table return window)",
+    "source_evidence_quote": "| Holiday purchases (Nov 1 - Dec 24) | Until January 31 of the following year |",
+    "baseline": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:57:8c86d12b5335:1ba40462b4",
+      "subject": "Holiday purchases (Nov 1 - Dec 24)",
+      "predicate": "has_return_deadline",
+      "object": "Until January 31 of the following year",
+      "conditions": [
+        {
+          "field": "purchase_date",
+          "operator": "between",
+          "value": [
+            "11-01",
+            "12-24"
+          ]
+        }
+      ],
+      "lifecycle_decision": "approve",
+      "decision_code": "APPROVE_ALL_PASSED",
+      "plain_assertion": "Holiday purchases (Nov 1 - Dec 24) [POLICY_FACT] has_return_deadline -> Until January 31 of the following year [CONDITION: {'field': 'purchase_date', 'operator': 'between', 'value': ['11-01', '12-24']}]"
+    },
+    "exported": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:57:8c86d12b5335:1ba40462b4",
+      "subject": "Holiday purchases (Nov 1 - Dec 24)",
+      "predicate": "has_return_deadline",
+      "object": "Until January 31 of the following year",
+      "conditions": [
+        {
+          "field": "purchase_date",
+          "operator": "between",
+          "value": [
+            "11-01",
+            "12-24"
+          ]
+        }
+      ],
+      "lifecycle_decision": "approve",
+      "decision_code": "APPROVE_ALL_PASSED",
+      "plain_assertion": "Holiday purchases (Nov 1 - Dec 24) [POLICY_FACT] has_return_deadline -> Until January 31 of the following year [CONDITION: {'field': 'purchase_date', 'operator': 'between', 'value': ['11-01', '12-24']}]"
+    },
+    "transition": "approve -> approve",
+    "reasons": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED."
+  },
+  {
+    "baseline_order_index": 16,
+    "category": "Bucket 1: Correct evidence-aware recovery (table return window)",
+    "source_evidence_quote": "| Footwear (worn indoors only) | 45 days |",
+    "baseline": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:58:3cf1b5d3c8c9:9f2dda3e4e",
+      "subject": "Footwear (worn indoors only)",
+      "predicate": "has_return_window",
+      "object": "45 days",
+      "conditions": [
+        "Table Column: Return Window"
+      ],
+      "lifecycle_decision": "approve",
+      "decision_code": "APPROVE_ALL_PASSED",
+      "plain_assertion": "Footwear (worn indoors only) [POLICY_FACT] has_return_window -> 45 days [CONDITION: Table Column: Return Window]"
+    },
+    "exported": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:58:3cf1b5d3c8c9:9f2dda3e4e",
+      "subject": "Footwear (worn indoors only)",
+      "predicate": "has_return_window",
+      "object": "45 days",
+      "conditions": [
+        "Table Column: Return Window"
+      ],
+      "lifecycle_decision": "approve",
+      "decision_code": "APPROVE_ALL_PASSED",
+      "plain_assertion": "Footwear (worn indoors only) [POLICY_FACT] has_return_window -> 45 days [CONDITION: Table Column: Return Window]"
+    },
+    "transition": "approve -> approve",
+    "reasons": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED."
+  },
+  {
+    "baseline_order_index": 17,
+    "category": "Bucket 1: Correct evidence-aware recovery (table return window)",
+    "source_evidence_quote": "| Camping tents and sleeping bags (unused) | 60 days |",
+    "baseline": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:59:9c86921e84b4:5201bcc22e",
+      "subject": "Camping tents and sleeping bags (unused)",
+      "predicate": "has_return_window",
+      "object": "60 days",
+      "conditions": [
+        "Table Column: Return Window"
+      ],
+      "lifecycle_decision": "approve",
+      "decision_code": "APPROVE_ALL_PASSED",
+      "plain_assertion": "Camping tents and sleeping bags (unused) [POLICY_FACT] has_return_window -> 60 days [CONDITION: Table Column: Return Window]"
+    },
+    "exported": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:59:9c86921e84b4:5201bcc22e",
+      "subject": "Camping tents and sleeping bags (unused)",
+      "predicate": "has_return_window",
+      "object": "60 days",
+      "conditions": [
+        "Table Column: Return Window"
+      ],
+      "lifecycle_decision": "approve",
+      "decision_code": "APPROVE_ALL_PASSED",
+      "plain_assertion": "Camping tents and sleeping bags (unused) [POLICY_FACT] has_return_window -> 60 days [CONDITION: Table Column: Return Window]"
+    },
+    "transition": "approve -> approve",
+    "reasons": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED."
+  },
+  {
+    "baseline_order_index": 37,
+    "category": "Bucket 3: Approval of an unchanged incorrect claim (transitioned, MUST BLOCK)",
+    "source_evidence_quote": "\u007f  Perishable goods such as freeze-dried meals past 14 days from delivery.",
+    "baseline": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:94:b65f3b27b664:992cf7cca2",
+      "subject": "Customer",
+      "predicate": "has_refund_eligibility",
+      "object": "\u007f Perishable goods such as freeze-dried meals past 14 days from delivery.",
+      "conditions": [],
+      "lifecycle_decision": "reject",
+      "decision_code": "FRAGMENT_ASSERTION_DISCARDED",
+      "plain_assertion": "Customer [PERMISSION] has_refund_eligibility -> \u007f Perishable goods such as freeze-dried meals past 14 days from delivery."
+    },
+    "exported": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:94:b65f3b27b664:992cf7cca2",
+      "subject": "Customer",
+      "predicate": "has_refund_eligibility",
+      "object": "\u007f Perishable goods such as freeze-dried meals past 14 days from delivery.",
+      "conditions": [],
+      "lifecycle_decision": "approve",
+      "decision_code": "APPROVE_ALL_PASSED",
+      "plain_assertion": "Customer [PERMISSION] has_refund_eligibility -> \u007f Perishable goods such as freeze-dried meals past 14 days from delivery."
+    },
+    "transition": "reject -> approve",
+    "reasons": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED."
+  },
+  {
+    "baseline_order_index": 38,
+    "category": "Bucket 3: Approval of an unchanged incorrect claim (transitioned, MUST BLOCK)",
+    "source_evidence_quote": "\u007f  Items returned more than 90 days after delivery.",
+    "baseline": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:96:8be0b6a7095d:3379ed2d81",
+      "subject": "Customer",
+      "predicate": "has_refund_eligibility",
+      "object": "\u007f Items returned more than 90 days after delivery.",
+      "conditions": [],
+      "lifecycle_decision": "reject",
+      "decision_code": "FRAGMENT_ASSERTION_DISCARDED",
+      "plain_assertion": "Customer [PERMISSION] has_refund_eligibility -> \u007f Items returned more than 90 days after delivery."
+    },
+    "exported": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:96:8be0b6a7095d:3379ed2d81",
+      "subject": "Customer",
+      "predicate": "has_refund_eligibility",
+      "object": "\u007f Items returned more than 90 days after delivery.",
+      "conditions": [],
+      "lifecycle_decision": "approve",
+      "decision_code": "APPROVE_ALL_PASSED",
+      "plain_assertion": "Customer [PERMISSION] has_refund_eligibility -> \u007f Items returned more than 90 days after delivery."
+    },
+    "transition": "reject -> approve",
+    "reasons": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED."
+  },
+  {
+    "baseline_order_index": 42,
+    "category": "Bucket 4: Reclassification of non-executable context",
+    "source_evidence_quote": "| Order number | NW-10482391 | Yes |",
+    "baseline": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:113:c9118947eb1c:9a98507be5",
+      "subject": "Order",
+      "predicate": "has_example_value",
+      "object": "NW-10482391",
+      "conditions": [
+        "Table Column: Example"
+      ],
+      "lifecycle_decision": "approve",
+      "decision_code": "APPROVE_ALL_PASSED",
+      "plain_assertion": "Order [PERMISSION] has_example_value -> NW-10482391 [CONDITION: Table Column: Example]"
+    },
+    "exported": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:113:c9118947eb1c:9a98507be5",
+      "subject": "Order",
+      "predicate": "has_example_value",
+      "object": "NW-10482391",
+      "conditions": [
+        "Table Column: Example"
+      ],
+      "lifecycle_decision": "reject",
+      "decision_code": "REJECT_DESCRIPTIVE_PURPOSE",
+      "plain_assertion": "Order [PERMISSION] has_example_value -> NW-10482391 [CONDITION: Table Column: Example]"
+    },
+    "transition": "approve -> reject",
+    "reasons": "[REJECT_DESCRIPTIVE_PURPOSE] Claim type failure: Unrecognized claim type 'form_field_specification'."
+  },
+  {
+    "baseline_order_index": 43,
+    "category": "Bucket 6: Operative rule incorrectly rejected as non-rule / fragment",
+    "source_evidence_quote": "| Order number | NW-10482391 | Yes |",
+    "baseline": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:113:c9118947eb1c:77d6cd34e6",
+      "subject": "Order",
+      "predicate": "is_required_for_refund_request",
+      "object": "Yes",
+      "conditions": [
+        "Table Column: Required?"
+      ],
+      "lifecycle_decision": "review",
+      "decision_code": "WEAK_PREDICATE",
+      "plain_assertion": "Order [PERMISSION] is_required_for_refund_request -> Yes [CONDITION: Table Column: Required?]"
+    },
+    "exported": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:113:c9118947eb1c:77d6cd34e6",
+      "subject": "Order",
+      "predicate": "is_required_for_refund_request",
+      "object": "Yes",
+      "conditions": [
+        "Table Column: Required?"
+      ],
+      "lifecycle_decision": "reject",
+      "decision_code": "REJECT_DESCRIPTIVE_PURPOSE",
+      "plain_assertion": "Order [PERMISSION] is_required_for_refund_request -> Yes [CONDITION: Table Column: Required?]"
+    },
+    "transition": "review -> reject",
+    "reasons": "[REJECT_DESCRIPTIVE_PURPOSE] Predicate failure: Predicate 'is_required_for_refund_request' is not present in versioned taxonomy registry.; Claim type failure: Unrecognized claim type 'form_field_specification'."
+  },
+  {
+    "baseline_order_index": 45,
+    "category": "Bucket 4: Reclassification of non-executable context",
+    "source_evidence_quote": "| Item SKU / name | TNT-4P-GRN / Summit 4-Person Tent | Yes |",
+    "baseline": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:115:f599a9bede39:be7d401a63",
+      "subject": "Item SKU / name",
+      "predicate": "has_example_value",
+      "object": "TNT-4P-GRN / Summit 4-Person Tent",
+      "conditions": [
+        "Table Column: Example"
+      ],
+      "lifecycle_decision": "approve",
+      "decision_code": "APPROVE_ALL_PASSED",
+      "plain_assertion": "Item SKU / name [POLICY_FACT] has_example_value -> TNT-4P-GRN / Summit 4-Person Tent [CONDITION: Table Column: Example]"
+    },
+    "exported": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:115:f599a9bede39:be7d401a63",
+      "subject": "Item SKU / name",
+      "predicate": "has_example_value",
+      "object": "TNT-4P-GRN / Summit 4-Person Tent",
+      "conditions": [
+        "Table Column: Example"
+      ],
+      "lifecycle_decision": "reject",
+      "decision_code": "REJECT_DESCRIPTIVE_PURPOSE",
+      "plain_assertion": "Item SKU / name [POLICY_FACT] has_example_value -> TNT-4P-GRN / Summit 4-Person Tent [CONDITION: Table Column: Example]"
+    },
+    "transition": "approve -> reject",
+    "reasons": "[REJECT_DESCRIPTIVE_PURPOSE] Claim type failure: Unrecognized claim type 'form_field_specification'."
+  },
+  {
+    "baseline_order_index": 46,
+    "category": "Bucket 6: Operative rule incorrectly rejected as non-rule / fragment",
+    "source_evidence_quote": "| Item SKU / name | TNT-4P-GRN / Summit 4-Person Tent | Yes |",
+    "baseline": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:115:f599a9bede39:87cdef10bc",
+      "subject": "Item SKU / name",
+      "predicate": "is_required_for_refund_request",
+      "object": "Yes",
+      "conditions": [
+        "Table Column: Required?"
+      ],
+      "lifecycle_decision": "review",
+      "decision_code": "WEAK_PREDICATE",
+      "plain_assertion": "Item SKU / name [POLICY_FACT] is_required_for_refund_request -> Yes [CONDITION: Table Column: Required?]"
+    },
+    "exported": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:115:f599a9bede39:87cdef10bc",
+      "subject": "Item SKU / name",
+      "predicate": "is_required_for_refund_request",
+      "object": "Yes",
+      "conditions": [
+        "Table Column: Required?"
+      ],
+      "lifecycle_decision": "reject",
+      "decision_code": "REJECT_DESCRIPTIVE_PURPOSE",
+      "plain_assertion": "Item SKU / name [POLICY_FACT] is_required_for_refund_request -> Yes [CONDITION: Table Column: Required?]"
+    },
+    "transition": "review -> reject",
+    "reasons": "[REJECT_DESCRIPTIVE_PURPOSE] Predicate failure: Predicate 'is_required_for_refund_request' is not present in versioned taxonomy registry.; Claim type failure: Unrecognized claim type 'form_field_specification'."
+  },
+  {
+    "baseline_order_index": 47,
+    "category": "Bucket 4: Reclassification of non-executable context",
+    "source_evidence_quote": "| Reason for return | Wrong size | Yes |",
+    "baseline": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:116:401c999351bc:c804bf16e2",
+      "subject": "Reason for return",
+      "predicate": "has_example_value",
+      "object": "Wrong size",
+      "conditions": [
+        "Table Column: Example"
+      ],
+      "lifecycle_decision": "approve",
+      "decision_code": "APPROVE_ALL_PASSED",
+      "plain_assertion": "Reason for return [POLICY_FACT] has_example_value -> Wrong size [CONDITION: Table Column: Example]"
+    },
+    "exported": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:116:401c999351bc:c804bf16e2",
+      "subject": "Reason for return",
+      "predicate": "has_example_value",
+      "object": "Wrong size",
+      "conditions": [
+        "Table Column: Example"
+      ],
+      "lifecycle_decision": "reject",
+      "decision_code": "REJECT_DESCRIPTIVE_PURPOSE",
+      "plain_assertion": "Reason for return [POLICY_FACT] has_example_value -> Wrong size [CONDITION: Table Column: Example]"
+    },
+    "transition": "approve -> reject",
+    "reasons": "[REJECT_DESCRIPTIVE_PURPOSE] Claim type failure: Unrecognized claim type 'form_field_specification'."
+  },
+  {
+    "baseline_order_index": 48,
+    "category": "Bucket 6: Operative rule incorrectly rejected as non-rule / fragment",
+    "source_evidence_quote": "| Reason for return | Wrong size | Yes |",
+    "baseline": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:116:401c999351bc:bc279a2071",
+      "subject": "Reason for return",
+      "predicate": "is_required_for_refund_request",
+      "object": "Yes",
+      "conditions": [
+        "Table Column: Required?"
+      ],
+      "lifecycle_decision": "review",
+      "decision_code": "WEAK_PREDICATE",
+      "plain_assertion": "Reason for return [POLICY_FACT] is_required_for_refund_request -> Yes [CONDITION: Table Column: Required?]"
+    },
+    "exported": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:116:401c999351bc:bc279a2071",
+      "subject": "Reason for return",
+      "predicate": "is_required_for_refund_request",
+      "object": "Yes",
+      "conditions": [
+        "Table Column: Required?"
+      ],
+      "lifecycle_decision": "reject",
+      "decision_code": "REJECT_DESCRIPTIVE_PURPOSE",
+      "plain_assertion": "Reason for return [POLICY_FACT] is_required_for_refund_request -> Yes [CONDITION: Table Column: Required?]"
+    },
+    "transition": "review -> reject",
+    "reasons": "[REJECT_DESCRIPTIVE_PURPOSE] Predicate failure: Predicate 'is_required_for_refund_request' is not present in versioned taxonomy registry.; Claim type failure: Unrecognized claim type 'form_field_specification'."
+  },
+  {
+    "baseline_order_index": 49,
+    "category": "Bucket 4: Reclassification of non-executable context",
+    "source_evidence_quote": "| Photos | Damage close-up | If damaged |",
+    "baseline": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:117:77b7c138cba7:1d024856ff",
+      "subject": "Photos",
+      "predicate": "has_example_value",
+      "object": "Damage close-up",
+      "conditions": [
+        "Table Column: Example"
+      ],
+      "lifecycle_decision": "approve",
+      "decision_code": "APPROVE_ALL_PASSED",
+      "plain_assertion": "Photos [POLICY_FACT] has_example_value -> Damage close-up [CONDITION: Table Column: Example]"
+    },
+    "exported": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:117:77b7c138cba7:1d024856ff",
+      "subject": "Photos",
+      "predicate": "has_example_value",
+      "object": "Damage close-up",
+      "conditions": [
+        "Table Column: Example"
+      ],
+      "lifecycle_decision": "reject",
+      "decision_code": "REJECT_DESCRIPTIVE_PURPOSE",
+      "plain_assertion": "Photos [POLICY_FACT] has_example_value -> Damage close-up [CONDITION: Table Column: Example]"
+    },
+    "transition": "approve -> reject",
+    "reasons": "[REJECT_DESCRIPTIVE_PURPOSE] Claim type failure: Unrecognized claim type 'form_field_specification'."
+  },
+  {
+    "baseline_order_index": 50,
+    "category": "Bucket 6: Operative rule incorrectly rejected as non-rule / fragment",
+    "source_evidence_quote": "| Photos | Damage close-up | If damaged |",
+    "baseline": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:117:77b7c138cba7:b41f7b67cb",
+      "subject": "Photos",
+      "predicate": "is_required_for_refund_request",
+      "object": "If damaged",
+      "conditions": [
+        "Table Column: Required?"
+      ],
+      "lifecycle_decision": "review",
+      "decision_code": "WEAK_PREDICATE",
+      "plain_assertion": "Photos [POLICY_FACT] is_required_for_refund_request -> If damaged [CONDITION: Table Column: Required?]"
+    },
+    "exported": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:117:77b7c138cba7:b41f7b67cb",
+      "subject": "Photos",
+      "predicate": "is_required_for_refund_request",
+      "object": "If damaged",
+      "conditions": [
+        "Table Column: Required?"
+      ],
+      "lifecycle_decision": "reject",
+      "decision_code": "REJECT_DESCRIPTIVE_PURPOSE",
+      "plain_assertion": "Photos [POLICY_FACT] is_required_for_refund_request -> If damaged [CONDITION: Table Column: Required?]"
+    },
+    "transition": "review -> reject",
+    "reasons": "[REJECT_DESCRIPTIVE_PURPOSE] Predicate failure: Predicate 'is_required_for_refund_request' is not present in versioned taxonomy registry.; Claim type failure: Unrecognized claim type 'form_field_specification'."
+  },
+  {
+    "baseline_order_index": 51,
+    "category": "Bucket 4: Reclassification of non-executable context",
+    "source_evidence_quote": "| Preferred resolution | Refund to card | Yes |",
+    "baseline": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:118:a7f54580c413:0b39f7c47a",
+      "subject": "Preferred resolution",
+      "predicate": "has_example_value",
+      "object": "Refund to card",
+      "conditions": [
+        "Table Column: Example"
+      ],
+      "lifecycle_decision": "approve",
+      "decision_code": "APPROVE_ALL_PASSED",
+      "plain_assertion": "Preferred resolution [POLICY_FACT] has_example_value -> Refund to card [CONDITION: Table Column: Example]"
+    },
+    "exported": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:118:a7f54580c413:0b39f7c47a",
+      "subject": "Preferred resolution",
+      "predicate": "has_example_value",
+      "object": "Refund to card",
+      "conditions": [
+        "Table Column: Example"
+      ],
+      "lifecycle_decision": "reject",
+      "decision_code": "REJECT_DESCRIPTIVE_PURPOSE",
+      "plain_assertion": "Preferred resolution [POLICY_FACT] has_example_value -> Refund to card [CONDITION: Table Column: Example]"
+    },
+    "transition": "approve -> reject",
+    "reasons": "[REJECT_DESCRIPTIVE_PURPOSE] Claim type failure: Unrecognized claim type 'form_field_specification'."
+  },
+  {
+    "baseline_order_index": 52,
+    "category": "Bucket 6: Operative rule incorrectly rejected as non-rule / fragment",
+    "source_evidence_quote": "| Preferred resolution | Refund to card | Yes |",
+    "baseline": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:118:a7f54580c413:029847d3f9",
+      "subject": "Preferred resolution",
+      "predicate": "is_required_for_refund_request",
+      "object": "Yes",
+      "conditions": [
+        "Table Column: Required?"
+      ],
+      "lifecycle_decision": "review",
+      "decision_code": "WEAK_PREDICATE",
+      "plain_assertion": "Preferred resolution [POLICY_FACT] is_required_for_refund_request -> Yes [CONDITION: Table Column: Required?]"
+    },
+    "exported": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:118:a7f54580c413:029847d3f9",
+      "subject": "Preferred resolution",
+      "predicate": "is_required_for_refund_request",
+      "object": "Yes",
+      "conditions": [
+        "Table Column: Required?"
+      ],
+      "lifecycle_decision": "reject",
+      "decision_code": "REJECT_DESCRIPTIVE_PURPOSE",
+      "plain_assertion": "Preferred resolution [POLICY_FACT] is_required_for_refund_request -> Yes [CONDITION: Table Column: Required?]"
+    },
+    "transition": "review -> reject",
+    "reasons": "[REJECT_DESCRIPTIVE_PURPOSE] Predicate failure: Predicate 'is_required_for_refund_request' is not present in versioned taxonomy registry.; Claim type failure: Unrecognized claim type 'form_field_specification'."
+  },
+  {
+    "baseline_order_index": 68,
+    "category": "Bucket 3: Approval of an unchanged incorrect claim (pre-existing, MUST BLOCK)",
+    "source_evidence_quote": "| Apple Pay / Google Pay | Underlying card | Same as card |",
+    "baseline": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:140:afde2d37e4ff:492363b786",
+      "subject": "Google",
+      "predicate": "has_refund_method",
+      "object": "Underlying card",
+      "conditions": [
+        "Table Column: Refund method"
+      ],
+      "lifecycle_decision": "approve",
+      "decision_code": "APPROVE_ALL_PASSED",
+      "plain_assertion": "Google [PERMISSION] has_refund_method -> Underlying card [CONDITION: Table Column: Refund method]"
+    },
+    "exported": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:140:afde2d37e4ff:492363b786",
+      "subject": "Google",
+      "predicate": "has_refund_method",
+      "object": "Underlying card",
+      "conditions": [
+        "Table Column: Refund method"
+      ],
+      "lifecycle_decision": "approve",
+      "decision_code": "APPROVE_ALL_PASSED",
+      "plain_assertion": "Google [PERMISSION] has_refund_method -> Underlying card [CONDITION: Table Column: Refund method]"
+    },
+    "transition": "approve -> approve",
+    "reasons": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED."
+  },
+  {
+    "baseline_order_index": 69,
+    "category": "Bucket 3: Approval of an unchanged incorrect claim (pre-existing, MUST BLOCK)",
+    "source_evidence_quote": "| Apple Pay / Google Pay | Underlying card | Same as card |",
+    "baseline": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:140:afde2d37e4ff:2c9cf67391",
+      "subject": "Google",
+      "predicate": "has_stage_duration",
+      "object": "Same as card",
+      "conditions": [
+        "Table Column: Notes"
+      ],
+      "lifecycle_decision": "approve",
+      "decision_code": "APPROVE_ALL_PASSED",
+      "plain_assertion": "Google [PERMISSION] has_stage_duration -> Same as card [CONDITION: Table Column: Notes]"
+    },
+    "exported": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:140:afde2d37e4ff:2c9cf67391",
+      "subject": "Google",
+      "predicate": "has_stage_duration",
+      "object": "Same as card",
+      "conditions": [
+        "Table Column: Notes"
+      ],
+      "lifecycle_decision": "approve",
+      "decision_code": "APPROVE_ALL_PASSED",
+      "plain_assertion": "Google [PERMISSION] has_stage_duration -> Same as card [CONDITION: Table Column: Notes]"
+    },
+    "transition": "approve -> approve",
+    "reasons": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED."
+  },
+  {
+    "baseline_order_index": 78,
+    "category": "Bucket 3: Approval of an unchanged incorrect claim (transitioned, MUST BLOCK)",
+    "source_evidence_quote": "Customers who choose store credit instead of a refund to the original payment method receive a 5% bonus on the credit value, up to $25.",
+    "baseline": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:146:d2060256ff89:36c1774757",
+      "subject": "Refund",
+      "predicate": "has_default_refund_destination",
+      "object": "Original payment method whenever possible",
+      "conditions": [],
+      "lifecycle_decision": "reject",
+      "decision_code": "FRAGMENT_ASSERTION_DISCARDED",
+      "plain_assertion": "Refund [OBLIGATION] has_default_refund_destination -> Original payment method whenever possible"
+    },
+    "exported": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:146:d2060256ff89:36c1774757",
+      "subject": "Refund",
+      "predicate": "has_default_refund_destination",
+      "object": "Original payment method whenever possible",
+      "conditions": [],
+      "lifecycle_decision": "approve",
+      "decision_code": "APPROVE_ALL_PASSED",
+      "plain_assertion": "Refund [OBLIGATION] has_default_refund_destination -> Original payment method whenever possible"
+    },
+    "transition": "reject -> approve",
+    "reasons": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED."
+  },
+  {
+    "baseline_order_index": 92,
+    "category": "Bucket 2: Correct semantic revision",
+    "source_evidence_quote": "| Order over $150, any reason | No | Free |",
+    "baseline": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:158:1e10965ca521:21704ae5fd",
+      "subject": "Order",
+      "predicate": "has_return_shipping_rule",
+      "object": "No",
+      "conditions": [
+        "Table Column: Original shipping refunded?"
+      ],
+      "lifecycle_decision": "approve",
+      "decision_code": "APPROVE_ALL_PASSED",
+      "plain_assertion": "Order [PERMISSION] has_return_shipping_rule -> No [CONDITION: Table Column: Original shipping refunded?]"
+    },
+    "exported": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:158:1e10965ca521:05aae6b5e2",
+      "subject": "Order",
+      "predicate": "has_return_shipping_rule",
+      "object": "No",
+      "conditions": [
+        "Table Column: Original shipping refunded?",
+        "order_value > 150 USD",
+        "return_reason: any reason"
+      ],
+      "lifecycle_decision": "approve",
+      "decision_code": "APPROVE_ALL_PASSED",
+      "plain_assertion": "Order [PERMISSION] has_return_shipping_rule -> No [CONDITION: Table Column: Original shipping refunded?; order_value > 150 USD; return_reason: any reason]"
+    },
+    "transition": "approve -> approve",
+    "reasons": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED."
+  },
+  {
+    "baseline_order_index": 93,
+    "category": "Bucket 2: Correct semantic revision",
+    "source_evidence_quote": "| Order over $150, any reason | No | Free |",
+    "baseline": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:158:1e10965ca521:3becf40f50",
+      "subject": "Order",
+      "predicate": "has_return_label_cost",
+      "object": "Free",
+      "conditions": [
+        "Table Column: Return label cost"
+      ],
+      "lifecycle_decision": "approve",
+      "decision_code": "APPROVE_ALL_PASSED",
+      "plain_assertion": "Order [PERMISSION] has_return_label_cost -> Free [CONDITION: Table Column: Return label cost]"
+    },
+    "exported": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:158:1e10965ca521:def86bf564",
+      "subject": "Order",
+      "predicate": "has_return_label_cost",
+      "object": "Free",
+      "conditions": [
+        "Table Column: Return label cost",
+        "order_value > 150 USD",
+        "return_reason: any reason"
+      ],
+      "lifecycle_decision": "approve",
+      "decision_code": "APPROVE_ALL_PASSED",
+      "plain_assertion": "Order [PERMISSION] has_return_label_cost -> Free [CONDITION: Table Column: Return label cost; order_value > 150 USD; return_reason: any reason]"
+    },
+    "transition": "approve -> approve",
+    "reasons": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED."
+  },
+  {
+    "baseline_order_index": 94,
+    "category": "Bucket 3: Approval of an unchanged incorrect claim (transitioned, MUST BLOCK)",
+    "source_evidence_quote": "Return freight for change-of-mind returns is a flat $49.00, deducted from the refund.",
+    "baseline": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:160:5c7041a7d3aa:e334b208a5",
+      "subject": "Oversize items",
+      "predicate": "has_refund_eligibility",
+      "object": "Return freight for change-of-mind returns is a flat $49.00, deducted from the refund.",
+      "conditions": [],
+      "lifecycle_decision": "reject",
+      "decision_code": "FRAGMENT_ASSERTION_DISCARDED",
+      "plain_assertion": "Oversize items [POLICY_FACT] has_refund_eligibility -> Return freight for change-of-mind returns is a flat $49.00, deducted from the refund."
+    },
+    "exported": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:160:5c7041a7d3aa:e334b208a5",
+      "subject": "Oversize items",
+      "predicate": "has_refund_eligibility",
+      "object": "Return freight for change-of-mind returns is a flat $49.00, deducted from the refund.",
+      "conditions": [],
+      "lifecycle_decision": "approve",
+      "decision_code": "APPROVE_ALL_PASSED",
+      "plain_assertion": "Oversize items [POLICY_FACT] has_refund_eligibility -> Return freight for change-of-mind returns is a flat $49.00, deducted from the refund."
+    },
+    "transition": "reject -> approve",
+    "reasons": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED."
+  },
+  {
+    "baseline_order_index": 99,
+    "category": "Bucket 3: Approval of an unchanged incorrect claim (transitioned, MUST BLOCK)",
+    "source_evidence_quote": "Keep the drop-off receipt until your refund has been confirmed.",
+    "baseline": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:164:9ad8389a2d33:cb5871be1e",
+      "subject": "Drop-off locations",
+      "predicate": "has_refund_eligibility",
+      "object": "Keep the drop-off receipt until your refund has been confirmed.",
+      "conditions": [],
+      "lifecycle_decision": "reject",
+      "decision_code": "FRAGMENT_ASSERTION_DISCARDED",
+      "plain_assertion": "Drop-off locations [POLICY_FACT] has_refund_eligibility -> Keep the drop-off receipt until your refund has been confirmed."
+    },
+    "exported": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:164:9ad8389a2d33:cb5871be1e",
+      "subject": "Drop-off locations",
+      "predicate": "has_refund_eligibility",
+      "object": "Keep the drop-off receipt until your refund has been confirmed.",
+      "conditions": [],
+      "lifecycle_decision": "approve",
+      "decision_code": "APPROVE_ALL_PASSED",
+      "plain_assertion": "Drop-off locations [POLICY_FACT] has_refund_eligibility -> Keep the drop-off receipt until your refund has been confirmed."
+    },
+    "transition": "reject -> approve",
+    "reasons": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED."
+  },
+  {
+    "baseline_order_index": 104,
+    "category": "Bucket 3: Approval of an unchanged incorrect claim (pre-existing, MUST BLOCK)",
+    "source_evidence_quote": "| Partial refund (keep item) | Offered for minor cosmetic flaws | Immediate |",
+    "baseline": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:177:dd611bcaa1c8:83acd7961d",
+      "subject": "Keep It policy",
+      "predicate": "has_resolution_option_details",
+      "object": "Offered for minor cosmetic flaws",
+      "conditions": [
+        "Table Column: Details"
+      ],
+      "lifecycle_decision": "approve",
+      "decision_code": "APPROVE_ALL_PASSED",
+      "plain_assertion": "Keep It policy [POLICY_FACT] has_resolution_option_details -> Offered for minor cosmetic flaws [CONDITION: Table Column: Details]"
+    },
+    "exported": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:177:dd611bcaa1c8:83acd7961d",
+      "subject": "Keep It policy",
+      "predicate": "has_resolution_option_details",
+      "object": "Offered for minor cosmetic flaws",
+      "conditions": [
+        "Table Column: Details"
+      ],
+      "lifecycle_decision": "approve",
+      "decision_code": "APPROVE_ALL_PASSED",
+      "plain_assertion": "Keep It policy [POLICY_FACT] has_resolution_option_details -> Offered for minor cosmetic flaws [CONDITION: Table Column: Details]"
+    },
+    "transition": "approve -> approve",
+    "reasons": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED."
+  },
+  {
+    "baseline_order_index": 105,
+    "category": "Bucket 3: Approval of an unchanged incorrect claim (pre-existing, MUST BLOCK)",
+    "source_evidence_quote": "| Partial refund (keep item) | Offered for minor cosmetic flaws | Immediate |",
+    "baseline": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:177:dd611bcaa1c8:903c128dd4",
+      "subject": "Keep It policy",
+      "predicate": "has_stage_duration",
+      "object": "Immediate",
+      "conditions": [
+        "Table Column: Timeline"
+      ],
+      "lifecycle_decision": "approve",
+      "decision_code": "APPROVE_ALL_PASSED",
+      "plain_assertion": "Keep It policy [POLICY_FACT] has_stage_duration -> Immediate [CONDITION: Table Column: Timeline]"
+    },
+    "exported": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:177:dd611bcaa1c8:903c128dd4",
+      "subject": "Keep It policy",
+      "predicate": "has_stage_duration",
+      "object": "Immediate",
+      "conditions": [
+        "Table Column: Timeline"
+      ],
+      "lifecycle_decision": "approve",
+      "decision_code": "APPROVE_ALL_PASSED",
+      "plain_assertion": "Keep It policy [POLICY_FACT] has_stage_duration -> Immediate [CONDITION: Table Column: Timeline]"
+    },
+    "transition": "approve -> approve",
+    "reasons": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED."
+  },
+  {
+    "baseline_order_index": 108,
+    "category": "Other",
+    "source_evidence_quote": "For damaged items valued under $40.00, we may issue a refund without requiring the item to be returned (\"Keep It\" policy), at the agent's discretion.",
+    "baseline": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:179:3d0c401efe83:8c38ca72f9",
+      "subject": "Damaged item valued under $40",
+      "predicate": "may_issue_refund_without_return",
+      "object": "Damaged items under $40 may be refunded without return",
+      "conditions": [],
+      "lifecycle_decision": "approve",
+      "decision_code": "APPROVE_ALL_PASSED",
+      "plain_assertion": "Damaged item valued under $40 [PERMISSION] may_issue_refund_without_return -> Damaged items under $40 may be refunded without return"
+    },
+    "exported": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:179:3d0c401efe83:8c38ca72f9",
+      "subject": "Damaged item valued under $40",
+      "predicate": "may_issue_refund_without_return",
+      "object": "Damaged items under $40 may be refunded without return",
+      "conditions": [],
+      "lifecycle_decision": "approve",
+      "decision_code": "APPROVE_ALL_PASSED",
+      "plain_assertion": "Damaged item valued under $40 [PERMISSION] may_issue_refund_without_return -> Damaged items under $40 may be refunded without return"
+    },
+    "transition": "approve -> approve",
+    "reasons": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED."
+  },
+  {
+    "baseline_order_index": 109,
+    "category": "Other",
+    "source_evidence_quote": "This is limited to two instances per customer per year.",
+    "baseline": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:179:3d0c401efe83:ffdf9667bd",
+      "subject": "This is",
+      "predicate": "limited_to",
+      "object": "two instances per customer per year",
+      "conditions": [],
+      "lifecycle_decision": "review",
+      "decision_code": "WEAK_PREDICATE",
+      "plain_assertion": "This is [OBLIGATION] limited_to -> two instances per customer per year"
+    },
+    "exported": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:179:3d0c401efe83:ffdf9667bd",
+      "subject": "This is",
+      "predicate": "limited_to",
+      "object": "two instances per customer per year",
+      "conditions": [],
+      "lifecycle_decision": "review",
+      "decision_code": "WEAK_PREDICATE",
+      "plain_assertion": "This is [OBLIGATION] limited_to -> two instances per customer per year"
+    },
+    "transition": "review -> review",
+    "reasons": "[WEAK_PREDICATE] Predicate failure: Predicate 'limited_to' is not present in versioned taxonomy registry."
+  },
+  {
+    "baseline_order_index": 124,
+    "category": "Bucket 3: Approval of an unchanged incorrect claim (pre-existing, MUST BLOCK)",
+    "source_evidence_quote": "| Trailhead Box | Monthly, 1st of month | Anytime before the 25th | Full refund if cancelled within 48 hours of renewal and box not shipped |",
+    "baseline": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:195:d912e62369ac:87f7a3311b",
+      "subject": "Subscription",
+      "predicate": "has_refund_rule",
+      "object": "Full refund if cancelled within 48 hours of renewal and box not shipped",
+      "conditions": [
+        {
+          "field": "cancellation_time",
+          "operator": "<=",
+          "value": 48,
+          "unit": "hours_after_renewal"
+        },
+        {
+          "field": "box_status",
+          "operator": "!=",
+          "value": "shipped"
+        }
+      ],
+      "lifecycle_decision": "review",
+      "decision_code": "WEAK_PREDICATE",
+      "plain_assertion": "Subscription [ENTITLEMENT] has_refund_rule -> Full refund if cancelled within 48 hours of renewal and box not shipped [CONDITION: {'field': 'cancellation_time', 'operator': '<=', 'value': 48, 'unit': 'hours_after_renewal'}; {'field': 'box_status', 'operator': '!=', 'value': 'shipped'}]"
+    },
+    "exported": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:195:d912e62369ac:87f7a3311b",
+      "subject": "Subscription",
+      "predicate": "has_refund_rule",
+      "object": "Full refund if cancelled within 48 hours of renewal and box not shipped",
+      "conditions": [
+        {
+          "field": "cancellation_time",
+          "operator": "<=",
+          "value": 48,
+          "unit": "hours_after_renewal"
+        },
+        {
+          "field": "box_status",
+          "operator": "!=",
+          "value": "shipped"
+        }
+      ],
+      "lifecycle_decision": "review",
+      "decision_code": "WEAK_PREDICATE",
+      "plain_assertion": "Subscription [ENTITLEMENT] has_refund_rule -> Full refund if cancelled within 48 hours of renewal and box not shipped [CONDITION: {'field': 'cancellation_time', 'operator': '<=', 'value': 48, 'unit': 'hours_after_renewal'}; {'field': 'box_status', 'operator': '!=', 'value': 'shipped'}]"
+    },
+    "transition": "review -> review",
+    "reasons": "[WEAK_PREDICATE] Predicate failure: Predicate 'has_refund_rule' is not present in versioned taxonomy registry."
+  },
+  {
+    "baseline_order_index": 125,
+    "category": "Bucket 3: Approval of an unchanged incorrect claim (pre-existing, MUST BLOCK)",
+    "source_evidence_quote": "| Rewards Plus | Annual | Anytime | Pro-rated refund within 30 days of renewal; none afterwards |",
+    "baseline": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:196:da364f4785fb:cc57c9841b",
+      "subject": "Subscription",
+      "predicate": "has_billing_schedule",
+      "object": "Annual",
+      "conditions": [
+        "Table Column: Billing"
+      ],
+      "lifecycle_decision": "approve",
+      "decision_code": "APPROVE_ALL_PASSED",
+      "plain_assertion": "Subscription [PERMISSION] has_billing_schedule -> Annual [CONDITION: Table Column: Billing]"
+    },
+    "exported": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:196:da364f4785fb:cc57c9841b",
+      "subject": "Subscription",
+      "predicate": "has_billing_schedule",
+      "object": "Annual",
+      "conditions": [
+        "Table Column: Billing"
+      ],
+      "lifecycle_decision": "approve",
+      "decision_code": "APPROVE_ALL_PASSED",
+      "plain_assertion": "Subscription [PERMISSION] has_billing_schedule -> Annual [CONDITION: Table Column: Billing]"
+    },
+    "transition": "approve -> approve",
+    "reasons": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED."
+  },
+  {
+    "baseline_order_index": 126,
+    "category": "Bucket 3: Approval of an unchanged incorrect claim (pre-existing, MUST BLOCK)",
+    "source_evidence_quote": "| Rewards Plus | Annual | Anytime | Pro-rated refund within 30 days of renewal; none afterwards |",
+    "baseline": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:196:da364f4785fb:61c79d676b",
+      "subject": "Subscription",
+      "predicate": "has_cancellation_rule",
+      "object": "Anytime",
+      "conditions": [
+        "Table Column: Cancellation"
+      ],
+      "lifecycle_decision": "approve",
+      "decision_code": "APPROVE_ALL_PASSED",
+      "plain_assertion": "Subscription [PERMISSION] has_cancellation_rule -> Anytime [CONDITION: Table Column: Cancellation]"
+    },
+    "exported": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:196:da364f4785fb:61c79d676b",
+      "subject": "Subscription",
+      "predicate": "has_cancellation_rule",
+      "object": "Anytime",
+      "conditions": [
+        "Table Column: Cancellation"
+      ],
+      "lifecycle_decision": "approve",
+      "decision_code": "APPROVE_ALL_PASSED",
+      "plain_assertion": "Subscription [PERMISSION] has_cancellation_rule -> Anytime [CONDITION: Table Column: Cancellation]"
+    },
+    "transition": "approve -> approve",
+    "reasons": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED."
+  },
+  {
+    "baseline_order_index": 127,
+    "category": "Bucket 3: Approval of an unchanged incorrect claim (pre-existing, MUST BLOCK)",
+    "source_evidence_quote": "| Rewards Plus | Annual | Anytime | Pro-rated refund within 30 days of renewal; none afterwards |",
+    "baseline": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:196:da364f4785fb:502c6c333c",
+      "subject": "Subscription",
+      "predicate": "has_refund_rule",
+      "object": "Pro-rated refund within 30 days of renewal; none afterwards",
+      "conditions": [
+        "Table Column: Refund rule"
+      ],
+      "lifecycle_decision": "review",
+      "decision_code": "WEAK_PREDICATE",
+      "plain_assertion": "Subscription [ENTITLEMENT] has_refund_rule -> Pro-rated refund within 30 days of renewal; none afterwards [CONDITION: Table Column: Refund rule]"
+    },
+    "exported": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:196:da364f4785fb:502c6c333c",
+      "subject": "Subscription",
+      "predicate": "has_refund_rule",
+      "object": "Pro-rated refund within 30 days of renewal; none afterwards",
+      "conditions": [
+        "Table Column: Refund rule"
+      ],
+      "lifecycle_decision": "review",
+      "decision_code": "WEAK_PREDICATE",
+      "plain_assertion": "Subscription [ENTITLEMENT] has_refund_rule -> Pro-rated refund within 30 days of renewal; none afterwards [CONDITION: Table Column: Refund rule]"
+    },
+    "transition": "review -> review",
+    "reasons": "[WEAK_PREDICATE] Predicate failure: Predicate 'has_refund_rule' is not present in versioned taxonomy registry."
+  },
+  {
+    "baseline_order_index": 128,
+    "category": "Bucket 3: Approval of an unchanged incorrect claim (pre-existing, MUST BLOCK)",
+    "source_evidence_quote": "| Gear Care Plan | Monthly | Anytime | No refund for current month; cancel effective next cycle |",
+    "baseline": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:197:3a15a267c8f1:dd42fcf4cb",
+      "subject": "Subscription",
+      "predicate": "has_billing_schedule",
+      "object": "Monthly",
+      "conditions": [
+        "Table Column: Billing"
+      ],
+      "lifecycle_decision": "approve",
+      "decision_code": "APPROVE_ALL_PASSED",
+      "plain_assertion": "Subscription [PERMISSION] has_billing_schedule -> Monthly [CONDITION: Table Column: Billing]"
+    },
+    "exported": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:197:3a15a267c8f1:dd42fcf4cb",
+      "subject": "Subscription",
+      "predicate": "has_billing_schedule",
+      "object": "Monthly",
+      "conditions": [
+        "Table Column: Billing"
+      ],
+      "lifecycle_decision": "approve",
+      "decision_code": "APPROVE_ALL_PASSED",
+      "plain_assertion": "Subscription [PERMISSION] has_billing_schedule -> Monthly [CONDITION: Table Column: Billing]"
+    },
+    "transition": "approve -> approve",
+    "reasons": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED."
+  },
+  {
+    "baseline_order_index": 129,
+    "category": "Bucket 3: Approval of an unchanged incorrect claim (pre-existing, MUST BLOCK)",
+    "source_evidence_quote": "| Gear Care Plan | Monthly | Anytime | No refund for current month; cancel effective next cycle |",
+    "baseline": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:197:3a15a267c8f1:8312fe140a",
+      "subject": "Subscription",
+      "predicate": "has_refund_eligibility",
+      "object": "No refund for current month; cancel effective next cycle",
+      "conditions": [
+        "Table Column: Refund rule"
+      ],
+      "lifecycle_decision": "approve",
+      "decision_code": "APPROVE_ALL_PASSED",
+      "plain_assertion": "Subscription [ENTITLEMENT] has_refund_eligibility -> No refund for current month; cancel effective next cycle [CONDITION: Table Column: Refund rule]"
+    },
+    "exported": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:197:3a15a267c8f1:8312fe140a",
+      "subject": "Subscription",
+      "predicate": "has_refund_eligibility",
+      "object": "No refund for current month; cancel effective next cycle",
+      "conditions": [
+        "Table Column: Refund rule"
+      ],
+      "lifecycle_decision": "approve",
+      "decision_code": "APPROVE_ALL_PASSED",
+      "plain_assertion": "Subscription [ENTITLEMENT] has_refund_eligibility -> No refund for current month; cancel effective next cycle [CONDITION: Table Column: Refund rule]"
+    },
+    "transition": "approve -> approve",
+    "reasons": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED."
+  },
+  {
+    "baseline_order_index": 130,
+    "category": "Bucket 2: Correct semantic revision",
+    "source_evidence_quote": "If you cancel before the trial ends, you will not be charged.",
+    "baseline": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:199:a5aeba23b922:6b115dd9bb",
+      "subject": "User",
+      "predicate": "can_cancel_before_shipment",
+      "object": "be charged",
+      "conditions": [
+        "you cancel before the trial ends"
+      ],
+      "lifecycle_decision": "review",
+      "decision_code": "DEONTIC_MODALITY_MISMATCH",
+      "plain_assertion": "User [PERMISSION] can_cancel_before_shipment -> be charged [CONDITION: you cancel before the trial ends]"
+    },
+    "exported": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:199:a5aeba23b922:4db1e8c340",
+      "subject": "Subscriber",
+      "predicate": "can_cancel_before_trial_ends",
+      "object": "without charge",
+      "conditions": [
+        "you cancel before the trial ends",
+        "before trial ends"
+      ],
+      "lifecycle_decision": "approve",
+      "decision_code": "APPROVE_ALL_PASSED",
+      "plain_assertion": "Subscriber [PERMISSION] can_cancel_before_trial_ends -> without charge [CONDITION: you cancel before the trial ends; before trial ends]"
+    },
+    "transition": "review -> approve",
+    "reasons": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED."
+  },
+  {
+    "baseline_order_index": 134,
+    "category": "Bucket 3: Approval of an unchanged incorrect claim (pre-existing, MUST BLOCK)",
+    "source_evidence_quote": "Digital goods such as trail guides (PDF), camping-skills video courses, and map packs are non-refundable after download or streaming begins.",
+    "baseline": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:208:732a25bc5fcb:96eccf76e4",
+      "subject": "Video course",
+      "predicate": "has_refund_window",
+      "object": "Refunded within 7 days if under 20% viewed",
+      "conditions": [
+        "Under 20% viewed"
+      ],
+      "lifecycle_decision": "approve",
+      "decision_code": "APPROVE_ALL_PASSED",
+      "plain_assertion": "Video course [PERMISSION] has_refund_window -> Refunded within 7 days if under 20% viewed [CONDITION: Under 20% viewed]"
+    },
+    "exported": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:208:732a25bc5fcb:96eccf76e4",
+      "subject": "Video course",
+      "predicate": "has_refund_window",
+      "object": "Refunded within 7 days if under 20% viewed",
+      "conditions": [
+        "Under 20% viewed"
+      ],
+      "lifecycle_decision": "approve",
+      "decision_code": "APPROVE_ALL_PASSED",
+      "plain_assertion": "Video course [PERMISSION] has_refund_window -> Refunded within 7 days if under 20% viewed [CONDITION: Under 20% viewed]"
+    },
+    "transition": "approve -> approve",
+    "reasons": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED."
+  },
+  {
+    "baseline_order_index": 141,
+    "category": "Bucket 3: Approval of an unchanged incorrect claim (transitioned, MUST BLOCK)",
+    "source_evidence_quote": "The purchaser is not notified of the return.",
+    "baseline": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:216:7a27f9e58d51:66e2a3e745",
+      "subject": "Gift receipt",
+      "predicate": "has_refund_eligibility",
+      "object": "The purchaser is not notified of the return.",
+      "conditions": [],
+      "lifecycle_decision": "reject",
+      "decision_code": "FRAGMENT_ASSERTION_DISCARDED",
+      "plain_assertion": "Gift receipt [POLICY_FACT] has_refund_eligibility -> The purchaser is not notified of the return."
+    },
+    "exported": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:216:7a27f9e58d51:66e2a3e745",
+      "subject": "Gift receipt",
+      "predicate": "has_refund_eligibility",
+      "object": "The purchaser is not notified of the return.",
+      "conditions": [],
+      "lifecycle_decision": "approve",
+      "decision_code": "APPROVE_ALL_PASSED",
+      "plain_assertion": "Gift receipt [POLICY_FACT] has_refund_eligibility -> The purchaser is not notified of the return."
+    },
+    "transition": "reject -> approve",
+    "reasons": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED."
+  },
+  {
+    "baseline_order_index": 159,
+    "category": "Bucket 3: Approval of an unchanged incorrect claim (transitioned, MUST BLOCK)",
+    "source_evidence_quote": "Items shipped directly by third-party sellers follow the seller's policy, but Northwind's A-to-Z Guarantee ensures a refund if the seller fails to respond within 5 business days.",
+    "baseline": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:235:b6ca0f38e9e1:47af89e674",
+      "subject": "Marketplace sellers",
+      "predicate": "has_refund_eligibility",
+      "object": "Items shipped directly by third-party sellers follow the seller's policy, but Northwind's A-to-Z Guarantee ensures a refund if the seller fails to respond within 5 business days.",
+      "conditions": [
+        "the seller fails to respond within 5 business days"
+      ],
+      "lifecycle_decision": "reject",
+      "decision_code": "FRAGMENT_ASSERTION_DISCARDED",
+      "plain_assertion": "Marketplace sellers [POLICY_FACT] has_refund_eligibility -> Items shipped directly by third-party sellers follow the seller's policy, but Northwind's A-to-Z Guarantee ensures a refund if the seller fails to respond within 5 business days. [CONDITION: the seller fails to respond within 5 business days]"
+    },
+    "exported": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:235:b6ca0f38e9e1:47af89e674",
+      "subject": "Marketplace sellers",
+      "predicate": "has_refund_eligibility",
+      "object": "Items shipped directly by third-party sellers follow the seller's policy, but Northwind's A-to-Z Guarantee ensures a refund if the seller fails to respond within 5 business days.",
+      "conditions": [
+        "the seller fails to respond within 5 business days"
+      ],
+      "lifecycle_decision": "approve",
+      "decision_code": "APPROVE_ALL_PASSED",
+      "plain_assertion": "Marketplace sellers [POLICY_FACT] has_refund_eligibility -> Items shipped directly by third-party sellers follow the seller's policy, but Northwind's A-to-Z Guarantee ensures a refund if the seller fails to respond within 5 business days. [CONDITION: the seller fails to respond within 5 business days]"
+    },
+    "transition": "reject -> approve",
+    "reasons": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED."
+  },
+  {
+    "baseline_order_index": 178,
+    "category": "Bucket 3: Approval of an unchanged incorrect claim (pre-existing, MUST BLOCK)",
+    "source_evidence_quote": "Refunds are issued in the currency of the original charge.",
+    "baseline": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:246:e7823c09f89f:a0966355ef",
+      "subject": "International refund",
+      "predicate": "has_refund_eligibility",
+      "object": "Refunds are issued in the currency of the original charge.",
+      "conditions": [],
+      "lifecycle_decision": "approve",
+      "decision_code": "APPROVE_ALL_PASSED",
+      "plain_assertion": "International refund [POLICY_FACT] has_refund_eligibility -> Refunds are issued in the currency of the original charge."
+    },
+    "exported": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:246:e7823c09f89f:a0966355ef",
+      "subject": "International refund",
+      "predicate": "has_refund_eligibility",
+      "object": "Refunds are issued in the currency of the original charge.",
+      "conditions": [],
+      "lifecycle_decision": "approve",
+      "decision_code": "APPROVE_ALL_PASSED",
+      "plain_assertion": "International refund [POLICY_FACT] has_refund_eligibility -> Refunds are issued in the currency of the original charge."
+    },
+    "transition": "approve -> approve",
+    "reasons": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED."
+  },
+  {
+    "baseline_order_index": 180,
+    "category": "Bucket 6: Operative rule incorrectly rejected as non-rule / fragment",
+    "source_evidence_quote": "Customers are responsible for filing customs duty drawback claims where available.",
+    "baseline": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:248:8ce08a2be4ff:20254f798d",
+      "subject": "Customer",
+      "predicate": "are_responsible_for",
+      "object": "filing customs duty drawback claims where available",
+      "conditions": [
+        "available"
+      ],
+      "lifecycle_decision": "reject",
+      "decision_code": "FRAGMENT_ASSERTION_DISCARDED",
+      "plain_assertion": "Customer [PERMISSION] are_responsible_for -> filing customs duty drawback claims where available [CONDITION: available]"
+    },
+    "exported": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:248:8ce08a2be4ff:20254f798d",
+      "subject": "Customer",
+      "predicate": "are_responsible_for",
+      "object": "filing customs duty drawback claims where available",
+      "conditions": [
+        "available"
+      ],
+      "lifecycle_decision": "reject",
+      "decision_code": "FRAGMENT_ASSERTION_DISCARDED",
+      "plain_assertion": "Customer [PERMISSION] are_responsible_for -> filing customs duty drawback claims where available [CONDITION: available]"
+    },
+    "transition": "reject -> reject",
+    "reasons": "[FRAGMENT_ASSERTION_DISCARDED] Text integrity failure: Normative rule is missing an operative modal phrase ('may', 'must', 'will', 'shall', etc.).; Predicate failure: Predicate 'are_responsible_for' is not present in versioned taxonomy registry."
+  },
+  {
+    "baseline_order_index": 206,
+    "category": "Bucket 3: Approval of an unchanged incorrect claim (transitioned, MUST BLOCK)",
+    "source_evidence_quote": "Return history is stored per our Privacy Policy, retained for 7 years for audit purposes, and never sold to third parties.",
+    "baseline": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:283:e24d2a3aa07f:4a793c501f",
+      "subject": "Privacy",
+      "predicate": "has_refund_eligibility",
+      "object": "Return history is stored per our Privacy Policy, retained for 7 years for audit purposes, and never sold to third parties.",
+      "conditions": [],
+      "lifecycle_decision": "reject",
+      "decision_code": "FRAGMENT_ASSERTION_DISCARDED",
+      "plain_assertion": "Privacy [POLICY_FACT] has_refund_eligibility -> Return history is stored per our Privacy Policy, retained for 7 years for audit purposes, and never sold to third parties."
+    },
+    "exported": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:283:e24d2a3aa07f:4a793c501f",
+      "subject": "Privacy",
+      "predicate": "has_refund_eligibility",
+      "object": "Return history is stored per our Privacy Policy, retained for 7 years for audit purposes, and never sold to third parties.",
+      "conditions": [],
+      "lifecycle_decision": "approve",
+      "decision_code": "APPROVE_ALL_PASSED",
+      "plain_assertion": "Privacy [POLICY_FACT] has_refund_eligibility -> Return history is stored per our Privacy Policy, retained for 7 years for audit purposes, and never sold to third parties."
+    },
+    "transition": "reject -> approve",
+    "reasons": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED."
+  },
+  {
+    "baseline_order_index": 210,
+    "category": "Bucket 1: Correct evidence-aware recovery",
+    "source_evidence_quote": "We offer one courtesy replacement per customer per year for packages under $200.",
+    "baseline": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:300:2fc3a3c486dc:7f502aab54",
+      "subject": "Stolen package",
+      "predicate": "has_courtesy_replacement_rule",
+      "object": "One courtesy replacement per customer per year for packages under $200",
+      "conditions": [],
+      "lifecycle_decision": "reject",
+      "decision_code": "FRAGMENT_ASSERTION_DISCARDED",
+      "plain_assertion": "Stolen package [PERMISSION] has_courtesy_replacement_rule -> One courtesy replacement per customer per year for packages under $200"
+    },
+    "exported": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:300:2fc3a3c486dc:7f502aab54",
+      "subject": "Stolen package",
+      "predicate": "has_courtesy_replacement_rule",
+      "object": "One courtesy replacement per customer per year for packages under $200",
+      "conditions": [],
+      "lifecycle_decision": "approve",
+      "decision_code": "APPROVE_ALL_PASSED",
+      "plain_assertion": "Stolen package [PERMISSION] has_courtesy_replacement_rule -> One courtesy replacement per customer per year for packages under $200"
+    },
+    "transition": "reject -> approve",
+    "reasons": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED."
+  },
+  {
+    "baseline_order_index": 229,
+    "category": "Bucket 4: Reclassification of non-executable context",
+    "source_evidence_quote": "0             Mar 1, 2025                Gold member window raised from 45 to 60 days",
+    "baseline": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:331:fda96f9aef62:38c844a5e9",
+      "subject": "Aug 15, 2025 Added Gear Care",
+      "predicate": "has_resolution_path",
+      "object": "4.0 Mar 1, 2025 Gold member window raised from 45 to 60 days",
+      "conditions": [],
+      "lifecycle_decision": "reject",
+      "decision_code": "FRAGMENT_ASSERTION_DISCARDED",
+      "plain_assertion": "Aug 15, 2025 Added Gear Care [POLICY_FACT] has_resolution_path -> 4.0 Mar 1, 2025 Gold member window raised from 45 to 60 days"
+    },
+    "exported": {
+      "candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:331:fda96f9aef62:38c844a5e9",
+      "subject": "Aug 15, 2025 Added Gear Care",
+      "predicate": "has_resolution_path",
+      "object": "4.0 Mar 1, 2025 Gold member window raised from 45 to 60 days",
+      "conditions": [],
+      "lifecycle_decision": "reject",
+      "decision_code": "REJECT_DESCRIPTIVE_PURPOSE",
+      "plain_assertion": "Aug 15, 2025 Added Gear Care [POLICY_FACT] has_resolution_path -> 4.0 Mar 1, 2025 Gold member window raised from 45 to 60 days"
+    },
+    "transition": "reject -> reject",
+    "reasons": "[REJECT_DESCRIPTIVE_PURPOSE] Claim type failure: Unrecognized claim type 'EXAMPLE'."
+  }
+]

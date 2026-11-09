@@ -10,6 +10,7 @@ from app.db.models.claim_conflict import ClaimConflict
 from app.db.models.document import Document
 from app.db.models.document_version import DocumentVersion
 from app.db.models.folder import Folder
+from app.db.enums import RecordStatus
 from app.db.models.human_review import HumanReview
 from app.schemas.folder import (
     FolderClaimMetrics,
@@ -660,10 +661,13 @@ class FolderService:
         res = await self.db.execute(stmt)
         folders = res.scalars().all()
 
-        # Aggregate counts
+        # Aggregate counts - exclude inactive/deleted documents
         doc_counts_res = await self.db.execute(
             select(Document.folder_id, func.count(Document.id))
-            .where(Document.organization_id == organization_id)
+            .where(
+                Document.organization_id == organization_id,
+                Document.status.notin_([RecordStatus.INACTIVE, RecordStatus.DELETED]),
+            )
             .group_by(Document.folder_id)
         )
         doc_counts: Dict[uuid.UUID, int] = {r[0]: r[1] for r in doc_counts_res.fetchall() if r[0] is not None}
@@ -1131,12 +1135,13 @@ class FolderService:
             )
         ).scalar() or 0
 
-        # Count documents
+        # Count documents (excluding inactive/deleted)
         doc_count = (
             await self.db.execute(
                 select(func.count(Document.id)).where(
                     Document.organization_id == organization_id,
                     Document.folder_id == folder_id,
+                    Document.status.notin_([RecordStatus.INACTIVE, RecordStatus.DELETED]),
                 )
             )
         ).scalar() or 0
@@ -1172,11 +1177,12 @@ class FolderService:
             descendants = await self._get_subtree_folders(organization_id, folder_id)
             folder_ids.extend([d.id for d in descendants])
 
-        # 1. Document metrics
+        # 1. Document metrics (excluding inactive/deleted)
         docs_res = await self.db.execute(
             select(Document.id, Document.status).where(
                 Document.organization_id == organization_id,
                 Document.folder_id.in_(folder_ids),
+                Document.status.notin_([RecordStatus.INACTIVE, RecordStatus.DELETED]),
             )
         )
         docs = docs_res.fetchall()

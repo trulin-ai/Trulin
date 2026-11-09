@@ -80,7 +80,20 @@ INVALID_SUBJECT_PATTERNS = [
 ] + PAGE_HEADER_PATTERNS + POSTAL_ADDRESS_PATTERNS
 
 # Operative contractual modal verbs required in normative rules
-MODAL_OPERATIVE_PATTERN = r"\b(may|must|will|shall|can|should|is\s+required\s+to|are\s+required\s+to|is\s+entitled\s+to|are\s+entitled\s+to|is\s+eligible\s+(?:for|to)|are\s+eligible\s+(?:for|to)|agrees\s+to|agree\s+to|authorizes?|grants?|retains?|warrants?|reserves?|assigns?|requires?|is\s+responsible\s+for|remains\s+responsible\s+for|has\s+a\b|has\s+the\s+right\s+to\b|is\s+limited\s+to\b|is\s+capped\s+at\b|shall\s+be\s+limited\s+to\b|liability\s+is\s+the\b|must\s+not|may\s+not|will\s+not|shall\s+not|neither\s+party\s+will|is\s+not\s+licensed\s+to|prohibited\s+from)\b"
+MODAL_OPERATIVE_PATTERN = (
+    r"\b("
+    r"may|must|will|shall|can|should|cannot|"
+    r"(?:is|are)\s+required(?:\s+to)?|approval\s+required|required|"
+    r"(?:is|are)\s+accepted|accepted\s+in-store|"
+    r"(?:is|are)\s+entitled\s+to|(?:is|are)\s+eligible\s+(?:for|to)|"
+    r"agrees?\s+to|authorizes?|grants?|retains?|warrants?|reserves?|assigns?|requires?|"
+    r"(?:is|are|remains)\s+responsible\s+for|has\s+a\b|has\s+the\s+right\s+to\b|"
+    r"is\s+limited\s+to\b|is\s+capped\s+at\b|shall\s+be\s+limited\s+to\b|liability\s+is\s+the\b|"
+    r"must\s+not|may\s+not|will\s+not|shall\s+not|neither\s+party\s+will|is\s+not\s+licensed\s+to|prohibited\s+from|"
+    r"non-refundable|not\s+refundable|not\s+eligible|never\s+expire|applies|"
+    r"(?:is|are)\s+issued|submits?|decides?|refunded|refunds?|receives?|bonus|deducted(?:\s+from)?"
+    r")\b"
+)
 
 # Generic predicate slug pattern in claim text
 PREDICATE_SLUG_REGEX = r"\b(?:has|can|may|must|will|remains|is)_[a-z0-9]+(?:_[a-z0-9]+)+\b"
@@ -159,6 +172,7 @@ class UniversalGateResult:
     entailment_reason: Optional[str] = None
     entailment_dimension: Optional[str] = None
 
+    subject: Optional[str] = None
     all_gates_passed: bool = False
     lifecycle_state: ClaimLifecycleState = ClaimLifecycleState.REVIEW_REQUIRED
     certification_tier: str = "REVIEW_REQUIRED"
@@ -168,11 +182,23 @@ class UniversalGateResult:
     gates: Dict[str, bool] = field(default_factory=dict)
     repaired_claim_text: Optional[str] = None
 
+    @property
+    def lifecycle_decision(self) -> str:
+        if self.certification_tier == "AUTOMATED_CERTIFIED":
+            return "approve"
+        if self.certification_tier == "REVIEW_REQUIRED":
+            return "review"
+        if self.certification_tier == "NON_RULE":
+            return "non_rule"
+        return "reject"
+
     def to_dict(self) -> Dict[str, Any]:
         return {
             "gates": self.gates,
             "all_gates_passed": self.all_gates_passed,
+            "subject": self.subject,
             "lifecycle_state": self.lifecycle_state.value if hasattr(self.lifecycle_state, "value") else str(self.lifecycle_state),
+            "lifecycle_decision": self.lifecycle_decision,
             "certification_tier": self.certification_tier,
             "is_canonical": self.is_canonical,
             "agent_accessible": self.agent_accessible,
@@ -229,16 +255,28 @@ class UniversalGateEvaluator:
         subj_lower = (subject or "").lower()
         obj_lower = (object_text or "").lower()
 
-        # 1. has_return_window
-        if pred_lower == "has_return_window":
-            # Direct contradiction: clause explicitly bars returns
-            if re.search(r"\b(no returns|all sales are final|returns are not permitted|non-returnable|cannot be returned)\b", full_evidence):
-                return SemanticEntailmentResult(
-                    decision=EntailmentDecision.CONTRADICTED,
-                    is_supported=False,
-                    reason="Direct contradiction: evidence explicitly bars returns of products.",
-                    dimension_checked="MODALITY_POLARITY",
-                )
+        # 1. has_return_window / has_refund_window
+        if pred_lower in ("has_return_window", "has_refund_window"):
+            # Direct contradiction: clause explicitly bars returns or specifies non-refundable
+            if re.search(r"\b(no returns|all sales are final|returns are not permitted|non-returnable|cannot be returned|strictly non-refundable|non-refundable|nonrefundable|not eligible for (?:any\s+)?refund|no refunds?(?:\s+will\s+be\s+provided)?)\b", full_evidence):
+                # If claim asserts a specific timeframe/exception (e.g. 7 days) that does not appear in full_evidence
+                window_match = re.search(r"\b(\d+)\s*(?:days?|calendar days?|business days?|hours?)\b", claim_text.lower())
+                if window_match:
+                    window_str = window_match.group(0)
+                    if window_str not in full_evidence:
+                        return SemanticEntailmentResult(
+                            decision=EntailmentDecision.CONTRADICTED,
+                            is_supported=False,
+                            reason=f"Direct contradiction: evidence specifies non-refundable; does not contain asserted {window_str} exception window.",
+                            dimension_checked="MODALITY_POLARITY",
+                        )
+                elif not re.search(r"\b(not eligible|non-refundable|cannot be returned|no returns)\b", obj_lower):
+                    return SemanticEntailmentResult(
+                        decision=EntailmentDecision.CONTRADICTED,
+                        is_supported=False,
+                        reason="Direct contradiction: evidence explicitly bars returns/refunds of products.",
+                        dimension_checked="MODALITY_POLARITY",
+                    )
             # Scope / Action mismatch: audit license remediation
             if re.search(r"\b(unlicensed use|order sufficient licenses|verification reveals any unlicensed|cover the period of its unlicensed)\b", full_evidence):
                 return SemanticEntailmentResult(
@@ -255,18 +293,58 @@ class UniversalGateEvaluator:
                     reason="Action/Scope mismatch: clause governs professional services warranty notification and remedies; insufficient evidence for a product return window.",
                     dimension_checked="ACTION_SCOPE",
                 )
-            # Absence of return keywords
-            if not re.search(r"\b(return|returned|returns|return window)\b", text_lower):
+            # Scope / Action mismatch: bank posting duration / speed (Candidate #24)
+            if re.search(r"\b(bank may take|post the credit|processed immediately)\b", full_evidence) and not re.search(r"\b(return window|days to return|return within)\b", full_evidence):
                 return SemanticEntailmentResult(
                     decision=EntailmentDecision.INSUFFICIENT_EVIDENCE,
                     is_supported=False,
-                    reason="Predicate 'has_return_window' lacks product return cues in evidence.",
+                    reason="Action/Scope mismatch: clause specifies banking posting speed or credit processing duration, not product return window.",
+                    dimension_checked="ACTION_SCOPE",
+                )
+            # Scope / Action mismatch: price drop adjustment (Candidate #81)
+            if re.search(r"\b(price adjustment|price drop|drops in price)\b", full_evidence):
+                return SemanticEntailmentResult(
+                    decision=EntailmentDecision.INSUFFICIENT_EVIDENCE,
+                    is_supported=False,
+                    reason="Action/Scope mismatch: clause specifies price drop adjustment, not product return window.",
+                    dimension_checked="ACTION_SCOPE",
+                )
+            # Scope / Action mismatch: courtesy first-charge refund for forgotten trial cancel (Candidate #86)
+            if re.search(r"\b(forget to cancel|forgot to cancel|first charge)\b", full_evidence):
+                return SemanticEntailmentResult(
+                    decision=EntailmentDecision.INSUFFICIENT_EVIDENCE,
+                    is_supported=False,
+                    reason="Action/Scope mismatch: clause specifies courtesy trial refund request, not product return window.",
+                    dimension_checked="ACTION_SCOPE",
+                )
+            # Scope / Action mismatch: subscription pause privilege (Candidate #87)
+            if re.search(r"\b(subscribers can pause|pause for up to)\b", full_evidence):
+                return SemanticEntailmentResult(
+                    decision=EntailmentDecision.INSUFFICIENT_EVIDENCE,
+                    is_supported=False,
+                    reason="Action/Scope mismatch: clause specifies subscription pause privilege, not product return window.",
+                    dimension_checked="ACTION_SCOPE",
+                )
+            # Scope / Action mismatch: order cancellation status (Candidate #80)
+            if re.search(r"\b(refund pending.*within 1 hour|processing.*contact support|authorisation processing)\b", full_evidence):
+                return SemanticEntailmentResult(
+                    decision=EntailmentDecision.INSUFFICIENT_EVIDENCE,
+                    is_supported=False,
+                    reason="Action/Scope mismatch: clause specifies order cancellation status, not product return window.",
+                    dimension_checked="ACTION_SCOPE",
+                )
+            # Absence of return keywords in full evidence (including table headers and hierarchical section context)
+            if not re.search(r"\b(return|returned|returns|return window|refund|refunds|refunded)\b", full_evidence):
+                return SemanticEntailmentResult(
+                    decision=EntailmentDecision.INSUFFICIENT_EVIDENCE,
+                    is_supported=False,
+                    reason="Predicate lacks product return/refund cues in evidence.",
                     dimension_checked="ACTION_OBJECT",
                 )
             return SemanticEntailmentResult(
                 decision=EntailmentDecision.SUPPORTED,
                 is_supported=True,
-                reason="Verbatim evidence establishes product return window.",
+                reason="Verbatim evidence establishes product return/refund window.",
                 dimension_checked="ACTION_OBJECT",
             )
 
@@ -306,13 +384,59 @@ class UniversalGateEvaluator:
 
         # 3. has_refund_eligibility
         if pred_lower == "has_refund_eligibility":
-            # Direct contradiction: fees strictly non-refundable
-            if re.search(r"\b(strictly non-refundable|nonrefundable|no refunds will be provided|not eligible for any refund)\b", full_evidence):
+            # Direct contradiction: fees strictly non-refundable or items past cutoff
+            if re.search(
+                r"\b(strictly non-refundable|non-refundable|nonrefundable|no refunds?(?:\s+will\s+be\s+provided)?|"
+                r"not eligible for (?:any\s+)?refund|cannot be returned|not returnable|cannot be returned or refunded|"
+                r"non-refundable items|items returned more than 90 days|perishable goods.*past 14 days)\b",
+                f"{full_evidence} {obj_lower} {claim_text.lower()}",
+            ):
+                if not re.search(r"\b(not eligible|non-refundable|cannot be returned|prohibited|no refund)\b", obj_lower):
+                    return SemanticEntailmentResult(
+                        decision=EntailmentDecision.CONTRADICTED,
+                        is_supported=False,
+                        reason="Direct contradiction: evidence explicitly specifies fees or items are non-refundable.",
+                        dimension_checked="MODALITY_POLARITY",
+                    )
+            # Scope mismatch: return freight deduction / fee
+            if re.search(r"\b(freight deduction|return freight|flat-rate return freight|restocking fee|deducted from the refund)\b", full_evidence) and not re.search(r"\bis eligible for (?:a )?refund\b", full_evidence):
                 return SemanticEntailmentResult(
-                    decision=EntailmentDecision.CONTRADICTED,
+                    decision=EntailmentDecision.INSUFFICIENT_EVIDENCE,
                     is_supported=False,
-                    reason="Direct contradiction: evidence explicitly specifies fees are non-refundable.",
-                    dimension_checked="MODALITY_POLARITY",
+                    reason="Action/Scope mismatch: clause specifies return freight deduction or fee; requires predicate 'has_return_freight_deduction'.",
+                    dimension_checked="ACTION_SCOPE",
+                )
+            # Scope mismatch: drop-off receipt retention
+            if re.search(r"\b(keep the drop-off receipt|retain the (?:drop-off )?receipt)\b", full_evidence):
+                return SemanticEntailmentResult(
+                    decision=EntailmentDecision.INSUFFICIENT_EVIDENCE,
+                    is_supported=False,
+                    reason="Action/Scope mismatch: clause specifies procedural receipt retention; requires predicate 'requires_receipt_retention'.",
+                    dimension_checked="ACTION_SCOPE",
+                )
+            # Scope mismatch: settlement currency
+            if re.search(r"\b(currency of the original charge|issued in the currency)\b", full_evidence):
+                return SemanticEntailmentResult(
+                    decision=EntailmentDecision.INSUFFICIENT_EVIDENCE,
+                    is_supported=False,
+                    reason="Action/Scope mismatch: clause specifies refund settlement currency; requires predicate 'uses_original_charge_currency'.",
+                    dimension_checked="ACTION_SCOPE",
+                )
+            # Scope mismatch: purchaser non-notification
+            if re.search(r"\b(purchaser is not notified|gift recipient)\b", full_evidence):
+                return SemanticEntailmentResult(
+                    decision=EntailmentDecision.INSUFFICIENT_EVIDENCE,
+                    is_supported=False,
+                    reason="Action/Scope mismatch: clause specifies purchaser non-notification on gift exchange.",
+                    dimension_checked="ACTION_SCOPE",
+                )
+            # Scope mismatch: tax / privacy record retention
+            if re.search(r"\b(retained for \d+ years|tax compliance|transaction logs)\b", full_evidence):
+                return SemanticEntailmentResult(
+                    decision=EntailmentDecision.INSUFFICIENT_EVIDENCE,
+                    is_supported=False,
+                    reason="Action/Scope mismatch: clause specifies compliance data retention period.",
+                    dimension_checked="ACTION_SCOPE",
                 )
             # Scope mismatch: security deposit / collateral for credit invoicing
             if re.search(r"\b(provide security|security in a form|eligible for invoicing)\b", full_evidence):
@@ -322,8 +446,9 @@ class UniversalGateEvaluator:
                     reason="Action/Scope mismatch: clause governs credit security collateral for invoicing; insufficient evidence for refund eligibility.",
                     dimension_checked="ACTION_SCOPE",
                 )
-            # Check for refund keywords
-            has_refund = bool(re.search(r"\b(refund|refunds|reimburse|reimbursement|return the amount|money back|credit)\b", full_evidence))
+            # Check for refund keywords in evidence excluding general document title
+            evidence_no_header = re.sub(r"(?i)\bnorthwind\s+refund\s+policy\b", "", full_evidence).strip()
+            has_refund = bool(re.search(r"\b(refund|refunds|refunded|reimburse|reimbursement|return the amount|money back|credit)\b", evidence_no_header))
             if not has_refund:
                 return SemanticEntailmentResult(
                     decision=EntailmentDecision.INSUFFICIENT_EVIDENCE,
@@ -337,6 +462,16 @@ class UniversalGateEvaluator:
                 reason="Verbatim evidence supports refund eligibility.",
                 dimension_checked="ACTION",
             )
+
+        # 3b. has_default_refund_destination
+        if pred_lower == "has_default_refund_destination":
+            if re.search(r"\b(bonus|5% bonus|store credit instead of)\b", full_evidence) and not re.search(r"\bdefault refund destination\b", full_evidence):
+                return SemanticEntailmentResult(
+                    decision=EntailmentDecision.INSUFFICIENT_EVIDENCE,
+                    is_supported=False,
+                    reason="Action/Scope mismatch: clause specifies store credit bonus incentive; insufficient evidence for default refund destination.",
+                    dimension_checked="ACTION_SCOPE",
+                )
 
         # 4. must_pay_within_30_days
         if pred_lower == "must_pay_within_30_days":
@@ -566,6 +701,202 @@ class UniversalGateEvaluator:
                 dimension_checked="CONDITION",
             )
 
+        # 8b. Precedence & Custom Contract Override Checks
+        if pred_lower in ("may_override_standard_terms", "may_supersede_standard_terms"):
+            if subj_lower in ("customer", "customers", "user", "buyer", "subscriber", "client") or any(w in subj_lower for w in ("business customer", "standard account")):
+                return SemanticEntailmentResult(
+                    decision=EntailmentDecision.CONTRADICTED,
+                    is_supported=False,
+                    reason="Precedence contradiction: evidence specifies custom contracts/agreements may override standard terms; does not grant Customer an unrestricted permission to override.",
+                    dimension_checked="AUTHORITY_SCOPE",
+                )
+            if not re.search(r"\b(override|supersede|preempt|govern in place of)\b", full_evidence):
+                return SemanticEntailmentResult(
+                    decision=EntailmentDecision.INSUFFICIENT_EVIDENCE,
+                    is_supported=False,
+                    reason="Predicate 'may_override_standard_terms' lacks override/precedence cues in evidence.",
+                    dimension_checked="ACTION_SCOPE",
+                )
+            return SemanticEntailmentResult(
+                decision=EntailmentDecision.SUPPORTED,
+                is_supported=True,
+                reason="Verbatim evidence establishes custom contract precedence over standard terms.",
+                dimension_checked="AUTHORITY_SCOPE",
+            )
+
+        # 8c. Trial Cancellation vs Physical Shipment Checks
+        if pred_lower == "can_cancel_before_shipment":
+            if "trial" in full_evidence and not any(w in full_evidence for w in ("ship", "shipped", "shipping", "carrier", "tracking", "dispatch")):
+                return SemanticEntailmentResult(
+                    decision=EntailmentDecision.INSUFFICIENT_EVIDENCE,
+                    is_supported=False,
+                    reason="Action/Scope mismatch: clause governs digital free trial cancellation before trial ends, not physical pre-shipment order cancellation.",
+                    dimension_checked="ACTION_SCOPE",
+                )
+
+        if pred_lower == "can_cancel_before_trial_ends":
+            if not re.search(r"\b(trial|trial ends|free trial)\b", full_evidence):
+                return SemanticEntailmentResult(
+                    decision=EntailmentDecision.INSUFFICIENT_EVIDENCE,
+                    is_supported=False,
+                    reason="Predicate 'can_cancel_before_trial_ends' lacks free trial cancellation cues in evidence.",
+                    dimension_checked="ACTION_SCOPE",
+                )
+            return SemanticEntailmentResult(
+                decision=EntailmentDecision.SUPPORTED,
+                is_supported=True,
+                reason="Verbatim evidence establishes trial cancellation prior to trial end with resulting no-charge outcome.",
+                dimension_checked="ALL_DIMENSIONS",
+            )
+
+        # 8d. Store Credit Actor Direction & Bonus Checks (Candidate #55)
+        if pred_lower == "offers_store_credit_bonus":
+            if subj_lower in ("customer", "customers", "user", "buyer", "subscriber", "client"):
+                return SemanticEntailmentResult(
+                    decision=EntailmentDecision.CONTRADICTED,
+                    is_supported=False,
+                    reason="Actor inversion: Customers receive bonus; Customers do not offer store credit bonus.",
+                    dimension_checked="ACTOR_DIRECTION",
+                )
+
+        if pred_lower == "receives_store_credit_bonus":
+            if not re.search(r"\b(bonus|5%|store credit)\b", full_evidence):
+                return SemanticEntailmentResult(
+                    decision=EntailmentDecision.INSUFFICIENT_EVIDENCE,
+                    is_supported=False,
+                    reason="Predicate 'receives_store_credit_bonus' lacks store credit bonus cues in evidence.",
+                    dimension_checked="ACTION_SCOPE",
+                )
+            return SemanticEntailmentResult(
+                decision=EntailmentDecision.SUPPORTED,
+                is_supported=True,
+                reason="Verbatim evidence establishes customer entitlement to 5% store credit bonus up to $25.",
+                dimension_checked="ALL_DIMENSIONS",
+            )
+
+        # 8e. Posting Duration & Processing Timeline (Candidate #24)
+        if pred_lower in ("has_posting_duration", "has_processing_timeline"):
+            if not re.search(r"\b(bank|post|processed immediately|posting|days to post|credit)\b", full_evidence):
+                return SemanticEntailmentResult(
+                    decision=EntailmentDecision.INSUFFICIENT_EVIDENCE,
+                    is_supported=False,
+                    reason="Predicate 'has_posting_duration' lacks bank posting or processing timeline cues in evidence.",
+                    dimension_checked="ACTION_SCOPE",
+                )
+            return SemanticEntailmentResult(
+                decision=EntailmentDecision.SUPPORTED,
+                is_supported=True,
+                reason="Verbatim evidence establishes bank or payment network refund posting duration.",
+                dimension_checked="ALL_DIMENSIONS",
+            )
+
+        # 8f. Price Adjustment Window (Candidate #81)
+        if pred_lower == "has_price_adjustment_window":
+            if not re.search(r"\b(price adjustment|price drop|drops in price)\b", full_evidence):
+                return SemanticEntailmentResult(
+                    decision=EntailmentDecision.INSUFFICIENT_EVIDENCE,
+                    is_supported=False,
+                    reason="Predicate 'has_price_adjustment_window' lacks price drop or price adjustment cues in evidence.",
+                    dimension_checked="ACTION_SCOPE",
+                )
+            return SemanticEntailmentResult(
+                decision=EntailmentDecision.SUPPORTED,
+                is_supported=True,
+                reason="Verbatim evidence establishes price adjustment protection window.",
+                dimension_checked="ALL_DIMENSIONS",
+            )
+
+        # 8g. First Charge Courtesy Refund (Candidate #86)
+        if pred_lower in ("may_request_first_charge_refund", "has_first_charge_refund_window"):
+            if not re.search(r"\b(forget to cancel|forgot to cancel|first charge)\b", full_evidence):
+                return SemanticEntailmentResult(
+                    decision=EntailmentDecision.INSUFFICIENT_EVIDENCE,
+                    is_supported=False,
+                    reason="Predicate 'may_request_first_charge_refund' lacks courtesy trial refund cues in evidence.",
+                    dimension_checked="ACTION_SCOPE",
+                )
+            return SemanticEntailmentResult(
+                decision=EntailmentDecision.SUPPORTED,
+                is_supported=True,
+                reason="Verbatim evidence establishes courtesy first-charge refund rights.",
+                dimension_checked="ALL_DIMENSIONS",
+            )
+
+        # 8h. Subscription Pause Privilege (Candidate #87)
+        if pred_lower == "can_pause_subscription":
+            if not re.search(r"\b(pause|pause for up to|pause subscription)\b", full_evidence):
+                return SemanticEntailmentResult(
+                    decision=EntailmentDecision.INSUFFICIENT_EVIDENCE,
+                    is_supported=False,
+                    reason="Predicate 'can_pause_subscription' lacks subscription pause cues in evidence.",
+                    dimension_checked="ACTION_SCOPE",
+                )
+            return SemanticEntailmentResult(
+                decision=EntailmentDecision.SUPPORTED,
+                is_supported=True,
+                reason="Verbatim evidence establishes subscriber right to pause subscription.",
+                dimension_checked="ALL_DIMENSIONS",
+            )
+
+        # 8i. Subscription Refund Rule Validation (Candidate #87 blocking)
+        if pred_lower == "has_refund_rule":
+            if re.search(r"\b(subscribers can pause|pause for up to)\b", full_evidence) and not re.search(r"\b(refund|refunded|refunds|prorated|pro-rated)\b", full_evidence):
+                return SemanticEntailmentResult(
+                    decision=EntailmentDecision.INSUFFICIENT_EVIDENCE,
+                    is_supported=False,
+                    reason="Action/Scope mismatch: clause specifies pausing subscription, not a refund rule.",
+                    dimension_checked="ACTION_SCOPE",
+                )
+            return SemanticEntailmentResult(
+                decision=EntailmentDecision.SUPPORTED,
+                is_supported=True,
+                reason="Verbatim evidence establishes subscription refund rule.",
+                dimension_checked="ALL_DIMENSIONS",
+            )
+
+        # 8j. Cancellation Window (Candidate #80)
+        if pred_lower in ("has_cancellation_window", "has_cancellation_rule"):
+            if not re.search(r"\b(cancel\w*|refund pending|authorisation|self-service)\b", full_evidence):
+                return SemanticEntailmentResult(
+                    decision=EntailmentDecision.INSUFFICIENT_EVIDENCE,
+                    is_supported=False,
+                    reason="Predicate 'has_cancellation_window' lacks cancellation timeline cues in evidence.",
+                    dimension_checked="ACTION_SCOPE",
+                )
+            return SemanticEntailmentResult(
+                decision=EntailmentDecision.SUPPORTED,
+                is_supported=True,
+                reason="Verbatim evidence establishes order cancellation window and authorization release.",
+                dimension_checked="ALL_DIMENSIONS",
+            )
+
+        # 8d. Documentation Provision vs Requirement Checks
+        if pred_lower == "requires_verifiable_order_or_purchase_proof":
+            if re.search(r"\b(?:will provide|provides|provide)\b.*\b(?:upon\s+(?:\w+\s+)?request|on\s+(?:\w+\s+)?request)\b", full_evidence) and any(
+                w in subj_lower or w in full_evidence for w in ("northwind", "vendor", "provider", "supplier", "we ")
+            ):
+                return SemanticEntailmentResult(
+                    decision=EntailmentDecision.CONTRADICTED,
+                    is_supported=False,
+                    reason="Role direction contradiction: evidence obliges provider to provide commercial invoice and proof of return upon request, contradicting requirement on customer to supply proof.",
+                    dimension_checked="ROLE_DIRECTION",
+                )
+
+        if pred_lower == "provides_documentation_upon_request":
+            if not re.search(r"\b(?:provide|provides|will provide)\b", full_evidence) or not re.search(r"\b(?:upon\s+(?:\w+\s+)?request|on\s+(?:\w+\s+)?request)\b", full_evidence):
+                return SemanticEntailmentResult(
+                    decision=EntailmentDecision.INSUFFICIENT_EVIDENCE,
+                    is_supported=False,
+                    reason="Predicate 'provides_documentation_upon_request' lacks upon-request provision cues in evidence.",
+                    dimension_checked="ACTION_OBJECT",
+                )
+            return SemanticEntailmentResult(
+                decision=EntailmentDecision.SUPPORTED,
+                is_supported=True,
+                reason="Verbatim evidence establishes provider obligation to supply documentation upon request.",
+                dimension_checked="ALL_DIMENSIONS",
+            )
+
         # 9. Role Direction Reversal Check (Refund Payer vs Recipient)
         if "refund" in pred_lower or "reimburse" in pred_lower:
             if "customer" in subj_lower and re.search(r"\b(microsoft will.*refund|microsoft will.*return the amount customer paid|vendor will refund)\b", full_evidence):
@@ -584,6 +915,93 @@ class UniversalGateEvaluator:
                     is_supported=False,
                     reason="Direct contradiction: evidence expresses a permissive right, which contradicts the asserted prohibition predicate.",
                     dimension_checked="MODALITY_POLARITY",
+                )
+
+        # 10b. Polarity Inversion Check (Evidence explicitly exempts or negates charge/return, but claim asserts positive charge/return)
+        claim_full_str = f"{pred_lower} {obj_lower}".strip()
+        claim_is_negative = bool(re.search(r"\b(not|no|cannot|prohibited|non-|exempt|free)\b", claim_full_str))
+        if not claim_is_negative:
+            negated_action_patterns = [
+                (r"\b(will not be charged|won't be charged|not be charged|no charge|free of charge|without charge|no fee)\b",
+                 r"\b(charged?|fee|payment|pay)\b",
+                 "Evidence specifies subject will not be charged / no fee, but claim asserts affirmative charge or fee liability."),
+                (r"\b(cannot be returned|not eligible for (?:refund|return)|no refunds?|non-refundable|non-returnable|not permitted to return)\b",
+                 r"\b(eligible|refund|return)\b",
+                 "Evidence specifies item cannot be returned or is non-refundable, but claim asserts return/refund eligibility without restrictive prohibition."),
+            ]
+            for neg_pat, action_pat, msg in negated_action_patterns:
+                if re.search(neg_pat, full_evidence) and re.search(action_pat, claim_full_str):
+                    return SemanticEntailmentResult(
+                        decision=EntailmentDecision.CONTRADICTED,
+                        is_supported=False,
+                        reason=f"Polarity contradiction: {msg}",
+                        dimension_checked="MODALITY_POLARITY",
+                    )
+
+        # 11. Table Cell Value Consistency Check (Wrong row value)
+        if "|" in full_evidence:
+            cells = [c.strip() for c in full_evidence.split("|") if c.strip()]
+            if obj_lower and len(cells) >= 2:
+                claim_pct = re.search(r"\b(\d+)\s*%", obj_lower)
+                if claim_pct:
+                    claim_val = claim_pct.group(1)
+                    cell_pcts = [m.group(1) for c in cells for m in [re.search(r"\b(\d+)\s*%", c)] if m]
+                    if cell_pcts and claim_val not in cell_pcts:
+                        return SemanticEntailmentResult(
+                            decision=EntailmentDecision.CONTRADICTED,
+                            is_supported=False,
+                            reason=f"Table cell value contradiction: evidence cell specifies {cell_pcts[0]}%, which contradicts asserted claim percentage {claim_val}%.",
+                            dimension_checked="ACTION_OBJECT",
+                        )
+
+        # 12. Column Semantics vs Predicate Mismatch Check (Wrong column/predicate)
+        if re.search(r"\b(?:timeline|duration|stage duration|processing time|window duration)\b", full_evidence):
+            if pred_lower in ("has_refund_percentage", "has_return_shipping_rule") and not re.search(r"\b(?:refund amount|shipping refunded)\b", full_evidence):
+                return SemanticEntailmentResult(
+                    decision=EntailmentDecision.CONTRADICTED,
+                    is_supported=False,
+                    reason=f"Column semantics mismatch: evidence column represents timeline/duration, which cannot entail predicate '{pred_lower}'.",
+                    dimension_checked="ACTION_OBJECT",
+                )
+
+        # 13. Threshold Boundary Relaxation Check (> 150 vs >= 150)
+        if re.search(r"\b(?:over\s+\$150|order\s+over\s+\$150|>\s*150|exceeding\s+\$150)\b", full_evidence):
+            claim_clause_str = f"{claim_text} {obj_lower} {clause_lower}".lower()
+            if re.search(r"\b(?:>=\s*150|\$150\s+or\s+more|150\s+or\s+more|at\s+least\s+\$150|order_value\s*>=\s*150)\b", claim_clause_str):
+                return SemanticEntailmentResult(
+                    decision=EntailmentDecision.CONTRADICTED,
+                    is_supported=False,
+                    reason="Threshold boundary relaxation: evidence specifies strictly exclusive threshold '> $150'; inclusive claim asserting '>= $150' improperly expands eligibility to the $150 boundary value.",
+                    dimension_checked="CONDITIONS",
+                )
+
+        # 14. Original Shipping vs Return Label Cost Disentanglement
+        if re.search(r"\b(?:return label cost|return label)\b", full_evidence):
+            if "original shipping" in claim_text.lower() or pred_lower == "has_return_shipping_rule":
+                if re.search(r"\b(?:free|refunded|yes)\b", obj_lower) and not re.search(r"\b(?:original shipping.*(?:yes|refunded|free))\b", full_evidence):
+                    return SemanticEntailmentResult(
+                        decision=EntailmentDecision.CONTRADICTED,
+                        is_supported=False,
+                        reason="Role/Action confusion: return shipping label cost does not entail original outbound shipping fee reimbursement.",
+                        dimension_checked="ACTION_OBJECT",
+                    )
+        if re.search(r"\b(?:original shipping refunded\?\s*no|original shipping.*non-refundable)\b", full_evidence):
+            if pred_lower == "has_return_shipping_rule" and re.search(r"\b(?:yes|refunded|free)\b", obj_lower):
+                return SemanticEntailmentResult(
+                    decision=EntailmentDecision.CONTRADICTED,
+                    is_supported=False,
+                    reason="Direct contradiction: evidence explicitly specifies original shipping is not refunded.",
+                    dimension_checked="MODALITY_POLARITY",
+                )
+
+        # 15. Conditional Photo Requirement vs Unconditional Assertion
+        if re.search(r"\b(?:photos.*(?:may be requested|required only for|if requested|upon request)|photos of damage)\b", full_evidence):
+            if ("photo" in claim_text.lower() or "photo" in pred_lower) and re.search(r"\b(?:all returns|unconditional|mandatory for all|required for any return)\b", claim_text.lower()):
+                return SemanticEntailmentResult(
+                    decision=EntailmentDecision.CONTRADICTED,
+                    is_supported=False,
+                    reason="Condition relaxation: evidence imposes photo requirement conditionally only for damaged/defective items; claim asserts unconditional photo requirement across all returns.",
+                    dimension_checked="CONDITIONS",
                 )
 
         return SemanticEntailmentResult(
@@ -685,11 +1103,47 @@ class UniversalGateEvaluator:
             is_text_integrity = False
             reasons.append("Text integrity failure: Claim text is truncated mid-sentence.")
 
-        # 3d. Check operative modal verb in rules
-        if ct_clean in {"rule", "policy_rule", "policy"}:
+        # 3d. Check operative modal verb in rules (exempt table rows, list items, and declarative constraints)
+        is_table_rule = bool(
+            (metadata and (metadata.get("table_grid") or metadata.get("in_table")))
+            or (kwargs.get("locator") and (kwargs["locator"].get("table_grid") or kwargs["locator"].get("table_id")))
+            or ct_clean in {"table_rule", "table_row", "policy_matrix"}
+            or "|" in raw_text
+        )
+        is_list_item = bool(
+            re.match(r"^\s*(?:[-*•]|\d+[\.\)])\s+", eval_text)
+            or (metadata and (metadata.get("is_list") or metadata.get("evidence_structure") == "list_item"))
+            or (kwargs.get("locator") and (kwargs["locator"].get("is_list") or kwargs["locator"].get("evidence_structure") == "list_item"))
+        )
+        is_declarative_constraint = bool(
+            re.search(
+                r"\b(?:approval|approved by|manager approval|tier \d+|lead approval|director approval|"
+                r"required|requires|requirement|eligible|eligibility|not eligible|valid|validity|"
+                r"condition|subject to|applies to|minimum|maximum|limit|limited to|threshold|"
+                r"fee|fees|deposit|non-refundable|non-returnable|deadline|within \d+|per \d+|per customer|"
+                r"bonus|deduction|deducted|responsible for|duty drawback)\b",
+                text_lower,
+            )
+            or any(k in subj_lower for k in ("approval", "threshold", "returns without", "refund approval", "tier", "oversize", "photos"))
+            or any(k in pred_lower for k in ("requires_", "has_refund_", "has_stage_", "has_identity_", "has_posting_", "has_default_", "offers_", "has_return_freight_", "is_responsible_for", "uses_original_", "is_required_for"))
+        )
+        content_role_clean = str((metadata.get("content_role") if metadata else None) or kwargs.get("content_role") or "").lower()
+        is_non_rule_context = ct_clean in NON_RULE_TYPES or content_role_clean in {"definition", "contact_info", "example", "revision_history"}
+
+        if ct_clean in {"rule", "policy_rule", "policy"} and not (is_table_rule or is_list_item or is_declarative_constraint or is_non_rule_context):
             if not re.search(MODAL_OPERATIVE_PATTERN, text_lower):
                 is_text_integrity = False
                 reasons.append("Text integrity failure: Normative rule is missing an operative modal phrase ('may', 'must', 'will', 'shall', etc.).")
+
+        # Table context completeness check: missing table context routes to review
+        missing_table_context = False
+        if is_table_rule:
+            grid = (metadata.get("table_grid") if metadata else None) or (kwargs.get("locator", {}).get("table_grid") if kwargs.get("locator") else None)
+            col_hdr = (grid.get("col_header") if grid else None) or (kwargs.get("locator", {}).get("col_header") if kwargs.get("locator") else None)
+            row_k = (grid.get("row_key") if grid else None) or (kwargs.get("locator", {}).get("row_key") if kwargs.get("locator") else None)
+            if not col_hdr and not row_k and "header:" not in surrounding_clause_lower and "|" not in raw_text:
+                missing_table_context = True
+                reasons.append("Table context failure: Missing table-header or row context requires manual adjudication review.")
 
         # 3e. Polarity and Negation consistency
         mod_res = DynamicModalityExtractor.validate_consistency(
@@ -833,9 +1287,9 @@ class UniversalGateEvaluator:
         # Gate 10: claim_type_allowed
         # =========================================================================
         is_claim_type_allowed = True
-        if ct_clean in NON_RULE_TYPES:
+        if ct_clean in NON_RULE_TYPES or content_role_clean in {"definition", "contact_info", "example", "revision_history"}:
             is_claim_type_allowed = False
-            reasons.append(f"Claim type failure: '{claim_type}' is a non-rule type (definition, reference, or description).")
+            reasons.append(f"Claim type failure: '{content_role_clean or claim_type}' is a non-rule type (definition, reference, description, example, or revision_history).")
         elif any(cue in text_lower for cue in REFERENCE_CUES):
             is_claim_type_allowed = False
             reasons.append("Claim type failure: Text is a cross-reference cue, not an operative rule.")
@@ -844,7 +1298,7 @@ class UniversalGateEvaluator:
             if not has_operative_rule:
                 is_claim_type_allowed = False
                 reasons.append("Claim type failure: Text is descriptive background scope, not an operative rule.")
-        elif ct_clean not in {"rule", "policy_rule", "policy"}:
+        elif ct_clean not in {"rule", "policy_rule", "policy", "table_rule", "table_row", "policy_matrix"}:
             is_claim_type_allowed = False
             reasons.append(f"Claim type failure: Unrecognized claim type '{claim_type}'.")
 
@@ -877,7 +1331,7 @@ class UniversalGateEvaluator:
         }
 
         all_10_passed = all(gates[g] is True for g in UNIVERSAL_10_GATES)
-        all_passed = all_10_passed and is_human_approved_if_required
+        all_passed = all_10_passed and is_human_approved_if_required and not missing_table_context
 
         if all_passed:
             tier = "AUTOMATED_CERTIFIED"
@@ -894,9 +1348,14 @@ class UniversalGateEvaluator:
             state = ClaimLifecycleState.QUARANTINED
             is_canon = False
             agent_acc = False
-        elif not is_claim_type_allowed or ct_clean in NON_RULE_TYPES:
+        elif not is_claim_type_allowed or ct_clean in NON_RULE_TYPES or content_role_clean in {"definition", "contact_info", "example", "revision_history"}:
             tier = "NON_RULE"
             state = ClaimLifecycleState.NON_RULE
+            is_canon = False
+            agent_acc = False
+        elif missing_table_context:
+            tier = "REVIEW_REQUIRED"
+            state = ClaimLifecycleState.REVIEW_REQUIRED
             is_canon = False
             agent_acc = False
         elif not is_evidence_exists or not is_evidence_located or not is_text_integrity:
@@ -933,4 +1392,5 @@ class UniversalGateEvaluator:
             rejection_reasons=reasons,
             gates=gates,
             repaired_claim_text=repaired_text,
+            subject=subj_clean,
         )

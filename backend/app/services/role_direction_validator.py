@@ -62,6 +62,47 @@ class RoleDirectionValidator:
             # Clause explicitly grants reciprocal right
             return RoleDirectionResult(is_valid=True, requires_review=False, explicit_grant_found=True)
 
+        # Fail-closed check: Custom contract precedence cannot be granted as an unrestricted customer permission
+        if p_lower in ("may_override_standard_terms", "may_supersede_standard_terms"):
+            if s_lower in cls.CUSTOMER_ROLES or any(w in s_lower for w in ("customer", "buyer", "user", "client", "business customer")):
+                return RoleDirectionResult(
+                    is_valid=False,
+                    requires_review=True,
+                    explicit_grant_found=False,
+                    reason=(
+                        "Role direction failure: An individual Customer cannot be granted unilateral permission "
+                        "to override standard policy terms; precedence belongs to custom contracts or corporate agreements."
+                    ),
+                )
+
+        # Fail-closed check: Provider commitment to provide documentation upon request cannot be reversed into customer requirement
+        if p_lower == "requires_verifiable_order_or_purchase_proof":
+            if re.search(r"\b(?:will provide|provides|provide)\b.*\b(?:upon\s+(?:\w+\s+)?request|on\s+(?:\w+\s+)?request)\b", clause_lower) and any(
+                w in s_lower or w in clause_lower for w in ("northwind", "vendor", "provider", "supplier", "we ")
+            ):
+                return RoleDirectionResult(
+                    is_valid=False,
+                    requires_review=True,
+                    explicit_grant_found=False,
+                    reason=(
+                        "Role direction reversal: Clause states provider supplies commercial invoice and proof of return "
+                        "upon request, which contradicts a requirement on the customer to supply proof."
+                    ),
+                )
+
+        # Fail-closed check: Physical goods pre-shipment cancellation cannot apply to digital subscriptions or free trials
+        if p_lower == "can_cancel_before_shipment":
+            if "trial" in clause_lower and not any(w in clause_lower for w in ("ship", "shipped", "shipping", "carrier", "tracking")):
+                return RoleDirectionResult(
+                    is_valid=False,
+                    requires_review=True,
+                    explicit_grant_found=False,
+                    reason=(
+                        "Incompatible action domain: Physical goods pre-shipment cancellation predicate "
+                        "cannot be applied to digital trial subscription cancellation."
+                    ),
+                )
+
         # Check taxonomy allowed subject roles
         pred_defn = PredicateRegistryService.get_predicate(p_lower)
         if pred_defn:

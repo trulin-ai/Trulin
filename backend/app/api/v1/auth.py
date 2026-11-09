@@ -1,9 +1,12 @@
+import logging
 import uuid
 from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import select, or_
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
+
+logger = logging.getLogger(__name__)
 
 from app.core.security import (
     create_access_token,
@@ -406,7 +409,7 @@ async def list_available_personas(
             organization_name="Enterprise Organization",
             name="Aisha Patel",
             email="aisha.patel@enterprise.internal",
-            role=UserRole.CONTRIBUTOR,
+            role=UserRole.DEVELOPER,
             title="Principal AI Architect",
             department="Engineering",
             avatar_url="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150",
@@ -418,7 +421,7 @@ async def list_available_personas(
             organization_name="Enterprise Organization",
             name="David Kim",
             email="david.kim@enterprise.internal",
-            role=UserRole.CURATOR,
+            role=UserRole.REVIEWER,
             title="Senior Policy Curator",
             department="Legal Operations",
             avatar_url="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150",

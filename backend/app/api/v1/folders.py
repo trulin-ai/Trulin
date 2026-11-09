@@ -141,6 +141,7 @@ async def list_folder_documents(
     folder_id: uuid.UUID,
     recursive: bool = Query(False, description="Include documents from all descendant subfolders"),
     status: Optional[str] = Query(None, description="Filter by status (e.g. active, processing, failed)"),
+    include_archived: bool = Query(False, description="Include inactive/archived/deleted documents"),
     limit: int = Query(50, ge=1, le=100),
     offset: int = Query(0, ge=0),
     org_id: uuid.UUID = Depends(_resolve_organization_id),
@@ -159,6 +160,7 @@ async def list_folder_documents(
         organization_id=org_id,
         folder_ids=folder_ids,
         status_filter=status,
+        include_archived=include_archived,
         limit=limit,
         offset=offset,
     )
@@ -166,6 +168,7 @@ async def list_folder_documents(
         organization_id=org_id,
         folder_ids=folder_ids,
         status_filter=status,
+        include_archived=include_archived,
     )
 
     return {

@@ -70,6 +70,8 @@ class CanonicalPredicate(str, Enum):
     MAY_OVERRIDE_STANDARD_TERMS = "may_override_standard_terms"
     CAN_INITIATE_RETURN = "can_initiate_return"
     CAN_CANCEL_BEFORE_SHIPMENT = "can_cancel_before_shipment"
+    CAN_CANCEL_BEFORE_TRIAL_ENDS = "can_cancel_before_trial_ends"
+    PROVIDES_DOCUMENTATION_UPON_REQUEST = "provides_documentation_upon_request"
     MUST_BE_HANDLED_AS_RETURN = "must_be_handled_as_return"
     MAY_RECEIVE_GOODWILL_DISCOUNT = "may_receive_goodwill_discount"
     MAY_APPLY_ADMINISTRATION_FEE = "may_apply_administration_fee"
@@ -110,6 +112,16 @@ class CanonicalPredicate(str, Enum):
     HAS_DOCUMENT_METADATA = "has_document_metadata"
     HAS_INTELLECTUAL_PROPERTY_OWNERSHIP = "has_intellectual_property_ownership"
 
+    # Commercial & Policy Operations (Slice 3 Refinements)
+    OFFERS_STORE_CREDIT_BONUS = "offers_store_credit_bonus"
+    HAS_RETURN_FREIGHT_DEDUCTION = "has_return_freight_deduction"
+    REQUIRES_RECEIPT_RETENTION = "requires_receipt_retention"
+    USES_ORIGINAL_CHARGE_CURRENCY = "uses_original_charge_currency"
+    IS_RESPONSIBLE_FOR_DUTY_DRAWBACK = "is_responsible_for_duty_drawback"
+    IS_REQUIRED_FOR_REFUND_REQUEST = "is_required_for_refund_request"
+    HAS_REFUND_RULE = "has_refund_rule"
+    HAS_REVISION_HISTORY = "has_revision_history"
+
 
 class PredicateRegistry:
     """
@@ -143,6 +155,13 @@ class PredicateRegistry:
         "can it be cancelled": CanonicalPredicate.HAS_CANCELLATION_ELIGIBILITY.value,
         "cancel before shipment": CanonicalPredicate.CAN_CANCEL_BEFORE_SHIPMENT.value,
         "can cancel before shipment": CanonicalPredicate.CAN_CANCEL_BEFORE_SHIPMENT.value,
+        "cancel before trial ends": CanonicalPredicate.CAN_CANCEL_BEFORE_TRIAL_ENDS.value,
+        "can cancel before trial ends": CanonicalPredicate.CAN_CANCEL_BEFORE_TRIAL_ENDS.value,
+        "cancel before the trial ends": CanonicalPredicate.CAN_CANCEL_BEFORE_TRIAL_ENDS.value,
+        "provides documentation upon request": CanonicalPredicate.PROVIDES_DOCUMENTATION_UPON_REQUEST.value,
+        "provide documentation upon request": CanonicalPredicate.PROVIDES_DOCUMENTATION_UPON_REQUEST.value,
+        "provides commercial invoice upon request": CanonicalPredicate.PROVIDES_DOCUMENTATION_UPON_REQUEST.value,
+        "will provide commercial invoice": CanonicalPredicate.PROVIDES_DOCUMENTATION_UPON_REQUEST.value,
         "must be handled as return": CanonicalPredicate.MUST_BE_HANDLED_AS_RETURN.value,
         "shipped order must be handled as return": CanonicalPredicate.HAS_POST_SHIPMENT_RESOLUTION_PATH.value,
         "goodwill discount": CanonicalPredicate.MAY_RECEIVE_GOODWILL_DISCOUNT.value,
