@@ -50,7 +50,7 @@ class DocumentParser:
         # 1. Illustrative Examples and Case Studies (Prioritized before Revision History for hybrid sections like '20. Revision History and Sample Case Studies')
         if any(w in context_lower for w in ("sample case", "sample cases", "case stud", "case study", "illustrative scenario", "worked example", "hypothetical scenario", "examples", "example")):
             return ContentRole.EXAMPLE
-        if re.match(r"^case\s+[a-z]\b", text_lower) or any(text_lower.startswith(w) for w in ("for example", "example:", "e.g.", "scenario:", "sample calculation:", "case a", "case b", "case c", "case d", "case e", "case f")):
+        if re.match(r"^case\s+[a-z]\b", text_lower) or any(text_lower.startswith(w) for w in ("for example", "example:", "e.g.", "scenario:", "sample calculation:")):
             return ContentRole.EXAMPLE
 
         # 2. Contact Information and Escalation Channels
@@ -420,6 +420,24 @@ class DocumentParser:
 
             unit_role = cls._classify_content_role(clean_text, context, block_type)
 
+            # Multi-level Evidence Segmentation (Phase 3)
+            # Extracts individual sentence offsets within the evidence unit
+            structured_info = {"raw_line": line_str}
+            try:
+                from app.core.nlp_manager import NLPManager
+                sent_spans = NLPManager.get_sentence_spans(clean_text)
+                if len(sent_spans) > 1:
+                    structured_info["sentences"] = [
+                        {
+                            "text": s_text,
+                            "start_char": line_start_char + s_start,
+                            "end_char": line_start_char + s_end,
+                        }
+                        for s_text, s_start, s_end in sent_spans
+                    ]
+            except Exception:
+                pass
+
             unit = ParsedEvidenceUnit.create(
                 envelope_id=envelope.envelope_id,
                 asset_id=envelope.asset_id,
@@ -431,7 +449,7 @@ class DocumentParser:
                 raw_content=line_raw,
                 normalized_content=clean_text,
                 content_text=clean_text,
-                structured_data={"raw_line": line_str},
+                structured_data=structured_info,
                 locator={
                     **envelope.locator_metadata,
                     "page": current_page,

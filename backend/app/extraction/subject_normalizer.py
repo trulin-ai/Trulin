@@ -125,28 +125,9 @@ class SubjectNormalizer:
         "in the event of death or discharge from service of a contract employee, 1/ of 2 earned leave at his credit subject to a maximum of 150 days": "Earned leave",
         "in the event of death or discharge from service of a contract employee, 1/2 of earned leave at his credit subject to a maximum of 150 days": "Earned leave",
 
-        # Case studies & narrative isolation
-        "case a - wrong size, within window": "Case A: Wrong size, within window",
-        "case a: wrong size, within window": "Case A: Wrong size, within window",
-        "case a - wrong size": "Case A: Wrong size, within window",
-        "case b - defective tent zipper.": "Case B: Defective tent zipper",
-        "case b - defective tent zipper": "Case B: Defective tent zipper",
-        "case b: defective tent zipper": "Case B: Defective tent zipper",
-        "case c - late return, gold member.": "Case C: Late return, Gold member",
-        "case c - late return, gold member": "Case C: Late return, Gold member",
-        "case c: late return, gold member": "Case C: Late return, Gold member",
-        "case d - final sale item": "Case D: Final Sale item",
-        "case d: final sale item": "Case D: Final Sale item",
-        "case f - international return": "Case F: International return",
-        "case f: international return": "Case F: International return",
-        "daniel bought a $349 tent on": "Case B: Defective tent zipper",
-        "daniel bought a $349 tent on may 1 and discovered a broken zipper on": "Case B: Defective tent zipper",
-        "daniel bought a $349 tent on may 1 and discovered a broken zipper on may 12": "Case B: Defective tent zipper",
-        "priya (gold) returned a $79 pair of boots on day 52": "Case C: Late return, Gold member",
-        "priya (gold) returned": "Case C: Late return, Gold member",
-        "vat was refunded; return shipping of eur 18 was paid by the customer": "Case F: International return",
-        "vat was refunded": "Case F: International return",
-        "refund issued: $113.05 to her visa": "Case A: Wrong size, within window",
+        # Case studies & narrative isolation (generic, document-agnostic)
+        # Case-study headings are detected structurally via regex (case [a-f])
+        # and ContentRole.EXAMPLE; no document-specific subject mappings here.
         "video course": "Video course",
         "video courses": "Video course",
         "digital goods": "Digital goods",
@@ -267,32 +248,15 @@ class SubjectNormalizer:
         if "gift card" in combined:
             return "Gift cards", True
 
-        # Cross-case contamination protection: Case specific narrative must retain its own subject
-        if any(k in cleaned_lower for k in ("case a", "case b", "case c", "case d", "case f")) or any(k in ctx_lower for k in ("case a", "case b", "case c", "case d", "case f")):
-            if any(k in combined for k in ("tent", "zipper", "daniel", "$349")):
-                return "Case B: Defective tent zipper", True
-            elif any(k in combined for k in ("priya", "boots on day 52", "day 52", "boots")):
-                return "Case C: Late return, Gold member", True
-            elif any(k in combined for k in ("final sale", "sleeping bag")):
-                return "Case D: Final Sale item", True
-            elif any(k in combined for k in ("eur 18", "vat was refunded", "return shipping of eur")):
-                return "Case F: International return", True
-            elif any(k in combined for k in ("wrong size", "113.05", "$113.05")):
-                return "Case A: Wrong size, within window", True
+        # Cross-case contamination protection: general policy must not absorb illustrative example subjects.
+        # Case-study identification is structural (regex case [a-f] / ContentRole.EXAMPLE); no
+        # document-specific subject leakage here.
 
-        # Handle explicit Case headings (e.g. "Case A - Wrong size", "Case B - Defective tent zipper")
+        # Handle explicit Case headings (e.g. "Case A", "Case B") — generic, document-agnostic
         case_match = re.match(r"^case\s+([a-f])(?:\b|$)", cleaned_lower)
         if case_match:
             letter = case_match.group(1)
-            case_map = {
-                "a": "Case A: Wrong size, within window",
-                "b": "Case B: Defective tent zipper",
-                "c": "Case C: Late return, Gold member",
-                "d": "Case D: Final Sale item",
-                "f": "Case F: International return",
-            }
-            if letter in case_map:
-                return case_map[letter], True
+            return f"Case {letter.upper()}", True
 
         # 1. Exact match in known fragment mappings
         if cleaned_lower in cls.KNOWN_FRAGMENT_MAPPINGS:
@@ -393,6 +357,73 @@ class SubjectNormalizer:
 
         # Default fallback: Product Scope
         return EntityType.PRODUCT_SCOPE.value
+
+    @classmethod
+    def resolve_entity_cascaded(cls, text: str) -> Dict[str, Any]:
+        """
+        Three-Tier Entity Extraction Cascade (Phase 4):
+        Tier 1: Deterministic Regex for dates, currencies, thresholds, IDs.
+        Tier 2: spaCy NER for standard categories (ORG, PERSON, DATE, MONEY).
+        Tier 3: GLiNER for domain-specific zero-shot roles.
+        """
+        entities: Dict[str, Any] = {"raw_text": text, "entities": []}
+        if not text or not text.strip():
+            return entities
+
+        # Tier 1: Deterministic regex patterns
+        # 1A. Currencies & monetary amounts
+        money_matches = re.findall(r"(?:[\$€£₹]\s*\d+(?:,\d{3})*(?:\.\d+)?|\b\d+(?:,\d{3})*(?:\.\d+)?\s*(?:USD|EUR|GBP|INR)\b)", text, re.IGNORECASE)
+        for m in money_matches:
+            entities["entities"].append({"text": m.strip(), "label": "MONEY", "tier": 1, "source": "regex"})
+
+        # 1B. Durations & temporal windows
+        time_matches = re.findall(r"\b\d+\s*(?:calendar\s+days?|business\s+days?|days?|months?|years?|hours?|weeks?)\b", text, re.IGNORECASE)
+        for t in time_matches:
+            entities["entities"].append({"text": t.strip(), "label": "DURATION", "tier": 1, "source": "regex"})
+
+        # 1C. Percentages
+        pct_matches = re.findall(r"\b\d+(?:\.\d+)?%", text)
+        for p in pct_matches:
+            entities["entities"].append({"text": p.strip(), "label": "PERCENTAGE", "tier": 1, "source": "regex"})
+
+        # Tier 2: spaCy NER (when available)
+        try:
+            from app.core.nlp_manager import NLPManager
+            spacy_nlp = NLPManager.get_spacy()
+            if spacy_nlp is not None:
+                doc = spacy_nlp(text[:500])
+                for ent in getattr(doc, "ents", []):
+                    if ent.label_ in ("ORG", "PERSON", "DATE", "GPE", "MONEY"):
+                        # Avoid duplicates from Tier 1
+                        if not any(e["text"] == ent.text for e in entities["entities"]):
+                            entities["entities"].append({"text": ent.text, "label": ent.label_, "tier": 2, "source": "spacy"})
+        except Exception:
+            pass
+
+        # Tier 3: GLiNER Zero-Shot Fallback (when available)
+        # Activated when no domain role or governing org is found in Tier 1/2
+        has_role_or_org = any(e["label"] in ("ORG", "PERSON") for e in entities["entities"])
+        if not has_role_or_org:
+            try:
+                from app.core.nlp_manager import NLPManager
+                gliner_preds = NLPManager.extract_domain_entities(
+                    text,
+                    labels=["approver_role", "employee_type", "governing_entity", "jurisdiction", "department", "vendor", "customer"],
+                    threshold=0.55,
+                )
+                for pred in gliner_preds:
+                    if not any(e["text"] == pred["text"] for e in entities["entities"]):
+                        entities["entities"].append({
+                            "text": pred["text"],
+                            "label": pred["label"],
+                            "tier": 3,
+                            "source": "gliner",
+                            "score": pred.get("score", 1.0),
+                        })
+            except Exception:
+                pass
+
+        return entities
 
     @classmethod
     def normalize_to_object(cls, raw_subject: str, context: Optional[str] = None) -> SubjectObject:

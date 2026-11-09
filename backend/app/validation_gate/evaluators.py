@@ -193,12 +193,11 @@ class CompletenessEvaluator:
         # Knockout 3D: Subject Contamination (Cross-Case / Cross-Section Leaks)
         subj_l = subj.lower()
         claim_l = claim_text_clean.lower()
+        # Generic cross-case contamination: subject starts with a case tag, or claim text
+        # references more than one distinct case study (case A AND case B)
         is_subject_contaminated = (
-            ("case a" in subj_l and any(k in claim_l for k in ("case b", "tent", "zipper", "daniel", "case c", "boots on day 52", "priya", "gold member", "case d", "final sale", "sleeping bag", "case f", "eur 18", "vat", "international return", "video course", "digital goods")))
-            or ("case b" in subj_l and any(k in claim_l for k in ("video course", "digital goods", "trail guide", "case a", "wrong size", "113.05", "case c", "priya", "boots on day 52", "case d", "final sale", "sleeping bag", "case f", "eur 18", "vat", "international return")))
-            or ("case c" in subj_l and any(k in claim_l for k in ("case a", "wrong size", "113.05", "case b", "tent", "zipper", "daniel", "case d", "final sale", "sleeping bag", "case f", "eur 18", "vat", "international return")))
-            or ("case d" in subj_l and any(k in claim_l for k in ("case a", "wrong size", "113.05", "case b", "tent", "zipper", "daniel", "case c", "priya", "boots on day 52", "case f", "eur 18", "vat", "vat was refunded", "return shipping of eur", "international return")))
-            or ("case f" in subj_l and any(k in claim_l for k in ("case a", "wrong size", "113.05", "case b", "tent", "zipper", "daniel", "case c", "priya", "boots on day 52", "case d", "final sale", "sleeping bag", "currency follows", "exchange differences", "exchange difference", "currency conversion", "exchange rate")))
+            re.match(r"^case\s+[a-f]", subj_l) is not None
+            or len(re.findall(r"\bcase\s+[a-f]\b", claim_l)) > 1
         )
         if is_subject_contaminated:
             return DimensionEvaluation(
@@ -214,9 +213,8 @@ class CompletenessEvaluator:
         is_example = (
             getattr(candidate, "content_role", None) == ContentRole.EXAMPLE
             or getattr(candidate, "claim_type", "").lower() in ("example", "illustrative")
-            or subj_l.startswith(("case a", "case b", "case c", "case d", "case e", "case f"))
+            or re.match(r"^case\s+[a-f]", subj_l)
             or "case study" in subj_l
-            or any(p in claim_text_clean.lower() for p in ("refund issued: $113.05", "daniel bought a $349 tent", "priya (gold) returned", "vat was refunded; return shipping of eur 18", "customer bought a final sale"))
         )
         if is_example:
             return DimensionEvaluation(
@@ -440,6 +438,33 @@ class CompletenessEvaluator:
                 reason=f"Unsupported conditions detected: {'; '.join(unsupported_conditions)}.",
                 details={"unsupported_conditions": unsupported_conditions, **details_dict},
             )
+
+        # Condition Preservation Gate (Phase 6):
+        # Flags claims when enclosing evidence imposes restrictive conditions that were dropped
+        span_lower = span.lower()
+        if not getattr(candidate, "conditions", None) and len(span.split()) > 8:
+            dropped_restrictive = []
+            for pat, c_name in (
+                (r"\bsolely in connection with\b", "solely in connection with"),
+                (r"\bonly if\b", "only if"),
+                (r"\bon the condition that\b", "on the condition that"),
+                (r"\bcompleted at least \d+\s*(?:months?|years?)\b", "prior service qualification"),
+                (r"\bsubject to\s+[a-z]+ approval\b", "approval requirement"),
+            ):
+                if re.search(pat, span_lower):
+                    claim_obj_lower = (str(candidate.object or "") + " " + str(candidate.claim_text or "")).lower()
+                    if c_name not in claim_obj_lower:
+                        dropped_restrictive.append(c_name)
+
+            if dropped_restrictive:
+                return DimensionEvaluation(
+                    dimension_name="completeness",
+                    status=CompletenessStatus.PARTIAL.value,
+                    score=0.70,
+                    passed=False,
+                    reason=f"Condition preservation failure: evidence contains qualifying condition ({', '.join(dropped_restrictive)}), but structured claim omitted it.",
+                    details={"dropped_conditions": dropped_restrictive, **details_dict},
+                )
 
         return DimensionEvaluation(
             dimension_name="completeness",

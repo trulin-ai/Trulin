@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS users (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     organization_id UUID NOT NULL REFERENCES organizations(id) ON DELETE CASCADE,
     name VARCHAR(255) NOT NULL,
-    email VARCHAR(205) NOT NULL UNIQUE,
+    email VARCHAR(205) NOT NULL,
     role VARCHAR(50) NOT NULL DEFAULT 'auditor',
     status VARCHAR(50) NOT NULL DEFAULT 'active',
     avatar_url VARCHAR(500),
@@ -32,7 +32,8 @@ CREATE TABLE IF NOT EXISTS users (
     hashed_password VARCHAR(255),
     is_verified BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    CONSTRAINT uq_users_org_email UNIQUE (organization_id, email)
 );
 
 -- 3. data_sources

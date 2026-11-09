@@ -656,13 +656,16 @@ class UniversalFileParser:
                         except Exception:
                             pass
                     img_coverage = total_img_area / page_area
+                    replacement_chars = native_text.count("\ufffd") + native_text.count("?")
+                    replacement_ratio = replacement_chars / max(1, native_len)
 
                     # Page is scanned only if large image covers page AND text is sparse/absent,
-                    # or if zero text and images exist.
+                    # or if zero text and images exist, or high glyph corruption rate (> 5%).
                     # Legitimate short text pages without dominant image coverage are NOT scanned.
                     is_page_scanned = (
                         (img_coverage > 0.4 and native_len < 40)
                         or (len(img_list) > 0 and native_len < 15 and printable_ratio < 0.5)
+                        or (len(img_list) > 0 and native_len > 0 and replacement_ratio > 0.05)
                         or (native_len == 0 and len(img_list) > 0)
                     )
 

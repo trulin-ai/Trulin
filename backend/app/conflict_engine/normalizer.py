@@ -159,8 +159,10 @@ class ClaimNormalizer:
             cond_dict["product_type"] = "digital_goods"
 
         # 5. Membership Tier Dimension
-        if "gold member" in combined_text or "gold tier" in combined_text:
-            cond_dict["membership_tier"] = "gold"
+        tier_keywords = ("gold", "premium", "platinum", "vip", "silver", "bronze", "member", "tier")
+        found_tier = next((t for t in tier_keywords if t in combined_text), None)
+        if found_tier:
+            cond_dict["membership_tier"] = found_tier
         elif "standard member" in combined_text or "standard tier" in combined_text:
             cond_dict["membership_tier"] = "standard"
 

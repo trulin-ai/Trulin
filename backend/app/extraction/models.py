@@ -336,6 +336,36 @@ class CandidateClaim(BaseModel):
             is_duplicate=is_duplicate,
         )
 
+    @classmethod
+    def create_for_test(
+        cls,
+        claim_text: str,
+        subject: str,
+        predicate: str,
+        object_: str,
+        evidence_span: str,
+        conditions: Optional[List[Any]] = None,
+        exceptions: Optional[List[str]] = None,
+        modality: str = "REQUIRED",
+        claim_type: str = "policy",
+    ) -> "CandidateClaim":
+        """Convenience factory for unit tests."""
+        return cls.create(
+            envelope_id=uuid.UUID("11111111-1111-1111-1111-111111111111"),
+            unit_id=f"unit_test_{uuid.uuid4().hex[:8]}",
+            asset_id="asset_test",
+            claim_text=claim_text,
+            subject=subject,
+            predicate=predicate,
+            object_=object_,
+            evidence_text_span=evidence_span,
+            conditions=conditions or [],
+            exceptions=exceptions or [],
+            modality=modality,
+            claim_type=claim_type,
+            locator={"page": 1, "line": 1},
+        )
+
 
 class CompletenessLedgerRecord(BaseModel):
     """Audit entry recording the lifecycle of an individual evidence unit through Layer 5."""

@@ -40,6 +40,10 @@ from app.schemas.organization import (
     WorkspaceUpdate,
 )
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 router = APIRouter(prefix="/organizations", tags=["organizations"])
 
 
@@ -170,20 +174,25 @@ async def create_organization(
     await db.flush()
 
     if current_user:
-        new_membership = User(
-            id=uuid.uuid4(),
-            organization_id=org.id,
-            name=current_user.name,
-            email=current_user.email,
-            role=UserRole.ADMIN,
-            status=RecordStatus.ACTIVE,
-            title="Organization Creator & Admin",
-            department="Governance & Risk",
-            is_verified=True,
-            avatar_url=current_user.avatar_url,
-            hashed_password=current_user.hashed_password,
-        )
-        db.add(new_membership)
+        try:
+            async with db.begin_nested():
+                new_membership = User(
+                    id=uuid.uuid4(),
+                    organization_id=org.id,
+                    name=current_user.name,
+                    email=current_user.email,
+                    role=UserRole.ADMIN,
+                    status=RecordStatus.ACTIVE,
+                    title="Organization Creator & Admin",
+                    department="Governance & Risk",
+                    is_verified=True,
+                    avatar_url=current_user.avatar_url,
+                    hashed_password=current_user.hashed_password,
+                )
+                db.add(new_membership)
+                await db.flush()
+        except Exception as u_err:
+            logger.warning("Could not create membership for org %s: %s", org.id, u_err)
 
     await db.commit()
     await db.refresh(org)

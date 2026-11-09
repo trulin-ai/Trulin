@@ -52,7 +52,7 @@ class PolicyAnswerSynthesizer:
     @classmethod
     def extract_clean_window(cls, text: str) -> str:
         """Extracts the exact timeframe or return window phrase from a compound claim."""
-        # E.g. "30 days from delivery (60 days for Northwind Rewards Gold members)"
+        # E.g. "30 days from delivery (60 days for premium members)"
         m = re.search(r"(\d+\s*days?\s+(?:from|after|before)\s+[a-zA-Z0-9_\s]+(?:\s*\([^)]*\))?)", text, re.IGNORECASE)
         if m:
             extracted = m.group(1).strip()
