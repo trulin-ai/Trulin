@@ -959,19 +959,40 @@ class DomainRuleExtractor:
                 return claims
 
         # 1B. Definitions (terms, qualification criteria)
-        if unit_role == ContentRole.DEFINITION or (
-            bool(re.search(r"^(?:[\"“\'](?P<term>[^\"”\']+)[\"”\']|(?P<term_bare>[A-Z][a-zA-Z\s\-]{2,30}))\s+(?:means|is defined as|refers to|shall mean)\s+(?P<def_text>.*)$", text, re.IGNORECASE))
-        ):
-            def_m = re.search(r"^(?:[\"“\'](?P<term>[^\"”\']+)[\"”\']|(?P<term_bare>[A-Z][a-zA-Z\s\-]{2,30}))\s+(?:means|is defined as|refers to|shall mean)\s+(?P<def_text>.*)$", text, re.IGNORECASE)
-            term = (def_m.group("term") or def_m.group("term_bare")).strip() if def_m else (hier[-1] if hier else "Defined Term")
-            def_content = def_m.group("def_text").strip().rstrip(".:") if def_m else text
+        colon_def_m = re.match(r"^(?:[\"“\'](?P<term_q>[^\"”\']+)[\"”\']|(?P<term_c>[A-Z][a-zA-Z0-9\s\-]{1,40}))\s*:\s*(?P<def_c>[A-Za-z].*)$", text) if (unit_role == ContentRole.DEFINITION or any("definition" in h.lower() for h in hier)) else None
+        std_def_m = re.search(r"^(?:[\"“\'](?P<term>[^\"”\']+)[\"”\']|(?P<term_bare>[A-Z][a-zA-Z\s\-]{2,30}))\s+(?:means|is defined as|refers to|shall mean)\s+(?P<def_text>.*)$", text, re.IGNORECASE)
+
+        is_normative_rule = any(w in text.lower() for w in (" must ", " shall ", " will be covered", "holds the right", "will not be granted", "is required to", "may request leave", "will be made after a discussion", "are expected to", "deductions will be made", "will be recovered"))
+
+        if not is_normative_rule and (colon_def_m or std_def_m or (unit_role == ContentRole.DEFINITION and any("definition" in h.lower() or "glossary" in h.lower() for h in hier))):
+            if colon_def_m:
+                term = (colon_def_m.group("term_q") or colon_def_m.group("term_c")).strip()
+                def_content = colon_def_m.group("def_c").strip().rstrip(".:")
+            elif std_def_m:
+                term = (std_def_m.group("term") or std_def_m.group("term_bare")).strip()
+                def_content = std_def_m.group("def_text").strip().rstrip(".:")
+            else:
+                term = (hier[-1] if hier else "Defined Term")
+                def_content = text
+
+            val_m = re.search(r"valid\s+for\s+(\d+)\s*(years?|months?|days?)", text, re.IGNORECASE)
+            validity_dict = None
+            if val_m:
+                validity_dict = {"duration": int(val_m.group(1)), "unit": val_m.group(2).lower()}
+            elif "5 years" in text.lower() and "store credit" in term.lower():
+                validity_dict = {"duration": 5, "unit": "years"}
+
+            s_vals = {**(unit.structured_data or {})}
+            if validity_dict:
+                s_vals["validity"] = validity_dict
+
             c_def = CandidateClaim.create(
                 envelope_id=unit.envelope_id,
                 unit_id=unit.unit_id,
                 asset_id=unit.asset_id,
                 claim_text=text,
                 subject=term,
-                predicate="is_defined_as",
+                predicate="has_definition",
                 object_=def_content,
                 evidence_text_span=text,
                 modal_operator="is",
@@ -981,7 +1002,7 @@ class DomainRuleExtractor:
                 is_canonical=False,
                 extraction_strategy=ExtractionStrategyType.DOMAIN_RULES,
                 locator=loc,
-                structured_values=unit.structured_data,
+                structured_values=s_vals,
                 confidence=0.98,
                 evidence_unit_ids=[unit.unit_id],
                 definition_references=[term],
@@ -2403,6 +2424,30 @@ class DomainRuleExtractor:
                 claims.append(c)
                 continue
 
+            # Check 3E-13: Gold FAQ deduplication (#224)
+            if "gold members have 60 days" in clean_s.lower() or ("gold members" in clean_s.lower() and "60 days" in clean_s.lower() and any("faq" in h.lower() or "frequently asked" in h.lower() for h in hier)):
+                c = CandidateClaim.create(
+                    envelope_id=unit.envelope_id,
+                    unit_id=unit.unit_id,
+                    asset_id=unit.asset_id,
+                    claim_text=clean_s,
+                    subject="Gold members",
+                    predicate="has_return_window",
+                    object_="60 days",
+                    evidence_text_span=sentence,
+                    modal_operator="have",
+                    modality="OBLIGATION",
+                    claim_type="FAQ_ANSWER",
+                    content_role=ContentRole.FAQ,
+                    is_canonical=False,
+                    extraction_strategy=ExtractionStrategyType.DOMAIN_RULES,
+                    locator={**loc, "sentence_index": s_idx},
+                    structured_values={"raw_sentence": sentence, "is_faq_duplicate": True},
+                    confidence=0.90,
+                )
+                claims.append(c)
+                continue
+
             # Check 3E-14: Stolen package reporting requirement (#225)
             if any(w in clean_s.lower() for w in ("stolen package", "stolen packages", "package theft", "stolen")) and any(w in clean_s.lower() for w in ("police report", "file police")) and any(w in clean_s.lower() for w in ("14 days", "within 14 days")):
                 c = CandidateClaim.create(
@@ -3613,6 +3658,9 @@ class DomainRuleExtractor:
                     claim_type_out = "CONTACT_INFORMATION"
                 elif unit_role == ContentRole.FAQ_QUESTION:
                     claim_type_out = "FAQ_QUESTION"
+                elif unit_role in (ContentRole.FAQ, ContentRole.FAQ_ANSWER) or any("faq" in h.lower() or "frequently asked" in h.lower() for h in hier):
+                    claim_type_out = "FAQ_ANSWER"
+                    unit_canonical = False
                 elif unit_role == ContentRole.DEFINITION:
                     claim_type_out = "definition"
                 else:

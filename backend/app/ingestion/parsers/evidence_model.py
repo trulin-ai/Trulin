@@ -365,8 +365,8 @@ class EvidenceUnit(BaseModel):
     Establishes complete source-traceability, fine-grained coordinates, content roles,
     and structural relationships without hallucination.
     """
-    evidence_id: str = Field(..., description="Stable logical evidence identity")
-    evidence_instance_id: str = Field(..., description="Unique occurrence identity")
+    evidence_id: str = Field(default="", description="Stable logical evidence identity")
+    evidence_instance_id: str = Field(default="", description="Unique occurrence identity")
     asset_id: str = Field(..., description="Source asset identity")
     source_id: Optional[str] = Field(default=None, description="Connector or source identity")
     source_version: Optional[str] = Field(default=None, description="Source version when available")
@@ -423,6 +423,20 @@ class EvidenceUnit(BaseModel):
             return ExtractionStatus(val_str)
         except ValueError:
             return ExtractionStatus.EXTRACTED
+
+    @model_validator(mode="before")
+    @classmethod
+    def _populate_ids_before(cls, data: Any) -> Any:
+        if isinstance(data, dict):
+            u_id = data.get("unit_id")
+            if u_id:
+                if not data.get("evidence_instance_id"):
+                    data["evidence_instance_id"] = u_id
+                if not data.get("evidence_id"):
+                    data["evidence_id"] = u_id
+            elif data.get("evidence_instance_id") and not data.get("unit_id"):
+                data["unit_id"] = data["evidence_instance_id"]
+        return data
 
     @model_validator(mode="after")
     def _sync_compatibility_and_validation(self) -> EvidenceUnit:
@@ -847,6 +861,20 @@ class ParsedEvidenceResult(BaseModel):
     quality_report: Optional[ExtractionQualityReport] = None
     extraction_status: ExtractionStatus = ExtractionStatus.SUCCESS
     parsed_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+    @model_validator(mode="before")
+    @classmethod
+    def _populate_ids_before(cls, data: Any) -> Any:
+        if isinstance(data, dict):
+            u_id = data.get("unit_id")
+            if u_id:
+                if not data.get("evidence_instance_id"):
+                    data["evidence_instance_id"] = u_id
+                if not data.get("evidence_id"):
+                    data["evidence_id"] = u_id
+            elif data.get("evidence_instance_id") and not data.get("unit_id"):
+                data["unit_id"] = data["evidence_instance_id"]
+        return data
 
     @model_validator(mode="after")
     def sync_report_and_status(self) -> ParsedEvidenceResult:

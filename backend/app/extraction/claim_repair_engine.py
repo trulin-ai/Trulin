@@ -365,6 +365,9 @@ class ClaimRepairEngine:
             else:
                 claim.status = ClaimStatus.REVIEW
                 claim.gates.clause_entails_claim = False
+        elif rule.disposition == RepairDisposition.SPLIT:
+            claim.status = ClaimStatus.REVIEW
+            claim.gates.clause_entails_claim = False
 
         # 4. Construct audit record
         rec = ClaimRepairRecord(

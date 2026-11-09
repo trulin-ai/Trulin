@@ -35,6 +35,16 @@ PROTECTED_OCR_PATTERNS = [
 _PROTECTED_REGEX = re.compile('|'.join(f'(?:{p})' for p in PROTECTED_OCR_PATTERNS), re.IGNORECASE)
 
 
+def split_markdown_table_row(line: str) -> List[str]:
+    """Splits a markdown table row preserving all column positions including empty cells."""
+    s = line.strip()
+    if s.startswith("|"):
+        s = s[1:]
+    if s.endswith("|"):
+        s = s[:-1]
+    return [c.strip() for c in s.split("|")]
+
+
 def mask_protected_tokens(text: str) -> Tuple[str, Dict[str, str]]:
     tokens_map: Dict[str, str] = {}
     def repl(m):
@@ -191,6 +201,12 @@ class DocumentPage(BaseModel):
     ocr_confidence: Optional[float] = None
     char_count: int = 0
     is_scanned_image: bool = False
+    is_likely_scanned: bool = False
+    ocr_attempted: bool = False
+    ocr_succeeded: bool = False
+    text_extraction_status: str = "digital_text"
+    raw_digital_text: str = ""
+    raw_ocr_text: str = ""
     width: Optional[float] = None
     height: Optional[float] = None
     blocks: List[ContentBlock] = Field(default_factory=list)
@@ -773,8 +789,8 @@ class UniversalFileParser:
                 total_pages_count = max(1, len(pages))
                 if empty_pages == total_pages_count or total_chars == 0:
                     extraction_quality = 0.0
-                    warnings.append(f"PDF contains no extractable text or OCR failed ({filename}).")
-                    full_text = f"# {title}\n\n[No extractable text found in {filename}]"
+                    warnings.append(f"EXTRACTION_EMPTY: PDF contains no extractable text or OCR failed ({filename}).")
+                    full_text = ""
                     return full_text, pages, blocks, tables, warnings, is_scanned_overall, extraction_quality
 
                 if is_scanned_overall:
@@ -926,8 +942,8 @@ class UniversalFileParser:
             total_pages = max(1, len(reader.pages))
             if empty_pages == total_pages or total_chars == 0:
                 extraction_quality = 0.0
-                warnings.append(f"PDF contains no extractable text ({filename}).")
-                full_text = f"# {title}\n\n[No extractable text found in {filename}]"
+                warnings.append(f"EXTRACTION_EMPTY: PDF contains no extractable text ({filename}).")
+                full_text = ""
             else:
                 if is_scanned_overall:
                     extraction_quality = max(0.65, min(0.95, 1.0 - (empty_pages / total_pages) * 0.4))
@@ -1131,7 +1147,7 @@ class UniversalFileParser:
                         "is_hidden": is_hidden,
                         "merged_ranges": merged_ranges,
                         "headers": headers,
-                        "rows": table_rows[1:] if len(table_rows) > 1 else [],
+                        "rows": table_rows,
                         "row_count": max_r,
                         "col_count": max_c,
                         "cell_metadata": grid_metadata,

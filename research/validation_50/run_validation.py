@@ -145,13 +145,15 @@ class ClaimAuditor:
         queue_mgr: Optional[AdjudicationQueueManager] = None,
         raw_bytes: Optional[bytes] = None,
     ) -> Dict[str, Any]:
+        parsed_text = parsed.full_text if parsed else None
         options = UnifiedPipelineOptions(
             document_type=doc_type,
             doc_title=filename.rsplit(".", 1)[0],
             persist_to_db=False,
+            parsed_content=parsed_text,
         )
 
-        pipeline_bytes = raw_bytes if raw_bytes is not None else (parsed.full_text or "").encode("utf-8")
+        pipeline_bytes = raw_bytes if raw_bytes is not None else (parsed_text or "").encode("utf-8")
         try:
             loop = asyncio.get_running_loop()
         except RuntimeError:
@@ -166,6 +168,7 @@ class ClaimAuditor:
                         filename=filename,
                         raw_bytes=pipeline_bytes,
                         options=options,
+                        parsed_content=parsed_text,
                     ),
                 ).result()
         else:
@@ -174,6 +177,7 @@ class ClaimAuditor:
                     filename=filename,
                     raw_bytes=pipeline_bytes,
                     options=options,
+                    parsed_content=parsed_text,
                 )
             )
 
