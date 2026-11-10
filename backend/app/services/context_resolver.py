@@ -42,6 +42,12 @@ class ConversationContextResolver:
         words = q_clean.split()
         if len(words) <= 3:
             return True
+        # If the query is already a long, complete self-contained sentence (>= 7 words)
+        # starting with complete interrogatives ("What is the...", "Can I approve...", "Am I allowed to..."),
+        # do not treat it as a follow-up query just because it contains relative pronouns ("that", "it")
+        if len(words) >= 7 and re.match(r"^(?:what\s+(?:is|are|happens|does)|can\s+(?:i|we|an\s+agent)|am\s+i\s+allowed|how\s+(?:do|does|can))\b", q_clean, re.I):
+            explicit_anaphora = [r"\bthat\s+(?:one|item|rule|clause|policy)\b", r"\bthe\s+same\b", r"\blatter\b", r"\bformer\b", r"\bas\s+mentioned\b", r"\babove\b"]
+            return any(re.search(pat, q_clean, re.I) for pat in explicit_anaphora)
         return bool(FOLLOW_UP_REGEX.search(q_clean))
 
     async def resolve_query(
