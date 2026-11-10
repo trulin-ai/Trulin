@@ -131,6 +131,7 @@ class CandidateClaim(BaseModel):
     
     # Verification & Quality
     is_canonical: bool = Field(default=True, description="False if macro summary, example, revision history, or non-canonical context")
+    needs_subject_adjudication: bool = Field(default=False, description="Flag indicating subject requires manual adjudication")
     cross_references: List[str] = Field(default_factory=list, description="External policies, instruments or documents referenced")
     status: str = Field(default="candidate", description="Validation status (candidate, verified, unverified, rejected)")
     confidence: float = Field(ge=0.0, le=1.0, default=1.0, description="Extraction and verification confidence score")

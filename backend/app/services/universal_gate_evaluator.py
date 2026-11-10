@@ -241,6 +241,7 @@ class UniversalGateEvaluator:
         clause_text: str = "",
         object_text: str = "",
         modality: str = "",
+        metadata: Optional[Dict[str, Any]] = None,
     ) -> SemanticEntailmentResult:
         """
         Deterministic, document-agnostic 3-valued semantic entailment check.
@@ -1141,7 +1142,9 @@ class UniversalGateEvaluator:
             grid = (metadata.get("table_grid") if metadata else None) or (kwargs.get("locator", {}).get("table_grid") if kwargs.get("locator") else None)
             col_hdr = (grid.get("col_header") if grid else None) or (kwargs.get("locator", {}).get("col_header") if kwargs.get("locator") else None)
             row_k = (grid.get("row_key") if grid else None) or (kwargs.get("locator", {}).get("row_key") if kwargs.get("locator") else None)
-            if not col_hdr and not row_k and "header:" not in surrounding_clause_lower and "|" not in raw_text:
+            has_pipe = "|" in raw_text or "|" in surrounding_clause or (evidence and "|" in (evidence.verbatim_quote or "")) or (evidence and "|" in (evidence.clause_text or ""))
+            has_header_or_row = bool(col_hdr or row_k or "header:" in surrounding_clause_lower or "row:" in surrounding_clause_lower or has_pipe)
+            if not has_header_or_row:
                 missing_table_context = True
                 reasons.append("Table context failure: Missing table-header or row context requires manual adjudication review.")
 
@@ -1177,6 +1180,7 @@ class UniversalGateEvaluator:
                 evidence_quote=evidence.verbatim_quote if evidence else eval_text,
                 clause_text=surrounding_clause,
                 object_text=object_text or "",
+                metadata=metadata,
             )
             entailment_dec = entail_res.decision
             entailment_reason = entail_res.reason

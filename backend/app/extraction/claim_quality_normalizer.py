@@ -93,6 +93,9 @@ CANONICAL_SUBJECT_ALLOWLIST: Set[str] = {
     "Order number", "Email on order", "Item SKU / name", "Reason for return", "Preferred resolution",
     "In-store refunds", "Price adjustments", "Free trials", "Order cancellation",
     # Universal Operative Artifacts
+    "Executive", "Executive Level C", "Middle Management", "Senior Management",
+    "Probationary Employee", "Probationer", "Gold Member", "Gold Members",
+    "Member", "Members", "Staff", "Officer", "Director", "Supervisor", "Worker", "Lead", "Recipient",
     "Product", "Products", "Software", "Service", "Services", "Subscription",
     "Order", "Refund request", "Deliverable", "Deliverables",
     "Documentation", "Data", "Confidential Information", "Account", "Invoice",
@@ -218,6 +221,15 @@ SUBJECT_REPAIR_MAP: Dict[str, str] = {
     "price adjustment": "Price adjustments",
     "free trials": "Free trials",
     "order cancellation": "Order cancellation",
+    "middle mgmt": "Middle Management",
+    "middle management": "Middle Management",
+    "senior mgmt": "Senior Management",
+    "senior management": "Senior Management",
+    "probationary employees": "Probationary Employee",
+    "probationers": "Probationary Employee",
+    "probationer": "Probationary Employee",
+    "gold member": "Gold Members",
+    "gold members": "Gold Members",
 }
 
 
@@ -1155,6 +1167,11 @@ class ClaimQualityNormalizer:
 
         norm_subj, is_valid = cls.normalize_subject_entity(candidate.subject)
         if not is_valid or not norm_subj:
+            if candidate and (getattr(candidate, "evidence_text_span", None) or getattr(candidate, "claim_text", None)):
+                candidate.needs_subject_adjudication = True
+                candidate.is_canonical = False
+                candidate.status = "candidate"
+                return candidate
             return None
 
         norm_pred = cls.normalize_predicate(raw_pred, norm_subj, raw_obj)

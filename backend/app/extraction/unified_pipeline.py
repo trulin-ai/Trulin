@@ -26,7 +26,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.conflict_engine.compatibility_gate import CompatibilityGate
 from app.db.enums import SourceFamily, SourceIntent
 from app.extraction.candidate_discovery import CandidateDiscoveryEngine
-from app.extraction.models import CandidateClaim, Layer5ExtractionResult
+from app.extraction.models import CandidateClaim, Layer5ExtractionResult, ExtractionStrategyType
 from app.extraction.pipeline import global_extraction_pipeline
 from app.ingestion.envelope import CanonicalSourceEnvelope, EnvelopeFactory
 from app.ingestion.parsers.document_parser import DocumentParser
@@ -306,10 +306,21 @@ class UnifiedExtractionPipeline:
                 )
             else:
                 hdg_context = cand.locator.get("heading_path") or cand.locator.get("section_context") or []
-                grid_hdr = cand.locator.get("table_grid", {}).get("col_header") if cand.locator.get("table_grid") else ""
+                tb = getattr(cand, "table_binding", None)
+                grid_hdr = ""
+                grid_row = ""
+                if cand.locator.get("table_grid"):
+                    grid_hdr = cand.locator.get("table_grid", {}).get("col_header") or ""
+                    grid_row = cand.locator.get("table_grid", {}).get("row_key") or ""
+                elif tb:
+                    grid_hdr = getattr(tb, "column_header", "") or ""
+                    grid_row = getattr(tb, "row_key", "") or ""
+
                 context_parts = []
                 if isinstance(hdg_context, list) and hdg_context:
                     context_parts.append(" > ".join(str(h) for h in hdg_context))
+                if grid_row:
+                    context_parts.append(f"Row: {grid_row}")
                 if grid_hdr:
                     context_parts.append(f"Header: {grid_hdr}")
                 if raw_span or cand.claim_text:
@@ -317,6 +328,13 @@ class UnifiedExtractionPipeline:
                 surrounding_clause_text = " | ".join(context_parts) if context_parts else (raw_span or cand.claim_text)
 
                 role_str = getattr(cand.content_role, "value", str(cand.content_role or "policy_rule")).lower()
+                tbl_grid_meta = cand.locator.get("table_grid")
+                if not tbl_grid_meta and (grid_hdr or grid_row or tb):
+                    tbl_grid_meta = {
+                        "col_header": grid_hdr,
+                        "row_key": grid_row,
+                        "table_id": getattr(tb, "table_id", None) if tb else cand.locator.get("table_id"),
+                    }
                 gate_res = UniversalGateEvaluator.evaluate(
                     claim_text=cand.claim_text,
                     subject=clean_subj,
@@ -328,8 +346,8 @@ class UnifiedExtractionPipeline:
                     clause_text=surrounding_clause_text,
                     existing_signatures=seen_signatures,
                     metadata={
-                        "table_grid": cand.locator.get("table_grid"),
-                        "in_table": bool(cand.locator.get("table_grid") or getattr(cand, "table_binding", None)),
+                        "table_grid": tbl_grid_meta,
+                        "in_table": bool(tbl_grid_meta or tb or getattr(cand, "extraction_strategy", None) == ExtractionStrategyType.TABLE_AWARE),
                         "content_role": role_str,
                         "is_list": bool(cand.locator.get("is_list") or cand.claim_text.strip().startswith(("- ", "* ", "1. ", "2. ", "3. ", "• "))),
                     },
@@ -347,6 +365,13 @@ class UnifiedExtractionPipeline:
                 decision = ClaimLifecycleDecision.APPROVE
                 decision_code = DecisionCode.APPROVE_ALL_PASSED
                 composite_score = 0.99
+            elif tier == "QUALIFIED_CANONICAL":
+                cand.claim_type = "rule"
+                cand.is_canonical = True
+                cand.status = "verified"
+                decision = ClaimLifecycleDecision.APPROVE
+                decision_code = DecisionCode.APPROVE_ALL_PASSED
+                composite_score = 0.89
             elif tier == "REVIEW_REQUIRED":
                 cand.claim_type = "rule"
                 cand.is_canonical = False

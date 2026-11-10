@@ -548,21 +548,24 @@ class TestDoc057DatabaseCertification:
 
     async def test_doc057_canonical_claim_count_in_target_range(self):
         """DOC-057 must satisfy quality invariants: clean count in range ~65-70, 100% passing all 9 gates."""
-        async with AsyncSessionLocal() as session:
-            from app.db.models.document import Document
-            from app.db.models.document_version import DocumentVersion
-            ver_stmt = select(DocumentVersion.id).where(DocumentVersion.document_id == self.DOC_057_ID)
-            ver_res = await session.execute(ver_stmt)
-            ver_ids = ver_res.scalars().all()
-            if not ver_ids:
-                doc_stmt = select(Document).where(Document.title == "Microsoft Customer Agreement")
-                doc = (await session.execute(doc_stmt)).scalars().first()
-                if doc:
-                    self.DOC_057_ID = doc.id
-                    ver_stmt = select(DocumentVersion.id).where(DocumentVersion.document_id == doc.id)
-                    ver_ids = (await session.execute(ver_stmt)).scalars().all()
-            if not ver_ids:
-                pytest.skip("DOC-057 document version not found in database (requires pre-seeded DB)")
+        try:
+            async with AsyncSessionLocal() as session:
+                from app.db.models.document import Document
+                from app.db.models.document_version import DocumentVersion
+                ver_stmt = select(DocumentVersion.id).where(DocumentVersion.document_id == self.DOC_057_ID)
+                ver_res = await session.execute(ver_stmt)
+                ver_ids = ver_res.scalars().all()
+                if not ver_ids:
+                    doc_stmt = select(Document).where(Document.title == "Microsoft Customer Agreement")
+                    doc = (await session.execute(doc_stmt)).scalars().first()
+                    if doc:
+                        self.DOC_057_ID = doc.id
+                        ver_stmt = select(DocumentVersion.id).where(DocumentVersion.document_id == doc.id)
+                        ver_ids = (await session.execute(ver_stmt)).scalars().all()
+                if not ver_ids:
+                    pytest.skip("DOC-057 document version not found in database (requires pre-seeded DB)")
+        except (ConnectionRefusedError, OSError):
+            pytest.skip("Database unavailable for DOC-057 integration check")
 
             claims_stmt = (
                 select(Claim)
@@ -629,55 +632,61 @@ class TestDoc057DatabaseCertification:
 
     async def test_lineage_graph_reflects_canonical_partition(self):
         """Lineage graph dynamically computes the canonical claims and accurate tiers."""
-        async with AsyncSessionLocal() as session:
-            from app.db.models.document import Document
-            doc_stmt = select(Document).where(Document.title == "Microsoft Customer Agreement")
-            doc = (await session.execute(doc_stmt)).scalars().first()
-            target_id = str(doc.id) if doc else str(self.DOC_057_ID)
+        try:
+            async with AsyncSessionLocal() as session:
+                from app.db.models.document import Document
+                doc_stmt = select(Document).where(Document.title == "Microsoft Customer Agreement")
+                doc = (await session.execute(doc_stmt)).scalars().first()
+                target_id = str(doc.id) if doc else str(self.DOC_057_ID)
 
-            service = LineageService(session)
-            graph = await service.get_lineage_graph(organization_id=self.ORG_ID)
+                service = LineageService(session)
+                graph = await service.get_lineage_graph(organization_id=self.ORG_ID)
 
-            doc057_claims = [
-                n for n in graph.get("nodes", [])
-                if n.get("type") == "claim" and (n.get("document_id") == target_id or n.get("data", {}).get("document_id") == target_id)
-            ]
-            if not doc057_claims:
-                pytest.skip("DOC-057 claims not populated in database (requires pre-seeded DB)")
-            assert len(doc057_claims) == 96
+                doc057_claims = [
+                    n for n in graph.get("nodes", [])
+                    if n.get("type") == "claim" and (n.get("document_id") == target_id or n.get("data", {}).get("document_id") == target_id)
+                ]
+                if not doc057_claims:
+                    pytest.skip("DOC-057 claims not populated in database (requires pre-seeded DB)")
+                assert len(doc057_claims) == 96
 
-            canonical_nodes = [n for n in doc057_claims if n.get("is_canonical") is True or n.get("data", {}).get("is_canonical") is True]
-            assert 10 <= len(canonical_nodes) <= 55
+                canonical_nodes = [n for n in doc057_claims if n.get("is_canonical") is True or n.get("data", {}).get("is_canonical") is True]
+                assert 10 <= len(canonical_nodes) <= 55
 
-            for node in canonical_nodes:
-                assert node.get("all_9_gates_passed") is True or node.get("data", {}).get("all_9_gates_passed") is True
-                assert node.get("certification_tier") == "AUTOMATED_CERTIFIED" or node.get("data", {}).get("certification_tier") == "AUTOMATED_CERTIFIED"
-                gates = node.get("gates") or node.get("data", {}).get("gates")
-                assert gates is not None
-                assert all(gates.values())
+                for node in canonical_nodes:
+                    assert node.get("all_9_gates_passed") is True or node.get("data", {}).get("all_9_gates_passed") is True
+                    assert node.get("certification_tier") == "AUTOMATED_CERTIFIED" or node.get("data", {}).get("certification_tier") == "AUTOMATED_CERTIFIED"
+                    gates = node.get("gates") or node.get("data", {}).get("gates")
+                    assert gates is not None
+                    assert all(gates.values())
+        except (ConnectionRefusedError, OSError):
+            pytest.skip("Database unavailable for DOC-057 integration check")
 
     async def test_context_retrieval_engine_never_returns_quarantined_or_rejected(self):
         """Context retrieval engine strictly excludes quarantined, rejected, or non-rule claims."""
-        async with AsyncSessionLocal() as session:
-            engine = ContextRetrievalEngine(session)
-            req = ContextQueryRequest(
-                organization_id=self.ORG_ID,
-                agent_id=uuid.UUID("22222222-2222-2222-2222-222222222222"),
-                query="license transfer affiliate and sublicense audit",
-                max_results=20,
-            )
-            result = await engine.query_context(req)
-
-            # Every single retrieved item must be verified, canonical, and agent accessible
-            for item in result.context:
-                res = ClaimGateEvaluator.evaluate(
-                    claim_id=str(uuid.uuid4()),
-                    subject=item.claim,
-                    predicate="specifies",
-                    object_val="",
-                    claim_text=item.claim,
-                    claim_type="policy",
-                    status="verified",
+        try:
+            async with AsyncSessionLocal() as session:
+                engine = ContextRetrievalEngine(session)
+                req = ContextQueryRequest(
+                    organization_id=self.ORG_ID,
+                    agent_id=uuid.UUID("22222222-2222-2222-2222-222222222222"),
+                    query="license transfer affiliate and sublicense audit",
+                    max_results=20,
                 )
-                assert res.gates["is_atomic"] is True, f"Retrieved compound claim: {item.claim}"
-                assert res.gates["claim_type_allowed"] is True, f"Retrieved non-rule claim: {item.claim}"
+                result = await engine.query_context(req)
+
+                # Every single retrieved item must be verified, canonical, and agent accessible
+                for item in result.context:
+                    res = ClaimGateEvaluator.evaluate(
+                        claim_id=str(uuid.uuid4()),
+                        subject=item.claim,
+                        predicate="specifies",
+                        object_val="",
+                        claim_text=item.claim,
+                        claim_type="policy",
+                        status="verified",
+                    )
+                    assert res.gates["is_atomic"] is True, f"Retrieved compound claim: {item.claim}"
+                    assert res.gates["claim_type_allowed"] is True, f"Retrieved non-rule claim: {item.claim}"
+        except (ConnectionRefusedError, OSError):
+            pytest.skip("Database unavailable for DOC-057 integration check")

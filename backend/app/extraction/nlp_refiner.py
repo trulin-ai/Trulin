@@ -111,6 +111,18 @@ class NLPSemanticRefiner:
                 enrichment["entity_type"] = primary_ent.get("label")
                 enrichment["entity_source"] = primary_ent.get("source")
 
+            # If table claim, safely extract parenthetical conditions from cell object without destroying scalar value
+            if is_table_claim and raw_object:
+                paren_match = re.search(r"\(([^)]+)\)", raw_object)
+                if paren_match:
+                    cond_candidate = paren_match.group(1).strip()
+                    if any(cond_candidate.lower().startswith(p) for p in ("if ", "when ", "subject to", "upon ", "with ", "only if")):
+                        current_conds = list(candidate.conditions or [])
+                        if cond_candidate not in current_conds:
+                            current_conds.append(cond_candidate)
+                        candidate.conditions = current_conds
+                        raw_object = re.sub(r"\s*\([^)]+\)", "", raw_object).strip()
+
             # -----------------------------------------------------------------
             # Step C: Syntactic Dependency Tree Parsing (For Narrative Clauses)
             # -----------------------------------------------------------------
@@ -207,13 +219,23 @@ class NLPSemanticRefiner:
                 logger.debug("FastCoref pronoun resolution error: %s", e)
 
         # 2. Hierarchical context heuristic fallback (e.g. section heading actor)
-        hier_context = candidate.locator.get("heading_path") or candidate.hierarchical_context or []
+        hier_context = list(candidate.locator.get("heading_path") or candidate.hierarchical_context or [])
+        sec_h = candidate.locator.get("section_heading") or candidate.locator.get("section") or candidate.locator.get("title")
+        if sec_h and sec_h not in hier_context:
+            hier_context.append(sec_h)
+
         for heading in reversed(hier_context):
             h_clean = re.sub(r"^(?:#+|\d+(?:\.\d+)*\s*[-.]?\s*)", "", str(heading)).strip()
-            if any(term in h_clean.lower() for term in ("employee", "customer", "vendor", "partner", "subscriber", "admin", "contractor")):
-                for canonical_role in ("Employee", "Customer", "Vendor", "Partner", "Subscriber", "Admins", "Contractor"):
-                    if canonical_role.lower() in h_clean.lower():
-                        return canonical_role
+            role_keywords = (
+                ("employee", "Employee"), ("customer", "Customer"), ("vendor", "Vendor"),
+                ("partner", "Partner"), ("subscriber", "Subscriber"), ("admin", "Administrator"),
+                ("contractor", "Contractor"), ("gold member", "Gold Members"), ("member", "Member"),
+                ("client", "Client"), ("buyer", "Buyer"), ("seller", "Seller"),
+                ("executive", "Executive"), ("probation", "Probationer"),
+            )
+            for kw, canon in role_keywords:
+                if kw in h_clean.lower():
+                    return canon
 
         # 3. Default contextual fallback by policy family
         doc_family = str(candidate.locator.get("document_type") or "").lower()
@@ -317,6 +339,14 @@ class NLPSemanticRefiner:
             "may_return": "has_return_window",
             "cancels": "has_cancellation_window",
             "requires_notice_duration": "requires_written_notice",
+            "notice_period": "has_notice_duration",
+            "notice_duration": "has_notice_duration",
+            "probation_period": "has_notice_duration",
+            "refund_percentage": "has_refund_percentage",
+            "refund_amount": "has_refund_percentage",
+            "return_window": "has_return_window",
+            "processing_time": "has_processing_timeline",
+            "posting_duration": "has_posting_duration",
         }
         if clean_pred in synonym_map and PredicateRegistryService.exists(synonym_map[clean_pred]):
             return synonym_map[clean_pred]
