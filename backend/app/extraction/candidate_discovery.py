@@ -122,15 +122,26 @@ class CandidateDiscoveryEngine:
             if any("\u4e00" <= ch <= "\u9fff" for ch in text) and any(m in text for m in ("\u4e0d\u5f97", "\u5e94\u5f53", "\u5fc5\u987b", "\u5e94", "\u6709\u6743", "\u53ef\u4ee5")):
                 return True, ExtractionStrategyType.DOMAIN_RULES, "Chinese contract deontic policy assertion."
 
-        # 6. Document Clauses & Paragraphs
-        if b_type in ("clause", "paragraph"):
+        # 6. Document Clauses, Paragraphs, List Items, and Definitions
+        if b_type in ("clause", "paragraph", "list_item", "bullet", "definition") or unit.structure_type in ("list_item", "definition"):
             from app.extraction.deontic_classifier import DeonticClassifier
             from app.ingestion.parsers.evidence_model import ContentRole
+
+            # Operational Definition (e.g. Business Day, operational calendar, timeline basis)
+            if b_type == "definition" or unit.structure_type == "definition":
+                if ":" in text:
+                    term_part, def_part = text.split(":", 1)
+                    if term_part.strip() and any(w in text.lower() for w in ("day", "calendar", "holiday", "hour", "business", "timeline", "timeframe", "cutoff", "window", "period")):
+                        return True, ExtractionStrategyType.DOMAIN_RULES, "Operational policy definition / calendar specification."
 
             # Filter out FAQ questions, introductory context, and document metadata upfront
             unit_role = getattr(unit, "content_role", None)
             if unit_role in (ContentRole.FAQ_QUESTION, ContentRole.INTRODUCTORY_CONTEXT, ContentRole.DOCUMENT_METADATA) or text.strip().endswith("?"):
                 return False, ExtractionStrategyType.DOMAIN_RULES, "Inquiry question, introductory context, or document metadata; non-canonical context."
+
+            # Inherit parent context for list items / bullets
+            parent_ctx = getattr(unit, "parent_context", None) or ""
+            eval_text = f"{parent_ctx} {text}".strip() if parent_ctx else text
 
             # Filter out sample case studies, narrative customer anecdotes, and revision history
             h_path_str = " > ".join(getattr(unit, "heading_path", []) or []).lower()
@@ -170,7 +181,11 @@ class CandidateDiscoveryEngine:
             if re.search(r"\b(?:best efforts to|from time to time by\s*[a-z]?)$", text.strip(), re.IGNORECASE):
                 return False, ExtractionStrategyType.DOMAIN_RULES, "Dangling broken clause fragment."
 
-            has_obligations = any(ob.search(text) for ob in DeonticClassifier.OBLIGATION_PATTERNS) or bool(cls.MODAL_PATTERN.search(text))
+            has_obligations = (
+                any(ob.search(eval_text) for ob in DeonticClassifier.OBLIGATION_PATTERNS)
+                or bool(cls.MODAL_PATTERN.search(eval_text))
+                or any(w in eval_text.lower() for w in ("not on the non-refundable list", "not in the exclusion list", "cannot be returned", "cannot be refunded", "non-refundable"))
+            )
 
             if unit_role == ContentRole.REFERENCE_CITATION and not has_obligations:
                 return False, ExtractionStrategyType.DOMAIN_RULES, "Reference citation or external pointer; non-normative context."
@@ -183,7 +198,7 @@ class CandidateDiscoveryEngine:
             if DomainRuleExtractor.is_procedural_ui_instruction(text):
                 return False, ExtractionStrategyType.DOMAIN_RULES, "Procedural UI instruction or click in how-to guide; non-normative action."
 
-            modality, _, is_decision_eligible = DeonticClassifier.classify_text(text)
+            modality, _, is_decision_eligible = DeonticClassifier.classify_text(eval_text)
 
             # Filter out purpose/goal statements and preamble outlines
             if re.search(r"\b(?:primary goal is|aims to|outlines the expected|purpose of this policy|is designed to|is intended to|serves as|provides guidance)\b", text, re.IGNORECASE):
@@ -191,7 +206,7 @@ class CandidateDiscoveryEngine:
 
             # Filter out purely descriptive statements unless unit contains explicit obligation modals
             if (not is_decision_eligible or modality == "DESCRIPTIVE") and not has_obligations:
-                return False, ExtractionStrategyType.LLM_SEMANTIC, "Informational guidance or purpose statement; filtered from decision gate."
+                return False, ExtractionStrategyType.LLM_SEMANTIC, "Informational prose without normative constraints."
 
             # Allow macro summary statements for non-canonical derived summary extraction
             if DeonticClassifier.is_macro_summary(text):

@@ -1,0 +1,17 @@
+{
+  "metadata": {
+    "phase": "2.6",
+    "title": "Reversible Rollback and Recovery Plan",
+    "timestamp": "2026-11-10T13:45:03.380433+00:00"
+  },
+  "rollback_possible": true,
+  "prior_staging_baseline": "phase2_5_repaired_extraction_v1.json",
+  "restoration_steps": [
+    "1. If promotion transaction fails, execute ROLLBACK immediately to abort transaction.",
+    "2. Verify zero table row delta using pg_stat_database or table row counts.",
+    "3. Revert staging extraction JSON pointer to phase2_5_repaired_extraction_v1.json.",
+    "4. Restore staging database read-only replica snapshot if writes occurred.",
+    "5. Verify regression test suite passes cleanly at 142/142 tests."
+  ],
+  "zero_partial_writes_verified": true
+}

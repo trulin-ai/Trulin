@@ -179,6 +179,7 @@ class UniversalGateResult:
     is_canonical: bool = False
     agent_accessible: bool = False
     rejection_reasons: List[str] = field(default_factory=list)
+    reason_codes: List[str] = field(default_factory=list)
     gates: Dict[str, bool] = field(default_factory=dict)
     repaired_claim_text: Optional[str] = None
 
@@ -203,6 +204,7 @@ class UniversalGateResult:
             "is_canonical": self.is_canonical,
             "agent_accessible": self.agent_accessible,
             "rejection_reasons": self.rejection_reasons,
+            "reason_codes": self.reason_codes,
             "repaired_claim_text": self.repaired_claim_text,
             "entailment_decision": self.entailment_decision,
             "entailment_reason": self.entailment_reason,
@@ -1042,11 +1044,35 @@ class UniversalGateEvaluator:
         subj_lower = subj_clean.lower()
         pred_clean = (predicate or "").strip()
         pred_lower = pred_clean.lower()
+        obj_clean = (object_text or "").strip()
+        obj_lower = obj_clean.lower()
         ct_clean = (claim_type or "RULE").strip().lower()
 
         # Enclosing clause text fallback
         surrounding_clause = clause_text or (evidence.clause_text if evidence else "") or ""
         surrounding_clause_lower = surrounding_clause.lower()
+
+        # Phase 2.4: Execute shared universal gate contract
+        from app.services.gate_contract import SharedGateRequest, SharedGovernanceGateEngine
+        shared_req = SharedGateRequest(
+            claim_text=eval_text,
+            subject=subj_clean,
+            predicate=pred_clean,
+            object_val=obj_clean,
+            evidence_quote=evidence.verbatim_quote if evidence else eval_text,
+            enclosing_clause=surrounding_clause,
+            table_header=metadata.get("table_header") if metadata else kwargs.get("table_header"),
+            scope=metadata.get("scope") if metadata else kwargs.get("scope"),
+            conditions=kwargs.get("conditions") or (metadata.get("conditions") if metadata else None),
+            exceptions=kwargs.get("exceptions") or (metadata.get("exceptions") if metadata else None),
+            claim_type=ct_clean,
+            confidence=confidence_or_trust,
+            document_text=source_content,
+            locators=[{"start": evidence.char_start, "end": evidence.char_end}] if evidence and hasattr(evidence, "char_start") else None,
+            metadata=metadata,
+        )
+        shared_res = SharedGovernanceGateEngine.evaluate(shared_req)
+        codes = list(shared_res.reason_codes)
 
         # =========================================================================
         # Gate 1: evidence_exists
@@ -1076,6 +1102,16 @@ class UniversalGateEvaluator:
             if not loc_res.located:
                 is_evidence_located = False
                 reasons.append(f"Evidence location failure: {loc_res.error_reason or 'Quote not found in source text.'}")
+
+            # Phase 4: Field-to-Evidence Binding Containment Validation
+            evidence_bindings = (metadata.get("evidence_bindings") if metadata else None) or kwargs.get("evidence_bindings") or []
+            if evidence_bindings and source_content:
+                for b in evidence_bindings:
+                    b_span = getattr(b, "evidence_span", None) or (b.get("evidence_span") if isinstance(b, dict) else None)
+                    if b_span and b_span.strip() and b_span.strip().lower() not in source_content.lower():
+                        is_evidence_located = False
+                        f_name = getattr(b, "field", None) or (b.get("field") if isinstance(b, dict) else "unnamed")
+                        reasons.append(f"Evidence containment failure: Field binding for '{f_name}' ('{b_span}') not found in source text.")
 
         # =========================================================================
         # Gate 3: text_integrity
@@ -1227,6 +1263,18 @@ class UniversalGateEvaluator:
             is_counterparty_resolved = False
             reasons.append(role_res.reason or "Counterparty failure: Directional right/duty conflicts with clause evidence.")
 
+        # Phase 3: Universal Type-Compatibility Matrix Evaluation
+        from app.extraction.type_compatibility import TypeCompatibilityMatrix
+        type_comp = TypeCompatibilityMatrix.evaluate_compatibility(
+            subject=subj_clean,
+            predicate=pred_clean,
+            object_text=obj_clean,
+            clause_text=surrounding_clause,
+        )
+        if not type_comp.is_compatible:
+            is_counterparty_resolved = False
+            reasons.append(f"Type-compatibility failure [{type_comp.blocked_rule}]: {type_comp.reason}")
+
         # =========================================================================
         # Gate 7: predicate_valid
         # =========================================================================
@@ -1369,6 +1417,28 @@ class UniversalGateEvaluator:
             is_canon = False
             agent_acc = False
 
+        # Enforce shared gate contract verdicts
+        if not shared_res.predicate_normativity or not shared_res.table_column_binding:
+            is_predicate_valid = False
+            for r in shared_res.rejection_reasons:
+                if r not in reasons:
+                    reasons.append(r)
+        if not shared_res.spo_compatibility:
+            is_counterparty_resolved = False
+            for r in shared_res.rejection_reasons:
+                if r not in reasons:
+                    reasons.append(r)
+        if not shared_res.polarity_consistency:
+            is_text_integrity = False
+            for r in shared_res.rejection_reasons:
+                if r not in reasons:
+                    reasons.append(r)
+        if not shared_res.condition_preservation or not shared_res.exception_preservation or not shared_res.scope_preservation or not shared_res.value_fidelity:
+            is_clause_entails_claim = False
+            for r in shared_res.rejection_reasons:
+                if r not in reasons:
+                    reasons.append(r)
+
         return UniversalGateResult(
             evidence_exists=is_evidence_exists,
             evidence_located=is_evidence_located,
@@ -1390,6 +1460,7 @@ class UniversalGateEvaluator:
             is_canonical=is_canon,
             agent_accessible=agent_acc,
             rejection_reasons=reasons,
+            reason_codes=codes,
             gates=gates,
             repaired_claim_text=repaired_text,
             subject=subj_clean,

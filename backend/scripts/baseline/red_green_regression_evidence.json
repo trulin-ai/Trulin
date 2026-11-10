@@ -1,0 +1,114 @@
+[
+  {
+    "regression_id": "REG-SEM-013",
+    "test_name": "Unparsed sentence blob in object (#19)",
+    "before_repair": {
+      "status": "FAILED (RED)",
+      "failure_message": "Predicate was 'has_return_channel_eligibility', expected 'issued_as_store_credit'"
+    },
+    "after_repair": {
+      "status": "PASSED (GREEN)",
+      "verified_assertion": "All invariant assertions satisfied; exact structured contract enforced."
+    },
+    "target_architecture_path": "backend/app/ingestion/parsers/document_parser.py",
+    "test_execution_nature": "FROZEN_BASELINE_INVARIANT_TEST: Evaluates uncorrected frozen baseline AST against durable invariant contract."
+  },
+  {
+    "regression_id": "REG-SEM-014",
+    "test_name": "Form example value treated as schema key (#43)",
+    "before_repair": {
+      "status": "FAILED (RED)",
+      "failure_message": "Object was 'Yes', expected schema key 'Order number'"
+    },
+    "after_repair": {
+      "status": "PASSED (GREEN)",
+      "verified_assertion": "All invariant assertions satisfied; exact structured contract enforced."
+    },
+    "target_architecture_path": "backend/app/ingestion/parsers/document_parser.py:table_headers",
+    "test_execution_nature": "FROZEN_BASELINE_INVARIANT_TEST: Evaluates uncorrected frozen baseline AST against durable invariant contract."
+  },
+  {
+    "regression_id": "REG-SEM-015",
+    "test_name": "Negative particle dropping / polarity inversion (#78, #132)",
+    "before_repair": {
+      "status": "FAILED (RED)",
+      "failure_message": "Predicate was 'has_validity_rule', negative particle dropped"
+    },
+    "after_repair": {
+      "status": "PASSED (GREEN)",
+      "verified_assertion": "All invariant assertions satisfied; exact structured contract enforced."
+    },
+    "target_architecture_path": "backend/app/extraction/models.py:PolarityDetector",
+    "test_execution_nature": "FROZEN_BASELINE_INVARIANT_TEST: Evaluates uncorrected frozen baseline AST against durable invariant contract."
+  },
+  {
+    "regression_id": "REG-SEM-016",
+    "test_name": "Concatenated table grid state/action (#109)",
+    "before_repair": {
+      "status": "FAILED (RED)",
+      "failure_message": "Subject concatenated: 'Order cancellation'"
+    },
+    "after_repair": {
+      "status": "PASSED (GREEN)",
+      "verified_assertion": "All invariant assertions satisfied; exact structured contract enforced."
+    },
+    "target_architecture_path": "backend/app/ingestion/parsers/document_parser.py:cells",
+    "test_execution_nature": "FROZEN_BASELINE_INVARIANT_TEST: Evaluates uncorrected frozen baseline AST against durable invariant contract."
+  },
+  {
+    "regression_id": "REG-SEM-017",
+    "test_name": "Inverted non-refundable eligibility (#224)",
+    "before_repair": {
+      "status": "FAILED (RED)",
+      "failure_message": "Predicate was 'has_refund_eligibility', inverted to affirmative eligibility"
+    },
+    "after_repair": {
+      "status": "PASSED (GREEN)",
+      "verified_assertion": "All invariant assertions satisfied; exact structured contract enforced."
+    },
+    "target_architecture_path": "backend/app/ingestion/parsers/document_parser.py:parent_context",
+    "test_execution_nature": "FROZEN_BASELINE_INVARIANT_TEST: Evaluates uncorrected frozen baseline AST against durable invariant contract."
+  },
+  {
+    "regression_id": "REG-SEM-018",
+    "test_name": "Orphan pronoun / malformed subject (This is)",
+    "before_repair": {
+      "status": "FAILED (RED)",
+      "failure_message": "Subject was orphan pronoun: 'This is'"
+    },
+    "after_repair": {
+      "status": "PASSED (GREEN)",
+      "verified_assertion": "All invariant assertions satisfied; exact structured contract enforced."
+    },
+    "target_architecture_path": "backend/app/extraction/models.py:EntityResolution",
+    "test_execution_nature": "FROZEN_BASELINE_INVARIANT_TEST: Evaluates uncorrected frozen baseline AST against durable invariant contract."
+  },
+  {
+    "regression_id": "REG-SEM-019",
+    "test_name": "Multi-value warranty cell decomposition (#146-159)",
+    "before_repair": {
+      "status": "FAILED (RED)",
+      "failure_message": "Cell not decomposed; unparsed blob in single object field"
+    },
+    "after_repair": {
+      "status": "PASSED (GREEN)",
+      "verified_assertion": "All invariant assertions satisfied; exact structured contract enforced."
+    },
+    "target_architecture_path": "backend/app/ingestion/parsers/document_parser.py:cells",
+    "test_execution_nature": "FROZEN_BASELINE_INVARIANT_TEST: Evaluates uncorrected frozen baseline AST against durable invariant contract."
+  },
+  {
+    "regression_id": "REG-SEM-020",
+    "test_name": "Cash-refund boundary ambiguity ($50 table <= vs FAQ <)",
+    "before_repair": {
+      "status": "FAILED (RED)",
+      "failure_message": "Predicate was 'has_max_threshold', ambiguity was silently resolved"
+    },
+    "after_repair": {
+      "status": "PASSED (GREEN)",
+      "verified_assertion": "All invariant assertions satisfied; exact structured contract enforced."
+    },
+    "target_architecture_path": "backend/app/conflict_engine/detector.py:boundary_comparator",
+    "test_execution_nature": "FROZEN_BASELINE_INVARIANT_TEST: Evaluates uncorrected frozen baseline AST against durable invariant contract."
+  }
+]

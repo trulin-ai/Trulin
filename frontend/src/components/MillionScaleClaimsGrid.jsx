@@ -121,8 +121,16 @@ export default function MillionScaleClaimsGrid({
 
       // 1b. Document-wise filter
       if (selectedDocumentId !== 'all') {
-        const claimDoc = docMap.get(claim.document_id || claim.document_version?.document_id);
-        const matchId = claim.document_id === selectedDocumentId || claimDoc?.id === selectedDocumentId;
+        const docIdOnClaim = claim.document_id || claim.document_version?.document_id || claim.data?.document_id || claim.data?.doc_id;
+        const claimDoc = docMap.get(docIdOnClaim || claim.document_version_id);
+        const rawTargetId = String(selectedDocumentId).replace(/^doc_/, '');
+        const matchId = (
+          docIdOnClaim === selectedDocumentId ||
+          docIdOnClaim === rawTargetId ||
+          claimDoc?.id === selectedDocumentId ||
+          claimDoc?.id === rawTargetId ||
+          String(claimDoc?.id || '').replace(/^doc_/, '') === rawTargetId
+        );
         if (!matchId) return false;
       }
 

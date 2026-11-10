@@ -1,0 +1,2242 @@
+{
+  "1": {
+    "audit_id": 1,
+    "subject": "Custom corporate agreements",
+    "predicate": "may_override_standard_terms",
+    "object": "Standard policy terms",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "2": {
+    "audit_id": 2,
+    "subject": "Return window",
+    "predicate": "has_return_window",
+    "object": "30 days from delivery (60 days for Northwind Rewards Gold members)",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "3": {
+    "audit_id": 3,
+    "subject": "Refund speed",
+    "predicate": "has_refund_processing_duration",
+    "object": "3-5 business days after we receive and inspect the return",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": true,
+    "spo_compatible": true
+  },
+  "4": {
+    "audit_id": 4,
+    "subject": "Return shipping",
+    "predicate": "has_return_shipping_rule",
+    "object": "Free for defective or incorrect items; $6.95 deducted otherwise",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "5": {
+    "audit_id": 5,
+    "subject": "Restocking fee",
+    "predicate": "has_fee_rule",
+    "object": "None on most items; 15% on special-order and bulk items",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "6": {
+    "audit_id": 6,
+    "subject": "Final sale items",
+    "predicate": "cannot_be_returned_or_refunded",
+    "object": "Not eligible for refund or exchange",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "7": {
+    "audit_id": 7,
+    "subject": "Refund",
+    "predicate": "has_definition",
+    "object": "Return of money to the original payment method or store credit following an approved return or cancellation.",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "8": {
+    "audit_id": 8,
+    "subject": "Return",
+    "predicate": "has_definition",
+    "object": "Sending a purchased item back to Northwind by mail or in-store drop-off.",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "9": {
+    "audit_id": 9,
+    "subject": "Exchange",
+    "predicate": "has_definition",
+    "object": "Replacing an item with a different size, colour or product of equal or greater value.",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "10": {
+    "audit_id": 10,
+    "subject": "Store Credit",
+    "predicate": "has_definition",
+    "object": "A balance issued to a customer account, redeemable online and in stores",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "11": {
+    "audit_id": 11,
+    "subject": "RMA",
+    "predicate": "has_definition",
+    "object": "Return Merchandise Authorization number, e.g. RMA-2026-004815, required for mailed returns.",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "12": {
+    "audit_id": 12,
+    "subject": "Final Sale items",
+    "predicate": "cannot_be_returned_or_refunded",
+    "object": "cannot be returned",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "13": {
+    "audit_id": 13,
+    "subject": "Standard merchandise",
+    "predicate": "has_return_window",
+    "object": "30 days",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "14": {
+    "audit_id": 14,
+    "subject": "Northwind Rewards Gold members",
+    "predicate": "has_return_window",
+    "object": "60 days",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "15": {
+    "audit_id": 15,
+    "subject": "Holiday purchases (Nov 1 - Dec 24)",
+    "predicate": "has_return_deadline",
+    "object": "Until January 31 of the following year",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "16": {
+    "audit_id": 16,
+    "subject": "Footwear (worn indoors only)",
+    "predicate": "has_return_window",
+    "object": "45 days",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "17": {
+    "audit_id": 17,
+    "subject": "Camping tents and sleeping bags (unused)",
+    "predicate": "has_return_window",
+    "object": "60 days",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "18": {
+    "audit_id": 18,
+    "subject": "Defective items",
+    "predicate": "has_resolution_path",
+    "object": "Covered by warranty - see Section 14",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "19": {
+    "audit_id": 19,
+    "subject": "Returns without a receipt",
+    "predicate": "has_return_channel_eligibility",
+    "object": "store credit at lowest price in last 90 days",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "20": {
+    "audit_id": 20,
+    "subject": "Returns without a receipt",
+    "predicate": "has_identity_verification_requirement",
+    "object": "A government-issued photo ID is required and scanned",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "21": {
+    "audit_id": 21,
+    "subject": "Returns without a receipt",
+    "predicate": "has_usage_limit",
+    "object": "3 receipt-less returns per customer per 12-month period",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": true,
+    "spo_compatible": true
+  },
+  "22": {
+    "audit_id": 22,
+    "subject": "Support agents",
+    "predicate": "must_verify_refund_conditions",
+    "object": "verify each condition before approving a refund over $50.00",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "23": {
+    "audit_id": 23,
+    "subject": "Refund request",
+    "predicate": "has_purchase_verification_requirement",
+    "object": "be verified in our systems",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "24": {
+    "audit_id": 24,
+    "subject": "Northwind",
+    "predicate": "has_partial_refund_rule",
+    "object": "be issued when an item shows signs of use beyond inspection, is missing parts, or is returned without original packaging",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "25": {
+    "audit_id": 25,
+    "subject": "Like new, tags attached",
+    "predicate": "has_refund_percentage",
+    "object": "100%",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "26": {
+    "audit_id": 26,
+    "subject": "Opened packaging, item unused",
+    "predicate": "has_refund_percentage",
+    "object": "100%",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "27": {
+    "audit_id": 27,
+    "subject": "Missing original box (non-fragile)",
+    "predicate": "has_refund_percentage",
+    "object": "90%",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "28": {
+    "audit_id": 28,
+    "subject": "Missing accessories or free gift",
+    "predicate": "has_refund_rule",
+    "object": "Refund minus gift value",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "29": {
+    "audit_id": 29,
+    "subject": "Light wear or signs of use",
+    "predicate": "has_refund_percentage",
+    "object": "50% - 75%",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "30": {
+    "audit_id": 30,
+    "subject": "Customer",
+    "predicate": "has_refund_percentage",
+    "object": "0% - 25% (agent discretion, manager approval)",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "31": {
+    "audit_id": 31,
+    "subject": "Washed, altered or stained items",
+    "predicate": "cannot_be_returned_or_refunded",
+    "object": "Not eligible",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "32": {
+    "audit_id": 32,
+    "subject": "Refund approval",
+    "predicate": "requires_approval_role",
+    "object": "Tier 1 Customer Support Agent",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": true,
+    "spo_compatible": true
+  },
+  "33": {
+    "audit_id": 33,
+    "subject": "Refund approval",
+    "predicate": "requires_approval_role",
+    "object": "Tier 2 Support Lead",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "34": {
+    "audit_id": 34,
+    "subject": "Refund approval",
+    "predicate": "requires_approval_role",
+    "object": "Customer Experience Manager",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "35": {
+    "audit_id": 35,
+    "subject": "Refund approval",
+    "predicate": "requires_approval_role",
+    "object": "Finance Director",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "36": {
+    "audit_id": 36,
+    "subject": "Refund approval",
+    "predicate": "requires_fraud_review",
+    "object": "Secondary fraud review required",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "37": {
+    "audit_id": 37,
+    "subject": "Custom products",
+    "predicate": "cannot_be_returned_or_refunded",
+    "object": "cannot be resold",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "38": {
+    "audit_id": 38,
+    "subject": "Even for non-refundable items, a full refund or replacement",
+    "predicate": "will_issue_refund",
+    "object": "be provided if the item arrives damaged, is materially different from its description, or was shipped in error",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "39": {
+    "audit_id": 39,
+    "subject": "In-store refunds",
+    "predicate": "has_posting_duration",
+    "object": "processed immediately; bank may take 3-5 days to post the credit",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "40": {
+    "audit_id": 40,
+    "subject": "Order number",
+    "predicate": "has_example_value",
+    "object": "NW-10482391",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "41": {
+    "audit_id": 41,
+    "subject": "Order number",
+    "predicate": "is_required_for_refund_request",
+    "object": "Yes",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "42": {
+    "audit_id": 42,
+    "subject": "Email on order",
+    "predicate": "has_example_value",
+    "object": "jane.doe@example.com",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "43": {
+    "audit_id": 43,
+    "subject": "Customer submitting return request",
+    "predicate": "must_provide_information",
+    "object": "Email on order",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "44": {
+    "audit_id": 44,
+    "subject": "Item SKU / name",
+    "predicate": "has_example_value",
+    "object": "TNT-4P-GRN / Summit 4-Person Tent",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "45": {
+    "audit_id": 45,
+    "subject": "Item SKU / name",
+    "predicate": "is_required_for_refund_request",
+    "object": "Yes",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "46": {
+    "audit_id": 46,
+    "subject": "Reason for return",
+    "predicate": "has_example_value",
+    "object": "Wrong size",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "47": {
+    "audit_id": 47,
+    "subject": "Reason for return",
+    "predicate": "is_required_for_refund_request",
+    "object": "Yes",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "48": {
+    "audit_id": 48,
+    "subject": "Photos",
+    "predicate": "has_example_value",
+    "object": "Damage close-up",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "49": {
+    "audit_id": 49,
+    "subject": "Photos",
+    "predicate": "is_required_for_refund_request",
+    "object": "If damaged",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "50": {
+    "audit_id": 50,
+    "subject": "Preferred resolution",
+    "predicate": "has_example_value",
+    "object": "Refund to card",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "51": {
+    "audit_id": 51,
+    "subject": "Preferred resolution",
+    "predicate": "is_required_for_refund_request",
+    "object": "Yes",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "52": {
+    "audit_id": 52,
+    "subject": "RMA issued after request",
+    "predicate": "has_stage_duration",
+    "object": "Instantly online; up to 1 hour by phone",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "53": {
+    "audit_id": 53,
+    "subject": "Return transit to warehouse",
+    "predicate": "has_stage_duration",
+    "object": "3-7 business days (domestic)",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "54": {
+    "audit_id": 54,
+    "subject": "Warehouse receipt and inspection",
+    "predicate": "has_stage_duration",
+    "object": "1-2 business days",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "55": {
+    "audit_id": 55,
+    "subject": "Refund approved and issued",
+    "predicate": "has_stage_duration",
+    "object": "Within 1 business day of inspection",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "56": {
+    "audit_id": 56,
+    "subject": "Credit card refund posted by bank",
+    "predicate": "has_posting_duration",
+    "object": "3-5 business days",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "57": {
+    "audit_id": 57,
+    "subject": "Debit card / bank transfer",
+    "predicate": "has_posting_duration",
+    "object": "5-10 business days",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "58": {
+    "audit_id": 58,
+    "subject": "PayPal",
+    "predicate": "has_posting_duration",
+    "object": "Within 24 hours of issue",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "59": {
+    "audit_id": 59,
+    "subject": "Store credit",
+    "predicate": "has_posting_duration",
+    "object": "Immediate",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "60": {
+    "audit_id": 60,
+    "subject": "Check (by request, over $1,000)",
+    "predicate": "has_posting_duration",
+    "object": "10-15 business days",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "61": {
+    "audit_id": 61,
+    "subject": "Visa / Mastercard / Amex",
+    "predicate": "has_refund_method",
+    "object": "Original card",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "62": {
+    "audit_id": 62,
+    "subject": "Visa / Mastercard / Amex",
+    "predicate": "has_posting_duration",
+    "object": "3-5 business days to post",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "63": {
+    "audit_id": 63,
+    "subject": "Debit card",
+    "predicate": "has_refund_method",
+    "object": "Original card",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "64": {
+    "audit_id": 64,
+    "subject": "Debit card",
+    "predicate": "has_posting_duration",
+    "object": "Up to 10 business days",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "65": {
+    "audit_id": 65,
+    "subject": "PayPal",
+    "predicate": "has_refund_method",
+    "object": "PayPal balance",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "66": {
+    "audit_id": 66,
+    "subject": "PayPal",
+    "predicate": "has_posting_sla_estimate",
+    "object": "Usually within 24 hours",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "67": {
+    "audit_id": 67,
+    "subject": "Apple Pay / Google Pay",
+    "predicate": "references_underlying_payment_timeline",
+    "object": "Underlying card",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "68": {
+    "audit_id": 68,
+    "subject": "Apple Pay / Google Pay",
+    "predicate": "has_stage_duration",
+    "object": "Same as card",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "69": {
+    "audit_id": 69,
+    "subject": "Buy Now Pay Later (e.g. Klarna)",
+    "predicate": "has_refund_method",
+    "object": "Provider reduces balance",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "70": {
+    "audit_id": 70,
+    "subject": "Buy Now Pay Later (e.g. Klarna)",
+    "predicate": "has_provider_governed_timeline",
+    "object": "Provider timelines apply",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "71": {
+    "audit_id": 71,
+    "subject": "Gift cards",
+    "predicate": "has_refund_method",
+    "object": "New gift card or store credit",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "72": {
+    "audit_id": 72,
+    "subject": "Gift cards",
+    "predicate": "has_posting_duration",
+    "object": "Instant",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "73": {
+    "audit_id": 73,
+    "subject": "Cash (in-store)",
+    "predicate": "has_refund_method",
+    "object": "Cash up to $50, then store credit/card",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "74": {
+    "audit_id": 74,
+    "subject": "Cash (in-store)",
+    "predicate": "has_identity_verification_requirement",
+    "object": "ID required over $50",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "75": {
+    "audit_id": 75,
+    "subject": "Split payments",
+    "predicate": "has_refund_method",
+    "object": "Proportionally to each method",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "76": {
+    "audit_id": 76,
+    "subject": "Split payments",
+    "predicate": "has_refund_allocation_rule",
+    "object": "Gift card portion first",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "77": {
+    "audit_id": 77,
+    "subject": "Customer",
+    "predicate": "receives_store_credit_bonus",
+    "object": "5% bonus on credit value, maximum bonus $25.00 per return",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "78": {
+    "audit_id": 78,
+    "subject": "Bonus credit",
+    "predicate": "cannot_be_applied_retroactively",
+    "object": "be applied retroactively once a refund has been issued to the card",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "79": {
+    "audit_id": 79,
+    "subject": "Defective or damaged",
+    "predicate": "has_return_shipping_rule",
+    "object": "Yes, in full",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "80": {
+    "audit_id": 80,
+    "subject": "Defective or damaged",
+    "predicate": "has_return_label_cost",
+    "object": "Free",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "81": {
+    "audit_id": 81,
+    "subject": "Wrong item sent",
+    "predicate": "has_return_shipping_rule",
+    "object": "Yes, in full",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "82": {
+    "audit_id": 82,
+    "subject": "Wrong item sent",
+    "predicate": "has_return_label_cost",
+    "object": "Free",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "83": {
+    "audit_id": 83,
+    "subject": "Not as described",
+    "predicate": "has_return_shipping_rule",
+    "object": "Yes, in full",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "84": {
+    "audit_id": 84,
+    "subject": "Not as described",
+    "predicate": "has_return_label_cost",
+    "object": "Free",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "85": {
+    "audit_id": 85,
+    "subject": "Changed mind / wrong size",
+    "predicate": "has_return_shipping_rule",
+    "object": "No",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "86": {
+    "audit_id": 86,
+    "subject": "Changed mind / wrong size",
+    "predicate": "has_return_label_cost",
+    "object": "$6.95 deducted from refund",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "87": {
+    "audit_id": 87,
+    "subject": "Gold member, any reason",
+    "predicate": "has_return_shipping_rule",
+    "object": "No",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "88": {
+    "audit_id": 88,
+    "subject": "Gold member, any reason",
+    "predicate": "has_return_label_cost",
+    "object": "Free",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "89": {
+    "audit_id": 89,
+    "subject": "Exchange",
+    "predicate": "has_return_shipping_rule",
+    "object": "N/A",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "90": {
+    "audit_id": 90,
+    "subject": "Exchange",
+    "predicate": "has_return_label_cost",
+    "object": "Free both ways",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "91": {
+    "audit_id": 91,
+    "subject": "Order",
+    "predicate": "has_return_shipping_rule",
+    "object": "No",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "92": {
+    "audit_id": 92,
+    "subject": "Order",
+    "predicate": "has_return_label_cost",
+    "object": "Free",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "93": {
+    "audit_id": 93,
+    "subject": "Oversize items",
+    "predicate": "has_return_freight_deduction",
+    "object": "$49.00 flat return freight fee deducted from refund",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "94": {
+    "audit_id": 94,
+    "subject": "Freight pickups",
+    "predicate": "has_scheduling_requirement",
+    "object": "with our logistics team at least 3 business days in advance",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "95": {
+    "audit_id": 95,
+    "subject": "Customer",
+    "predicate": "has_return_shipping_rule",
+    "object": "their own carrier",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "96": {
+    "audit_id": 96,
+    "subject": "Carrier",
+    "predicate": "limited_to",
+    "object": "$12.00 and only for approved defective returns, with a receipt",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "97": {
+    "audit_id": 97,
+    "subject": "Prepaid labels",
+    "predicate": "has_drop_off_options",
+    "object": "be dropped at over 15,000 carrier locations and all Northwind stores",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "98": {
+    "audit_id": 98,
+    "subject": "Customer",
+    "predicate": "requires_receipt_retention",
+    "object": "drop-off receipt until refund has been confirmed",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "99": {
+    "audit_id": 99,
+    "subject": "Replacement",
+    "predicate": "has_resolution_option_details",
+    "object": "Same item shipped with free expedited shipping",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "100": {
+    "audit_id": 100,
+    "subject": "Replacement",
+    "predicate": "has_stage_duration",
+    "object": "2-3 business days",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "101": {
+    "audit_id": 101,
+    "subject": "Full refund",
+    "predicate": "has_resolution_option_details",
+    "object": "Item price plus shipping and tax",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "102": {
+    "audit_id": 102,
+    "subject": "Full refund",
+    "predicate": "has_stage_duration",
+    "object": "3-5 business days",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "103": {
+    "audit_id": 103,
+    "subject": "Partial refund for cosmetic flaws",
+    "predicate": "has_resolution_option_details",
+    "object": "Offered for minor cosmetic flaws",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "104": {
+    "audit_id": 104,
+    "subject": "Repair",
+    "predicate": "has_resolution_option_details",
+    "object": "For eligible products under warranty",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "105": {
+    "audit_id": 105,
+    "subject": "Repair",
+    "predicate": "has_stage_duration",
+    "object": "7-14 business days",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "106": {
+    "audit_id": 106,
+    "subject": "Damaged item under $40",
+    "predicate": "may_issue_refund_without_return",
+    "object": "refund without requiring item return ('Keep It' policy)",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "107": {
+    "audit_id": 107,
+    "subject": "Keep It Policy",
+    "predicate": "limited_to",
+    "object": "two instances per customer per year",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "108": {
+    "audit_id": 108,
+    "subject": "Shipped order",
+    "predicate": "must_be_handled_as_return",
+    "object": "Once an order has shipped, it must be handled as a return.",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "109": {
+    "audit_id": 109,
+    "subject": "Order cancellation",
+    "predicate": "has_cancellation_window",
+    "object": "Refund Pending (within 1 hour) self-service full refund and immediate authorization release",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "110": {
+    "audit_id": 110,
+    "subject": "Order",
+    "predicate": "has_attempted_not_guaranteed",
+    "object": "No",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "111": {
+    "audit_id": 111,
+    "subject": "Order",
+    "predicate": "has_full_refund_if_stopped_else_return",
+    "object": "Refuse delivery or return",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "112": {
+    "audit_id": 112,
+    "subject": "Order",
+    "predicate": "has_attempted_not_guaranteed",
+    "object": "No",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "113": {
+    "audit_id": 113,
+    "subject": "Order",
+    "predicate": "has_full_refund_if_stopped_else_return",
+    "object": "Standard return policy",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "114": {
+    "audit_id": 114,
+    "subject": "Order",
+    "predicate": "has_attempted_not_guaranteed",
+    "object": "Yes, until 7 days before release",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "115": {
+    "audit_id": 115,
+    "subject": "Order",
+    "predicate": "has_full_refund_if_stopped_else_return",
+    "object": "Full refund",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "116": {
+    "audit_id": 116,
+    "subject": "Order",
+    "predicate": "has_attempted_not_guaranteed",
+    "object": "Yes, anytime",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "117": {
+    "audit_id": 117,
+    "subject": "Order",
+    "predicate": "has_full_refund_if_stopped_else_return",
+    "object": "Full refund",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "118": {
+    "audit_id": 118,
+    "subject": "Northwind",
+    "predicate": "may_cancel_order",
+    "object": "an order for reasons including stock errors, pricing errors, suspected fraud, or inability to verify payment",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "119": {
+    "audit_id": 119,
+    "subject": "Price adjustments",
+    "predicate": "has_price_adjustment_window",
+    "object": "14 days of purchase for one-time refund of difference",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "120": {
+    "audit_id": 120,
+    "subject": "Trailhead Box subscription",
+    "predicate": "has_cancellation_rule",
+    "object": "Full refund if cancelled within 48 hours of renewal and box not shipped",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "121": {
+    "audit_id": 121,
+    "subject": "Rewards Plus subscription",
+    "predicate": "has_refund_rule",
+    "object": "Pro-rated refund within 30 days of renewal; none afterwards",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "122": {
+    "audit_id": 122,
+    "subject": "Gear Care Plan subscription",
+    "predicate": "has_refund_rule",
+    "object": "No refund for current month; cancel effective next cycle",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "123": {
+    "audit_id": 123,
+    "subject": "Subscriber",
+    "predicate": "can_cancel_before_trial_ends",
+    "object": "without charge",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "124": {
+    "audit_id": 124,
+    "subject": "Free trials",
+    "predicate": "may_request_first_charge_refund",
+    "object": "within 7 days for a full refund of the first charge",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "125": {
+    "audit_id": 125,
+    "subject": "Company",
+    "predicate": "will_issue_refund",
+    "object": "treat the renewal as accidental and refund in full within 30 days",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "126": {
+    "audit_id": 126,
+    "subject": "Trailhead Box subscription",
+    "predicate": "can_pause_subscription",
+    "object": "for up to 3 months, once per year, from the account page",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "127": {
+    "audit_id": 127,
+    "subject": "Video course",
+    "predicate": "has_content_view_refund_window",
+    "object": "within 7 days",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": true,
+    "spo_compatible": true
+  },
+  "128": {
+    "audit_id": 128,
+    "subject": "Product",
+    "predicate": "has_refund_window",
+    "object": "Full refund within 14 days for corrupt or inaccessible files",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "129": {
+    "audit_id": 129,
+    "subject": "Gift cards",
+    "predicate": "cannot_be_refunded_for_cash",
+    "object": "Cash (except where required by law, e.g. California, balances under $10)",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": true,
+    "spo_compatible": true
+  },
+  "130": {
+    "audit_id": 130,
+    "subject": "Gift cards",
+    "predicate": "has_expiration_and_fee_rule",
+    "object": "\u007f Gift cards never expire and carry no fees.",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "131": {
+    "audit_id": 131,
+    "subject": "Gift cards",
+    "predicate": "has_replacement_eligibility",
+    "object": "Replaced with original proof of purchase and remaining balance verifiable",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "132": {
+    "audit_id": 132,
+    "subject": "Gift cards",
+    "predicate": "cannot_be_cancelled",
+    "object": "be cancelled once the code is delivered by email",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "133": {
+    "audit_id": 133,
+    "subject": "Gift receipt",
+    "predicate": "has_refund_method",
+    "object": "return items with a gift receipt for store credit equal to the price paid, or exchange for another item",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "134": {
+    "audit_id": 134,
+    "subject": "Gift receipt",
+    "predicate": "has_purchaser_notification_policy",
+    "object": "The purchaser is not notified of the return.",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "135": {
+    "audit_id": 135,
+    "subject": "Gift receipt",
+    "predicate": "may_receive_store_credit",
+    "object": "Without a gift receipt, credit is issued at the lowest recent selling price.",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "136": {
+    "audit_id": 136,
+    "subject": "Tents and shelters",
+    "predicate": "has_warranty_period",
+    "object": "2 years",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "137": {
+    "audit_id": 137,
+    "subject": "Tents and shelters",
+    "predicate": "has_warranty_remedy",
+    "object": "Repair, replace or refund",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "138": {
+    "audit_id": 138,
+    "subject": "Sleeping bags",
+    "predicate": "has_warranty_period",
+    "object": "Lifetime (manufacturing defects)",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "139": {
+    "audit_id": 139,
+    "subject": "Sleeping bags",
+    "predicate": "has_warranty_remedy",
+    "object": "Repair or replace",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "140": {
+    "audit_id": 140,
+    "subject": "Backpacks",
+    "predicate": "has_warranty_period",
+    "object": "5 years",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "141": {
+    "audit_id": 141,
+    "subject": "Backpacks",
+    "predicate": "has_warranty_remedy",
+    "object": "Repair or replace",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "142": {
+    "audit_id": 142,
+    "subject": "Footwear",
+    "predicate": "has_warranty_period",
+    "object": "1 year",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "143": {
+    "audit_id": 143,
+    "subject": "Footwear",
+    "predicate": "has_warranty_remedy",
+    "object": "Replace or refund",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "144": {
+    "audit_id": 144,
+    "subject": "Apparel",
+    "predicate": "has_warranty_period",
+    "object": "1 year",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "145": {
+    "audit_id": 145,
+    "subject": "Apparel",
+    "predicate": "has_warranty_remedy",
+    "object": "Replace or refund",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "146": {
+    "audit_id": 146,
+    "subject": "Electronics (headlamps, GPS)",
+    "predicate": "has_warranty_period",
+    "object": "1 year",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "147": {
+    "audit_id": 147,
+    "subject": "Electronics (headlamps, GPS)",
+    "predicate": "has_warranty_remedy",
+    "object": "Repair or replace",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "148": {
+    "audit_id": 148,
+    "subject": "Stoves and cookware",
+    "predicate": "has_warranty_period",
+    "object": "2 years",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "149": {
+    "audit_id": 149,
+    "subject": "Stoves and cookware",
+    "predicate": "has_warranty_remedy",
+    "object": "Repair or replace",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "150": {
+    "audit_id": 150,
+    "subject": "Water filters",
+    "predicate": "has_warranty_period",
+    "object": "1 year",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "151": {
+    "audit_id": 151,
+    "subject": "Water filters",
+    "predicate": "has_warranty_remedy",
+    "object": "Replace",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "152": {
+    "audit_id": 152,
+    "subject": "Marketplace sellers",
+    "predicate": "has_third_party_policy_rule",
+    "object": "Items shipped directly by third-party sellers follow the seller's policy, but Northwind's A-to-Z Guarantee ensures a refund if the seller fails to respond within 5 business days.",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "153": {
+    "audit_id": 153,
+    "subject": "United States",
+    "predicate": "has_return_window",
+    "object": "30 days",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "154": {
+    "audit_id": 154,
+    "subject": "United States",
+    "predicate": "has_internal_policy_reference",
+    "object": "See Section 9",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "155": {
+    "audit_id": 155,
+    "subject": "United States",
+    "predicate": "has_duties_and_taxes_rule",
+    "object": "Included",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "156": {
+    "audit_id": 156,
+    "subject": "Canada",
+    "predicate": "has_return_window",
+    "object": "30 days",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "157": {
+    "audit_id": 157,
+    "subject": "Canada",
+    "predicate": "has_return_shipping_rule",
+    "object": "Customer pays unless defective",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "158": {
+    "audit_id": 158,
+    "subject": "Canada",
+    "predicate": "has_duties_and_taxes_rule",
+    "object": "Duties refunded on approved returns",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "159": {
+    "audit_id": 159,
+    "subject": "UK",
+    "predicate": "has_return_window",
+    "object": "30 days (14-day statutory minimum)",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "160": {
+    "audit_id": 160,
+    "subject": "UK",
+    "predicate": "has_return_shipping_rule",
+    "object": "Customer pays unless defective",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "161": {
+    "audit_id": 161,
+    "subject": "UK",
+    "predicate": "has_duties_and_taxes_rule",
+    "object": "VAT refunded, duty via customs claim",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "162": {
+    "audit_id": 162,
+    "subject": "EU",
+    "predicate": "has_return_window",
+    "object": "30 days (14-day statutory minimum)",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "163": {
+    "audit_id": 163,
+    "subject": "EU",
+    "predicate": "has_return_shipping_rule",
+    "object": "Customer pays unless defective",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "164": {
+    "audit_id": 164,
+    "subject": "EU",
+    "predicate": "has_duties_and_taxes_rule",
+    "object": "VAT refunded",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "165": {
+    "audit_id": 165,
+    "subject": "Australia",
+    "predicate": "has_return_window",
+    "object": "30 days",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "166": {
+    "audit_id": 166,
+    "subject": "Australia",
+    "predicate": "has_return_shipping_rule",
+    "object": "Customer pays unless defective",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "167": {
+    "audit_id": 167,
+    "subject": "Australia",
+    "predicate": "has_duties_and_taxes_rule",
+    "object": "GST refunded",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "168": {
+    "audit_id": 168,
+    "subject": "Rest of world",
+    "predicate": "has_return_window",
+    "object": "14 days",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "169": {
+    "audit_id": 169,
+    "subject": "Rest of world",
+    "predicate": "has_return_shipping_rule",
+    "object": "Customer pays",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "170": {
+    "audit_id": 170,
+    "subject": "Rest of world",
+    "predicate": "has_duties_and_taxes_rule",
+    "object": "Not refundable",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "171": {
+    "audit_id": 171,
+    "subject": "International refund",
+    "predicate": "uses_original_charge_currency",
+    "object": "currency of the original charge",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "172": {
+    "audit_id": 172,
+    "subject": "International refund",
+    "predicate": "has_currency_conversion_rule",
+    "object": "Refund currency follows original charge; exchange differences are not compensated",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "173": {
+    "audit_id": 173,
+    "subject": "Customer",
+    "predicate": "is_responsible_for_duty_drawback",
+    "object": "filing customs duty drawback claims",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "174": {
+    "audit_id": 174,
+    "subject": "Northwind",
+    "predicate": "provides_documentation_upon_request",
+    "object": "commercial invoice and proof of return",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "175": {
+    "audit_id": 175,
+    "subject": "Customs and duties",
+    "predicate": "has_refusal_refund_rule",
+    "object": "Refused deliveries at customs are refunded minus outbound and return shipping.",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "176": {
+    "audit_id": 176,
+    "subject": "Northwind",
+    "predicate": "has_evidence_submission_deadline",
+    "object": "Submits dispute evidence within 7 days",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "177": {
+    "audit_id": 177,
+    "subject": "Card issuer",
+    "predicate": "has_dispute_decision_timeline",
+    "object": "Decides dispute outcome within 30\u201390 days",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "178": {
+    "audit_id": 178,
+    "subject": "Dispute loss",
+    "predicate": "has_funds_debit_outcome",
+    "object": "Transaction funds are debited from Northwind account",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "179": {
+    "audit_id": 179,
+    "subject": "Fraudulent dispute",
+    "predicate": "may_apply_administration_fee",
+    "object": "$15 administration fee may apply for fraudulent claims",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "180": {
+    "audit_id": 180,
+    "subject": "Chargeback Reason Code 4853",
+    "predicate": "has_definition",
+    "object": "Cardholder dispute / not as described",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "181": {
+    "audit_id": 181,
+    "subject": "Chargeback Reason Code 4853",
+    "predicate": "has_typical_resolution",
+    "object": "Refund or evidence submission",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "182": {
+    "audit_id": 182,
+    "subject": "Chargeback Reason Code 4837",
+    "predicate": "has_definition",
+    "object": "No cardholder authorisation (fraud)",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "183": {
+    "audit_id": 183,
+    "subject": "Chargeback Reason Code 4837",
+    "predicate": "has_typical_resolution",
+    "object": "Fraud investigation",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "184": {
+    "audit_id": 184,
+    "subject": "Chargeback Reason Code 4855",
+    "predicate": "has_definition",
+    "object": "Goods or services not provided",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "185": {
+    "audit_id": 185,
+    "subject": "Chargeback Reason Code 4855",
+    "predicate": "has_typical_resolution",
+    "object": "Provide tracking proof or refund",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "186": {
+    "audit_id": 186,
+    "subject": "Chargeback Reason Code 4834",
+    "predicate": "has_definition",
+    "object": "Duplicate processing",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "187": {
+    "audit_id": 187,
+    "subject": "Chargeback Reason Code 4834",
+    "predicate": "has_typical_resolution",
+    "object": "Verify and refund duplicate",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "188": {
+    "audit_id": 188,
+    "subject": "Chargeback Reason Code 4841",
+    "predicate": "has_definition",
+    "object": "Cancelled recurring transaction",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "189": {
+    "audit_id": 189,
+    "subject": "Chargeback Reason Code 4841",
+    "predicate": "has_typical_resolution",
+    "object": "Check cancellation record",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "190": {
+    "audit_id": 190,
+    "subject": "Customer Account",
+    "predicate": "has_trigger",
+    "object": "Return rate 30-40%",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "191": {
+    "audit_id": 191,
+    "subject": "Customer Account",
+    "predicate": "has_action",
+    "object": "Email reminder of policy",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "192": {
+    "audit_id": 192,
+    "subject": "Customer Account",
+    "predicate": "has_trigger",
+    "object": "Return rate over 40% or one confirmed abuse case",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "193": {
+    "audit_id": 193,
+    "subject": "Customer Account",
+    "predicate": "has_action",
+    "object": "Store credit only; returns need manager approval",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "194": {
+    "audit_id": 194,
+    "subject": "Customer Account",
+    "predicate": "has_trigger",
+    "object": "Multiple confirmed abuse cases",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "195": {
+    "audit_id": 195,
+    "subject": "Customer Account",
+    "predicate": "has_action",
+    "object": "Account suspended for 12 months",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "196": {
+    "audit_id": 196,
+    "subject": "Customer Account",
+    "predicate": "has_trigger",
+    "object": "Fraud or counterfeit return",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "197": {
+    "audit_id": 197,
+    "subject": "Customer Account",
+    "predicate": "has_action",
+    "object": "Account closed; referral to law enforcement where appropriate",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "198": {
+    "audit_id": 198,
+    "subject": "Customer",
+    "predicate": "may_appeal_restrictions",
+    "object": "restrictions in writing to appeals@northwind-demo.example within 30 days",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "199": {
+    "audit_id": 199,
+    "subject": "Privacy",
+    "predicate": "has_retention_policy",
+    "object": "Return history is stored per our Privacy Policy, retained for 7 years for audit purposes, and never sold to third parties.",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "200": {
+    "audit_id": 200,
+    "subject": "Standard returns",
+    "predicate": "has_return_window",
+    "object": "requested within 30 days",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "201": {
+    "audit_id": 201,
+    "subject": "Unused item returned after standard return window",
+    "predicate": "may_receive_store_credit",
+    "object": "offer store credit at a manager's discretion for unused items within 90 days",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "202": {
+    "audit_id": 202,
+    "subject": "Items bought in-store",
+    "predicate": "has_return_channel_eligibility",
+    "object": "be returned in any store or by mail using the RMA process with your receipt or loyalty account lookup",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "203": {
+    "audit_id": 203,
+    "subject": "Stolen package",
+    "predicate": "has_courtesy_replacement_rule",
+    "object": "One courtesy replacement per customer per year for packages under $200",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "204": {
+    "audit_id": 204,
+    "subject": "Phone (US/Canada)",
+    "predicate": "has_contact_phone",
+    "object": "1-800-555-0142",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "205": {
+    "audit_id": 205,
+    "subject": "Phone (US/Canada)",
+    "predicate": "has_contact_hours",
+    "object": "Mon-Fri 8am-8pm; Sat 9am-5pm",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "206": {
+    "audit_id": 206,
+    "subject": "Phone (UK)",
+    "predicate": "has_contact_phone",
+    "object": "+44 20 7946 0142",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "207": {
+    "audit_id": 207,
+    "subject": "Phone (UK)",
+    "predicate": "has_contact_hours",
+    "object": "Mon-Fri 9am-5pm GMT",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "208": {
+    "audit_id": 208,
+    "subject": "Email",
+    "predicate": "has_contact_email",
+    "object": "support@northwind-demo.example",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "209": {
+    "audit_id": 209,
+    "subject": "Email",
+    "predicate": "has_contact_hours",
+    "object": "Response within 24 hours",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "210": {
+    "audit_id": 210,
+    "subject": "Live chat",
+    "predicate": "has_contact_channel",
+    "object": "northwind-demo.example/chat",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "211": {
+    "audit_id": 211,
+    "subject": "Live chat",
+    "predicate": "has_contact_hours",
+    "object": "Daily 7am-10pm",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "212": {
+    "audit_id": 212,
+    "subject": "Refund status line",
+    "predicate": "has_contact_phone",
+    "object": "1-800-555-0177",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "213": {
+    "audit_id": 213,
+    "subject": "Refund status line",
+    "predicate": "has_contact_hours",
+    "object": "24/7 automated",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "214": {
+    "audit_id": 214,
+    "subject": "Mail",
+    "predicate": "has_resolution_option_details",
+    "object": "Returns Dept., 200 Cascade Way, Portland, OR 97201, USA",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "215": {
+    "audit_id": 215,
+    "subject": "Mail",
+    "predicate": "has_contact_hours",
+    "object": "N/A",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "216": {
+    "audit_id": 216,
+    "subject": "Escalations",
+    "predicate": "has_contact_email",
+    "object": "escalations@northwind-demo.example",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "217": {
+    "audit_id": 217,
+    "subject": "Escalations",
+    "predicate": "has_contact_hours",
+    "object": "Response within 2 business days",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "218": {
+    "audit_id": 218,
+    "subject": "First response by email",
+    "predicate": "has_target",
+    "object": "24 hours",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "219": {
+    "audit_id": 219,
+    "subject": "First response by chat",
+    "predicate": "has_target",
+    "object": "Under 2 minutes",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "220": {
+    "audit_id": 220,
+    "subject": "Resolution of standard refund query",
+    "predicate": "has_target",
+    "object": "Within 3 business days",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "221": {
+    "audit_id": 221,
+    "subject": "Escalated complaint resolution",
+    "predicate": "has_target",
+    "object": "10 business days",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "222": {
+    "audit_id": 222,
+    "subject": "Aug 15, 2025 Added Gear Care",
+    "predicate": "has_resolution_path",
+    "object": "4.0 Mar 1, 2025 Gold member window raised from 45 to 60 days",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "223": {
+    "audit_id": 223,
+    "subject": "Perishable goods past 14 days from delivery",
+    "predicate": "cannot_be_returned_or_refunded",
+    "object": "\u007f Perishable goods such as freeze-dried meals past 14 days from delivery.",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  },
+  "224": {
+    "audit_id": 224,
+    "subject": "Items returned more than 90 days after delivery",
+    "predicate": "cannot_be_returned_or_refunded",
+    "object": "Not eligible for return or refund",
+    "predicate_class": "canonical",
+    "is_canonical": true,
+    "changed_in_phase2_3b": false,
+    "spo_compatible": true
+  }
+}

@@ -1,0 +1,398 @@
+[
+  {
+    "audit_id": 2,
+    "claim_id": "5fbf0095-a74f-575c-a400-8b480e1f2cf5",
+    "source_unit_id": null,
+    "before": {
+      "subject": "Return window",
+      "predicate": "has_summary",
+      "object": "30 days from delivery (60 days for Northwind Rewards Gold members)",
+      "predicate_class": "catch_all"
+    },
+    "after": {
+      "subject": "Return window",
+      "predicate": "has_return_window",
+      "object": "30 days from delivery (60 days for Northwind Rewards Gold members)",
+      "predicate_class": "canonical",
+      "reason": "Specialized from has_summary to typed temporal return_window"
+    }
+  },
+  {
+    "audit_id": 3,
+    "claim_id": "befe53b3-2c00-552d-b3e6-db1e6316789c",
+    "source_unit_id": null,
+    "before": {
+      "subject": "Refund speed",
+      "predicate": "has_summary",
+      "object": "3-5 business days after we receive and inspect the return",
+      "predicate_class": "catch_all"
+    },
+    "after": {
+      "subject": "Refund speed",
+      "predicate": "has_posting_duration",
+      "object": "3-5 business days after we receive and inspect the return",
+      "predicate_class": "canonical",
+      "reason": "Specialized from has_summary to typed temporal posting_duration"
+    }
+  },
+  {
+    "audit_id": 4,
+    "claim_id": "a1823bf9-dea7-5983-8a5d-c6dd3d7ff965",
+    "source_unit_id": null,
+    "before": {
+      "subject": "Return shipping",
+      "predicate": "has_summary",
+      "object": "Free for defective or incorrect items; $6.95 deducted otherwise",
+      "predicate_class": "catch_all"
+    },
+    "after": {
+      "subject": "Return shipping",
+      "predicate": "has_return_shipping_rule",
+      "object": "Free for defective or incorrect items; $6.95 deducted otherwise",
+      "predicate_class": "canonical",
+      "reason": "Specialized from has_summary to typed return_shipping_rule"
+    }
+  },
+  {
+    "audit_id": 5,
+    "claim_id": "ee12e47d-30d8-5c1e-b3cb-19e63fac806b",
+    "source_unit_id": null,
+    "before": {
+      "subject": "Restocking fee",
+      "predicate": "has_summary",
+      "object": "None on most items; 15% on special-order and bulk items",
+      "predicate_class": "catch_all"
+    },
+    "after": {
+      "subject": "Restocking fee",
+      "predicate": "has_fee_rule",
+      "object": "None on most items; 15% on special-order and bulk items",
+      "predicate_class": "canonical",
+      "reason": "Specialized from has_summary to typed fee_rule"
+    }
+  },
+  {
+    "audit_id": 6,
+    "claim_id": "97361b26-3077-5f81-8ae6-ec7ceaf90305",
+    "source_unit_id": null,
+    "before": {
+      "subject": "Final sale items",
+      "predicate": "has_summary",
+      "object": "Not eligible for refund or exchange",
+      "predicate_class": "catch_all"
+    },
+    "after": {
+      "subject": "Final sale items",
+      "predicate": "cannot_be_returned_or_refunded",
+      "object": "Not eligible for refund or exchange",
+      "predicate_class": "canonical",
+      "reason": "Specialized from has_summary to canonical exclusion predicate"
+    }
+  },
+  {
+    "audit_id": 12,
+    "claim_id": "a1cc1469-3402-5122-8bd9-37aa49d88efe",
+    "source_unit_id": null,
+    "before": {
+      "subject": "Customer",
+      "predicate": "has_refund_eligibility",
+      "object": "Final Sale Items marked 'Final Sale' at the time of purchase, which cannot be returned.",
+      "predicate_class": "canonical"
+    },
+    "after": {
+      "subject": "Final Sale items",
+      "predicate": "cannot_be_returned_or_refunded",
+      "object": "cannot be returned",
+      "predicate_class": "canonical",
+      "reason": "Specialized generic has_refund_eligibility to canonical prohibition"
+    }
+  },
+  {
+    "audit_id": 21,
+    "claim_id": "d7ebc202-21f7-5b34-87f8-e2cea7bac99a",
+    "source_unit_id": null,
+    "before": {
+      "subject": "Returns without a receipt",
+      "predicate": "has_refund_eligibility",
+      "object": "A limit of three receipt-less returns per customer per 12-month period applies.",
+      "predicate_class": "canonical"
+    },
+    "after": {
+      "subject": "Returns without a receipt",
+      "predicate": "has_usage_limit",
+      "object": "A limit of three receipt-less returns per customer per 12-month period applies.",
+      "predicate_class": "canonical",
+      "reason": "Specialized generic has_refund_eligibility to typed usage_limit"
+    }
+  },
+  {
+    "audit_id": 24,
+    "claim_id": "62d890f3-40ad-58aa-bc0b-ea9c64d6861c",
+    "source_unit_id": "SRC-P06-07",
+    "before": {
+      "subject": "Northwind",
+      "predicate": "has_validity_rule",
+      "object": "be issued when an item shows signs of use beyond inspection, is missing parts, or is returned without original packaging",
+      "predicate_class": "catch_all"
+    },
+    "after": {
+      "subject": "Northwind",
+      "predicate": "has_partial_refund_rule",
+      "object": "be issued when an item shows signs of use beyond inspection, is missing parts, or is returned without original packaging",
+      "predicate_class": "canonical",
+      "reason": "Specialized catch-all has_validity_rule to typed partial_refund_rule"
+    }
+  },
+  {
+    "audit_id": 31,
+    "claim_id": "616d7f2f-4627-577d-8c3b-6487a974704a",
+    "source_unit_id": null,
+    "before": {
+      "subject": "Washed, altered or stained",
+      "predicate": "has_refund_eligibility",
+      "object": "Not eligible",
+      "predicate_class": "canonical"
+    },
+    "after": {
+      "subject": "Washed, altered or stained items",
+      "predicate": "cannot_be_returned_or_refunded",
+      "object": "Not eligible",
+      "predicate_class": "canonical",
+      "reason": "Specialized generic has_refund_eligibility to canonical prohibition"
+    }
+  },
+  {
+    "audit_id": 37,
+    "claim_id": "50e18e3c-c8e8-5b63-9fa5-a645bcdd3349",
+    "source_unit_id": null,
+    "before": {
+      "subject": "Customer",
+      "predicate": "has_validity_rule",
+      "object": "be resold",
+      "predicate_class": "catch_all"
+    },
+    "after": {
+      "subject": "Custom products",
+      "predicate": "cannot_be_returned_or_refunded",
+      "object": "cannot be resold",
+      "predicate_class": "canonical",
+      "reason": "Specialized catch-all has_validity_rule to canonical prohibition"
+    }
+  },
+  {
+    "audit_id": 94,
+    "claim_id": "0e4cc3b2-701f-5c1b-9fa4-e6498fbf3190",
+    "source_unit_id": null,
+    "before": {
+      "subject": "Freight pickups",
+      "predicate": "scheduled",
+      "object": "with our logistics team at least 3 business days in advance",
+      "predicate_class": "deprecated"
+    },
+    "after": {
+      "subject": "Freight pickups",
+      "predicate": "has_scheduling_requirement",
+      "object": "with our logistics team at least 3 business days in advance",
+      "predicate_class": "canonical",
+      "reason": "Specialized deprecated verb 'scheduled' to typed scheduling_requirement"
+    }
+  },
+  {
+    "audit_id": 97,
+    "claim_id": "1ae197ee-cc6d-5e33-90df-7a285fddf166",
+    "source_unit_id": null,
+    "before": {
+      "subject": "Prepaid labels",
+      "predicate": "has_validity_rule",
+      "object": "be dropped at over 15,000 carrier locations and all Northwind stores",
+      "predicate_class": "catch_all"
+    },
+    "after": {
+      "subject": "Prepaid labels",
+      "predicate": "has_drop_off_options",
+      "object": "be dropped at over 15,000 carrier locations and all Northwind stores",
+      "predicate_class": "canonical",
+      "reason": "Specialized catch-all has_validity_rule to typed drop_off_options"
+    }
+  },
+  {
+    "audit_id": 108,
+    "claim_id": "651154e4-d156-546a-b8b1-531b9734058e",
+    "source_unit_id": null,
+    "before": {
+      "subject": "Customer",
+      "predicate": "has_refund_eligibility",
+      "object": "Once an order has shipped, it must be handled as a return.",
+      "predicate_class": "canonical"
+    },
+    "after": {
+      "subject": "Shipped order",
+      "predicate": "must_be_handled_as_return",
+      "object": "Once an order has shipped, it must be handled as a return.",
+      "predicate_class": "canonical",
+      "reason": "Specialized generic has_refund_eligibility to typed operational requirement"
+    }
+  },
+  {
+    "audit_id": 118,
+    "claim_id": "7c307e56-15bc-552a-98e0-6ee1dcfc2e8e",
+    "source_unit_id": "SRC-P13-05",
+    "before": {
+      "subject": "Northwind",
+      "predicate": "cancel",
+      "object": "an order for reasons including stock errors, pricing errors, suspected fraud, or inability to verify payment",
+      "predicate_class": "deprecated"
+    },
+    "after": {
+      "subject": "Northwind",
+      "predicate": "may_cancel_order",
+      "object": "an order for reasons including stock errors, pricing errors, suspected fraud, or inability to verify payment",
+      "predicate_class": "canonical",
+      "reason": "Specialized deprecated verb 'cancel' to canonical provider permission"
+    }
+  },
+  {
+    "audit_id": 127,
+    "claim_id": "a3987c7c-c29e-5fa3-9dd7-94f00971cab0",
+    "source_unit_id": null,
+    "before": {
+      "subject": "Video course",
+      "predicate": "has_refund_window",
+      "object": "7 days if less than 20% viewed",
+      "predicate_class": "canonical"
+    },
+    "after": {
+      "subject": "Video course",
+      "predicate": "has_trial_refund_window",
+      "object": "7 days if less than 20% viewed",
+      "predicate_class": "canonical",
+      "reason": "Specialized generic has_refund_window to typed trial_refund_window"
+    }
+  },
+  {
+    "audit_id": 129,
+    "claim_id": "3f9936ba-30a8-568d-aa69-3535cec52e2a",
+    "source_unit_id": null,
+    "before": {
+      "subject": "Gift cards",
+      "predicate": "has_refund_eligibility",
+      "object": "13.2 Gift cards \u007f Gift cards are not refundable for cash, except where required by law (e.g. California, balances under $10).",
+      "predicate_class": "canonical"
+    },
+    "after": {
+      "subject": "Gift cards",
+      "predicate": "cannot_be_refunded_for_cash",
+      "object": "13.2 Gift cards \u007f Gift cards are not refundable for cash, except where required by law (e.g. California, balances under $10).",
+      "predicate_class": "canonical",
+      "reason": "Specialized generic has_refund_eligibility to canonical cash prohibition"
+    }
+  },
+  {
+    "audit_id": 134,
+    "claim_id": "9a3d4e16-7858-5a74-b5a2-3db334b317ea",
+    "source_unit_id": null,
+    "before": {
+      "subject": "Gift receipt",
+      "predicate": "has_refund_eligibility",
+      "object": "The purchaser is not notified of the return.",
+      "predicate_class": "canonical"
+    },
+    "after": {
+      "subject": "Gift receipt",
+      "predicate": "has_purchaser_notification_policy",
+      "object": "The purchaser is not notified of the return.",
+      "predicate_class": "canonical",
+      "reason": "Specialized generic has_refund_eligibility to typed notification policy"
+    }
+  },
+  {
+    "audit_id": 152,
+    "claim_id": "e430fc70-9819-5f56-9ce3-5e282be8fc44",
+    "source_unit_id": null,
+    "before": {
+      "subject": "Marketplace sellers",
+      "predicate": "has_refund_eligibility",
+      "object": "Items shipped directly by third-party sellers follow the seller's policy, but Northwind's A-to-Z Guarantee ensures a refund if the seller fails to respond within 5 business days.",
+      "predicate_class": "canonical"
+    },
+    "after": {
+      "subject": "Marketplace sellers",
+      "predicate": "has_third_party_policy_rule",
+      "object": "Items shipped directly by third-party sellers follow the seller's policy, but Northwind's A-to-Z Guarantee ensures a refund if the seller fails to respond within 5 business days.",
+      "predicate_class": "canonical",
+      "reason": "Specialized generic has_refund_eligibility to typed marketplace seller rule"
+    }
+  },
+  {
+    "audit_id": 175,
+    "claim_id": "69b9dd45-5e3d-5dba-9730-7b50901cdbf2",
+    "source_unit_id": null,
+    "before": {
+      "subject": "Customs and duties",
+      "predicate": "has_refund_eligibility",
+      "object": "Refused deliveries at customs are refunded minus outbound and return shipping.",
+      "predicate_class": "canonical"
+    },
+    "after": {
+      "subject": "Customs and duties",
+      "predicate": "has_refusal_refund_rule",
+      "object": "Refused deliveries at customs are refunded minus outbound and return shipping.",
+      "predicate_class": "canonical",
+      "reason": "Specialized generic has_refund_eligibility to typed customs refusal rule"
+    }
+  },
+  {
+    "audit_id": 198,
+    "claim_id": "c8844dc7-e6aa-5468-a972-6cba01ecd58e",
+    "source_unit_id": null,
+    "before": {
+      "subject": "Customer",
+      "predicate": "appeal",
+      "object": "restrictions in writing to appeals@northwind-demo.example within 30 days",
+      "predicate_class": "deprecated"
+    },
+    "after": {
+      "subject": "Customer",
+      "predicate": "may_appeal_restrictions",
+      "object": "restrictions in writing to appeals@northwind-demo.example within 30 days",
+      "predicate_class": "canonical",
+      "reason": "Specialized deprecated verb 'appeal' to canonical customer permission"
+    }
+  },
+  {
+    "audit_id": 199,
+    "claim_id": "7bac9255-acfb-5133-8974-5caa0fcf2b18",
+    "source_unit_id": null,
+    "before": {
+      "subject": "Privacy",
+      "predicate": "has_refund_eligibility",
+      "object": "Return history is stored per our Privacy Policy, retained for 7 years for audit purposes, and never sold to third parties.",
+      "predicate_class": "canonical"
+    },
+    "after": {
+      "subject": "Privacy",
+      "predicate": "has_retention_policy",
+      "object": "Return history is stored per our Privacy Policy, retained for 7 years for audit purposes, and never sold to third parties.",
+      "predicate_class": "canonical",
+      "reason": "Specialized generic has_refund_eligibility to typed data retention policy"
+    }
+  },
+  {
+    "audit_id": 223,
+    "claim_id": "4f87a460-9b39-5055-ab06-d192073678ca",
+    "source_unit_id": null,
+    "before": {
+      "subject": "Customer",
+      "predicate": "has_refund_eligibility",
+      "object": "\u007f Perishable goods such as freeze-dried meals past 14 days from delivery.",
+      "predicate_class": "canonical"
+    },
+    "after": {
+      "subject": "Perishable goods past 14 days from delivery",
+      "predicate": "cannot_be_returned_or_refunded",
+      "object": "\u007f Perishable goods such as freeze-dried meals past 14 days from delivery.",
+      "predicate_class": "canonical",
+      "reason": "Specialized generic has_refund_eligibility to canonical prohibition"
+    }
+  }
+]

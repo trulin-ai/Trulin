@@ -1,0 +1,47 @@
+{
+  "audit_timestamp": "2026-11-10T10:00:00Z",
+  "baseline_frozen_snapshot": "db_224_claims_frozen.json",
+  "total_claims": 224,
+  "reconciliation_summary": {
+    "db_verified_count": 140,
+    "api_certified_count": 140,
+    "explorer_certified_count": 140,
+    "studio_canonical_count": 140,
+    "read_time_candidate_elevations": 0,
+    "read_time_verified_downgrades": 0,
+    "divergence_flags_in_diagnostic_audit": 81
+  },
+  "pre_fix_vs_post_fix_comparison": {
+    "explorer_automated_certified_v3": {
+      "pre_fix": 144,
+      "post_fix": 140,
+      "delta": -4,
+      "explanation": "4 Section 1.2 candidate summary claims (#2-#5) no longer elevated on read; remain REVIEW_REQUIRED"
+    },
+    "studio_canonical_v3": {
+      "pre_fix": 164,
+      "post_fix": 140,
+      "delta": -24,
+      "explanation": "13 verified claims protected from read demotion (140-13=127 eliminated) and 37 candidates prevented from read elevation (127+37=164 eliminated)"
+    },
+    "postgresql_verified_status": {
+      "pre_fix": 140,
+      "post_fix": 140,
+      "delta": 0,
+      "explanation": "PostgreSQL database state remained completely immutable; 0 live writes"
+    }
+  },
+  "candidate_summary_claims_status": {
+    "claim_2_return_window": "REVIEW_REQUIRED (candidate)",
+    "claim_3_refund_speed": "REVIEW_REQUIRED (candidate)",
+    "claim_4_return_shipping": "REVIEW_REQUIRED (candidate)",
+    "claim_5_restocking_fee": "REVIEW_REQUIRED (candidate)"
+  },
+  "studio_category_breakdown": {
+    "canonical": 140,
+    "review": 53,
+    "non_rule": 24,
+    "rejected": 7,
+    "total": 224
+  }
+}

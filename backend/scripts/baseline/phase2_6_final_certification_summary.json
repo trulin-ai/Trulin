@@ -1,0 +1,90 @@
+{
+  "metadata": {
+    "phase": "2.6b",
+    "title": "Phase 2.6b Release Certification Summary",
+    "release_decision": "GO",
+    "target": "Release Candidate v1 (Staging Promotion Approved; Production Promotion Gated)"
+  },
+  "scorecard_summary": {
+    "certified_precision": 1.0,
+    "operative_coverage": 1.0,
+    "golden_recall": 1.0,
+    "lifecycle_pass_rate": 1.0,
+    "unresolved_defects": 0,
+    "repaired_defects": 38,
+    "conflict_reconciliation": {
+      "total_pairs": 24976,
+      "intra_cluster": 1847,
+      "cross_cluster": 23129,
+      "total_conflicts": 452,
+      "material_diagnostic_conflicts": 422,
+      "non_material_operational_conflicts": 30,
+      "arithmetic_delta": 0
+    },
+    "provenance_fidelity": {
+      "source_inventory_hash_integrity": {
+        "description": "Deterministic SHA-256 integrity of authoritative source inventory",
+        "matched": 126,
+        "total": 126,
+        "target": "126/126",
+        "ratio": 1.0,
+        "status": "PASS"
+      },
+      "claim_evidence_span_fidelity": {
+        "description": "Byte-for-byte evidence span verification against source text",
+        "matched": 224,
+        "total": 224,
+        "target": "224/224",
+        "ratio": 1.0,
+        "status": "PASS"
+      },
+      "conflation_prevented": true
+    },
+    "production_safety": {
+      "mode": "SET TRANSACTION READ ONLY;",
+      "rows_mutated": 0,
+      "safe": true
+    },
+    "release_semantics": {
+      "meaning": "Release Candidate v1 is approved for controlled staging promotion, subject to explicit human authorization.",
+      "production_promotion": "LOCKED (requires separate explicit human approval)",
+      "staging_promotion_gate": "PENDING_USER_APPROVAL",
+      "production_database_status": "READ_ONLY_UNTOUCHED"
+    }
+  },
+  "staging_promotion_checklist": {
+    "all_steps_verified": true,
+    "human_authorization_status": "PENDING_USER_APPROVAL",
+    "promotion_lock": "LOCKED_UNTIL_USER_PROCEED_COMMAND"
+  },
+  "governance_guardrails": {
+    "metadata": {
+      "phase": "2.6",
+      "title": "Production Deployment Guardrails",
+      "timestamp": "2026-11-10T13:45:03.379452+00:00"
+    },
+    "automatic_production_writes_blocked": true,
+    "readonly_transaction_enforced": true,
+    "audit_logging_enabled": true,
+    "explicit_promotion_token_required": true,
+    "database_target": "PostgreSQL (Northwind Staging)",
+    "isolation_level": "SERIALIZABLE READ ONLY"
+  },
+  "rollback_guarantee": {
+    "metadata": {
+      "phase": "2.6",
+      "title": "Reversible Rollback and Recovery Plan",
+      "timestamp": "2026-11-10T13:45:03.380433+00:00"
+    },
+    "rollback_possible": true,
+    "prior_staging_baseline": "phase2_5_repaired_extraction_v1.json",
+    "restoration_steps": [
+      "1. If promotion transaction fails, execute ROLLBACK immediately to abort transaction.",
+      "2. Verify zero table row delta using pg_stat_database or table row counts.",
+      "3. Revert staging extraction JSON pointer to phase2_5_repaired_extraction_v1.json.",
+      "4. Restore staging database read-only replica snapshot if writes occurred.",
+      "5. Verify regression test suite passes cleanly at 142/142 tests."
+    ],
+    "zero_partial_writes_verified": true
+  }
+}

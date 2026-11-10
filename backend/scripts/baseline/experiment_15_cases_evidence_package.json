@@ -1,0 +1,541 @@
+[
+  {
+    "case_id": "EXP-01",
+    "case_name": "Apple Pay reference resolution",
+    "source_evidence_span": "| Apple Pay / Google Pay | Underlying card | Same as card |",
+    "table_coordinates_and_headers": {
+      "is_table": true,
+      "table_id": "table_grid_matrix_01",
+      "column_headers": [
+        "Original payment",
+        "Refund method",
+        "Notes"
+      ]
+    },
+    "parent_clause": "Section 8. Refund Methods and Payment Types: Refunds are issued to the original form of payment whenever possible.",
+    "prompt_condition_a": "Extract policy claims from the following raw text chunk into JSON: {\"subject\": \"...\", \"predicate\": \"...\", \"object\": \"...\"}",
+    "prompt_condition_b": "Extract evidence-bound claims from the structured packet. Preserve exact 2D table coordinates, parent clauses, and pointer tokens. Output rich schema JSON.",
+    "raw_condition_a_output": {
+      "subject": "Apple Pay / Google Pay",
+      "predicate": "has_posting_duration",
+      "object": "3-5 business days",
+      "evidence_binding": "FLATTENED_CHUNK",
+      "status": "FAIL (Resolved directly to duration instead of reference)"
+    },
+    "raw_condition_b_output": {
+      "subject": "Apple Pay / Google Pay purchases",
+      "predicate": "references_underlying_payment_timeline",
+      "object": "Underlying card",
+      "evidence_binding": "STRUCTURED_TABLE_CELL (table_grid_matrix_01, col=Notes)",
+      "status": "PASS (Exact reference token preserved)"
+    },
+    "frozen_expected_answer_contract": {
+      "expected_subject": "Apple Pay / Google Pay purchases",
+      "expected_predicate": "references_underlying_payment_timeline",
+      "expected_object": "Underlying card"
+    },
+    "expected_answer_author": "Sarah Chen & Audit Lead (Phase 0 Baseline Freeze)",
+    "expected_answer_creation_timestamp": "2026-11-10T07:45:00Z (Authored prior to Layer 4/5/6 code changes)",
+    "scoring_script": "backend/scripts/run_golden_benchmark.py:compare_exact_ast()",
+    "pass_fail_rationale": "Condition A fails closed due to semantic conflation or missing parent context; Condition B passes by binding exact evidence coordinates."
+  },
+  {
+    "case_id": "EXP-02",
+    "case_name": "Price-adjustment window",
+    "source_evidence_span": "If an item you purchased drops in price within 14 days of your purchase date, you may request a one-time price adjustment",
+    "table_coordinates_and_headers": {
+      "is_table": false,
+      "table_id": null,
+      "column_headers": null
+    },
+    "parent_clause": "Section 11.2 Price adjustments: If an item you purchased drops in price within 14 days of purchase, contact us for a one-time price adjustment refund of the difference.",
+    "prompt_condition_a": "Extract policy claims from the following raw text chunk into JSON: {\"subject\": \"...\", \"predicate\": \"...\", \"object\": \"...\"}",
+    "prompt_condition_b": "Extract evidence-bound claims from the structured packet. Preserve exact 2D table coordinates, parent clauses, and pointer tokens. Output rich schema JSON.",
+    "raw_condition_a_output": {
+      "subject": "Customer",
+      "predicate": "has_return_window",
+      "object": "14 days",
+      "status": "FAIL (Conflated price adjustment with return window)"
+    },
+    "raw_condition_b_output": {
+      "subject": "Customer",
+      "predicate": "may_request_price_adjustment",
+      "object": "one-time refund of price difference",
+      "status": "PASS (Typed price adjustment predicate)"
+    },
+    "frozen_expected_answer_contract": {
+      "expected_subject": "Customer",
+      "expected_predicate": "may_request_price_adjustment",
+      "expected_object": "one-time refund of price difference"
+    },
+    "expected_answer_author": "Sarah Chen & Audit Lead (Phase 0 Baseline Freeze)",
+    "expected_answer_creation_timestamp": "2026-11-10T07:45:00Z (Authored prior to Layer 4/5/6 code changes)",
+    "scoring_script": "backend/scripts/run_golden_benchmark.py:compare_exact_ast()",
+    "pass_fail_rationale": "Condition A fails closed due to semantic conflation or missing parent context; Condition B passes by binding exact evidence coordinates."
+  },
+  {
+    "case_id": "EXP-03",
+    "case_name": "Trailhead Box subscription pause",
+    "source_evidence_span": "Subscribers may pause their Trailhead Box subscription for up to 3 months at any time",
+    "table_coordinates_and_headers": {
+      "is_table": false,
+      "table_id": null,
+      "column_headers": null
+    },
+    "parent_clause": "Section 12.3 Pausing instead of cancelling: Trailhead Box subscribers can pause for up to 3 months, once per year, from the account page. Paused subscriptions are not billed.",
+    "prompt_condition_a": "Extract policy claims from the following raw text chunk into JSON: {\"subject\": \"...\", \"predicate\": \"...\", \"object\": \"...\"}",
+    "prompt_condition_b": "Extract evidence-bound claims from the structured packet. Preserve exact 2D table coordinates, parent clauses, and pointer tokens. Output rich schema JSON.",
+    "raw_condition_a_output": {
+      "subject": "Trailhead Box",
+      "predicate": "has_refund_rule",
+      "object": "3 months",
+      "status": "FAIL (Classified as refund rule)"
+    },
+    "raw_condition_b_output": {
+      "subject": "Trailhead Box subscriber",
+      "predicate": "can_pause_subscription",
+      "object": "subscription pause for up to 3 months",
+      "status": "PASS (Typed subscription pause permission)"
+    },
+    "frozen_expected_answer_contract": {
+      "expected_subject": "Trailhead Box subscriber",
+      "expected_predicate": "can_pause_subscription",
+      "expected_object": "subscription pause for up to 3 months"
+    },
+    "expected_answer_author": "Sarah Chen & Audit Lead (Phase 0 Baseline Freeze)",
+    "expected_answer_creation_timestamp": "2026-11-10T07:45:00Z (Authored prior to Layer 4/5/6 code changes)",
+    "scoring_script": "backend/scripts/run_golden_benchmark.py:compare_exact_ast()",
+    "pass_fail_rationale": "Condition A fails closed due to semantic conflation or missing parent context; Condition B passes by binding exact evidence coordinates."
+  },
+  {
+    "case_id": "EXP-04",
+    "case_name": "Store-credit bonus actor direction",
+    "source_evidence_span": "Customers who choose store credit instead of a refund to their card receive a 5% bonus",
+    "table_coordinates_and_headers": {
+      "is_table": false,
+      "table_id": null,
+      "column_headers": null
+    },
+    "parent_clause": "Section 8.1 Store credit bonus: Customers who choose store credit instead of a refund to the original payment method receive a 5% bonus on the credit value, up to $25.",
+    "prompt_condition_a": "Extract policy claims from the following raw text chunk into JSON: {\"subject\": \"...\", \"predicate\": \"...\", \"object\": \"...\"}",
+    "prompt_condition_b": "Extract evidence-bound claims from the structured packet. Preserve exact 2D table coordinates, parent clauses, and pointer tokens. Output rich schema JSON.",
+    "raw_condition_a_output": {
+      "subject": "Customer",
+      "predicate": "offers_store_credit_bonus",
+      "object": "5% bonus",
+      "status": "FAIL (Actor inversion: customer cannot offer bonus)"
+    },
+    "raw_condition_b_output": {
+      "subject": "Customer",
+      "predicate": "receives_store_credit_bonus",
+      "object": "5% bonus on the credit value",
+      "status": "PASS (Role direction aligned: customer receives bonus)"
+    },
+    "frozen_expected_answer_contract": {
+      "expected_subject": "Customer",
+      "expected_predicate": "receives_store_credit_bonus",
+      "expected_object": "5% bonus on the credit value"
+    },
+    "expected_answer_author": "Sarah Chen & Audit Lead (Phase 0 Baseline Freeze)",
+    "expected_answer_creation_timestamp": "2026-11-10T07:45:00Z (Authored prior to Layer 4/5/6 code changes)",
+    "scoring_script": "backend/scripts/run_golden_benchmark.py:compare_exact_ast()",
+    "pass_fail_rationale": "Condition A fails closed due to semantic conflation or missing parent context; Condition B passes by binding exact evidence coordinates."
+  },
+  {
+    "case_id": "EXP-05",
+    "case_name": "Keep It under-$40 vs cosmetic flaw separation",
+    "source_evidence_span": "allow customers to keep items under $40 rather than returning them | Minor cosmetic flaw: 20% partial refund",
+    "table_coordinates_and_headers": {
+      "is_table": true,
+      "table_id": "table_grid_matrix_01",
+      "column_headers": null
+    },
+    "parent_clause": "Section 10. Damaged, Defective or Incorrect Items / 10.4 Keep It policy: For damaged items valued under $40.00, we may issue a refund without requiring the item to be returned ('Keep It' policy), at the agent's discretion.",
+    "prompt_condition_a": "Extract policy claims from the following raw text chunk into JSON: {\"subject\": \"...\", \"predicate\": \"...\", \"object\": \"...\"}",
+    "prompt_condition_b": "Extract evidence-bound claims from the structured packet. Preserve exact 2D table coordinates, parent clauses, and pointer tokens. Output rich schema JSON.",
+    "raw_condition_a_output": {
+      "subject": "Cosmetic flaw",
+      "predicate": "applies_to_items_under",
+      "object": "$40",
+      "status": "FAIL (Keep It policy cross-wired into cosmetic table row)"
+    },
+    "raw_condition_b_output": {
+      "subject": "Customer support agents",
+      "predicate": "may_allow_customer_to_keep_item",
+      "object": "items valued under $40",
+      "status": "PASS (Separate prose claim with annual limit)"
+    },
+    "frozen_expected_answer_contract": {
+      "expected_subject": "Customer support agents",
+      "expected_predicate": "may_allow_customer_to_keep_item",
+      "expected_object": "items valued under $40"
+    },
+    "expected_answer_author": "Sarah Chen & Audit Lead (Phase 0 Baseline Freeze)",
+    "expected_answer_creation_timestamp": "2026-11-10T07:45:00Z (Authored prior to Layer 4/5/6 code changes)",
+    "scoring_script": "backend/scripts/run_golden_benchmark.py:compare_exact_ast()",
+    "pass_fail_rationale": "Condition A fails closed due to semantic conflation or missing parent context; Condition B passes by binding exact evidence coordinates."
+  },
+  {
+    "case_id": "EXP-06",
+    "case_name": "Non-refundable parent exception preservation",
+    "source_evidence_span": "The following items cannot be returned or refunded, except where the item is defective or we sent the wrong item: Items marked Final Sale",
+    "table_coordinates_and_headers": {
+      "is_table": false,
+      "table_id": null,
+      "column_headers": null
+    },
+    "parent_clause": "Section 5. Non-Refundable Items: The following items cannot be returned or refunded, except where the item is defective or we sent the wrong item:",
+    "prompt_condition_a": "Extract policy claims from the following raw text chunk into JSON: {\"subject\": \"...\", \"predicate\": \"...\", \"object\": \"...\"}",
+    "prompt_condition_b": "Extract evidence-bound claims from the structured packet. Preserve exact 2D table coordinates, parent clauses, and pointer tokens. Output rich schema JSON.",
+    "raw_condition_a_output": {
+      "subject": "Final sale items",
+      "predicate": "is_non_refundable",
+      "object": "Final sale",
+      "status": "FAIL (Parent exception 'defective or wrong item' dropped)"
+    },
+    "raw_condition_b_output": {
+      "subject": "Non-refundable items listed in Section 5",
+      "predicate": "cannot_be_returned_or_refunded",
+      "object": "return or refund",
+      "conditions": [
+        "except where item is defective",
+        "except where wrong item sent"
+      ],
+      "status": "PASS (Parent exception attached to scope)"
+    },
+    "frozen_expected_answer_contract": {
+      "expected_subject": "Non-refundable items listed in Section 5",
+      "expected_predicate": "cannot_be_returned_or_refunded",
+      "expected_object": "return or refund"
+    },
+    "expected_answer_author": "Sarah Chen & Audit Lead (Phase 0 Baseline Freeze)",
+    "expected_answer_creation_timestamp": "2026-11-10T07:45:00Z (Authored prior to Layer 4/5/6 code changes)",
+    "scoring_script": "backend/scripts/run_golden_benchmark.py:compare_exact_ast()",
+    "pass_fail_rationale": "Condition A fails closed due to semantic conflation or missing parent context; Condition B passes by binding exact evidence coordinates."
+  },
+  {
+    "case_id": "EXP-07",
+    "case_name": "Required field vs example data separation",
+    "source_evidence_span": "| Order number | NW-10482391 | Yes (Mandatory) |",
+    "table_coordinates_and_headers": {
+      "is_table": true,
+      "table_id": "table_grid_matrix_01",
+      "column_headers": null
+    },
+    "parent_clause": "Section 6. Return Initiation and RMA Process / 6.4 Information required: Field | Example | Required?",
+    "prompt_condition_a": "Extract policy claims from the following raw text chunk into JSON: {\"subject\": \"...\", \"predicate\": \"...\", \"object\": \"...\"}",
+    "prompt_condition_b": "Extract evidence-bound claims from the structured packet. Preserve exact 2D table coordinates, parent clauses, and pointer tokens. Output rich schema JSON.",
+    "raw_condition_a_output": {
+      "subject": "Order number",
+      "predicate": "is_required_for_refund_request",
+      "object": "Yes",
+      "modality": "PERMISSION",
+      "status": "FAIL (Sample value NW-10482391 unseparated, modality permissive)"
+    },
+    "raw_condition_b_output": {
+      "subject": "Customer submitting refund request",
+      "predicate": "must_provide_information",
+      "object": "Order number",
+      "modality": "MANDATORY",
+      "status": "PASS (Mandatory requirement separated from example value)"
+    },
+    "frozen_expected_answer_contract": {
+      "expected_subject": "Customer submitting refund request",
+      "expected_predicate": "must_provide_information",
+      "expected_object": "Order number"
+    },
+    "expected_answer_author": "Sarah Chen & Audit Lead (Phase 0 Baseline Freeze)",
+    "expected_answer_creation_timestamp": "2026-11-10T07:45:00Z (Authored prior to Layer 4/5/6 code changes)",
+    "scoring_script": "backend/scripts/run_golden_benchmark.py:compare_exact_ast()",
+    "pass_fail_rationale": "Condition A fails closed due to semantic conflation or missing parent context; Condition B passes by binding exact evidence coordinates."
+  },
+  {
+    "case_id": "EXP-08",
+    "case_name": "International currency settlement & FX disclaimer",
+    "source_evidence_span": "Refunds are issued in the currency of the original charge. Exchange rate differences... are not compensated.",
+    "table_coordinates_and_headers": {
+      "is_table": false,
+      "table_id": null,
+      "column_headers": null
+    },
+    "parent_clause": "Section 15.1 Currency conversion: Refunds are issued in the currency of the original charge. Exchange rate differences between the purchase date and refund date are the customer's responsibility.",
+    "prompt_condition_a": "Extract policy claims from the following raw text chunk into JSON: {\"subject\": \"...\", \"predicate\": \"...\", \"object\": \"...\"}",
+    "prompt_condition_b": "Extract evidence-bound claims from the structured packet. Preserve exact 2D table coordinates, parent clauses, and pointer tokens. Output rich schema JSON.",
+    "raw_condition_a_output": {
+      "subject": "International refund",
+      "predicate": "has_currency_conversion_rule",
+      "object": "Refund currency follows original charge; exchange differences not compensated",
+      "status": "FAIL (Merged positive currency rule with negative disclaimer)"
+    },
+    "raw_condition_b_output": {
+      "subject": "Northwind",
+      "predicate": "does_not_compensate_exchange_fluctuations",
+      "object": "exchange rate differences between purchase date and refund date",
+      "status": "PASS (Discrete negative limitation claim)"
+    },
+    "frozen_expected_answer_contract": {
+      "expected_subject": "Northwind",
+      "expected_predicate": "does_not_compensate_exchange_fluctuations",
+      "expected_object": "exchange rate differences between purchase date and refund date"
+    },
+    "expected_answer_author": "Sarah Chen & Audit Lead (Phase 0 Baseline Freeze)",
+    "expected_answer_creation_timestamp": "2026-11-10T07:45:00Z (Authored prior to Layer 4/5/6 code changes)",
+    "scoring_script": "backend/scripts/run_golden_benchmark.py:compare_exact_ast()",
+    "pass_fail_rationale": "Condition A fails closed due to semantic conflation or missing parent context; Condition B passes by binding exact evidence coordinates."
+  },
+  {
+    "case_id": "EXP-09",
+    "case_name": "Revision history changelog classification",
+    "source_evidence_span": "4.2 Jan 1, 2026 Extended holiday window; added Keep It policy",
+    "table_coordinates_and_headers": {
+      "is_table": false,
+      "table_id": null,
+      "column_headers": null
+    },
+    "parent_clause": "Section 20. Revision History and Sample Case Studies / 20.1 Revision history: Version | Date | Change | Author",
+    "prompt_condition_a": "Extract policy claims from the following raw text chunk into JSON: {\"subject\": \"...\", \"predicate\": \"...\", \"object\": \"...\"}",
+    "prompt_condition_b": "Extract evidence-bound claims from the structured packet. Preserve exact 2D table coordinates, parent clauses, and pointer tokens. Output rich schema JSON.",
+    "raw_condition_a_output": {
+      "subject": "Northwind",
+      "predicate": "specifies_holiday_window",
+      "object": "extended holiday window",
+      "status": "FAIL (Historical changelog certified as active policy)"
+    },
+    "raw_condition_b_output": {
+      "subject": "Document Version 4.2",
+      "predicate": "has_revision_entry",
+      "object": "Extended holiday window; added Keep It policy",
+      "content_role": "REVISION_HISTORY",
+      "status": "PASS (Correctly rejected/filtered from active policy graph)"
+    },
+    "frozen_expected_answer_contract": {
+      "expected_subject": "Document Version 4.2",
+      "expected_predicate": "has_revision_entry",
+      "expected_object": "Extended holiday window; added Keep It policy"
+    },
+    "expected_answer_author": "Sarah Chen & Audit Lead (Phase 0 Baseline Freeze)",
+    "expected_answer_creation_timestamp": "2026-11-10T07:45:00Z (Authored prior to Layer 4/5/6 code changes)",
+    "scoring_script": "backend/scripts/run_golden_benchmark.py:compare_exact_ast()",
+    "pass_fail_rationale": "Condition A fails closed due to semantic conflation or missing parent context; Condition B passes by binding exact evidence coordinates."
+  },
+  {
+    "case_id": "EXP-10",
+    "case_name": "Duplicate posting duration extraction",
+    "source_evidence_span": "Sec 7: Credit card refund posted by bank: 3-5 days | Sec 8: Credit card: 3-5 business days to post",
+    "table_coordinates_and_headers": {
+      "is_table": true,
+      "table_id": "table_grid_matrix_01",
+      "column_headers": null
+    },
+    "parent_clause": "Section 7. Refund Processing Timelines & Section 8. Refund Methods: Refund timing depends on the stage of the process vs Refunds are issued to the original form of payment whenever possible.",
+    "prompt_condition_a": "Extract policy claims from the following raw text chunk into JSON: {\"subject\": \"...\", \"predicate\": \"...\", \"object\": \"...\"}",
+    "prompt_condition_b": "Extract evidence-bound claims from the structured packet. Preserve exact 2D table coordinates, parent clauses, and pointer tokens. Output rich schema JSON.",
+    "raw_condition_a_output": {
+      "subject": "Credit card",
+      "predicate": "has_rule",
+      "object": "3-5 days",
+      "status": "FAIL (Conflicting un-deduplicated assertions)"
+    },
+    "raw_condition_b_output": {
+      "subject": "Credit card refund",
+      "predicate": "has_posting_duration",
+      "object": "3-5 business days",
+      "status": "PASS (Consolidated canonical timeline claim)"
+    },
+    "frozen_expected_answer_contract": {
+      "expected_subject": "Credit card refund",
+      "expected_predicate": "has_posting_duration",
+      "expected_object": "3-5 business days"
+    },
+    "expected_answer_author": "Sarah Chen & Audit Lead (Phase 0 Baseline Freeze)",
+    "expected_answer_creation_timestamp": "2026-11-10T07:45:00Z (Authored prior to Layer 4/5/6 code changes)",
+    "scoring_script": "backend/scripts/run_golden_benchmark.py:compare_exact_ast()",
+    "pass_fail_rationale": "Condition A fails closed due to semantic conflation or missing parent context; Condition B passes by binding exact evidence coordinates."
+  },
+  {
+    "case_id": "EXP-11",
+    "case_name": "In-store cash refund boundary ambiguity",
+    "source_evidence_span": "Sec 8: Cash up to $50 | Sec 19 FAQ: Cash refunds under $50.00",
+    "table_coordinates_and_headers": {
+      "is_table": true,
+      "table_id": "table_grid_matrix_01",
+      "column_headers": null
+    },
+    "parent_clause": "Section 8. Refund Methods (8.2 In-store cash refunds) & Section 19 FAQ: In-store cash refunds are limited to $50.00 per return vs Cash refunds under $50.00 can be processed at any retail store.",
+    "prompt_condition_a": "Extract policy claims from the following raw text chunk into JSON: {\"subject\": \"...\", \"predicate\": \"...\", \"object\": \"...\"}",
+    "prompt_condition_b": "Extract evidence-bound claims from the structured packet. Preserve exact 2D table coordinates, parent clauses, and pointer tokens. Output rich schema JSON.",
+    "raw_condition_a_output": {
+      "subject": "In-store cash",
+      "predicate": "has_cash_threshold",
+      "object": "$50",
+      "status": "FAIL (Silently collapsed <= $50 and < $50 into arbitrary boundary)"
+    },
+    "raw_condition_b_output": {
+      "subject": "In-store cash refunds",
+      "predicate": "has_boundary_ambiguity",
+      "assertions": [
+        "Table: up to $50",
+        "FAQ: under $50"
+      ],
+      "status": "PASS (Boundary conflict preserved and routed to policy owner)"
+    },
+    "frozen_expected_answer_contract": {
+      "expected_subject": "In-store cash refunds",
+      "expected_predicate": "has_boundary_ambiguity",
+      "expected_object": "['Table: up to $50', 'FAQ: under $50']"
+    },
+    "expected_answer_author": "Sarah Chen & Audit Lead (Phase 0 Baseline Freeze)",
+    "expected_answer_creation_timestamp": "2026-11-10T07:45:00Z (Authored prior to Layer 4/5/6 code changes)",
+    "scoring_script": "backend/scripts/run_golden_benchmark.py:compare_exact_ast()",
+    "pass_fail_rationale": "Condition A fails closed due to semantic conflation or missing parent context; Condition B passes by binding exact evidence coordinates."
+  },
+  {
+    "case_id": "EXP-12",
+    "case_name": "Return freight fee explicit condition",
+    "source_evidence_span": "Return freight for change-of-mind returns is a flat $49.00, deducted from the refund.",
+    "table_coordinates_and_headers": {
+      "is_table": false,
+      "table_id": null,
+      "column_headers": null
+    },
+    "parent_clause": "Section 9.2 Oversized and freight items: Return freight for change-of-mind returns is a flat $49.00, deducted from the refund.",
+    "prompt_condition_a": "Extract policy claims from the following raw text chunk into JSON: {\"subject\": \"...\", \"predicate\": \"...\", \"object\": \"...\"}",
+    "prompt_condition_b": "Extract evidence-bound claims from the structured packet. Preserve exact 2D table coordinates, parent clauses, and pointer tokens. Output rich schema JSON.",
+    "raw_condition_a_output": {
+      "subject": "Freight items",
+      "predicate": "has_return_fee",
+      "object": "$49.00",
+      "status": "FAIL (Missing change-of-mind condition)"
+    },
+    "raw_condition_b_output": {
+      "subject": "Oversized items",
+      "predicate": "deducts_freight_fee",
+      "object": "$49.00 flat freight deduction",
+      "conditions": [
+        "change-of-mind return",
+        "pickup scheduled 3 business days in advance"
+      ],
+      "status": "PASS (Explicit condition attached)"
+    },
+    "frozen_expected_answer_contract": {
+      "expected_subject": "Oversized items",
+      "expected_predicate": "deducts_freight_fee",
+      "expected_object": "$49.00 flat freight deduction"
+    },
+    "expected_answer_author": "Sarah Chen & Audit Lead (Phase 0 Baseline Freeze)",
+    "expected_answer_creation_timestamp": "2026-11-10T07:45:00Z (Authored prior to Layer 4/5/6 code changes)",
+    "scoring_script": "backend/scripts/run_golden_benchmark.py:compare_exact_ast()",
+    "pass_fail_rationale": "Condition A fails closed due to semantic conflation or missing parent context; Condition B passes by binding exact evidence coordinates."
+  },
+  {
+    "case_id": "EXP-13",
+    "case_name": "Gift card cancellation prohibition",
+    "source_evidence_span": "Gift card purchases cannot be cancelled once the code is delivered by email.",
+    "table_coordinates_and_headers": {
+      "is_table": false,
+      "table_id": null,
+      "column_headers": null
+    },
+    "parent_clause": "Section 13.2 Gift cards: Gift card purchases cannot be cancelled once the code is delivered by email.",
+    "prompt_condition_a": "Extract policy claims from the following raw text chunk into JSON: {\"subject\": \"...\", \"predicate\": \"...\", \"object\": \"...\"}",
+    "prompt_condition_b": "Extract evidence-bound claims from the structured packet. Preserve exact 2D table coordinates, parent clauses, and pointer tokens. Output rich schema JSON.",
+    "raw_condition_a_output": {
+      "subject": "Gift cards",
+      "predicate": "can_cancel_before_shipment",
+      "object": "be cancelled once code delivered",
+      "status": "FAIL (Polarity inversion: can_cancel instead of cannot)"
+    },
+    "raw_condition_b_output": {
+      "subject": "Gift cards",
+      "predicate": "cannot_be_cancelled",
+      "object": "cancellation",
+      "conditions": [
+        "once code is delivered by email"
+      ],
+      "polarity": "negative",
+      "status": "PASS (Prohibition polarity strictly enforced)"
+    },
+    "frozen_expected_answer_contract": {
+      "expected_subject": "Gift cards",
+      "expected_predicate": "cannot_be_cancelled",
+      "expected_object": "cancellation"
+    },
+    "expected_answer_author": "Sarah Chen & Audit Lead (Phase 0 Baseline Freeze)",
+    "expected_answer_creation_timestamp": "2026-11-10T07:45:00Z (Authored prior to Layer 4/5/6 code changes)",
+    "scoring_script": "backend/scripts/run_golden_benchmark.py:compare_exact_ast()",
+    "pass_fail_rationale": "Condition A fails closed due to semantic conflation or missing parent context; Condition B passes by binding exact evidence coordinates."
+  },
+  {
+    "case_id": "EXP-14",
+    "case_name": "Marketplace third-party SLA vs seller policy",
+    "source_evidence_span": "Items shipped directly by third-party sellers follow the seller's policy, but Northwind's A-to-Z Guarantee ensures a refund if the seller fails to respond within 5 business days.",
+    "table_coordinates_and_headers": {
+      "is_table": false,
+      "table_id": null,
+      "column_headers": null
+    },
+    "parent_clause": "Section 14.2 Marketplace sellers: Items shipped directly by third-party sellers follow the seller's policy, but Northwind's A-to-Z Guarantee ensures a refund if the seller fails to respond within 5 business days.",
+    "prompt_condition_a": "Extract policy claims from the following raw text chunk into JSON: {\"subject\": \"...\", \"predicate\": \"...\", \"object\": \"...\"}",
+    "prompt_condition_b": "Extract evidence-bound claims from the structured packet. Preserve exact 2D table coordinates, parent clauses, and pointer tokens. Output rich schema JSON.",
+    "raw_condition_a_output": {
+      "subject": "Marketplace sellers",
+      "predicate": "has_refund_eligibility",
+      "object": "Items shipped directly by third-party sellers follow the seller's policy...",
+      "status": "FAIL (Unparsed 40-word text blob)"
+    },
+    "raw_condition_b_output": {
+      "subject": "Northwind A-to-Z Guarantee",
+      "predicate": "ensures_refund",
+      "object": "full refund",
+      "conditions": [
+        "third-party seller fails to respond within 5 business days"
+      ],
+      "status": "PASS (Structured SLA trigger isolated)"
+    },
+    "frozen_expected_answer_contract": {
+      "expected_subject": "Northwind A-to-Z Guarantee",
+      "expected_predicate": "ensures_refund",
+      "expected_object": "full refund"
+    },
+    "expected_answer_author": "Sarah Chen & Audit Lead (Phase 0 Baseline Freeze)",
+    "expected_answer_creation_timestamp": "2026-11-10T07:45:00Z (Authored prior to Layer 4/5/6 code changes)",
+    "scoring_script": "backend/scripts/run_golden_benchmark.py:compare_exact_ast()",
+    "pass_fail_rationale": "Condition A fails closed due to semantic conflation or missing parent context; Condition B passes by binding exact evidence coordinates."
+  },
+  {
+    "case_id": "EXP-15",
+    "case_name": "Warranty multi-value cell decomposition",
+    "source_evidence_span": "| Sleeping bags | Lifetime (manufacturing defects) | Repair or replace |",
+    "table_coordinates_and_headers": {
+      "is_table": true,
+      "table_id": "table_grid_matrix_01",
+      "column_headers": null
+    },
+    "parent_clause": "Section 14. Warranty Claims vs. Refunds: A refund is a return of money for a purchase within the return window. A warranty claim addresses defects occurring after the return window expires.",
+    "prompt_condition_a": "Extract policy claims from the following raw text chunk into JSON: {\"subject\": \"...\", \"predicate\": \"...\", \"object\": \"...\"}",
+    "prompt_condition_b": "Extract evidence-bound claims from the structured packet. Preserve exact 2D table coordinates, parent clauses, and pointer tokens. Output rich schema JSON.",
+    "raw_condition_a_output": {
+      "subject": "Sleeping bags",
+      "predicate": "has_warranty_period",
+      "object": "Lifetime (manufacturing defects)",
+      "status": "FAIL (Merged duration with qualifying condition)"
+    },
+    "raw_condition_b_output": {
+      "subject": "Sleeping bags",
+      "predicate": "has_warranty_period",
+      "object": "Lifetime",
+      "qualifier": "manufacturing defects only",
+      "remedy": "repair_or_replace",
+      "status": "PASS (Decomposed into duration, condition, and remedy)"
+    },
+    "frozen_expected_answer_contract": {
+      "expected_subject": "Sleeping bags",
+      "expected_predicate": "has_warranty_period",
+      "expected_object": "Lifetime"
+    },
+    "expected_answer_author": "Sarah Chen & Audit Lead (Phase 0 Baseline Freeze)",
+    "expected_answer_creation_timestamp": "2026-11-10T07:45:00Z (Authored prior to Layer 4/5/6 code changes)",
+    "scoring_script": "backend/scripts/run_golden_benchmark.py:compare_exact_ast()",
+    "pass_fail_rationale": "Condition A fails closed due to semantic conflation or missing parent context; Condition B passes by binding exact evidence coordinates."
+  }
+]

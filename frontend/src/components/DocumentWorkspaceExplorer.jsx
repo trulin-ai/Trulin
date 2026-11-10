@@ -205,6 +205,8 @@ export default function DocumentWorkspaceExplorer({
   showToast,
   onInspectDocument,
   onViewClaims,
+  onClaimExtracted,
+  onDocumentUploaded,
   readOnly = false,
 }) {
   // Folder tree & all documents state
@@ -1026,6 +1028,11 @@ export default function DocumentWorkspaceExplorer({
         setShowUploadModal(false);
         setUploadFile(null);
         await fetchData();
+        if (result.document?.id) {
+          setSelectedDocId(result.document.id);
+        }
+        onClaimExtracted?.();
+        onDocumentUploaded?.(result);
       } else {
         const err = await res.json();
         showToast?.(err.detail || 'Upload failed', 'error');
@@ -3061,7 +3068,7 @@ export default function DocumentWorkspaceExplorer({
                           </td>
                           <td style={{ padding: '8px 12px' }}>
                             <span style={{ fontSize: '0.68rem', padding: '2px 6px', borderRadius: '4px', background: '#EFF6FF', color: '#1D4ED8', fontWeight: 700 }}>
-                              {doc.claims_count !== undefined ? `${doc.claims_count} Claims` : 'Claims ready'}
+                              {doc.claims_count !== undefined ? `${doc.claims_count} Claims` : (doc.id === selectedDocId && selectedDocArtifacts?.claims ? `${selectedDocArtifacts.claims.length} Claims` : 'Claims ready')}
                             </span>
                           </td>
                           <td style={{ padding: '8px 12px' }}>

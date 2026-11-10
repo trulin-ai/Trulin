@@ -26,19 +26,23 @@ class DynamicModalityExtractor:
     PROHIBITION_PATTERNS = [
         r"\b(?:may\s+not|must\s+not|shall\s+not|will\s+not|cannot|prohibited\s+from|is\s+not\s+permitted\s+to|is\s+not\s+licensed\s+to|neither\s+party\s+will|neither\s+party\s+shall)\b",
         r"\b(?:no\s+party\s+may|in\s+no\s+event\s+will)\b",
+        r"\b(?:cannot\s+claim|shall\s+not\s+be\s+entitled|shall\s+not\s+have\s+any\s+right|are\s+barred\s+from|disqualified\s+from|ineligible\s+for|no\s+claim\s+shall\s+lie)\b",
     ]
 
     ENTITLEMENT_PATTERNS = [
         r"\b(?:is\s+entitled\s+to|are\s+entitled\s+to|has\s+the\s+right\s+to|have\s+the\s+right\s+to|reserves\s+the\s+right\s+to|reserve\s+the\s+right\s+to)\b",
+        r"\b(?:shall\s+be\s+entitled\s+to|shall\s+be\s+eligible\s+for|is\s+eligible\s+to|are\s+eligible\s+to|is\s+entitled\s+to\s+receive|shall\s+have\s+the\s+right\s+to)\b",
     ]
 
     PERMISSION_PATTERNS = [
         r"\b(?:may|can|authorizes?|grants?|is\s+permitted\s+to|are\s+permitted\s+to)\b",
+        r"\b(?:may\s+at\s+its\s+option|shall\s+have\s+discretion\s+to|is\s+authorized\s+to|has\s+the\s+option\s+to)\b",
     ]
 
     OBLIGATION_PATTERNS = [
         r"\b(?:must|shall|is\s+required\s+to|are\s+required\s+to|agrees\s+to|agree\s+to|is\s+obligated\s+to|are\s+obligated\s+to)\b",
         r"\b(?:will|warrants?|retains?|remains\s+responsible\s+for|is\s+responsible\s+for)\b",
+        r"\b(?:payment\s+is\s+due|due\s+and\s+payable|due\s+within|shall\s+pay|must\s+remit|shall\s+indemnify|shall\s+hold\s+harmless|shall\s+give\s+notice|must\s+provide\s+notice)\b",
     ]
 
     @classmethod

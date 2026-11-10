@@ -1,0 +1,5479 @@
+{
+  "document": "Northwind_Refund_Policy_Handbook.pdf",
+  "sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd",
+  "total_units": 684,
+  "units": [
+    {
+      "unit_id": "SRC-U001",
+      "page": 1,
+      "section": "Front Matter",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Northwind Outfitters Inc.Refund, Return & Cancellation Policy Handbook",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U002",
+      "page": 1,
+      "section": "Header Disclaimer",
+      "structure_type": "disclaimer",
+      "verbatim_text": "NOTICE: Northwind Outfitters Inc. is a fictional demo company. All names, policies, amounts, phone",
+      "content_role": "non_rule"
+    },
+    {
+      "unit_id": "SRC-U003",
+      "page": 1,
+      "section": "Front Matter",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "numbers, email addresses and order numbers in this document are invented solely for testing",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U004",
+      "page": 1,
+      "section": "Front Matter",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "document-processing, search and Q&A systems.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U005",
+      "page": 2,
+      "section": "Front Matter",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Table of Contents",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U006",
+      "page": 2,
+      "section": "1. Introduction and Scope",
+      "structure_type": "heading",
+      "verbatim_text": "1. Introduction and Scope",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U007",
+      "page": 2,
+      "section": "2. Definitions",
+      "structure_type": "heading",
+      "verbatim_text": "2. Definitions",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U008",
+      "page": 2,
+      "section": "3. Standard Return Policy",
+      "structure_type": "heading",
+      "verbatim_text": "3. Standard Return Policy",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U009",
+      "page": 2,
+      "section": "4. Refund Eligibility Criteria",
+      "structure_type": "heading",
+      "verbatim_text": "4. Refund Eligibility Criteria",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U010",
+      "page": 2,
+      "section": "5. Non-Refundable Items",
+      "structure_type": "heading",
+      "verbatim_text": "5. Non-Refundable Items",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U011",
+      "page": 2,
+      "section": "6. How to Request a Refund",
+      "structure_type": "heading",
+      "verbatim_text": "6. How to Request a Refund",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U012",
+      "page": 2,
+      "section": "7. Refund Processing Timelines",
+      "structure_type": "heading",
+      "verbatim_text": "7. Refund Processing Timelines",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U013",
+      "page": 2,
+      "section": "8. Refund Methods and Payment Types",
+      "structure_type": "heading",
+      "verbatim_text": "8. Refund Methods and Payment Types",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U014",
+      "page": 2,
+      "section": "9. Shipping Costs and Return Labels",
+      "structure_type": "heading",
+      "verbatim_text": "9. Shipping Costs and Return Labels",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U015",
+      "page": 2,
+      "section": "10. Damaged, Defective or Incorrect Items",
+      "structure_type": "heading",
+      "verbatim_text": "10. Damaged, Defective or Incorrect Items",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U016",
+      "page": 2,
+      "section": "11. Order Cancellations",
+      "structure_type": "heading",
+      "verbatim_text": "11. Order Cancellations",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U017",
+      "page": 2,
+      "section": "12. Subscription Refunds",
+      "structure_type": "heading",
+      "verbatim_text": "12. Subscription Refunds",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U018",
+      "page": 2,
+      "section": "13. Digital Products and Gift Cards",
+      "structure_type": "heading",
+      "verbatim_text": "13. Digital Products and Gift Cards",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U019",
+      "page": 2,
+      "section": "14. Warranty Claims vs. Refunds",
+      "structure_type": "heading",
+      "verbatim_text": "14. Warranty Claims vs. Refunds",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U020",
+      "page": 2,
+      "section": "15. International Orders, Duties and Currency",
+      "structure_type": "heading",
+      "verbatim_text": "15. International Orders, Duties and Currency",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U021",
+      "page": 2,
+      "section": "16. Chargebacks and Disputes",
+      "structure_type": "heading",
+      "verbatim_text": "16. Chargebacks and Disputes",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U022",
+      "page": 2,
+      "section": "17. Fraud Prevention and Abuse",
+      "structure_type": "heading",
+      "verbatim_text": "17. Fraud Prevention and Abuse",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U023",
+      "page": 2,
+      "section": "18. Frequently Asked Questions",
+      "structure_type": "heading",
+      "verbatim_text": "18. Frequently Asked Questions",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U024",
+      "page": 2,
+      "section": "19. Contact Information and Escalation",
+      "structure_type": "heading",
+      "verbatim_text": "19. Contact Information and Escalation",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U025",
+      "page": 2,
+      "section": "20. Revision History and Sample Case Studies",
+      "structure_type": "heading",
+      "verbatim_text": "20. Revision History and Sample Case Studies",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U026",
+      "page": 3,
+      "section": "1. Introduction and Scope",
+      "structure_type": "heading",
+      "verbatim_text": "1. Introduction and Scope",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U027",
+      "page": 3,
+      "section": "1. Introduction and Scope",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Northwind Outfitters Inc. (\"Northwind\", \"we\", \"us\") is a fictional online and retail seller of outdoor gear,",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U028",
+      "page": 3,
+      "section": "1. Introduction and Scope",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "apparel, camping equipment and accessories, headquartered in Portland, Oregon. This handbook",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U029",
+      "page": 3,
+      "section": "1. Introduction and Scope",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "describes our policies on refunds, returns, exchanges and cancellations for purchases made through",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U030",
+      "page": 3,
+      "section": "1. Introduction and Scope",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "northwind-demo.example, our mobile app, and our 42 retail stores.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U031",
+      "page": 3,
+      "section": "1. Introduction and Scope",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Our guiding principle is simple: if you are not satisfied with your purchase, we want to make it right. This",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U032",
+      "page": 3,
+      "section": "1. Introduction and Scope",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "document is intended for customers, support agents, and finance staff, so that every refund decision is",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U033",
+      "page": 3,
+      "section": "1. Introduction and Scope",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "consistent, fair and transparent.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U034",
+      "page": 3,
+      "section": "1.1 Who this policy applies to",
+      "structure_type": "heading",
+      "verbatim_text": "1.1 Who this policy applies to",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U035",
+      "page": 3,
+      "section": "1.1 Who this policy applies to",
+      "structure_type": "bullet",
+      "verbatim_text": "Retail customers purchasing for personal use in the United States, Canada, the UK and the EU.",
+      "content_role": "policy_clause"
+    },
+    {
+      "unit_id": "SRC-U036",
+      "page": 3,
+      "section": "1.1 Who this policy applies to",
+      "structure_type": "bullet",
+      "verbatim_text": "Marketplace customers purchasing Northwind-fulfilled items from third-party sellers (see Section 14).",
+      "content_role": "policy_clause"
+    },
+    {
+      "unit_id": "SRC-U037",
+      "page": 3,
+      "section": "1.1 Who this policy applies to",
+      "structure_type": "bullet",
+      "verbatim_text": "Business customers on standard accounts (custom contracts may override these terms).",
+      "content_role": "policy_clause"
+    },
+    {
+      "unit_id": "SRC-U038",
+      "page": 3,
+      "section": "1.2 Policy summary at a glance",
+      "structure_type": "heading",
+      "verbatim_text": "1.2 Policy summary at a glance",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U039",
+      "page": 3,
+      "section": "1.2 Policy summary at a glance",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Topic",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U040",
+      "page": 3,
+      "section": "1.2 Policy summary at a glance",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Summary",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U041",
+      "page": 3,
+      "section": "1.2 Policy summary at a glance",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Return window",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U042",
+      "page": 3,
+      "section": "1.2 Policy summary at a glance",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "30 days from delivery (60 days for Northwind Rewards Gold members)",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U043",
+      "page": 3,
+      "section": "1.2 Policy summary at a glance",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Refund speed",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U044",
+      "page": 3,
+      "section": "1.2 Policy summary at a glance",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "3-5 business days after we receive and inspect the return",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U045",
+      "page": 3,
+      "section": "1.2 Policy summary at a glance",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Return shipping",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U046",
+      "page": 3,
+      "section": "1.2 Policy summary at a glance",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Free for defective or incorrect items; $6.95 deducted otherwise",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U047",
+      "page": 3,
+      "section": "1.2 Policy summary at a glance",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Restocking fee",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U048",
+      "page": 3,
+      "section": "1.2 Policy summary at a glance",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "None on most items; 15% on special-order and bulk items",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U049",
+      "page": 3,
+      "section": "1.2 Policy summary at a glance",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Final sale items",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U050",
+      "page": 3,
+      "section": "1.2 Policy summary at a glance",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Not eligible for refund or exchange",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U051",
+      "page": 4,
+      "section": "2. Definitions",
+      "structure_type": "heading",
+      "verbatim_text": "2. Definitions",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U052",
+      "page": 4,
+      "section": "2. Definitions",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "The following terms are used throughout this handbook with the meanings given below.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U053",
+      "page": 4,
+      "section": "2. Definitions",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Term",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U054",
+      "page": 4,
+      "section": "2. Definitions",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Definition",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U055",
+      "page": 4,
+      "section": "2. Definitions",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Refund",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U056",
+      "page": 4,
+      "section": "2. Definitions",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Return of money to the original payment method or store credit following an",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U057",
+      "page": 4,
+      "section": "2. Definitions",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "approved return or cancellation.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U058",
+      "page": 4,
+      "section": "2. Definitions",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Return",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U059",
+      "page": 4,
+      "section": "2. Definitions",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Sending a purchased item back to Northwind by mail or in-store drop-off.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U060",
+      "page": 4,
+      "section": "2. Definitions",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Exchange",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U061",
+      "page": 4,
+      "section": "2. Definitions",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Replacing an item with a different size, colour or product of equal or greater value.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U062",
+      "page": 4,
+      "section": "2. Definitions",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Store Credit",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U063",
+      "page": 4,
+      "section": "2. Definitions",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "A balance issued to a customer account, redeemable online and in stores, valid for",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U064",
+      "page": 4,
+      "section": "2. Definitions",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "5 years.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U065",
+      "page": 4,
+      "section": "2. Definitions",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "RMA",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U066",
+      "page": 4,
+      "section": "2. Definitions",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Return Merchandise Authorization number, e.g. RMA-2026-004815, required for",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U067",
+      "page": 4,
+      "section": "2. Definitions",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "mailed returns.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U068",
+      "page": 4,
+      "section": "2. Definitions",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Delivery Date",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U069",
+      "page": 4,
+      "section": "2. Definitions",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "The date the carrier marks the package as delivered, as shown in the tracking",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U070",
+      "page": 4,
+      "section": "2. Definitions",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "record.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U071",
+      "page": 4,
+      "section": "2. Definitions",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Final Sale",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U072",
+      "page": 4,
+      "section": "2. Definitions",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Items marked 'Final Sale' at the time of purchase, which cannot be returned.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U073",
+      "page": 4,
+      "section": "2. Definitions",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Original Condition",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U074",
+      "page": 4,
+      "section": "2. Definitions",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Unused, unwashed, with all tags, packaging and accessories included.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U075",
+      "page": 4,
+      "section": "2. Definitions",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Business Day",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U076",
+      "page": 4,
+      "section": "2. Definitions",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Monday to Friday, excluding US federal holidays.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U077",
+      "page": 4,
+      "section": "2. Definitions",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Where this handbook conflicts with applicable consumer protection law, the law prevails. Nothing in this",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U078",
+      "page": 4,
+      "section": "2. Definitions",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "policy limits statutory rights, including the 14-day cooling-off right for EU and UK distance purchases.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U079",
+      "page": 5,
+      "section": "3. Standard Return Policy",
+      "structure_type": "heading",
+      "verbatim_text": "3. Standard Return Policy",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U080",
+      "page": 5,
+      "section": "3. Standard Return Policy",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Most items purchased from Northwind may be returned within 30 calendar days of the delivery date (or",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U081",
+      "page": 5,
+      "section": "3. Standard Return Policy",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "purchase date for in-store sales) for a full refund of the item price, provided the item is in original condition.",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U082",
+      "page": 5,
+      "section": "3.1 Extended windows",
+      "structure_type": "heading",
+      "verbatim_text": "3.1 Extended windows",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U083",
+      "page": 5,
+      "section": "3.1 Extended windows",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Category / Situation",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U084",
+      "page": 5,
+      "section": "3.1 Extended windows",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Return Window",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U085",
+      "page": 5,
+      "section": "3.1 Extended windows",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Standard merchandise",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U086",
+      "page": 5,
+      "section": "3.1 Extended windows",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "30 days",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U087",
+      "page": 5,
+      "section": "3.1 Extended windows",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Northwind Rewards Gold members",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U088",
+      "page": 5,
+      "section": "3.1 Extended windows",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "60 days",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U089",
+      "page": 5,
+      "section": "3.1 Extended windows",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Holiday purchases (Nov 1 - Dec 24)",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U090",
+      "page": 5,
+      "section": "3.1 Extended windows",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Until January 31 of the following year",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U091",
+      "page": 5,
+      "section": "3.1 Extended windows",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Footwear (worn indoors only)",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U092",
+      "page": 5,
+      "section": "3.1 Extended windows",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "45 days",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U093",
+      "page": 5,
+      "section": "3.1 Extended windows",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Camping tents and sleeping bags (unused)",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U094",
+      "page": 5,
+      "section": "3.1 Extended windows",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "60 days",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U095",
+      "page": 5,
+      "section": "3.1 Extended windows",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Defective items",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U096",
+      "page": 5,
+      "section": "3.1 Extended windows",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Covered by warranty - see Section 14",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U097",
+      "page": 5,
+      "section": "3.2 Returns without a receipt",
+      "structure_type": "heading",
+      "verbatim_text": "3.2 Returns without a receipt",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U098",
+      "page": 5,
+      "section": "3.2 Returns without a receipt",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Returns without proof of purchase are accepted in-store only, for store credit at the lowest price the item",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U099",
+      "page": 5,
+      "section": "3.2 Returns without a receipt",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "was sold in the last 90 days. A government-issued photo ID is required and scanned. A limit of three",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U100",
+      "page": 5,
+      "section": "3.2 Returns without a receipt",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "receipt-less returns per customer per 12-month period applies.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U101",
+      "page": 5,
+      "section": "3.3 Exchanges",
+      "structure_type": "heading",
+      "verbatim_text": "3.3 Exchanges",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U102",
+      "page": 5,
+      "section": "3.3 Exchanges",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Exchanges for a different size or colour are free of charge, including shipping both ways, when requested",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U103",
+      "page": 5,
+      "section": "3.3 Exchanges",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "within the return window and when the replacement item is in stock. If the replacement costs more, the",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U104",
+      "page": 5,
+      "section": "3.3 Exchanges",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "difference will be charged; if less, the difference will be refunded.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U105",
+      "page": 6,
+      "section": "4. Refund Eligibility Criteria",
+      "structure_type": "heading",
+      "verbatim_text": "4. Refund Eligibility Criteria",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U106",
+      "page": 6,
+      "section": "4. Refund Eligibility Criteria",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "To be eligible for a refund, all of the following conditions must be met. Support agents must verify each",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U107",
+      "page": 6,
+      "section": "4. Refund Eligibility Criteria",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "condition before approving a refund over $50.00.",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U108",
+      "page": 6,
+      "section": "4. Refund Eligibility Criteria",
+      "structure_type": "bullet",
+      "verbatim_text": "The request is made within the applicable return window.",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U109",
+      "page": 6,
+      "section": "4. Refund Eligibility Criteria",
+      "structure_type": "bullet",
+      "verbatim_text": "The item is in original condition: unused, unwashed, undamaged, with original tags attached.",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U110",
+      "page": 6,
+      "section": "4. Refund Eligibility Criteria",
+      "structure_type": "bullet",
+      "verbatim_text": "The item is returned with all accessories, manuals, free gifts and original packaging where practical.",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U111",
+      "page": 6,
+      "section": "4. Refund Eligibility Criteria",
+      "structure_type": "bullet",
+      "verbatim_text": "The order number or proof of purchase can be verified in our systems.",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U112",
+      "page": 6,
+      "section": "4. Refund Eligibility Criteria",
+      "structure_type": "bullet",
+      "verbatim_text": "The item is not on the non-refundable list in Section 5.",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U113",
+      "page": 6,
+      "section": "4.1 Partial refunds",
+      "structure_type": "heading",
+      "verbatim_text": "4.1 Partial refunds",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U114",
+      "page": 6,
+      "section": "4.1 Partial refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "A partial refund may be issued when an item shows signs of use beyond inspection, is missing parts, or is",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U115",
+      "page": 6,
+      "section": "4.1 Partial refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "returned without original packaging. Typical deductions are shown below.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U116",
+      "page": 6,
+      "section": "4.1 Partial refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Condition on arrival",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U117",
+      "page": 6,
+      "section": "4.1 Partial refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Refund amount",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U118",
+      "page": 6,
+      "section": "4.1 Partial refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Like new, tags attached",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U119",
+      "page": 6,
+      "section": "4.1 Partial refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "100%",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U120",
+      "page": 6,
+      "section": "4.1 Partial refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Opened packaging, item unused",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U121",
+      "page": 6,
+      "section": "4.1 Partial refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "100%",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U122",
+      "page": 6,
+      "section": "4.1 Partial refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Missing original box (non-fragile)",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U123",
+      "page": 6,
+      "section": "4.1 Partial refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "90%",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U124",
+      "page": 6,
+      "section": "4.1 Partial refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Missing accessories or free gift",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U125",
+      "page": 6,
+      "section": "4.1 Partial refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Refund minus gift value",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U126",
+      "page": 6,
+      "section": "4.1 Partial refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Light wear or signs of use",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U127",
+      "page": 6,
+      "section": "4.1 Partial refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "50% - 75%",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U128",
+      "page": 6,
+      "section": "4.1 Partial refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Damaged by customer / heavy use",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U129",
+      "page": 6,
+      "section": "4.1 Partial refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "0% - 25% (agent discretion, manager approval)",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U130",
+      "page": 6,
+      "section": "4.1 Partial refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Washed, altered or stained",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U131",
+      "page": 6,
+      "section": "4.1 Partial refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Not eligible",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U132",
+      "page": 6,
+      "section": "4.2 Manager approval thresholds",
+      "structure_type": "heading",
+      "verbatim_text": "4.2 Manager approval thresholds",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U133",
+      "page": 6,
+      "section": "4.2 Manager approval thresholds",
+      "structure_type": "bullet",
+      "verbatim_text": "Up to $100: Tier 1 agent may approve.",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U134",
+      "page": 6,
+      "section": "4.2 Manager approval thresholds",
+      "structure_type": "bullet",
+      "verbatim_text": "$100.01 - $500: Tier 2 agent or team lead approval required.",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U135",
+      "page": 6,
+      "section": "4.2 Manager approval thresholds",
+      "structure_type": "bullet",
+      "verbatim_text": "Over $500: Customer Experience Manager approval required.",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U136",
+      "page": 6,
+      "section": "4.2 Manager approval thresholds",
+      "structure_type": "bullet",
+      "verbatim_text": "Over $2,000: Finance Director approval and fraud review required.",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U137",
+      "page": 7,
+      "section": "5. Non-Refundable Items",
+      "structure_type": "heading",
+      "verbatim_text": "5. Non-Refundable Items",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U138",
+      "page": 7,
+      "section": "5. Non-Refundable Items",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "The following items cannot be returned or refunded, except where the item is defective or we sent the",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U139",
+      "page": 7,
+      "section": "5. Non-Refundable Items",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "wrong item.",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U140",
+      "page": 7,
+      "section": "5. Non-Refundable Items",
+      "structure_type": "bullet",
+      "verbatim_text": "Items marked Final Sale or Clearance - All Sales Final at checkout.",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U141",
+      "page": 7,
+      "section": "5. Non-Refundable Items",
+      "structure_type": "bullet",
+      "verbatim_text": "Gift cards and e-gift cards (see Section 13).",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U142",
+      "page": 7,
+      "section": "5. Non-Refundable Items",
+      "structure_type": "bullet",
+      "verbatim_text": "Downloadable software, digital guides and trail-map files once downloaded.",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U143",
+      "page": 7,
+      "section": "5. Non-Refundable Items",
+      "structure_type": "bullet",
+      "verbatim_text": "Personalised or custom-engraved items, including monogrammed jackets and embroidered packs.",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U144",
+      "page": 7,
+      "section": "5. Non-Refundable Items",
+      "structure_type": "bullet",
+      "verbatim_text": "Opened hygiene items: water bottles' mouthpieces, thermal underwear, socks, and swimwear without",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U145",
+      "page": 7,
+      "section": "5. Non-Refundable Items",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "liner tags.",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U146",
+      "page": 7,
+      "section": "5. Non-Refundable Items",
+      "structure_type": "bullet",
+      "verbatim_text": "Fuel canisters, bear spray, and other hazardous materials once opened or shipped.",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U147",
+      "page": 7,
+      "section": "5. Non-Refundable Items",
+      "structure_type": "bullet",
+      "verbatim_text": "Perishable goods such as freeze-dried meals past 14 days from delivery.",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U148",
+      "page": 7,
+      "section": "5. Non-Refundable Items",
+      "structure_type": "bullet",
+      "verbatim_text": "Installation, repair, and gear-fitting services already performed.",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U149",
+      "page": 7,
+      "section": "5. Non-Refundable Items",
+      "structure_type": "bullet",
+      "verbatim_text": "Items returned more than 90 days after delivery.",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U150",
+      "page": 7,
+      "section": "5.1 Why some items are excluded",
+      "structure_type": "heading",
+      "verbatim_text": "5.1 Why some items are excluded",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U151",
+      "page": 7,
+      "section": "5.1 Why some items are excluded",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Hygiene, safety and legal regulations prevent us from restocking certain categories. For example, we",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U152",
+      "page": 7,
+      "section": "5.1 Why some items are excluded",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "cannot resell opened pressurised canisters. Custom products are made specifically for the customer and",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U153",
+      "page": 7,
+      "section": "5.1 Why some items are excluded",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "cannot be resold.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U154",
+      "page": 7,
+      "section": "5.2 Exceptions",
+      "structure_type": "heading",
+      "verbatim_text": "5.2 Exceptions",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U155",
+      "page": 7,
+      "section": "5.2 Exceptions",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Even for non-refundable items, a full refund or replacement will be provided if the item arrives damaged, is",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U156",
+      "page": 7,
+      "section": "5.2 Exceptions",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "materially different from its description, or was shipped in error. Report these issues within 7 days of",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U157",
+      "page": 7,
+      "section": "5.2 Exceptions",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "delivery with photos.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U158",
+      "page": 8,
+      "section": "6. How to Request a Refund",
+      "structure_type": "heading",
+      "verbatim_text": "6. How to Request a Refund",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U159",
+      "page": 8,
+      "section": "6. How to Request a Refund",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Customers can start a return through any of the following channels. Online requests are fastest and",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U160",
+      "page": 8,
+      "section": "6. How to Request a Refund",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "generate an RMA automatically.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U161",
+      "page": 8,
+      "section": "6.1 Online (recommended)",
+      "structure_type": "heading",
+      "verbatim_text": "6.1 Online (recommended)",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U162",
+      "page": 8,
+      "section": "6.1 Online (recommended)",
+      "structure_type": "bullet",
+      "verbatim_text": "Sign in at northwind-demo.example/returns and select the order.",
+      "content_role": "policy_clause"
+    },
+    {
+      "unit_id": "SRC-U163",
+      "page": 8,
+      "section": "6.1 Online (recommended)",
+      "structure_type": "bullet",
+      "verbatim_text": "Choose the items to return and select a reason from the list.",
+      "content_role": "policy_clause"
+    },
+    {
+      "unit_id": "SRC-U164",
+      "page": 8,
+      "section": "6.1 Online (recommended)",
+      "structure_type": "bullet",
+      "verbatim_text": "Upload photos if the item is damaged or defective.",
+      "content_role": "policy_clause"
+    },
+    {
+      "unit_id": "SRC-U165",
+      "page": 8,
+      "section": "6.1 Online (recommended)",
+      "structure_type": "bullet",
+      "verbatim_text": "Choose a refund method: original payment, store credit (bonus 5%) or exchange.",
+      "content_role": "policy_clause"
+    },
+    {
+      "unit_id": "SRC-U166",
+      "page": 8,
+      "section": "6.1 Online (recommended)",
+      "structure_type": "bullet",
+      "verbatim_text": "Print the prepaid label (if eligible) or choose a QR-code drop-off at a partner location.",
+      "content_role": "policy_clause"
+    },
+    {
+      "unit_id": "SRC-U167",
+      "page": 8,
+      "section": "6.2 By phone or chat",
+      "structure_type": "heading",
+      "verbatim_text": "6.2 By phone or chat",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U168",
+      "page": 8,
+      "section": "6.2 By phone or chat",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Call 1-800-555-0142 (Mon-Fri 8am-8pm PT, Sat 9am-5pm PT) or use live chat. Please have your order",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U169",
+      "page": 8,
+      "section": "6.2 By phone or chat",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "number and email address ready. Agents will email your RMA and label within 1 hour.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U170",
+      "page": 8,
+      "section": "6.3 In store",
+      "structure_type": "heading",
+      "verbatim_text": "6.3 In store",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U171",
+      "page": 8,
+      "section": "6.3 In store",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Bring the item, packaging and receipt or order confirmation to any Northwind store. In-store refunds to the",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U172",
+      "page": 8,
+      "section": "6.3 In store",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "original card are processed immediately; the bank may take 3-5 days to post the credit.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U173",
+      "page": 8,
+      "section": "6.4 Information required",
+      "structure_type": "heading",
+      "verbatim_text": "6.4 Information required",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U174",
+      "page": 8,
+      "section": "6.4 Information required",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Field",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U175",
+      "page": 8,
+      "section": "6.4 Information required",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Example",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U176",
+      "page": 8,
+      "section": "6.4 Information required",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Required?",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U177",
+      "page": 8,
+      "section": "6.4 Information required",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Order number",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U178",
+      "page": 8,
+      "section": "6.4 Information required",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "NW-10482391",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U179",
+      "page": 8,
+      "section": "6.4 Information required",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Yes",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U180",
+      "page": 8,
+      "section": "6.4 Information required",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Email on order",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U181",
+      "page": 8,
+      "section": "6.4 Information required",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "jane.doe@example.com",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U182",
+      "page": 8,
+      "section": "6.4 Information required",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Yes",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U183",
+      "page": 8,
+      "section": "6.4 Information required",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Item SKU / name",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U184",
+      "page": 8,
+      "section": "6.4 Information required",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "TNT-4P-GRN / Summit 4-Person Tent",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U185",
+      "page": 8,
+      "section": "6.4 Information required",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Yes",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U186",
+      "page": 8,
+      "section": "6.4 Information required",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Reason for return",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U187",
+      "page": 8,
+      "section": "6.4 Information required",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Wrong size",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U188",
+      "page": 8,
+      "section": "6.4 Information required",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Yes",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U189",
+      "page": 8,
+      "section": "6.4 Information required",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Photos",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U190",
+      "page": 8,
+      "section": "6.4 Information required",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Damage close-up",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U191",
+      "page": 8,
+      "section": "6.4 Information required",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "If damaged",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U192",
+      "page": 8,
+      "section": "6.4 Information required",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Preferred resolution",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U193",
+      "page": 8,
+      "section": "6.4 Information required",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Refund to card",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U194",
+      "page": 8,
+      "section": "6.4 Information required",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Yes",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U195",
+      "page": 9,
+      "section": "7. Refund Processing Timelines",
+      "structure_type": "heading",
+      "verbatim_text": "7. Refund Processing Timelines",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U196",
+      "page": 9,
+      "section": "7. Refund Processing Timelines",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Refund timing depends on the stage of the process. The table below shows typical timelines. Business",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U197",
+      "page": 9,
+      "section": "7. Refund Processing Timelines",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "days exclude weekends and US federal holidays.",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U198",
+      "page": 9,
+      "section": "7. Refund Processing Timelines",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Stage",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U199",
+      "page": 9,
+      "section": "7. Refund Processing Timelines",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Typical Duration",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U200",
+      "page": 9,
+      "section": "7. Refund Processing Timelines",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "RMA issued after request",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U201",
+      "page": 9,
+      "section": "7. Refund Processing Timelines",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Instantly online; up to 1 hour by phone",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U202",
+      "page": 9,
+      "section": "7. Refund Processing Timelines",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Return transit to warehouse",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U203",
+      "page": 9,
+      "section": "7. Refund Processing Timelines",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "3-7 business days (domestic)",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U204",
+      "page": 9,
+      "section": "7. Refund Processing Timelines",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Warehouse receipt and inspection",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U205",
+      "page": 9,
+      "section": "7. Refund Processing Timelines",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "1-2 business days",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U206",
+      "page": 9,
+      "section": "7. Refund Processing Timelines",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Refund approved and issued",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U207",
+      "page": 9,
+      "section": "7. Refund Processing Timelines",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Within 1 business day of inspection",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U208",
+      "page": 9,
+      "section": "7. Refund Processing Timelines",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Credit card refund posted by bank",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U209",
+      "page": 9,
+      "section": "7. Refund Processing Timelines",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "3-5 business days",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U210",
+      "page": 9,
+      "section": "7. Refund Processing Timelines",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Debit card / bank transfer",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U211",
+      "page": 9,
+      "section": "7. Refund Processing Timelines",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "5-10 business days",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U212",
+      "page": 9,
+      "section": "7. Refund Processing Timelines",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "PayPal",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U213",
+      "page": 9,
+      "section": "7. Refund Processing Timelines",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Within 24 hours of issue",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U214",
+      "page": 9,
+      "section": "7. Refund Processing Timelines",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Store credit",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U215",
+      "page": 9,
+      "section": "7. Refund Processing Timelines",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Immediate",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U216",
+      "page": 9,
+      "section": "7. Refund Processing Timelines",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Check (by request, over $1,000)",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U217",
+      "page": 9,
+      "section": "7. Refund Processing Timelines",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "10-15 business days",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U218",
+      "page": 9,
+      "section": "7.1 Example timeline",
+      "structure_type": "heading",
+      "verbatim_text": "7.1 Example timeline",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U219",
+      "page": 9,
+      "section": "7.1 Example timeline",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "A customer ships a return on Monday, March 2. The package is delivered to our warehouse on Friday,",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U220",
+      "page": 9,
+      "section": "7.1 Example timeline",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "March 6. Inspection is completed Monday, March 9, and the refund is issued that day. The customer's",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U221",
+      "page": 9,
+      "section": "7.1 Example timeline",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "credit card statement shows the credit by Friday, March 13 at the latest.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U222",
+      "page": 9,
+      "section": "7.2 Delays",
+      "structure_type": "heading",
+      "verbatim_text": "7.2 Delays",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U223",
+      "page": 9,
+      "section": "7.2 Delays",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "If a refund has not appeared 10 business days after our confirmation email, please contact your bank first,",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U224",
+      "page": 9,
+      "section": "7.2 Delays",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "then contact us with the refund reference number (format: REF-2026-XXXXXX). We will provide an",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U225",
+      "page": 9,
+      "section": "7.2 Delays",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Acquirer Reference Number (ARN) on request.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U226",
+      "page": 10,
+      "section": "8. Refund Methods and Payment Types",
+      "structure_type": "heading",
+      "verbatim_text": "8. Refund Methods and Payment Types",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U227",
+      "page": 10,
+      "section": "8. Refund Methods and Payment Types",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Refunds are issued to the original form of payment whenever possible. This is required for fraud",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U228",
+      "page": 10,
+      "section": "8. Refund Methods and Payment Types",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "prevention and by card network rules.",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U229",
+      "page": 10,
+      "section": "8. Refund Methods and Payment Types",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Original payment",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U230",
+      "page": 10,
+      "section": "8. Refund Methods and Payment Types",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Refund method",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U231",
+      "page": 10,
+      "section": "8. Refund Methods and Payment Types",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Notes",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U232",
+      "page": 10,
+      "section": "8. Refund Methods and Payment Types",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Visa / Mastercard / Amex",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U233",
+      "page": 10,
+      "section": "8. Refund Methods and Payment Types",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Original card",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U234",
+      "page": 10,
+      "section": "8. Refund Methods and Payment Types",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "3-5 business days to post",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U235",
+      "page": 10,
+      "section": "8. Refund Methods and Payment Types",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Debit card",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U236",
+      "page": 10,
+      "section": "8. Refund Methods and Payment Types",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Original card",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U237",
+      "page": 10,
+      "section": "8. Refund Methods and Payment Types",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Up to 10 business days",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U238",
+      "page": 10,
+      "section": "8. Refund Methods and Payment Types",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "PayPal",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U239",
+      "page": 10,
+      "section": "8. Refund Methods and Payment Types",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "PayPal balance",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U240",
+      "page": 10,
+      "section": "8. Refund Methods and Payment Types",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Usually within 24 hours",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U241",
+      "page": 10,
+      "section": "8. Refund Methods and Payment Types",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Apple Pay / Google Pay",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U242",
+      "page": 10,
+      "section": "8. Refund Methods and Payment Types",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Underlying card",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U243",
+      "page": 10,
+      "section": "8. Refund Methods and Payment Types",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Same as card",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U244",
+      "page": 10,
+      "section": "8. Refund Methods and Payment Types",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Buy Now Pay Later (e.g.",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U245",
+      "page": 10,
+      "section": "8. Refund Methods and Payment Types",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Klarna)",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U246",
+      "page": 10,
+      "section": "8. Refund Methods and Payment Types",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Provider reduces balance",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U247",
+      "page": 10,
+      "section": "8. Refund Methods and Payment Types",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Provider timelines apply",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U248",
+      "page": 10,
+      "section": "8. Refund Methods and Payment Types",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Gift card",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U249",
+      "page": 10,
+      "section": "8. Refund Methods and Payment Types",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "New gift card or store credit",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U250",
+      "page": 10,
+      "section": "8. Refund Methods and Payment Types",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Instant",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U251",
+      "page": 10,
+      "section": "8. Refund Methods and Payment Types",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Cash (in-store)",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U252",
+      "page": 10,
+      "section": "8. Refund Methods and Payment Types",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Cash up to $50, then store",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U253",
+      "page": 10,
+      "section": "8. Refund Methods and Payment Types",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "credit/card",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U254",
+      "page": 10,
+      "section": "8. Refund Methods and Payment Types",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "ID required over $50",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U255",
+      "page": 10,
+      "section": "8. Refund Methods and Payment Types",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Split payments",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U256",
+      "page": 10,
+      "section": "8. Refund Methods and Payment Types",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Proportionally to each method",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U257",
+      "page": 10,
+      "section": "8. Refund Methods and Payment Types",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Gift card portion first",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U258",
+      "page": 10,
+      "section": "8.1 Store credit bonus",
+      "structure_type": "heading",
+      "verbatim_text": "8.1 Store credit bonus",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U259",
+      "page": 10,
+      "section": "8.1 Store credit bonus",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Customers who choose store credit instead of a refund to the original payment method receive a 5%",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U260",
+      "page": 10,
+      "section": "8.1 Store credit bonus",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "bonus on the credit value, up to $25. For example, a $200 return becomes $210 in store credit. Bonus",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U261",
+      "page": 10,
+      "section": "8.1 Store credit bonus",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "credit cannot be applied retroactively once a refund has been issued to the card.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U262",
+      "page": 10,
+      "section": "8.2 Expired or closed cards",
+      "structure_type": "heading",
+      "verbatim_text": "8.2 Expired or closed cards",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U263",
+      "page": 10,
+      "section": "8.2 Expired or closed cards",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "If the original card has been closed or replaced, the bank will normally still forward the credit to the new",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U264",
+      "page": 10,
+      "section": "8.2 Expired or closed cards",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "card. If it is rejected, we will contact the customer by email within 5 business days to arrange store credit",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U265",
+      "page": 10,
+      "section": "8.2 Expired or closed cards",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "or a check.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U266",
+      "page": 11,
+      "section": "9. Shipping Costs and Return Labels",
+      "structure_type": "heading",
+      "verbatim_text": "9. Shipping Costs and Return Labels",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U267",
+      "page": 11,
+      "section": "9. Shipping Costs and Return Labels",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Shipping costs are handled differently depending on the reason for return.",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U268",
+      "page": 11,
+      "section": "9. Shipping Costs and Return Labels",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Reason",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U269",
+      "page": 11,
+      "section": "9. Shipping Costs and Return Labels",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Original shipping refunded?",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U270",
+      "page": 11,
+      "section": "9. Shipping Costs and Return Labels",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Return label cost",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U271",
+      "page": 11,
+      "section": "9. Shipping Costs and Return Labels",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Defective or damaged",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U272",
+      "page": 11,
+      "section": "9. Shipping Costs and Return Labels",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Yes, in full",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U273",
+      "page": 11,
+      "section": "9. Shipping Costs and Return Labels",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Free",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U274",
+      "page": 11,
+      "section": "9. Shipping Costs and Return Labels",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Wrong item sent",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U275",
+      "page": 11,
+      "section": "9. Shipping Costs and Return Labels",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Yes, in full",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U276",
+      "page": 11,
+      "section": "9. Shipping Costs and Return Labels",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Free",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U277",
+      "page": 11,
+      "section": "9. Shipping Costs and Return Labels",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Not as described",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U278",
+      "page": 11,
+      "section": "9. Shipping Costs and Return Labels",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Yes, in full",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U279",
+      "page": 11,
+      "section": "9. Shipping Costs and Return Labels",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Free",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U280",
+      "page": 11,
+      "section": "9. Shipping Costs and Return Labels",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Changed mind / wrong size",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U281",
+      "page": 11,
+      "section": "9. Shipping Costs and Return Labels",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "No",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U282",
+      "page": 11,
+      "section": "9. Shipping Costs and Return Labels",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "$6.95 deducted from refund",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U283",
+      "page": 11,
+      "section": "9. Shipping Costs and Return Labels",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Gold member, any reason",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U284",
+      "page": 11,
+      "section": "9. Shipping Costs and Return Labels",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "No",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U285",
+      "page": 11,
+      "section": "9. Shipping Costs and Return Labels",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Free",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U286",
+      "page": 11,
+      "section": "9. Shipping Costs and Return Labels",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Exchange",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U287",
+      "page": 11,
+      "section": "9. Shipping Costs and Return Labels",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "N/A",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U288",
+      "page": 11,
+      "section": "9. Shipping Costs and Return Labels",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Free both ways",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U289",
+      "page": 11,
+      "section": "9. Shipping Costs and Return Labels",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Order over $150, any reason",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U290",
+      "page": 11,
+      "section": "9. Shipping Costs and Return Labels",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "No",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U291",
+      "page": 11,
+      "section": "9. Shipping Costs and Return Labels",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Free",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U292",
+      "page": 11,
+      "section": "9.1 Oversize items",
+      "structure_type": "heading",
+      "verbatim_text": "9.1 Oversize items",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U293",
+      "page": 11,
+      "section": "9.1 Oversize items",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Large items such as kayaks, canoes and heavy tents ship via freight. Return freight for change-of-mind",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U294",
+      "page": 11,
+      "section": "9.1 Oversize items",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "returns is a flat $49.00, deducted from the refund. Freight pickups must be scheduled with our logistics",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U295",
+      "page": 11,
+      "section": "9.1 Oversize items",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "team at least 3 business days in advance.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U296",
+      "page": 11,
+      "section": "9.2 Using your own carrier",
+      "structure_type": "heading",
+      "verbatim_text": "9.2 Using your own carrier",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U297",
+      "page": 11,
+      "section": "9.2 Using your own carrier",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Customers may use their own carrier. We recommend a tracked service with insurance, as Northwind is",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U298",
+      "page": 11,
+      "section": "9.2 Using your own carrier",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "not responsible for returns lost in transit. Reimbursement for carrier costs is limited to $12.00 and only for",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U299",
+      "page": 11,
+      "section": "9.2 Using your own carrier",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "approved defective returns, with a receipt.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U300",
+      "page": 11,
+      "section": "9.3 Drop-off locations",
+      "structure_type": "heading",
+      "verbatim_text": "9.3 Drop-off locations",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U301",
+      "page": 11,
+      "section": "9.3 Drop-off locations",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Prepaid labels can be dropped at over 15,000 carrier locations and all Northwind stores. Keep the drop-off",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U302",
+      "page": 11,
+      "section": "9.3 Drop-off locations",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "receipt until your refund has been confirmed.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U303",
+      "page": 12,
+      "section": "10. Damaged, Defective or Incorrect Items",
+      "structure_type": "heading",
+      "verbatim_text": "10. Damaged, Defective or Incorrect Items",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U304",
+      "page": 12,
+      "section": "10. Damaged, Defective or Incorrect Items",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "If your order arrives damaged, defective or incorrect, we will make it right with a replacement or a full",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U305",
+      "page": 12,
+      "section": "10. Damaged, Defective or Incorrect Items",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "refund, including original shipping, at your choice.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U306",
+      "page": 12,
+      "section": "10.1 Reporting window",
+      "structure_type": "heading",
+      "verbatim_text": "10.1 Reporting window",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U307",
+      "page": 12,
+      "section": "10.1 Reporting window",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Please report issues within 7 days of delivery for the fastest resolution. Reports up to 30 days are",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U308",
+      "page": 12,
+      "section": "10.1 Reporting window",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "accepted for visible defects; hidden defects fall under the warranty (Section 14).",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U309",
+      "page": 12,
+      "section": "10.2 Evidence required",
+      "structure_type": "heading",
+      "verbatim_text": "10.2 Evidence required",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U310",
+      "page": 12,
+      "section": "10.2 Evidence required",
+      "structure_type": "bullet",
+      "verbatim_text": "Clear photos of the damaged item and the outer shipping box.",
+      "content_role": "policy_clause"
+    },
+    {
+      "unit_id": "SRC-U311",
+      "page": 12,
+      "section": "10.2 Evidence required",
+      "structure_type": "bullet",
+      "verbatim_text": "Photo of the shipping label showing the order and tracking number.",
+      "content_role": "policy_clause"
+    },
+    {
+      "unit_id": "SRC-U312",
+      "page": 12,
+      "section": "10.2 Evidence required",
+      "structure_type": "bullet",
+      "verbatim_text": "A short description of the issue.",
+      "content_role": "policy_clause"
+    },
+    {
+      "unit_id": "SRC-U313",
+      "page": 12,
+      "section": "10.2 Evidence required",
+      "structure_type": "bullet",
+      "verbatim_text": "Video evidence for electronic or mechanical failures (recommended).",
+      "content_role": "policy_clause"
+    },
+    {
+      "unit_id": "SRC-U314",
+      "page": 12,
+      "section": "10.3 Resolution options",
+      "structure_type": "heading",
+      "verbatim_text": "10.3 Resolution options",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U315",
+      "page": 12,
+      "section": "10.3 Resolution options",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Option",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U316",
+      "page": 12,
+      "section": "10.3 Resolution options",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Details",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U317",
+      "page": 12,
+      "section": "10.3 Resolution options",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Timeline",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U318",
+      "page": 12,
+      "section": "10.3 Resolution options",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Replacement",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U319",
+      "page": 12,
+      "section": "10.3 Resolution options",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Same item shipped with free expedited shipping",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U320",
+      "page": 12,
+      "section": "10.3 Resolution options",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "2-3 business days",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U321",
+      "page": 12,
+      "section": "10.3 Resolution options",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Full refund",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U322",
+      "page": 12,
+      "section": "10.3 Resolution options",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Item price plus shipping and tax",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U323",
+      "page": 12,
+      "section": "10.3 Resolution options",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "3-5 business days",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U324",
+      "page": 12,
+      "section": "10.3 Resolution options",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Partial refund (keep item)",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U325",
+      "page": 12,
+      "section": "10.3 Resolution options",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Offered for minor cosmetic flaws",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U326",
+      "page": 12,
+      "section": "10.3 Resolution options",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Immediate",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U327",
+      "page": 12,
+      "section": "10.3 Resolution options",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Repair",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U328",
+      "page": 12,
+      "section": "10.3 Resolution options",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "For eligible products under warranty",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U329",
+      "page": 12,
+      "section": "10.3 Resolution options",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "7-14 business days",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U330",
+      "page": 12,
+      "section": "10.3 Resolution options",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "For damaged items valued under $40.00, we may issue a refund without requiring the item to be returned",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U331",
+      "page": 12,
+      "section": "10.3 Resolution options",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "(\"Keep It\" policy), at the agent's discretion. This is limited to two instances per customer per year.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U332",
+      "page": 13,
+      "section": "11. Order Cancellations",
+      "structure_type": "heading",
+      "verbatim_text": "11. Order Cancellations",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U333",
+      "page": 13,
+      "section": "11. Order Cancellations",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Orders can be cancelled at no cost before they ship. Once an order has shipped, it must be handled as a",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U334",
+      "page": 13,
+      "section": "11. Order Cancellations",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "return.",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U335",
+      "page": 13,
+      "section": "11. Order Cancellations",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Order status",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U336",
+      "page": 13,
+      "section": "11. Order Cancellations",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Can it be cancelled?",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U337",
+      "page": 13,
+      "section": "11. Order Cancellations",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Refund",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U338",
+      "page": 13,
+      "section": "11. Order Cancellations",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Pending (within 1 hour)",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U339",
+      "page": 13,
+      "section": "11. Order Cancellations",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Yes - self-service",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U340",
+      "page": 13,
+      "section": "11. Order Cancellations",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Full refund, immediate release of",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U341",
+      "page": 13,
+      "section": "11. Order Cancellations",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "authorisation",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U342",
+      "page": 13,
+      "section": "11. Order Cancellations",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Processing",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U343",
+      "page": 13,
+      "section": "11. Order Cancellations",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Yes - contact support",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U344",
+      "page": 13,
+      "section": "11. Order Cancellations",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Full refund within 3-5 days",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U345",
+      "page": 13,
+      "section": "11. Order Cancellations",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Packed, not shipped",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U346",
+      "page": 13,
+      "section": "11. Order Cancellations",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Attempted - not guaranteed",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U347",
+      "page": 13,
+      "section": "11. Order Cancellations",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Full refund if stopped, else return",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U348",
+      "page": 13,
+      "section": "11. Order Cancellations",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Shipped",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U349",
+      "page": 13,
+      "section": "11. Order Cancellations",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "No",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U350",
+      "page": 13,
+      "section": "11. Order Cancellations",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Refuse delivery or return",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U351",
+      "page": 13,
+      "section": "11. Order Cancellations",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Delivered",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U352",
+      "page": 13,
+      "section": "11. Order Cancellations",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "No",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U353",
+      "page": 13,
+      "section": "11. Order Cancellations",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Standard return policy",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U354",
+      "page": 13,
+      "section": "11. Order Cancellations",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Pre-order",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U355",
+      "page": 13,
+      "section": "11. Order Cancellations",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Yes, until 7 days before release",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U356",
+      "page": 13,
+      "section": "11. Order Cancellations",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Full refund",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U357",
+      "page": 13,
+      "section": "11. Order Cancellations",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Backordered",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U358",
+      "page": 13,
+      "section": "11. Order Cancellations",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Yes, anytime",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U359",
+      "page": 13,
+      "section": "11. Order Cancellations",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Full refund",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U360",
+      "page": 13,
+      "section": "11.1 Cancellations by Northwind",
+      "structure_type": "heading",
+      "verbatim_text": "11.1 Cancellations by Northwind",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U361",
+      "page": 13,
+      "section": "11.1 Cancellations by Northwind",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "We may cancel an order for reasons including stock errors, pricing errors, suspected fraud, or inability to",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U362",
+      "page": 13,
+      "section": "11.1 Cancellations by Northwind",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "verify payment. In such cases, a full refund is issued automatically within 3 business days, and a 10%",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U363",
+      "page": 13,
+      "section": "11.1 Cancellations by Northwind",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "discount code may be provided where the cancellation was due to our error.",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U364",
+      "page": 13,
+      "section": "11.2 Price adjustments",
+      "structure_type": "heading",
+      "verbatim_text": "11.2 Price adjustments",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U365",
+      "page": 13,
+      "section": "11.2 Price adjustments",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "If an item you purchased drops in price within 14 days of purchase, contact us for a one-time price",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U366",
+      "page": 13,
+      "section": "11.2 Price adjustments",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "adjustment refund of the difference. Limited to one adjustment per order. Doorbuster, flash-sale and",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U367",
+      "page": 13,
+      "section": "11.2 Price adjustments",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "marketplace items are excluded.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U368",
+      "page": 14,
+      "section": "12. Subscription Refunds",
+      "structure_type": "heading",
+      "verbatim_text": "12. Subscription Refunds",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U369",
+      "page": 14,
+      "section": "12. Subscription Refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Northwind offers the following subscriptions: Trailhead Box (monthly gear box, $39.00/month),",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U370",
+      "page": 14,
+      "section": "12. Subscription Refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Northwind Rewards Plus ($49/year), and Gear Care Plan ($9.99/month).",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U371",
+      "page": 14,
+      "section": "12. Subscription Refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Subscription",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U372",
+      "page": 14,
+      "section": "12. Subscription Refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Billing",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U373",
+      "page": 14,
+      "section": "12. Subscription Refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Cancellation",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U374",
+      "page": 14,
+      "section": "12. Subscription Refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Refund rule",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U375",
+      "page": 14,
+      "section": "12. Subscription Refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Trailhead Box",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U376",
+      "page": 14,
+      "section": "12. Subscription Refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Monthly, 1st of",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U377",
+      "page": 14,
+      "section": "12. Subscription Refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "month",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U378",
+      "page": 14,
+      "section": "12. Subscription Refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Anytime before the",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U379",
+      "page": 14,
+      "section": "12. Subscription Refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "25th",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U380",
+      "page": 14,
+      "section": "12. Subscription Refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Full refund if cancelled within 48 hours",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U381",
+      "page": 14,
+      "section": "12. Subscription Refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "of renewal and box not shipped",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U382",
+      "page": 14,
+      "section": "12. Subscription Refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Rewards Plus",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U383",
+      "page": 14,
+      "section": "12. Subscription Refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Annual",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U384",
+      "page": 14,
+      "section": "12. Subscription Refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Anytime",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U385",
+      "page": 14,
+      "section": "12. Subscription Refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Pro-rated refund within 30 days of",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U386",
+      "page": 14,
+      "section": "12. Subscription Refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "renewal; none afterwards",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U387",
+      "page": 14,
+      "section": "12. Subscription Refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Gear Care Plan",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U388",
+      "page": 14,
+      "section": "12. Subscription Refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Monthly",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U389",
+      "page": 14,
+      "section": "12. Subscription Refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Anytime",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U390",
+      "page": 14,
+      "section": "12. Subscription Refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "No refund for current month; cancel",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U391",
+      "page": 14,
+      "section": "12. Subscription Refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "effective next cycle",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U392",
+      "page": 14,
+      "section": "12.1 Free trials",
+      "structure_type": "heading",
+      "verbatim_text": "12.1 Free trials",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U393",
+      "page": 14,
+      "section": "12.1 Free trials",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Rewards Plus offers a 14-day free trial. If you cancel before the trial ends, you will not be charged. If you",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U394",
+      "page": 14,
+      "section": "12.1 Free trials",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "forget to cancel and are charged, contact us within 7 days for a full refund of the first charge.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U395",
+      "page": 14,
+      "section": "12.2 Accidental renewals",
+      "structure_type": "heading",
+      "verbatim_text": "12.2 Accidental renewals",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U396",
+      "page": 14,
+      "section": "12.2 Accidental renewals",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "We send renewal reminders 7 days before annual renewals. If you did not receive a reminder due to an",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U397",
+      "page": 14,
+      "section": "12.2 Accidental renewals",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "invalid email address, we will treat the renewal as accidental and refund in full within 30 days.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U398",
+      "page": 14,
+      "section": "12.3 Pausing instead of cancelling",
+      "structure_type": "heading",
+      "verbatim_text": "12.3 Pausing instead of cancelling",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U399",
+      "page": 14,
+      "section": "12.3 Pausing instead of cancelling",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Trailhead Box subscribers can pause for up to 3 months, once per year, from the account page. Paused",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U400",
+      "page": 14,
+      "section": "12.3 Pausing instead of cancelling",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "subscriptions are not billed.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U401",
+      "page": 15,
+      "section": "13. Digital Products and Gift Cards",
+      "structure_type": "heading",
+      "verbatim_text": "13. Digital Products and Gift Cards",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U402",
+      "page": 15,
+      "section": "13.1 Digital products",
+      "structure_type": "heading",
+      "verbatim_text": "13.1 Digital products",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U403",
+      "page": 15,
+      "section": "13.1 Digital products",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Digital goods such as trail guides (PDF), camping-skills video courses, and map packs are non-refundable",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U404",
+      "page": 15,
+      "section": "13.1 Digital products",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "after download or streaming begins. If a file is corrupt or inaccessible, we will provide a working copy or a",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U405",
+      "page": 15,
+      "section": "13.1 Digital products",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "full refund within 14 days of purchase.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U406",
+      "page": 15,
+      "section": "13.1 Digital products",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Video courses may be refunded within 7 days if less than 20% of the content has been viewed.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U407",
+      "page": 15,
+      "section": "13.2 Gift cards",
+      "structure_type": "heading",
+      "verbatim_text": "13.2 Gift cards",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U408",
+      "page": 15,
+      "section": "13.2 Gift cards",
+      "structure_type": "bullet",
+      "verbatim_text": "Gift cards are not refundable for cash, except where required by law (e.g. California, balances under",
+      "content_role": "policy_clause"
+    },
+    {
+      "unit_id": "SRC-U409",
+      "page": 15,
+      "section": "13.2 Gift cards",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "$10).",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U410",
+      "page": 15,
+      "section": "13.2 Gift cards",
+      "structure_type": "bullet",
+      "verbatim_text": "Gift cards never expire and carry no fees.",
+      "content_role": "policy_clause"
+    },
+    {
+      "unit_id": "SRC-U411",
+      "page": 15,
+      "section": "13.2 Gift cards",
+      "structure_type": "bullet",
+      "verbatim_text": "Lost or stolen gift cards can be replaced if the card number is provided, minus any used balance.",
+      "content_role": "policy_clause"
+    },
+    {
+      "unit_id": "SRC-U412",
+      "page": 15,
+      "section": "13.2 Gift cards",
+      "structure_type": "bullet",
+      "verbatim_text": "Gift card purchases cannot be cancelled once the code is delivered by email.",
+      "content_role": "policy_clause"
+    },
+    {
+      "unit_id": "SRC-U413",
+      "page": 15,
+      "section": "13.2 Gift cards",
+      "structure_type": "bullet",
+      "verbatim_text": "Fraudulently purchased gift cards will be voided and the associated payment refunded to the real",
+      "content_role": "policy_clause"
+    },
+    {
+      "unit_id": "SRC-U414",
+      "page": 15,
+      "section": "13.2 Gift cards",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "cardholder.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U415",
+      "page": 15,
+      "section": "13.3 Returning a gift",
+      "structure_type": "heading",
+      "verbatim_text": "13.3 Returning a gift",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U416",
+      "page": 15,
+      "section": "13.3 Returning a gift",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Gift recipients can return items with a gift receipt for store credit equal to the price paid, or exchange for",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U417",
+      "page": 15,
+      "section": "13.3 Returning a gift",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "another item. The purchaser is not notified of the return. Without a gift receipt, credit is issued at the",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U418",
+      "page": 15,
+      "section": "13.3 Returning a gift",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "lowest recent selling price.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U419",
+      "page": 15,
+      "section": "13.4 Promotional credits",
+      "structure_type": "heading",
+      "verbatim_text": "13.4 Promotional credits",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U420",
+      "page": 15,
+      "section": "13.4 Promotional credits",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Promotional credits and coupon codes have no cash value. If an order paid with a promotional code is",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U421",
+      "page": 15,
+      "section": "13.4 Promotional credits",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "refunded, the code's value is returned as promotional credit, not as cash.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U422",
+      "page": 16,
+      "section": "14. Warranty Claims vs. Refunds",
+      "structure_type": "heading",
+      "verbatim_text": "14. Warranty Claims vs. Refunds",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U423",
+      "page": 16,
+      "section": "14. Warranty Claims vs. Refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "A refund is a return of money for a purchase within the return window. A warranty claim addresses defects",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U424",
+      "page": 16,
+      "section": "14. Warranty Claims vs. Refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "that appear later, during normal use.",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U425",
+      "page": 16,
+      "section": "14. Warranty Claims vs. Refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Product Category",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U426",
+      "page": 16,
+      "section": "14. Warranty Claims vs. Refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Warranty period",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U427",
+      "page": 16,
+      "section": "14. Warranty Claims vs. Refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Remedy",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U428",
+      "page": 16,
+      "section": "14. Warranty Claims vs. Refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Tents and shelters",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U429",
+      "page": 16,
+      "section": "14. Warranty Claims vs. Refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "2 years",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U430",
+      "page": 16,
+      "section": "14. Warranty Claims vs. Refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Repair, replace or refund",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U431",
+      "page": 16,
+      "section": "14. Warranty Claims vs. Refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Sleeping bags",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U432",
+      "page": 16,
+      "section": "14. Warranty Claims vs. Refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Lifetime (manufacturing defects)",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U433",
+      "page": 16,
+      "section": "14. Warranty Claims vs. Refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Repair or replace",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U434",
+      "page": 16,
+      "section": "14. Warranty Claims vs. Refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Backpacks",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U435",
+      "page": 16,
+      "section": "14. Warranty Claims vs. Refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "5 years",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U436",
+      "page": 16,
+      "section": "14. Warranty Claims vs. Refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Repair or replace",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U437",
+      "page": 16,
+      "section": "14. Warranty Claims vs. Refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Footwear",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U438",
+      "page": 16,
+      "section": "14. Warranty Claims vs. Refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "1 year",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U439",
+      "page": 16,
+      "section": "14. Warranty Claims vs. Refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Replace or refund",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U440",
+      "page": 16,
+      "section": "14. Warranty Claims vs. Refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Apparel",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U441",
+      "page": 16,
+      "section": "14. Warranty Claims vs. Refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "1 year",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U442",
+      "page": 16,
+      "section": "14. Warranty Claims vs. Refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Replace or refund",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U443",
+      "page": 16,
+      "section": "14. Warranty Claims vs. Refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Electronics (headlamps, GPS)",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U444",
+      "page": 16,
+      "section": "14. Warranty Claims vs. Refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "1 year",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U445",
+      "page": 16,
+      "section": "14. Warranty Claims vs. Refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Repair or replace",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U446",
+      "page": 16,
+      "section": "14. Warranty Claims vs. Refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Stoves and cookware",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U447",
+      "page": 16,
+      "section": "14. Warranty Claims vs. Refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "2 years",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U448",
+      "page": 16,
+      "section": "14. Warranty Claims vs. Refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Repair or replace",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U449",
+      "page": 16,
+      "section": "14. Warranty Claims vs. Refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Water filters",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U450",
+      "page": 16,
+      "section": "14. Warranty Claims vs. Refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "1 year",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U451",
+      "page": 16,
+      "section": "14. Warranty Claims vs. Refunds",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Replace",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U452",
+      "page": 16,
+      "section": "14.1 What the warranty does not cover",
+      "structure_type": "heading",
+      "verbatim_text": "14.1 What the warranty does not cover",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U453",
+      "page": 16,
+      "section": "14.1 What the warranty does not cover",
+      "structure_type": "bullet",
+      "verbatim_text": "Normal wear and tear, fading, and gradual abrasion.",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U454",
+      "page": 16,
+      "section": "14.1 What the warranty does not cover",
+      "structure_type": "bullet",
+      "verbatim_text": "Damage from misuse, accidents, improper cleaning or storage.",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U455",
+      "page": 16,
+      "section": "14.1 What the warranty does not cover",
+      "structure_type": "bullet",
+      "verbatim_text": "Modifications or repairs by unauthorised parties.",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U456",
+      "page": 16,
+      "section": "14.1 What the warranty does not cover",
+      "structure_type": "bullet",
+      "verbatim_text": "Damage from fire, flood, wildlife, or other external causes.",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U457",
+      "page": 16,
+      "section": "14.2 Marketplace sellers",
+      "structure_type": "heading",
+      "verbatim_text": "14.2 Marketplace sellers",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U458",
+      "page": 16,
+      "section": "14.2 Marketplace sellers",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Items sold by third-party sellers but fulfilled by Northwind are covered by this policy. Items shipped directly",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U459",
+      "page": 16,
+      "section": "14.2 Marketplace sellers",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "by third-party sellers follow the seller's policy, but Northwind's A-to-Z Guarantee ensures a refund if the",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U460",
+      "page": 16,
+      "section": "14.2 Marketplace sellers",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "seller fails to respond within 5 business days.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U461",
+      "page": 17,
+      "section": "15. International Orders, Duties and Currency",
+      "structure_type": "heading",
+      "verbatim_text": "15. International Orders, Duties and Currency",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U462",
+      "page": 17,
+      "section": "15. International Orders, Duties and Currency",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Northwind ships to 38 countries. International returns follow the same eligibility rules, with the exceptions",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U463",
+      "page": 17,
+      "section": "15. International Orders, Duties and Currency",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "below.",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U464",
+      "page": 17,
+      "section": "15. International Orders, Duties and Currency",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Region",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U465",
+      "page": 17,
+      "section": "15. International Orders, Duties and Currency",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Return window",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U466",
+      "page": 17,
+      "section": "15. International Orders, Duties and Currency",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Return shipping",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U467",
+      "page": 17,
+      "section": "15. International Orders, Duties and Currency",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Duties and taxes",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U468",
+      "page": 17,
+      "section": "15. International Orders, Duties and Currency",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "United States",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U469",
+      "page": 17,
+      "section": "15. International Orders, Duties and Currency",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "30 days",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U470",
+      "page": 17,
+      "section": "15. International Orders, Duties and Currency",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "See Section 9",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U471",
+      "page": 17,
+      "section": "15. International Orders, Duties and Currency",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Included",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U472",
+      "page": 17,
+      "section": "15. International Orders, Duties and Currency",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Canada",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U473",
+      "page": 17,
+      "section": "15. International Orders, Duties and Currency",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "30 days",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U474",
+      "page": 17,
+      "section": "15. International Orders, Duties and Currency",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Customer pays unless",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U475",
+      "page": 17,
+      "section": "15. International Orders, Duties and Currency",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "defective",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U476",
+      "page": 17,
+      "section": "15. International Orders, Duties and Currency",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Duties refunded on",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U477",
+      "page": 17,
+      "section": "15. International Orders, Duties and Currency",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "approved returns",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U478",
+      "page": 17,
+      "section": "15. International Orders, Duties and Currency",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "UK",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U479",
+      "page": 17,
+      "section": "15. International Orders, Duties and Currency",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "30 days (14-day statutory",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U480",
+      "page": 17,
+      "section": "15. International Orders, Duties and Currency",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "minimum)",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U481",
+      "page": 17,
+      "section": "15. International Orders, Duties and Currency",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Customer pays unless",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U482",
+      "page": 17,
+      "section": "15. International Orders, Duties and Currency",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "defective",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U483",
+      "page": 17,
+      "section": "15. International Orders, Duties and Currency",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "VAT refunded, duty via",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U484",
+      "page": 17,
+      "section": "15. International Orders, Duties and Currency",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "customs claim",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U485",
+      "page": 17,
+      "section": "15. International Orders, Duties and Currency",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "EU",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U486",
+      "page": 17,
+      "section": "15. International Orders, Duties and Currency",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "30 days (14-day statutory",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U487",
+      "page": 17,
+      "section": "15. International Orders, Duties and Currency",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "minimum)",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U488",
+      "page": 17,
+      "section": "15. International Orders, Duties and Currency",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Customer pays unless",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U489",
+      "page": 17,
+      "section": "15. International Orders, Duties and Currency",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "defective",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U490",
+      "page": 17,
+      "section": "15. International Orders, Duties and Currency",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "VAT refunded",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U491",
+      "page": 17,
+      "section": "15. International Orders, Duties and Currency",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Australia",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U492",
+      "page": 17,
+      "section": "15. International Orders, Duties and Currency",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "30 days",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U493",
+      "page": 17,
+      "section": "15. International Orders, Duties and Currency",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Customer pays unless",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U494",
+      "page": 17,
+      "section": "15. International Orders, Duties and Currency",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "defective",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U495",
+      "page": 17,
+      "section": "15. International Orders, Duties and Currency",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "GST refunded",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U496",
+      "page": 17,
+      "section": "15. International Orders, Duties and Currency",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Rest of world",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U497",
+      "page": 17,
+      "section": "15. International Orders, Duties and Currency",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "14 days",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U498",
+      "page": 17,
+      "section": "15. International Orders, Duties and Currency",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Customer pays",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U499",
+      "page": 17,
+      "section": "15. International Orders, Duties and Currency",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Not refundable",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U500",
+      "page": 17,
+      "section": "15.1 Currency conversion",
+      "structure_type": "heading",
+      "verbatim_text": "15.1 Currency conversion",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U501",
+      "page": 17,
+      "section": "15.1 Currency conversion",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Refunds are issued in the currency of the original charge. Exchange rate differences between the",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U502",
+      "page": 17,
+      "section": "15.1 Currency conversion",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "purchase and refund date are not compensated; the bank's rate on the refund date applies. For example,",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U503",
+      "page": 17,
+      "section": "15.1 Currency conversion",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "a EUR 100.00 purchase may be charged as $108.00 and refunded as $106.50 depending on exchange",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U504",
+      "page": 17,
+      "section": "15.1 Currency conversion",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "movement.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U505",
+      "page": 17,
+      "section": "15.2 Customs and duties",
+      "structure_type": "heading",
+      "verbatim_text": "15.2 Customs and duties",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U506",
+      "page": 17,
+      "section": "15.2 Customs and duties",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Customers are responsible for filing customs duty drawback claims where available. Northwind will",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U507",
+      "page": 17,
+      "section": "15.2 Customs and duties",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "provide a commercial invoice and proof of return upon request. Refused deliveries at customs are",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U508",
+      "page": 17,
+      "section": "15.2 Customs and duties",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "refunded minus outbound and return shipping.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U509",
+      "page": 18,
+      "section": "16. Chargebacks and Disputes",
+      "structure_type": "heading",
+      "verbatim_text": "16. Chargebacks and Disputes",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U510",
+      "page": 18,
+      "section": "16. Chargebacks and Disputes",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "We encourage customers to contact us before initiating a chargeback with their bank. Most issues can be",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U511",
+      "page": 18,
+      "section": "16. Chargebacks and Disputes",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "resolved faster directly, and a chargeback can lead to account restrictions.",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U512",
+      "page": 18,
+      "section": "16.1 Process",
+      "structure_type": "heading",
+      "verbatim_text": "16.1 Process",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U513",
+      "page": 18,
+      "section": "16.1 Process",
+      "structure_type": "bullet",
+      "verbatim_text": "Customer files a dispute with the card issuer.",
+      "content_role": "policy_clause"
+    },
+    {
+      "unit_id": "SRC-U514",
+      "page": 18,
+      "section": "16.1 Process",
+      "structure_type": "bullet",
+      "verbatim_text": "Our payment processor notifies us within 1-3 business days.",
+      "content_role": "policy_clause"
+    },
+    {
+      "unit_id": "SRC-U515",
+      "page": 18,
+      "section": "16.1 Process",
+      "structure_type": "bullet",
+      "verbatim_text": "We submit evidence (order record, delivery confirmation, communications) within 7 days.",
+      "content_role": "policy_clause"
+    },
+    {
+      "unit_id": "SRC-U516",
+      "page": 18,
+      "section": "16.1 Process",
+      "structure_type": "bullet",
+      "verbatim_text": "The issuer decides within 30-90 days.",
+      "content_role": "policy_clause"
+    },
+    {
+      "unit_id": "SRC-U517",
+      "page": 18,
+      "section": "16.1 Process",
+      "structure_type": "bullet",
+      "verbatim_text": "If the dispute is lost, funds are debited; a $15 administration fee may apply for fraudulent claims.",
+      "content_role": "policy_clause"
+    },
+    {
+      "unit_id": "SRC-U518",
+      "page": 18,
+      "section": "16.2 If you already received a refund",
+      "structure_type": "heading",
+      "verbatim_text": "16.2 If you already received a refund",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U519",
+      "page": 18,
+      "section": "16.2 If you already received a refund",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Please do not dispute a charge that has been refunded. Duplicate recoveries (refund plus chargeback) are",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U520",
+      "page": 18,
+      "section": "16.2 If you already received a refund",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "treated as potential fraud, and the customer is liable for repayment.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U521",
+      "page": 18,
+      "section": "16.3 Dispute reason codes",
+      "structure_type": "heading",
+      "verbatim_text": "16.3 Dispute reason codes",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U522",
+      "page": 18,
+      "section": "16.3 Dispute reason codes",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Code (example)",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U523",
+      "page": 18,
+      "section": "16.3 Dispute reason codes",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Meaning",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U524",
+      "page": 18,
+      "section": "16.3 Dispute reason codes",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Typical resolution",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U525",
+      "page": 18,
+      "section": "16.3 Dispute reason codes",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "4853",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U526",
+      "page": 18,
+      "section": "16.3 Dispute reason codes",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Cardholder dispute / not as described",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U527",
+      "page": 18,
+      "section": "16.3 Dispute reason codes",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Refund or evidence submission",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U528",
+      "page": 18,
+      "section": "16.3 Dispute reason codes",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "4837",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U529",
+      "page": 18,
+      "section": "16.3 Dispute reason codes",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "No cardholder authorisation (fraud)",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U530",
+      "page": 18,
+      "section": "16.3 Dispute reason codes",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Fraud investigation",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U531",
+      "page": 18,
+      "section": "16.3 Dispute reason codes",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "4855",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U532",
+      "page": 18,
+      "section": "16.3 Dispute reason codes",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Goods or services not provided",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U533",
+      "page": 18,
+      "section": "16.3 Dispute reason codes",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Provide tracking proof or refund",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U534",
+      "page": 18,
+      "section": "16.3 Dispute reason codes",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "4834",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U535",
+      "page": 18,
+      "section": "16.3 Dispute reason codes",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Duplicate processing",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U536",
+      "page": 18,
+      "section": "16.3 Dispute reason codes",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Verify and refund duplicate",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U537",
+      "page": 18,
+      "section": "16.3 Dispute reason codes",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "4841",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U538",
+      "page": 18,
+      "section": "16.3 Dispute reason codes",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Cancelled recurring transaction",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U539",
+      "page": 18,
+      "section": "16.3 Dispute reason codes",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Check cancellation record",
+      "content_role": "operative_rule"
+    },
+    {
+      "unit_id": "SRC-U540",
+      "page": 19,
+      "section": "17. Fraud Prevention and Abuse",
+      "structure_type": "heading",
+      "verbatim_text": "17. Fraud Prevention and Abuse",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U541",
+      "page": 19,
+      "section": "17. Fraud Prevention and Abuse",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Northwind monitors return activity to protect honest customers and prevent abuse. Our systems and",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U542",
+      "page": 19,
+      "section": "17. Fraud Prevention and Abuse",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "agents look for patterns such as:",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U543",
+      "page": 19,
+      "section": "17. Fraud Prevention and Abuse",
+      "structure_type": "bullet",
+      "verbatim_text": "Return rates exceeding 40% of purchases across a rolling 12-month period.",
+      "content_role": "policy_clause"
+    },
+    {
+      "unit_id": "SRC-U544",
+      "page": 19,
+      "section": "17. Fraud Prevention and Abuse",
+      "structure_type": "bullet",
+      "verbatim_text": "Returning items that were not purchased from Northwind.",
+      "content_role": "policy_clause"
+    },
+    {
+      "unit_id": "SRC-U545",
+      "page": 19,
+      "section": "17. Fraud Prevention and Abuse",
+      "structure_type": "bullet",
+      "verbatim_text": "Wardrobing - purchasing items for one-time use and returning them.",
+      "content_role": "policy_clause"
+    },
+    {
+      "unit_id": "SRC-U546",
+      "page": 19,
+      "section": "17. Fraud Prevention and Abuse",
+      "structure_type": "bullet",
+      "verbatim_text": "Returning counterfeit or swapped items (e.g. an empty box, or a lower-grade item).",
+      "content_role": "policy_clause"
+    },
+    {
+      "unit_id": "SRC-U547",
+      "page": 19,
+      "section": "17. Fraud Prevention and Abuse",
+      "structure_type": "bullet",
+      "verbatim_text": "Multiple accounts linked to the same address, device or payment method.",
+      "content_role": "policy_clause"
+    },
+    {
+      "unit_id": "SRC-U548",
+      "page": 19,
+      "section": "17. Fraud Prevention and Abuse",
+      "structure_type": "bullet",
+      "verbatim_text": "Repeated claims of 'item not received' on delivered orders.",
+      "content_role": "policy_clause"
+    },
+    {
+      "unit_id": "SRC-U549",
+      "page": 19,
+      "section": "17.1 Consequences",
+      "structure_type": "heading",
+      "verbatim_text": "17.1 Consequences",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U550",
+      "page": 19,
+      "section": "17.1 Consequences",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Level",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U551",
+      "page": 19,
+      "section": "17.1 Consequences",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Trigger",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U552",
+      "page": 19,
+      "section": "17.1 Consequences",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Action",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U553",
+      "page": 19,
+      "section": "17.1 Consequences",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Notice",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U554",
+      "page": 19,
+      "section": "17.1 Consequences",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Return rate 30-40%",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U555",
+      "page": 19,
+      "section": "17.1 Consequences",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Email reminder of policy",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U556",
+      "page": 19,
+      "section": "17.1 Consequences",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Restricted",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U557",
+      "page": 19,
+      "section": "17.1 Consequences",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Return rate over 40% or one confirmed",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U558",
+      "page": 19,
+      "section": "17.1 Consequences",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "abuse case",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U559",
+      "page": 19,
+      "section": "17.1 Consequences",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Store credit only; returns need manager",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U560",
+      "page": 19,
+      "section": "17.1 Consequences",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "approval",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U561",
+      "page": 19,
+      "section": "17.1 Consequences",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Suspended",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U562",
+      "page": 19,
+      "section": "17.1 Consequences",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Multiple confirmed abuse cases",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U563",
+      "page": 19,
+      "section": "17.1 Consequences",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Account suspended for 12 months",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U564",
+      "page": 19,
+      "section": "17.1 Consequences",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Permanent",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U565",
+      "page": 19,
+      "section": "17.1 Consequences",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Fraud or counterfeit return",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U566",
+      "page": 19,
+      "section": "17.1 Consequences",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Account closed; referral to law enforcement",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U567",
+      "page": 19,
+      "section": "17.1 Consequences",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "where appropriate",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U568",
+      "page": 19,
+      "section": "17.2 Appeals",
+      "structure_type": "heading",
+      "verbatim_text": "17.2 Appeals",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U569",
+      "page": 19,
+      "section": "17.2 Appeals",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Customers may appeal restrictions in writing to appeals@northwind-demo.example within 30 days.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U570",
+      "page": 19,
+      "section": "17.2 Appeals",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Appeals are reviewed by a manager not involved in the original decision within 10 business days.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U571",
+      "page": 19,
+      "section": "17.3 Privacy",
+      "structure_type": "heading",
+      "verbatim_text": "17.3 Privacy",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U572",
+      "page": 19,
+      "section": "17.3 Privacy",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Return history is stored per our Privacy Policy, retained for 7 years for audit purposes, and never sold to",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U573",
+      "page": 19,
+      "section": "17.3 Privacy",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "third parties.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U574",
+      "page": 20,
+      "section": "18. Frequently Asked Questions",
+      "structure_type": "heading",
+      "verbatim_text": "18. Frequently Asked Questions",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U575",
+      "page": 20,
+      "section": "18. Frequently Asked Questions",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Q1. Can I return an item after 30 days?",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U576",
+      "page": 20,
+      "section": "18. Frequently Asked Questions",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Standard returns must be requested within 30 days. Gold members have 60 days. After that we may offer",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U577",
+      "page": 20,
+      "section": "18. Frequently Asked Questions",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "store credit at a manager's discretion for unused items within 90 days.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U578",
+      "page": 20,
+      "section": "18. Frequently Asked Questions",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Q2. Will I get my shipping cost back?",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U579",
+      "page": 20,
+      "section": "18. Frequently Asked Questions",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Only if the return is due to our error or a defect. For change-of-mind returns, original shipping is not",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U580",
+      "page": 20,
+      "section": "18. Frequently Asked Questions",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "refunded.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U581",
+      "page": 20,
+      "section": "18. Frequently Asked Questions",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Q3. How will I know my refund has been issued?",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U582",
+      "page": 20,
+      "section": "18. Frequently Asked Questions",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "You will receive an email titled 'Your refund is on the way' containing the refund amount, method, and",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U583",
+      "page": 20,
+      "section": "18. Frequently Asked Questions",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "reference number such as REF-2026-077314.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U584",
+      "page": 20,
+      "section": "18. Frequently Asked Questions",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Q4. I returned my item but have not received a refund. What should I do?",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U585",
+      "page": 20,
+      "section": "18. Frequently Asked Questions",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Check your tracking to confirm delivery, allow 2 business days for inspection and up to 5 more for your",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U586",
+      "page": 20,
+      "section": "18. Frequently Asked Questions",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "bank. If it has been more than 10 business days, contact support.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U587",
+      "page": 20,
+      "section": "18. Frequently Asked Questions",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Q5. Can I return an item bought in-store through the website?",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U588",
+      "page": 20,
+      "section": "18. Frequently Asked Questions",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Yes. Items bought in-store can be returned in any store or by mail using the RMA process with your",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U589",
+      "page": 20,
+      "section": "18. Frequently Asked Questions",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "receipt or loyalty account lookup.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U590",
+      "page": 20,
+      "section": "18. Frequently Asked Questions",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Q6. Do sale items qualify for a refund?",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U591",
+      "page": 20,
+      "section": "18. Frequently Asked Questions",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Regular sale items yes; items marked Final Sale or Clearance - All Sales Final no.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U592",
+      "page": 20,
+      "section": "18. Frequently Asked Questions",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Q7. Can I get a cash refund?",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U593",
+      "page": 20,
+      "section": "18. Frequently Asked Questions",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Refunds go to the original payment method. Cash refunds are only available for cash purchases under",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U594",
+      "page": 20,
+      "section": "18. Frequently Asked Questions",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "$50.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U595",
+      "page": 20,
+      "section": "18. Frequently Asked Questions",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Q8. What if my package was stolen after delivery?",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U596",
+      "page": 20,
+      "section": "18. Frequently Asked Questions",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Please file a police report and contact us within 14 days. We offer one courtesy replacement per customer",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U597",
+      "page": 20,
+      "section": "18. Frequently Asked Questions",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "per year for packages under $200.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U598",
+      "page": 20,
+      "section": "18. Frequently Asked Questions",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Q9. Is my sales tax refunded?",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U599",
+      "page": 20,
+      "section": "18. Frequently Asked Questions",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Yes, tax is refunded proportionally with the item price.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U600",
+      "page": 20,
+      "section": "18. Frequently Asked Questions",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Q10. Can I cancel part of my order?",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U601",
+      "page": 20,
+      "section": "18. Frequently Asked Questions",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Yes, if the order has not shipped. Contact support to remove specific items.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U602",
+      "page": 21,
+      "section": "19. Contact Information and Escalation",
+      "structure_type": "heading",
+      "verbatim_text": "19. Contact Information and Escalation",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U603",
+      "page": 21,
+      "section": "19. Contact Information and Escalation",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Our customer care team is available through the following channels. All contact details below are fictional.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U604",
+      "page": 21,
+      "section": "19. Contact Information and Escalation",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Channel",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U605",
+      "page": 21,
+      "section": "19. Contact Information and Escalation",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Details",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U606",
+      "page": 21,
+      "section": "19. Contact Information and Escalation",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Hours (Pacific Time)",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U607",
+      "page": 21,
+      "section": "19. Contact Information and Escalation",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Phone (US/Canada)",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U608",
+      "page": 21,
+      "section": "19. Contact Information and Escalation",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "1-800-555-0142",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U609",
+      "page": 21,
+      "section": "19. Contact Information and Escalation",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Mon-Fri 8am-8pm; Sat",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U610",
+      "page": 21,
+      "section": "19. Contact Information and Escalation",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "9am-5pm",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U611",
+      "page": 21,
+      "section": "19. Contact Information and Escalation",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Phone (UK)",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U612",
+      "page": 21,
+      "section": "19. Contact Information and Escalation",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "+44 20 7946 0142",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U613",
+      "page": 21,
+      "section": "19. Contact Information and Escalation",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Mon-Fri 9am-5pm GMT",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U614",
+      "page": 21,
+      "section": "19. Contact Information and Escalation",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Email",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U615",
+      "page": 21,
+      "section": "19. Contact Information and Escalation",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "support@northwind-demo.example",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U616",
+      "page": 21,
+      "section": "19. Contact Information and Escalation",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Response within 24 hours",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U617",
+      "page": 21,
+      "section": "19. Contact Information and Escalation",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Live chat",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U618",
+      "page": 21,
+      "section": "19. Contact Information and Escalation",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "northwind-demo.example/chat",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U619",
+      "page": 21,
+      "section": "19. Contact Information and Escalation",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Daily 7am-10pm",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U620",
+      "page": 21,
+      "section": "19. Contact Information and Escalation",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Refund status line",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U621",
+      "page": 21,
+      "section": "19. Contact Information and Escalation",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "1-800-555-0177",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U622",
+      "page": 21,
+      "section": "19. Contact Information and Escalation",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "24/7 automated",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U623",
+      "page": 21,
+      "section": "19. Contact Information and Escalation",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Mail",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U624",
+      "page": 21,
+      "section": "19. Contact Information and Escalation",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Returns Dept., 200 Cascade Way, Portland,",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U625",
+      "page": 21,
+      "section": "19. Contact Information and Escalation",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "OR 97201, USA",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U626",
+      "page": 21,
+      "section": "19. Contact Information and Escalation",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "N/A",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U627",
+      "page": 21,
+      "section": "19. Contact Information and Escalation",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Escalations",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U628",
+      "page": 21,
+      "section": "19. Contact Information and Escalation",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "escalations@northwind-demo.example",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U629",
+      "page": 21,
+      "section": "19. Contact Information and Escalation",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Response within 2 business",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U630",
+      "page": 21,
+      "section": "19. Contact Information and Escalation",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "days",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U631",
+      "page": 21,
+      "section": "19.1 Escalation path",
+      "structure_type": "heading",
+      "verbatim_text": "19.1 Escalation path",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U632",
+      "page": 21,
+      "section": "19.1 Escalation path",
+      "structure_type": "bullet",
+      "verbatim_text": "Level 1: Customer Care Agent - resolves most issues in one contact.",
+      "content_role": "policy_clause"
+    },
+    {
+      "unit_id": "SRC-U633",
+      "page": 21,
+      "section": "19.1 Escalation path",
+      "structure_type": "bullet",
+      "verbatim_text": "Level 2: Team Lead - refunds over $100, policy exceptions.",
+      "content_role": "policy_clause"
+    },
+    {
+      "unit_id": "SRC-U634",
+      "page": 21,
+      "section": "19.1 Escalation path",
+      "structure_type": "bullet",
+      "verbatim_text": "Level 3: Customer Experience Manager - refunds over $500, complex disputes.",
+      "content_role": "policy_clause"
+    },
+    {
+      "unit_id": "SRC-U635",
+      "page": 21,
+      "section": "19.1 Escalation path",
+      "structure_type": "bullet",
+      "verbatim_text": "Level 4: Executive Resolution Office - legal threats, regulatory complaints, media.",
+      "content_role": "policy_clause"
+    },
+    {
+      "unit_id": "SRC-U636",
+      "page": 21,
+      "section": "19.2 Service-level commitments",
+      "structure_type": "heading",
+      "verbatim_text": "19.2 Service-level commitments",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U637",
+      "page": 21,
+      "section": "19.2 Service-level commitments",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Request type",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U638",
+      "page": 21,
+      "section": "19.2 Service-level commitments",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Target",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U639",
+      "page": 21,
+      "section": "19.2 Service-level commitments",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "First response by email",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U640",
+      "page": 21,
+      "section": "19.2 Service-level commitments",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "24 hours",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U641",
+      "page": 21,
+      "section": "19.2 Service-level commitments",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "First response by chat",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U642",
+      "page": 21,
+      "section": "19.2 Service-level commitments",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Under 2 minutes",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U643",
+      "page": 21,
+      "section": "19.2 Service-level commitments",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Resolution of standard refund query",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U644",
+      "page": 21,
+      "section": "19.2 Service-level commitments",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Within 3 business days",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U645",
+      "page": 21,
+      "section": "19.2 Service-level commitments",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Escalated complaint resolution",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U646",
+      "page": 21,
+      "section": "19.2 Service-level commitments",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "10 business days",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U647",
+      "page": 22,
+      "section": "20. Revision History and Sample Case Studies",
+      "structure_type": "heading",
+      "verbatim_text": "20. Revision History and Sample Case Studies",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U648",
+      "page": 22,
+      "section": "20.1 Revision history",
+      "structure_type": "heading",
+      "verbatim_text": "20.1 Revision history",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U649",
+      "page": 22,
+      "section": "20.1 Revision history",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Version",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U650",
+      "page": 22,
+      "section": "20.1 Revision history",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Date",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U651",
+      "page": 22,
+      "section": "20.1 Revision history",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Change",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U652",
+      "page": 22,
+      "section": "4.2",
+      "structure_type": "heading",
+      "verbatim_text": "4.2",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U653",
+      "page": 22,
+      "section": "4.2",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Jan 1, 2026",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U654",
+      "page": 22,
+      "section": "4.2",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Extended holiday window; added Keep It policy under $40",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U655",
+      "page": 22,
+      "section": "4.1",
+      "structure_type": "heading",
+      "verbatim_text": "4.1",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U656",
+      "page": 22,
+      "section": "4.1",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Aug 15, 2025",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U657",
+      "page": 22,
+      "section": "4.1",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Added Gear Care Plan subscription terms",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U658",
+      "page": 22,
+      "section": "4.0",
+      "structure_type": "heading",
+      "verbatim_text": "4.0",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U659",
+      "page": 22,
+      "section": "4.0",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Mar 1, 2025",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U660",
+      "page": 22,
+      "section": "4.0",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Gold member window raised from 45 to 60 days",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U661",
+      "page": 22,
+      "section": "3.5",
+      "structure_type": "heading",
+      "verbatim_text": "3.5",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U662",
+      "page": 22,
+      "section": "3.5",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Nov 10, 2024",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U663",
+      "page": 22,
+      "section": "3.5",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Introduced 5% store-credit bonus",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U664",
+      "page": 22,
+      "section": "3.0",
+      "structure_type": "heading",
+      "verbatim_text": "3.0",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U665",
+      "page": 22,
+      "section": "3.0",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Jan 5, 2024",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U666",
+      "page": 22,
+      "section": "3.0",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Restructured policy; added international section",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U667",
+      "page": 22,
+      "section": "20.2 Sample case studies",
+      "structure_type": "heading",
+      "verbatim_text": "20.2 Sample case studies",
+      "content_role": "heading"
+    },
+    {
+      "unit_id": "SRC-U668",
+      "page": 22,
+      "section": "20.2 Sample case studies",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Case A - Wrong size, within window. Maria ordered a $120 jacket (order NW-10482391) and received it",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U669",
+      "page": 22,
+      "section": "20.2 Sample case studies",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "on June 3. On June 20 she requested a return as it did not fit. She used the prepaid label ($6.95",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U670",
+      "page": 22,
+      "section": "20.2 Sample case studies",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "deducted). Refund issued: $113.05 to her Visa, plus tax refunded proportionally.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U671",
+      "page": 22,
+      "section": "20.2 Sample case studies",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Case B - Defective tent zipper. Daniel bought a $349 tent on May 1 and discovered a broken zipper on",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U672",
+      "page": 22,
+      "section": "20.2 Sample case studies",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "May 12. He reported it with photos. Northwind issued a free label and sent a replacement tent with",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U673",
+      "page": 22,
+      "section": "20.2 Sample case studies",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "expedited shipping. Total cost to customer: $0.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U674",
+      "page": 22,
+      "section": "20.2 Sample case studies",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Case C - Late return, Gold member. Priya (Gold) returned a $79 pair of boots on day 52. Because Gold",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U675",
+      "page": 22,
+      "section": "20.2 Sample case studies",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "members have 60 days, a full refund of $79 was issued with free return shipping.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U676",
+      "page": 22,
+      "section": "20.2 Sample case studies",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Case D - Final Sale item. Tom attempted to return a $25 Final Sale fleece after 10 days. The request was",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U677",
+      "page": 22,
+      "section": "20.2 Sample case studies",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "declined under Section 5. As a goodwill gesture, a 10% discount code was offered.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U678",
+      "page": 22,
+      "section": "20.2 Sample case studies",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Case E - Subscription accident. Lena was charged $49 for Rewards Plus renewal on Feb 3 and",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U679",
+      "page": 22,
+      "section": "20.2 Sample case studies",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "contacted support on Feb 9. She received a full pro-rated refund as she had not used any benefits in that",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U680",
+      "page": 22,
+      "section": "20.2 Sample case studies",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "period.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U681",
+      "page": 22,
+      "section": "20.2 Sample case studies",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "Case F - International return. Hans in Germany returned a EUR 150 sleeping bag within 20 days. VAT",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U682",
+      "page": 22,
+      "section": "20.2 Sample case studies",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "was refunded; return shipping of EUR 18 was paid by the customer. Refund issued in EUR within 5",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U683",
+      "page": 22,
+      "section": "20.2 Sample case studies",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "business days of receipt.",
+      "content_role": "informational"
+    },
+    {
+      "unit_id": "SRC-U684",
+      "page": 22,
+      "section": "20.2 Sample case studies",
+      "structure_type": "table_or_prose",
+      "verbatim_text": "End of document. All content is fictional and provided for software testing only.",
+      "content_role": "informational"
+    }
+  ]
+}

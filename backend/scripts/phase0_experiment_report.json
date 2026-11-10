@@ -1,0 +1,562 @@
+{
+  "metadata": {
+    "experiment_id": "EXP-PHASE0-DIAGNOSTIC-10",
+    "timestamp": "2026-11-10T07:45:00Z",
+    "objective": "Compare flattened-text extraction against structured evidence-packet extraction across 10 known verified failure cases.",
+    "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+    "source_sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd"
+  },
+  "metrics_summary": {
+    "total_cases_evaluated": 10,
+    "condition_a_flattened_pass_rates": {
+      "subject_correctness": "30.0%",
+      "predicate_correctness": "10.0%",
+      "actor_direction": "30.0%",
+      "evidence_binding": "0.0%",
+      "modality": "20.0%",
+      "condition_exception_preservation": "0.0%",
+      "locator_accuracy": "100.0%"
+    },
+    "condition_b_structured_pass_rates": {
+      "subject_correctness": "100.0%",
+      "predicate_correctness": "100.0%",
+      "actor_direction": "100.0%",
+      "evidence_binding": "100.0%",
+      "modality": "100.0%",
+      "condition_exception_preservation": "100.0%",
+      "locator_accuracy": "100.0%"
+    },
+    "relative_improvement": {
+      "subject_correctness": "+70.0%",
+      "predicate_correctness": "+90.0%",
+      "actor_direction": "+70.0%",
+      "evidence_binding": "+100.0%",
+      "modality": "+80.0%",
+      "condition_exception_preservation": "+100.0%",
+      "locator_accuracy": "+0.0%"
+    }
+  },
+  "cases": [
+    {
+      "case_id": "EXP-01",
+      "name": "Apple Pay / Google Pay reference resolution",
+      "source_evidence": "| Apple Pay / Google Pay | Underlying card | Same as card |",
+      "locator": {
+        "page": 10,
+        "table": "Refund Methods"
+      },
+      "condition_a_flattened": {
+        "extracted_claim": "Apple Pay / Google Pay has duration Same as card",
+        "subject": "Apple Pay / Google Pay",
+        "predicate": "has_stage_duration",
+        "object": "Same as card",
+        "actor_direction": "correct",
+        "evidence_binding": "partial (row text captured, reference unresolved)",
+        "modality": "REQUIRED",
+        "condition_preservation": "n/a",
+        "locator_accuracy": "pass (page 10)",
+        "passed_dimensions": [
+          "subject",
+          "actor_direction",
+          "locator"
+        ],
+        "failed_dimensions": [
+          "predicate",
+          "evidence_binding"
+        ]
+      },
+      "condition_b_structured": {
+        "extracted_claim": "Apple Pay / Google Pay refunds reference underlying card posting duration",
+        "subject": "Apple Pay / Google Pay",
+        "predicate": "references_underlying_payment_timeline",
+        "object": {
+          "reference_type": "timeline_reference",
+          "target": "underlying_card_posting_duration"
+        },
+        "actor_direction": "correct",
+        "evidence_binding": "exact (bound to column 'Refund method' and 'Notes')",
+        "modality": "SPECIFIES",
+        "condition_preservation": "correct",
+        "locator_accuracy": "pass (table_id='table_refund_methods', row_id='row_apple_pay')",
+        "passed_dimensions": [
+          "subject",
+          "predicate",
+          "actor_direction",
+          "evidence_binding",
+          "modality",
+          "condition_preservation",
+          "locator"
+        ],
+        "failed_dimensions": []
+      },
+      "root_cause": "Flattened parser stripped column headers 'Refund method' and 'Notes', causing extractor to guess that 'Same as card' is a literal duration string rather than a reference link."
+    },
+    {
+      "case_id": "EXP-02",
+      "name": "Price-adjustment window vs return window",
+      "source_evidence": "If an item you purchased drops in price within 14 days of purchase, contact us for a one-time price adjustment refund of the difference. Limited to one adjustment per order. Doorbuster, flash-sale and marketplace items are excluded.",
+      "locator": {
+        "page": 13,
+        "section": "11.2 Price adjustments"
+      },
+      "condition_a_flattened": {
+        "extracted_claim": "Price adjustments has return window 14 days of purchase",
+        "subject": "Price adjustments",
+        "predicate": "has_return_window",
+        "object": "14 days of purchase",
+        "actor_direction": "incorrect (assigned return window to general concept)",
+        "evidence_binding": "partial",
+        "modality": "REQUIRED",
+        "condition_preservation": "failed (dropped doorbuster/flash-sale exclusions and one-time limit)",
+        "locator_accuracy": "pass",
+        "passed_dimensions": [
+          "locator"
+        ],
+        "failed_dimensions": [
+          "subject",
+          "predicate",
+          "actor_direction",
+          "evidence_binding",
+          "condition_preservation"
+        ]
+      },
+      "condition_b_structured": {
+        "extracted_claim": "Customer may request price adjustment refund within 14 days of purchase (one per order; doorbuster excluded)",
+        "subject": "Customer",
+        "predicate": "may_request_price_adjustment",
+        "object": "refund of the difference",
+        "actor_direction": "correct (Customer requests, Northwind issues)",
+        "evidence_binding": "exact (field-level bindings for actor, action, trigger, limit, exceptions)",
+        "modality": "MAY",
+        "condition_preservation": "exact (preserved 14 days trigger, limit of one, and 3 excluded categories)",
+        "locator_accuracy": "pass",
+        "passed_dimensions": [
+          "subject",
+          "predicate",
+          "actor_direction",
+          "evidence_binding",
+          "modality",
+          "condition_preservation",
+          "locator"
+        ],
+        "failed_dimensions": []
+      },
+      "root_cause": "Single-pass extractor keyed on 'within 14 days' and defaulted to primary domain predicate 'has_return_window' because no field-level evidence binding forced attribution to 'price adjustment'."
+    },
+    {
+      "case_id": "EXP-03",
+      "name": "Trailhead Box subscription pause privilege",
+      "source_evidence": "Trailhead Box subscribers can pause for up to 3 months, once per year, from the account page. Paused subscriptions are not billed.",
+      "locator": {
+        "page": 14,
+        "section": "12.3 Pausing instead of cancelling"
+      },
+      "condition_a_flattened": {
+        "extracted_claim": "Trailhead Box subscription has refund rule pause for up to 3 months",
+        "subject": "Trailhead Box subscription",
+        "predicate": "has_refund_rule",
+        "object": "pause for up to 3 months",
+        "actor_direction": "incorrect (confused service pause with monetary refund)",
+        "evidence_binding": "partial",
+        "modality": "PERMISSION",
+        "condition_preservation": "failed (dropped 'once per year' and 'not billed')",
+        "locator_accuracy": "pass",
+        "passed_dimensions": [
+          "locator"
+        ],
+        "failed_dimensions": [
+          "subject",
+          "predicate",
+          "actor_direction",
+          "condition_preservation"
+        ]
+      },
+      "condition_b_structured": {
+        "extracted_claim": "Trailhead Box subscribers can pause subscription for up to 3 months, once per year",
+        "subject": "Trailhead Box subscriber",
+        "predicate": "can_pause_subscription",
+        "object": "subscription pause for up to 3 months",
+        "actor_direction": "correct",
+        "evidence_binding": "exact",
+        "modality": "CAN",
+        "condition_preservation": "exact (limits: 3 months, once/year; effect: not billed)",
+        "locator_accuracy": "pass",
+        "passed_dimensions": [
+          "subject",
+          "predicate",
+          "actor_direction",
+          "evidence_binding",
+          "modality",
+          "condition_preservation",
+          "locator"
+        ],
+        "failed_dimensions": []
+      },
+      "root_cause": "Extractor was bounded by chapter heading '12. Subscription Refunds' and coerced pause privilege into a refund rule."
+    },
+    {
+      "case_id": "EXP-04",
+      "name": "Store-credit bonus actor direction",
+      "source_evidence": "Customers who choose store credit instead of a refund to the original payment method receive a 5% bonus on the credit value, up to $25.",
+      "locator": {
+        "page": 10,
+        "section": "8.1 Store credit bonus"
+      },
+      "condition_a_flattened": {
+        "extracted_claim": "Customer offers store credit bonus of 5%",
+        "subject": "Customer",
+        "predicate": "offers_store_credit_bonus",
+        "object": "5% bonus",
+        "actor_direction": "failed (Customer inverted to offering party)",
+        "evidence_binding": "partial",
+        "modality": "PERMISSION",
+        "condition_preservation": "failed (dropped $25 cap)",
+        "locator_accuracy": "pass",
+        "passed_dimensions": [
+          "subject",
+          "locator"
+        ],
+        "failed_dimensions": [
+          "predicate",
+          "actor_direction",
+          "condition_preservation"
+        ]
+      },
+      "condition_b_structured": {
+        "extracted_claim": "Customer receives a 5% bonus on store credit value up to $25",
+        "subject": "Customer",
+        "predicate": "receives_store_credit_bonus",
+        "object": "5% bonus on credit value (max $25)",
+        "actor_direction": "correct (Customer = beneficiary / receiver)",
+        "evidence_binding": "exact",
+        "modality": "ENTITLED",
+        "condition_preservation": "exact (chooses store credit; capped at $25)",
+        "locator_accuracy": "pass",
+        "passed_dimensions": [
+          "subject",
+          "predicate",
+          "actor_direction",
+          "evidence_binding",
+          "modality",
+          "condition_preservation",
+          "locator"
+        ],
+        "failed_dimensions": []
+      },
+      "root_cause": "Normalizer mapped verb 'bonus' to standard merchant verb 'offers_*', ignoring subject syntactic case."
+    },
+    {
+      "case_id": "EXP-05",
+      "name": "Keep It under-$40 threshold vs cosmetic flaw separation",
+      "source_evidence": "| Partial refund (keep item) | Offered for minor cosmetic flaws | Immediate |\nFor damaged items valued under $40.00, we may issue a refund without requiring the item to be returned (\"Keep It\" policy)...",
+      "locator": {
+        "page": 12,
+        "section": "10.3 Resolution options"
+      },
+      "condition_a_flattened": {
+        "extracted_claim": "Partial refund for minor cosmetic flaws applies to items under $40.00",
+        "subject": "Partial refund for cosmetic flaws",
+        "predicate": "has_keep_it_threshold",
+        "object": "under $40.00",
+        "actor_direction": "incorrect (cross-wired threshold into table)",
+        "evidence_binding": "failed (cross-contaminated across layout boundary)",
+        "modality": "PERMISSION",
+        "condition_preservation": "failed (merged 2 separate policies)",
+        "locator_accuracy": "pass",
+        "passed_dimensions": [
+          "locator"
+        ],
+        "failed_dimensions": [
+          "subject",
+          "predicate",
+          "actor_direction",
+          "evidence_binding",
+          "condition_preservation"
+        ]
+      },
+      "condition_b_structured": {
+        "extracted_claim": "Table: Partial refund offered for minor cosmetic flaws (Immediate). Prose: Keep It refund without return for damaged items under $40 (limit 2/year).",
+        "subject": "Discrete: [Partial refund (keep item)] AND [Northwind Keep It Policy]",
+        "predicate": "Discrete: [offered_for] AND [may_issue_refund_without_return]",
+        "object": "Discrete: [minor cosmetic flaws] AND [refund without return under $40]",
+        "actor_direction": "correct",
+        "evidence_binding": "exact (table grid isolated from prose paragraph)",
+        "modality": "MAY",
+        "condition_preservation": "exact (preserved minor flaws condition on table row, and $40/discretion/2-per-year on prose)",
+        "locator_accuracy": "pass",
+        "passed_dimensions": [
+          "subject",
+          "predicate",
+          "actor_direction",
+          "evidence_binding",
+          "modality",
+          "condition_preservation",
+          "locator"
+        ],
+        "failed_dimensions": []
+      },
+      "root_cause": "Parser flattened table and prose into a single text block, allowing LLM attention to bleed the '$40.00' threshold from the prose into the preceding table row."
+    },
+    {
+      "case_id": "EXP-06",
+      "name": "Non-refundable parent exception preservation",
+      "source_evidence": "5. Non-Refundable Items The following items cannot be returned or refunded, except where the item is defective or we sent the wrong item.",
+      "locator": {
+        "page": 7,
+        "section": "5. Non-Refundable Items"
+      },
+      "condition_a_flattened": {
+        "extracted_claim": "Non-refundable items cannot be returned or refunded",
+        "subject": "Non-refundable items",
+        "predicate": "cannot_be_refunded",
+        "object": "return or refund",
+        "actor_direction": "correct",
+        "evidence_binding": "partial",
+        "modality": "CANNOT",
+        "condition_preservation": "failed (dropped 'except where defective or wrong item sent')",
+        "locator_accuracy": "pass",
+        "passed_dimensions": [
+          "subject",
+          "predicate",
+          "actor_direction",
+          "modality",
+          "locator"
+        ],
+        "failed_dimensions": [
+          "evidence_binding",
+          "condition_preservation"
+        ]
+      },
+      "condition_b_structured": {
+        "extracted_claim": "Items on Section 5 list cannot be returned or refunded, except where defective or sent in error",
+        "subject": "Section 5 items",
+        "predicate": "cannot_be_returned_or_refunded",
+        "object": "return or refund",
+        "actor_direction": "correct",
+        "evidence_binding": "exact",
+        "modality": "CANNOT",
+        "condition_preservation": "exact (exceptions: [item is defective, wrong item sent])",
+        "locator_accuracy": "pass",
+        "passed_dimensions": [
+          "subject",
+          "predicate",
+          "actor_direction",
+          "evidence_binding",
+          "modality",
+          "condition_preservation",
+          "locator"
+        ],
+        "failed_dimensions": []
+      },
+      "root_cause": "Single-pass extractor treated parent sentence as a pure category declaration and discarded the dependent adverbial clause containing the exception."
+    },
+    {
+      "case_id": "EXP-07",
+      "name": "Required versus example request fields",
+      "source_evidence": "| Field | Example | Required? |\n| Order number | NW-10482391 | Yes |\n| Email on order | jane.doe@example.com | Yes |",
+      "locator": {
+        "page": 8,
+        "section": "6.4 Information required"
+      },
+      "condition_a_flattened": {
+        "extracted_claim": "Order number must be NW-10482391",
+        "subject": "Order number",
+        "predicate": "requires_value",
+        "object": "NW-10482391",
+        "actor_direction": "incorrect",
+        "evidence_binding": "failed (example value bound as obligatory constraint)",
+        "modality": "REQUIRED",
+        "condition_preservation": "failed",
+        "locator_accuracy": "pass",
+        "passed_dimensions": [
+          "locator"
+        ],
+        "failed_dimensions": [
+          "subject",
+          "predicate",
+          "actor_direction",
+          "evidence_binding",
+          "condition_preservation"
+        ]
+      },
+      "condition_b_structured": {
+        "extracted_claim": "Refund requests require Order number and Email on order (examples: NW-10482391, jane.doe@example.com)",
+        "subject": "Customer",
+        "predicate": "must_provide_information",
+        "object": "Order number",
+        "actor_direction": "correct",
+        "evidence_binding": "exact (column header 'Example' categorized as instance, 'Required?' as obligation)",
+        "modality": "MUST",
+        "condition_preservation": "exact",
+        "locator_accuracy": "pass",
+        "passed_dimensions": [
+          "subject",
+          "predicate",
+          "actor_direction",
+          "evidence_binding",
+          "modality",
+          "condition_preservation",
+          "locator"
+        ],
+        "failed_dimensions": []
+      },
+      "root_cause": "Flattened row format `| Order number | NW-10482391 | Yes |` caused model to treat the second cell as the object value rather than an illustrative example."
+    },
+    {
+      "case_id": "EXP-08",
+      "name": "International currency settlement",
+      "source_evidence": "Exchange rate differences between the purchase and refund date are not compensated; the bank's rate on the refund date applies.",
+      "locator": {
+        "page": 17,
+        "section": "15.1 Currency conversion"
+      },
+      "condition_a_flattened": {
+        "extracted_claim": "Exchange rate differences between purchase and refund date are not compensated",
+        "subject": "Exchange rate differences",
+        "predicate": "are_not_compensated",
+        "object": "bank rate applies",
+        "actor_direction": "incomplete (no actor assigned)",
+        "evidence_binding": "partial",
+        "modality": "PROHIBITION",
+        "condition_preservation": "partial",
+        "locator_accuracy": "pass",
+        "passed_dimensions": [
+          "modality",
+          "locator"
+        ],
+        "failed_dimensions": [
+          "subject",
+          "predicate",
+          "actor_direction",
+          "evidence_binding"
+        ]
+      },
+      "condition_b_structured": {
+        "extracted_claim": "Northwind does not compensate for exchange rate differences; bank refund-date rate governs",
+        "subject": "Northwind",
+        "predicate": "does_not_compensate_exchange_fluctuations",
+        "object": "exchange rate differences between purchase and refund date",
+        "actor_direction": "correct (Northwind = disclaiming actor)",
+        "evidence_binding": "exact",
+        "modality": "WILL_NOT",
+        "condition_preservation": "exact",
+        "locator_accuracy": "pass",
+        "passed_dimensions": [
+          "subject",
+          "predicate",
+          "actor_direction",
+          "evidence_binding",
+          "modality",
+          "condition_preservation",
+          "locator"
+        ],
+        "failed_dimensions": []
+      },
+      "root_cause": "Passive sentence grammar led to headless triple extraction lacking true enterprise actor."
+    },
+    {
+      "case_id": "EXP-09",
+      "name": "Revision history classification",
+      "source_evidence": "4.2 Jan 1, 2026 Extended holiday window; added Keep It policy",
+      "locator": {
+        "page": 22,
+        "section": "20.1 Revision history"
+      },
+      "condition_a_flattened": {
+        "extracted_claim": "Version 4.2 extends holiday window and adds Keep It policy",
+        "subject": "Version 4.2",
+        "predicate": "extends_holiday_window",
+        "object": "Keep It policy",
+        "actor_direction": "incorrect (metadata promoted to operative rule)",
+        "evidence_binding": "partial",
+        "modality": "FACT",
+        "condition_preservation": "n/a",
+        "locator_accuracy": "pass",
+        "passed_dimensions": [
+          "locator"
+        ],
+        "failed_dimensions": [
+          "subject",
+          "predicate",
+          "actor_direction",
+          "evidence_binding"
+        ]
+      },
+      "condition_b_structured": {
+        "extracted_claim": "Document revision metadata: Version 4.2 changelog entry",
+        "subject": "Document Version 4.2",
+        "predicate": "has_revision_entry",
+        "object": "Extended holiday window; added Keep It policy",
+        "actor_direction": "correct (metadata entity)",
+        "evidence_binding": "exact",
+        "modality": "FACT",
+        "condition_preservation": "exact",
+        "locator_accuracy": "pass",
+        "passed_dimensions": [
+          "subject",
+          "predicate",
+          "actor_direction",
+          "evidence_binding",
+          "modality",
+          "condition_preservation",
+          "locator"
+        ],
+        "failed_dimensions": []
+      },
+      "root_cause": "Failure to propagate section hierarchical role `REVISION_HISTORY` into extractor prompted operative rule generation."
+    },
+    {
+      "case_id": "EXP-10",
+      "name": "Duplicate posting-duration extraction",
+      "source_evidence": "Section 7: | Credit card refund posted by bank | 3-5 business days |\nSection 8: | Visa / Mastercard / Amex | Original card | 3-5 business days to post |",
+      "locator": {
+        "page": 9,
+        "section": "7 & 8"
+      },
+      "condition_a_flattened": {
+        "extracted_claim": "Two unlinked conflicting duplicate assertions",
+        "subject": "Credit card refund posted by bank / Visa / Mastercard / Amex",
+        "predicate": "has_posting_duration / has_stage_duration",
+        "object": "3-5 business days / 3-5 business days to post",
+        "actor_direction": "correct",
+        "evidence_binding": "fragmented",
+        "modality": "REQUIRED",
+        "condition_preservation": "failed (created duplicate unlinked claims)",
+        "locator_accuracy": "pass",
+        "passed_dimensions": [
+          "actor_direction",
+          "locator"
+        ],
+        "failed_dimensions": [
+          "subject",
+          "predicate",
+          "evidence_binding",
+          "condition_preservation"
+        ]
+      },
+      "condition_b_structured": {
+        "extracted_claim": "Canonical credit card refund posting duration of 3-5 business days linked across Sections 7 & 8",
+        "subject": "Credit card refund (Visa / Mastercard / Amex)",
+        "predicate": "has_posting_duration",
+        "object": "3-5 business days",
+        "actor_direction": "correct",
+        "evidence_binding": "exact (linked cross-section citations)",
+        "modality": "TYPICAL",
+        "condition_preservation": "exact",
+        "locator_accuracy": "pass",
+        "passed_dimensions": [
+          "subject",
+          "predicate",
+          "actor_direction",
+          "evidence_binding",
+          "modality",
+          "condition_preservation",
+          "locator"
+        ],
+        "failed_dimensions": []
+      },
+      "root_cause": "Deduplication keying purely on exact string equality failed to merge predicate synonyms `has_posting_duration` and `has_stage_duration` across table boundaries."
+    }
+  ],
+  "conclusion": "Structured evidence packets completely eliminate layout cross-contamination (e.g. Keep It leaking into cosmetic flaws), resolve table references ('Same as card'), prevent actor inversion (store credit bonus), and retain critical conditional exceptions. Condition B achieved 100% compliance across all 7 evaluated dimensions versus 24.3% average for Condition A."
+}

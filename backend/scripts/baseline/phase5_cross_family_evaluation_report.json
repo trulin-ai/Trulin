@@ -1,0 +1,175 @@
+{
+  "pipeline_status": "PASS",
+  "timestamp": "2026-11-10T16:57:53.370489+00:00",
+  "contamination_audit": {
+    "status": "PASS",
+    "cross_family_document_isolation": true,
+    "cross_family_text_span_isolation": true,
+    "document_violations": [],
+    "span_violations": [],
+    "total_documents_checked": 12,
+    "total_units_checked": 250
+  },
+  "family_evaluations": {
+    "all_family_targets_passed": true,
+    "timestamp": "2026-11-10T16:57:53.369410+00:00",
+    "scorecards": [
+      {
+        "family_id": "FAM-1",
+        "family_name": "Commercial Contracts & MSAs",
+        "target_recall": 0.9,
+        "actual_recall": 1.0,
+        "target_lifecycle": 0.95,
+        "actual_lifecycle": 1.0,
+        "recall_passed": true,
+        "lifecycle_passed": true,
+        "total_operative_units": 12,
+        "matched_operative_units": 12,
+        "total_claims_evaluated": 71,
+        "gate_pass_rate": 1.0,
+        "gate_failures": {}
+      },
+      {
+        "family_id": "FAM-2",
+        "family_name": "HR & Employment Policies",
+        "target_recall": 0.95,
+        "actual_recall": 1.0,
+        "target_lifecycle": 0.98,
+        "actual_lifecycle": 1.0,
+        "recall_passed": true,
+        "lifecycle_passed": true,
+        "total_operative_units": 16,
+        "matched_operative_units": 16,
+        "total_claims_evaluated": 63,
+        "gate_pass_rate": 1.0,
+        "gate_failures": {}
+      },
+      {
+        "family_id": "FAM-3",
+        "family_name": "Invoices & Commercial Billing",
+        "target_recall": 0.95,
+        "actual_recall": 1.0,
+        "target_lifecycle": 0.98,
+        "actual_lifecycle": 1.0,
+        "recall_passed": true,
+        "lifecycle_passed": true,
+        "total_operative_units": 8,
+        "matched_operative_units": 8,
+        "total_claims_evaluated": 49,
+        "gate_pass_rate": 1.0,
+        "gate_failures": {}
+      },
+      {
+        "family_id": "FAM-4",
+        "family_name": "Statutory & Compliance Guidelines",
+        "target_recall": 0.9,
+        "actual_recall": 1.0,
+        "target_lifecycle": 0.95,
+        "actual_lifecycle": 1.0,
+        "recall_passed": true,
+        "lifecycle_passed": true,
+        "total_operative_units": 10,
+        "matched_operative_units": 10,
+        "total_claims_evaluated": 67,
+        "gate_pass_rate": 1.0,
+        "gate_failures": {}
+      }
+    ]
+  },
+  "negative_control_suite": {
+    "all_negative_controls_failed_closed": true,
+    "total_cases_evaluated": 8,
+    "failed_closed_count": 8,
+    "cases": [
+      {
+        "case_id": "NEG-FAM1-01",
+        "family_id": "FAM-1",
+        "defect_description": "Liability cap currency amount altered ($250,000 asserted vs $500,000 in source)",
+        "gate_passed": false,
+        "failed_closed": true,
+        "expected_error_code": "ERR_VALUE_FIDELITY_MISMATCH",
+        "actual_errors": [
+          "ERR_VALUE_FIDELITY_MISMATCH"
+        ]
+      },
+      {
+        "case_id": "NEG-FAM1-02",
+        "family_id": "FAM-1",
+        "defect_description": "Inverted actor role: Customer asserts offering provider store credit bonus",
+        "gate_passed": false,
+        "failed_closed": true,
+        "expected_error_code": "ERR_ACTOR_ROLE_INVERSION",
+        "actual_errors": [
+          "ERR_ACTOR_ROLE_INVERSION"
+        ]
+      },
+      {
+        "case_id": "NEG-FAM2-01",
+        "family_id": "FAM-2",
+        "defect_description": "Prohibition predicate asserted against affirmative phrasing lacking negative token",
+        "gate_passed": false,
+        "failed_closed": true,
+        "expected_error_code": "ERR_POLARITY_INVERSION",
+        "actual_errors": [
+          "ERR_POLARITY_INVERSION"
+        ]
+      },
+      {
+        "case_id": "NEG-FAM2-02",
+        "family_id": "FAM-2",
+        "defect_description": "Mandatory written approval condition omitted from conditional notice clause",
+        "gate_passed": false,
+        "failed_closed": true,
+        "expected_error_code": "ERR_CONDITION_LOST",
+        "actual_errors": [
+          "ERR_CONDITION_LOST"
+        ]
+      },
+      {
+        "case_id": "NEG-FAM3-01",
+        "family_id": "FAM-3",
+        "defect_description": "Table column header does not bind to asserted tax predicate",
+        "gate_passed": false,
+        "failed_closed": true,
+        "expected_error_code": "ERR_TABLE_BINDING_MISMATCH",
+        "actual_errors": [
+          "ERR_TABLE_BINDING_MISMATCH",
+          "ERR_MODALITY_MISMATCH"
+        ]
+      },
+      {
+        "case_id": "NEG-FAM3-02",
+        "family_id": "FAM-3",
+        "defect_description": "Completely missing verbatim evidence quote for invoice payment term",
+        "gate_passed": false,
+        "failed_closed": true,
+        "expected_error_code": "ERR_EVIDENCE_MISSING",
+        "actual_errors": [
+          "ERR_EVIDENCE_MISSING"
+        ]
+      },
+      {
+        "case_id": "NEG-FAM4-01",
+        "family_id": "FAM-4",
+        "defect_description": "Banned generic catch-all predicate 'has_summary' on contract tenure clause",
+        "gate_passed": false,
+        "failed_closed": true,
+        "expected_error_code": "ERR_PREDICATE_CATCH_ALL",
+        "actual_errors": [
+          "ERR_PREDICATE_CATCH_ALL"
+        ]
+      },
+      {
+        "case_id": "NEG-FAM4-02",
+        "family_id": "FAM-4",
+        "defect_description": "Unverified candidate claim silently upgraded to verified status",
+        "gate_passed": false,
+        "failed_closed": true,
+        "expected_error_code": "ERR_NO_SILENT_UPGRADE_VIOLATION",
+        "actual_errors": [
+          "ERR_NO_SILENT_UPGRADE_VIOLATION"
+        ]
+      }
+    ]
+  }
+}

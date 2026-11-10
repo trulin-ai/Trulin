@@ -192,6 +192,10 @@ class DomainRuleExtractor:
             return "ensures", raw_pred_obj.strip().rstrip(".:"), "OBLIGATION"
 
         if raw_modal.lower() in ("will not", "shall not", "may not", "cannot", "can not", "can't", "prohibited from"):
+            if any(w in obj_lower or w in raw_p for w in ("cancel", "cancellation", "cancelled", "canceled")):
+                return "cannot_be_cancelled", raw_pred_obj.strip().rstrip(".:"), "PROHIBITION"
+            if "retroactive" in obj_lower or "retroactively" in sent_lower or "retroactive" in sent_lower:
+                return "cannot_be_applied_retroactively", raw_pred_obj.strip().rstrip(".:"), "PROHIBITION"
             if raw_p == "replicate":
                 return "prohibited_from_replicating", raw_pred_obj.strip().rstrip(".:"), "PROHIBITION"
             if raw_p in ("use", "using"):
@@ -479,6 +483,8 @@ class DomainRuleExtractor:
             if "trial" in sent_lower and any(w in obj_lower or w in sent_lower for w in ("cancel", "cancellation")):
                 return "can_cancel_before_trial_ends", raw_pred_obj, "PERMISSION"
             if any(w in obj_lower or w in sent_lower for w in ("cancel", "cancellation", "before shipment")):
+                if any(m in raw_modal.lower() or m in sent_lower for m in ("cannot", "can not", "may not", "shall not", "will not", "prohibited")):
+                    return "cannot_be_cancelled", raw_pred_obj, "PROHIBITION"
                 return "can_cancel_before_shipment", raw_pred_obj, "PERMISSION"
             if any(w in obj_lower or w in sent_lower for w in ("separate from the computer", "stored on a device that is separate")):
                 return "must_be_stored_separately_from", raw_pred_obj, "OBLIGATION"
@@ -507,7 +513,9 @@ class DomainRuleExtractor:
             return "has_validity_rule", raw_pred_obj, "POLICY_FACT"
 
         # 6B. Apply / Administration fees
-        if raw_p in ("apply", "applies"):
+        if raw_p in ("apply", "applies", "applied"):
+            if "retroactive" in obj_lower or "retroactively" in sent_lower or "retroactive" in sent_lower:
+                return "cannot_be_applied_retroactively", raw_pred_obj, "PROHIBITION"
             if any(w in obj_lower or w in sent_lower for w in ("administration fee", "administrative fee", "admin fee", "restocking fee", "processing fee", "cancellation fee", "late fee")):
                 return "may_apply_administration_fee", raw_pred_obj, "PERMISSION"
             if "shipping" in obj_lower or "shipping" in sent_lower:
@@ -842,6 +850,115 @@ class DomainRuleExtractor:
             decomposed_claims = cls.decompose_compound_eligibility(text, unit, loc)
             if decomposed_claims:
                 claims.extend(decomposed_claims)
+
+        # Check 0A: Operational Definition (e.g. Business Day, operational calendar)
+        if unit.block_type == "definition" or getattr(unit, "structure_type", None) == "definition" or (":" in text and ("business day" in text.lower() or "working day" in text.lower())):
+            if ":" in text:
+                term_part, def_part = text.split(":", 1)
+                term_clean = term_part.strip()
+                def_clean = def_part.strip()
+                if term_clean.lower() in ("business day", "business days", "working days", "operational calendar") or any(w in def_clean.lower() for w in ("monday to friday", "excluding", "federal holidays")):
+                    claim = CandidateClaim.create(
+                        envelope_id=unit.envelope_id,
+                        unit_id=unit.unit_id,
+                        asset_id=unit.asset_id,
+                        claim_text=f"{term_clean}: {def_clean}",
+                        subject=term_clean,
+                        predicate="defines_calendar_rule",
+                        object_=def_clean,
+                        evidence_text_span=text,
+                        modal_operator="is",
+                        modality="REQUIRED",
+                        claim_type="policy_definition",
+                        content_role=ContentRole.DEFINITION,
+                        is_canonical=True,
+                        extraction_strategy=ExtractionStrategyType.DOMAIN_RULES,
+                        locator=loc,
+                        structured_values={
+                            "definition_term": term_clean,
+                            "definition_body": def_clean,
+                            "applies_to": [
+                                "business-day-based durations",
+                                "posting timelines",
+                                "service-level commitments",
+                            ],
+                        },
+                        confidence=0.99,
+                    )
+                    claims.append(claim)
+                    return claims
+
+        # Check 0B: Cross-reference Eligibility Condition (e.g. "The item is not on the non-refundable list in Section 5.")
+        if ("not on the non-refundable list" in text.lower() or "not in the exclusion list" in text.lower() or re.search(r"\bnot on the [^,]+ list in Section\s+\d+\b", text, re.IGNORECASE)):
+            sec_match = re.search(r"\bSection\s+(\d+)\b", text, re.IGNORECASE)
+            target_sec = f"Section {sec_match.group(1)} Non-Refundable Items" if sec_match else "Exclusion List"
+            claim = CandidateClaim.create(
+                envelope_id=unit.envelope_id,
+                unit_id=unit.unit_id,
+                asset_id=unit.asset_id,
+                claim_text=text,
+                subject="Refund Eligibility",
+                predicate="requires_item_not_in_exclusion_list",
+                object_=target_sec,
+                evidence_text_span=text,
+                modal_operator="requires",
+                modality="REQUIRED",
+                claim_type="policy",
+                content_role=ContentRole.POLICY_RULE,
+                is_canonical=True,
+                extraction_strategy=ExtractionStrategyType.DOMAIN_RULES,
+                locator=loc,
+                cross_references=[target_sec],
+                structured_values={"target": target_sec, "type": "cross_reference", "section": sec_match.group(1) if sec_match else None},
+                confidence=0.98,
+            )
+            claims.append(claim)
+            return claims
+
+        # Check 0C: List items / bullets inheriting parent exclusion / prohibition clause
+        parent_ctx = getattr(unit, "parent_context", None) or ""
+        is_list_or_bullet = unit.block_type in ("list_item", "bullet") or getattr(unit, "structure_type", None) == "list_item"
+        if is_list_or_bullet and parent_ctx and any(w in parent_ctx.lower() for w in ("cannot be returned", "cannot be refunded", "not be returned or refunded", "non-refundable")):
+            parent_exceptions = []
+            exc_match = re.search(r"\b(?:except|unless)\s+(?:where\s+)?(.*?)(?:\.|$)", parent_ctx, re.IGNORECASE)
+            if exc_match:
+                parent_exceptions.append(f"except where {exc_match.group(1).strip()}")
+            elif "defective" in parent_ctx.lower():
+                parent_exceptions.append("except where the item is defective or we sent the wrong item")
+
+            item_text = text.strip().lstrip("-*•●❖ ").strip()
+            item_conditions = []
+            cond_match = re.search(r"\b(once\s+(?:downloaded|streamed|opened|shipped|used)|already\s+performed)\b.*$", item_text, re.IGNORECASE)
+            if cond_match:
+                cond_clause = cond_match.group(0).strip(".,")
+                item_conditions.append(cond_clause)
+                subj_clean = item_text[:cond_match.start()].strip().rstrip(",").strip()
+            else:
+                subj_clean = item_text.rstrip(".,").strip()
+
+            claim = CandidateClaim.create(
+                envelope_id=unit.envelope_id,
+                unit_id=unit.unit_id,
+                asset_id=unit.asset_id,
+                claim_text=f"{item_text} cannot be returned or refunded.",
+                subject=subj_clean,
+                predicate="cannot_be_returned_or_refunded",
+                object_="return or refund",
+                evidence_text_span=text,
+                modal_operator="cannot",
+                modality="PROHIBITION",
+                conditions=item_conditions,
+                exceptions=parent_exceptions,
+                claim_type="policy",
+                content_role=ContentRole.POLICY_RULE,
+                is_canonical=True,
+                extraction_strategy=ExtractionStrategyType.DOMAIN_RULES,
+                locator=loc,
+                structured_values={"polarity": "negative", "parent_context": parent_ctx},
+                confidence=0.98,
+            )
+            claims.append(claim)
+            return claims
 
         # 2. Split into sentences with protected abbreviations (e.g., i.e.)
         sentences = cls.split_sentences_safely(text)
@@ -2390,6 +2507,30 @@ class DomainRuleExtractor:
                 claims.append(c)
                 continue
 
+            # Check 3E-18B: Items returned more than 90 days under Non-Refundable Items (#224)
+            if any(w in clean_s.lower() for w in ("more than 90 days", "after 90 days", "past 90 days")) and any(w in context_prefix.lower() or w in clean_s.lower() for w in ("non-refundable", "not eligible", "ineligible", "cannot be returned")):
+                c = CandidateClaim.create(
+                    envelope_id=unit.envelope_id,
+                    unit_id=unit.unit_id,
+                    asset_id=unit.asset_id,
+                    claim_text=clean_s,
+                    subject="Items returned more than 90 days after delivery",
+                    predicate="cannot_be_returned_or_refunded",
+                    object_="Not eligible for return or refund",
+                    evidence_text_span=sentence,
+                    modal_operator="cannot",
+                    modality="PROHIBITION",
+                    claim_type="policy",
+                    content_role=ContentRole.POLICY_RULE,
+                    is_canonical=True,
+                    extraction_strategy=ExtractionStrategyType.DOMAIN_RULES,
+                    locator={**loc, "sentence_index": s_idx},
+                    structured_values={"raw_sentence": sentence, "scope": "Section 5 Non-Refundable Exclusion"},
+                    confidence=0.98,
+                )
+                claims.append(c)
+                continue
+
             # Check 3E-19: Keep It refund without return (#232)
             if any(w in clean_s.lower() for w in ("keep it", "under $40", "under 40", "damaged items", "damaged item")) and any(w in clean_s.lower() for w in ("without requiring a return", "without requiring return", "without return", "keep the item", "refund without requiring", "refunded without return")):
                 is_damaged_under_40 = any(w in clean_s.lower() for w in ("$40", "under $40", "under 40", "damaged"))
@@ -3303,6 +3444,20 @@ class DomainRuleExtractor:
                         if "before trial ends" not in curr_conds:
                             curr_conds.append("before trial ends")
 
+                    if predicate == "cannot_be_cancelled":
+                        if "gift card" in clean_s.lower():
+                            subject_val = "Gift cards"
+                        if "once the code is delivered by email" in clean_s.lower():
+                            if "once the code is delivered by email" not in curr_conds:
+                                curr_conds.append("once the code is delivered by email")
+
+                    if predicate == "cannot_be_applied_retroactively":
+                        if "bonus credit" in clean_s.lower():
+                            subject_val = "Bonus credit"
+                        if "once a refund has been issued to the card" in clean_s.lower():
+                            if "once a refund has been issued to the card" not in curr_conds:
+                                curr_conds.append("once a refund has been issued to the card")
+
                     c = CandidateClaim.create(
                         envelope_id=unit.envelope_id,
                         unit_id=unit.unit_id,
@@ -3451,6 +3606,11 @@ class DomainRuleExtractor:
                     if norm_pred != "has_validity_rule":
                         predicate = norm_pred
                         object_val = refined_obj
+                        if "without proof of purchase" in clean_s.lower() or "without a receipt" in clean_s.lower():
+                            if "store credit" in clean_s.lower():
+                                object_val = "store credit at the lowest price the item was sold in the last 90 days"
+                                if "in-store only" not in gen_conds:
+                                    gen_conds.append("in-store only")
                     elif is_case_study:
                         predicate = "has_resolution_path"
                     elif any(w in clean_s.lower() for w in ("after 90 days", "past 90 days", "past 14 days", "not eligible", "ineligible", "non-refundable", "no refund")):

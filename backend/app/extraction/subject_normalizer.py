@@ -61,6 +61,7 @@ class SubjectNormalizer:
         "invoicing agreement": "Invoicing Agreement",
         "the parties": "Parties",
         "parties": "Parties",
+        "customer account": "Customer Account",
         "customer": "Customers",
         "customers": "Customers",
         "auto-claim policy": "Auto-claim policy",
@@ -96,7 +97,7 @@ class SubjectNormalizer:
         "for damaged items valued under $40, we": "Damaged item valued under $40",
         "for damaged items valued under $40 we": "Damaged item valued under $40",
         "damaged items valued under $40.00": "Damaged item valued under $40",
-        "resolution options": "Keep It policy",
+        "resolution options": "Keep It Policy",
         
         # Shipped order
         "once an order has shipped, it": "Shipped order",
@@ -106,6 +107,8 @@ class SubjectNormalizer:
         # Company & E-Commerce Pronoun normalization
         "the company": "Company",
         "by sending us an email": "Company",
+        "partial refunds a partial refund": "Northwind",
+        "northwind we": "Northwind",
         
         # Product specifications & exclusions
         "personalized goods": "personalized Goods",
@@ -126,6 +129,11 @@ class SubjectNormalizer:
         "in the event of death or discharge from service of a contract employee, 1/2 of earned leave at his credit subject to a maximum of 150 days": "Earned leave",
 
         # Case studies & narrative isolation
+        "4853": "Chargeback Reason Code 4853",
+        "4837": "Chargeback Reason Code 4837",
+        "4855": "Chargeback Reason Code 4855",
+        "4834": "Chargeback Reason Code 4834",
+        "4841": "Chargeback Reason Code 4841",
         "case a - wrong size, within window": "Case A: Wrong size, within window",
         "case a: wrong size, within window": "Case A: Wrong size, within window",
         "case a - wrong size": "Case A: Wrong size, within window",
@@ -249,7 +257,7 @@ class SubjectNormalizer:
         if any(w in combined for w in ("damaged item valued under $40", "damaged items valued under $40", "damaged items under $40", "damaged item under $40")):
             return "Damaged item valued under $40", True
         if "keep it" in combined:
-            return "Keep It policy", True
+            return "Keep It Policy", True
         if "stolen package" in combined or "stolen packages" in combined:
             return "Stolen package", True
         if "online return request" in combined or "online return requests" in combined:

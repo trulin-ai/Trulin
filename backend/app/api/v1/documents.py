@@ -44,6 +44,22 @@ router = APIRouter(prefix="/documents", tags=["documents"])
 STORAGE_UPLOADS_DIR = Path(__file__).resolve().parents[3] / "storage" / "uploads"
 
 
+async def _get_claims_counts_for_documents(
+    db: AsyncSession, doc_ids: list[uuid.UUID]
+) -> dict[uuid.UUID, int]:
+    """Efficiently counts extracted claims grouped by document ID."""
+    if not doc_ids:
+        return {}
+    stmt = (
+        select(DocumentVersion.document_id, func.count(Claim.id))
+        .join(Claim, Claim.document_version_id == DocumentVersion.id)
+        .where(DocumentVersion.document_id.in_(doc_ids))
+        .group_by(DocumentVersion.document_id)
+    )
+    result = await db.execute(stmt)
+    return {row[0]: int(row[1]) for row in result.all()}
+
+
 async def _ensure_source_exists(db: AsyncSession, organization_id: uuid.UUID, source_id: uuid.UUID | None) -> uuid.UUID:
     """Finds or creates a dedicated file-upload DataSource for the organization so uploaded PDFs/files never mix with DB connectors."""
     # Ensure organization exists
@@ -735,19 +751,25 @@ async def upload_and_extract_document(
     )
 
     total_claims_count = len(extracted_claims)
-    if layers_payload and layers_payload.get("layer_5_extraction", {}).get("claims_extracted", 0) > 0:
-        total_claims_count = max(total_claims_count, layers_payload["layer_5_extraction"]["claims_extracted"])
+    doc_response.claims_count = total_claims_count
 
     folder_res = await db.execute(select(Folder).where(Folder.id == resolved_folder_id))
     folder_obj = folder_res.scalar_one_or_none()
     folder_name = folder_obj.name if folder_obj else "Inbox"
+
+    claims_payload = []
+    for c in extracted_claims:
+        cd = c.model_dump()
+        if not cd.get("document_id"):
+            cd["document_id"] = str(document.id)
+        claims_payload.append(cd)
 
     return {
         "success": True,
         "document": doc_response.model_dump(),
         "current_version": version_response.model_dump(),
         "claims_extracted_count": total_claims_count,
-        "claims": [c.model_dump() for c in extracted_claims],
+        "claims": claims_payload,
         "duration_ms": duration_ms,
         "layers": layers_payload,
         "folder_id": str(resolved_folder_id),
@@ -875,7 +897,10 @@ async def get_document(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Document not found",
         )
-    return DocumentResponse.model_validate(document)
+    claims_counts = await _get_claims_counts_for_documents(db, [document.id])
+    resp = DocumentResponse.model_validate(document)
+    resp.claims_count = claims_counts.get(document.id, 0)
+    return resp
 
 
 
@@ -1297,6 +1322,23 @@ async def get_document_artifacts(
             first_ev = c.evidence[0] if c.evidence else None
             section = getattr(first_ev, "section", "General") or "General"
             quote = getattr(first_ev, "text_span", None) or getattr(first_ev, "exact_quote", "") or ""
+            
+            # Phase 1a: Read-Path Stabilization
+            # Determine immutable persisted certification tier directly from database state / metadata
+            status_val = c.status.value if hasattr(c.status, "value") else str(c.status).lower()
+            metadata = getattr(c, "claim_metadata", {}) or {}
+            persisted_tier = metadata.get("certification_tier")
+            if not persisted_tier:
+                if status_val in ("verified", "active"):
+                    persisted_tier = "AUTOMATED_CERTIFIED"
+                elif status_val in ("rejected", "quarantined"):
+                    persisted_tier = "QUARANTINED"
+                else:
+                    persisted_tier = "REVIEW_REQUIRED"
+
+            is_canon = (persisted_tier == "AUTOMATED_CERTIFIED") and (status_val in ("verified", "active"))
+
+            # Dynamic evaluation is strictly diagnostic (revalidation_audit) and never mutates persisted_tier on read
             gate_res = ClaimGateEvaluator.evaluate(
                 claim_id=str(c.id),
                 subject=c.subject,
@@ -1304,33 +1346,41 @@ async def get_document_artifacts(
                 object_val=c.object,
                 claim_text=c.claim_text,
                 claim_type=getattr(c, "claim_type", "policy"),
-                status=c.status.value if hasattr(c.status, "value") else str(c.status),
-                metadata=getattr(c, "claim_metadata", {}) or {},
+                status=status_val,
+                metadata=metadata,
                 confidence=float(score),
             )
-            is_canon = gate_res.is_canonical and (c.status == ClaimStatus.VERIFIED or c.status == ClaimStatus.ACTIVE or getattr(c.status, "value", None) in ("verified", "active"))
-            tier = gate_res.certification_tier
-            if not is_canon and tier == "AUTOMATED_CERTIFIED":
-                tier = "REVIEW_REQUIRED"
+
+            revalidation_audit = {
+                "live_tier": gate_res.certification_tier,
+                "divergence_flag": (gate_res.certification_tier != persisted_tier),
+                "live_all_9_gates_passed": gate_res.all_9_gates_passed,
+                "live_rejection_reasons": gate_res.rejection_reasons,
+                "evaluator_version": "ClaimGateEvaluator_v3.2",
+                "persisted_tier": persisted_tier,
+            }
+
             claims_output.append({
                 "id": str(c.id),
+                "document_id": str(document.id),
                 "document_version_id": str(c.document_version_id),
                 "subject": c.subject or "General",
                 "predicate": c.predicate or "specifies",
                 "object": c.object or "",
                 "claim_text": c.claim_text,
-                "status": c.status.value if hasattr(c.status, "value") else str(c.status),
+                "status": status_val,
                 "trust_score": float(score),
                 "validity": str(validity),
                 "section": section,
                 "quote": quote,
                 "created_at": c.created_at.isoformat() if c.created_at else None,
                 "gates": gate_res.gates,
-                "all_9_gates_passed": gate_res.all_9_gates_passed,
+                "all_9_gates_passed": (persisted_tier == "AUTOMATED_CERTIFIED"),
                 "is_canonical": is_canon,
                 "agent_accessible": is_canon,
-                "certification_tier": tier,
-                "rejection_reasons": gate_res.rejection_reasons,
+                "certification_tier": persisted_tier,
+                "rejection_reasons": [] if persisted_tier == "AUTOMATED_CERTIFIED" else gate_res.rejection_reasons,
+                "revalidation_audit": revalidation_audit,
             })
 
     # Get sample content preview
@@ -1380,7 +1430,14 @@ async def list_documents(
         d for d in documents
         if include_archived or (d.status.value if hasattr(d.status, "value") else str(d.status)).lower() not in ("deleted", "inactive", "archived")
     ]
-    return [DocumentResponse.model_validate(d) for d in valid_docs]
+    doc_ids = [d.id for d in valid_docs]
+    claims_counts = await _get_claims_counts_for_documents(db, doc_ids)
+    results = []
+    for d in valid_docs:
+        model_obj = DocumentResponse.model_validate(d)
+        model_obj.claims_count = claims_counts.get(d.id, 0)
+        results.append(model_obj)
+    return results
 
 
 @router.get("/{document_id}/blast-radius")

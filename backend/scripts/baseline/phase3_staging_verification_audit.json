@@ -1,0 +1,54 @@
+{
+  "all_parity_checks_passed": true,
+  "total_claims": 224,
+  "status_counts": {
+    "verified": 140,
+    "candidate": 51,
+    "rejected": 31,
+    "conflicted": 2
+  },
+  "evidence_accounting": {
+    "total_claims": 224,
+    "claims_with_single_evidence": 221,
+    "claims_with_multiple_evidence": 3,
+    "multi_evidence_claims": [
+      120,
+      121,
+      122
+    ],
+    "claims_without_evidence": 0,
+    "total_evidence_records": 230,
+    "formula": "221 (single) + (3 claims * 3 quotes = 9) = 230 total evidence records",
+    "reconciliation_status": "EXACT_PARITY_VERIFIED"
+  },
+  "conflict_records_accounting": {
+    "total_conflict_records": 2,
+    "record_1_50_dollar_ambiguity": {
+      "claim_a_number": 73,
+      "claim_a_id": "f0e0206d-ce07-5507-815a-d3cdd361661d",
+      "claim_a_source": "Section 8.2 (p. 10) - Cash (in-store) up to $50",
+      "claim_b_id": "d03c897d-0e5f-56d9-8995-6d653d9a773b",
+      "claim_b_source": "FAQ Q7 / SRC-P20-02 (p. 20) - Cash refunds only under $50",
+      "code": "AMBIGUITY_PRESERVED",
+      "boundary": "exactly $50",
+      "resolution": "unresolved pending policy review"
+    },
+    "record_2_section_5_exclusions": {
+      "claim_a_number": 223,
+      "claim_a_id": "4f87a460-9b39-5055-ab06-d192073678ca",
+      "claim_a_source": "Section 5 (p. 7) Perishable goods past 14 days",
+      "claim_b_number": 224,
+      "claim_b_id": "eab88ee6-78ec-5bfb-9b31-c0646de5eaad",
+      "claim_b_source": "Section 5 (p. 7) Items returned past 90 days",
+      "code": "NON_REFUNDABLE_EXCLUSION_CONFLICT",
+      "resolution": "human_review_required"
+    }
+  },
+  "provenance_integrity": {
+    "artifact_sha256": "0f98fa810ee626e86d5f46a556f7501d7788d0ead56657808dba9a43da257d15",
+    "source_inventory_hashes_matched": "126/126",
+    "evidence_spans_matched": "224/224",
+    "integrity_verified": true
+  },
+  "timestamp": "2026-11-10T14:20:27.162208+00:00"
+}

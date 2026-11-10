@@ -1,0 +1,960 @@
+[
+  {
+    "audit_id": 19,
+    "claim_id": "2827c6fb-1e4b-5deb-862b-296a80853d64",
+    "source_unit_id": "SRC-P05-08",
+    "defect_type": "STRUCTURAL_UNPARSED_BLOB",
+    "defect_subtype": "MULTI_CLAUSE_CONFLATION",
+    "repair_rule": "BATCH2_STRUCTURED_REMEDY_AND_CHANNEL_CONDITION",
+    "before": {
+      "subject": "Returns without a receipt",
+      "predicate": "has_return_channel_eligibility",
+      "object": "Returns without proof of purchase are accepted in-store only, for store credit at the lowest price the item was sold in the last 90 days.",
+      "modality": null,
+      "conditions": null,
+      "status": "verified"
+    },
+    "after": {
+      "subject": "Returns without a receipt",
+      "predicate": "has_return_channel_eligibility",
+      "object": "store credit at lowest price in last 90 days",
+      "modality": "POLICY_FACT",
+      "conditions": [
+        "in-store only"
+      ],
+      "status": "verified"
+    }
+  },
+  {
+    "audit_id": 24,
+    "claim_id": "62d890f3-40ad-58aa-bc0b-ea9c64d6861c",
+    "source_unit_id": "SRC-P06-07",
+    "defect_type": "MALFORMED_SUBJECT",
+    "defect_subtype": "TOKEN_BLEED",
+    "repair_rule": "BATCH5_TOKEN_BLEED",
+    "before": {
+      "subject": "Partial refunds A partial refund",
+      "predicate": "has_validity_rule",
+      "object": "be issued when an item shows signs of use beyond inspection, is missing parts, or is returned without original packaging",
+      "modality": null,
+      "conditions": null,
+      "status": "candidate"
+    },
+    "after": {
+      "subject": "Northwind",
+      "predicate": "has_validity_rule",
+      "object": "be issued when an item shows signs of use beyond inspection, is missing parts, or is returned without original packaging",
+      "modality": "POLICY_FACT",
+      "conditions": [],
+      "status": "candidate"
+    }
+  },
+  {
+    "audit_id": 43,
+    "claim_id": "d2824fc1-ae44-518d-a2d4-af323d37d965",
+    "source_unit_id": "SRC-P08-04",
+    "defect_type": "MODALITY_MISMATCH",
+    "defect_subtype": "FORM_EXAMPLE_CONFLATION",
+    "repair_rule": "BATCH4_FORM_SPECIFICATION_MANDATORY_FIELD",
+    "before": {
+      "subject": "Email on order",
+      "predicate": "is_required_for_refund_request",
+      "object": "Yes",
+      "modality": null,
+      "conditions": null,
+      "status": "verified"
+    },
+    "after": {
+      "subject": "Customer submitting return request",
+      "predicate": "must_provide_information",
+      "object": "Email on order",
+      "modality": "REQUIRED",
+      "conditions": [],
+      "status": "verified"
+    }
+  },
+  {
+    "audit_id": 66,
+    "claim_id": "d6c9c736-04dc-50e8-b1cb-8e9606c4b609",
+    "source_unit_id": "SRC-P10-04",
+    "defect_type": "MODALITY_MISMATCH",
+    "defect_subtype": "SLA_ESTIMATE_CHECKED_AS_DEONTIC",
+    "repair_rule": "BATCH4_SOFT_SLA_ESTIMATE_NORMALIZATION",
+    "before": {
+      "subject": "PayPal",
+      "predicate": "has_posting_duration",
+      "object": "Usually within 24 hours",
+      "modality": null,
+      "conditions": null,
+      "status": "candidate"
+    },
+    "after": {
+      "subject": "PayPal",
+      "predicate": "has_posting_sla_estimate",
+      "object": "Usually within 24 hours",
+      "modality": "POLICY_FACT",
+      "conditions": [],
+      "status": "candidate"
+    }
+  },
+  {
+    "audit_id": 67,
+    "claim_id": "7e6b6689-ec72-5b6e-852c-2764ceda35dc",
+    "source_unit_id": "SRC-P11-06",
+    "defect_type": "MISSING_CONDITION",
+    "defect_subtype": "QUALIFIER_DROPPED",
+    "repair_rule": "BATCH2_TIMELINE_REFERENCE_QUALIFIER",
+    "before": {
+      "subject": "Apple Pay / Google Pay",
+      "predicate": "has_refund_method",
+      "object": "Underlying card",
+      "modality": null,
+      "conditions": null,
+      "status": "verified"
+    },
+    "after": {
+      "subject": "Apple Pay / Google Pay",
+      "predicate": "references_underlying_payment_timeline",
+      "object": "Underlying card",
+      "modality": "POLICY_FACT",
+      "conditions": [
+        "references underlying payment timeline (Same as card)"
+      ],
+      "status": "verified"
+    }
+  },
+  {
+    "audit_id": 78,
+    "claim_id": "e2585ded-515d-5cc1-bb66-7ee01acb26ee",
+    "source_unit_id": "SRC-P10-07",
+    "defect_type": "POLARITY_INVERSION",
+    "defect_subtype": "NEGATIVE_PARTICLE_DROPPING",
+    "repair_rule": "BATCH1_POLARITY_PROHIBITION",
+    "before": {
+      "subject": "Bonus credit",
+      "predicate": "has_validity_rule",
+      "object": "be applied retroactively once a refund has been issued to the card",
+      "modality": null,
+      "conditions": null,
+      "status": "candidate"
+    },
+    "after": {
+      "subject": "Bonus credit",
+      "predicate": "cannot_be_applied_retroactively",
+      "object": "be applied retroactively once a refund has been issued to the card",
+      "modality": "PROHIBITION",
+      "conditions": [
+        "once a refund has been issued to the card"
+      ],
+      "status": "candidate"
+    }
+  },
+  {
+    "audit_id": 91,
+    "claim_id": "5ad75932-6c45-5c30-a146-9692e241ed7a",
+    "source_unit_id": "SRC-P13-03",
+    "defect_type": "MALFORMED_SUBJECT",
+    "defect_subtype": "STATUS_TOKEN",
+    "repair_rule": "BATCH5_STATUS_TOKEN",
+    "before": {
+      "subject": "Order",
+      "predicate": "has_return_shipping_rule",
+      "object": "No",
+      "modality": null,
+      "conditions": null,
+      "status": "verified"
+    },
+    "after": {
+      "subject": "Order",
+      "predicate": "has_return_shipping_rule",
+      "object": "No",
+      "modality": "POLICY_FACT",
+      "conditions": [
+        "Order over $150, any reason"
+      ],
+      "status": "verified"
+    }
+  },
+  {
+    "audit_id": 92,
+    "claim_id": "19a6b158-14ab-5384-8f91-2c73b6a93e44",
+    "source_unit_id": "SRC-P13-03",
+    "defect_type": "MALFORMED_SUBJECT",
+    "defect_subtype": "STATUS_TOKEN",
+    "repair_rule": "BATCH5_STATUS_TOKEN",
+    "before": {
+      "subject": "Order",
+      "predicate": "has_return_label_cost",
+      "object": "Free",
+      "modality": null,
+      "conditions": null,
+      "status": "verified"
+    },
+    "after": {
+      "subject": "Order",
+      "predicate": "has_return_label_cost",
+      "object": "Free",
+      "modality": "POLICY_FACT",
+      "conditions": [
+        "Order over $150, any reason"
+      ],
+      "status": "verified"
+    }
+  },
+  {
+    "audit_id": 107,
+    "claim_id": "7eea6475-37c4-56e7-85da-b64c9458bedb",
+    "source_unit_id": "SRC-P12-02",
+    "defect_type": "MALFORMED_SUBJECT",
+    "defect_subtype": "ORPHAN_PRONOUN",
+    "repair_rule": "BATCH5_ORPHAN_PRONOUN",
+    "before": {
+      "subject": "This is",
+      "predicate": "limited_to",
+      "object": "two instances per customer per year",
+      "modality": null,
+      "conditions": null,
+      "status": "candidate"
+    },
+    "after": {
+      "subject": "Keep It Policy",
+      "predicate": "limited_to",
+      "object": "two instances per customer per year",
+      "modality": "POLICY_FACT",
+      "conditions": [],
+      "status": "candidate"
+    }
+  },
+  {
+    "audit_id": 110,
+    "claim_id": "cb5b46d1-ae31-5280-aef5-00996b2006bc",
+    "source_unit_id": "SRC-P13-03",
+    "defect_type": "MALFORMED_SUBJECT",
+    "defect_subtype": "STATUS_TOKEN",
+    "repair_rule": "BATCH5_STATUS_TOKEN",
+    "before": {
+      "subject": "Shipped",
+      "predicate": "has_attempted_not_guaranteed",
+      "object": "No",
+      "modality": null,
+      "conditions": null,
+      "status": "candidate"
+    },
+    "after": {
+      "subject": "Order",
+      "predicate": "has_attempted_not_guaranteed",
+      "object": "No",
+      "modality": "POLICY_FACT",
+      "conditions": [
+        "Order Status: Shipped"
+      ],
+      "status": "candidate"
+    }
+  },
+  {
+    "audit_id": 111,
+    "claim_id": "bcd27d08-a9a8-595d-aead-7d90043073d6",
+    "source_unit_id": "SRC-P13-03",
+    "defect_type": "MALFORMED_SUBJECT",
+    "defect_subtype": "STATUS_TOKEN",
+    "repair_rule": "BATCH5_STATUS_TOKEN",
+    "before": {
+      "subject": "Shipped",
+      "predicate": "has_full_refund_if_stopped_else_return",
+      "object": "Refuse delivery or return",
+      "modality": null,
+      "conditions": null,
+      "status": "candidate"
+    },
+    "after": {
+      "subject": "Order",
+      "predicate": "has_full_refund_if_stopped_else_return",
+      "object": "Refuse delivery or return",
+      "modality": "POLICY_FACT",
+      "conditions": [
+        "Order Status: Shipped"
+      ],
+      "status": "candidate"
+    }
+  },
+  {
+    "audit_id": 112,
+    "claim_id": "ee4f61ad-9262-5c8c-8a18-16eefc2ed0f0",
+    "source_unit_id": "SRC-P13-03",
+    "defect_type": "MALFORMED_SUBJECT",
+    "defect_subtype": "STATUS_TOKEN",
+    "repair_rule": "BATCH5_STATUS_TOKEN",
+    "before": {
+      "subject": "Delivered",
+      "predicate": "has_attempted_not_guaranteed",
+      "object": "No",
+      "modality": null,
+      "conditions": null,
+      "status": "candidate"
+    },
+    "after": {
+      "subject": "Order",
+      "predicate": "has_attempted_not_guaranteed",
+      "object": "No",
+      "modality": "POLICY_FACT",
+      "conditions": [
+        "Order Status: Delivered"
+      ],
+      "status": "candidate"
+    }
+  },
+  {
+    "audit_id": 113,
+    "claim_id": "07091d68-404c-5cc1-be1d-4310e270d7f5",
+    "source_unit_id": "SRC-P13-03",
+    "defect_type": "MALFORMED_SUBJECT",
+    "defect_subtype": "STATUS_TOKEN",
+    "repair_rule": "BATCH5_STATUS_TOKEN",
+    "before": {
+      "subject": "Delivered",
+      "predicate": "has_full_refund_if_stopped_else_return",
+      "object": "Standard return policy",
+      "modality": null,
+      "conditions": null,
+      "status": "candidate"
+    },
+    "after": {
+      "subject": "Order",
+      "predicate": "has_full_refund_if_stopped_else_return",
+      "object": "Standard return policy",
+      "modality": "POLICY_FACT",
+      "conditions": [
+        "Order Status: Delivered"
+      ],
+      "status": "candidate"
+    }
+  },
+  {
+    "audit_id": 114,
+    "claim_id": "bdab680b-6426-5140-931d-d33cffbccc20",
+    "source_unit_id": "SRC-P13-03",
+    "defect_type": "MALFORMED_SUBJECT",
+    "defect_subtype": "STATUS_TOKEN",
+    "repair_rule": "BATCH5_STATUS_TOKEN",
+    "before": {
+      "subject": "Order",
+      "predicate": "has_attempted_not_guaranteed",
+      "object": "Yes, until 7 days before release",
+      "modality": null,
+      "conditions": null,
+      "status": "candidate"
+    },
+    "after": {
+      "subject": "Order",
+      "predicate": "has_attempted_not_guaranteed",
+      "object": "Yes, until 7 days before release",
+      "modality": "POLICY_FACT",
+      "conditions": [
+        "Order Status: Pre-order"
+      ],
+      "status": "candidate"
+    }
+  },
+  {
+    "audit_id": 115,
+    "claim_id": "d8ecf6aa-ddc8-515d-ba50-c202d68d051e",
+    "source_unit_id": "SRC-P13-03",
+    "defect_type": "MALFORMED_SUBJECT",
+    "defect_subtype": "STATUS_TOKEN",
+    "repair_rule": "BATCH5_STATUS_TOKEN",
+    "before": {
+      "subject": "Order",
+      "predicate": "has_full_refund_if_stopped_else_return",
+      "object": "Full refund",
+      "modality": null,
+      "conditions": null,
+      "status": "candidate"
+    },
+    "after": {
+      "subject": "Order",
+      "predicate": "has_full_refund_if_stopped_else_return",
+      "object": "Full refund",
+      "modality": "POLICY_FACT",
+      "conditions": [
+        "Order Status: Pre-order"
+      ],
+      "status": "candidate"
+    }
+  },
+  {
+    "audit_id": 116,
+    "claim_id": "c729e396-23ec-5bb1-ab43-6311ab4c1b7d",
+    "source_unit_id": "SRC-P13-03",
+    "defect_type": "MALFORMED_SUBJECT",
+    "defect_subtype": "STATUS_TOKEN",
+    "repair_rule": "BATCH5_STATUS_TOKEN",
+    "before": {
+      "subject": "Backordered",
+      "predicate": "has_attempted_not_guaranteed",
+      "object": "Yes, anytime",
+      "modality": null,
+      "conditions": null,
+      "status": "candidate"
+    },
+    "after": {
+      "subject": "Order",
+      "predicate": "has_attempted_not_guaranteed",
+      "object": "Yes, anytime",
+      "modality": "POLICY_FACT",
+      "conditions": [
+        "Order Status: Backordered"
+      ],
+      "status": "candidate"
+    }
+  },
+  {
+    "audit_id": 117,
+    "claim_id": "582714dd-087f-563d-98b5-c37d680f6be1",
+    "source_unit_id": "SRC-P13-03",
+    "defect_type": "MALFORMED_SUBJECT",
+    "defect_subtype": "STATUS_TOKEN",
+    "repair_rule": "BATCH5_STATUS_TOKEN",
+    "before": {
+      "subject": "Backordered",
+      "predicate": "has_full_refund_if_stopped_else_return",
+      "object": "Full refund",
+      "modality": null,
+      "conditions": null,
+      "status": "candidate"
+    },
+    "after": {
+      "subject": "Order",
+      "predicate": "has_full_refund_if_stopped_else_return",
+      "object": "Full refund",
+      "modality": "POLICY_FACT",
+      "conditions": [
+        "Order Status: Backordered"
+      ],
+      "status": "candidate"
+    }
+  },
+  {
+    "audit_id": 118,
+    "claim_id": "7c307e56-15bc-552a-98e0-6ee1dcfc2e8e",
+    "source_unit_id": "SRC-P13-01",
+    "defect_type": "MALFORMED_SUBJECT",
+    "defect_subtype": "TOKEN_BLEED",
+    "repair_rule": "BATCH5_TOKEN_BLEED",
+    "before": {
+      "subject": "Northwind We",
+      "predicate": "cancel",
+      "object": "an order for reasons including stock errors, pricing errors, suspected fraud, or inability to verify payment",
+      "modality": null,
+      "conditions": null,
+      "status": "candidate"
+    },
+    "after": {
+      "subject": "Northwind",
+      "predicate": "cancel",
+      "object": "an order for reasons including stock errors, pricing errors, suspected fraud, or inability to verify payment",
+      "modality": "POLICY_FACT",
+      "conditions": [],
+      "status": "candidate"
+    }
+  },
+  {
+    "audit_id": 132,
+    "claim_id": "8cb16778-8a6f-5e85-83b5-0ed642fee3a5",
+    "source_unit_id": "SRC-P15-02",
+    "defect_type": "POLARITY_INVERSION",
+    "defect_subtype": "CONTRADICTORY_MODALITY",
+    "repair_rule": "BATCH1_POLARITY_PROHIBITION",
+    "before": {
+      "subject": "Gift cards",
+      "predicate": "can_cancel_before_shipment",
+      "object": "be cancelled once the code is delivered by email",
+      "modality": null,
+      "conditions": null,
+      "status": "verified"
+    },
+    "after": {
+      "subject": "Gift cards",
+      "predicate": "cannot_be_cancelled",
+      "object": "be cancelled once the code is delivered by email",
+      "modality": "PROHIBITION",
+      "conditions": [
+        "once the code is delivered by email"
+      ],
+      "status": "verified"
+    }
+  },
+  {
+    "audit_id": 180,
+    "claim_id": "a2bea058-ced0-5eb0-8eb9-0c34cf836697",
+    "source_unit_id": "SRC-P18-04",
+    "defect_type": "MALFORMED_SUBJECT",
+    "defect_subtype": "BARE_NUMERIC_CODE",
+    "repair_rule": "BATCH5_BARE_NUMERIC_CODE",
+    "before": {
+      "subject": "4853",
+      "predicate": "has_definition",
+      "object": "Cardholder dispute / not as described",
+      "modality": null,
+      "conditions": null,
+      "status": "rejected"
+    },
+    "after": {
+      "subject": "Chargeback Reason Code 4853",
+      "predicate": "has_definition",
+      "object": "Cardholder dispute / not as described",
+      "modality": "POLICY_FACT",
+      "conditions": [],
+      "status": "rejected"
+    }
+  },
+  {
+    "audit_id": 181,
+    "claim_id": "383f0ae8-9364-5048-90e3-9cdf0f2f1dcb",
+    "source_unit_id": "SRC-P18-04",
+    "defect_type": "MALFORMED_SUBJECT",
+    "defect_subtype": "BARE_NUMERIC_CODE",
+    "repair_rule": "BATCH5_BARE_NUMERIC_CODE",
+    "before": {
+      "subject": "4853",
+      "predicate": "has_typical_resolution",
+      "object": "Refund or evidence submission",
+      "modality": null,
+      "conditions": null,
+      "status": "candidate"
+    },
+    "after": {
+      "subject": "Chargeback Reason Code 4853",
+      "predicate": "has_typical_resolution",
+      "object": "Refund or evidence submission",
+      "modality": "POLICY_FACT",
+      "conditions": [],
+      "status": "candidate"
+    }
+  },
+  {
+    "audit_id": 182,
+    "claim_id": "af3e10cd-b353-5390-ac97-33c8b322bb96",
+    "source_unit_id": "SRC-P18-04",
+    "defect_type": "MALFORMED_SUBJECT",
+    "defect_subtype": "BARE_NUMERIC_CODE",
+    "repair_rule": "BATCH5_BARE_NUMERIC_CODE",
+    "before": {
+      "subject": "4837",
+      "predicate": "has_definition",
+      "object": "No cardholder authorisation (fraud)",
+      "modality": null,
+      "conditions": null,
+      "status": "rejected"
+    },
+    "after": {
+      "subject": "Chargeback Reason Code 4837",
+      "predicate": "has_definition",
+      "object": "No cardholder authorisation (fraud)",
+      "modality": "POLICY_FACT",
+      "conditions": [],
+      "status": "rejected"
+    }
+  },
+  {
+    "audit_id": 183,
+    "claim_id": "ed9b9894-ef5d-57aa-b1e5-abdd15de18f1",
+    "source_unit_id": "SRC-P18-04",
+    "defect_type": "MALFORMED_SUBJECT",
+    "defect_subtype": "BARE_NUMERIC_CODE",
+    "repair_rule": "BATCH5_BARE_NUMERIC_CODE",
+    "before": {
+      "subject": "4837",
+      "predicate": "has_typical_resolution",
+      "object": "Fraud investigation",
+      "modality": null,
+      "conditions": null,
+      "status": "candidate"
+    },
+    "after": {
+      "subject": "Chargeback Reason Code 4837",
+      "predicate": "has_typical_resolution",
+      "object": "Fraud investigation",
+      "modality": "POLICY_FACT",
+      "conditions": [],
+      "status": "candidate"
+    }
+  },
+  {
+    "audit_id": 184,
+    "claim_id": "8a977758-fbe6-5a7a-99ea-b7220e61ef53",
+    "source_unit_id": "SRC-P18-04",
+    "defect_type": "MALFORMED_SUBJECT",
+    "defect_subtype": "BARE_NUMERIC_CODE",
+    "repair_rule": "BATCH5_BARE_NUMERIC_CODE",
+    "before": {
+      "subject": "4855",
+      "predicate": "has_definition",
+      "object": "Goods or services not provided",
+      "modality": null,
+      "conditions": null,
+      "status": "rejected"
+    },
+    "after": {
+      "subject": "Chargeback Reason Code 4855",
+      "predicate": "has_definition",
+      "object": "Goods or services not provided",
+      "modality": "POLICY_FACT",
+      "conditions": [],
+      "status": "rejected"
+    }
+  },
+  {
+    "audit_id": 185,
+    "claim_id": "b31551d7-77a8-5856-97b1-7427c61e993c",
+    "source_unit_id": "SRC-P18-04",
+    "defect_type": "MALFORMED_SUBJECT",
+    "defect_subtype": "BARE_NUMERIC_CODE",
+    "repair_rule": "BATCH5_BARE_NUMERIC_CODE",
+    "before": {
+      "subject": "4855",
+      "predicate": "has_typical_resolution",
+      "object": "Provide tracking proof or refund",
+      "modality": null,
+      "conditions": null,
+      "status": "candidate"
+    },
+    "after": {
+      "subject": "Chargeback Reason Code 4855",
+      "predicate": "has_typical_resolution",
+      "object": "Provide tracking proof or refund",
+      "modality": "POLICY_FACT",
+      "conditions": [],
+      "status": "candidate"
+    }
+  },
+  {
+    "audit_id": 186,
+    "claim_id": "84472b8f-1e20-5f04-b1c8-8961f5839db7",
+    "source_unit_id": "SRC-P18-04",
+    "defect_type": "MALFORMED_SUBJECT",
+    "defect_subtype": "BARE_NUMERIC_CODE",
+    "repair_rule": "BATCH5_BARE_NUMERIC_CODE",
+    "before": {
+      "subject": "4834",
+      "predicate": "has_definition",
+      "object": "Duplicate processing",
+      "modality": null,
+      "conditions": null,
+      "status": "rejected"
+    },
+    "after": {
+      "subject": "Chargeback Reason Code 4834",
+      "predicate": "has_definition",
+      "object": "Duplicate processing",
+      "modality": "POLICY_FACT",
+      "conditions": [],
+      "status": "rejected"
+    }
+  },
+  {
+    "audit_id": 187,
+    "claim_id": "20390128-a2ea-5f03-89a3-d92e59dc066b",
+    "source_unit_id": "SRC-P18-04",
+    "defect_type": "MALFORMED_SUBJECT",
+    "defect_subtype": "BARE_NUMERIC_CODE",
+    "repair_rule": "BATCH5_BARE_NUMERIC_CODE",
+    "before": {
+      "subject": "4834",
+      "predicate": "has_typical_resolution",
+      "object": "Verify and refund duplicate",
+      "modality": null,
+      "conditions": null,
+      "status": "candidate"
+    },
+    "after": {
+      "subject": "Chargeback Reason Code 4834",
+      "predicate": "has_typical_resolution",
+      "object": "Verify and refund duplicate",
+      "modality": "POLICY_FACT",
+      "conditions": [],
+      "status": "candidate"
+    }
+  },
+  {
+    "audit_id": 188,
+    "claim_id": "fe646fd9-0b50-58ed-8b43-1f1888e06046",
+    "source_unit_id": "SRC-P18-04",
+    "defect_type": "MALFORMED_SUBJECT",
+    "defect_subtype": "BARE_NUMERIC_CODE",
+    "repair_rule": "BATCH5_BARE_NUMERIC_CODE",
+    "before": {
+      "subject": "4841",
+      "predicate": "has_definition",
+      "object": "Cancelled recurring transaction",
+      "modality": null,
+      "conditions": null,
+      "status": "rejected"
+    },
+    "after": {
+      "subject": "Chargeback Reason Code 4841",
+      "predicate": "has_definition",
+      "object": "Cancelled recurring transaction",
+      "modality": "POLICY_FACT",
+      "conditions": [],
+      "status": "rejected"
+    }
+  },
+  {
+    "audit_id": 189,
+    "claim_id": "90b36b61-02ae-5bcd-99e2-001a04a42ce7",
+    "source_unit_id": "SRC-P18-04",
+    "defect_type": "MALFORMED_SUBJECT",
+    "defect_subtype": "BARE_NUMERIC_CODE",
+    "repair_rule": "BATCH5_BARE_NUMERIC_CODE",
+    "before": {
+      "subject": "4841",
+      "predicate": "has_typical_resolution",
+      "object": "Check cancellation record",
+      "modality": null,
+      "conditions": null,
+      "status": "candidate"
+    },
+    "after": {
+      "subject": "Chargeback Reason Code 4841",
+      "predicate": "has_typical_resolution",
+      "object": "Check cancellation record",
+      "modality": "POLICY_FACT",
+      "conditions": [],
+      "status": "candidate"
+    }
+  },
+  {
+    "audit_id": 190,
+    "claim_id": "78bf1215-063d-5a00-9e19-9a27e855122b",
+    "source_unit_id": "SRC-P19-01",
+    "defect_type": "MALFORMED_SUBJECT",
+    "defect_subtype": "LADDER_TIER_TOKEN",
+    "repair_rule": "BATCH5_LADDER_TIER_TOKEN",
+    "before": {
+      "subject": "Notice",
+      "predicate": "has_trigger",
+      "object": "Return rate 30-40%",
+      "modality": null,
+      "conditions": null,
+      "status": "candidate"
+    },
+    "after": {
+      "subject": "Customer Account",
+      "predicate": "has_trigger",
+      "object": "Return rate 30-40%",
+      "modality": "POLICY_FACT",
+      "conditions": [
+        "Tier: Notice"
+      ],
+      "status": "candidate"
+    }
+  },
+  {
+    "audit_id": 191,
+    "claim_id": "22864bba-fd53-57b3-af93-74294c0531bf",
+    "source_unit_id": "SRC-P19-01",
+    "defect_type": "MALFORMED_SUBJECT",
+    "defect_subtype": "LADDER_TIER_TOKEN",
+    "repair_rule": "BATCH5_LADDER_TIER_TOKEN",
+    "before": {
+      "subject": "Notice",
+      "predicate": "has_action",
+      "object": "Email reminder of policy",
+      "modality": null,
+      "conditions": null,
+      "status": "candidate"
+    },
+    "after": {
+      "subject": "Customer Account",
+      "predicate": "has_action",
+      "object": "Email reminder of policy",
+      "modality": "POLICY_FACT",
+      "conditions": [
+        "Tier: Notice"
+      ],
+      "status": "candidate"
+    }
+  },
+  {
+    "audit_id": 192,
+    "claim_id": "bb7e838b-a4bc-5efe-8be9-5a5a8c43c3b1",
+    "source_unit_id": "SRC-P19-01",
+    "defect_type": "MALFORMED_SUBJECT",
+    "defect_subtype": "LADDER_TIER_TOKEN",
+    "repair_rule": "BATCH5_LADDER_TIER_TOKEN",
+    "before": {
+      "subject": "Restricted",
+      "predicate": "has_trigger",
+      "object": "Return rate over 40% or one confirmed abuse case",
+      "modality": null,
+      "conditions": null,
+      "status": "candidate"
+    },
+    "after": {
+      "subject": "Customer Account",
+      "predicate": "has_trigger",
+      "object": "Return rate over 40% or one confirmed abuse case",
+      "modality": "POLICY_FACT",
+      "conditions": [
+        "Tier: Restricted"
+      ],
+      "status": "candidate"
+    }
+  },
+  {
+    "audit_id": 193,
+    "claim_id": "9ed8a28e-f5f6-57b8-a938-be07a15c5582",
+    "source_unit_id": "SRC-P19-01",
+    "defect_type": "MALFORMED_SUBJECT",
+    "defect_subtype": "LADDER_TIER_TOKEN",
+    "repair_rule": "BATCH5_LADDER_TIER_TOKEN",
+    "before": {
+      "subject": "Restricted",
+      "predicate": "has_action",
+      "object": "Store credit only; returns need manager approval",
+      "modality": null,
+      "conditions": null,
+      "status": "candidate"
+    },
+    "after": {
+      "subject": "Customer Account",
+      "predicate": "has_action",
+      "object": "Store credit only; returns need manager approval",
+      "modality": "POLICY_FACT",
+      "conditions": [
+        "Tier: Restricted"
+      ],
+      "status": "candidate"
+    }
+  },
+  {
+    "audit_id": 194,
+    "claim_id": "0384743e-d6e0-5943-bfe3-01ae61daa5dd",
+    "source_unit_id": "SRC-P19-01",
+    "defect_type": "MALFORMED_SUBJECT",
+    "defect_subtype": "LADDER_TIER_TOKEN",
+    "repair_rule": "BATCH5_LADDER_TIER_TOKEN",
+    "before": {
+      "subject": "Suspended",
+      "predicate": "has_trigger",
+      "object": "Multiple confirmed abuse cases",
+      "modality": null,
+      "conditions": null,
+      "status": "candidate"
+    },
+    "after": {
+      "subject": "Customer Account",
+      "predicate": "has_trigger",
+      "object": "Multiple confirmed abuse cases",
+      "modality": "POLICY_FACT",
+      "conditions": [
+        "Tier: Suspended"
+      ],
+      "status": "candidate"
+    }
+  },
+  {
+    "audit_id": 195,
+    "claim_id": "6bb94bca-bc31-536e-8ee6-30e5978258c8",
+    "source_unit_id": "SRC-P19-01",
+    "defect_type": "MALFORMED_SUBJECT",
+    "defect_subtype": "LADDER_TIER_TOKEN",
+    "repair_rule": "BATCH5_LADDER_TIER_TOKEN",
+    "before": {
+      "subject": "Suspended",
+      "predicate": "has_action",
+      "object": "Account suspended for 12 months",
+      "modality": null,
+      "conditions": null,
+      "status": "candidate"
+    },
+    "after": {
+      "subject": "Customer Account",
+      "predicate": "has_action",
+      "object": "Account suspended for 12 months",
+      "modality": "POLICY_FACT",
+      "conditions": [
+        "Tier: Suspended"
+      ],
+      "status": "candidate"
+    }
+  },
+  {
+    "audit_id": 196,
+    "claim_id": "59f51f1f-dc49-5994-9edf-30e789606d80",
+    "source_unit_id": "SRC-P19-01",
+    "defect_type": "MALFORMED_SUBJECT",
+    "defect_subtype": "LADDER_TIER_TOKEN",
+    "repair_rule": "BATCH5_LADDER_TIER_TOKEN",
+    "before": {
+      "subject": "Permanent",
+      "predicate": "has_trigger",
+      "object": "Fraud or counterfeit return",
+      "modality": null,
+      "conditions": null,
+      "status": "candidate"
+    },
+    "after": {
+      "subject": "Customer Account",
+      "predicate": "has_trigger",
+      "object": "Fraud or counterfeit return",
+      "modality": "POLICY_FACT",
+      "conditions": [
+        "Tier: Permanent"
+      ],
+      "status": "candidate"
+    }
+  },
+  {
+    "audit_id": 197,
+    "claim_id": "07e6916a-b7cf-583e-bbd5-d656f019c05a",
+    "source_unit_id": "SRC-P19-01",
+    "defect_type": "MALFORMED_SUBJECT",
+    "defect_subtype": "LADDER_TIER_TOKEN",
+    "repair_rule": "BATCH5_LADDER_TIER_TOKEN",
+    "before": {
+      "subject": "Permanent",
+      "predicate": "has_action",
+      "object": "Account closed; referral to law enforcement where appropriate",
+      "modality": null,
+      "conditions": null,
+      "status": "candidate"
+    },
+    "after": {
+      "subject": "Customer Account",
+      "predicate": "has_action",
+      "object": "Account closed; referral to law enforcement where appropriate",
+      "modality": "POLICY_FACT",
+      "conditions": [
+        "Tier: Permanent"
+      ],
+      "status": "candidate"
+    }
+  },
+  {
+    "audit_id": 224,
+    "claim_id": "eab88ee6-78ec-5bfb-9b31-c0646de5eaad",
+    "source_unit_id": "SRC-P07-10",
+    "defect_type": "SCOPE_INVERSION",
+    "defect_subtype": "NON_REFUNDABLE_EXCEPTION_INVERTED",
+    "repair_rule": "BATCH3_PARENT_NON_REFUNDABLE_SCOPE_PROHIBITION",
+    "before": {
+      "subject": "Customer",
+      "predicate": "has_refund_eligibility",
+      "object": "\u007f Items returned more than 90 days after delivery.",
+      "modality": null,
+      "conditions": null,
+      "status": "conflicted"
+    },
+    "after": {
+      "subject": "Items returned more than 90 days after delivery",
+      "predicate": "cannot_be_returned_or_refunded",
+      "object": "Not eligible for return or refund",
+      "modality": "PROHIBITION",
+      "conditions": [
+        "Section 5 Non-Refundable Exclusion"
+      ],
+      "status": "conflicted"
+    }
+  }
+]

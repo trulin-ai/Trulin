@@ -117,6 +117,8 @@ class DocumentParser:
         table_start_line = 0
         table_row_count = 0
         table_semantic_type = "policy_matrix"
+        last_prose_context: str | None = None
+        last_lead_in_prose: str | None = None
 
         total_lines = len(lines)
         parsed_lines = 0
@@ -144,6 +146,7 @@ class DocumentParser:
 
                 level = len(h_match.group(1))
                 h_title = h_match.group(2).strip()
+                last_lead_in_prose = None
 
                 # Adjust breadcrumb hierarchy
                 while breadcrumb_stack and breadcrumb_stack[-1][0] >= level:
@@ -171,6 +174,10 @@ class DocumentParser:
                     hierarchical_context=context,
                     sequence_index=seq_idx,
                     metadata={"source_version": envelope.source_version},
+                    structure_type="heading",
+                    section_path=context,
+                    char_start=line_start_char,
+                    char_end=line_end_char,
                 )
                 units.append(unit)
                 seq_idx += 1
@@ -307,6 +314,34 @@ class DocumentParser:
                     else:
                         row_content_role = ContentRole.POLICY_RULE
 
+                    # Phase 1: Reference Resolution for table cells
+                    row_refs = []
+                    for col_k, cell_v in row_dict.items():
+                        c_low = str(cell_v).lower().strip()
+                        if "same as card" in c_low or c_low == "same as card":
+                            row_refs.append({
+                                "reference_type": "timeline_reference",
+                                "target": "underlying_card_posting_duration",
+                                "source_text": str(cell_v).strip(),
+                                "column": col_k,
+                            })
+                        elif "provider timelines apply" in c_low:
+                            row_refs.append({
+                                "reference_type": "external_provider_timeline",
+                                "target": "provider_timelines",
+                                "source_text": str(cell_v).strip(),
+                                "column": col_k,
+                            })
+                        m_sec = re.search(r"\bsee section\s+(\d+(?:\.\d+)*)\b", c_low)
+                        if m_sec:
+                            row_refs.append({
+                                "reference_type": "cross_reference",
+                                "target_section": f"Section {m_sec.group(1)}",
+                                "source_text": str(cell_v).strip(),
+                                "column": col_k,
+                            })
+
+                    row_id_str = f"{table_id_str}_row_{table_row_count}"
                     unit = ParsedEvidenceUnit.create(
                         envelope_id=envelope.envelope_id,
                         asset_id=envelope.asset_id,
@@ -319,6 +354,7 @@ class DocumentParser:
                             "table_headers": table_headers,
                             "table_type": table_semantic_type,
                             "table_id": table_id_str,
+                            "row_id": row_id_str,
                             "row_index": table_row_count,
                             "is_ambiguous": is_ambiguous,
                             "ambiguity_reason": ambiguity_reason,
@@ -345,6 +381,16 @@ class DocumentParser:
                             "row_index": table_row_count,
                             "is_ambiguous": is_ambiguous,
                         },
+                        structure_type="table_row",
+                        table_id=table_id_str,
+                        row_id=row_id_str,
+                        column_headers=table_headers,
+                        cells=row_dict,
+                        parent_context=last_prose_context,
+                        section_path=context,
+                        char_start=line_start_char,
+                        char_end=line_end_char,
+                        resolved_references=row_refs,
                     )
                     units.append(unit)
                     seq_idx += 1
@@ -364,6 +410,7 @@ class DocumentParser:
             bullet_prefixes = ("-", "*", "+", "•", "●", "❖", "■", "▪", "►", "○", "◆", "–", "—")
             is_bullet_line = any(line_str.startswith(b) for b in bullet_prefixes)
             block_type = "clause" if (clause_match or is_bullet_line) else "paragraph"
+            structure_type = "list_item" if is_bullet_line else "prose_clause"
             clean_text = line_str
             for b in bullet_prefixes:
                 if clean_text.startswith(b):
@@ -371,6 +418,24 @@ class DocumentParser:
                     break
 
             unit_role = cls._classify_content_role(clean_text, context, block_type)
+
+            # Check for cross-references in prose
+            prose_refs = []
+            m_sec = re.search(r"\bsee section\s+(\d+(?:\.\d+)*)\b", clean_text.lower())
+            if m_sec:
+                prose_refs.append({
+                    "reference_type": "cross_reference",
+                    "target_section": f"Section {m_sec.group(1)}",
+                    "source_text": m_sec.group(0),
+                })
+
+            # Update last_prose_context and last_lead_in_prose
+            if not is_bullet_line:
+                last_lead_in_prose = clean_text
+                last_prose_context = clean_text
+                clause_parent_context = " > ".join(context) if context else None
+            else:
+                clause_parent_context = last_lead_in_prose or (" > ".join(context) if context else None)
 
             unit = ParsedEvidenceUnit.create(
                 envelope_id=envelope.envelope_id,
@@ -391,6 +456,12 @@ class DocumentParser:
                 hierarchical_context=context,
                 sequence_index=seq_idx,
                 metadata={"source_version": envelope.source_version},
+                structure_type=structure_type,
+                parent_context=clause_parent_context,
+                section_path=context,
+                char_start=line_start_char,
+                char_end=line_end_char,
+                resolved_references=prose_refs,
             )
             units.append(unit)
             seq_idx += 1
@@ -402,12 +473,50 @@ class DocumentParser:
         cls._propagate_table_merged_cells(units)
 
         completeness = 1.0 if total_lines > 0 else 1.0
+
+        # Phase 1b: Coverage Instrumentation Completeness Ledger
+        completeness_ledger = []
+        for u in units:
+            is_op = (u.content_role == ContentRole.POLICY_RULE)
+            skip_reason = None
+            if not is_op:
+                if u.block_type == "heading":
+                    skip_reason = "NON_OPERATIVE_HEADING"
+                elif u.content_role == ContentRole.DEFINITION:
+                    skip_reason = "NON_OPERATIVE_DEFINITION"
+                elif u.content_role == ContentRole.REVISION_HISTORY:
+                    skip_reason = "NON_OPERATIVE_CHANGELOG"
+                elif u.content_role == ContentRole.CONTACT_INFO:
+                    skip_reason = "NON_OPERATIVE_CONTACT"
+                elif u.content_role == ContentRole.EXAMPLE:
+                    skip_reason = "NON_OPERATIVE_EXAMPLE"
+                elif u.structured_data.get("is_ambiguous"):
+                    skip_reason = "AMBIGUOUS_REPRESENTATION_FLAGGED"
+                else:
+                    skip_reason = "NON_OPERATIVE_METADATA"
+
+            completeness_ledger.append({
+                "unit_id": u.unit_id,
+                "sequence_index": u.sequence_index,
+                "structure_type": u.structure_type,
+                "content_role": u.content_role.value if hasattr(u.content_role, "value") else str(u.content_role),
+                "is_operative_rule": is_op,
+                "skip_reason": skip_reason,
+                "parent_context": u.parent_context,
+                "section_path": u.section_path,
+                "char_start": u.char_start,
+                "char_end": u.char_end,
+                "text_preview": u.content_text[:80],
+            })
+
         quality_metrics = {
             "total_lines": total_lines,
             "parsed_units": len(units),
             "headings_count": sum(1 for u in units if u.block_type == "heading"),
             "clauses_count": sum(1 for u in units if u.block_type == "clause"),
             "table_rows_count": sum(1 for u in units if u.block_type == "table_row"),
+            "operative_rules_count": sum(1 for u in units if u.content_role == ContentRole.POLICY_RULE),
+            "unextracted_units_accounted": sum(1 for u in units if u.content_role != ContentRole.POLICY_RULE),
             "char_count": char_cursor,
         }
 
@@ -418,6 +527,7 @@ class DocumentParser:
             parser_name="DocumentParser",
             units=units,
             completeness_score=completeness,
+            completeness_ledger=completeness_ledger,
             quality_metrics=quality_metrics,
         )
 

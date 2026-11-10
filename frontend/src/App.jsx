@@ -7389,6 +7389,14 @@ export default function App() {
                 user={authUser}
                 showToast={showToast}
                 readOnly={false}
+                onClaimExtracted={() => {
+                  fetchLiveDatabaseRecords();
+                  fetchHealthAndConflicts(activeOrg?.id);
+                }}
+                onDocumentUploaded={() => {
+                  fetchLiveDatabaseRecords();
+                  fetchHealthAndConflicts(activeOrg?.id);
+                }}
                 onInspectDocument={(doc) => setInspectorState({
                   isOpen: true,
                   assetType: 'document',

@@ -1,0 +1,2262 @@
+{
+  "cluster_01_scope_and_hierarchy": {
+    "cluster_id": "cluster_01_scope_and_hierarchy",
+    "section_number": "Section 1",
+    "section_title": "1. Introduction and Scope",
+    "pages": [
+      3
+    ],
+    "cluster_rationale": "B2B corporate contract precedence rules and Section 1.2 Summary at a Glance restatement table.",
+    "claim_count": 6,
+    "claim_numbers": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "claims": [
+      {
+        "number": 1,
+        "id": "679ef215-0e90-585b-91ab-574350f1d241",
+        "subject": "Custom corporate agreements",
+        "predicate": "may_override_standard_terms",
+        "object": "Standard policy terms",
+        "status": "verified"
+      },
+      {
+        "number": 2,
+        "id": "5fbf0095-a74f-575c-a400-8b480e1f2cf5",
+        "subject": "Return window",
+        "predicate": "has_return_window",
+        "object": "30 days from delivery (60 days for Northwind Rewards Gold members)",
+        "status": "candidate"
+      },
+      {
+        "number": 3,
+        "id": "befe53b3-2c00-552d-b3e6-db1e6316789c",
+        "subject": "Refund speed",
+        "predicate": "has_refund_processing_duration",
+        "object": "3-5 business days after we receive and inspect the return",
+        "status": "candidate"
+      },
+      {
+        "number": 4,
+        "id": "a1823bf9-dea7-5983-8a5d-c6dd3d7ff965",
+        "subject": "Return shipping",
+        "predicate": "has_return_shipping_rule",
+        "object": "Free for defective or incorrect items; $6.95 deducted otherwise",
+        "status": "candidate"
+      },
+      {
+        "number": 5,
+        "id": "ee12e47d-30d8-5c1e-b3cb-19e63fac806b",
+        "subject": "Restocking fee",
+        "predicate": "has_fee_rule",
+        "object": "None on most items; 15% on special-order and bulk items",
+        "status": "candidate"
+      },
+      {
+        "number": 6,
+        "id": "97361b26-3077-5f81-8ae6-ec7ceaf90305",
+        "subject": "Final sale items",
+        "predicate": "cannot_be_returned_or_refunded",
+        "object": "Not eligible for refund or exchange",
+        "status": "candidate"
+      }
+    ]
+  },
+  "cluster_02_definitions": {
+    "cluster_id": "cluster_02_definitions",
+    "section_number": "Section 2",
+    "section_title": "2. Definitions",
+    "pages": [
+      4
+    ],
+    "cluster_rationale": "Canonical contractual definitions (Refund, Return, Exchange, Store Credit, RMA, Final Sale).",
+    "claim_count": 6,
+    "claim_numbers": [
+      7,
+      8,
+      9,
+      10,
+      11,
+      12
+    ],
+    "claims": [
+      {
+        "number": 7,
+        "id": "33d9a22f-4875-5517-bd5a-16c73ee42987",
+        "subject": "Refund",
+        "predicate": "has_definition",
+        "object": "Return of money to the original payment method or store credit following an approved return or cancellation.",
+        "status": "rejected"
+      },
+      {
+        "number": 8,
+        "id": "12f39677-43f4-5967-824d-a14efe3addbe",
+        "subject": "Return",
+        "predicate": "has_definition",
+        "object": "Sending a purchased item back to Northwind by mail or in-store drop-off.",
+        "status": "rejected"
+      },
+      {
+        "number": 9,
+        "id": "941149de-eaa7-56a5-9297-58570b58cb4e",
+        "subject": "Exchange",
+        "predicate": "has_definition",
+        "object": "Replacing an item with a different size, colour or product of equal or greater value.",
+        "status": "rejected"
+      },
+      {
+        "number": 10,
+        "id": "56625e97-1a95-5060-a0a5-f61959ed770f",
+        "subject": "Store Credit",
+        "predicate": "has_definition",
+        "object": "A balance issued to a customer account, redeemable online and in stores",
+        "status": "rejected"
+      },
+      {
+        "number": 11,
+        "id": "1b16cddb-3907-5af0-93b4-61685783357f",
+        "subject": "RMA",
+        "predicate": "has_definition",
+        "object": "Return Merchandise Authorization number, e.g. RMA-2026-004815, required for mailed returns.",
+        "status": "rejected"
+      },
+      {
+        "number": 12,
+        "id": "a1cc1469-3402-5122-8bd9-37aa49d88efe",
+        "subject": "Final Sale items",
+        "predicate": "cannot_be_returned_or_refunded",
+        "object": "cannot be returned",
+        "status": "candidate"
+      }
+    ]
+  },
+  "cluster_03_standard_and_tier_return_windows": {
+    "cluster_id": "cluster_03_standard_and_tier_return_windows",
+    "section_number": "Section 3 & 3.1",
+    "section_title": "3. Standard Return Policy & 3.1 Extended Windows",
+    "pages": [
+      5,
+      20
+    ],
+    "cluster_rationale": "Standard 30-day window, Gold member 60d, footwear 45d, tents 60d, warranty referral, and FAQ #200/#201 restatements.",
+    "claim_count": 8,
+    "claim_numbers": [
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      200,
+      201
+    ],
+    "claims": [
+      {
+        "number": 13,
+        "id": "311e1132-4c26-5e05-909f-bc2fb2947a97",
+        "subject": "Standard merchandise",
+        "predicate": "has_return_window",
+        "object": "30 days",
+        "status": "verified"
+      },
+      {
+        "number": 14,
+        "id": "4c0fe437-4d0b-518e-834f-31d078b9686e",
+        "subject": "Northwind Rewards Gold members",
+        "predicate": "has_return_window",
+        "object": "60 days",
+        "status": "verified"
+      },
+      {
+        "number": 15,
+        "id": "2f76936d-fb6b-5101-a43f-96e8cf450d1a",
+        "subject": "Holiday purchases (Nov 1 - Dec 24)",
+        "predicate": "has_return_deadline",
+        "object": "Until January 31 of the following year",
+        "status": "verified"
+      },
+      {
+        "number": 16,
+        "id": "a1004510-d65b-5303-b259-a3eb067e017e",
+        "subject": "Footwear (worn indoors only)",
+        "predicate": "has_return_window",
+        "object": "45 days",
+        "status": "verified"
+      },
+      {
+        "number": 17,
+        "id": "774ad1c0-c51b-563e-990b-1aca2d6d9ca5",
+        "subject": "Camping tents and sleeping bags (unused)",
+        "predicate": "has_return_window",
+        "object": "60 days",
+        "status": "verified"
+      },
+      {
+        "number": 18,
+        "id": "a00ecb32-46be-5387-86d3-7e1d83c91731",
+        "subject": "Defective items",
+        "predicate": "has_resolution_path",
+        "object": "Covered by warranty - see Section 14",
+        "status": "verified"
+      },
+      {
+        "number": 200,
+        "id": "13ddc205-3abd-54ee-8f5f-13e30975c8c6",
+        "subject": "Standard returns",
+        "predicate": "has_return_window",
+        "object": "requested within 30 days",
+        "status": "verified"
+      },
+      {
+        "number": 201,
+        "id": "5bc77e21-674c-51f9-8a5f-985accade5ce",
+        "subject": "Unused item returned after standard return window",
+        "predicate": "may_receive_store_credit",
+        "object": "offer store credit at a manager's discretion for unused items within 90 days",
+        "status": "verified"
+      }
+    ]
+  },
+  "cluster_04_receiptless_returns": {
+    "cluster_id": "cluster_04_receiptless_returns",
+    "section_number": "Section 3.2",
+    "section_title": "3.2 Returns Without a Receipt",
+    "pages": [
+      5,
+      6
+    ],
+    "cluster_rationale": "In-store only store credit at lowest 90-day price, scanned photo ID requirement, 3-return annual limit, and support agent verification.",
+    "claim_count": 4,
+    "claim_numbers": [
+      19,
+      20,
+      21,
+      22
+    ],
+    "claims": [
+      {
+        "number": 19,
+        "id": "2827c6fb-1e4b-5deb-862b-296a80853d64",
+        "subject": "Returns without a receipt",
+        "predicate": "has_return_channel_eligibility",
+        "object": "store credit at lowest price in last 90 days",
+        "status": "verified"
+      },
+      {
+        "number": 20,
+        "id": "1d34fcb8-bc2d-5436-b377-b6fcfa6315bf",
+        "subject": "Returns without a receipt",
+        "predicate": "has_identity_verification_requirement",
+        "object": "A government-issued photo ID is required and scanned",
+        "status": "verified"
+      },
+      {
+        "number": 21,
+        "id": "d7ebc202-21f7-5b34-87f8-e2cea7bac99a",
+        "subject": "Returns without a receipt",
+        "predicate": "has_usage_limit",
+        "object": "3 receipt-less returns per customer per 12-month period",
+        "status": "candidate"
+      },
+      {
+        "number": 22,
+        "id": "7a378e7f-705c-5664-83dc-452eeb4c68b6",
+        "subject": "Support agents",
+        "predicate": "must_verify_refund_conditions",
+        "object": "verify each condition before approving a refund over $50.00",
+        "status": "verified"
+      }
+    ]
+  },
+  "cluster_05_condition_grading_and_restocking": {
+    "cluster_id": "cluster_05_condition_grading_and_restocking",
+    "section_number": "Section 4, 4.1, 4.2",
+    "section_title": "4. Refund Eligibility Criteria, 4.1 Partial Refunds & 4.2 Manager Approval Thresholds",
+    "pages": [
+      6
+    ],
+    "cluster_rationale": "Proof of purchase verification, partial refund condition deductions, and escalating dollar approval thresholds (Up to $100 Tier 1, $100.01-$500 Tier 2/team lead, Over $500 Customer Experience Manager, Over $2,000 Finance Director & fraud review).",
+    "claim_count": 14,
+    "claim_numbers": [
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36
+    ],
+    "claims": [
+      {
+        "number": 23,
+        "id": "5e70b680-9ae2-5ece-9895-bb086997ac9e",
+        "subject": "Refund request",
+        "predicate": "has_purchase_verification_requirement",
+        "object": "be verified in our systems",
+        "status": "verified"
+      },
+      {
+        "number": 24,
+        "id": "62d890f3-40ad-58aa-bc0b-ea9c64d6861c",
+        "subject": "Northwind",
+        "predicate": "has_partial_refund_rule",
+        "object": "be issued when an item shows signs of use beyond inspection, is missing parts, or is returned without original packaging",
+        "status": "candidate"
+      },
+      {
+        "number": 25,
+        "id": "dfdc6719-c0e5-5023-9389-f091e3c52fd7",
+        "subject": "Like new, tags attached",
+        "predicate": "has_refund_percentage",
+        "object": "100%",
+        "status": "verified"
+      },
+      {
+        "number": 26,
+        "id": "66fbceaa-7b67-51cd-9610-265fa8c7ae77",
+        "subject": "Opened packaging, item unused",
+        "predicate": "has_refund_percentage",
+        "object": "100%",
+        "status": "verified"
+      },
+      {
+        "number": 27,
+        "id": "213ba61a-d607-5fcd-834b-847ede05f5ba",
+        "subject": "Missing original box (non-fragile)",
+        "predicate": "has_refund_percentage",
+        "object": "90%",
+        "status": "verified"
+      },
+      {
+        "number": 28,
+        "id": "d7f13f09-1bf2-5ff1-acf9-3b3b99869e6c",
+        "subject": "Missing accessories or free gift",
+        "predicate": "has_refund_rule",
+        "object": "Refund minus gift value",
+        "status": "verified"
+      },
+      {
+        "number": 29,
+        "id": "13c83548-53fb-5307-99ca-e536c5fb862d",
+        "subject": "Light wear or signs of use",
+        "predicate": "has_refund_percentage",
+        "object": "50% - 75%",
+        "status": "verified"
+      },
+      {
+        "number": 30,
+        "id": "974a2402-ca6d-51ac-bf6e-fb271e6fd0b3",
+        "subject": "Customer",
+        "predicate": "has_refund_percentage",
+        "object": "0% - 25% (agent discretion, manager approval)",
+        "status": "verified"
+      },
+      {
+        "number": 31,
+        "id": "616d7f2f-4627-577d-8c3b-6487a974704a",
+        "subject": "Washed, altered or stained items",
+        "predicate": "cannot_be_returned_or_refunded",
+        "object": "Not eligible",
+        "status": "verified"
+      },
+      {
+        "number": 32,
+        "id": "ffb5e191-e550-5120-8864-6b5eecb231e2",
+        "subject": "Refund approval",
+        "predicate": "requires_approval_role",
+        "object": "Tier 1 Customer Support Agent",
+        "status": "verified"
+      },
+      {
+        "number": 33,
+        "id": "2b572992-d649-5e11-98cf-9d1314744703",
+        "subject": "Refund approval",
+        "predicate": "requires_approval_role",
+        "object": "Tier 2 Support Lead",
+        "status": "verified"
+      },
+      {
+        "number": 34,
+        "id": "88950801-834b-5abd-9ba8-49221ab1ee83",
+        "subject": "Refund approval",
+        "predicate": "requires_approval_role",
+        "object": "Customer Experience Manager",
+        "status": "verified"
+      },
+      {
+        "number": 35,
+        "id": "b1eb290d-a462-54cc-9178-a07d0b7332af",
+        "subject": "Refund approval",
+        "predicate": "requires_approval_role",
+        "object": "Finance Director",
+        "status": "verified"
+      },
+      {
+        "number": 36,
+        "id": "f56bab01-5207-55ec-a333-8370225a564f",
+        "subject": "Refund approval",
+        "predicate": "requires_fraud_review",
+        "object": "Secondary fraud review required",
+        "status": "verified"
+      }
+    ]
+  },
+  "cluster_06_non_refundable_items_and_exceptions": {
+    "cluster_id": "cluster_06_non_refundable_items_and_exceptions",
+    "section_number": "Section 5 & 5.2",
+    "section_title": "5. Non-Refundable Items & 5.2 Exceptions",
+    "pages": [
+      7
+    ],
+    "cluster_rationale": "Non-refundable items including perishable foods past 14 days (#223), items returned past 90 days (#224), and Section 5.2 policy exception for damaged/defective/misdescribed goods (#38).",
+    "claim_count": 4,
+    "claim_numbers": [
+      37,
+      38,
+      223,
+      224
+    ],
+    "claims": [
+      {
+        "number": 37,
+        "id": "50e18e3c-c8e8-5b63-9fa5-a645bcdd3349",
+        "subject": "Custom products",
+        "predicate": "cannot_be_returned_or_refunded",
+        "object": "cannot be resold",
+        "status": "candidate"
+      },
+      {
+        "number": 38,
+        "id": "1167a715-8453-5b0b-a2c7-f9bc5989f280",
+        "subject": "Even for non-refundable items, a full refund or replacement",
+        "predicate": "will_issue_refund",
+        "object": "be provided if the item arrives damaged, is materially different from its description, or was shipped in error",
+        "status": "candidate"
+      },
+      {
+        "number": 223,
+        "id": "4f87a460-9b39-5055-ab06-d192073678ca",
+        "subject": "Perishable goods past 14 days from delivery",
+        "predicate": "cannot_be_returned_or_refunded",
+        "object": "\u007f Perishable goods such as freeze-dried meals past 14 days from delivery.",
+        "status": "conflicted"
+      },
+      {
+        "number": 224,
+        "id": "eab88ee6-78ec-5bfb-9b31-c0646de5eaad",
+        "subject": "Items returned more than 90 days after delivery",
+        "predicate": "cannot_be_returned_or_refunded",
+        "object": "Not eligible for return or refund",
+        "status": "conflicted"
+      }
+    ]
+  },
+  "cluster_07_return_process_and_required_info": {
+    "cluster_id": "cluster_07_return_process_and_required_info",
+    "section_number": "Section 6 & 6.4",
+    "section_title": "6. Return Process & 6.4 Required Information",
+    "pages": [
+      8
+    ],
+    "cluster_rationale": "Return initiation channels (phone, chat, mail) and mandatory data requirements (Order #, Email, SKU, Reason, Photos, Preferred Resolution).",
+    "claim_count": 13,
+    "claim_numbers": [
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51
+    ],
+    "claims": [
+      {
+        "number": 39,
+        "id": "1b10c46a-fdb8-5b5f-9c64-7c804450db8a",
+        "subject": "In-store refunds",
+        "predicate": "has_posting_duration",
+        "object": "processed immediately; bank may take 3-5 days to post the credit",
+        "status": "verified"
+      },
+      {
+        "number": 40,
+        "id": "3b9fe178-3459-506e-9aa1-c278b96ff7b7",
+        "subject": "Order number",
+        "predicate": "has_example_value",
+        "object": "NW-10482391",
+        "status": "rejected"
+      },
+      {
+        "number": 41,
+        "id": "2aed1d95-23b3-54cc-add6-a012615595df",
+        "subject": "Order number",
+        "predicate": "is_required_for_refund_request",
+        "object": "Yes",
+        "status": "verified"
+      },
+      {
+        "number": 42,
+        "id": "3775628f-1524-586b-9410-073ded4df318",
+        "subject": "Email on order",
+        "predicate": "has_example_value",
+        "object": "jane.doe@example.com",
+        "status": "rejected"
+      },
+      {
+        "number": 43,
+        "id": "d2824fc1-ae44-518d-a2d4-af323d37d965",
+        "subject": "Customer submitting return request",
+        "predicate": "must_provide_information",
+        "object": "Email on order",
+        "status": "verified"
+      },
+      {
+        "number": 44,
+        "id": "aa729d6a-1dc9-5da7-84d9-cba3a5588793",
+        "subject": "Item SKU / name",
+        "predicate": "has_example_value",
+        "object": "TNT-4P-GRN / Summit 4-Person Tent",
+        "status": "rejected"
+      },
+      {
+        "number": 45,
+        "id": "7faa45fc-3f30-5870-ac44-4b286e90a2f8",
+        "subject": "Item SKU / name",
+        "predicate": "is_required_for_refund_request",
+        "object": "Yes",
+        "status": "verified"
+      },
+      {
+        "number": 46,
+        "id": "995aeec4-de54-59eb-8305-8337b91d706d",
+        "subject": "Reason for return",
+        "predicate": "has_example_value",
+        "object": "Wrong size",
+        "status": "rejected"
+      },
+      {
+        "number": 47,
+        "id": "5bcafb97-2c5d-52ed-bcb1-4c99c2c01fff",
+        "subject": "Reason for return",
+        "predicate": "is_required_for_refund_request",
+        "object": "Yes",
+        "status": "verified"
+      },
+      {
+        "number": 48,
+        "id": "fdb8e3ae-22b6-5420-929f-bcdc33715bc2",
+        "subject": "Photos",
+        "predicate": "has_example_value",
+        "object": "Damage close-up",
+        "status": "rejected"
+      },
+      {
+        "number": 49,
+        "id": "aae9551d-1de2-5db1-88ce-c4de347bffb7",
+        "subject": "Photos",
+        "predicate": "is_required_for_refund_request",
+        "object": "If damaged",
+        "status": "verified"
+      },
+      {
+        "number": 50,
+        "id": "0ab8ae23-ba17-50b5-9078-f6d9eed800a7",
+        "subject": "Preferred resolution",
+        "predicate": "has_example_value",
+        "object": "Refund to card",
+        "status": "rejected"
+      },
+      {
+        "number": 51,
+        "id": "b1726a8f-2912-544d-b8ac-c3b179ac6f27",
+        "subject": "Preferred resolution",
+        "predicate": "is_required_for_refund_request",
+        "object": "Yes",
+        "status": "verified"
+      }
+    ]
+  },
+  "cluster_08_refund_processing_timelines": {
+    "cluster_id": "cluster_08_refund_processing_timelines",
+    "section_number": "Section 7",
+    "section_title": "7. Refund Processing Timelines",
+    "pages": [
+      9
+    ],
+    "cluster_rationale": "Stage durations for RMA issuance, carrier transit, warehouse receipt & inspection, and posting duration by tender type (e.g. debit card / bank transfer 5-10 business days).",
+    "claim_count": 9,
+    "claim_numbers": [
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60
+    ],
+    "claims": [
+      {
+        "number": 52,
+        "id": "14cc40da-0816-5f90-9559-03473e7146e4",
+        "subject": "RMA issued after request",
+        "predicate": "has_stage_duration",
+        "object": "Instantly online; up to 1 hour by phone",
+        "status": "verified"
+      },
+      {
+        "number": 53,
+        "id": "69b329a5-83ea-56aa-9d11-c9da0ed614db",
+        "subject": "Return transit to warehouse",
+        "predicate": "has_stage_duration",
+        "object": "3-7 business days (domestic)",
+        "status": "verified"
+      },
+      {
+        "number": 54,
+        "id": "9c0e8950-a413-5d17-8169-1cafba97d851",
+        "subject": "Warehouse receipt and inspection",
+        "predicate": "has_stage_duration",
+        "object": "1-2 business days",
+        "status": "verified"
+      },
+      {
+        "number": 55,
+        "id": "5c754883-1ff5-54e7-a9ce-7dd325b86ee2",
+        "subject": "Refund approved and issued",
+        "predicate": "has_stage_duration",
+        "object": "Within 1 business day of inspection",
+        "status": "verified"
+      },
+      {
+        "number": 56,
+        "id": "d5a931b1-54e4-5141-8aa9-c0ead35a2fb4",
+        "subject": "Credit card refund posted by bank",
+        "predicate": "has_posting_duration",
+        "object": "3-5 business days",
+        "status": "verified"
+      },
+      {
+        "number": 57,
+        "id": "9598293d-5667-50f8-94fa-2740787d07ad",
+        "subject": "Debit card / bank transfer",
+        "predicate": "has_posting_duration",
+        "object": "5-10 business days",
+        "status": "verified"
+      },
+      {
+        "number": 58,
+        "id": "b0787a14-f161-5f4f-ab29-80956ad2b9da",
+        "subject": "PayPal",
+        "predicate": "has_posting_duration",
+        "object": "Within 24 hours of issue",
+        "status": "candidate"
+      },
+      {
+        "number": 59,
+        "id": "064fc06d-35e7-5fb5-b86d-507d27a2d85d",
+        "subject": "Store credit",
+        "predicate": "has_posting_duration",
+        "object": "Immediate",
+        "status": "verified"
+      },
+      {
+        "number": 60,
+        "id": "37bc7404-9e07-5d51-9ea7-e44e3555679b",
+        "subject": "Check (by request, over $1,000)",
+        "predicate": "has_posting_duration",
+        "object": "10-15 business days",
+        "status": "candidate"
+      }
+    ]
+  },
+  "cluster_09_refund_methods_and_payment_types": {
+    "cluster_id": "cluster_09_refund_methods_and_payment_types",
+    "section_number": "Section 8 & 8.3",
+    "section_title": "8. Refund Methods and Payment Types & 8.3 Store Credit Bonus",
+    "pages": [
+      10
+    ],
+    "cluster_rationale": "Original payment refunding across cards, PayPal, Apple Pay, BNPL, gift cards, cash in-store ($50 threshold boundary), split payments, and 5% store credit bonus (up to $25).",
+    "claim_count": 18,
+    "claim_numbers": [
+      61,
+      62,
+      63,
+      64,
+      65,
+      66,
+      67,
+      68,
+      69,
+      70,
+      71,
+      72,
+      73,
+      74,
+      75,
+      76,
+      77,
+      78
+    ],
+    "claims": [
+      {
+        "number": 61,
+        "id": "7cd28d47-1b5c-586c-afce-ffbadae0a0b5",
+        "subject": "Visa / Mastercard / Amex",
+        "predicate": "has_refund_method",
+        "object": "Original card",
+        "status": "verified"
+      },
+      {
+        "number": 62,
+        "id": "d1cf2561-93da-519d-8c46-a34b9484f712",
+        "subject": "Visa / Mastercard / Amex",
+        "predicate": "has_posting_duration",
+        "object": "3-5 business days to post",
+        "status": "verified"
+      },
+      {
+        "number": 63,
+        "id": "712563ee-ef8d-59e7-97b2-cf4514b343b0",
+        "subject": "Debit card",
+        "predicate": "has_refund_method",
+        "object": "Original card",
+        "status": "verified"
+      },
+      {
+        "number": 64,
+        "id": "2a460a39-332f-5ff0-b1d4-faf07cb7f2ab",
+        "subject": "Debit card",
+        "predicate": "has_posting_duration",
+        "object": "Up to 10 business days",
+        "status": "candidate"
+      },
+      {
+        "number": 65,
+        "id": "d17e6dfb-1000-55fb-805e-0d4c6a9911c8",
+        "subject": "PayPal",
+        "predicate": "has_refund_method",
+        "object": "PayPal balance",
+        "status": "verified"
+      },
+      {
+        "number": 66,
+        "id": "d6c9c736-04dc-50e8-b1cb-8e9606c4b609",
+        "subject": "PayPal",
+        "predicate": "has_posting_sla_estimate",
+        "object": "Usually within 24 hours",
+        "status": "candidate"
+      },
+      {
+        "number": 67,
+        "id": "7e6b6689-ec72-5b6e-852c-2764ceda35dc",
+        "subject": "Apple Pay / Google Pay",
+        "predicate": "references_underlying_payment_timeline",
+        "object": "Underlying card",
+        "status": "verified"
+      },
+      {
+        "number": 68,
+        "id": "6e7c96b1-9f0c-5a82-93d4-b11485e00947",
+        "subject": "Apple Pay / Google Pay",
+        "predicate": "has_stage_duration",
+        "object": "Same as card",
+        "status": "verified"
+      },
+      {
+        "number": 69,
+        "id": "d049cf4e-d9cb-5c41-b424-0bae8b9d27fe",
+        "subject": "Buy Now Pay Later (e.g. Klarna)",
+        "predicate": "has_refund_method",
+        "object": "Provider reduces balance",
+        "status": "verified"
+      },
+      {
+        "number": 70,
+        "id": "8ea3833f-1887-52fd-84c4-ac337b06e399",
+        "subject": "Buy Now Pay Later (e.g. Klarna)",
+        "predicate": "has_provider_governed_timeline",
+        "object": "Provider timelines apply",
+        "status": "verified"
+      },
+      {
+        "number": 71,
+        "id": "99609521-df66-51c5-b570-ba1874bd94e9",
+        "subject": "Gift cards",
+        "predicate": "has_refund_method",
+        "object": "New gift card or store credit",
+        "status": "verified"
+      },
+      {
+        "number": 72,
+        "id": "287cbd68-ad78-5bd7-921a-be098bda00ed",
+        "subject": "Gift cards",
+        "predicate": "has_posting_duration",
+        "object": "Instant",
+        "status": "verified"
+      },
+      {
+        "number": 73,
+        "id": "f0e0206d-ce07-5507-815a-d3cdd361661d",
+        "subject": "Cash (in-store)",
+        "predicate": "has_refund_method",
+        "object": "Cash up to $50, then store credit/card",
+        "status": "verified"
+      },
+      {
+        "number": 74,
+        "id": "1f2bc618-01ff-530d-b01d-daa682288c2c",
+        "subject": "Cash (in-store)",
+        "predicate": "has_identity_verification_requirement",
+        "object": "ID required over $50",
+        "status": "verified"
+      },
+      {
+        "number": 75,
+        "id": "514d4d3e-48b2-5ad6-9508-5e73cf90abdc",
+        "subject": "Split payments",
+        "predicate": "has_refund_method",
+        "object": "Proportionally to each method",
+        "status": "verified"
+      },
+      {
+        "number": 76,
+        "id": "d0d2f6c6-f893-5f73-ab6b-762f632f8f2f",
+        "subject": "Split payments",
+        "predicate": "has_refund_allocation_rule",
+        "object": "Gift card portion first",
+        "status": "verified"
+      },
+      {
+        "number": 77,
+        "id": "02d74b39-1fcf-5bc1-9119-92d435c580e0",
+        "subject": "Customer",
+        "predicate": "receives_store_credit_bonus",
+        "object": "5% bonus on credit value, maximum bonus $25.00 per return",
+        "status": "verified"
+      },
+      {
+        "number": 78,
+        "id": "e2585ded-515d-5cc1-bb66-7ee01acb26ee",
+        "subject": "Bonus credit",
+        "predicate": "cannot_be_applied_retroactively",
+        "object": "be applied retroactively once a refund has been issued to the card",
+        "status": "candidate"
+      }
+    ]
+  },
+  "cluster_10_shipping_costs_and_return_labels": {
+    "cluster_id": "cluster_10_shipping_costs_and_return_labels",
+    "section_number": "Section 9 & 9.2",
+    "section_title": "9. Shipping Costs and Return Labels & 9.2 Oversized and Freight Items",
+    "pages": [
+      11
+    ],
+    "cluster_rationale": "Customer-paid $6.95 return label, free return shipping for defective items or orders >$150, drop-off rules, freight exclusions.",
+    "claim_count": 20,
+    "claim_numbers": [
+      79,
+      80,
+      81,
+      82,
+      83,
+      84,
+      85,
+      86,
+      87,
+      88,
+      89,
+      90,
+      91,
+      92,
+      93,
+      94,
+      95,
+      96,
+      97,
+      98
+    ],
+    "claims": [
+      {
+        "number": 79,
+        "id": "03171073-2357-5474-82d1-bbaab393b11a",
+        "subject": "Defective or damaged",
+        "predicate": "has_return_shipping_rule",
+        "object": "Yes, in full",
+        "status": "verified"
+      },
+      {
+        "number": 80,
+        "id": "1a3cfa24-0d66-5f9e-a3bf-501504532db5",
+        "subject": "Defective or damaged",
+        "predicate": "has_return_label_cost",
+        "object": "Free",
+        "status": "verified"
+      },
+      {
+        "number": 81,
+        "id": "ec046b2b-bf74-55b3-84a7-f823441471df",
+        "subject": "Wrong item sent",
+        "predicate": "has_return_shipping_rule",
+        "object": "Yes, in full",
+        "status": "verified"
+      },
+      {
+        "number": 82,
+        "id": "d3848452-8b69-5467-92ae-201b09e28770",
+        "subject": "Wrong item sent",
+        "predicate": "has_return_label_cost",
+        "object": "Free",
+        "status": "verified"
+      },
+      {
+        "number": 83,
+        "id": "981f7ec2-4a7d-509b-92df-a5b763d97790",
+        "subject": "Not as described",
+        "predicate": "has_return_shipping_rule",
+        "object": "Yes, in full",
+        "status": "verified"
+      },
+      {
+        "number": 84,
+        "id": "e0792adf-8434-5806-a945-1bf587e61325",
+        "subject": "Not as described",
+        "predicate": "has_return_label_cost",
+        "object": "Free",
+        "status": "verified"
+      },
+      {
+        "number": 85,
+        "id": "2a48351f-8ca1-591d-bbaa-4ba7e37ccd89",
+        "subject": "Changed mind / wrong size",
+        "predicate": "has_return_shipping_rule",
+        "object": "No",
+        "status": "verified"
+      },
+      {
+        "number": 86,
+        "id": "76a0fde9-ac2a-5a22-9a40-d953d7865ddd",
+        "subject": "Changed mind / wrong size",
+        "predicate": "has_return_label_cost",
+        "object": "$6.95 deducted from refund",
+        "status": "verified"
+      },
+      {
+        "number": 87,
+        "id": "2534aaa8-122b-56df-925a-ce9fe22ff9c3",
+        "subject": "Gold member, any reason",
+        "predicate": "has_return_shipping_rule",
+        "object": "No",
+        "status": "verified"
+      },
+      {
+        "number": 88,
+        "id": "32df8a56-a0da-54d3-ab31-8c90d7bf6ae5",
+        "subject": "Gold member, any reason",
+        "predicate": "has_return_label_cost",
+        "object": "Free",
+        "status": "verified"
+      },
+      {
+        "number": 89,
+        "id": "3b43e186-2054-5e23-bf7a-79eec43aa8a5",
+        "subject": "Exchange",
+        "predicate": "has_return_shipping_rule",
+        "object": "N/A",
+        "status": "verified"
+      },
+      {
+        "number": 90,
+        "id": "bf0ccbfa-26a1-56bf-af54-71af2bff7a7c",
+        "subject": "Exchange",
+        "predicate": "has_return_label_cost",
+        "object": "Free both ways",
+        "status": "verified"
+      },
+      {
+        "number": 91,
+        "id": "5ad75932-6c45-5c30-a146-9692e241ed7a",
+        "subject": "Order",
+        "predicate": "has_return_shipping_rule",
+        "object": "No",
+        "status": "verified"
+      },
+      {
+        "number": 92,
+        "id": "19a6b158-14ab-5384-8f91-2c73b6a93e44",
+        "subject": "Order",
+        "predicate": "has_return_label_cost",
+        "object": "Free",
+        "status": "verified"
+      },
+      {
+        "number": 93,
+        "id": "c893448c-a9b3-5766-8624-af7b9080c40c",
+        "subject": "Oversize items",
+        "predicate": "has_return_freight_deduction",
+        "object": "$49.00 flat return freight fee deducted from refund",
+        "status": "verified"
+      },
+      {
+        "number": 94,
+        "id": "0e4cc3b2-701f-5c1b-9fa4-e6498fbf3190",
+        "subject": "Freight pickups",
+        "predicate": "has_scheduling_requirement",
+        "object": "with our logistics team at least 3 business days in advance",
+        "status": "candidate"
+      },
+      {
+        "number": 95,
+        "id": "06fa91e2-9620-55f1-a3e3-29bb41885bc5",
+        "subject": "Customer",
+        "predicate": "has_return_shipping_rule",
+        "object": "their own carrier",
+        "status": "verified"
+      },
+      {
+        "number": 96,
+        "id": "2c2b96fa-6717-516b-bf29-b3f15945e7d7",
+        "subject": "Carrier",
+        "predicate": "limited_to",
+        "object": "$12.00 and only for approved defective returns, with a receipt",
+        "status": "candidate"
+      },
+      {
+        "number": 97,
+        "id": "1ae197ee-cc6d-5e33-90df-7a285fddf166",
+        "subject": "Prepaid labels",
+        "predicate": "has_drop_off_options",
+        "object": "be dropped at over 15,000 carrier locations and all Northwind stores",
+        "status": "candidate"
+      },
+      {
+        "number": 98,
+        "id": "4b5c9490-c88a-52de-a36d-150774991955",
+        "subject": "Customer",
+        "predicate": "requires_receipt_retention",
+        "object": "drop-off receipt until refund has been confirmed",
+        "status": "verified"
+      }
+    ]
+  },
+  "cluster_11_damaged_defective_items": {
+    "cluster_id": "cluster_11_damaged_defective_items",
+    "section_number": "Section 10 & 10.3",
+    "section_title": "10. Damaged, Defective or Incorrect Items & 10.3 Resolution Options",
+    "pages": [
+      12
+    ],
+    "cluster_rationale": "Remedies for carrier damage, incorrect shipment, replacement within 2-3 business days, and Keep It policy for damaged items under $40.",
+    "claim_count": 9,
+    "claim_numbers": [
+      99,
+      100,
+      101,
+      102,
+      103,
+      104,
+      105,
+      106,
+      107
+    ],
+    "claims": [
+      {
+        "number": 99,
+        "id": "5dd2ebdc-30b6-5a18-91c6-193bd9c53016",
+        "subject": "Replacement",
+        "predicate": "has_resolution_option_details",
+        "object": "Same item shipped with free expedited shipping",
+        "status": "verified"
+      },
+      {
+        "number": 100,
+        "id": "24dc8116-5ef1-52c8-816c-3409c54f42cb",
+        "subject": "Replacement",
+        "predicate": "has_stage_duration",
+        "object": "2-3 business days",
+        "status": "verified"
+      },
+      {
+        "number": 101,
+        "id": "e24fede9-ebf5-5199-a621-f5e491e4c63c",
+        "subject": "Full refund",
+        "predicate": "has_resolution_option_details",
+        "object": "Item price plus shipping and tax",
+        "status": "verified"
+      },
+      {
+        "number": 102,
+        "id": "ff981f0d-99d2-5315-8730-c0ed5623c5fd",
+        "subject": "Full refund",
+        "predicate": "has_stage_duration",
+        "object": "3-5 business days",
+        "status": "verified"
+      },
+      {
+        "number": 103,
+        "id": "48325771-a8f9-5327-b437-4ac8b8176725",
+        "subject": "Partial refund for cosmetic flaws",
+        "predicate": "has_resolution_option_details",
+        "object": "Offered for minor cosmetic flaws",
+        "status": "verified"
+      },
+      {
+        "number": 104,
+        "id": "6e636c29-4a05-512f-be52-85dc34c782a8",
+        "subject": "Repair",
+        "predicate": "has_resolution_option_details",
+        "object": "For eligible products under warranty",
+        "status": "verified"
+      },
+      {
+        "number": 105,
+        "id": "3905f471-4c38-5873-8c57-9f79cac80b3c",
+        "subject": "Repair",
+        "predicate": "has_stage_duration",
+        "object": "7-14 business days",
+        "status": "verified"
+      },
+      {
+        "number": 106,
+        "id": "3f93125f-13d0-5b3d-bb51-d7fb2e114b3c",
+        "subject": "Damaged item under $40",
+        "predicate": "may_issue_refund_without_return",
+        "object": "refund without requiring item return ('Keep It' policy)",
+        "status": "verified"
+      },
+      {
+        "number": 107,
+        "id": "7eea6475-37c4-56e7-85da-b64c9458bedb",
+        "subject": "Keep It Policy",
+        "predicate": "limited_to",
+        "object": "two instances per customer per year",
+        "status": "candidate"
+      }
+    ]
+  },
+  "cluster_12_cancellations_and_price_adjustments": {
+    "cluster_id": "cluster_12_cancellations_and_price_adjustments",
+    "section_number": "Section 11 & 11.2",
+    "section_title": "11. Order Cancellations & 11.2 Price Adjustments",
+    "pages": [
+      13
+    ],
+    "cluster_rationale": "Cancellation rights by order status (placed, processing, shipped, delivered, pre-order, backorder), and 14-day price adjustment policy.",
+    "claim_count": 12,
+    "claim_numbers": [
+      108,
+      109,
+      110,
+      111,
+      112,
+      113,
+      114,
+      115,
+      116,
+      117,
+      118,
+      119
+    ],
+    "claims": [
+      {
+        "number": 108,
+        "id": "651154e4-d156-546a-b8b1-531b9734058e",
+        "subject": "Shipped order",
+        "predicate": "must_be_handled_as_return",
+        "object": "Once an order has shipped, it must be handled as a return.",
+        "status": "candidate"
+      },
+      {
+        "number": 109,
+        "id": "9516ac0d-219d-5a9f-92db-7cf8f2b515e5",
+        "subject": "Order cancellation",
+        "predicate": "has_cancellation_window",
+        "object": "Refund Pending (within 1 hour) self-service full refund and immediate authorization release",
+        "status": "verified"
+      },
+      {
+        "number": 110,
+        "id": "cb5b46d1-ae31-5280-aef5-00996b2006bc",
+        "subject": "Order",
+        "predicate": "has_attempted_not_guaranteed",
+        "object": "No",
+        "status": "candidate"
+      },
+      {
+        "number": 111,
+        "id": "bcd27d08-a9a8-595d-aead-7d90043073d6",
+        "subject": "Order",
+        "predicate": "has_full_refund_if_stopped_else_return",
+        "object": "Refuse delivery or return",
+        "status": "candidate"
+      },
+      {
+        "number": 112,
+        "id": "ee4f61ad-9262-5c8c-8a18-16eefc2ed0f0",
+        "subject": "Order",
+        "predicate": "has_attempted_not_guaranteed",
+        "object": "No",
+        "status": "candidate"
+      },
+      {
+        "number": 113,
+        "id": "07091d68-404c-5cc1-be1d-4310e270d7f5",
+        "subject": "Order",
+        "predicate": "has_full_refund_if_stopped_else_return",
+        "object": "Standard return policy",
+        "status": "candidate"
+      },
+      {
+        "number": 114,
+        "id": "bdab680b-6426-5140-931d-d33cffbccc20",
+        "subject": "Order",
+        "predicate": "has_attempted_not_guaranteed",
+        "object": "Yes, until 7 days before release",
+        "status": "candidate"
+      },
+      {
+        "number": 115,
+        "id": "d8ecf6aa-ddc8-515d-ba50-c202d68d051e",
+        "subject": "Order",
+        "predicate": "has_full_refund_if_stopped_else_return",
+        "object": "Full refund",
+        "status": "candidate"
+      },
+      {
+        "number": 116,
+        "id": "c729e396-23ec-5bb1-ab43-6311ab4c1b7d",
+        "subject": "Order",
+        "predicate": "has_attempted_not_guaranteed",
+        "object": "Yes, anytime",
+        "status": "candidate"
+      },
+      {
+        "number": 117,
+        "id": "582714dd-087f-563d-98b5-c37d680f6be1",
+        "subject": "Order",
+        "predicate": "has_full_refund_if_stopped_else_return",
+        "object": "Full refund",
+        "status": "candidate"
+      },
+      {
+        "number": 118,
+        "id": "7c307e56-15bc-552a-98e0-6ee1dcfc2e8e",
+        "subject": "Northwind",
+        "predicate": "may_cancel_order",
+        "object": "an order for reasons including stock errors, pricing errors, suspected fraud, or inability to verify payment",
+        "status": "candidate"
+      },
+      {
+        "number": 119,
+        "id": "3390bb9e-9dc1-5ffd-92b3-ce81e12e709e",
+        "subject": "Price adjustments",
+        "predicate": "has_price_adjustment_window",
+        "object": "14 days of purchase for one-time refund of difference",
+        "status": "verified"
+      }
+    ]
+  },
+  "cluster_13_subscriptions_digital_and_warranties": {
+    "cluster_id": "cluster_13_subscriptions_digital_and_warranties",
+    "section_number": "Section 12, 13, 14",
+    "section_title": "12. Subscription Refunds, 13. Digital Products and Gift Cards, 14. Warranty Claims",
+    "pages": [
+      14,
+      15,
+      16
+    ],
+    "cluster_rationale": "Subscription recurring fees & free trials, 7-day digital video course window, gift card cash redemption rules, and product warranty schedules.",
+    "claim_count": 33,
+    "claim_numbers": [
+      120,
+      121,
+      122,
+      123,
+      124,
+      125,
+      126,
+      127,
+      128,
+      129,
+      130,
+      131,
+      132,
+      133,
+      134,
+      135,
+      136,
+      137,
+      138,
+      139,
+      140,
+      141,
+      142,
+      143,
+      144,
+      145,
+      146,
+      147,
+      148,
+      149,
+      150,
+      151,
+      152
+    ],
+    "claims": [
+      {
+        "number": 120,
+        "id": "f3cc569d-d632-550c-b1e9-5069f669c02f",
+        "subject": "Trailhead Box subscription",
+        "predicate": "has_cancellation_rule",
+        "object": "Full refund if cancelled within 48 hours of renewal and box not shipped",
+        "status": "verified"
+      },
+      {
+        "number": 121,
+        "id": "1ecf2d3e-99c2-5aa8-8ed9-29573607e5c7",
+        "subject": "Rewards Plus subscription",
+        "predicate": "has_refund_rule",
+        "object": "Pro-rated refund within 30 days of renewal; none afterwards",
+        "status": "verified"
+      },
+      {
+        "number": 122,
+        "id": "d5dc0d44-d16f-5c4f-a3b8-282da62ffe05",
+        "subject": "Gear Care Plan subscription",
+        "predicate": "has_refund_rule",
+        "object": "No refund for current month; cancel effective next cycle",
+        "status": "verified"
+      },
+      {
+        "number": 123,
+        "id": "0099cba0-7fa2-54b2-b16d-f63b431fbed1",
+        "subject": "Subscriber",
+        "predicate": "can_cancel_before_trial_ends",
+        "object": "without charge",
+        "status": "verified"
+      },
+      {
+        "number": 124,
+        "id": "a3921956-5357-57db-b499-b5996eb0457f",
+        "subject": "Free trials",
+        "predicate": "may_request_first_charge_refund",
+        "object": "within 7 days for a full refund of the first charge",
+        "status": "verified"
+      },
+      {
+        "number": 125,
+        "id": "cc9eb019-6741-5fe3-9446-aa1c1c46555f",
+        "subject": "Company",
+        "predicate": "will_issue_refund",
+        "object": "treat the renewal as accidental and refund in full within 30 days",
+        "status": "candidate"
+      },
+      {
+        "number": 126,
+        "id": "6992854e-57e7-55e7-8d2c-44f498d3325b",
+        "subject": "Trailhead Box subscription",
+        "predicate": "can_pause_subscription",
+        "object": "for up to 3 months, once per year, from the account page",
+        "status": "verified"
+      },
+      {
+        "number": 127,
+        "id": "a3987c7c-c29e-5fa3-9dd7-94f00971cab0",
+        "subject": "Video course",
+        "predicate": "has_content_view_refund_window",
+        "object": "within 7 days",
+        "status": "verified"
+      },
+      {
+        "number": 128,
+        "id": "8c7c33aa-5885-501e-86b1-ab4cd0caa4db",
+        "subject": "Product",
+        "predicate": "has_refund_window",
+        "object": "Full refund within 14 days for corrupt or inaccessible files",
+        "status": "verified"
+      },
+      {
+        "number": 129,
+        "id": "3f9936ba-30a8-568d-aa69-3535cec52e2a",
+        "subject": "Gift cards",
+        "predicate": "cannot_be_refunded_for_cash",
+        "object": "Cash (except where required by law, e.g. California, balances under $10)",
+        "status": "candidate"
+      },
+      {
+        "number": 130,
+        "id": "346a3d13-2273-56db-bc52-634864daf6c1",
+        "subject": "Gift cards",
+        "predicate": "has_expiration_and_fee_rule",
+        "object": "\u007f Gift cards never expire and carry no fees.",
+        "status": "verified"
+      },
+      {
+        "number": 131,
+        "id": "67ec9cdc-6524-5dfd-b1a0-bbe7ca1b394a",
+        "subject": "Gift cards",
+        "predicate": "has_replacement_eligibility",
+        "object": "Replaced with original proof of purchase and remaining balance verifiable",
+        "status": "verified"
+      },
+      {
+        "number": 132,
+        "id": "8cb16778-8a6f-5e85-83b5-0ed642fee3a5",
+        "subject": "Gift cards",
+        "predicate": "cannot_be_cancelled",
+        "object": "be cancelled once the code is delivered by email",
+        "status": "verified"
+      },
+      {
+        "number": 133,
+        "id": "f686dc62-e653-56a9-88b6-d6546938acfe",
+        "subject": "Gift receipt",
+        "predicate": "has_refund_method",
+        "object": "return items with a gift receipt for store credit equal to the price paid, or exchange for another item",
+        "status": "verified"
+      },
+      {
+        "number": 134,
+        "id": "9a3d4e16-7858-5a74-b5a2-3db334b317ea",
+        "subject": "Gift receipt",
+        "predicate": "has_purchaser_notification_policy",
+        "object": "The purchaser is not notified of the return.",
+        "status": "candidate"
+      },
+      {
+        "number": 135,
+        "id": "fb28667e-bc58-590c-a7fc-8612070563e0",
+        "subject": "Gift receipt",
+        "predicate": "may_receive_store_credit",
+        "object": "Without a gift receipt, credit is issued at the lowest recent selling price.",
+        "status": "verified"
+      },
+      {
+        "number": 136,
+        "id": "cf8ac5a0-e482-5c94-8409-76382aecba18",
+        "subject": "Tents and shelters",
+        "predicate": "has_warranty_period",
+        "object": "2 years",
+        "status": "verified"
+      },
+      {
+        "number": 137,
+        "id": "a2cd5b2c-9bb0-5e01-b2b4-8814073e9430",
+        "subject": "Tents and shelters",
+        "predicate": "has_warranty_remedy",
+        "object": "Repair, replace or refund",
+        "status": "verified"
+      },
+      {
+        "number": 138,
+        "id": "f647023f-58e3-581d-95c3-fa4e67cf14a1",
+        "subject": "Sleeping bags",
+        "predicate": "has_warranty_period",
+        "object": "Lifetime (manufacturing defects)",
+        "status": "verified"
+      },
+      {
+        "number": 139,
+        "id": "d0b5bb05-1e9f-5b86-b3a9-5407c087e853",
+        "subject": "Sleeping bags",
+        "predicate": "has_warranty_remedy",
+        "object": "Repair or replace",
+        "status": "verified"
+      },
+      {
+        "number": 140,
+        "id": "390e1954-b356-5431-9f4d-8a8c27856b99",
+        "subject": "Backpacks",
+        "predicate": "has_warranty_period",
+        "object": "5 years",
+        "status": "verified"
+      },
+      {
+        "number": 141,
+        "id": "72a4291e-8432-5fdc-86fe-51bc6377448d",
+        "subject": "Backpacks",
+        "predicate": "has_warranty_remedy",
+        "object": "Repair or replace",
+        "status": "verified"
+      },
+      {
+        "number": 142,
+        "id": "1793bed7-ebec-5940-a235-21986f30dbfa",
+        "subject": "Footwear",
+        "predicate": "has_warranty_period",
+        "object": "1 year",
+        "status": "verified"
+      },
+      {
+        "number": 143,
+        "id": "f563990b-a3b3-562f-a2d5-344acf26a393",
+        "subject": "Footwear",
+        "predicate": "has_warranty_remedy",
+        "object": "Replace or refund",
+        "status": "verified"
+      },
+      {
+        "number": 144,
+        "id": "9dfc2825-4fcc-53ed-9207-383e709a9693",
+        "subject": "Apparel",
+        "predicate": "has_warranty_period",
+        "object": "1 year",
+        "status": "verified"
+      },
+      {
+        "number": 145,
+        "id": "cb7ce083-86c4-506d-be99-d852593285d5",
+        "subject": "Apparel",
+        "predicate": "has_warranty_remedy",
+        "object": "Replace or refund",
+        "status": "verified"
+      },
+      {
+        "number": 146,
+        "id": "243ed26a-4d57-5f78-a221-79427cf73f85",
+        "subject": "Electronics (headlamps, GPS)",
+        "predicate": "has_warranty_period",
+        "object": "1 year",
+        "status": "verified"
+      },
+      {
+        "number": 147,
+        "id": "b9f9cd49-de25-593b-b2c9-fd8110e49629",
+        "subject": "Electronics (headlamps, GPS)",
+        "predicate": "has_warranty_remedy",
+        "object": "Repair or replace",
+        "status": "verified"
+      },
+      {
+        "number": 148,
+        "id": "486a7665-86f0-5c0e-812a-231c217ca41f",
+        "subject": "Stoves and cookware",
+        "predicate": "has_warranty_period",
+        "object": "2 years",
+        "status": "verified"
+      },
+      {
+        "number": 149,
+        "id": "46295d19-8753-50eb-aeff-a39a58ab091e",
+        "subject": "Stoves and cookware",
+        "predicate": "has_warranty_remedy",
+        "object": "Repair or replace",
+        "status": "verified"
+      },
+      {
+        "number": 150,
+        "id": "bf30c50b-4ebf-5895-9f53-07c4f92a0ace",
+        "subject": "Water filters",
+        "predicate": "has_warranty_period",
+        "object": "1 year",
+        "status": "verified"
+      },
+      {
+        "number": 151,
+        "id": "5b26f47a-1742-5a7b-934b-8ef95ad22f2d",
+        "subject": "Water filters",
+        "predicate": "has_warranty_remedy",
+        "object": "Replace",
+        "status": "verified"
+      },
+      {
+        "number": 152,
+        "id": "e430fc70-9819-5f56-9ce3-5e282be8fc44",
+        "subject": "Marketplace sellers",
+        "predicate": "has_third_party_policy_rule",
+        "object": "Items shipped directly by third-party sellers follow the seller's policy, but Northwind's A-to-Z Guarantee ensures a refund if the seller fails to respond within 5 business days.",
+        "status": "verified"
+      }
+    ]
+  },
+  "cluster_14_international_orders": {
+    "cluster_id": "cluster_14_international_orders",
+    "section_number": "Section 15 & 15.2",
+    "section_title": "15. International Orders & 15.2 Currency Rules",
+    "pages": [
+      17
+    ],
+    "cluster_rationale": "Country-specific return windows (US, Canada, UK, EU, Australia, Rest of World), non-refundable customs duties, and original charge currency rules.",
+    "claim_count": 23,
+    "claim_numbers": [
+      153,
+      154,
+      155,
+      156,
+      157,
+      158,
+      159,
+      160,
+      161,
+      162,
+      163,
+      164,
+      165,
+      166,
+      167,
+      168,
+      169,
+      170,
+      171,
+      172,
+      173,
+      174,
+      175
+    ],
+    "claims": [
+      {
+        "number": 153,
+        "id": "8ff37f7d-74b6-592a-b763-711e8796a5f8",
+        "subject": "United States",
+        "predicate": "has_return_window",
+        "object": "30 days",
+        "status": "verified"
+      },
+      {
+        "number": 154,
+        "id": "e73a5ce7-2164-51f0-b5ab-7221424edd19",
+        "subject": "United States",
+        "predicate": "has_internal_policy_reference",
+        "object": "See Section 9",
+        "status": "verified"
+      },
+      {
+        "number": 155,
+        "id": "68e43087-d4dc-5e41-b41b-fe37239de67a",
+        "subject": "United States",
+        "predicate": "has_duties_and_taxes_rule",
+        "object": "Included",
+        "status": "verified"
+      },
+      {
+        "number": 156,
+        "id": "5b2f948a-8daf-5aeb-8685-7f494c1084e7",
+        "subject": "Canada",
+        "predicate": "has_return_window",
+        "object": "30 days",
+        "status": "verified"
+      },
+      {
+        "number": 157,
+        "id": "9cb2fa84-80a8-5f9b-aed7-fa36a4142930",
+        "subject": "Canada",
+        "predicate": "has_return_shipping_rule",
+        "object": "Customer pays unless defective",
+        "status": "verified"
+      },
+      {
+        "number": 158,
+        "id": "d962fd62-9eb2-5645-87d4-c31c1fd36d55",
+        "subject": "Canada",
+        "predicate": "has_duties_and_taxes_rule",
+        "object": "Duties refunded on approved returns",
+        "status": "verified"
+      },
+      {
+        "number": 159,
+        "id": "92612b76-8a50-58f0-baad-c4f104d45122",
+        "subject": "UK",
+        "predicate": "has_return_window",
+        "object": "30 days (14-day statutory minimum)",
+        "status": "verified"
+      },
+      {
+        "number": 160,
+        "id": "6eead355-b194-5580-a872-62adf0b99249",
+        "subject": "UK",
+        "predicate": "has_return_shipping_rule",
+        "object": "Customer pays unless defective",
+        "status": "verified"
+      },
+      {
+        "number": 161,
+        "id": "cbfdfaaf-ede2-5885-8fbf-d04b791a72be",
+        "subject": "UK",
+        "predicate": "has_duties_and_taxes_rule",
+        "object": "VAT refunded, duty via customs claim",
+        "status": "verified"
+      },
+      {
+        "number": 162,
+        "id": "fa9ccb4b-e5cb-56ce-8983-a454ca8a44dc",
+        "subject": "EU",
+        "predicate": "has_return_window",
+        "object": "30 days (14-day statutory minimum)",
+        "status": "verified"
+      },
+      {
+        "number": 163,
+        "id": "da525d2f-5b0c-5e56-a0f3-71775199bf28",
+        "subject": "EU",
+        "predicate": "has_return_shipping_rule",
+        "object": "Customer pays unless defective",
+        "status": "verified"
+      },
+      {
+        "number": 164,
+        "id": "e7e25134-666b-5676-b919-949b235ccc11",
+        "subject": "EU",
+        "predicate": "has_duties_and_taxes_rule",
+        "object": "VAT refunded",
+        "status": "verified"
+      },
+      {
+        "number": 165,
+        "id": "027cc66f-5707-5780-8cb6-58f1c2887ae3",
+        "subject": "Australia",
+        "predicate": "has_return_window",
+        "object": "30 days",
+        "status": "verified"
+      },
+      {
+        "number": 166,
+        "id": "131f1e94-eb11-55f2-b67c-da01b3ee7f44",
+        "subject": "Australia",
+        "predicate": "has_return_shipping_rule",
+        "object": "Customer pays unless defective",
+        "status": "verified"
+      },
+      {
+        "number": 167,
+        "id": "7aa81a95-fa9b-57fd-a11e-fce83e70b0db",
+        "subject": "Australia",
+        "predicate": "has_duties_and_taxes_rule",
+        "object": "GST refunded",
+        "status": "verified"
+      },
+      {
+        "number": 168,
+        "id": "42d166f3-4400-52bf-a04a-c730df0f727a",
+        "subject": "Rest of world",
+        "predicate": "has_return_window",
+        "object": "14 days",
+        "status": "verified"
+      },
+      {
+        "number": 169,
+        "id": "154c7bcc-975f-598e-b122-dbeffd30da60",
+        "subject": "Rest of world",
+        "predicate": "has_return_shipping_rule",
+        "object": "Customer pays",
+        "status": "verified"
+      },
+      {
+        "number": 170,
+        "id": "c2199ab3-97f1-583d-b4fd-7c9eb0dbf06f",
+        "subject": "Rest of world",
+        "predicate": "has_duties_and_taxes_rule",
+        "object": "Not refundable",
+        "status": "verified"
+      },
+      {
+        "number": 171,
+        "id": "4699fa3a-076f-5c09-a909-15629f89de85",
+        "subject": "International refund",
+        "predicate": "uses_original_charge_currency",
+        "object": "currency of the original charge",
+        "status": "verified"
+      },
+      {
+        "number": 172,
+        "id": "1277fdc3-2fa9-58f9-8252-0da288c01853",
+        "subject": "International refund",
+        "predicate": "has_currency_conversion_rule",
+        "object": "Refund currency follows original charge; exchange differences are not compensated",
+        "status": "verified"
+      },
+      {
+        "number": 173,
+        "id": "5f834dfb-8471-5133-bad1-9b59074be3ef",
+        "subject": "Customer",
+        "predicate": "is_responsible_for_duty_drawback",
+        "object": "filing customs duty drawback claims",
+        "status": "verified"
+      },
+      {
+        "number": 174,
+        "id": "e803e6c8-3c55-5889-95ad-2d4d8c9058db",
+        "subject": "Northwind",
+        "predicate": "provides_documentation_upon_request",
+        "object": "commercial invoice and proof of return",
+        "status": "verified"
+      },
+      {
+        "number": 175,
+        "id": "69b9dd45-5e3d-5dba-9730-7b50901cdbf2",
+        "subject": "Customs and duties",
+        "predicate": "has_refusal_refund_rule",
+        "object": "Refused deliveries at customs are refunded minus outbound and return shipping.",
+        "status": "verified"
+      }
+    ]
+  },
+  "cluster_15_chargebacks_and_disputes": {
+    "cluster_id": "cluster_15_chargebacks_and_disputes",
+    "section_number": "Section 16 & 16.3",
+    "section_title": "16. Chargeback Reason Codes & 16.3 Dispute Penalties",
+    "pages": [
+      18
+    ],
+    "cluster_rationale": "Cardholder dispute procedures, evidence submission deadlines, 30-90 day resolution timeline, reason codes 4853/4837/4855/4834/4841, and $25 admin fee.",
+    "claim_count": 14,
+    "claim_numbers": [
+      176,
+      177,
+      178,
+      179,
+      180,
+      181,
+      182,
+      183,
+      184,
+      185,
+      186,
+      187,
+      188,
+      189
+    ],
+    "claims": [
+      {
+        "number": 176,
+        "id": "51c4e7ae-eade-52ce-899e-ccaa90ce709c",
+        "subject": "Northwind",
+        "predicate": "has_evidence_submission_deadline",
+        "object": "Submits dispute evidence within 7 days",
+        "status": "verified"
+      },
+      {
+        "number": 177,
+        "id": "8b9958e8-e654-5947-90a4-2cc2468bf090",
+        "subject": "Card issuer",
+        "predicate": "has_dispute_decision_timeline",
+        "object": "Decides dispute outcome within 30\u201390 days",
+        "status": "verified"
+      },
+      {
+        "number": 178,
+        "id": "810a9be6-96e1-54ed-81ec-280ae9d3d539",
+        "subject": "Dispute loss",
+        "predicate": "has_funds_debit_outcome",
+        "object": "Transaction funds are debited from Northwind account",
+        "status": "verified"
+      },
+      {
+        "number": 179,
+        "id": "f6bfb94a-188a-5b53-97c2-8b166e3591fd",
+        "subject": "Fraudulent dispute",
+        "predicate": "may_apply_administration_fee",
+        "object": "$15 administration fee may apply for fraudulent claims",
+        "status": "verified"
+      },
+      {
+        "number": 180,
+        "id": "a2bea058-ced0-5eb0-8eb9-0c34cf836697",
+        "subject": "Chargeback Reason Code 4853",
+        "predicate": "has_definition",
+        "object": "Cardholder dispute / not as described",
+        "status": "rejected"
+      },
+      {
+        "number": 181,
+        "id": "383f0ae8-9364-5048-90e3-9cdf0f2f1dcb",
+        "subject": "Chargeback Reason Code 4853",
+        "predicate": "has_typical_resolution",
+        "object": "Refund or evidence submission",
+        "status": "candidate"
+      },
+      {
+        "number": 182,
+        "id": "af3e10cd-b353-5390-ac97-33c8b322bb96",
+        "subject": "Chargeback Reason Code 4837",
+        "predicate": "has_definition",
+        "object": "No cardholder authorisation (fraud)",
+        "status": "rejected"
+      },
+      {
+        "number": 183,
+        "id": "ed9b9894-ef5d-57aa-b1e5-abdd15de18f1",
+        "subject": "Chargeback Reason Code 4837",
+        "predicate": "has_typical_resolution",
+        "object": "Fraud investigation",
+        "status": "candidate"
+      },
+      {
+        "number": 184,
+        "id": "8a977758-fbe6-5a7a-99ea-b7220e61ef53",
+        "subject": "Chargeback Reason Code 4855",
+        "predicate": "has_definition",
+        "object": "Goods or services not provided",
+        "status": "rejected"
+      },
+      {
+        "number": 185,
+        "id": "b31551d7-77a8-5856-97b1-7427c61e993c",
+        "subject": "Chargeback Reason Code 4855",
+        "predicate": "has_typical_resolution",
+        "object": "Provide tracking proof or refund",
+        "status": "candidate"
+      },
+      {
+        "number": 186,
+        "id": "84472b8f-1e20-5f04-b1c8-8961f5839db7",
+        "subject": "Chargeback Reason Code 4834",
+        "predicate": "has_definition",
+        "object": "Duplicate processing",
+        "status": "rejected"
+      },
+      {
+        "number": 187,
+        "id": "20390128-a2ea-5f03-89a3-d92e59dc066b",
+        "subject": "Chargeback Reason Code 4834",
+        "predicate": "has_typical_resolution",
+        "object": "Verify and refund duplicate",
+        "status": "candidate"
+      },
+      {
+        "number": 188,
+        "id": "fe646fd9-0b50-58ed-8b43-1f1888e06046",
+        "subject": "Chargeback Reason Code 4841",
+        "predicate": "has_definition",
+        "object": "Cancelled recurring transaction",
+        "status": "rejected"
+      },
+      {
+        "number": 189,
+        "id": "90b36b61-02ae-5bcd-99e2-001a04a42ce7",
+        "subject": "Chargeback Reason Code 4841",
+        "predicate": "has_typical_resolution",
+        "object": "Check cancellation record",
+        "status": "candidate"
+      }
+    ]
+  },
+  "cluster_16_fraud_prevention_and_abuse": {
+    "cluster_id": "cluster_16_fraud_prevention_and_abuse",
+    "section_number": "Section 17 & 17.3",
+    "section_title": "17. Fraud Prevention and Policy Abuse",
+    "pages": [
+      19
+    ],
+    "cluster_rationale": "Four-tier escalating enforcement ladder (Notice, Restricted, Suspended, Permanent account closure), 30-day appeal process, and 7-year audit retention.",
+    "claim_count": 10,
+    "claim_numbers": [
+      190,
+      191,
+      192,
+      193,
+      194,
+      195,
+      196,
+      197,
+      198,
+      199
+    ],
+    "claims": [
+      {
+        "number": 190,
+        "id": "78bf1215-063d-5a00-9e19-9a27e855122b",
+        "subject": "Customer Account",
+        "predicate": "has_trigger",
+        "object": "Return rate 30-40%",
+        "status": "candidate"
+      },
+      {
+        "number": 191,
+        "id": "22864bba-fd53-57b3-af93-74294c0531bf",
+        "subject": "Customer Account",
+        "predicate": "has_action",
+        "object": "Email reminder of policy",
+        "status": "candidate"
+      },
+      {
+        "number": 192,
+        "id": "bb7e838b-a4bc-5efe-8be9-5a5a8c43c3b1",
+        "subject": "Customer Account",
+        "predicate": "has_trigger",
+        "object": "Return rate over 40% or one confirmed abuse case",
+        "status": "candidate"
+      },
+      {
+        "number": 193,
+        "id": "9ed8a28e-f5f6-57b8-a938-be07a15c5582",
+        "subject": "Customer Account",
+        "predicate": "has_action",
+        "object": "Store credit only; returns need manager approval",
+        "status": "candidate"
+      },
+      {
+        "number": 194,
+        "id": "0384743e-d6e0-5943-bfe3-01ae61daa5dd",
+        "subject": "Customer Account",
+        "predicate": "has_trigger",
+        "object": "Multiple confirmed abuse cases",
+        "status": "candidate"
+      },
+      {
+        "number": 195,
+        "id": "6bb94bca-bc31-536e-8ee6-30e5978258c8",
+        "subject": "Customer Account",
+        "predicate": "has_action",
+        "object": "Account suspended for 12 months",
+        "status": "candidate"
+      },
+      {
+        "number": 196,
+        "id": "59f51f1f-dc49-5994-9edf-30e789606d80",
+        "subject": "Customer Account",
+        "predicate": "has_trigger",
+        "object": "Fraud or counterfeit return",
+        "status": "candidate"
+      },
+      {
+        "number": 197,
+        "id": "07e6916a-b7cf-583e-bbd5-d656f019c05a",
+        "subject": "Customer Account",
+        "predicate": "has_action",
+        "object": "Account closed; referral to law enforcement where appropriate",
+        "status": "candidate"
+      },
+      {
+        "number": 198,
+        "id": "c8844dc7-e6aa-5468-a972-6cba01ecd58e",
+        "subject": "Customer",
+        "predicate": "may_appeal_restrictions",
+        "object": "restrictions in writing to appeals@northwind-demo.example within 30 days",
+        "status": "candidate"
+      },
+      {
+        "number": 199,
+        "id": "7bac9255-acfb-5133-8974-5caa0fcf2b18",
+        "subject": "Privacy",
+        "predicate": "has_retention_policy",
+        "object": "Return history is stored per our Privacy Policy, retained for 7 years for audit purposes, and never sold to third parties.",
+        "status": "candidate"
+      }
+    ]
+  },
+  "cluster_17_faqs_support_and_slas": {
+    "cluster_id": "cluster_17_faqs_support_and_slas",
+    "section_number": "Section 18, 19, 20",
+    "section_title": "18. Frequently Asked Questions, 19. Contact Information & SLAs, 20. Revision History",
+    "pages": [
+      20,
+      21,
+      22
+    ],
+    "cluster_rationale": "FAQ provisions, contact channels in Pacific Time (Live chat Daily 7am-10pm PT; Phone US/Canada Mon-Fri 8am-8pm PT, Sat 9am-5pm PT; 24/7 automated refund line), support SLAs, and version history.",
+    "claim_count": 21,
+    "claim_numbers": [
+      202,
+      203,
+      204,
+      205,
+      206,
+      207,
+      208,
+      209,
+      210,
+      211,
+      212,
+      213,
+      214,
+      215,
+      216,
+      217,
+      218,
+      219,
+      220,
+      221,
+      222
+    ],
+    "claims": [
+      {
+        "number": 202,
+        "id": "b24783e6-cabc-50fb-9c7f-1537b64f1e9b",
+        "subject": "Items bought in-store",
+        "predicate": "has_return_channel_eligibility",
+        "object": "be returned in any store or by mail using the RMA process with your receipt or loyalty account lookup",
+        "status": "verified"
+      },
+      {
+        "number": 203,
+        "id": "bda6335d-7c1c-5ef0-9386-110319bd0daa",
+        "subject": "Stolen package",
+        "predicate": "has_courtesy_replacement_rule",
+        "object": "One courtesy replacement per customer per year for packages under $200",
+        "status": "verified"
+      },
+      {
+        "number": 204,
+        "id": "7a8dc9ed-e939-53c2-81ee-e4df802d0d01",
+        "subject": "Phone (US/Canada)",
+        "predicate": "has_contact_phone",
+        "object": "1-800-555-0142",
+        "status": "rejected"
+      },
+      {
+        "number": 205,
+        "id": "0251f986-23e3-5f8f-a3a8-b9f2a1b03591",
+        "subject": "Phone (US/Canada)",
+        "predicate": "has_contact_hours",
+        "object": "Mon-Fri 8am-8pm; Sat 9am-5pm",
+        "status": "rejected"
+      },
+      {
+        "number": 206,
+        "id": "7979b56a-19b9-56a4-b760-0b6b248e569b",
+        "subject": "Phone (UK)",
+        "predicate": "has_contact_phone",
+        "object": "+44 20 7946 0142",
+        "status": "rejected"
+      },
+      {
+        "number": 207,
+        "id": "c30d3212-22ce-5aef-a2c5-2e692666f257",
+        "subject": "Phone (UK)",
+        "predicate": "has_contact_hours",
+        "object": "Mon-Fri 9am-5pm GMT",
+        "status": "rejected"
+      },
+      {
+        "number": 208,
+        "id": "4b2e4e8a-6d33-5382-a1c8-dfe6fdfd07cb",
+        "subject": "Email",
+        "predicate": "has_contact_email",
+        "object": "support@northwind-demo.example",
+        "status": "rejected"
+      },
+      {
+        "number": 209,
+        "id": "eb8f42a4-dccf-5fa2-bc16-db69c295fd26",
+        "subject": "Email",
+        "predicate": "has_contact_hours",
+        "object": "Response within 24 hours",
+        "status": "rejected"
+      },
+      {
+        "number": 210,
+        "id": "c04d7fe2-c659-56cf-8019-028c9ddccce0",
+        "subject": "Live chat",
+        "predicate": "has_contact_channel",
+        "object": "northwind-demo.example/chat",
+        "status": "rejected"
+      },
+      {
+        "number": 211,
+        "id": "38712024-c07e-57b1-8ec3-4a9ddfa0d9fd",
+        "subject": "Live chat",
+        "predicate": "has_contact_hours",
+        "object": "Daily 7am-10pm",
+        "status": "rejected"
+      },
+      {
+        "number": 212,
+        "id": "b1bb1283-b035-5efe-8e5c-9b760254d273",
+        "subject": "Refund status line",
+        "predicate": "has_contact_phone",
+        "object": "1-800-555-0177",
+        "status": "rejected"
+      },
+      {
+        "number": 213,
+        "id": "2270d59a-2910-58a4-ac07-5dd6e03c3211",
+        "subject": "Refund status line",
+        "predicate": "has_contact_hours",
+        "object": "24/7 automated",
+        "status": "rejected"
+      },
+      {
+        "number": 214,
+        "id": "5900ccde-fbcd-56bf-a222-95e230b4944a",
+        "subject": "Mail",
+        "predicate": "has_resolution_option_details",
+        "object": "Returns Dept., 200 Cascade Way, Portland, OR 97201, USA",
+        "status": "rejected"
+      },
+      {
+        "number": 215,
+        "id": "4ffaa6fd-1c67-5f89-aeef-d3f9efda33a3",
+        "subject": "Mail",
+        "predicate": "has_contact_hours",
+        "object": "N/A",
+        "status": "rejected"
+      },
+      {
+        "number": 216,
+        "id": "6112c2fb-3bd4-5dcd-af45-f9e44c961ad9",
+        "subject": "Escalations",
+        "predicate": "has_contact_email",
+        "object": "escalations@northwind-demo.example",
+        "status": "rejected"
+      },
+      {
+        "number": 217,
+        "id": "5f0cad9a-96e8-5747-8714-e5fd4a539c10",
+        "subject": "Escalations",
+        "predicate": "has_contact_hours",
+        "object": "Response within 2 business days",
+        "status": "rejected"
+      },
+      {
+        "number": 218,
+        "id": "33a7a86d-0f7c-5fcb-bdfe-900553221859",
+        "subject": "First response by email",
+        "predicate": "has_target",
+        "object": "24 hours",
+        "status": "candidate"
+      },
+      {
+        "number": 219,
+        "id": "7ec49b49-8c31-5a0e-9566-66c735d15335",
+        "subject": "First response by chat",
+        "predicate": "has_target",
+        "object": "Under 2 minutes",
+        "status": "candidate"
+      },
+      {
+        "number": 220,
+        "id": "40633e3d-83c7-53dc-88ba-586db009eb91",
+        "subject": "Resolution of standard refund query",
+        "predicate": "has_target",
+        "object": "Within 3 business days",
+        "status": "candidate"
+      },
+      {
+        "number": 221,
+        "id": "ca40254f-cf16-5ed0-b90d-e9b4546f968d",
+        "subject": "Escalated complaint resolution",
+        "predicate": "has_target",
+        "object": "10 business days",
+        "status": "candidate"
+      },
+      {
+        "number": 222,
+        "id": "3a57286f-5797-5468-acc4-01214cbc8522",
+        "subject": "Aug 15, 2025 Added Gear Care",
+        "predicate": "has_resolution_path",
+        "object": "4.0 Mar 1, 2025 Gold member window raised from 45 to 60 days",
+        "status": "rejected"
+      }
+    ]
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "metadata": {
+    "phase": "2.6b",
+    "title": "Production Release-Readiness Scorecard (Release Candidate v1)",
+    "timestamp": "2026-11-10T13:45:03.376435+00:00",
+    "corpus": "Northwind_Refund_Policy_Handbook.pdf"
+  },
+  "certified_precision": 1.0,
+  "operative_coverage": 1.0,
+  "golden_recall": 1.0,
+  "lifecycle_pass_rate": 1.0,
+  "unresolved_defects_count": 0,
+  "repaired_defects_count": 38,
+  "status_distribution": {
+    "total_claims": 224,
+    "verified": 140,
+    "candidate": 51,
+    "rejected": 31,
+    "conflicted": 2
+  },
+  "conflict_reconciliation": {
+    "total_pairs": 24976,
+    "intra_cluster": 1847,
+    "cross_cluster": 23129,
+    "total_conflicts": 452,
+    "material_diagnostic_conflicts": 422,
+    "non_material_operational_conflicts": 30,
+    "arithmetic_delta": 0
+  },
+  "provenance_fidelity": {
+    "source_inventory_hash_integrity": {
+      "description": "Deterministic SHA-256 integrity of authoritative source inventory",
+      "matched": 126,
+      "total": 126,
+      "target": "126/126",
+      "ratio": 1.0,
+      "status": "PASS"
+    },
+    "claim_evidence_span_fidelity": {
+      "description": "Byte-for-byte evidence span verification against source text",
+      "matched": 224,
+      "total": 224,
+      "target": "224/224",
+      "ratio": 1.0,
+      "status": "PASS"
+    },
+    "conflation_prevented": true
+  },
+  "production_safety": {
+    "mode": "SET TRANSACTION READ ONLY;",
+    "rows_mutated": 0,
+    "safe": true
+  },
+  "release_decision": "GO",
+  "release_semantics": {
+    "meaning": "Release Candidate v1 is approved for controlled staging promotion, subject to explicit human authorization.",
+    "production_promotion": "LOCKED (requires separate explicit human approval)",
+    "staging_promotion_gate": "PENDING_USER_APPROVAL",
+    "production_database_status": "READ_ONLY_UNTOUCHED"
+  }
+}

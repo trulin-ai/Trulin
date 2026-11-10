@@ -1,0 +1,41 @@
+{
+  "metadata": {
+    "report_id": "RECON-V1-PHASE0",
+    "timestamp": "2026-11-10T07:45:00Z",
+    "baseline_run_id": "northwind-run-20261109-1715",
+    "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+    "source_sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd"
+  },
+  "candidate_summary": {
+    "total_baseline_candidates": 230,
+    "retained_exact_count": 199,
+    "revised_semantics_count": 30,
+    "newly_recovered_count": 1,
+    "total_verified_ground_truth_count": 230
+  },
+  "gate_evaluation_distribution": {
+    "approved_automated_certified": 146,
+    "review_required": 53,
+    "rejected_quarantined": 31
+  },
+  "defect_catalog_reconciliation": {
+    "total_catalogued_defects": 12,
+    "defects_by_error_type": {
+      "temporal_conflation": 2,
+      "concept_cross_wiring": 3,
+      "actor_inversion": 1,
+      "exception_dropped": 1,
+      "reference_misinterpreted": 1,
+      "role_misclassification": 2,
+      "duplicate_conflict": 1,
+      "malformed_actor_subject": 1
+    },
+    "defects_by_origin_layer": {
+      "Layer 4: Parsing": 2,
+      "Layer 5: Extraction": 8,
+      "Layer 5.5: Normalization": 1,
+      "Layer 6: Evaluator": 1
+    }
+  },
+  "governance_status": "PHASE_0_FROZEN_READY_FOR_LAYER_4_REFACTOR"
+}

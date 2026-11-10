@@ -55,7 +55,26 @@ class PredicateRegistryService:
 
     @classmethod
     def get_predicate(cls, predicate_id: str) -> Optional[PredicateDefinition]:
-        return cls.get_instance()._predicates.get((predicate_id or "").strip().lower())
+        inst = cls.get_instance()
+        pid = (predicate_id or "").strip().lower()
+        if pid in inst._predicates:
+            return inst._predicates[pid]
+        try:
+            from app.extraction.predicate_registry import PredicateRegistry
+            if PredicateRegistry.is_canonical(pid):
+                return PredicateDefinition(
+                    predicate_id=pid,
+                    label=pid.replace("_", " ").capitalize(),
+                    action_category="CANONICAL_POLICY",
+                    allowed_subject_roles=["ANY_PARTY"],
+                    allowed_object_roles=["ANY_OBJECT"],
+                    default_modality="MUST",
+                    requires_condition=False,
+                    risk_level="MEDIUM",
+                )
+        except Exception:
+            pass
+        return None
 
     @classmethod
     def is_banned(cls, predicate_id: str) -> bool:

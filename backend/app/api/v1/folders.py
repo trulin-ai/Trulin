@@ -171,13 +171,22 @@ async def list_folder_documents(
         include_archived=include_archived,
     )
 
+    from app.api.v1.documents import _get_claims_counts_for_documents
+    doc_ids = [d.id for d in docs]
+    claims_counts = await _get_claims_counts_for_documents(db, doc_ids)
+    items = []
+    for d in docs:
+        resp = DocumentResponse.model_validate(d)
+        resp.claims_count = claims_counts.get(d.id, 0)
+        items.append(resp)
+
     return {
         "folder_id": str(folder_id),
         "is_recursive": recursive,
         "total": total,
         "limit": limit,
         "offset": offset,
-        "items": [DocumentResponse.model_validate(d) for d in docs],
+        "items": items,
     }
 
 

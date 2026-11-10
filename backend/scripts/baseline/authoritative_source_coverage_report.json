@@ -1,0 +1,262 @@
+{
+  "audit_timestamp": "2026-11-10T11:25:00Z",
+  "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+  "source_document_sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd",
+  "audit_verdict": "PHASE_2_1_COMPLETE_AND_RECONCILED",
+  "inventory_arithmetic": {
+    "total_source_units": 126,
+    "operative_rules_denominator": 108,
+    "non_operative_units": 18,
+    "balance_equation": "108 operative + 18 non-operative = 126 total",
+    "is_balanced": true
+  },
+  "coverage_metrics": {
+    "baseline_extracted_operative_rules": 103,
+    "baseline_operative_coverage_percentage": 95.37,
+    "phase2_1_recovered_operative_rules": 5,
+    "phase2_1_recovered_definitional_rules": 1,
+    "post_recovery_processed_operative_rules": 108,
+    "post_recovery_operative_coverage_percentage": 100.0,
+    "remaining_unextracted_operative_rules": 0,
+    "unaccounted_inventory_units": 0
+  },
+  "metric_separation_audit": {
+    "database_certified_precision": {
+      "numerator": 134,
+      "denominator": 140,
+      "percentage": 95.71,
+      "scope": "All persisted verified claims in live PostgreSQL trulin_db",
+      "defect_breakdown": "140 total verified = 134 correct + 2 lost_condition (#19, #67) + 2 wrong_predicate (#43, #132) + 2 wrong_subject (#91, #92)"
+    },
+    "golden_benchmark_precision": {
+      "numerator": 66,
+      "denominator": 66,
+      "percentage": 100.0,
+      "scope": "Independent cross-document golden benchmark suite",
+      "recall": "66/66 operative recall (100.0%)",
+      "lifecycle_pass_rate": "70/70 lifecycle pass rate (100.0%)",
+      "raw_approval_ratio": "66/70 raw approval ratio (94.29%)"
+    }
+  },
+  "eighteen_non_operative_units_ledger": [
+    {
+      "unit_id": "SRC-P03-01",
+      "page": 3,
+      "section": "1. Introduction and Scope",
+      "structure_type": "prose",
+      "content_role": "non_rule",
+      "char_start": 1200,
+      "char_end": 1332,
+      "sha256": "58f3987dcc28a459212594e7f9b196dfcbd88611978a969869cb86e34dd5dcc6",
+      "verbatim_text": "Northwind Outfitters Inc. (\"Northwind\", \"we\", \"us\") is a fictional online and retail seller of outdoor gear, clothing and equipment.",
+      "exclusion_reason": "Document preamble/overview metadata"
+    },
+    {
+      "unit_id": "SRC-P03-02",
+      "page": 3,
+      "section": "1. Introduction and Scope",
+      "structure_type": "prose",
+      "content_role": "non_rule",
+      "char_start": 1200,
+      "char_end": 1336,
+      "sha256": "a810238d3e999b0a55e806753506d42421158aa190c8b267dc968658b15a7ec6",
+      "verbatim_text": "This handbook sets out our complete refund, return and cancellation policies for customers, customer care agents and retail store staff.",
+      "exclusion_reason": "Document policy scope preamble"
+    },
+    {
+      "unit_id": "SRC-P04-01",
+      "page": 4,
+      "section": "2. Definitions",
+      "structure_type": "definition",
+      "content_role": "definition",
+      "char_start": 2643,
+      "char_end": 2759,
+      "sha256": "1320eca7a094649f3cd4691f2f694557df464894f0d997619e2a40ef86cf412c",
+      "verbatim_text": "Refund: Return of money to the original payment method or store credit following an approved return or cancellation.",
+      "exclusion_reason": "Pure terminology definition"
+    },
+    {
+      "unit_id": "SRC-P04-02",
+      "page": 4,
+      "section": "2. Definitions",
+      "structure_type": "definition",
+      "content_role": "definition",
+      "char_start": 2643,
+      "char_end": 2723,
+      "sha256": "ef44e7a5aa45ac3b004ddf51e4637cb3d3516b5d7222f3f61121956da10077ca",
+      "verbatim_text": "Return: Sending a purchased item back to Northwind by mail or in-store drop-off.",
+      "exclusion_reason": "Pure terminology definition"
+    },
+    {
+      "unit_id": "SRC-P04-06",
+      "page": 4,
+      "section": "2. Definitions",
+      "structure_type": "definition",
+      "content_role": "definition",
+      "char_start": 2643,
+      "char_end": 2743,
+      "sha256": "944bafdfc02a6a6f18ec058671c33a093a55f6ea14f1d760d9dec450d48a1d55",
+      "verbatim_text": "Delivery Date: The date the carrier marks the package as delivered, as shown in the tracking record.",
+      "exclusion_reason": "Carrier tracking terminology definition"
+    },
+    {
+      "unit_id": "SRC-P04-09",
+      "page": 4,
+      "section": "2. Definitions",
+      "structure_type": "definition",
+      "content_role": "policy_definition",
+      "char_start": 2643,
+      "char_end": 2705,
+      "sha256": "679d2cbe1191afd37c96bedfa28669ed9e32aca2373e251ff6f7f906a219a728",
+      "verbatim_text": "Business Day: Monday to Friday, excluding US federal holidays.",
+      "exclusion_reason": "Operational calendar framework definition"
+    },
+    {
+      "unit_id": "SRC-P08-02",
+      "page": 8,
+      "section": "6.2 By phone or chat",
+      "structure_type": "contact",
+      "content_role": "non_rule",
+      "char_start": 8657,
+      "char_end": 8731,
+      "sha256": "9bae4eebf809a5db6e70b3fbd344546eb5db241ddc6c03ea2fa9678559f843e5",
+      "verbatim_text": "Call 1-800-555-0142 (Mon-Fri 8am-8pm PT, Sat 9am-5pm PT) or use live chat.",
+      "exclusion_reason": "Customer care directory operating hours"
+    },
+    {
+      "unit_id": "SRC-P10-05",
+      "page": 10,
+      "section": "8. Refund Methods and Payment Types",
+      "structure_type": "table_row",
+      "content_role": "ambiguous",
+      "char_start": 10605,
+      "char_end": 10684,
+      "sha256": "3850640b178cba9760034d2a7b8b828cda4f5d87d9a91648c85fceca9902b688",
+      "verbatim_text": "Cash (in-store) | Cash up to $50, then store credit/card | ID required over $50",
+      "exclusion_reason": "Flagged textual boundary ambiguity (<= $50 table vs < $50 FAQ 7)",
+      "notes": "Normalized display quote, not character-exact source quote (raw extracted: Cash in-store | Cash up to 50, then store creditcard ID required over 50). Flagged textual boundary ambiguity (<=  table vs <  FAQ 7).",
+      "raw_extracted_string": "Cash in-store | Cash up to 50, then store creditcard ID required over 50",
+      "is_display_normalized": true
+    },
+    {
+      "unit_id": "SRC-P20-01",
+      "page": 20,
+      "section": "18. Frequently Asked Questions",
+      "structure_type": "faq",
+      "content_role": "duplicate_restatement",
+      "char_start": 23640,
+      "char_end": 23853,
+      "sha256": "bfc0e20c45fccfd43b0ec4e87c261b7117696505dc0be9b688fce1167952bbc5",
+      "verbatim_text": "Q1. Can I return an item after 30 days? Standard returns must be requested within 30 days. Gold members have 60 days. After that we may offer store credit at a manager's discretion for unused items within 90 days.",
+      "exclusion_reason": "Informational restatement of Section 3.1 and 4.1 rules"
+    },
+    {
+      "unit_id": "SRC-P20-02",
+      "page": 20,
+      "section": "18. Frequently Asked Questions",
+      "structure_type": "faq",
+      "content_role": "ambiguous",
+      "char_start": 24761,
+      "char_end": 24894,
+      "sha256": "56a443e9a358529ea9b59385b88327a7f7358c505413ba7531cd63f5a662e0c3",
+      "verbatim_text": "Q7. Can I get a cash refund? Refunds go to the original payment method. Cash refunds are only available for cash purchases under $50.",
+      "exclusion_reason": "Flagged textual boundary ambiguity (< $50 FAQ 7 vs <= $50 table)"
+    },
+    {
+      "unit_id": "SRC-P21-01",
+      "page": 21,
+      "section": "19. Contact Information",
+      "structure_type": "contact",
+      "content_role": "non_rule",
+      "char_start": 25285,
+      "char_end": 25350,
+      "sha256": "9e28ebccd0606b79f6e72bc9837469fff3b6d92599647837057727ccb1db129b",
+      "verbatim_text": "Email | support@northwind-demo.example | Response within 24 hours",
+      "exclusion_reason": "General support email contact coordinate"
+    },
+    {
+      "unit_id": "SRC-P21-02",
+      "page": 21,
+      "section": "19. Contact Information",
+      "structure_type": "contact",
+      "content_role": "non_rule",
+      "char_start": 25285,
+      "char_end": 25367,
+      "sha256": "002ce34dbb85e58ab36fe1916453ac0f151d89dd36fe07159eee7ab19af50393",
+      "verbatim_text": "Escalations | escalations@northwind-demo.example | Response within 2 business days",
+      "exclusion_reason": "Escalations department email contact coordinate"
+    },
+    {
+      "unit_id": "SRC-P21-05",
+      "page": 21,
+      "section": "19. Contact Information",
+      "structure_type": "contact",
+      "content_role": "non_rule",
+      "char_start": 25285,
+      "char_end": 25350,
+      "sha256": "7a386eb5aeb9e49da3448c90436fa1af3ed923000963c084ee07a919cecd3909",
+      "verbatim_text": "Phone (US/Canada) | 1-800-555-0142 | Mon-Fri 8am-8pm; Sat 9am-5pm",
+      "exclusion_reason": "Customer support phone directory coordinate"
+    },
+    {
+      "unit_id": "SRC-P21-06",
+      "page": 21,
+      "section": "19. Contact Information",
+      "structure_type": "contact",
+      "content_role": "non_rule",
+      "char_start": 25285,
+      "char_end": 25336,
+      "sha256": "d3e679d7168989a72b9be19fd4780349cad6cb80ec204f1dd28dc8f20b3d5d89",
+      "verbatim_text": "Phone (UK) | +44 20 7946 0142 | Mon-Fri 9am-5pm GMT",
+      "exclusion_reason": "UK customer support phone directory coordinate"
+    },
+    {
+      "unit_id": "SRC-P22-01",
+      "page": 22,
+      "section": "20.1 Revision history",
+      "structure_type": "table_row",
+      "content_role": "changelog",
+      "char_start": 26519,
+      "char_end": 26594,
+      "sha256": "b16f5f877aa3283bbb15e895a602e3e05d7c76638a2434b6edbb4fae3e968a25",
+      "verbatim_text": "4.2 | Jan 1, 2026 | Extended holiday window; added Keep It policy under $40",
+      "exclusion_reason": "Handbook version 4.2 changelog"
+    },
+    {
+      "unit_id": "SRC-P22-02",
+      "page": 22,
+      "section": "20.1 Revision history",
+      "structure_type": "table_row",
+      "content_role": "changelog",
+      "char_start": 26519,
+      "char_end": 26579,
+      "sha256": "1815d70710382aca5c212db912f5fae21d04561dba5bbfafabb00e0cb9947470",
+      "verbatim_text": "4.1 | Aug 15, 2025 | Added Gear Care Plan subscription terms",
+      "exclusion_reason": "Handbook version 4.1 changelog"
+    },
+    {
+      "unit_id": "SRC-P22-03",
+      "page": 22,
+      "section": "20.1 Revision history",
+      "structure_type": "table_row",
+      "content_role": "changelog",
+      "char_start": 26519,
+      "char_end": 26583,
+      "sha256": "5b837a722f74d37d305dbbb3331847f0d5666a10eac684d05ec9d1249b4b13f8",
+      "verbatim_text": "4.0 | Mar 1, 2025 | Gold member window raised from 45 to 60 days",
+      "exclusion_reason": "Handbook version 4.0 changelog"
+    },
+    {
+      "unit_id": "SRC-P22-04",
+      "page": 22,
+      "section": "20.2 Sample Case Studies",
+      "structure_type": "example",
+      "content_role": "non_rule",
+      "char_start": 27020,
+      "char_end": 27298,
+      "sha256": "583a3ee21d6bb347b87cbaa78e23fe3240609bfb31d98407efd9035420d85f01",
+      "verbatim_text": "Case A - Wrong size, within window. Maria ordered a $120 jacket (order NW-10482391) and received it on June 3. On June 20 she requested a return as it did not fit. She used the prepaid label ($6.95 deducted). Refund issued: $113.05 to her Visa, plus tax refunded proportionally.",
+      "exclusion_reason": "Narrative customer scenario example"
+    }
+  ]
+}

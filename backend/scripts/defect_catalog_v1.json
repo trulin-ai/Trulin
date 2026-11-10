@@ -1,0 +1,624 @@
+[
+  {
+    "regression_id": "REG-SEM-001",
+    "name": "Posting duration conflated with return window",
+    "error_type": "temporal_conflation",
+    "origin_layer": "Layer 5: Extraction",
+    "affected_candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:126:6ad938cec8bd:70a086d38c",
+    "source_verbatim_span": "| Credit card refund posted by bank | 3-5 business days |",
+    "locator": {
+      "page": 9,
+      "section": "7. Refund Processing Timelines",
+      "section_path": [
+        "7",
+        "Refund Processing Timelines"
+      ],
+      "char_start": 10850,
+      "char_end": 10915
+    },
+    "actual_baseline_output": {
+      "subject": "Credit card refund posted by bank",
+      "predicate": "has_return_window",
+      "object": "3-5 business days",
+      "modality": "REQUIRED",
+      "claim_text": "Credit card refund posted by bank has a 3-5 business days return window."
+    },
+    "expected_correct_representation": {
+      "subject": {
+        "text": "Credit card refund",
+        "type": "financial_disbursement"
+      },
+      "action": {
+        "universal_role": "specifies_temporal_rule",
+        "typed_subtype": "posting_duration",
+        "predicate": "has_posting_duration",
+        "modality": "typical",
+        "polarity": "positive"
+      },
+      "object": {
+        "text": "3-5 business days",
+        "type": "duration",
+        "unit": "business_days",
+        "scalar_min": 3,
+        "scalar_max": 5
+      },
+      "actor": "bank",
+      "conditions": [
+        "after refund is approved and issued by Northwind"
+      ],
+      "content_role": "policy_rule"
+    },
+    "expected_lifecycle_decision": "APPROVE"
+  },
+  {
+    "regression_id": "REG-SEM-002",
+    "name": "Price adjustment window conflated with return window",
+    "error_type": "temporal_conflation",
+    "origin_layer": "Layer 5: Extraction",
+    "affected_candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:191:c0ba7b1b3cf1:563fd13d7a",
+    "source_verbatim_span": "If an item you purchased drops in price within 14 days of purchase, contact us for a one-time price adjustment refund of the difference. Limited to one adjustment per order. Doorbuster, flash-sale and marketplace items are excluded.",
+    "locator": {
+      "page": 13,
+      "section": "11.2 Price adjustments",
+      "section_path": [
+        "11",
+        "Order Cancellations",
+        "11.2",
+        "Price adjustments"
+      ],
+      "char_start": 17192,
+      "char_end": 17424
+    },
+    "actual_baseline_output": {
+      "subject": "Price adjustments",
+      "predicate": "has_return_window",
+      "object": "14 days of purchase for one-time refund of difference",
+      "modality": "PERMISSION",
+      "claim_text": "Price adjustments has return window 14 days of purchase."
+    },
+    "expected_correct_representation": {
+      "subject": {
+        "text": "Customer",
+        "type": "actor"
+      },
+      "action": {
+        "universal_role": "permits",
+        "typed_subtype": "price_adjustment_window",
+        "predicate": "may_request_price_adjustment",
+        "modality": "may",
+        "polarity": "positive"
+      },
+      "object": {
+        "text": "one-time refund of price difference",
+        "type": "remedy"
+      },
+      "conditions": [
+        "item drops in price within 14 days of purchase"
+      ],
+      "limits": [
+        "one adjustment per order"
+      ],
+      "exceptions": [
+        "Doorbuster items",
+        "flash-sale items",
+        "marketplace items"
+      ],
+      "content_role": "policy_rule"
+    },
+    "expected_lifecycle_decision": "APPROVE"
+  },
+  {
+    "regression_id": "REG-SEM-003",
+    "name": "Subscription pause permission conflated with refund rule",
+    "error_type": "concept_cross_wiring",
+    "origin_layer": "Layer 5: Extraction",
+    "affected_candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:203:37ee51f31f54:51cd3f0e39",
+    "source_verbatim_span": "Trailhead Box subscribers can pause for up to 3 months, once per year, from the account page. Paused subscriptions are not billed.",
+    "locator": {
+      "page": 14,
+      "section": "12.3 Pausing instead of cancelling",
+      "section_path": [
+        "12",
+        "Subscription Refunds",
+        "12.3",
+        "Pausing instead of cancelling"
+      ],
+      "char_start": 18728,
+      "char_end": 18870
+    },
+    "actual_baseline_output": {
+      "subject": "Trailhead Box subscription",
+      "predicate": "has_refund_rule",
+      "object": "pause for up to 3 months, once per year",
+      "modality": "PERMISSION",
+      "claim_text": "Trailhead Box subscription has refund rule pause for up to 3 months."
+    },
+    "expected_correct_representation": {
+      "subject": {
+        "text": "Trailhead Box subscriber",
+        "type": "actor"
+      },
+      "action": {
+        "universal_role": "permits",
+        "typed_subtype": "subscription_pause_privilege",
+        "predicate": "can_pause_subscription",
+        "modality": "can",
+        "polarity": "positive"
+      },
+      "object": {
+        "text": "subscription pause for up to 3 months",
+        "type": "service_status"
+      },
+      "conditions": [
+        "initiated from the account page"
+      ],
+      "limits": [
+        "up to 3 months duration",
+        "once per year frequency"
+      ],
+      "effects": [
+        "Paused subscriptions are not billed"
+      ],
+      "content_role": "policy_rule"
+    },
+    "expected_lifecycle_decision": "APPROVE"
+  },
+  {
+    "regression_id": "REG-SEM-004",
+    "name": "Store credit bonus actor direction inverted",
+    "error_type": "actor_inversion",
+    "origin_layer": "Layer 5 / 5.5: Extraction & Normalization",
+    "affected_candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:146:d2060256ff89:36c1774757",
+    "source_verbatim_span": "Customers who choose store credit instead of a refund to the original payment method receive a 5% bonus on the credit value, up to $25.",
+    "locator": {
+      "page": 10,
+      "section": "8.1 Store credit bonus",
+      "section_path": [
+        "8",
+        "Refund Methods and Payment Types",
+        "8.1",
+        "Store credit bonus"
+      ],
+      "char_start": 12430,
+      "char_end": 12585
+    },
+    "actual_baseline_output": {
+      "subject": "Customer",
+      "predicate": "offers_store_credit_bonus",
+      "object": "5% bonus on credit value, maximum bonus $25.00 per return",
+      "modality": "PERMISSION",
+      "claim_text": "Customer offers store credit bonus of 5%."
+    },
+    "expected_correct_representation": {
+      "subject": {
+        "text": "Customer",
+        "type": "actor"
+      },
+      "action": {
+        "universal_role": "entitles",
+        "typed_subtype": "store_credit_incentive",
+        "predicate": "receives_store_credit_bonus",
+        "semantic_role": "receives",
+        "modality": "entitled",
+        "polarity": "positive"
+      },
+      "object": {
+        "text": "5% bonus on the credit value",
+        "type": "benefit",
+        "percentage": 5.0
+      },
+      "conditions": [
+        "chooses store credit instead of a refund to the original payment method"
+      ],
+      "limits": [
+        "maximum bonus $25.00"
+      ],
+      "content_role": "policy_rule"
+    },
+    "expected_lifecycle_decision": "APPROVE"
+  },
+  {
+    "regression_id": "REG-SEM-005",
+    "name": "Keep It under-$40 threshold cross-contaminated into cosmetic flaw table row",
+    "error_type": "concept_cross_wiring",
+    "origin_layer": "Layer 4: Parsing (Table/Prose Flattening)",
+    "affected_candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:177:dd611bcaa1c8:83acd7961d",
+    "source_verbatim_span": "Table row: | Partial refund (keep item) | Offered for minor cosmetic flaws | Immediate |\nProse below table: For damaged items valued under $40.00, we may issue a refund without requiring the item to be returned (\"Keep It\" policy), at the agent's discretion. This is limited to two instances per customer per year.",
+    "locator": {
+      "page": 12,
+      "section": "10.3 Resolution options",
+      "section_path": [
+        "10",
+        "Damaged, Defective or Incorrect Items",
+        "10.3",
+        "Resolution options"
+      ],
+      "char_start": 15590,
+      "char_end": 15920
+    },
+    "actual_baseline_output": {
+      "subject": "Partial refund for cosmetic flaws",
+      "predicate": "has_keep_it_threshold",
+      "object": "under $40.00",
+      "modality": "PERMISSION",
+      "claim_text": "Partial refund for minor cosmetic flaws applies to items under $40.00."
+    },
+    "expected_correct_representation": {
+      "claim_1_table": {
+        "subject": {
+          "text": "Partial refund (keep item)",
+          "type": "resolution_option"
+        },
+        "action": {
+          "predicate": "offered_for",
+          "modality": "may"
+        },
+        "object": {
+          "text": "minor cosmetic flaws",
+          "type": "condition"
+        },
+        "structure_type": "table_row",
+        "content_role": "policy_rule"
+      },
+      "claim_2_prose": {
+        "subject": {
+          "text": "Northwind",
+          "type": "actor"
+        },
+        "action": {
+          "predicate": "may_issue_refund_without_return",
+          "modality": "may"
+        },
+        "object": {
+          "text": "full refund without item return",
+          "type": "remedy"
+        },
+        "conditions": [
+          "damaged items valued under $40.00",
+          "at agent discretion"
+        ],
+        "limits": [
+          "two instances per customer per year"
+        ],
+        "structure_type": "prose_clause",
+        "content_role": "policy_rule"
+      }
+    },
+    "expected_lifecycle_decision": "APPROVE"
+  },
+  {
+    "regression_id": "REG-SEM-006",
+    "name": "Non-refundable parent exception dropped",
+    "error_type": "exception_dropped",
+    "origin_layer": "Layer 5: Extraction",
+    "affected_candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:99:23bfe8fedfdf:7331c99880",
+    "source_verbatim_span": "5. Non-Refundable Items The following items cannot be returned or refunded, except where the item is defective or we sent the wrong item.",
+    "locator": {
+      "page": 7,
+      "section": "5. Non-Refundable Items",
+      "section_path": [
+        "5",
+        "Non-Refundable Items"
+      ],
+      "char_start": 7384,
+      "char_end": 7520
+    },
+    "actual_baseline_output": {
+      "subject": "Non-refundable items",
+      "predicate": "cannot_be_refunded",
+      "object": "All items on Section 5 list",
+      "modality": "PROHIBITION",
+      "conditions": [],
+      "claim_text": "Non-refundable items cannot be returned or refunded under any circumstances."
+    },
+    "expected_correct_representation": {
+      "subject": {
+        "text": "Non-refundable items listed in Section 5",
+        "type": "product_category"
+      },
+      "action": {
+        "universal_role": "prohibits",
+        "typed_subtype": "return_and_refund_prohibition",
+        "predicate": "cannot_be_returned_or_refunded",
+        "modality": "cannot",
+        "polarity": "negative"
+      },
+      "object": {
+        "text": "return or refund",
+        "type": "process"
+      },
+      "exceptions": [
+        "where the item is defective",
+        "where Northwind sent the wrong item"
+      ],
+      "content_role": "policy_rule"
+    },
+    "expected_lifecycle_decision": "APPROVE"
+  },
+  {
+    "regression_id": "REG-SEM-007",
+    "name": "Table cell 'Same as card' misclassified as standalone duration instead of reference",
+    "error_type": "reference_misinterpreted",
+    "origin_layer": "Layer 4 & 5: Parsing & Extraction",
+    "affected_candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:140:afde2d37e4ff:2c9cf67391",
+    "source_verbatim_span": "| Apple Pay / Google Pay | Underlying card | Same as card |",
+    "locator": {
+      "page": 10,
+      "section": "8. Refund Methods and Payment Types",
+      "section_path": [
+        "8",
+        "Refund Methods and Payment Types"
+      ],
+      "char_start": 12187,
+      "char_end": 12250
+    },
+    "actual_baseline_output": {
+      "subject": "Apple Pay / Google Pay",
+      "predicate": "has_stage_duration",
+      "object": "Same as card",
+      "modality": "REQUIRED",
+      "claim_text": "Apple Pay / Google Pay has duration Same as card."
+    },
+    "expected_correct_representation": {
+      "subject": {
+        "text": "Apple Pay / Google Pay purchases",
+        "type": "payment_instrument"
+      },
+      "action": {
+        "universal_role": "references",
+        "typed_subtype": "timeline_reference",
+        "predicate": "references_underlying_payment_timeline",
+        "modality": "specifies",
+        "polarity": "positive"
+      },
+      "object": {
+        "reference_type": "timeline_reference",
+        "target": "underlying_card_posting_duration",
+        "source_text": "Same as card"
+      },
+      "refund_method": "Underlying card",
+      "content_role": "policy_rule"
+    },
+    "expected_lifecycle_decision": "APPROVE"
+  },
+  {
+    "regression_id": "REG-SEM-008",
+    "name": "Table example values in Section 6.4 extracted as operative rules",
+    "error_type": "role_misclassification",
+    "origin_layer": "Layer 4 & 5: Parsing & Extraction",
+    "affected_candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:113:c9118947eb1c:9a98507be5",
+    "source_verbatim_span": "| Order number | NW-10482391 | Yes |\n| Email on order | jane.doe@example.com | Yes |",
+    "locator": {
+      "page": 8,
+      "section": "6.4 Information required",
+      "section_path": [
+        "6",
+        "How to Request a Refund",
+        "6.4",
+        "Information required"
+      ],
+      "char_start": 10250,
+      "char_end": 10380
+    },
+    "actual_baseline_output": {
+      "subject": "Order number",
+      "predicate": "requires_value",
+      "object": "NW-10482391",
+      "modality": "REQUIRED",
+      "claim_text": "Order number must be NW-10482391."
+    },
+    "expected_correct_representation": {
+      "subject": {
+        "text": "Customer submitting refund request",
+        "type": "actor"
+      },
+      "action": {
+        "universal_role": "requires",
+        "typed_subtype": "submission_prerequisite",
+        "predicate": "must_provide_information",
+        "modality": "must",
+        "polarity": "positive"
+      },
+      "object": {
+        "text": "Order number",
+        "type": "required_form_field"
+      },
+      "example_instance": "NW-10482391",
+      "is_required": true,
+      "content_role": "policy_rule"
+    },
+    "expected_lifecycle_decision": "APPROVE"
+  },
+  {
+    "regression_id": "REG-SEM-009",
+    "name": "Revision history row extracted as operative customer rule",
+    "error_type": "role_misclassification",
+    "origin_layer": "Layer 4: Parsing (Content Role Filter)",
+    "affected_candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:271:rev_hist:001",
+    "source_verbatim_span": "4.2 Jan 1, 2026 Extended holiday window; added Keep It policy",
+    "locator": {
+      "page": 22,
+      "section": "20.1 Revision history",
+      "section_path": [
+        "20",
+        "Revision History and Sample Case Studies",
+        "20.1",
+        "Revision history"
+      ],
+      "char_start": 29620,
+      "char_end": 29710
+    },
+    "actual_baseline_output": {
+      "subject": "Version 4.2",
+      "predicate": "extends_holiday_window",
+      "object": "Keep It policy",
+      "modality": "FACT",
+      "claim_type": "rule",
+      "content_role": "policy_rule"
+    },
+    "expected_correct_representation": {
+      "subject": {
+        "text": "Document Version 4.2",
+        "type": "document_version"
+      },
+      "action": {
+        "predicate": "has_revision_entry"
+      },
+      "object": {
+        "text": "Extended holiday window; added Keep It policy",
+        "type": "changelog"
+      },
+      "date": "2026-01-01",
+      "content_role": "revision_history",
+      "is_canonical": false
+    },
+    "expected_lifecycle_decision": "REJECT"
+  },
+  {
+    "regression_id": "REG-SEM-010",
+    "name": "International currency settlement loss of exchange rate not compensated",
+    "error_type": "concept_cross_wiring",
+    "origin_layer": "Layer 5: Extraction",
+    "affected_candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:246:e7823c09f89f:23503e325d",
+    "source_verbatim_span": "Exchange rate differences between the purchase and refund date are not compensated; the bank's rate on the refund date applies.",
+    "locator": {
+      "page": 17,
+      "section": "15.1 Currency conversion",
+      "section_path": [
+        "15",
+        "International Orders, Duties and Currency",
+        "15.1",
+        "Currency conversion"
+      ],
+      "char_start": 22610,
+      "char_end": 22750
+    },
+    "actual_baseline_output": {
+      "subject": "Exchange rate differences",
+      "predicate": "are_not_compensated",
+      "object": "bank rate on refund date applies",
+      "modality": "PROHIBITION",
+      "claim_text": "Exchange rate differences between purchase and refund date are not compensated."
+    },
+    "expected_correct_representation": {
+      "subject": {
+        "text": "Northwind",
+        "type": "actor"
+      },
+      "action": {
+        "universal_role": "excludes",
+        "typed_subtype": "liability_exclusion",
+        "predicate": "does_not_compensate_exchange_fluctuations",
+        "modality": "will_not",
+        "polarity": "negative"
+      },
+      "object": {
+        "text": "exchange rate differences between purchase date and refund date",
+        "type": "financial_differential"
+      },
+      "governing_standard": "the bank's exchange rate on the refund date applies",
+      "content_role": "policy_rule"
+    },
+    "expected_lifecycle_decision": "APPROVE"
+  },
+  {
+    "regression_id": "REG-SEM-011",
+    "name": "Duplicate unlinked posting duration extraction across sections",
+    "error_type": "duplicate_conflict",
+    "origin_layer": "Layer 5: Extraction & Deduplication",
+    "affected_candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:137:72efcda89409:0555008ced",
+    "source_verbatim_span": "Section 7: | Credit card refund posted by bank | 3-5 business days |\nSection 8: | Visa / Mastercard / Amex | Original card | 3-5 business days to post |",
+    "locator": {
+      "page": 9,
+      "section": "7 & 8 Refund Timelines and Payment Types",
+      "section_path": [
+        "7 & 8"
+      ],
+      "char_start": 10850,
+      "char_end": 12150
+    },
+    "actual_baseline_output": {
+      "claim_a": "Credit card refund posted by bank has posting duration 3-5 business days",
+      "claim_b": "Visa / Mastercard / Amex has posting duration 3-5 business days to post",
+      "relationship": "unlinked duplicate assertions"
+    },
+    "expected_correct_representation": {
+      "canonical_claim": {
+        "subject": {
+          "text": "Credit card refunds (Visa / Mastercard / Amex)",
+          "type": "financial_disbursement"
+        },
+        "action": {
+          "predicate": "has_posting_duration",
+          "modality": "typical"
+        },
+        "object": {
+          "text": "3-5 business days",
+          "type": "duration",
+          "unit": "business_days"
+        },
+        "actor": "bank",
+        "cross_references": [
+          "Section 7. Refund Processing Timelines",
+          "Section 8. Refund Methods"
+        ]
+      },
+      "is_deduplicated": true,
+      "content_role": "policy_rule"
+    },
+    "expected_lifecycle_decision": "APPROVE"
+  },
+  {
+    "regression_id": "REG-SEM-012",
+    "name": "Malformed clause/grammar fragment extracted as actor/subject",
+    "error_type": "malformed_actor_subject",
+    "origin_layer": "Layer 5: Extraction (Grammar Boundary Failure)",
+    "affected_candidate_id": "cand:402901c8-3509-5f0e-8a95-5efb3ca98fba:99:23bfe8fedfdf:7331c99880",
+    "source_verbatim_span": "Even for non-refundable items, a full refund or replacement will be provided if the item arrives damaged, is materially different from its description, or was shipped in error.",
+    "locator": {
+      "page": 7,
+      "section": "5.2 Exceptions",
+      "section_path": [
+        "5",
+        "Non-Refundable Items",
+        "5.2",
+        "Exceptions"
+      ],
+      "char_start": 8450,
+      "char_end": 8620
+    },
+    "actual_baseline_output": {
+      "subject": "Even for non-refundable items, a full refund or replacement",
+      "predicate": "will_issue_refund",
+      "object": "be provided if the item arrives damaged, is materially different from its description, or was shipped in error",
+      "claim_text": "Even for non-refundable items, a full refund or replacement will be provided if damaged."
+    },
+    "expected_correct_representation": {
+      "subject": {
+        "text": "Northwind",
+        "type": "actor"
+      },
+      "action": {
+        "universal_role": "specifies",
+        "typed_subtype": "remedy_provision",
+        "predicate": "will_provide_refund_or_replacement",
+        "modality": "will",
+        "polarity": "positive"
+      },
+      "object": {
+        "text": "full refund or replacement",
+        "type": "remedy"
+      },
+      "scope": {
+        "target": "non-refundable items"
+      },
+      "conditions": [
+        "item arrives damaged",
+        "item is materially different from its description",
+        "item was shipped in error"
+      ],
+      "content_role": "policy_rule"
+    },
+    "expected_lifecycle_decision": "APPROVE"
+  }
+]

@@ -1985,17 +1985,29 @@ export default function VisualLineageGraph({
       if (!activeDoc) return null;
       const parentEdge = edges.find(e => e.target === activeDoc.id && e.source.startsWith('src_'));
       const parentSource = nodes.find(n => n.id === parentEdge?.source) || null;
-      const rawActiveDocId = activeDoc.data?.doc_id || String(activeDoc.id || '').replace(/^doc_/, '');
-      const claimIds = new Set(edges.filter(e => e.source === activeDoc.id && e.target.startsWith('cl_')).map(e => e.target));
+      const rawActiveDocId = activeDoc.data?.doc_id || activeDoc.data?.document_id || String(activeDoc.id || '').replace(/^doc_/, '');
+      const fullDocId = `doc_${rawActiveDocId}`;
+      const claimIds = new Set(
+        edges
+          .filter(e => (e.source === activeDoc.id || e.source === fullDocId || e.source === rawActiveDocId) && e.target.startsWith('cl_'))
+          .map(e => e.target)
+      );
       const assetClaims = allClaimsRaw.filter(cl => {
         if (claimIds.has(cl.id)) return true;
-        const clDocId = cl.data?.doc_id || cl.doc_id || cl.asset_id;
-        if (clDocId && (clDocId === activeDoc.id || clDocId === rawActiveDocId)) return true;
+        const clRawId = String(cl.id || '').replace(/^cl_/, '');
+        if (claimIds.has(clRawId) || claimIds.has(`cl_${clRawId}`)) return true;
+        const clDocId = cl.data?.document_id || cl.data?.doc_id || cl.document_id || cl.doc_id || cl.asset_id;
+        const rawClDocId = clDocId ? String(clDocId).replace(/^doc_/, '') : null;
+        if (rawClDocId && (rawClDocId === rawActiveDocId || clDocId === activeDoc.id || clDocId === fullDocId)) return true;
         return false;
       });
       const assetConflicts = allConflictsRaw.filter(c => {
         const cItem = conflictMap[c.id];
-        return claimIds.has(cItem?.claimAId) || claimIds.has(cItem?.claimBId);
+        const clA = cItem?.claimAId ? String(cItem.claimAId).replace(/^cl_/, '') : null;
+        const clB = cItem?.claimBId ? String(cItem.claimBId).replace(/^cl_/, '') : null;
+        return claimIds.has(cItem?.claimAId) || claimIds.has(cItem?.claimBId) ||
+               (clA && (claimIds.has(clA) || claimIds.has(`cl_${clA}`))) ||
+               (clB && (claimIds.has(clB) || claimIds.has(`cl_${clB}`)));
       });
       const activeAssetConflicts = assetConflicts.filter(c => {
         const st = (c.status || '').toLowerCase();
@@ -6031,9 +6043,10 @@ export default function VisualLineageGraph({
       {vaultSubTab === 'claims' && (() => {
         // Resolve parent document and source for any claim
         const resolveClaimProvenance = (cl) => {
-          const clDocId = cl.document_id || cl.data?.document_id || cl.data?.doc_id;
+          const clDocId = cl.document_id || cl.data?.document_id || cl.data?.doc_id || cl.doc_id;
+          const clRawId = String(cl.id || '').replace(/^cl_/, '');
           const docEdge = graphData?.edges?.find(e =>
-            (e.target === cl.id || e.target === `cl_${cl.id}`) && e.source.startsWith('doc_')
+            (e.target === cl.id || e.target === `cl_${cl.id}` || e.target === clRawId || e.target === `cl_${clRawId}`) && e.source.startsWith('doc_')
           );
           const resolvedDocId = docEdge
             ? docEdge.source.replace(/^doc_/, '')

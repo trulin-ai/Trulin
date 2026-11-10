@@ -1,0 +1,492 @@
+{
+  "mathematical_reconciliation_summary": {
+    "postgres_persisted_verified": 140,
+    "explorer_view_canonical": 144,
+    "studio_pane_canonical": 164,
+    "explanation": "140 is persisted DB state. Explorer (144) includes 4 candidate summary claims that pass read evaluation. Studio (164) is calculated as: 140 persisted - 13 read-path downgrades + 37 read-path candidate elevations = 164."
+  },
+  "four_explorer_bridging_claims_to_144": [
+    {
+      "audit_id": 2,
+      "id": "5fbf0095-a74f-575c-a400-8b480e1f2cf5",
+      "subject": "Return window",
+      "predicate": "has_summary",
+      "reason": "Section 1.2 Return Window Summary passes all 9 gates on read path"
+    },
+    {
+      "audit_id": 3,
+      "id": "befe53b3-2c00-552d-b3e6-db1e6316789c",
+      "subject": "Refund speed",
+      "predicate": "has_summary",
+      "reason": "Section 1.2 Refund Speed Summary passes all 9 gates on read path"
+    },
+    {
+      "audit_id": 4,
+      "id": "a1823bf9-dea7-5983-8a5d-c6dd3d7ff965",
+      "subject": "Return shipping",
+      "predicate": "has_summary",
+      "reason": "Section 1.2 Return Shipping Summary passes all 9 gates on read path"
+    },
+    {
+      "audit_id": 5,
+      "id": "ee12e47d-30d8-5c1e-b3cb-19e63fac806b",
+      "subject": "Restocking fee",
+      "predicate": "has_summary",
+      "reason": "Section 1.2 Restocking Fee Summary passes all 9 gates on read path"
+    }
+  ],
+  "thirteen_studio_downgraded_claims": [
+    {
+      "audit_id": 13,
+      "claim_id": "311e1132-4c26-5e05-909f-bc2fb2947a97",
+      "subject": "Standard merchandise",
+      "predicate": "has_return_window",
+      "db_status": "verified",
+      "read_path_tier": "REVIEW_REQUIRED",
+      "downgrade_reason": "Clause entailment failure: Predicate lacks product return/refund cues in evidence."
+    },
+    {
+      "audit_id": 14,
+      "claim_id": "4c0fe437-4d0b-518e-834f-31d078b9686e",
+      "subject": "Northwind Rewards Gold members",
+      "predicate": "has_return_window",
+      "db_status": "verified",
+      "read_path_tier": "REVIEW_REQUIRED",
+      "downgrade_reason": "Clause entailment failure: Predicate lacks product return/refund cues in evidence."
+    },
+    {
+      "audit_id": 16,
+      "claim_id": "a1004510-d65b-5303-b259-a3eb067e017e",
+      "subject": "Footwear (worn indoors only)",
+      "predicate": "has_return_window",
+      "db_status": "verified",
+      "read_path_tier": "REVIEW_REQUIRED",
+      "downgrade_reason": "Clause entailment failure: Predicate lacks product return/refund cues in evidence."
+    },
+    {
+      "audit_id": 17,
+      "claim_id": "774ad1c0-c51b-563e-990b-1aca2d6d9ca5",
+      "subject": "Camping tents and sleeping bags (unused)",
+      "predicate": "has_return_window",
+      "db_status": "verified",
+      "read_path_tier": "REVIEW_REQUIRED",
+      "downgrade_reason": "Clause entailment failure: Predicate lacks product return/refund cues in evidence."
+    },
+    {
+      "audit_id": 31,
+      "claim_id": "616d7f2f-4627-577d-8c3b-6487a974704a",
+      "subject": "Washed, altered or stained",
+      "predicate": "has_refund_eligibility",
+      "db_status": "verified",
+      "read_path_tier": "REVIEW_REQUIRED",
+      "downgrade_reason": "Clause entailment failure: Predicate 'has_refund_eligibility' lacks refund or reimbursement support in evidence."
+    },
+    {
+      "audit_id": 77,
+      "claim_id": "02d74b39-1fcf-5bc1-9119-92d435c580e0",
+      "subject": "Customer",
+      "predicate": "receives_store_credit_bonus",
+      "db_status": "verified",
+      "read_path_tier": "REVIEW_REQUIRED",
+      "downgrade_reason": "Text integrity failure: Normative rule is missing an operative modal verb ('may', 'must', 'will', 'shall', etc.)."
+    },
+    {
+      "audit_id": 132,
+      "claim_id": "8cb16778-8a6f-5e85-83b5-0ed642fee3a5",
+      "subject": "Gift cards",
+      "predicate": "can_cancel_before_shipment",
+      "db_status": "verified",
+      "read_path_tier": "REVIEW_REQUIRED",
+      "downgrade_reason": "Text integrity failure: Normative rule is missing an operative modal verb ('may', 'must', 'will', 'shall', etc.)."
+    },
+    {
+      "audit_id": 135,
+      "claim_id": "fb28667e-bc58-590c-a7fc-8612070563e0",
+      "subject": "Gift receipt",
+      "predicate": "may_receive_store_credit",
+      "db_status": "verified",
+      "read_path_tier": "REVIEW_REQUIRED",
+      "downgrade_reason": "Text integrity failure: Normative rule is missing an operative modal verb ('may', 'must', 'will', 'shall', etc.)."
+    },
+    {
+      "audit_id": 153,
+      "claim_id": "8ff37f7d-74b6-592a-b763-711e8796a5f8",
+      "subject": "United States",
+      "predicate": "has_return_window",
+      "db_status": "verified",
+      "read_path_tier": "REVIEW_REQUIRED",
+      "downgrade_reason": "Clause entailment failure: Predicate lacks product return/refund cues in evidence."
+    },
+    {
+      "audit_id": 168,
+      "claim_id": "42d166f3-4400-52bf-a04a-c730df0f727a",
+      "subject": "Rest of world",
+      "predicate": "has_return_window",
+      "db_status": "verified",
+      "read_path_tier": "REVIEW_REQUIRED",
+      "downgrade_reason": "Clause entailment failure: Predicate lacks product return/refund cues in evidence."
+    },
+    {
+      "audit_id": 171,
+      "claim_id": "4699fa3a-076f-5c09-a909-15629f89de85",
+      "subject": "International refund",
+      "predicate": "uses_original_charge_currency",
+      "db_status": "verified",
+      "read_path_tier": "REVIEW_REQUIRED",
+      "downgrade_reason": "Text integrity failure: Normative rule is missing an operative modal verb ('may', 'must', 'will', 'shall', etc.)."
+    },
+    {
+      "audit_id": 172,
+      "claim_id": "1277fdc3-2fa9-58f9-8252-0da288c01853",
+      "subject": "International refund",
+      "predicate": "has_currency_conversion_rule",
+      "db_status": "verified",
+      "read_path_tier": "REVIEW_REQUIRED",
+      "downgrade_reason": "Text integrity failure: Normative rule is missing an operative modal verb ('may', 'must', 'will', 'shall', etc.)."
+    },
+    {
+      "audit_id": 173,
+      "claim_id": "5f834dfb-8471-5133-bad1-9b59074be3ef",
+      "subject": "Customer",
+      "predicate": "is_responsible_for_duty_drawback",
+      "db_status": "verified",
+      "read_path_tier": "REVIEW_REQUIRED",
+      "downgrade_reason": "Text integrity failure: Normative rule is missing an operative modal verb ('may', 'must', 'will', 'shall', etc.)."
+    }
+  ],
+  "thirty_seven_studio_elevated_claims": [
+    {
+      "audit_id": 2,
+      "claim_id": "5fbf0095-a74f-575c-a400-8b480e1f2cf5",
+      "subject": "Return window",
+      "predicate": "has_summary",
+      "db_status": "candidate",
+      "read_path_tier": "AUTOMATED_CERTIFIED",
+      "elevation_reason": "Passed all 9 gates in ClaimGateEvaluator at read time"
+    },
+    {
+      "audit_id": 3,
+      "claim_id": "befe53b3-2c00-552d-b3e6-db1e6316789c",
+      "subject": "Refund speed",
+      "predicate": "has_summary",
+      "db_status": "candidate",
+      "read_path_tier": "AUTOMATED_CERTIFIED",
+      "elevation_reason": "Passed all 9 gates in ClaimGateEvaluator at read time"
+    },
+    {
+      "audit_id": 4,
+      "claim_id": "a1823bf9-dea7-5983-8a5d-c6dd3d7ff965",
+      "subject": "Return shipping",
+      "predicate": "has_summary",
+      "db_status": "candidate",
+      "read_path_tier": "AUTOMATED_CERTIFIED",
+      "elevation_reason": "Passed all 9 gates in ClaimGateEvaluator at read time"
+    },
+    {
+      "audit_id": 5,
+      "claim_id": "ee12e47d-30d8-5c1e-b3cb-19e63fac806b",
+      "subject": "Restocking fee",
+      "predicate": "has_summary",
+      "db_status": "candidate",
+      "read_path_tier": "AUTOMATED_CERTIFIED",
+      "elevation_reason": "Passed all 9 gates in ClaimGateEvaluator at read time"
+    },
+    {
+      "audit_id": 6,
+      "claim_id": "97361b26-3077-5f81-8ae6-ec7ceaf90305",
+      "subject": "Final sale items",
+      "predicate": "has_summary",
+      "db_status": "candidate",
+      "read_path_tier": "AUTOMATED_CERTIFIED",
+      "elevation_reason": "Passed all 9 gates in ClaimGateEvaluator at read time"
+    },
+    {
+      "audit_id": 38,
+      "claim_id": "1167a715-8453-5b0b-a2c7-f9bc5989f280",
+      "subject": "Even for non-refundable items, a full refund or replacement",
+      "predicate": "will_issue_refund",
+      "db_status": "candidate",
+      "read_path_tier": "AUTOMATED_CERTIFIED",
+      "elevation_reason": "Passed all 9 gates in ClaimGateEvaluator at read time"
+    },
+    {
+      "audit_id": 94,
+      "claim_id": "0e4cc3b2-701f-5c1b-9fa4-e6498fbf3190",
+      "subject": "Freight pickups",
+      "predicate": "scheduled",
+      "db_status": "candidate",
+      "read_path_tier": "AUTOMATED_CERTIFIED",
+      "elevation_reason": "Passed all 9 gates in ClaimGateEvaluator at read time"
+    },
+    {
+      "audit_id": 96,
+      "claim_id": "2c2b96fa-6717-516b-bf29-b3f15945e7d7",
+      "subject": "Carrier",
+      "predicate": "limited_to",
+      "db_status": "candidate",
+      "read_path_tier": "AUTOMATED_CERTIFIED",
+      "elevation_reason": "Passed all 9 gates in ClaimGateEvaluator at read time"
+    },
+    {
+      "audit_id": 107,
+      "claim_id": "7eea6475-37c4-56e7-85da-b64c9458bedb",
+      "subject": "This is",
+      "predicate": "limited_to",
+      "db_status": "candidate",
+      "read_path_tier": "AUTOMATED_CERTIFIED",
+      "elevation_reason": "Passed all 9 gates in ClaimGateEvaluator at read time"
+    },
+    {
+      "audit_id": 110,
+      "claim_id": "cb5b46d1-ae31-5280-aef5-00996b2006bc",
+      "subject": "Shipped",
+      "predicate": "has_attempted_not_guaranteed",
+      "db_status": "candidate",
+      "read_path_tier": "AUTOMATED_CERTIFIED",
+      "elevation_reason": "Passed all 9 gates in ClaimGateEvaluator at read time"
+    },
+    {
+      "audit_id": 111,
+      "claim_id": "bcd27d08-a9a8-595d-aead-7d90043073d6",
+      "subject": "Shipped",
+      "predicate": "has_full_refund_if_stopped_else_return",
+      "db_status": "candidate",
+      "read_path_tier": "AUTOMATED_CERTIFIED",
+      "elevation_reason": "Passed all 9 gates in ClaimGateEvaluator at read time"
+    },
+    {
+      "audit_id": 112,
+      "claim_id": "ee4f61ad-9262-5c8c-8a18-16eefc2ed0f0",
+      "subject": "Delivered",
+      "predicate": "has_attempted_not_guaranteed",
+      "db_status": "candidate",
+      "read_path_tier": "AUTOMATED_CERTIFIED",
+      "elevation_reason": "Passed all 9 gates in ClaimGateEvaluator at read time"
+    },
+    {
+      "audit_id": 113,
+      "claim_id": "07091d68-404c-5cc1-be1d-4310e270d7f5",
+      "subject": "Delivered",
+      "predicate": "has_full_refund_if_stopped_else_return",
+      "db_status": "candidate",
+      "read_path_tier": "AUTOMATED_CERTIFIED",
+      "elevation_reason": "Passed all 9 gates in ClaimGateEvaluator at read time"
+    },
+    {
+      "audit_id": 114,
+      "claim_id": "bdab680b-6426-5140-931d-d33cffbccc20",
+      "subject": "Order",
+      "predicate": "has_attempted_not_guaranteed",
+      "db_status": "candidate",
+      "read_path_tier": "AUTOMATED_CERTIFIED",
+      "elevation_reason": "Passed all 9 gates in ClaimGateEvaluator at read time"
+    },
+    {
+      "audit_id": 115,
+      "claim_id": "d8ecf6aa-ddc8-515d-ba50-c202d68d051e",
+      "subject": "Order",
+      "predicate": "has_full_refund_if_stopped_else_return",
+      "db_status": "candidate",
+      "read_path_tier": "AUTOMATED_CERTIFIED",
+      "elevation_reason": "Passed all 9 gates in ClaimGateEvaluator at read time"
+    },
+    {
+      "audit_id": 116,
+      "claim_id": "c729e396-23ec-5bb1-ab43-6311ab4c1b7d",
+      "subject": "Backordered",
+      "predicate": "has_attempted_not_guaranteed",
+      "db_status": "candidate",
+      "read_path_tier": "AUTOMATED_CERTIFIED",
+      "elevation_reason": "Passed all 9 gates in ClaimGateEvaluator at read time"
+    },
+    {
+      "audit_id": 117,
+      "claim_id": "582714dd-087f-563d-98b5-c37d680f6be1",
+      "subject": "Backordered",
+      "predicate": "has_full_refund_if_stopped_else_return",
+      "db_status": "candidate",
+      "read_path_tier": "AUTOMATED_CERTIFIED",
+      "elevation_reason": "Passed all 9 gates in ClaimGateEvaluator at read time"
+    },
+    {
+      "audit_id": 118,
+      "claim_id": "7c307e56-15bc-552a-98e0-6ee1dcfc2e8e",
+      "subject": "Northwind We",
+      "predicate": "cancel",
+      "db_status": "candidate",
+      "read_path_tier": "AUTOMATED_CERTIFIED",
+      "elevation_reason": "Passed all 9 gates in ClaimGateEvaluator at read time"
+    },
+    {
+      "audit_id": 125,
+      "claim_id": "cc9eb019-6741-5fe3-9446-aa1c1c46555f",
+      "subject": "Company",
+      "predicate": "will_issue_refund",
+      "db_status": "candidate",
+      "read_path_tier": "AUTOMATED_CERTIFIED",
+      "elevation_reason": "Passed all 9 gates in ClaimGateEvaluator at read time"
+    },
+    {
+      "audit_id": 181,
+      "claim_id": "383f0ae8-9364-5048-90e3-9cdf0f2f1dcb",
+      "subject": "4853",
+      "predicate": "has_typical_resolution",
+      "db_status": "candidate",
+      "read_path_tier": "AUTOMATED_CERTIFIED",
+      "elevation_reason": "Passed all 9 gates in ClaimGateEvaluator at read time"
+    },
+    {
+      "audit_id": 183,
+      "claim_id": "ed9b9894-ef5d-57aa-b1e5-abdd15de18f1",
+      "subject": "4837",
+      "predicate": "has_typical_resolution",
+      "db_status": "candidate",
+      "read_path_tier": "AUTOMATED_CERTIFIED",
+      "elevation_reason": "Passed all 9 gates in ClaimGateEvaluator at read time"
+    },
+    {
+      "audit_id": 185,
+      "claim_id": "b31551d7-77a8-5856-97b1-7427c61e993c",
+      "subject": "4855",
+      "predicate": "has_typical_resolution",
+      "db_status": "candidate",
+      "read_path_tier": "AUTOMATED_CERTIFIED",
+      "elevation_reason": "Passed all 9 gates in ClaimGateEvaluator at read time"
+    },
+    {
+      "audit_id": 187,
+      "claim_id": "20390128-a2ea-5f03-89a3-d92e59dc066b",
+      "subject": "4834",
+      "predicate": "has_typical_resolution",
+      "db_status": "candidate",
+      "read_path_tier": "AUTOMATED_CERTIFIED",
+      "elevation_reason": "Passed all 9 gates in ClaimGateEvaluator at read time"
+    },
+    {
+      "audit_id": 189,
+      "claim_id": "90b36b61-02ae-5bcd-99e2-001a04a42ce7",
+      "subject": "4841",
+      "predicate": "has_typical_resolution",
+      "db_status": "candidate",
+      "read_path_tier": "AUTOMATED_CERTIFIED",
+      "elevation_reason": "Passed all 9 gates in ClaimGateEvaluator at read time"
+    },
+    {
+      "audit_id": 190,
+      "claim_id": "78bf1215-063d-5a00-9e19-9a27e855122b",
+      "subject": "Notice",
+      "predicate": "has_trigger",
+      "db_status": "candidate",
+      "read_path_tier": "AUTOMATED_CERTIFIED",
+      "elevation_reason": "Passed all 9 gates in ClaimGateEvaluator at read time"
+    },
+    {
+      "audit_id": 191,
+      "claim_id": "22864bba-fd53-57b3-af93-74294c0531bf",
+      "subject": "Notice",
+      "predicate": "has_action",
+      "db_status": "candidate",
+      "read_path_tier": "AUTOMATED_CERTIFIED",
+      "elevation_reason": "Passed all 9 gates in ClaimGateEvaluator at read time"
+    },
+    {
+      "audit_id": 192,
+      "claim_id": "bb7e838b-a4bc-5efe-8be9-5a5a8c43c3b1",
+      "subject": "Restricted",
+      "predicate": "has_trigger",
+      "db_status": "candidate",
+      "read_path_tier": "AUTOMATED_CERTIFIED",
+      "elevation_reason": "Passed all 9 gates in ClaimGateEvaluator at read time"
+    },
+    {
+      "audit_id": 193,
+      "claim_id": "9ed8a28e-f5f6-57b8-a938-be07a15c5582",
+      "subject": "Restricted",
+      "predicate": "has_action",
+      "db_status": "candidate",
+      "read_path_tier": "AUTOMATED_CERTIFIED",
+      "elevation_reason": "Passed all 9 gates in ClaimGateEvaluator at read time"
+    },
+    {
+      "audit_id": 194,
+      "claim_id": "0384743e-d6e0-5943-bfe3-01ae61daa5dd",
+      "subject": "Suspended",
+      "predicate": "has_trigger",
+      "db_status": "candidate",
+      "read_path_tier": "AUTOMATED_CERTIFIED",
+      "elevation_reason": "Passed all 9 gates in ClaimGateEvaluator at read time"
+    },
+    {
+      "audit_id": 195,
+      "claim_id": "6bb94bca-bc31-536e-8ee6-30e5978258c8",
+      "subject": "Suspended",
+      "predicate": "has_action",
+      "db_status": "candidate",
+      "read_path_tier": "AUTOMATED_CERTIFIED",
+      "elevation_reason": "Passed all 9 gates in ClaimGateEvaluator at read time"
+    },
+    {
+      "audit_id": 196,
+      "claim_id": "59f51f1f-dc49-5994-9edf-30e789606d80",
+      "subject": "Permanent",
+      "predicate": "has_trigger",
+      "db_status": "candidate",
+      "read_path_tier": "AUTOMATED_CERTIFIED",
+      "elevation_reason": "Passed all 9 gates in ClaimGateEvaluator at read time"
+    },
+    {
+      "audit_id": 197,
+      "claim_id": "07e6916a-b7cf-583e-bbd5-d656f019c05a",
+      "subject": "Permanent",
+      "predicate": "has_action",
+      "db_status": "candidate",
+      "read_path_tier": "AUTOMATED_CERTIFIED",
+      "elevation_reason": "Passed all 9 gates in ClaimGateEvaluator at read time"
+    },
+    {
+      "audit_id": 198,
+      "claim_id": "c8844dc7-e6aa-5468-a972-6cba01ecd58e",
+      "subject": "Customer",
+      "predicate": "appeal",
+      "db_status": "candidate",
+      "read_path_tier": "AUTOMATED_CERTIFIED",
+      "elevation_reason": "Passed all 9 gates in ClaimGateEvaluator at read time"
+    },
+    {
+      "audit_id": 218,
+      "claim_id": "33a7a86d-0f7c-5fcb-bdfe-900553221859",
+      "subject": "First response by email",
+      "predicate": "has_target",
+      "db_status": "candidate",
+      "read_path_tier": "AUTOMATED_CERTIFIED",
+      "elevation_reason": "Passed all 9 gates in ClaimGateEvaluator at read time"
+    },
+    {
+      "audit_id": 219,
+      "claim_id": "7ec49b49-8c31-5a0e-9566-66c735d15335",
+      "subject": "First response by chat",
+      "predicate": "has_target",
+      "db_status": "candidate",
+      "read_path_tier": "AUTOMATED_CERTIFIED",
+      "elevation_reason": "Passed all 9 gates in ClaimGateEvaluator at read time"
+    },
+    {
+      "audit_id": 220,
+      "claim_id": "40633e3d-83c7-53dc-88ba-586db009eb91",
+      "subject": "Resolution of standard refund query",
+      "predicate": "has_target",
+      "db_status": "candidate",
+      "read_path_tier": "AUTOMATED_CERTIFIED",
+      "elevation_reason": "Passed all 9 gates in ClaimGateEvaluator at read time"
+    },
+    {
+      "audit_id": 221,
+      "claim_id": "ca40254f-cf16-5ed0-b90d-e9b4546f968d",
+      "subject": "Escalated complaint resolution",
+      "predicate": "has_target",
+      "db_status": "candidate",
+      "read_path_tier": "AUTOMATED_CERTIFIED",
+      "elevation_reason": "Passed all 9 gates in ClaimGateEvaluator at read time"
+    }
+  ]
+}

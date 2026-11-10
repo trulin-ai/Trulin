@@ -1,0 +1,23 @@
+{
+  "metadata": {
+    "phase": "2.6",
+    "title": "Staging Promotion Checklist",
+    "timestamp": "2026-11-10T13:45:03.379452+00:00"
+  },
+  "all_steps_verified": true,
+  "verified_artifact_hashes": {
+    "phase2_5_repaired_extraction_v1.json": "0f98fa810ee626e86d5f46a556f7501d7788d0ead56657808dba9a43da257d15",
+    "authoritative_source_inventory_126_units.json": "b6c2417197042b2e9daa7548c06f5ffb7276f56c585bdda90460613c9ece592b",
+    "phase2_5_conflict_reconciliation.json": "96ddab8a336f7bdb3c3af64d75ab2c7b12ff0e40ef25244166931b071a4d28b6",
+    "phase2_5d_rationale_audit.json": "f0a7b93ee2761ee011690580b5c31d819304d2373cc464639b7edb8c99a82f6c",
+    "phase2_5d_rationale_before_after_diff.json": "75b4b13dd22ecc3a99690072ccd4d6024b7fbe4930aa20fa02f7425cc0433aea"
+  },
+  "source_inventory_126_verified": true,
+  "span_verification_224_verified": true,
+  "regression_142_verified": true,
+  "golden_benchmark_verified": true,
+  "held_out_35_verified": true,
+  "human_authorization_required": true,
+  "human_authorization_status": "PENDING_USER_APPROVAL",
+  "promotion_lock": "LOCKED_UNTIL_USER_PROCEED_COMMAND"
+}

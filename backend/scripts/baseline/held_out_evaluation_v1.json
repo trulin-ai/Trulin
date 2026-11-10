@@ -1,0 +1,657 @@
+[
+  {
+    "case_id": "HELD-NOTICE-001",
+    "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+    "source_sha256": "45dfae85a80a6985e7e48153526a83fcfef2ed96fb416917467a0ff48d6851f8",
+    "document_family": "hr_policy",
+    "source_verbatim_quote": "Level & Grade A (A1 & A2) CXO notice period is 90 Days.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 55
+    },
+    "expected_subject": "CXO (Grade A1 & A2)",
+    "expected_predicate": "has_notice_period",
+    "expected_object": "90 Days",
+    "expected_modality": "REQUIRED",
+    "expected_conditions": [
+      "confirmed employees"
+    ],
+    "expected_lifecycle_decision": "APPROVE"
+  },
+  {
+    "case_id": "HELD-NOTICE-002",
+    "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+    "source_sha256": "45dfae85a80a6985e7e48153526a83fcfef2ed96fb416917467a0ff48d6851f8",
+    "document_family": "hr_policy",
+    "source_verbatim_quote": "Level & Grade B (B1 & B2) SeniorManagement notice period is 90 Days.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 68
+    },
+    "expected_subject": "Senior Management (Grade B1 & B2)",
+    "expected_predicate": "has_notice_period",
+    "expected_object": "90 Days",
+    "expected_modality": "REQUIRED",
+    "expected_conditions": [
+      "confirmed employees"
+    ],
+    "expected_lifecycle_decision": "APPROVE"
+  },
+  {
+    "case_id": "HELD-NOTICE-003",
+    "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+    "source_sha256": "45dfae85a80a6985e7e48153526a83fcfef2ed96fb416917467a0ff48d6851f8",
+    "document_family": "hr_policy",
+    "source_verbatim_quote": "Level & Grade C (C1, C2 & C3) Middle Management notice period is 60 Days.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 73
+    },
+    "expected_subject": "Middle Management (Grade C)",
+    "expected_predicate": "has_notice_period",
+    "expected_object": "60 Days",
+    "expected_modality": "REQUIRED",
+    "expected_conditions": [
+      "confirmed employees"
+    ],
+    "expected_lifecycle_decision": "APPROVE"
+  },
+  {
+    "case_id": "HELD-NOTICE-004",
+    "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+    "source_sha256": "45dfae85a80a6985e7e48153526a83fcfef2ed96fb416917467a0ff48d6851f8",
+    "document_family": "hr_policy",
+    "source_verbatim_quote": "Level & Grade D (D1, D2 & D3) Junior Management notice period is 30 Days.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 73
+    },
+    "expected_subject": "Junior Management (Grade D)",
+    "expected_predicate": "has_notice_period",
+    "expected_object": "30 Days",
+    "expected_modality": "REQUIRED",
+    "expected_conditions": [
+      "confirmed employees"
+    ],
+    "expected_lifecycle_decision": "APPROVE"
+  },
+  {
+    "case_id": "HELD-NOTICE-005",
+    "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+    "source_sha256": "45dfae85a80a6985e7e48153526a83fcfef2ed96fb416917467a0ff48d6851f8",
+    "document_family": "hr_policy",
+    "source_verbatim_quote": "Level & Grade E (E1, E2 & E3) Fellow notice period is 30 Days.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 62
+    },
+    "expected_subject": "Fellow (Grade E)",
+    "expected_predicate": "has_notice_period",
+    "expected_object": "30 Days",
+    "expected_modality": "REQUIRED",
+    "expected_conditions": [
+      "confirmed employees"
+    ],
+    "expected_lifecycle_decision": "APPROVE"
+  },
+  {
+    "case_id": "HELD-NOTICE-006",
+    "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+    "source_sha256": "45dfae85a80a6985e7e48153526a83fcfef2ed96fb416917467a0ff48d6851f8",
+    "document_family": "hr_policy",
+    "source_verbatim_quote": "Probationers across all grades have a notice period of 15 days.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 63
+    },
+    "expected_subject": "Probationers across all grades",
+    "expected_predicate": "has_notice_period",
+    "expected_object": "15 days",
+    "expected_modality": "REQUIRED",
+    "expected_conditions": [
+      "during probation period"
+    ],
+    "expected_lifecycle_decision": "APPROVE"
+  },
+  {
+    "case_id": "HELD-NOTICE-007",
+    "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+    "source_sha256": "45dfae85a80a6985e7e48153526a83fcfef2ed96fb416917467a0ff48d6851f8",
+    "document_family": "hr_policy",
+    "source_verbatim_quote": "Employees may request leave during the notice period as an exception with prior approval from their reporting manager.",
+    "locator": {
+      "page": 1,
+      "char_start": 5766,
+      "char_end": 5884
+    },
+    "expected_subject": "Employees",
+    "expected_predicate": "may_request_leave",
+    "expected_object": "leave during notice period",
+    "expected_modality": "MAY",
+    "expected_conditions": [
+      "prior approval from reporting manager"
+    ],
+    "expected_lifecycle_decision": "APPROVE"
+  },
+  {
+    "case_id": "HELD-NOTICE-008",
+    "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+    "source_sha256": "45dfae85a80a6985e7e48153526a83fcfef2ed96fb416917467a0ff48d6851f8",
+    "document_family": "hr_policy",
+    "source_verbatim_quote": "Notice periods vary based on Wingify levels and grades framework.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 65
+    },
+    "expected_subject": "Wingify notice period policy",
+    "expected_predicate": "varies_by",
+    "expected_object": "levels and grades framework",
+    "expected_modality": "FACT",
+    "expected_conditions": [],
+    "expected_lifecycle_decision": "APPROVE"
+  },
+  {
+    "case_id": "HELD-NOTICE-009",
+    "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+    "source_sha256": "45dfae85a80a6985e7e48153526a83fcfef2ed96fb416917467a0ff48d6851f8",
+    "document_family": "hr_policy",
+    "source_verbatim_quote": "Final settlement includes recovery for short notice periods and joining bonus recovery.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 87
+    },
+    "expected_subject": "Company",
+    "expected_predicate": "deducts_recovery",
+    "expected_object": "short notice periods and joining bonus recovery",
+    "expected_modality": "WILL",
+    "expected_conditions": [
+      "early resignation"
+    ],
+    "expected_lifecycle_decision": "APPROVE"
+  },
+  {
+    "case_id": "HELD-NOTICE-010",
+    "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+    "source_sha256": "45dfae85a80a6985e7e48153526a83fcfef2ed96fb416917467a0ff48d6851f8",
+    "document_family": "hr_policy",
+    "source_verbatim_quote": "Document Approvers: Director, People Success.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 45
+    },
+    "expected_subject": "Director, People Success",
+    "expected_predicate": "approves_policy",
+    "expected_object": "Employee Notice Period Policy",
+    "expected_modality": "FACT",
+    "expected_conditions": [],
+    "expected_lifecycle_decision": "REVIEW"
+  },
+  {
+    "case_id": "HELD-NOTICE-011",
+    "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+    "source_sha256": "45dfae85a80a6985e7e48153526a83fcfef2ed96fb416917467a0ff48d6851f8",
+    "document_family": "hr_policy",
+    "source_verbatim_quote": "Employees must submit resignation through formal written communication.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 71
+    },
+    "expected_subject": "Employees",
+    "expected_predicate": "must_submit_resignation",
+    "expected_object": "formal written communication",
+    "expected_modality": "MUST",
+    "expected_conditions": [],
+    "expected_lifecycle_decision": "APPROVE"
+  },
+  {
+    "case_id": "HELD-NOTICE-012",
+    "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+    "source_sha256": "45dfae85a80a6985e7e48153526a83fcfef2ed96fb416917467a0ff48d6851f8",
+    "document_family": "hr_policy",
+    "source_verbatim_quote": "This document contains confidential and proprietary information of Wingify.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 75
+    },
+    "expected_subject": "Document",
+    "expected_predicate": "contains_confidential_info",
+    "expected_object": "Wingify proprietary information",
+    "expected_modality": "FACT",
+    "expected_conditions": [],
+    "expected_lifecycle_decision": "REJECT"
+  },
+  {
+    "case_id": "HELD-VENDOR-001",
+    "source_document": "Vendor Agreement Template-02.2021_2.pdf",
+    "source_sha256": "53c8cc27edc8682320f6d49f9849452f57f0b089535191526f5536d4e0ad0ebe",
+    "document_family": "commercial_contract",
+    "source_verbatim_quote": "This Agreement shall be in full force and effect from the Effective Date until all Vendor Obligations have been duly discharged.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 128
+    },
+    "expected_subject": "Agreement",
+    "expected_predicate": "remains_in_effect_until",
+    "expected_object": "all Vendor Obligations have been duly discharged",
+    "expected_modality": "SHALL",
+    "expected_conditions": [],
+    "expected_lifecycle_decision": "APPROVE"
+  },
+  {
+    "case_id": "HELD-VENDOR-002",
+    "source_document": "Vendor Agreement Template-02.2021_2.pdf",
+    "source_sha256": "53c8cc27edc8682320f6d49f9849452f57f0b089535191526f5536d4e0ad0ebe",
+    "document_family": "commercial_contract",
+    "source_verbatim_quote": "This Agreement shall be governed by and construed in accordance with the laws of the Province of Ontario and the laws of Canada.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 128
+    },
+    "expected_subject": "Agreement",
+    "expected_predicate": "is_governed_by",
+    "expected_object": "laws of Province of Ontario and laws of Canada",
+    "expected_modality": "SHALL",
+    "expected_conditions": [],
+    "expected_lifecycle_decision": "APPROVE"
+  },
+  {
+    "case_id": "HELD-VENDOR-003",
+    "source_document": "Vendor Agreement Template-02.2021_2.pdf",
+    "source_sha256": "53c8cc27edc8682320f6d49f9849452f57f0b089535191526f5536d4e0ad0ebe",
+    "document_family": "commercial_contract",
+    "source_verbatim_quote": "The Vendor hereby irrevocably attorns to the non-exclusive jurisdiction of the courts of Ontario.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 97
+    },
+    "expected_subject": "Vendor",
+    "expected_predicate": "attorns_to_jurisdiction",
+    "expected_object": "non-exclusive jurisdiction of the courts of Ontario",
+    "expected_modality": "REQUIRED",
+    "expected_conditions": [],
+    "expected_lifecycle_decision": "APPROVE"
+  },
+  {
+    "case_id": "HELD-VENDOR-004",
+    "source_document": "Vendor Agreement Template-02.2021_2.pdf",
+    "source_sha256": "53c8cc27edc8682320f6d49f9849452f57f0b089535191526f5536d4e0ad0ebe",
+    "document_family": "commercial_contract",
+    "source_verbatim_quote": "The Vendor must be licensed under the New Home Construction Licensing Act, 2017.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 80
+    },
+    "expected_subject": "Vendor",
+    "expected_predicate": "must_be_licensed_under",
+    "expected_object": "New Home Construction Licensing Act, 2017",
+    "expected_modality": "MUST",
+    "expected_conditions": [
+      "in order to offer to sell new homes"
+    ],
+    "expected_lifecycle_decision": "APPROVE"
+  },
+  {
+    "case_id": "HELD-VENDOR-005",
+    "source_document": "Vendor Agreement Template-02.2021_2.pdf",
+    "source_sha256": "53c8cc27edc8682320f6d49f9849452f57f0b089535191526f5536d4e0ad0ebe",
+    "document_family": "commercial_contract",
+    "source_verbatim_quote": "The Vendor agrees to indemnify and hold harmless Tarion against all losses, damages and liabilities.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 100
+    },
+    "expected_subject": "Vendor",
+    "expected_predicate": "indemnifies_and_holds_harmless",
+    "expected_object": "Tarion against losses, damages and liabilities",
+    "expected_modality": "AGREES",
+    "expected_conditions": [],
+    "expected_lifecycle_decision": "APPROVE"
+  },
+  {
+    "case_id": "HELD-VENDOR-006",
+    "source_document": "Vendor Agreement Template-02.2021_2.pdf",
+    "source_sha256": "53c8cc27edc8682320f6d49f9849452f57f0b089535191526f5536d4e0ad0ebe",
+    "document_family": "commercial_contract",
+    "source_verbatim_quote": "Either party may terminate this Agreement upon written notice if the other party breaches any material term.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 108
+    },
+    "expected_subject": "Either party",
+    "expected_predicate": "may_terminate_agreement",
+    "expected_object": "termination upon material breach",
+    "expected_modality": "MAY",
+    "expected_conditions": [
+      "written notice",
+      "30-day cure period"
+    ],
+    "expected_lifecycle_decision": "APPROVE"
+  },
+  {
+    "case_id": "HELD-VENDOR-007",
+    "source_document": "Vendor Agreement Template-02.2021_2.pdf",
+    "source_sha256": "53c8cc27edc8682320f6d49f9849452f57f0b089535191526f5536d4e0ad0ebe",
+    "document_family": "commercial_contract",
+    "source_verbatim_quote": "The Vendor shall maintain books and records relating to this Agreement for a period of seven (7) years.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 103
+    },
+    "expected_subject": "Vendor",
+    "expected_predicate": "shall_maintain_records",
+    "expected_object": "books and records for seven (7) years",
+    "expected_modality": "SHALL",
+    "expected_conditions": [],
+    "expected_lifecycle_decision": "APPROVE"
+  },
+  {
+    "case_id": "HELD-VENDOR-008",
+    "source_document": "Vendor Agreement Template-02.2021_2.pdf",
+    "source_sha256": "53c8cc27edc8682320f6d49f9849452f57f0b089535191526f5536d4e0ad0ebe",
+    "document_family": "commercial_contract",
+    "source_verbatim_quote": "No amendment or modification of this Agreement shall be valid unless in writing and signed by both parties.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 107
+    },
+    "expected_subject": "Agreement amendment",
+    "expected_predicate": "requires_written_agreement",
+    "expected_object": "writing signed by both parties",
+    "expected_modality": "SHALL",
+    "expected_conditions": [],
+    "expected_lifecycle_decision": "APPROVE"
+  },
+  {
+    "case_id": "HELD-VENDOR-009",
+    "source_document": "Vendor Agreement Template-02.2021_2.pdf",
+    "source_sha256": "53c8cc27edc8682320f6d49f9849452f57f0b089535191526f5536d4e0ad0ebe",
+    "document_family": "commercial_contract",
+    "source_verbatim_quote": "Confidential information of the disclosing party must not be disclosed to any third party without prior written consent.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 120
+    },
+    "expected_subject": "Recipient",
+    "expected_predicate": "must_not_disclose",
+    "expected_object": "confidential information to third parties",
+    "expected_modality": "MUST_NOT",
+    "expected_conditions": [
+      "prior written consent"
+    ],
+    "expected_lifecycle_decision": "APPROVE"
+  },
+  {
+    "case_id": "HELD-VENDOR-010",
+    "source_document": "Vendor Agreement Template-02.2021_2.pdf",
+    "source_sha256": "53c8cc27edc8682320f6d49f9849452f57f0b089535191526f5536d4e0ad0ebe",
+    "document_family": "commercial_contract",
+    "source_verbatim_quote": "All notices shall be in writing and deemed given when delivered by registered mail or courier.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 94
+    },
+    "expected_subject": "Notices",
+    "expected_predicate": "must_be_in_writing",
+    "expected_object": "registered mail or courier delivery",
+    "expected_modality": "SHALL",
+    "expected_conditions": [],
+    "expected_lifecycle_decision": "APPROVE"
+  },
+  {
+    "case_id": "HELD-VENDOR-011",
+    "source_document": "Vendor Agreement Template-02.2021_2.pdf",
+    "source_sha256": "53c8cc27edc8682320f6d49f9849452f57f0b089535191526f5536d4e0ad0ebe",
+    "document_family": "commercial_contract",
+    "source_verbatim_quote": "The Vendor warrants that all services will be performed in a professional and workmanlike manner.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 97
+    },
+    "expected_subject": "Vendor",
+    "expected_predicate": "warrants_services",
+    "expected_object": "professional and workmanlike performance",
+    "expected_modality": "WARRANTS",
+    "expected_conditions": [],
+    "expected_lifecycle_decision": "APPROVE"
+  },
+  {
+    "case_id": "HELD-VENDOR-012",
+    "source_document": "Vendor Agreement Template-02.2021_2.pdf",
+    "source_sha256": "53c8cc27edc8682320f6d49f9849452f57f0b089535191526f5536d4e0ad0ebe",
+    "document_family": "commercial_contract",
+    "source_verbatim_quote": "Survival of representations and indemnities following termination of this Agreement.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 84
+    },
+    "expected_subject": "Representations and indemnities",
+    "expected_predicate": "survive_termination",
+    "expected_object": "post-termination survival",
+    "expected_modality": "FACT",
+    "expected_conditions": [],
+    "expected_lifecycle_decision": "APPROVE"
+  },
+  {
+    "case_id": "HELD-INV-001",
+    "source_document": "wordpress-pdf-invoice-plugin-sample.pdf",
+    "source_sha256": "c2de358a0974f9b047aed8e457def7d4b1b39170f44819ec3152b42db787d72e",
+    "document_family": "commercial_invoice",
+    "source_verbatim_quote": "Payment is due within 30 days from date of invoice.",
+    "locator": {
+      "page": 1,
+      "char_start": 1048,
+      "char_end": 1099
+    },
+    "expected_subject": "Buyer",
+    "expected_predicate": "must_pay_invoice",
+    "expected_object": "within 30 days from date of invoice",
+    "expected_modality": "REQUIRED",
+    "expected_conditions": [],
+    "expected_lifecycle_decision": "APPROVE"
+  },
+  {
+    "case_id": "HELD-INV-002",
+    "source_document": "wordpress-pdf-invoice-plugin-sample.pdf",
+    "source_sha256": "c2de358a0974f9b047aed8e457def7d4b1b39170f44819ec3152b42db787d72e",
+    "document_family": "commercial_invoice",
+    "source_verbatim_quote": "Late payment is subject to fees of 5% per month.",
+    "locator": {
+      "page": 1,
+      "char_start": 1100,
+      "char_end": 1148
+    },
+    "expected_subject": "Late payment",
+    "expected_predicate": "incurs_penalty_fee",
+    "expected_object": "fees of 5% per month",
+    "expected_modality": "IS_SUBJECT_TO",
+    "expected_conditions": [
+      "payment past due date"
+    ],
+    "expected_lifecycle_decision": "APPROVE"
+  },
+  {
+    "case_id": "HELD-INV-003",
+    "source_document": "wordpress-pdf-invoice-plugin-sample.pdf",
+    "source_sha256": "c2de358a0974f9b047aed8e457def7d4b1b39170f44819ec3152b42db787d72e",
+    "document_family": "commercial_invoice",
+    "source_verbatim_quote": "Invoice Number INV-3337 | Order Number 12345.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 45
+    },
+    "expected_subject": "Invoice INV-3337",
+    "expected_predicate": "references_order",
+    "expected_object": "Order 12345",
+    "expected_modality": "FACT",
+    "expected_conditions": [],
+    "expected_lifecycle_decision": "APPROVE"
+  },
+  {
+    "case_id": "HELD-INV-004",
+    "source_document": "wordpress-pdf-invoice-plugin-sample.pdf",
+    "source_sha256": "c2de358a0974f9b047aed8e457def7d4b1b39170f44819ec3152b42db787d72e",
+    "document_family": "commercial_invoice",
+    "source_verbatim_quote": "Total Due $93.50 (Sub Total $85.00 plus Tax $8.50).",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 51
+    },
+    "expected_subject": "Invoice Total Due",
+    "expected_predicate": "is_amount",
+    "expected_object": "$93.50",
+    "expected_modality": "FACT",
+    "expected_conditions": [],
+    "expected_lifecycle_decision": "APPROVE"
+  },
+  {
+    "case_id": "HELD-INV-005",
+    "source_document": "wordpress-pdf-invoice-plugin-sample.pdf",
+    "source_sha256": "c2de358a0974f9b047aed8e457def7d4b1b39170f44819ec3152b42db787d72e",
+    "document_family": "commercial_invoice",
+    "source_verbatim_quote": "Invoice Due Date is January 31, 2016.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 37
+    },
+    "expected_subject": "Invoice due date",
+    "expected_predicate": "is_calendar_date",
+    "expected_object": "January 31, 2016",
+    "expected_modality": "REQUIRED",
+    "expected_conditions": [],
+    "expected_lifecycle_decision": "APPROVE"
+  },
+  {
+    "case_id": "HELD-INV-006",
+    "source_document": "wordpress-pdf-invoice-plugin-sample.pdf",
+    "source_sha256": "c2de358a0974f9b047aed8e457def7d4b1b39170f44819ec3152b42db787d72e",
+    "document_family": "commercial_invoice",
+    "source_verbatim_quote": "Remittance bank account: ANZ Bank ACC # 1234 1234 BSB # 4321 432.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 65
+    },
+    "expected_subject": "Buyer",
+    "expected_predicate": "must_remit_payment_to",
+    "expected_object": "ANZ Bank ACC # 1234 1234",
+    "expected_modality": "REQUIRED",
+    "expected_conditions": [],
+    "expected_lifecycle_decision": "APPROVE"
+  },
+  {
+    "case_id": "HELD-GOV-001",
+    "source_document": "guidelines-for-engagement-of-employees-on-contract-basis.pdf",
+    "source_sha256": "gov_mizoram_guidelines_sha256",
+    "document_family": "statutory_guidelines",
+    "source_verbatim_quote": "Contract engagement of employees shall be for a maximum initial period of 1 year.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 81
+    },
+    "expected_subject": "Contract engagement",
+    "expected_predicate": "has_maximum_period",
+    "expected_object": "1 year initial term",
+    "expected_modality": "SHALL",
+    "expected_conditions": [],
+    "expected_lifecycle_decision": "APPROVE"
+  },
+  {
+    "case_id": "HELD-GOV-002",
+    "source_document": "guidelines-for-engagement-of-employees-on-contract-basis.pdf",
+    "source_sha256": "gov_mizoram_guidelines_sha256",
+    "document_family": "statutory_guidelines",
+    "source_verbatim_quote": "Contract appointees shall be entitled to casual leave of 12 days in a calendar year.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 84
+    },
+    "expected_subject": "Contract appointees",
+    "expected_predicate": "are_entitled_to_leave",
+    "expected_object": "12 days casual leave per calendar year",
+    "expected_modality": "ENTITLED",
+    "expected_conditions": [],
+    "expected_lifecycle_decision": "APPROVE"
+  },
+  {
+    "case_id": "HELD-GOV-003",
+    "source_document": "guidelines-for-engagement-of-employees-on-contract-basis.pdf",
+    "source_sha256": "gov_mizoram_guidelines_sha256",
+    "document_family": "statutory_guidelines",
+    "source_verbatim_quote": "Contract appointment can be terminated by either side by giving one month notice or pay in lieu.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 96
+    },
+    "expected_subject": "Contract appointment",
+    "expected_predicate": "may_be_terminated_by",
+    "expected_object": "one month notice or pay in lieu",
+    "expected_modality": "CAN",
+    "expected_conditions": [],
+    "expected_lifecycle_decision": "APPROVE"
+  },
+  {
+    "case_id": "HELD-GOV-004",
+    "source_document": "guidelines-for-engagement-of-employees-on-contract-basis.pdf",
+    "source_sha256": "gov_mizoram_guidelines_sha256",
+    "document_family": "statutory_guidelines",
+    "source_verbatim_quote": "Monthly remuneration shall be consolidated pay without DA or other allowances.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 78
+    },
+    "expected_subject": "Contract appointee remuneration",
+    "expected_predicate": "is_consolidated_pay",
+    "expected_object": "fixed remuneration without DA/allowances",
+    "expected_modality": "SHALL",
+    "expected_conditions": [],
+    "expected_lifecycle_decision": "APPROVE"
+  },
+  {
+    "case_id": "HELD-GOV-005",
+    "source_document": "guidelines-for-engagement-of-employees-on-contract-basis.pdf",
+    "source_sha256": "gov_mizoram_guidelines_sha256",
+    "document_family": "statutory_guidelines",
+    "source_verbatim_quote": "Contract appointees shall not be entitled to claim regularisation or absorption in government service.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 102
+    },
+    "expected_subject": "Contract appointees",
+    "expected_predicate": "cannot_claim_regularisation",
+    "expected_object": "regularisation or absorption in service",
+    "expected_modality": "CANNOT",
+    "expected_conditions": [],
+    "expected_lifecycle_decision": "APPROVE"
+  }
+]

@@ -1,7 +1,7 @@
 {
   "$schema": "https://context-trust-layer.ai/schemas/taxonomy-predicates.json",
-  "version": "1.0.0",
-  "last_updated": "2026-10-22T00:00:00Z",
+  "version": "2.0.0",
+  "last_updated": "2026-11-10T15:20:00Z",
   "banned_generic_predicates": [
     "governs_contract_validity",
     "contract_validity",
@@ -13,8 +13,17 @@
       "predicate_id": "grants_product_license",
       "label": "Grants product or software license",
       "action_category": "LICENSING",
-      "allowed_subject_roles": ["VENDOR", "LICENSOR", "ANY_PARTY"],
-      "allowed_object_roles": ["PRODUCT", "SOFTWARE", "SERVICES", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "VENDOR",
+        "LICENSOR",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "PRODUCT",
+        "SOFTWARE",
+        "SERVICES",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MUST",
       "requires_condition": false,
       "risk_level": "LOW"
@@ -23,8 +32,17 @@
       "predicate_id": "grants_nonexclusive_license",
       "label": "Grants non-exclusive license",
       "action_category": "LICENSING",
-      "allowed_subject_roles": ["VENDOR", "LICENSOR", "ANY_PARTY"],
-      "allowed_object_roles": ["PRODUCT", "SOFTWARE", "SERVICES", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "VENDOR",
+        "LICENSOR",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "PRODUCT",
+        "SOFTWARE",
+        "SERVICES",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MUST",
       "requires_condition": false,
       "risk_level": "LOW"
@@ -33,8 +51,19 @@
       "predicate_id": "must_not_reverse_engineer",
       "label": "Prohibits reverse engineering or decompilation",
       "action_category": "RESTRICTIONS",
-      "allowed_subject_roles": ["CUSTOMER", "LICENSEE", "EMPLOYEE", "RECIPIENT", "ANY_PARTY"],
-      "allowed_object_roles": ["SOFTWARE", "PRODUCT", "CONFIDENTIAL_INFORMATION", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "CUSTOMER",
+        "LICENSEE",
+        "EMPLOYEE",
+        "RECIPIENT",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "SOFTWARE",
+        "PRODUCT",
+        "CONFIDENTIAL_INFORMATION",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MUST_NOT",
       "requires_condition": false,
       "risk_level": "MEDIUM"
@@ -43,8 +72,17 @@
       "predicate_id": "may_sublicense",
       "label": "May sublicense rights",
       "action_category": "LICENSING",
-      "allowed_subject_roles": ["CUSTOMER", "LICENSEE", "ANY_PARTY"],
-      "allowed_object_roles": ["DELIVERABLES", "SERVICES", "SOFTWARE", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "CUSTOMER",
+        "LICENSEE",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "DELIVERABLES",
+        "SERVICES",
+        "SOFTWARE",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MAY",
       "requires_condition": false,
       "risk_level": "HIGH"
@@ -53,8 +91,16 @@
       "predicate_id": "may_transfer_perpetual_license",
       "label": "May transfer perpetual license",
       "action_category": "LICENSING",
-      "allowed_subject_roles": ["CUSTOMER", "LICENSEE", "ANY_PARTY"],
-      "allowed_object_roles": ["LICENSE", "SOFTWARE", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "CUSTOMER",
+        "LICENSEE",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "LICENSE",
+        "SOFTWARE",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MAY",
       "requires_condition": true,
       "risk_level": "HIGH"
@@ -63,8 +109,17 @@
       "predicate_id": "must_pay_within_30_days",
       "label": "Must pay invoices within thirty calendar days",
       "action_category": "PAYMENT",
-      "allowed_subject_roles": ["CUSTOMER", "BUYER", "CLIENT", "ANY_PARTY"],
-      "allowed_object_roles": ["INVOICES", "FEES", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "CUSTOMER",
+        "BUYER",
+        "CLIENT",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "INVOICES",
+        "FEES",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MUST",
       "requires_condition": false,
       "risk_level": "LOW"
@@ -73,8 +128,17 @@
       "predicate_id": "must_pay_unpaid_invoices_immediately",
       "label": "Must pay all unpaid invoices immediately upon termination",
       "action_category": "PAYMENT",
-      "allowed_subject_roles": ["CUSTOMER", "BUYER", "CLIENT", "ANY_PARTY"],
-      "allowed_object_roles": ["INVOICES", "CHARGES", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "CUSTOMER",
+        "BUYER",
+        "CLIENT",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "INVOICES",
+        "CHARGES",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MUST",
       "requires_condition": true,
       "risk_level": "MEDIUM"
@@ -83,8 +147,17 @@
       "predicate_id": "must_pay_for_services_before_termination",
       "label": "Must pay for services delivered prior to termination date",
       "action_category": "PAYMENT",
-      "allowed_subject_roles": ["CUSTOMER", "BUYER", "CLIENT", "ANY_PARTY"],
-      "allowed_object_roles": ["SERVICES", "FEES", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "CUSTOMER",
+        "BUYER",
+        "CLIENT",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "SERVICES",
+        "FEES",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MUST",
       "requires_condition": true,
       "risk_level": "MEDIUM"
@@ -93,8 +166,17 @@
       "predicate_id": "authorizes_recurring_charges",
       "label": "Authorizes periodic or recurring billing charges",
       "action_category": "PAYMENT",
-      "allowed_subject_roles": ["CUSTOMER", "BUYER", "CLIENT", "ANY_PARTY"],
-      "allowed_object_roles": ["PAYMENT_METHOD", "VENDOR", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "CUSTOMER",
+        "BUYER",
+        "CLIENT",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "PAYMENT_METHOD",
+        "VENDOR",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MAY",
       "requires_condition": false,
       "risk_level": "MEDIUM"
@@ -103,8 +185,17 @@
       "predicate_id": "authorizes_payment_storage_and_processing",
       "label": "Authorizes payment details storage and electronic debits",
       "action_category": "PAYMENT",
-      "allowed_subject_roles": ["CUSTOMER", "BUYER", "CLIENT", "ANY_PARTY"],
-      "allowed_object_roles": ["PAYMENT_DETAILS", "VENDOR", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "CUSTOMER",
+        "BUYER",
+        "CLIENT",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "PAYMENT_DETAILS",
+        "VENDOR",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MAY",
       "requires_condition": false,
       "risk_level": "MEDIUM"
@@ -113,8 +204,17 @@
       "predicate_id": "may_assess_late_fee",
       "label": "May assess late fees on past due payments",
       "action_category": "PAYMENT",
-      "allowed_subject_roles": ["VENDOR", "SERVICE_PROVIDER", "LICENSOR", "ANY_PARTY"],
-      "allowed_object_roles": ["LATE_PAYMENT", "INTEREST", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "VENDOR",
+        "SERVICE_PROVIDER",
+        "LICENSOR",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "LATE_PAYMENT",
+        "INTEREST",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MAY",
       "requires_condition": true,
       "risk_level": "MEDIUM"
@@ -123,8 +223,17 @@
       "predicate_id": "may_collect_return_or_insufficient_funds_fee",
       "label": "May collect fee on unpaid or returned payments",
       "action_category": "PAYMENT",
-      "allowed_subject_roles": ["VENDOR", "SERVICE_PROVIDER", "LICENSOR", "ANY_PARTY"],
-      "allowed_object_roles": ["RETURN_FEE", "CUSTOMER", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "VENDOR",
+        "SERVICE_PROVIDER",
+        "LICENSOR",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "RETURN_FEE",
+        "CUSTOMER",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MAY",
       "requires_condition": true,
       "risk_level": "MEDIUM"
@@ -133,8 +242,17 @@
       "predicate_id": "may_require_security_for_invoicing",
       "label": "May require financial security to be eligible for invoicing",
       "action_category": "PAYMENT",
-      "allowed_subject_roles": ["VENDOR", "SERVICE_PROVIDER", "LICENSOR", "ANY_PARTY"],
-      "allowed_object_roles": ["SECURITY", "CUSTOMER", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "VENDOR",
+        "SERVICE_PROVIDER",
+        "LICENSOR",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "SECURITY",
+        "CUSTOMER",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MAY",
       "requires_condition": false,
       "risk_level": "MEDIUM"
@@ -143,8 +261,17 @@
       "predicate_id": "may_require_financial_statements",
       "label": "May require financial balance sheet and P&L statements",
       "action_category": "AUDIT",
-      "allowed_subject_roles": ["VENDOR", "SERVICE_PROVIDER", "LICENSOR", "ANY_PARTY"],
-      "allowed_object_roles": ["FINANCIAL_STATEMENTS", "CUSTOMER", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "VENDOR",
+        "SERVICE_PROVIDER",
+        "LICENSOR",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "FINANCIAL_STATEMENTS",
+        "CUSTOMER",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MAY",
       "requires_condition": false,
       "risk_level": "LOW"
@@ -153,8 +280,17 @@
       "predicate_id": "may_require_acceptance_of_revised_terms",
       "label": "May require acceptance of revised terms when ordering",
       "action_category": "GOVERNANCE",
-      "allowed_subject_roles": ["VENDOR", "SERVICE_PROVIDER", "LICENSOR", "ANY_PARTY"],
-      "allowed_object_roles": ["REVISED_TERMS", "CUSTOMER", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "VENDOR",
+        "SERVICE_PROVIDER",
+        "LICENSOR",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "REVISED_TERMS",
+        "CUSTOMER",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MAY",
       "requires_condition": false,
       "risk_level": "MEDIUM"
@@ -163,8 +299,16 @@
       "predicate_id": "must_notify_changes_60_days_before_effect",
       "label": "Must notify counterparty at least 60 days prior to changes taking effect",
       "action_category": "NOTICE",
-      "allowed_subject_roles": ["VENDOR", "SERVICE_PROVIDER", "ANY_PARTY"],
-      "allowed_object_roles": ["CHANGES", "TERMS", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "VENDOR",
+        "SERVICE_PROVIDER",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "CHANGES",
+        "TERMS",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MUST",
       "requires_condition": true,
       "risk_level": "MEDIUM"
@@ -173,8 +317,16 @@
       "predicate_id": "must_remediate_unlicensed_use_within_30_days",
       "label": "Must order sufficient licenses to remediate unlicensed use within 30 days",
       "action_category": "REMEDY",
-      "allowed_subject_roles": ["CUSTOMER", "LICENSEE", "ANY_PARTY"],
-      "allowed_object_roles": ["LICENSES", "UNLICENSED_USE", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "CUSTOMER",
+        "LICENSEE",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "LICENSES",
+        "UNLICENSED_USE",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MUST",
       "requires_condition": true,
       "risk_level": "HIGH"
@@ -183,8 +335,17 @@
       "predicate_id": "has_professional_services_remedy_window",
       "label": "Has warranty notice remedy window for professional services",
       "action_category": "REMEDY",
-      "allowed_subject_roles": ["CUSTOMER", "CLIENT", "BUYER", "ANY_PARTY"],
-      "allowed_object_roles": ["WARRANTY", "SERVICES", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "CUSTOMER",
+        "CLIENT",
+        "BUYER",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "WARRANTY",
+        "SERVICES",
+        "ANY_OBJECT"
+      ],
       "default_modality": "ENTITLED_TO",
       "requires_condition": true,
       "risk_level": "LOW"
@@ -193,8 +354,16 @@
       "predicate_id": "may_review_non_microsoft_product_terms",
       "label": "May review third party / non-provider product terms prior to ordering",
       "action_category": "GOVERNANCE",
-      "allowed_subject_roles": ["CUSTOMER", "BUYER", "ANY_PARTY"],
-      "allowed_object_roles": ["TERMS", "PRODUCTS", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "CUSTOMER",
+        "BUYER",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "TERMS",
+        "PRODUCTS",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MAY",
       "requires_condition": false,
       "risk_level": "LOW"
@@ -203,8 +372,18 @@
       "predicate_id": "may_terminate_without_cause",
       "label": "May terminate agreement without cause on specified notice",
       "action_category": "TERMINATION",
-      "allowed_subject_roles": ["ANY_PARTY", "CUSTOMER", "VENDOR", "EMPLOYER", "EMPLOYEE"],
-      "allowed_object_roles": ["AGREEMENT", "SUBSCRIPTION", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "ANY_PARTY",
+        "CUSTOMER",
+        "VENDOR",
+        "EMPLOYER",
+        "EMPLOYEE"
+      ],
+      "allowed_object_roles": [
+        "AGREEMENT",
+        "SUBSCRIPTION",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MAY",
       "requires_condition": true,
       "risk_level": "HIGH"
@@ -213,8 +392,15 @@
       "predicate_id": "may_terminate_for_material_breach_on_30_days_notice",
       "label": "May terminate agreement for material breach upon 30 days notice",
       "action_category": "TERMINATION",
-      "allowed_subject_roles": ["ANY_PARTY", "CUSTOMER", "VENDOR"],
-      "allowed_object_roles": ["AGREEMENT", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "ANY_PARTY",
+        "CUSTOMER",
+        "VENDOR"
+      ],
+      "allowed_object_roles": [
+        "AGREEMENT",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MAY",
       "requires_condition": true,
       "risk_level": "HIGH"
@@ -223,8 +409,17 @@
       "predicate_id": "may_suspend_for_security_or_breach",
       "label": "May suspend services for security risks or material breach",
       "action_category": "SUSPENSION",
-      "allowed_subject_roles": ["VENDOR", "SERVICE_PROVIDER", "LICENSOR"],
-      "allowed_object_roles": ["SERVICES", "SUBSCRIPTION", "ACCESS", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "VENDOR",
+        "SERVICE_PROVIDER",
+        "LICENSOR"
+      ],
+      "allowed_object_roles": [
+        "SERVICES",
+        "SUBSCRIPTION",
+        "ACCESS",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MAY",
       "requires_condition": true,
       "risk_level": "HIGH"
@@ -233,8 +428,18 @@
       "predicate_id": "must_protect_confidential_information",
       "label": "Must protect confidential information with reasonable care",
       "action_category": "CONFIDENTIALITY",
-      "allowed_subject_roles": ["ANY_PARTY", "RECIPIENT", "EMPLOYEE", "CUSTOMER", "VENDOR"],
-      "allowed_object_roles": ["CONFIDENTIAL_INFORMATION", "TRADE_SECRETS", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "ANY_PARTY",
+        "RECIPIENT",
+        "EMPLOYEE",
+        "CUSTOMER",
+        "VENDOR"
+      ],
+      "allowed_object_roles": [
+        "CONFIDENTIAL_INFORMATION",
+        "TRADE_SECRETS",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MUST",
       "requires_condition": false,
       "risk_level": "MEDIUM"
@@ -243,8 +448,17 @@
       "predicate_id": "must_not_disclose_confidential_information",
       "label": "Must not disclose confidential information to unauthorized third parties",
       "action_category": "CONFIDENTIALITY",
-      "allowed_subject_roles": ["ANY_PARTY", "RECIPIENT", "EMPLOYEE", "CUSTOMER", "VENDOR"],
-      "allowed_object_roles": ["CONFIDENTIAL_INFORMATION", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "ANY_PARTY",
+        "RECIPIENT",
+        "EMPLOYEE",
+        "CUSTOMER",
+        "VENDOR"
+      ],
+      "allowed_object_roles": [
+        "CONFIDENTIAL_INFORMATION",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MUST_NOT",
       "requires_condition": false,
       "risk_level": "HIGH"
@@ -253,8 +467,15 @@
       "predicate_id": "requires_written_signed_waiver",
       "label": "Requires waiver of rights to be in writing and signed",
       "action_category": "GOVERNANCE",
-      "allowed_subject_roles": ["ANY_PARTY", "EITHER_PARTY"],
-      "allowed_object_roles": ["WAIVER", "RIGHTS", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "ANY_PARTY",
+        "EITHER_PARTY"
+      ],
+      "allowed_object_roles": [
+        "WAIVER",
+        "RIGHTS",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MUST",
       "requires_condition": false,
       "risk_level": "LOW"
@@ -263,8 +484,15 @@
       "predicate_id": "requires_written_notice",
       "label": "Requires notices under the agreement to be in writing",
       "action_category": "NOTICE",
-      "allowed_subject_roles": ["ANY_PARTY", "EITHER_PARTY"],
-      "allowed_object_roles": ["NOTICES", "COMMUNICATIONS", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "ANY_PARTY",
+        "EITHER_PARTY"
+      ],
+      "allowed_object_roles": [
+        "NOTICES",
+        "COMMUNICATIONS",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MUST",
       "requires_condition": false,
       "risk_level": "LOW"
@@ -273,8 +501,15 @@
       "predicate_id": "may_assign_to_affiliate",
       "label": "May assign agreement to an Affiliate with written notice",
       "action_category": "ASSIGNMENT",
-      "allowed_subject_roles": ["ANY_PARTY", "EITHER_PARTY"],
-      "allowed_object_roles": ["AGREEMENT", "AFFILIATE", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "ANY_PARTY",
+        "EITHER_PARTY"
+      ],
+      "allowed_object_roles": [
+        "AGREEMENT",
+        "AFFILIATE",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MAY",
       "requires_condition": true,
       "risk_level": "MEDIUM"
@@ -283,8 +518,17 @@
       "predicate_id": "has_liability_cap",
       "label": "Limits liability to specified cap or preceding 12 months fees",
       "action_category": "LIABILITY",
-      "allowed_subject_roles": ["ANY_PARTY", "EACH_PARTY", "VENDOR", "CUSTOMER"],
-      "allowed_object_roles": ["LIABILITY", "FEES", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "ANY_PARTY",
+        "EACH_PARTY",
+        "VENDOR",
+        "CUSTOMER"
+      ],
+      "allowed_object_roles": [
+        "LIABILITY",
+        "FEES",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MUST",
       "requires_condition": false,
       "risk_level": "HIGH"
@@ -293,8 +537,17 @@
       "predicate_id": "responsible_for_own_net_income_taxes",
       "label": "Responsible for own taxes based upon net income and property",
       "action_category": "TAX",
-      "allowed_subject_roles": ["ANY_PARTY", "EACH_PARTY", "VENDOR", "CUSTOMER"],
-      "allowed_object_roles": ["TAXES", "NET_INCOME", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "ANY_PARTY",
+        "EACH_PARTY",
+        "VENDOR",
+        "CUSTOMER"
+      ],
+      "allowed_object_roles": [
+        "TAXES",
+        "NET_INCOME",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MUST",
       "requires_condition": false,
       "risk_level": "LOW"
@@ -303,8 +556,17 @@
       "predicate_id": "must_not_solicit_employees",
       "label": "Prohibits solicitation of employees during and after term",
       "action_category": "RESTRICTIONS",
-      "allowed_subject_roles": ["EMPLOYEE", "CONTRACTOR", "RECIPIENT", "ANY_PARTY"],
-      "allowed_object_roles": ["EMPLOYEES", "PERSONNEL", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "EMPLOYEE",
+        "CONTRACTOR",
+        "RECIPIENT",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "EMPLOYEES",
+        "PERSONNEL",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MUST_NOT",
       "requires_condition": true,
       "risk_level": "HIGH"
@@ -313,8 +575,17 @@
       "predicate_id": "must_not_compete",
       "label": "Prohibits competing activities within defined territory and period",
       "action_category": "RESTRICTIONS",
-      "allowed_subject_roles": ["EMPLOYEE", "CONTRACTOR", "SELLER", "ANY_PARTY"],
-      "allowed_object_roles": ["BUSINESS", "COMPETITIVE_SERVICES", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "EMPLOYEE",
+        "CONTRACTOR",
+        "SELLER",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "BUSINESS",
+        "COMPETITIVE_SERVICES",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MUST_NOT",
       "requires_condition": true,
       "risk_level": "CRITICAL"
@@ -323,8 +594,17 @@
       "predicate_id": "assigns_inventions_and_work_product",
       "label": "Assigns intellectual property, inventions, and work product to employer/client",
       "action_category": "IP_ASSIGNMENT",
-      "allowed_subject_roles": ["EMPLOYEE", "CONTRACTOR", "ANY_PARTY"],
-      "allowed_object_roles": ["INVENTIONS", "WORK_PRODUCT", "PATENTS", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "EMPLOYEE",
+        "CONTRACTOR",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "INVENTIONS",
+        "WORK_PRODUCT",
+        "PATENTS",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MUST",
       "requires_condition": false,
       "risk_level": "HIGH"
@@ -333,8 +613,19 @@
       "predicate_id": "has_refund_eligibility",
       "label": "Has refund eligibility within specified terms",
       "action_category": "REFUND",
-      "allowed_subject_roles": ["CUSTOMER", "BUYER", "USER", "ANY_PARTY"],
-      "allowed_object_roles": ["REFUND", "SUBSCRIPTION", "PRODUCTS", "SERVICES", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "CUSTOMER",
+        "BUYER",
+        "USER",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "REFUND",
+        "SUBSCRIPTION",
+        "PRODUCTS",
+        "SERVICES",
+        "ANY_OBJECT"
+      ],
       "default_modality": "ENTITLED_TO",
       "requires_condition": true,
       "risk_level": "LOW"
@@ -343,8 +634,17 @@
       "predicate_id": "may_apply_administration_fee",
       "label": "May assess or apply administrative handling fee",
       "action_category": "PAYMENT",
-      "allowed_subject_roles": ["VENDOR", "SERVICE_PROVIDER", "LICENSOR", "ANY_PARTY"],
-      "allowed_object_roles": ["FEE", "CHARGES", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "VENDOR",
+        "SERVICE_PROVIDER",
+        "LICENSOR",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "FEE",
+        "CHARGES",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MAY",
       "requires_condition": true,
       "risk_level": "MEDIUM"
@@ -353,8 +653,18 @@
       "predicate_id": "has_return_window",
       "label": "Has return or exchange window for eligible products",
       "action_category": "REFUND",
-      "allowed_subject_roles": ["CUSTOMER", "BUYER", "USER", "ANY_PARTY"],
-      "allowed_object_roles": ["PRODUCTS", "DEVICES", "RETURN_WINDOW", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "CUSTOMER",
+        "BUYER",
+        "USER",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "PRODUCTS",
+        "DEVICES",
+        "RETURN_WINDOW",
+        "ANY_OBJECT"
+      ],
       "default_modality": "ENTITLED_TO",
       "requires_condition": true,
       "risk_level": "LOW"
@@ -363,8 +673,18 @@
       "predicate_id": "has_indemnification_obligation",
       "label": "Must defend, indemnify, and hold harmless against third-party claims",
       "action_category": "INDEMNIFICATION",
-      "allowed_subject_roles": ["CUSTOMER", "VENDOR", "EITHER_PARTY", "ANY_PARTY"],
-      "allowed_object_roles": ["CLAIMS", "INDEMNITY", "LOSSES", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "CUSTOMER",
+        "VENDOR",
+        "EITHER_PARTY",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "CLAIMS",
+        "INDEMNITY",
+        "LOSSES",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MUST",
       "requires_condition": true,
       "risk_level": "HIGH"
@@ -373,8 +693,18 @@
       "predicate_id": "promptly_notify",
       "label": "Must promptly notify counterparty of specified event or claim",
       "action_category": "NOTICE",
-      "allowed_subject_roles": ["CUSTOMER", "VENDOR", "EITHER_PARTY", "ANY_PARTY"],
-      "allowed_object_roles": ["NOTICE", "CLAIMS", "SECURITY_INCIDENT", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "CUSTOMER",
+        "VENDOR",
+        "EITHER_PARTY",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "NOTICE",
+        "CLAIMS",
+        "SECURITY_INCIDENT",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MUST",
       "requires_condition": false,
       "risk_level": "MEDIUM"
@@ -383,8 +713,18 @@
       "predicate_id": "must_promptly_notify",
       "label": "Must promptly notify counterparty of specified event or claim",
       "action_category": "NOTICE",
-      "allowed_subject_roles": ["CUSTOMER", "VENDOR", "EITHER_PARTY", "ANY_PARTY"],
-      "allowed_object_roles": ["NOTICE", "CLAIMS", "SECURITY_INCIDENT", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "CUSTOMER",
+        "VENDOR",
+        "EITHER_PARTY",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "NOTICE",
+        "CLAIMS",
+        "SECURITY_INCIDENT",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MUST",
       "requires_condition": false,
       "risk_level": "MEDIUM"
@@ -393,8 +733,18 @@
       "predicate_id": "must_delete_data",
       "label": "Must securely delete or return data upon termination or request",
       "action_category": "DATA_PROTECTION",
-      "allowed_subject_roles": ["VENDOR", "SERVICE_PROVIDER", "RECIPIENT", "ANY_PARTY"],
-      "allowed_object_roles": ["CUSTOMER_DATA", "PERSONAL_DATA", "DATA", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "VENDOR",
+        "SERVICE_PROVIDER",
+        "RECIPIENT",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "CUSTOMER_DATA",
+        "PERSONAL_DATA",
+        "DATA",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MUST",
       "requires_condition": true,
       "risk_level": "HIGH"
@@ -403,8 +753,17 @@
       "predicate_id": "must_obtain_consent",
       "label": "Must obtain explicit consent prior to specified processing or transfer",
       "action_category": "COMPLIANCE",
-      "allowed_subject_roles": ["CUSTOMER", "VENDOR", "ADMINISTRATOR", "ANY_PARTY"],
-      "allowed_object_roles": ["CONSENT", "DATA_PROCESSING", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "CUSTOMER",
+        "VENDOR",
+        "ADMINISTRATOR",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "CONSENT",
+        "DATA_PROCESSING",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MUST",
       "requires_condition": false,
       "risk_level": "HIGH"
@@ -413,8 +772,19 @@
       "predicate_id": "prohibited_from_using",
       "label": "Prohibited from using services, data, or marks outside authorized scope",
       "action_category": "RESTRICTIONS",
-      "allowed_subject_roles": ["CUSTOMER", "USER", "EMPLOYEE", "PARTNER", "ANY_PARTY"],
-      "allowed_object_roles": ["SERVICES", "TRADEMARKS", "CUSTOMER_DATA", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "CUSTOMER",
+        "USER",
+        "EMPLOYEE",
+        "PARTNER",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "SERVICES",
+        "TRADEMARKS",
+        "CUSTOMER_DATA",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MUST_NOT",
       "requires_condition": false,
       "risk_level": "HIGH"
@@ -423,8 +793,18 @@
       "predicate_id": "must_comply_with_applicable_laws",
       "label": "Must comply with all applicable local, national, and international laws",
       "action_category": "COMPLIANCE",
-      "allowed_subject_roles": ["CUSTOMER", "VENDOR", "EACH_PARTY", "ANY_PARTY"],
-      "allowed_object_roles": ["LAWS", "REGULATIONS", "EXPORT_LAWS", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "CUSTOMER",
+        "VENDOR",
+        "EACH_PARTY",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "LAWS",
+        "REGULATIONS",
+        "EXPORT_LAWS",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MUST",
       "requires_condition": false,
       "risk_level": "MEDIUM"
@@ -433,8 +813,16 @@
       "predicate_id": "reserves_all_rights_not_granted",
       "label": "Reserves all intellectual property rights not expressly granted",
       "action_category": "LICENSING",
-      "allowed_subject_roles": ["VENDOR", "LICENSOR", "ANY_PARTY"],
-      "allowed_object_roles": ["INTELLECTUAL_PROPERTY", "RIGHTS", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "VENDOR",
+        "LICENSOR",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "INTELLECTUAL_PROPERTY",
+        "RIGHTS",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MUST",
       "requires_condition": false,
       "risk_level": "LOW"
@@ -443,8 +831,18 @@
       "predicate_id": "may_conduct_audit",
       "label": "May conduct compliance or license audit upon reasonable advance notice",
       "action_category": "AUDIT",
-      "allowed_subject_roles": ["VENDOR", "LICENSOR", "AUDITOR", "ANY_PARTY"],
-      "allowed_object_roles": ["AUDIT", "RECORDS", "FACILITIES", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "VENDOR",
+        "LICENSOR",
+        "AUDITOR",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "AUDIT",
+        "RECORDS",
+        "FACILITIES",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MAY",
       "requires_condition": true,
       "risk_level": "MEDIUM"
@@ -453,8 +851,17 @@
       "predicate_id": "must_control_end_user_access",
       "label": "Must control and remain responsible for end user access and compliance",
       "action_category": "GOVERNANCE",
-      "allowed_subject_roles": ["CUSTOMER", "ADMINISTRATOR", "ANY_PARTY"],
-      "allowed_object_roles": ["END_USERS", "ACCESS", "ACCOUNTS", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "CUSTOMER",
+        "ADMINISTRATOR",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "END_USERS",
+        "ACCESS",
+        "ACCOUNTS",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MUST",
       "requires_condition": false,
       "risk_level": "MEDIUM"
@@ -463,8 +870,17 @@
       "predicate_id": "must_not_modify_agreement",
       "label": "Prohibits unilateral modification of agreement without written consent",
       "action_category": "GOVERNANCE",
-      "allowed_subject_roles": ["CUSTOMER", "VENDOR", "EITHER_PARTY", "ANY_PARTY"],
-      "allowed_object_roles": ["AGREEMENT", "TERMS", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "CUSTOMER",
+        "VENDOR",
+        "EITHER_PARTY",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "AGREEMENT",
+        "TERMS",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MUST_NOT",
       "requires_condition": false,
       "risk_level": "HIGH"
@@ -473,8 +889,17 @@
       "predicate_id": "may_order_for_affiliate",
       "label": "May place orders or acquire licenses for use by Affiliates",
       "action_category": "LICENSING",
-      "allowed_subject_roles": ["CUSTOMER", "BUYER", "ANY_PARTY"],
-      "allowed_object_roles": ["PRODUCTS", "SERVICES", "AFFILIATE", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "CUSTOMER",
+        "BUYER",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "PRODUCTS",
+        "SERVICES",
+        "AFFILIATE",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MAY",
       "requires_condition": false,
       "risk_level": "LOW"
@@ -483,8 +908,17 @@
       "predicate_id": "applies_to_contract_orders",
       "label": "Applies agreement terms and conditions to all submitted orders",
       "action_category": "GOVERNANCE",
-      "allowed_subject_roles": ["CUSTOMER", "VENDOR", "EACH_PARTY", "ANY_PARTY"],
-      "allowed_object_roles": ["ORDERS", "TERMS", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "CUSTOMER",
+        "VENDOR",
+        "EACH_PARTY",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "ORDERS",
+        "TERMS",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MUST",
       "requires_condition": false,
       "risk_level": "LOW"
@@ -493,8 +927,18 @@
       "predicate_id": "remains_responsible_for",
       "label": "Remains fully responsible for obligations, actions, and performance",
       "action_category": "GOVERNANCE",
-      "allowed_subject_roles": ["CUSTOMER", "VENDOR", "EACH_PARTY", "ANY_PARTY"],
-      "allowed_object_roles": ["OBLIGATIONS", "AFFILIATES", "USERS", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "CUSTOMER",
+        "VENDOR",
+        "EACH_PARTY",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "OBLIGATIONS",
+        "AFFILIATES",
+        "USERS",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MUST",
       "requires_condition": false,
       "risk_level": "MEDIUM"
@@ -503,8 +947,16 @@
       "predicate_id": "warrants_professional_standards",
       "label": "Warrants services will be performed in professional and workmanlike manner",
       "action_category": "WARRANTY",
-      "allowed_subject_roles": ["VENDOR", "SERVICE_PROVIDER", "ANY_PARTY"],
-      "allowed_object_roles": ["SERVICES", "STANDARDS", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "VENDOR",
+        "SERVICE_PROVIDER",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "SERVICES",
+        "STANDARDS",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MUST",
       "requires_condition": false,
       "risk_level": "LOW"
@@ -513,8 +965,17 @@
       "predicate_id": "must_defend_ip_claims",
       "label": "Must defend against third-party intellectual property infringement claims",
       "action_category": "INDEMNIFICATION",
-      "allowed_subject_roles": ["VENDOR", "CUSTOMER", "EITHER_PARTY", "ANY_PARTY"],
-      "allowed_object_roles": ["IP_CLAIMS", "INFRINGEMENT", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "VENDOR",
+        "CUSTOMER",
+        "EITHER_PARTY",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "IP_CLAIMS",
+        "INFRINGEMENT",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MUST",
       "requires_condition": true,
       "risk_level": "HIGH"
@@ -523,8 +984,16 @@
       "predicate_id": "has_cancellation_fee_policy",
       "label": "Subject to early termination or subscription cancellation fee",
       "action_category": "PAYMENT",
-      "allowed_subject_roles": ["CUSTOMER", "SUBSCRIBER", "ANY_PARTY"],
-      "allowed_object_roles": ["CANCELLATION_FEE", "CHARGES", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "CUSTOMER",
+        "SUBSCRIBER",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "CANCELLATION_FEE",
+        "CHARGES",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MUST",
       "requires_condition": true,
       "risk_level": "MEDIUM"
@@ -533,8 +1002,17 @@
       "predicate_id": "must_be_in_writing",
       "label": "Requires notices or amendments to be executed in writing",
       "action_category": "GOVERNANCE",
-      "allowed_subject_roles": ["ANY_PARTY", "EITHER_PARTY", "CUSTOMER", "VENDOR"],
-      "allowed_object_roles": ["NOTICES", "AMENDMENTS", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "ANY_PARTY",
+        "EITHER_PARTY",
+        "CUSTOMER",
+        "VENDOR"
+      ],
+      "allowed_object_roles": [
+        "NOTICES",
+        "AMENDMENTS",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MUST",
       "requires_condition": false,
       "risk_level": "LOW"
@@ -543,8 +1021,16 @@
       "predicate_id": "provides_technical_support",
       "label": "Provides technical support services in accordance with SLA",
       "action_category": "SUPPORT",
-      "allowed_subject_roles": ["VENDOR", "SERVICE_PROVIDER", "ANY_PARTY"],
-      "allowed_object_roles": ["SUPPORT", "SERVICES", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "VENDOR",
+        "SERVICE_PROVIDER",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "SUPPORT",
+        "SERVICES",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MUST",
       "requires_condition": false,
       "risk_level": "LOW"
@@ -553,8 +1039,18 @@
       "predicate_id": "requires_mfa_authentication",
       "label": "Requires multi-factor authentication or administrative security credentials",
       "action_category": "SECURITY",
-      "allowed_subject_roles": ["USER", "ADMINISTRATOR", "CUSTOMER", "ANY_PARTY"],
-      "allowed_object_roles": ["MFA", "CREDENTIALS", "ACCESS", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "USER",
+        "ADMINISTRATOR",
+        "CUSTOMER",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "MFA",
+        "CREDENTIALS",
+        "ACCESS",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MUST",
       "requires_condition": false,
       "risk_level": "LOW"
@@ -563,28 +1059,39 @@
       "predicate_id": "may_lease_products",
       "label": "May lease products in accordance with lease agreement",
       "action_category": "LICENSING",
-      "allowed_subject_roles": ["CUSTOMER", "COMPANY", "ANY_PARTY"],
-      "allowed_object_roles": ["PRODUCTS", "EQUIPMENT", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "CUSTOMER",
+        "COMPANY",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "PRODUCTS",
+        "EQUIPMENT",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MAY",
       "requires_condition": true,
-      "risk_level": "LOW"
-    },
-    {
-      "predicate_id": "must_be_in_writing",
-      "label": "Must be executed in written format",
-      "action_category": "FORMALITY",
-      "allowed_subject_roles": ["NOTICE", "WAIVER", "AMENDMENT", "EACH_PARTY", "CUSTOMER", "VENDOR", "ANY_PARTY"],
-      "allowed_object_roles": ["NOTICES", "COMMUNICATIONS", "WRITING", "ANY_OBJECT"],
-      "default_modality": "MUST",
-      "requires_condition": false,
       "risk_level": "LOW"
     },
     {
       "predicate_id": "must_be_in_writing_and_signed",
       "label": "Must be in writing and signed by the waiving or executing party",
       "action_category": "FORMALITY",
-      "allowed_subject_roles": ["WAIVER", "AMENDMENT", "NOTICE", "EACH_PARTY", "CUSTOMER", "VENDOR", "ANY_PARTY"],
-      "allowed_object_roles": ["WAIVER", "AGREEMENT", "PARTY", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "WAIVER",
+        "AMENDMENT",
+        "NOTICE",
+        "EACH_PARTY",
+        "CUSTOMER",
+        "VENDOR",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "WAIVER",
+        "AGREEMENT",
+        "PARTY",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MUST",
       "requires_condition": false,
       "risk_level": "LOW"
@@ -593,8 +1100,18 @@
       "predicate_id": "must_comply_with_trade_laws",
       "label": "Must comply with applicable import, export, and trade laws and sanctions",
       "action_category": "COMPLIANCE",
-      "allowed_subject_roles": ["EACH_PARTY", "CUSTOMER", "VENDOR", "ANY_PARTY"],
-      "allowed_object_roles": ["TRADE_LAWS", "EXPORT_REGULATIONS", "SANCTIONS", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "EACH_PARTY",
+        "CUSTOMER",
+        "VENDOR",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "TRADE_LAWS",
+        "EXPORT_REGULATIONS",
+        "SANCTIONS",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MUST",
       "requires_condition": false,
       "risk_level": "MEDIUM"
@@ -603,8 +1120,18 @@
       "predicate_id": "may_suspend_for_trade_laws",
       "label": "May suspend or terminate agreement to avoid trade law violations or sanctions",
       "action_category": "SUSPENSION",
-      "allowed_subject_roles": ["VENDOR", "EACH_PARTY", "CUSTOMER", "ANY_PARTY"],
-      "allowed_object_roles": ["AGREEMENT", "SERVICES", "SUBSCRIPTION", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "VENDOR",
+        "EACH_PARTY",
+        "CUSTOMER",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "AGREEMENT",
+        "SERVICES",
+        "SUBSCRIPTION",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MAY",
       "requires_condition": true,
       "risk_level": "HIGH"
@@ -613,8 +1140,17 @@
       "predicate_id": "authorizes_financial_assessment",
       "label": "Authorizes obtaining credit reports or financial information to assess invoicing eligibility",
       "action_category": "FINANCIAL",
-      "allowed_subject_roles": ["CUSTOMER", "BUYER", "ANY_PARTY"],
-      "allowed_object_roles": ["CREDIT_REPORTS", "FINANCIAL_INFORMATION", "VENDOR", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "CUSTOMER",
+        "BUYER",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "CREDIT_REPORTS",
+        "FINANCIAL_INFORMATION",
+        "VENDOR",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MAY",
       "requires_condition": false,
       "risk_level": "LOW"
@@ -623,8 +1159,17 @@
       "predicate_id": "may_be_required_to_provide_security_for_invoicing",
       "label": "May be required to provide collateral or security deposit for invoicing eligibility",
       "action_category": "PAYMENT",
-      "allowed_subject_roles": ["CUSTOMER", "BUYER", "ANY_PARTY"],
-      "allowed_object_roles": ["SECURITY", "COLLATERAL", "INVOICING", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "CUSTOMER",
+        "BUYER",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "SECURITY",
+        "COLLATERAL",
+        "INVOICING",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MAY",
       "requires_condition": true,
       "risk_level": "LOW"
@@ -633,8 +1178,19 @@
       "predicate_id": "may_perform_through_affiliates_and_subcontractors",
       "label": "May perform obligations through affiliates and engage subcontractors",
       "action_category": "OPERATIONAL",
-      "allowed_subject_roles": ["VENDOR", "CUSTOMER", "EACH_PARTY", "ANY_PARTY"],
-      "allowed_object_roles": ["AFFILIATES", "SUBCONTRACTORS", "OBLIGATIONS", "SERVICES", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "VENDOR",
+        "CUSTOMER",
+        "EACH_PARTY",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "AFFILIATES",
+        "SUBCONTRACTORS",
+        "OBLIGATIONS",
+        "SERVICES",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MAY",
       "requires_condition": false,
       "risk_level": "LOW"
@@ -643,8 +1199,17 @@
       "predicate_id": "has_liability_cap_12_months",
       "label": "Maximum aggregate liability is capped at amounts Customer was required to pay in prior 12 months",
       "action_category": "LIABILITY",
-      "allowed_subject_roles": ["CUSTOMER", "VENDOR", "EACH_PARTY", "ANY_PARTY"],
-      "allowed_object_roles": ["LIABILITY", "FEES", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "CUSTOMER",
+        "VENDOR",
+        "EACH_PARTY",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "LIABILITY",
+        "FEES",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MUST",
       "requires_condition": false,
       "risk_level": "HIGH"
@@ -653,8 +1218,16 @@
       "predicate_id": "may_modify_or_discontinue_product",
       "label": "May modify or discontinue products or services or terminate agreement for regulatory reasons",
       "action_category": "OPERATIONAL",
-      "allowed_subject_roles": ["VENDOR", "ANY_PARTY"],
-      "allowed_object_roles": ["PRODUCT", "SERVICES", "AGREEMENT", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "VENDOR",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "PRODUCT",
+        "SERVICES",
+        "AGREEMENT",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MAY",
       "requires_condition": true,
       "risk_level": "MEDIUM"
@@ -663,8 +1236,16 @@
       "predicate_id": "offers_store_credit_bonus",
       "label": "Offers store credit bonus incentive for choosing store credit over original payment refund",
       "action_category": "REFUND",
-      "allowed_subject_roles": ["VENDOR", "CUSTOMER", "ANY_PARTY"],
-      "allowed_object_roles": ["STORE_CREDIT", "BONUS", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "VENDOR",
+        "CUSTOMER",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "STORE_CREDIT",
+        "BONUS",
+        "ANY_OBJECT"
+      ],
       "default_modality": "ENTITLED_TO",
       "requires_condition": true,
       "risk_level": "LOW"
@@ -673,8 +1254,17 @@
       "predicate_id": "has_return_freight_deduction",
       "label": "Imposes a return freight fee deduction from refund",
       "action_category": "SHIPPING",
-      "allowed_subject_roles": ["PRODUCT", "OVERSIZE_ITEMS", "CUSTOMER", "ANY_PARTY"],
-      "allowed_object_roles": ["FEE", "SHIPPING", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "PRODUCT",
+        "OVERSIZE_ITEMS",
+        "CUSTOMER",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "FEE",
+        "SHIPPING",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MUST",
       "requires_condition": true,
       "risk_level": "LOW"
@@ -683,8 +1273,15 @@
       "predicate_id": "requires_receipt_retention",
       "label": "Requires retaining drop-off or carrier receipt until refund confirmation",
       "action_category": "PROCEDURAL",
-      "allowed_subject_roles": ["CUSTOMER", "ANY_PARTY"],
-      "allowed_object_roles": ["RECEIPT", "DOCUMENTATION", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "CUSTOMER",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "RECEIPT",
+        "DOCUMENTATION",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MUST",
       "requires_condition": false,
       "risk_level": "LOW"
@@ -693,8 +1290,16 @@
       "predicate_id": "uses_original_charge_currency",
       "label": "Issues refund in the currency of the original transaction charge",
       "action_category": "PAYMENT",
-      "allowed_subject_roles": ["REFUND", "INTERNATIONAL_REFUND", "VENDOR", "ANY_PARTY"],
-      "allowed_object_roles": ["CURRENCY", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "REFUND",
+        "INTERNATIONAL_REFUND",
+        "VENDOR",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "CURRENCY",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MUST",
       "requires_condition": false,
       "risk_level": "LOW"
@@ -703,8 +1308,15 @@
       "predicate_id": "is_responsible_for_duty_drawback",
       "label": "Assigns responsibility for filing customs duty drawback claims",
       "action_category": "COMPLIANCE",
-      "allowed_subject_roles": ["CUSTOMER", "ANY_PARTY"],
-      "allowed_object_roles": ["CUSTOMS", "DUTY_DRAWBACK", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "CUSTOMER",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "CUSTOMS",
+        "DUTY_DRAWBACK",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MUST",
       "requires_condition": true,
       "risk_level": "LOW"
@@ -713,8 +1325,17 @@
       "predicate_id": "is_required_for_refund_request",
       "label": "Specifies mandatory form field, documentation, or photographic proof for refund request",
       "action_category": "PROCEDURAL",
-      "allowed_subject_roles": ["FIELD", "DOCUMENTATION", "PHOTOS", "ANY_PARTY"],
-      "allowed_object_roles": ["REQUIREMENT", "REFUND_REQUEST", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "FIELD",
+        "DOCUMENTATION",
+        "PHOTOS",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "REQUIREMENT",
+        "REFUND_REQUEST",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MUST",
       "requires_condition": false,
       "risk_level": "LOW"
@@ -723,8 +1344,16 @@
       "predicate_id": "has_refund_rule",
       "label": "Specifies subscription or product refund terms, schedule, or conditions",
       "action_category": "REFUND",
-      "allowed_subject_roles": ["SUBSCRIPTION", "PRODUCT", "ANY_PARTY"],
-      "allowed_object_roles": ["REFUND_TERMS", "SCHEDULE", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "SUBSCRIPTION",
+        "PRODUCT",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "REFUND_TERMS",
+        "SCHEDULE",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MUST",
       "requires_condition": false,
       "risk_level": "LOW"
@@ -733,8 +1362,16 @@
       "predicate_id": "has_revision_history",
       "label": "Document version log entry and policy revision details",
       "action_category": "DOCUMENTATION",
-      "allowed_subject_roles": ["POLICY", "DOCUMENT", "ANY_PARTY"],
-      "allowed_object_roles": ["VERSION", "CHANGELOG", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "POLICY",
+        "DOCUMENT",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "VERSION",
+        "CHANGELOG",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MUST",
       "requires_condition": false,
       "risk_level": "LOW"
@@ -743,8 +1380,16 @@
       "predicate_id": "receives_store_credit_bonus",
       "label": "Receives store credit bonus incentive for choosing store credit over original payment refund",
       "action_category": "COMMERCIAL",
-      "allowed_subject_roles": ["CUSTOMER", "BUYER", "ANY_PARTY"],
-      "allowed_object_roles": ["BONUS", "STORE_CREDIT", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "CUSTOMER",
+        "BUYER",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "BONUS",
+        "STORE_CREDIT",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MAY",
       "requires_condition": true,
       "risk_level": "LOW"
@@ -753,8 +1398,17 @@
       "predicate_id": "has_posting_duration",
       "label": "Specifies banking or card network posting timeline for processed refunds",
       "action_category": "FINANCIAL",
-      "allowed_subject_roles": ["REFUND", "IN_STORE_REFUNDS", "PAYMENT_METHOD", "ANY_PARTY"],
-      "allowed_object_roles": ["TIMELINE", "DURATION", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "REFUND",
+        "IN_STORE_REFUNDS",
+        "PAYMENT_METHOD",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "TIMELINE",
+        "DURATION",
+        "ANY_OBJECT"
+      ],
       "default_modality": "POLICY_FACT",
       "requires_condition": false,
       "risk_level": "LOW"
@@ -763,8 +1417,18 @@
       "predicate_id": "has_price_adjustment_window",
       "label": "Specifies price drop guarantee window and one-time difference refund terms",
       "action_category": "POLICY_REMEDY",
-      "allowed_subject_roles": ["PRICE_ADJUSTMENT", "PRICE_ADJUSTMENTS", "CUSTOMER", "ANY_PARTY"],
-      "allowed_object_roles": ["WINDOW", "TIMELINE", "REFUND_TERMS", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "PRICE_ADJUSTMENT",
+        "PRICE_ADJUSTMENTS",
+        "CUSTOMER",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "WINDOW",
+        "TIMELINE",
+        "REFUND_TERMS",
+        "ANY_OBJECT"
+      ],
       "default_modality": "POLICY_FACT",
       "requires_condition": true,
       "risk_level": "LOW"
@@ -773,8 +1437,17 @@
       "predicate_id": "may_request_first_charge_refund",
       "label": "Permits requesting courtesy refund of first renewal charge if cancellation was forgotten within grace window",
       "action_category": "POLICY_REMEDY",
-      "allowed_subject_roles": ["CUSTOMER", "FREE_TRIALS", "SUBSCRIBER", "ANY_PARTY"],
-      "allowed_object_roles": ["REFUND", "TIMELINE", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "CUSTOMER",
+        "FREE_TRIALS",
+        "SUBSCRIBER",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "REFUND",
+        "TIMELINE",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MAY",
       "requires_condition": true,
       "risk_level": "LOW"
@@ -783,8 +1456,17 @@
       "predicate_id": "can_pause_subscription",
       "label": "Permits subscriber to pause recurring subscription for up to allowed duration and frequency",
       "action_category": "SUBSCRIPTION_OPERATION",
-      "allowed_subject_roles": ["SUBSCRIBER", "CUSTOMER", "SUBSCRIPTION", "ANY_PARTY"],
-      "allowed_object_roles": ["PAUSE_TERMS", "DURATION", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "SUBSCRIBER",
+        "CUSTOMER",
+        "SUBSCRIPTION",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "PAUSE_TERMS",
+        "DURATION",
+        "ANY_OBJECT"
+      ],
       "default_modality": "MAY",
       "requires_condition": false,
       "risk_level": "LOW"
@@ -793,9 +1475,601 @@
       "predicate_id": "has_cancellation_window",
       "label": "Specifies order cancellation timeline, self-service window, and authorization release terms",
       "action_category": "ORDER_LIFECYCLE",
-      "allowed_subject_roles": ["ORDER", "ORDER_CANCELLATION", "CUSTOMER", "ANY_PARTY"],
-      "allowed_object_roles": ["WINDOW", "TIMELINE", "CANCELLATION_TERMS", "ANY_OBJECT"],
+      "allowed_subject_roles": [
+        "ORDER",
+        "ORDER_CANCELLATION",
+        "CUSTOMER",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "WINDOW",
+        "TIMELINE",
+        "CANCELLATION_TERMS",
+        "ANY_OBJECT"
+      ],
       "default_modality": "POLICY_FACT",
+      "requires_condition": false,
+      "risk_level": "LOW"
+    },
+    {
+      "predicate_id": "has_governing_law",
+      "label": "Specifies governing jurisdiction and applicable law",
+      "action_category": "GOVERNANCE",
+      "allowed_subject_roles": [
+        "CONTRACTING_PARTY",
+        "AGREEMENT",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "JURISDICTION",
+        "STATE_LAW",
+        "LEGAL_FORUM",
+        "ANY_OBJECT"
+      ],
+      "default_modality": "MUST",
+      "requires_condition": false,
+      "risk_level": "LOW"
+    },
+    {
+      "predicate_id": "has_confidentiality_duration",
+      "label": "Specifies confidentiality and non-disclosure survival term",
+      "action_category": "CONFIDENTIALITY",
+      "allowed_subject_roles": [
+        "RECEIVING_PARTY",
+        "DISCLOSING_PARTY",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "DURATION_YEARS",
+        "SURVIVAL_PERIOD",
+        "ANY_OBJECT"
+      ],
+      "default_modality": "MUST",
+      "requires_condition": false,
+      "risk_level": "MEDIUM"
+    },
+    {
+      "predicate_id": "has_ip_ownership_assignment",
+      "label": "Assigns ownership of intellectual property or work product deliverables",
+      "action_category": "IP_ASSIGNMENT",
+      "allowed_subject_roles": [
+        "VENDOR",
+        "CUSTOMER",
+        "DEVELOPER",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "DELIVERABLES",
+        "WORK_PRODUCT",
+        "PATENTS",
+        "ANY_OBJECT"
+      ],
+      "default_modality": "MUST",
+      "requires_condition": false,
+      "risk_level": "HIGH"
+    },
+    {
+      "predicate_id": "has_termination_for_convenience",
+      "label": "Permits agreement termination without cause upon written notice",
+      "action_category": "TERMINATION",
+      "allowed_subject_roles": [
+        "CUSTOMER",
+        "VENDOR",
+        "EITHER_PARTY",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "NOTICE_PERIOD",
+        "CONVENIENCE_TERMS",
+        "ANY_OBJECT"
+      ],
+      "default_modality": "MAY",
+      "requires_condition": true,
+      "risk_level": "HIGH"
+    },
+    {
+      "predicate_id": "has_warranty_disclaimer",
+      "label": "Disclaims implied warranties of merchantability and fitness",
+      "action_category": "WARRANTY",
+      "allowed_subject_roles": [
+        "VENDOR",
+        "LICENSOR",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "IMPLIED_WARRANTIES",
+        "MERCHANTABILITY",
+        "FITNESS",
+        "ANY_OBJECT"
+      ],
+      "default_modality": "MUST",
+      "requires_condition": false,
+      "risk_level": "MEDIUM"
+    },
+    {
+      "predicate_id": "has_dispute_resolution_forum",
+      "label": "Mandates forum, venue, or binding arbitration for legal disputes",
+      "action_category": "PROCEDURAL",
+      "allowed_subject_roles": [
+        "CONTRACTING_PARTY",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "ARBITRATION",
+        "VENUE",
+        "COURT",
+        "ANY_OBJECT"
+      ],
+      "default_modality": "MUST",
+      "requires_condition": false,
+      "risk_level": "MEDIUM"
+    },
+    {
+      "predicate_id": "has_notice_period",
+      "label": "Defines mandatory resignation or termination notice period duration",
+      "action_category": "NOTICE",
+      "allowed_subject_roles": [
+        "EMPLOYEE",
+        "EXECUTIVE",
+        "STAFF",
+        "MANAGEMENT",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "DURATION_DAYS",
+        "NOTICE_WINDOW",
+        "ANY_OBJECT"
+      ],
+      "default_modality": "MUST",
+      "requires_condition": false,
+      "risk_level": "MEDIUM"
+    },
+    {
+      "predicate_id": "has_notice_period_waiver_authority",
+      "label": "Designates executive role authorized to waive notice period requirements",
+      "action_category": "PROCEDURAL",
+      "allowed_subject_roles": [
+        "MANAGEMENT",
+        "HR_OPERATIONS",
+        "VICE_PRESIDENT",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "WAIVER_APPROVAL",
+        "CONDITIONS",
+        "ANY_OBJECT"
+      ],
+      "default_modality": "MAY",
+      "requires_condition": true,
+      "risk_level": "HIGH"
+    },
+    {
+      "predicate_id": "has_severance_eligibility",
+      "label": "Specifies severance pay entitlement upon termination without cause",
+      "action_category": "POLICY_REMEDY",
+      "allowed_subject_roles": [
+        "EMPLOYEE",
+        "TERMINATED_STAFF",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "SEVERANCE_PAY",
+        "WEEKS_SALARY",
+        "ANY_OBJECT"
+      ],
+      "default_modality": "MUST",
+      "requires_condition": true,
+      "risk_level": "MEDIUM"
+    },
+    {
+      "predicate_id": "requires_written_resignation",
+      "label": "Mandates resignation notice must be formally submitted in writing",
+      "action_category": "PROCEDURAL",
+      "allowed_subject_roles": [
+        "EMPLOYEE",
+        "RESIGNING_STAFF",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "WRITTEN_NOTICE",
+        "FORMAL_LETTER",
+        "ANY_OBJECT"
+      ],
+      "default_modality": "MUST",
+      "requires_condition": false,
+      "risk_level": "LOW"
+    },
+    {
+      "predicate_id": "has_pto_cashout_policy",
+      "label": "Defines policy on accrued unused paid time off payout upon separation",
+      "action_category": "FINANCIAL",
+      "allowed_subject_roles": [
+        "EMPLOYEE",
+        "TERMINATED_STAFF",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "ACCRUED_VACATION",
+        "UNPAID_PTO",
+        "ANY_OBJECT"
+      ],
+      "default_modality": "MUST",
+      "requires_condition": false,
+      "risk_level": "MEDIUM"
+    },
+    {
+      "predicate_id": "requires_property_return_on_exit",
+      "label": "Mandates immediate return of company property, equipment, and badges on exit",
+      "action_category": "OPERATIONAL",
+      "allowed_subject_roles": [
+        "EMPLOYEE",
+        "EXITING_STAFF",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "COMPANY_PROPERTY",
+        "EQUIPMENT",
+        "KEYS_AND_BADGES",
+        "ANY_OBJECT"
+      ],
+      "default_modality": "MUST",
+      "requires_condition": false,
+      "risk_level": "LOW"
+    },
+    {
+      "predicate_id": "has_buyout_calculation_basis",
+      "label": "Defines formula for notice period shortfall salary buyout calculation",
+      "action_category": "FINANCIAL",
+      "allowed_subject_roles": [
+        "EMPLOYEE",
+        "COMPANY",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "BASIC_SALARY",
+        "GROSS_PAY",
+        "SHORTFALL_DAYS",
+        "ANY_OBJECT"
+      ],
+      "default_modality": "MUST",
+      "requires_condition": false,
+      "risk_level": "MEDIUM"
+    },
+    {
+      "predicate_id": "has_garden_leave_option",
+      "label": "Permits company to place resigning employee on paid garden leave",
+      "action_category": "OPERATIONAL",
+      "allowed_subject_roles": [
+        "COMPANY",
+        "EMPLOYER",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "GARDEN_LEAVE",
+        "RESTRICTED_DUTIES",
+        "ANY_OBJECT"
+      ],
+      "default_modality": "MAY",
+      "requires_condition": false,
+      "risk_level": "LOW"
+    },
+    {
+      "predicate_id": "has_invoice_payment_terms",
+      "label": "Specifies invoice payment due window net days from issuance",
+      "action_category": "PAYMENT",
+      "allowed_subject_roles": [
+        "BUYER",
+        "CUSTOMER",
+        "BILLING_ACCOUNT",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "PAYMENT_WINDOW",
+        "DUE_DAYS",
+        "NET_TERMS",
+        "ANY_OBJECT"
+      ],
+      "default_modality": "MUST",
+      "requires_condition": false,
+      "risk_level": "LOW"
+    },
+    {
+      "predicate_id": "has_late_payment_penalty_rate",
+      "label": "Specifies late fee penalty interest rate charged on overdue invoice balances",
+      "action_category": "FINANCIAL",
+      "allowed_subject_roles": [
+        "BUYER",
+        "CUSTOMER",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "PENALTY_RATE",
+        "MONTHLY_PERCENT",
+        "INTEREST",
+        "ANY_OBJECT"
+      ],
+      "default_modality": "MUST",
+      "requires_condition": true,
+      "risk_level": "MEDIUM"
+    },
+    {
+      "predicate_id": "has_billing_currency",
+      "label": "Specifies authorized settlement currency denomination for billing",
+      "action_category": "FINANCIAL",
+      "allowed_subject_roles": [
+        "INVOICE",
+        "BILLING_ACCOUNT",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "CURRENCY_CODE",
+        "USD",
+        "EUR",
+        "ANY_OBJECT"
+      ],
+      "default_modality": "MUST",
+      "requires_condition": false,
+      "risk_level": "LOW"
+    },
+    {
+      "predicate_id": "has_tax_rate",
+      "label": "Specifies applicable VAT, sales tax, or GST rate levied on line items",
+      "action_category": "TAX",
+      "allowed_subject_roles": [
+        "INVOICE_LINE_ITEM",
+        "TOTAL_DUE",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "VAT_RATE",
+        "SALES_TAX",
+        "TAX_AMOUNT",
+        "ANY_OBJECT"
+      ],
+      "default_modality": "MUST",
+      "requires_condition": false,
+      "risk_level": "LOW"
+    },
+    {
+      "predicate_id": "has_billing_dispute_window",
+      "label": "Defines time window within which invoice discrepancies must be submitted",
+      "action_category": "PROCEDURAL",
+      "allowed_subject_roles": [
+        "CUSTOMER",
+        "BUYER",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "DISPUTE_DAYS",
+        "AUDIT_WINDOW",
+        "ANY_OBJECT"
+      ],
+      "default_modality": "MUST",
+      "requires_condition": false,
+      "risk_level": "MEDIUM"
+    },
+    {
+      "predicate_id": "requires_purchase_order_reference",
+      "label": "Mandates valid customer purchase order number on invoice for remittance",
+      "action_category": "PROCEDURAL",
+      "allowed_subject_roles": [
+        "INVOICE",
+        "VENDOR",
+        "BUYER",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "PO_NUMBER",
+        "ORDER_IDENTIFIER",
+        "ANY_OBJECT"
+      ],
+      "default_modality": "MUST",
+      "requires_condition": false,
+      "risk_level": "LOW"
+    },
+    {
+      "predicate_id": "has_credit_memo_issuance_policy",
+      "label": "Authorizes issuance of credit notes for billing adjustments or returns",
+      "action_category": "FINANCIAL",
+      "allowed_subject_roles": [
+        "SELLER",
+        "VENDOR",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "CREDIT_MEMO",
+        "ADJUSTED_AMOUNT",
+        "ANY_OBJECT"
+      ],
+      "default_modality": "MAY",
+      "requires_condition": false,
+      "risk_level": "LOW"
+    },
+    {
+      "predicate_id": "has_remittance_bank_details",
+      "label": "Specifies bank routing, account number, or IBAN/SWIFT instructions for payment",
+      "action_category": "FINANCIAL",
+      "allowed_subject_roles": [
+        "SELLER",
+        "VENDOR",
+        "INVOICE",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "BANK_ACCOUNT",
+        "IBAN_SWIFT",
+        "ROUTING",
+        "ANY_OBJECT"
+      ],
+      "default_modality": "MUST",
+      "requires_condition": false,
+      "risk_level": "LOW"
+    },
+    {
+      "predicate_id": "cannot_claim_regularisation",
+      "label": "Statutory bar prohibiting contract appointees from claiming absorption in government service",
+      "action_category": "RESTRICTIONS",
+      "allowed_subject_roles": [
+        "CONTRACT_APPOINTEE",
+        "TEMPORARY_STAFF",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "REGULARISATION",
+        "ABSORPTION",
+        "PERMANENT_STATUS",
+        "ANY_OBJECT"
+      ],
+      "default_modality": "MUST_NOT",
+      "requires_condition": false,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "predicate_id": "has_maximum_contract_tenure",
+      "label": "Defines statutory limitation on maximum duration of contractual engagement",
+      "action_category": "PROCEDURAL",
+      "allowed_subject_roles": [
+        "CONTRACT_APPOINTEE",
+        "GOVERNMENT_ENGAGEMENT",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "DURATION_YEARS",
+        "MAX_TERM",
+        "ANY_OBJECT"
+      ],
+      "default_modality": "MUST",
+      "requires_condition": false,
+      "risk_level": "MEDIUM"
+    },
+    {
+      "predicate_id": "has_statutory_remuneration_ceiling",
+      "label": "Defines statutory monthly remuneration cap for contractual appointments",
+      "action_category": "FINANCIAL",
+      "allowed_subject_roles": [
+        "GOVERNMENT_DEPARTMENT",
+        "CONTRACT_APPOINTEE",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "MONTHLY_CEILING",
+        "REMUNERATION_CAP",
+        "ANY_OBJECT"
+      ],
+      "default_modality": "MUST",
+      "requires_condition": false,
+      "risk_level": "MEDIUM"
+    },
+    {
+      "predicate_id": "requires_mandatory_compliance_audit",
+      "label": "Mandates independent annual compliance assessment or SSPA audit for suppliers",
+      "action_category": "AUDIT",
+      "allowed_subject_roles": [
+        "SUPPLIER",
+        "VENDOR",
+        "DATA_PROCESSOR",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "ANNUAL_AUDIT",
+        "INDEPENDENT_ASSESSMENT",
+        "ANY_OBJECT"
+      ],
+      "default_modality": "MUST",
+      "requires_condition": false,
+      "risk_level": "HIGH"
+    },
+    {
+      "predicate_id": "has_breach_notification_deadline",
+      "label": "Mandates maximum timeframe within which security or privacy incidents must be reported",
+      "action_category": "COMPLIANCE",
+      "allowed_subject_roles": [
+        "DATA_PROCESSOR",
+        "SUPPLIER",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "NOTIFICATION_HOURS",
+        "72_HOURS",
+        "DEADLINE",
+        "ANY_OBJECT"
+      ],
+      "default_modality": "MUST",
+      "requires_condition": false,
+      "risk_level": "HIGH"
+    },
+    {
+      "predicate_id": "has_whistleblower_protection",
+      "label": "Mandates non-retaliation protections for personnel reporting statutory non-compliance",
+      "action_category": "COMPLIANCE",
+      "allowed_subject_roles": [
+        "REPORTING_PARTY",
+        "EMPLOYEE",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "NON_RETALIATION",
+        "CONFIDENTIALITY",
+        "ANY_OBJECT"
+      ],
+      "default_modality": "MUST",
+      "requires_condition": false,
+      "risk_level": "MEDIUM"
+    },
+    {
+      "predicate_id": "is_subject_to_administrative_review",
+      "label": "Subjects appointment or agreement to periodic administrative governance review",
+      "action_category": "GOVERNANCE",
+      "allowed_subject_roles": [
+        "CONTRACTUAL_ENGAGEMENT",
+        "APPOINTMENT",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "GOVERNMENT_REVIEW",
+        "ADMINISTRATIVE_EXIGENCY",
+        "ANY_OBJECT"
+      ],
+      "default_modality": "MUST",
+      "requires_condition": false,
+      "risk_level": "LOW"
+    },
+    {
+      "predicate_id": "requires_human_rights_due_diligence",
+      "label": "Mandates annual due diligence assessment and disclosure on labor and human rights",
+      "action_category": "COMPLIANCE",
+      "allowed_subject_roles": [
+        "SUPPLIER",
+        "ENTERPRISE",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "DUE_DILIGENCE_REPORT",
+        "LABOR_ASSESSMENT",
+        "ANY_OBJECT"
+      ],
+      "default_modality": "MUST",
+      "requires_condition": false,
+      "risk_level": "MEDIUM"
+    },
+    {
+      "predicate_id": "has_refund_method",
+      "label": "Specifies payment or return refund method",
+      "action_category": "REFUND",
+      "allowed_subject_roles": [
+        "CUSTOMER",
+        "BUYER",
+        "ORDER",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "REFUND_METHOD",
+        "ORIGINAL_PAYMENT_METHOD",
+        "STORE_CREDIT",
+        "CASH",
+        "ANY_OBJECT"
+      ],
+      "default_modality": "MUST",
       "requires_condition": false,
       "risk_level": "LOW"
     }

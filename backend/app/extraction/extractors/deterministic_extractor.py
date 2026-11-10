@@ -151,6 +151,120 @@ class DeterministicSchemaExtractor:
                 if s_data.get("table_type") in ("table_of_contents", "revision_history", "approver_signoff", "data_dictionary"):
                     return claims
 
+                # Form / Input Requirement Specification Matrix (e.g. Field | Example | Required?)
+                is_form_spec = (
+                    any("required" in k or "mandatory" in k for k in col_keys_lower)
+                    and any("field" in k or "parameter" in k or "information" in k or "data" in k for k in col_keys_lower)
+                ) or s_data.get("table_type") == "form_specification" or any("required information" in str(ctx).lower() for ctx in (unit.hierarchical_context or []))
+
+                if is_form_spec and cols:
+                    field_col = next((k for k in col_keys if any(term in k.lower() for term in ("field", "information", "parameter", "data"))), col_keys[0])
+                    field_name = str(cols.get(field_col, "")).strip()
+
+                    remaining_cols = [k for k in col_keys if k != field_col]
+                    example_col = next((k for k in remaining_cols if any(term in k.lower() for term in ("example", "format", "sample", "pattern"))), None)
+                    example_val = str(cols[example_col]).strip() if example_col and cols.get(example_col) is not None else None
+
+                    req_col = next((k for k in remaining_cols if any(term in k.lower() for term in ("required", "mandatory"))), None)
+                    req_val = str(cols[req_col]).strip() if req_col and cols.get(req_col) is not None else "Yes"
+
+                    # If document is a procedure, isolate as non-canonical form field specification
+                    if loc.get("document_type") == "procedure" or unit.content_role == ContentRole.PROCEDURE:
+                        c_req = CandidateClaim.create(
+                            envelope_id=unit.envelope_id,
+                            unit_id=unit.unit_id,
+                            asset_id=unit.asset_id,
+                            claim_text=f"Field `{field_name}` is required: {req_val}.",
+                            subject=f"Form field `{field_name}`",
+                            predicate="is_required_for_refund_request",
+                            object_=req_val,
+                            evidence_text_span=unit.content_text,
+                            claim_type="form_field_specification",
+                            content_role=ContentRole.PROCEDURE,
+                            is_canonical=False,
+                            extraction_strategy=ExtractionStrategyType.DETERMINISTIC_SCHEMA,
+                            locator=loc,
+                            structured_values={"field_name": field_name, "required": req_val},
+                            confidence=0.99,
+                        )
+                        claims.append(c_req)
+                        if example_val:
+                            c_ex = CandidateClaim.create(
+                                envelope_id=unit.envelope_id,
+                                unit_id=unit.unit_id,
+                                asset_id=unit.asset_id,
+                                claim_text=f"Field `{field_name}` example value is {example_val}.",
+                                subject=f"Form field `{field_name}`",
+                                predicate="has_example_value",
+                                object_=example_val,
+                                evidence_text_span=unit.content_text,
+                                claim_type="form_field_specification",
+                                content_role=ContentRole.PROCEDURE,
+                                is_canonical=False,
+                                extraction_strategy=ExtractionStrategyType.DETERMINISTIC_SCHEMA,
+                                locator=loc,
+                                structured_values={"field_name": field_name, "example": example_val},
+                                confidence=0.99,
+                            )
+                            claims.append(c_ex)
+                        return claims
+
+                    req_val_lower = req_val.lower()
+                    field_lower = field_name.lower()
+
+                    if any(term in field_lower for term in ("photo", "defect", "evidence", "proof")) or any(term in req_val_lower for term in ("claiming", "damaged", "defective")):
+                        subj = "Customer claiming damaged or defective item"
+                        pred = "must_provide_evidence"
+                        obj = f"{field_name} ({example_val})" if example_val else field_name
+                        modality = "REQUIRED"
+                        modal_op = "must"
+                        conds = ["claiming damaged or defective item"] if ("damaged" in req_val_lower or "defective" in req_val_lower or "defect" in field_lower) else []
+                        is_mandatory = True
+                    elif any(w in req_val_lower for w in ("optional", "no", "if available", "if applicable")):
+                        subj = "Customer submitting return request"
+                        pred = "may_provide_information"
+                        obj = field_name
+                        modality = "PERMITTED"
+                        modal_op = "may"
+                        conds = []
+                        is_mandatory = False
+                    else:
+                        subj = "Customer submitting return request"
+                        pred = "must_provide_information"
+                        obj = field_name
+                        modality = "REQUIRED"
+                        modal_op = "must"
+                        conds = []
+                        is_mandatory = True
+
+                    c = CandidateClaim.create(
+                        envelope_id=unit.envelope_id,
+                        unit_id=unit.unit_id,
+                        asset_id=unit.asset_id,
+                        claim_text=f"{subj} {modal_op} provide {obj}.",
+                        subject=subj,
+                        predicate=pred,
+                        object_=obj,
+                        evidence_text_span=unit.content_text,
+                        modal_operator=modal_op,
+                        modality=modality,
+                        conditions=conds,
+                        claim_type="policy",
+                        content_role=ContentRole.POLICY_RULE,
+                        is_canonical=True,
+                        extraction_strategy=ExtractionStrategyType.DETERMINISTIC_SCHEMA,
+                        locator=loc,
+                        structured_values={
+                            "is_mandatory": is_mandatory,
+                            "example_instance": example_val,
+                            "field_name": field_name,
+                            "requirement_text": req_val,
+                        },
+                        confidence=0.99,
+                    )
+                    claims.append(c)
+                    return claims
+
                 from app.extraction.deontic_classifier import DeonticClassifier
 
                 # Separate scoping/identifier keys from rule/value keys

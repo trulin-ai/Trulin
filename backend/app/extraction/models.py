@@ -11,7 +11,7 @@ import json
 import uuid
 from datetime import datetime, timezone
 from enum import Enum
-from typing import Any, List, Optional
+from typing import Any, Dict, List, Optional
 
 from pydantic import BaseModel, Field
 
@@ -69,6 +69,31 @@ class TypedValue(BaseModel):
     structured_rule: Optional[dict[str, Any]] = Field(default=None, description="Structured rule definition (e.g. calendar date rule)")
 
 
+class FieldEvidenceBinding(BaseModel):
+    """Exact character-level evidence binding for a structured claim field."""
+    field: str = Field(..., description="Target field: subject, action, object, condition, limit, exception, scope")
+    evidence_span: str = Field(..., description="Exact textual span from source that proves this field")
+    char_start: Optional[int] = Field(default=None, description="Start character offset in source document")
+    char_end: Optional[int] = Field(default=None, description="End character offset in source document")
+    cell_key: Optional[str] = Field(default=None, description="Column header or key if proved by table cell")
+
+
+class TypedEntity(BaseModel):
+    """Entity representation with category classification."""
+    text: str = Field(..., description="Canonical entity label")
+    type: str = Field(default="actor", description="Entity category: actor, product_category, payment_instrument, financial_disbursement, service, document_version")
+
+
+class TypedAction(BaseModel):
+    """Two-level action and normative role specification."""
+    predicate: str = Field(..., description="Predicate slug e.g. receives_store_credit_bonus, has_posting_duration")
+    universal_role: Optional[str] = Field(default="specifies", description="Base role: requires, permits, prohibits, entitles, specifies, limits, excludes, describes, references, classifies_as")
+    typed_subtype: Optional[str] = Field(default=None, description="Specific subtype: return_window, posting_duration, cancellation_window, price_adjustment_window, reporting_window, trial_refund_window, store_credit_incentive")
+    semantic_role: Optional[str] = Field(default=None, description="Granular role: receives, provides, requests, approves, issues, cancels")
+    modality: str = Field(default="REQUIRED", description="Standardized normative modality: REQUIRED, PROHIBITED, PERMITTED, RECOMMENDED, MUST, MAY, CANNOT, WILL")
+    polarity: str = Field(default="positive", description="Semantic polarity: positive or negative")
+
+
 class TableGridBinding(BaseModel):
     """
     Cryptographic and spatial proof binding an extracted claim to a 2D table matrix.
@@ -120,8 +145,16 @@ class CandidateClaim(BaseModel):
     modality: str = Field(default="REQUIRED", description="Standardized normative modality: REQUIRED, PROHIBITED, PERMITTED, RECOMMENDED")
     conditions: List[Any] = Field(default_factory=list, description="Explicit contextual preconditions, triggers, or activation requirements")
     exceptions: List[str] = Field(default_factory=list, description="Explicit permitted exemptions or negative preconditions (e.g. Customer internal business use)")
+    limits: List[str] = Field(default_factory=list, description="Explicit quantitative caps or limits (e.g. maximum bonus $25, once per year)")
     scope: dict[str, Any] = Field(default_factory=dict, description="Target population, grade, jurisdiction, or scope constraints")
     claim_type: str = Field(default="policy", description="Semantic category (policy, invariant, metric, decision)")
+    
+    # Phase 2: Typed Evidence-Bound Representations
+    typed_subject: Optional[TypedEntity] = Field(default=None, description="Typed entity representation of subject")
+    typed_action: Optional[TypedAction] = Field(default=None, description="Two-level action role and modality")
+    typed_object: Optional[TypedEntity] = Field(default=None, description="Typed entity representation of object")
+    evidence_bindings: List[FieldEvidenceBinding] = Field(default_factory=list, description="Character-level evidence bindings for each structured field")
+    normalization_history: List[Dict[str, Any]] = Field(default_factory=list, description="Phase 5: Non-destructive normalization audit trail and field diffs")
     
     # Provenance & Locators
     extraction_strategy: ExtractionStrategyType = Field(default=ExtractionStrategyType.DETERMINISTIC_SCHEMA)
@@ -161,6 +194,7 @@ class CandidateClaim(BaseModel):
         modality: str = "REQUIRED",
         conditions: Optional[List[Any]] = None,
         exceptions: Optional[List[str]] = None,
+        limits: Optional[List[str]] = None,
         scope: Optional[dict[str, Any]] = None,
         claim_type: str = "policy",
         is_canonical: Optional[bool] = None,
@@ -178,6 +212,10 @@ class CandidateClaim(BaseModel):
         typed_value: Optional[TypedValue] = None,
         deadline: Optional[dict[str, Any]] = None,
         content_role: ContentRole | str | None = None,
+        typed_subject: Optional[TypedEntity] = None,
+        typed_action: Optional[TypedAction] = None,
+        typed_object: Optional[TypedEntity] = None,
+        evidence_bindings: Optional[List[FieldEvidenceBinding]] = None,
     ) -> CandidateClaim:
         text_clean = claim_text.strip()
         hash_input = f"{asset_id}:{subject}:{predicate}:{object_}:{value}:{unit}:{evidence_text_span}:{json.dumps(structured_values or {}, sort_keys=True, default=str)}"
@@ -245,6 +283,7 @@ class CandidateClaim(BaseModel):
             modality=modality,
             conditions=conditions or [],
             exceptions=exceptions or [],
+            limits=limits or [],
             scope=scope or {},
             claim_type=claim_type,
             is_canonical=resolved_canonical,
@@ -253,6 +292,10 @@ class CandidateClaim(BaseModel):
             evidence_text_span=evidence_text_span.strip(),
             locator=locator or {},
             structured_values=structured_values or {},
+            typed_subject=typed_subject,
+            typed_action=typed_action,
+            typed_object=typed_object,
+            evidence_bindings=evidence_bindings or [],
             status="candidate",
             confidence=confidence,
             is_ambiguous=is_ambiguous,

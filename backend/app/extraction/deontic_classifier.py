@@ -281,6 +281,18 @@ class DeonticClassifier:
                 subject = clean_only_val if "subscription" in v_lower else f"{clean_only_val} subscription"
             elif any(sub_w in v_lower for sub_w in ("subscription plan", "subscription tier", "membership tier")):
                 subject = clean_only_val
+            elif re.match(r"^\d{4}$", clean_only_val) and any(ck in k_lower for ck in ("code", "reason", "chargeback")):
+                subject = f"Chargeback Reason Code {clean_only_val}"
+            elif clean_only_val.lower() in ("notice", "warning", "account review", "suspension", "suspended", "restricted", "permanent", "account closed") and any(tk in k_lower for tk in ("tier", "level", "stage")):
+                subject = "Customer Account"
+                tier_cond = f"Tier: {clean_only_val}"
+                if tier_cond not in conditions:
+                    conditions.append(tier_cond)
+            elif any(st in v_lower for st in ("shipped", "delivered", "pre-order", "preorder", "backordered", "backorder")) and any(sk in k_lower for sk in ("status", "order")):
+                subject = "Order"
+                order_cond = f"Order Status: {clean_only_val}"
+                if order_cond not in conditions:
+                    conditions.append(order_cond)
             else:
                 subject = clean_only_val
         else:
@@ -442,9 +454,16 @@ class DeonticClassifier:
             elif re.search(r"\bprovider\s+timelines\b", val_lower):
                 predicate = "has_provider_governed_timeline"
                 claim_text = f"{subject} specifies provider-governed timeline: {clean_val}."
+            elif re.search(r"\bsame\s+as\s+(?:card|original|underlying)\b", val_lower):
+                predicate = "references_underlying_payment_timeline"
+                claim_text = f"{subject} specifies timeline reference: {clean_val}."
             elif is_payment:
-                predicate = "has_posting_duration"
-                claim_text = f"{subject} posting duration is {clean_val}."
+                if any(q in active_qualifiers for q in ("usually", "typical", "approximate")) or re.search(r"\b(?:usually|typically|estimate|estimated|approx|approximate)\b", val_lower):
+                    predicate = "has_posting_sla_estimate"
+                    claim_text = f"{subject} posting SLA estimate is {clean_val}."
+                else:
+                    predicate = "has_posting_duration"
+                    claim_text = f"{subject} posting duration is {clean_val}."
             elif is_stage:
                 predicate = "has_stage_duration"
                 claim_text = f"{subject} stage duration is {clean_val}."

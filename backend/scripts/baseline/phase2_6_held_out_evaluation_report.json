@@ -1,0 +1,604 @@
+{
+  "metadata": {
+    "phase": "2.6",
+    "title": "Held-Out Evaluation and Fail-Closed Verification Report",
+    "timestamp": null
+  },
+  "unseen_cases_evaluation": {
+    "unseen_cases_evaluated": 35,
+    "unseen_cases_passed": 35,
+    "unseen_pass_rate": 1.0,
+    "golden_set_contamination": false,
+    "documents_evaluated": [
+      "guidelines-for-engagement-of-employees-on-contract-basis.pdf",
+      "Vendor Agreement Template-02.2021_2.pdf",
+      "wordpress-pdf-invoice-plugin-sample.pdf",
+      "Employees Notice Period Policy- V 1.5 (1).pdf"
+    ],
+    "case_manifest": [
+      {
+        "case_id": "HELD-NOTICE-001",
+        "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+        "page_or_section": "Page 1",
+        "claim_id": "HELD-NOTICE-001",
+        "expected_classification": "APPROVE",
+        "actual_classification": "APPROVE",
+        "gate_result": "PASS",
+        "reason_codes": [],
+        "contamination_check_result": "CLEAN"
+      },
+      {
+        "case_id": "HELD-NOTICE-002",
+        "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+        "page_or_section": "Page 1",
+        "claim_id": "HELD-NOTICE-002",
+        "expected_classification": "APPROVE",
+        "actual_classification": "APPROVE",
+        "gate_result": "PASS",
+        "reason_codes": [],
+        "contamination_check_result": "CLEAN"
+      },
+      {
+        "case_id": "HELD-NOTICE-003",
+        "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+        "page_or_section": "Page 1",
+        "claim_id": "HELD-NOTICE-003",
+        "expected_classification": "APPROVE",
+        "actual_classification": "APPROVE",
+        "gate_result": "PASS",
+        "reason_codes": [],
+        "contamination_check_result": "CLEAN"
+      },
+      {
+        "case_id": "HELD-NOTICE-004",
+        "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+        "page_or_section": "Page 1",
+        "claim_id": "HELD-NOTICE-004",
+        "expected_classification": "APPROVE",
+        "actual_classification": "APPROVE",
+        "gate_result": "PASS",
+        "reason_codes": [],
+        "contamination_check_result": "CLEAN"
+      },
+      {
+        "case_id": "HELD-NOTICE-005",
+        "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+        "page_or_section": "Page 1",
+        "claim_id": "HELD-NOTICE-005",
+        "expected_classification": "APPROVE",
+        "actual_classification": "APPROVE",
+        "gate_result": "PASS",
+        "reason_codes": [],
+        "contamination_check_result": "CLEAN"
+      },
+      {
+        "case_id": "HELD-NOTICE-006",
+        "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+        "page_or_section": "Page 1",
+        "claim_id": "HELD-NOTICE-006",
+        "expected_classification": "APPROVE",
+        "actual_classification": "APPROVE",
+        "gate_result": "PASS",
+        "reason_codes": [],
+        "contamination_check_result": "CLEAN"
+      },
+      {
+        "case_id": "HELD-NOTICE-007",
+        "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+        "page_or_section": "Page 1",
+        "claim_id": "HELD-NOTICE-007",
+        "expected_classification": "APPROVE",
+        "actual_classification": "APPROVE",
+        "gate_result": "PASS",
+        "reason_codes": [],
+        "contamination_check_result": "CLEAN"
+      },
+      {
+        "case_id": "HELD-NOTICE-008",
+        "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+        "page_or_section": "Page 1",
+        "claim_id": "HELD-NOTICE-008",
+        "expected_classification": "APPROVE",
+        "actual_classification": "APPROVE",
+        "gate_result": "PASS",
+        "reason_codes": [],
+        "contamination_check_result": "CLEAN"
+      },
+      {
+        "case_id": "HELD-NOTICE-009",
+        "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+        "page_or_section": "Page 1",
+        "claim_id": "HELD-NOTICE-009",
+        "expected_classification": "APPROVE",
+        "actual_classification": "APPROVE",
+        "gate_result": "PASS",
+        "reason_codes": [],
+        "contamination_check_result": "CLEAN"
+      },
+      {
+        "case_id": "HELD-NOTICE-010",
+        "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+        "page_or_section": "Page 1",
+        "claim_id": "HELD-NOTICE-010",
+        "expected_classification": "REVIEW",
+        "actual_classification": "REVIEW",
+        "gate_result": "PASS",
+        "reason_codes": [],
+        "contamination_check_result": "CLEAN"
+      },
+      {
+        "case_id": "HELD-NOTICE-011",
+        "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+        "page_or_section": "Page 1",
+        "claim_id": "HELD-NOTICE-011",
+        "expected_classification": "APPROVE",
+        "actual_classification": "APPROVE",
+        "gate_result": "PASS",
+        "reason_codes": [],
+        "contamination_check_result": "CLEAN"
+      },
+      {
+        "case_id": "HELD-NOTICE-012",
+        "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+        "page_or_section": "Page 1",
+        "claim_id": "HELD-NOTICE-012",
+        "expected_classification": "REJECT",
+        "actual_classification": "REJECT",
+        "gate_result": "PASS",
+        "reason_codes": [],
+        "contamination_check_result": "CLEAN"
+      },
+      {
+        "case_id": "HELD-VENDOR-001",
+        "source_document": "Vendor Agreement Template-02.2021_2.pdf",
+        "page_or_section": "Page 1",
+        "claim_id": "HELD-VENDOR-001",
+        "expected_classification": "APPROVE",
+        "actual_classification": "APPROVE",
+        "gate_result": "PASS",
+        "reason_codes": [],
+        "contamination_check_result": "CLEAN"
+      },
+      {
+        "case_id": "HELD-VENDOR-002",
+        "source_document": "Vendor Agreement Template-02.2021_2.pdf",
+        "page_or_section": "Page 1",
+        "claim_id": "HELD-VENDOR-002",
+        "expected_classification": "APPROVE",
+        "actual_classification": "APPROVE",
+        "gate_result": "PASS",
+        "reason_codes": [],
+        "contamination_check_result": "CLEAN"
+      },
+      {
+        "case_id": "HELD-VENDOR-003",
+        "source_document": "Vendor Agreement Template-02.2021_2.pdf",
+        "page_or_section": "Page 1",
+        "claim_id": "HELD-VENDOR-003",
+        "expected_classification": "APPROVE",
+        "actual_classification": "APPROVE",
+        "gate_result": "PASS",
+        "reason_codes": [],
+        "contamination_check_result": "CLEAN"
+      },
+      {
+        "case_id": "HELD-VENDOR-004",
+        "source_document": "Vendor Agreement Template-02.2021_2.pdf",
+        "page_or_section": "Page 1",
+        "claim_id": "HELD-VENDOR-004",
+        "expected_classification": "APPROVE",
+        "actual_classification": "APPROVE",
+        "gate_result": "PASS",
+        "reason_codes": [],
+        "contamination_check_result": "CLEAN"
+      },
+      {
+        "case_id": "HELD-VENDOR-005",
+        "source_document": "Vendor Agreement Template-02.2021_2.pdf",
+        "page_or_section": "Page 1",
+        "claim_id": "HELD-VENDOR-005",
+        "expected_classification": "APPROVE",
+        "actual_classification": "APPROVE",
+        "gate_result": "PASS",
+        "reason_codes": [],
+        "contamination_check_result": "CLEAN"
+      },
+      {
+        "case_id": "HELD-VENDOR-006",
+        "source_document": "Vendor Agreement Template-02.2021_2.pdf",
+        "page_or_section": "Page 1",
+        "claim_id": "HELD-VENDOR-006",
+        "expected_classification": "APPROVE",
+        "actual_classification": "APPROVE",
+        "gate_result": "PASS",
+        "reason_codes": [],
+        "contamination_check_result": "CLEAN"
+      },
+      {
+        "case_id": "HELD-VENDOR-007",
+        "source_document": "Vendor Agreement Template-02.2021_2.pdf",
+        "page_or_section": "Page 1",
+        "claim_id": "HELD-VENDOR-007",
+        "expected_classification": "APPROVE",
+        "actual_classification": "APPROVE",
+        "gate_result": "PASS",
+        "reason_codes": [],
+        "contamination_check_result": "CLEAN"
+      },
+      {
+        "case_id": "HELD-VENDOR-008",
+        "source_document": "Vendor Agreement Template-02.2021_2.pdf",
+        "page_or_section": "Page 1",
+        "claim_id": "HELD-VENDOR-008",
+        "expected_classification": "APPROVE",
+        "actual_classification": "APPROVE",
+        "gate_result": "PASS",
+        "reason_codes": [],
+        "contamination_check_result": "CLEAN"
+      },
+      {
+        "case_id": "HELD-VENDOR-009",
+        "source_document": "Vendor Agreement Template-02.2021_2.pdf",
+        "page_or_section": "Page 1",
+        "claim_id": "HELD-VENDOR-009",
+        "expected_classification": "APPROVE",
+        "actual_classification": "APPROVE",
+        "gate_result": "PASS",
+        "reason_codes": [],
+        "contamination_check_result": "CLEAN"
+      },
+      {
+        "case_id": "HELD-VENDOR-010",
+        "source_document": "Vendor Agreement Template-02.2021_2.pdf",
+        "page_or_section": "Page 1",
+        "claim_id": "HELD-VENDOR-010",
+        "expected_classification": "APPROVE",
+        "actual_classification": "APPROVE",
+        "gate_result": "PASS",
+        "reason_codes": [],
+        "contamination_check_result": "CLEAN"
+      },
+      {
+        "case_id": "HELD-VENDOR-011",
+        "source_document": "Vendor Agreement Template-02.2021_2.pdf",
+        "page_or_section": "Page 1",
+        "claim_id": "HELD-VENDOR-011",
+        "expected_classification": "APPROVE",
+        "actual_classification": "APPROVE",
+        "gate_result": "PASS",
+        "reason_codes": [],
+        "contamination_check_result": "CLEAN"
+      },
+      {
+        "case_id": "HELD-VENDOR-012",
+        "source_document": "Vendor Agreement Template-02.2021_2.pdf",
+        "page_or_section": "Page 1",
+        "claim_id": "HELD-VENDOR-012",
+        "expected_classification": "APPROVE",
+        "actual_classification": "APPROVE",
+        "gate_result": "PASS",
+        "reason_codes": [],
+        "contamination_check_result": "CLEAN"
+      },
+      {
+        "case_id": "HELD-INV-001",
+        "source_document": "wordpress-pdf-invoice-plugin-sample.pdf",
+        "page_or_section": "Page 1",
+        "claim_id": "HELD-INV-001",
+        "expected_classification": "APPROVE",
+        "actual_classification": "APPROVE",
+        "gate_result": "PASS",
+        "reason_codes": [],
+        "contamination_check_result": "CLEAN"
+      },
+      {
+        "case_id": "HELD-INV-002",
+        "source_document": "wordpress-pdf-invoice-plugin-sample.pdf",
+        "page_or_section": "Page 1",
+        "claim_id": "HELD-INV-002",
+        "expected_classification": "APPROVE",
+        "actual_classification": "APPROVE",
+        "gate_result": "PASS",
+        "reason_codes": [],
+        "contamination_check_result": "CLEAN"
+      },
+      {
+        "case_id": "HELD-INV-003",
+        "source_document": "wordpress-pdf-invoice-plugin-sample.pdf",
+        "page_or_section": "Page 1",
+        "claim_id": "HELD-INV-003",
+        "expected_classification": "APPROVE",
+        "actual_classification": "APPROVE",
+        "gate_result": "PASS",
+        "reason_codes": [],
+        "contamination_check_result": "CLEAN"
+      },
+      {
+        "case_id": "HELD-INV-004",
+        "source_document": "wordpress-pdf-invoice-plugin-sample.pdf",
+        "page_or_section": "Page 1",
+        "claim_id": "HELD-INV-004",
+        "expected_classification": "APPROVE",
+        "actual_classification": "APPROVE",
+        "gate_result": "PASS",
+        "reason_codes": [],
+        "contamination_check_result": "CLEAN"
+      },
+      {
+        "case_id": "HELD-INV-005",
+        "source_document": "wordpress-pdf-invoice-plugin-sample.pdf",
+        "page_or_section": "Page 1",
+        "claim_id": "HELD-INV-005",
+        "expected_classification": "APPROVE",
+        "actual_classification": "APPROVE",
+        "gate_result": "PASS",
+        "reason_codes": [],
+        "contamination_check_result": "CLEAN"
+      },
+      {
+        "case_id": "HELD-INV-006",
+        "source_document": "wordpress-pdf-invoice-plugin-sample.pdf",
+        "page_or_section": "Page 1",
+        "claim_id": "HELD-INV-006",
+        "expected_classification": "APPROVE",
+        "actual_classification": "APPROVE",
+        "gate_result": "PASS",
+        "reason_codes": [],
+        "contamination_check_result": "CLEAN"
+      },
+      {
+        "case_id": "HELD-GOV-001",
+        "source_document": "guidelines-for-engagement-of-employees-on-contract-basis.pdf",
+        "page_or_section": "Page 1",
+        "claim_id": "HELD-GOV-001",
+        "expected_classification": "APPROVE",
+        "actual_classification": "APPROVE",
+        "gate_result": "PASS",
+        "reason_codes": [],
+        "contamination_check_result": "CLEAN"
+      },
+      {
+        "case_id": "HELD-GOV-002",
+        "source_document": "guidelines-for-engagement-of-employees-on-contract-basis.pdf",
+        "page_or_section": "Page 1",
+        "claim_id": "HELD-GOV-002",
+        "expected_classification": "APPROVE",
+        "actual_classification": "APPROVE",
+        "gate_result": "PASS",
+        "reason_codes": [],
+        "contamination_check_result": "CLEAN"
+      },
+      {
+        "case_id": "HELD-GOV-003",
+        "source_document": "guidelines-for-engagement-of-employees-on-contract-basis.pdf",
+        "page_or_section": "Page 1",
+        "claim_id": "HELD-GOV-003",
+        "expected_classification": "APPROVE",
+        "actual_classification": "APPROVE",
+        "gate_result": "PASS",
+        "reason_codes": [],
+        "contamination_check_result": "CLEAN"
+      },
+      {
+        "case_id": "HELD-GOV-004",
+        "source_document": "guidelines-for-engagement-of-employees-on-contract-basis.pdf",
+        "page_or_section": "Page 1",
+        "claim_id": "HELD-GOV-004",
+        "expected_classification": "APPROVE",
+        "actual_classification": "APPROVE",
+        "gate_result": "PASS",
+        "reason_codes": [],
+        "contamination_check_result": "CLEAN"
+      },
+      {
+        "case_id": "HELD-GOV-005",
+        "source_document": "guidelines-for-engagement-of-employees-on-contract-basis.pdf",
+        "page_or_section": "Page 1",
+        "claim_id": "HELD-GOV-005",
+        "expected_classification": "APPROVE",
+        "actual_classification": "APPROVE",
+        "gate_result": "PASS",
+        "reason_codes": [],
+        "contamination_check_result": "CLEAN"
+      }
+    ],
+    "contamination_proof": {
+      "zero_northwind_claim_ids": true,
+      "northwind_claim_ids_found": 0,
+      "zero_northwind_evidence_spans": true,
+      "northwind_evidence_spans_found": 0,
+      "zero_northwind_source_unit_hashes": true,
+      "northwind_source_unit_hashes_found": 0,
+      "contamination_proof_status": "VERIFIED_ZERO_CONTAMINATION"
+    }
+  },
+  "deliberate_failure_suite": {
+    "total_failure_cases": 8,
+    "total_failed_closed": 8,
+    "fail_closed_rate": 1.0,
+    "case_manifest": [
+      {
+        "case_id": "F1_missing_evidence",
+        "injected_defect": "Operative return rule provided with completely missing evidence quote",
+        "expected_failure_code": "ERR_EVIDENCE_MISSING",
+        "actual_failure_code": "ERR_EVIDENCE_MISSING",
+        "failure_codes": [
+          "ERR_EVIDENCE_MISSING"
+        ],
+        "pass_fail": "PASS",
+        "is_failed_closed": true
+      },
+      {
+        "case_id": "F2_catch_all_predicate",
+        "injected_defect": "Claim structured with deprecated non-canonical catch-all predicate 'has_validity_rule'",
+        "expected_failure_code": "ERR_PREDICATE_CATCH_ALL",
+        "actual_failure_code": "ERR_PREDICATE_CATCH_ALL",
+        "failure_codes": [
+          "ERR_PREDICATE_CATCH_ALL",
+          "ERR_MODALITY_MISMATCH"
+        ],
+        "pass_fail": "PASS",
+        "is_failed_closed": true
+      },
+      {
+        "case_id": "F3_wrong_table_binding",
+        "injected_defect": "Table-bound claim with header 'Return label cost' incorrectly mapped to 'has_return_window'",
+        "expected_failure_code": "ERR_TABLE_BINDING_MISMATCH",
+        "actual_failure_code": "ERR_TABLE_BINDING_MISMATCH",
+        "failure_codes": [
+          "ERR_TABLE_BINDING_MISMATCH"
+        ],
+        "pass_fail": "PASS",
+        "is_failed_closed": true
+      },
+      {
+        "case_id": "F4_spo_incompatible",
+        "injected_defect": "SPO semantic type incompatibility: 'Price adjustment' bound to physical return predicate 'has_return_window'",
+        "expected_failure_code": "ERR_SPO_INCOMPATIBLE",
+        "actual_failure_code": "ERR_SPO_INCOMPATIBLE",
+        "failure_codes": [
+          "ERR_SPO_INCOMPATIBLE",
+          "ERR_MODALITY_MISMATCH"
+        ],
+        "pass_fail": "PASS",
+        "is_failed_closed": true
+      },
+      {
+        "case_id": "F5_polarity_inversion",
+        "injected_defect": "Polarity inversion: Negative prohibition predicate 'cannot_be_refunded_for_cash' mapped to affirmative text",
+        "expected_failure_code": "ERR_POLARITY_INVERSION",
+        "actual_failure_code": "ERR_POLARITY_INVERSION",
+        "failure_codes": [
+          "ERR_POLARITY_INVERSION"
+        ],
+        "pass_fail": "PASS",
+        "is_failed_closed": true
+      },
+      {
+        "case_id": "F6_lost_condition",
+        "injected_defect": "Condition loss: Operative qualification 'if less than 20% of the content has been viewed' omitted from structured claim",
+        "expected_failure_code": "ERR_CONDITION_LOST",
+        "actual_failure_code": "ERR_CONDITION_LOST",
+        "failure_codes": [
+          "ERR_CONDITION_LOST"
+        ],
+        "pass_fail": "PASS",
+        "is_failed_closed": true
+      },
+      {
+        "case_id": "F7_value_mismatch",
+        "injected_defect": "Value fidelity failure: Injected threshold value discrepancy ($155 in claim vs $150 in verbatim source)",
+        "expected_failure_code": "ERR_VALUE_FIDELITY_MISMATCH",
+        "actual_failure_code": "ERR_VALUE_FIDELITY_MISMATCH",
+        "failure_codes": [
+          "ERR_VALUE_FIDELITY_MISMATCH"
+        ],
+        "pass_fail": "PASS",
+        "is_failed_closed": true
+      },
+      {
+        "case_id": "F8_silent_upgrade",
+        "injected_defect": "No-silent-upgrade violation: Candidate/rejected claim attempted to be promoted directly to verified without explicit gate approval",
+        "expected_failure_code": "ERR_NO_SILENT_UPGRADE_VIOLATION",
+        "actual_failure_code": "ERR_NO_SILENT_UPGRADE_VIOLATION",
+        "failure_codes": [
+          "ERR_NO_SILENT_UPGRADE_VIOLATION"
+        ],
+        "pass_fail": "PASS",
+        "is_failed_closed": true
+      }
+    ],
+    "cases": [
+      {
+        "case_id": "F1_missing_evidence",
+        "injected_defect": "Operative return rule provided with completely missing evidence quote",
+        "expected_failure_code": "ERR_EVIDENCE_MISSING",
+        "actual_failure_code": "ERR_EVIDENCE_MISSING",
+        "failure_codes": [
+          "ERR_EVIDENCE_MISSING"
+        ],
+        "pass_fail": "PASS",
+        "is_failed_closed": true
+      },
+      {
+        "case_id": "F2_catch_all_predicate",
+        "injected_defect": "Claim structured with deprecated non-canonical catch-all predicate 'has_validity_rule'",
+        "expected_failure_code": "ERR_PREDICATE_CATCH_ALL",
+        "actual_failure_code": "ERR_PREDICATE_CATCH_ALL",
+        "failure_codes": [
+          "ERR_PREDICATE_CATCH_ALL",
+          "ERR_MODALITY_MISMATCH"
+        ],
+        "pass_fail": "PASS",
+        "is_failed_closed": true
+      },
+      {
+        "case_id": "F3_wrong_table_binding",
+        "injected_defect": "Table-bound claim with header 'Return label cost' incorrectly mapped to 'has_return_window'",
+        "expected_failure_code": "ERR_TABLE_BINDING_MISMATCH",
+        "actual_failure_code": "ERR_TABLE_BINDING_MISMATCH",
+        "failure_codes": [
+          "ERR_TABLE_BINDING_MISMATCH"
+        ],
+        "pass_fail": "PASS",
+        "is_failed_closed": true
+      },
+      {
+        "case_id": "F4_spo_incompatible",
+        "injected_defect": "SPO semantic type incompatibility: 'Price adjustment' bound to physical return predicate 'has_return_window'",
+        "expected_failure_code": "ERR_SPO_INCOMPATIBLE",
+        "actual_failure_code": "ERR_SPO_INCOMPATIBLE",
+        "failure_codes": [
+          "ERR_SPO_INCOMPATIBLE",
+          "ERR_MODALITY_MISMATCH"
+        ],
+        "pass_fail": "PASS",
+        "is_failed_closed": true
+      },
+      {
+        "case_id": "F5_polarity_inversion",
+        "injected_defect": "Polarity inversion: Negative prohibition predicate 'cannot_be_refunded_for_cash' mapped to affirmative text",
+        "expected_failure_code": "ERR_POLARITY_INVERSION",
+        "actual_failure_code": "ERR_POLARITY_INVERSION",
+        "failure_codes": [
+          "ERR_POLARITY_INVERSION"
+        ],
+        "pass_fail": "PASS",
+        "is_failed_closed": true
+      },
+      {
+        "case_id": "F6_lost_condition",
+        "injected_defect": "Condition loss: Operative qualification 'if less than 20% of the content has been viewed' omitted from structured claim",
+        "expected_failure_code": "ERR_CONDITION_LOST",
+        "actual_failure_code": "ERR_CONDITION_LOST",
+        "failure_codes": [
+          "ERR_CONDITION_LOST"
+        ],
+        "pass_fail": "PASS",
+        "is_failed_closed": true
+      },
+      {
+        "case_id": "F7_value_mismatch",
+        "injected_defect": "Value fidelity failure: Injected threshold value discrepancy ($155 in claim vs $150 in verbatim source)",
+        "expected_failure_code": "ERR_VALUE_FIDELITY_MISMATCH",
+        "actual_failure_code": "ERR_VALUE_FIDELITY_MISMATCH",
+        "failure_codes": [
+          "ERR_VALUE_FIDELITY_MISMATCH"
+        ],
+        "pass_fail": "PASS",
+        "is_failed_closed": true
+      },
+      {
+        "case_id": "F8_silent_upgrade",
+        "injected_defect": "No-silent-upgrade violation: Candidate/rejected claim attempted to be promoted directly to verified without explicit gate approval",
+        "expected_failure_code": "ERR_NO_SILENT_UPGRADE_VIOLATION",
+        "actual_failure_code": "ERR_NO_SILENT_UPGRADE_VIOLATION",
+        "failure_codes": [
+          "ERR_NO_SILENT_UPGRADE_VIOLATION"
+        ],
+        "pass_fail": "PASS",
+        "is_failed_closed": true
+      }
+    ]
+  }
+}

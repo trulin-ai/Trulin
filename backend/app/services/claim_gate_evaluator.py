@@ -42,7 +42,7 @@ PREDICATE_SLUG_PATTERNS = [
 ]
 
 # Operative contractual modal verbs required in normative rules
-MODAL_OPERATIVE_PATTERN = r"\b(may|must|will|shall|can|should|is\s+required\s+to|are\s+required\s+to|is\s+entitled\s+to|are\s+entitled\s+to|agrees\s+to|agree\s+to|authorizes?|grants?|retains?|warrants?|reserves?|is\s+responsible\s+for|remains\s+responsible\s+for|has\s+a\b|has\s+the\s+right\s+to\b|is\s+limited\s+to\b|is\s+capped\s+at\b|shall\s+be\s+limited\s+to\b|liability\s+is\s+the\b|must\s+not|may\s+not|will\s+not|shall\s+not|neither\s+party\s+will|is\s+not\s+licensed\s+to|prohibited\s+from)\b"
+MODAL_OPERATIVE_PATTERN = r"\b(may|must|will|shall|can|cannot|can\s+not|should|is\s+required\s+to|are\s+required\s+to|is\s+entitled\s+to|are\s+entitled\s+to|agrees\s+to|agree\s+to|authorizes?|grants?|retains?|warrants?|reserves?|is\s+responsible\s+for|remains\s+responsible\s+for|has\s+a\b|has\s+the\s+right\s+to\b|is\s+limited\s+to\b|is\s+capped\s+at\b|shall\s+be\s+limited\s+to\b|liability\s+is\s+the\b|must\s+not|may\s+not|will\s+not|shall\s+not|neither\s+party\s+will|is\s+not\s+licensed\s+to|prohibited\s+from|(?:is|are)\s+refunded|refunded|(?:is|are)\s+issued)\b"
 
 # Generic catch-all predicates banned from canonical certification
 BANNED_GENERIC_PREDICATES = {
@@ -50,6 +50,11 @@ BANNED_GENERIC_PREDICATES = {
     "contract_validity",
     "has_validity_rule",
     "complies_with",
+    "has_summary",
+    "cancel",
+    "scheduled",
+    "appeal",
+    "specifies_governing_rule",
 }
 
 # Unstripped leading enumeration artifact markers in claim text
@@ -193,6 +198,7 @@ class GateEvaluationResult:
     is_canonical: bool = False
     agent_accessible: bool = False
     rejection_reasons: List[str] = field(default_factory=list)
+    reason_codes: List[str] = field(default_factory=list)
     gates: Dict[str, bool] = field(default_factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -203,6 +209,7 @@ class GateEvaluationResult:
             "is_canonical": self.is_canonical,
             "agent_accessible": self.agent_accessible,
             "rejection_reasons": self.rejection_reasons,
+            "reason_codes": self.reason_codes,
         }
 
 
@@ -268,6 +275,32 @@ class ClaimGateEvaluator:
         pred_lower = pred_clean.lower()
         ct_clean = (claim_type or "policy").strip().lower()
         st_clean = (status or "candidate").strip().lower()
+
+        # ---------------------------------------------------------
+        # Phase 2.4: Shared Universal Gate Contract Routing
+        # ---------------------------------------------------------
+        from app.services.gate_contract import SharedGateRequest, SharedGovernanceGateEngine
+        ev_input = evidence_snippet or (kwargs.get("evidence_spans")[0] if kwargs.get("evidence_spans") else None) or text_clean
+        shared_req = SharedGateRequest(
+            claim_text=text_clean,
+            subject=subj_clean,
+            predicate=pred_clean,
+            object_val=object_text,
+            evidence_quote=str(ev_input) if ev_input else None,
+            conditions=kwargs.get("conditions") or (metadata.get("conditions") if metadata else None),
+            exceptions=kwargs.get("exceptions") or (metadata.get("exceptions") if metadata else None),
+            claim_type=ct_clean,
+            status=st_clean,
+            confidence=confidence_or_trust,
+            document_text=kwargs.get("document_text"),
+            enclosing_clause=kwargs.get("enclosing_clause"),
+            table_header=kwargs.get("table_header") or (metadata.get("table_header") if metadata else None),
+            scope=kwargs.get("scope") or (metadata.get("scope") if metadata else None),
+            locators=kwargs.get("locators") or (metadata.get("locators") if metadata else None),
+            metadata=metadata,
+        )
+        shared_res = SharedGovernanceGateEngine.evaluate(shared_req)
+        reason_codes = list(shared_res.reason_codes)
 
         # ---------------------------------------------------------
         # 1. Gate: claim_type_allowed
@@ -521,7 +554,7 @@ class ClaimGateEvaluator:
                 text_lower,
             )
             or any(k in subj_lower for k in ("approval", "threshold", "returns without", "refund approval", "tier", "return window", "refund speed", "return shipping", "restocking fee", "processing", "warranty", "shipping"))
-            or any(k in pred_lower for k in ("requires_", "has_refund_", "has_stage_", "has_identity_", "has_posting_", "has_default_", "has_return_", "has_summary", "has_warranty_", "applies_to", "is_required"))
+            or any(k in pred_lower for k in ("requires_", "has_refund_", "has_stage_", "has_identity_", "has_posting_", "has_default_", "has_return_", "has_summary", "has_warranty_", "applies_to", "is_required", "has_refusal_refund_rule", "cannot_be_refunded_for_cash"))
         )
         content_role_clean = str((metadata.get("content_role") if metadata else None) or kwargs.get("content_role") or "").lower()
         is_non_rule_context = ct_clean in NON_RULE_CLAIM_TYPES or content_role_clean in {"definition", "contact_info", "example", "revision_history"}
@@ -594,6 +627,33 @@ class ClaimGateEvaluator:
             agent_acc = False
 
 
+        # Enforce shared gate contract verdicts
+        if not shared_res.predicate_normativity or not shared_res.table_column_binding:
+            is_predicate_valid = False
+            for r in shared_res.rejection_reasons:
+                if r not in reasons:
+                    reasons.append(r)
+        if not shared_res.spo_compatibility:
+            is_counterparty_resolved = False
+            for r in shared_res.rejection_reasons:
+                if r not in reasons:
+                    reasons.append(r)
+        if not shared_res.polarity_consistency:
+            is_text_integrity = False
+            for r in shared_res.rejection_reasons:
+                if r not in reasons:
+                    reasons.append(r)
+        if not shared_res.evidence_grounding or not shared_res.source_locator_validity:
+            is_span_exists = False
+            for r in shared_res.rejection_reasons:
+                if r not in reasons:
+                    reasons.append(r)
+        if not shared_res.condition_preservation or not shared_res.exception_preservation or not shared_res.scope_preservation or not shared_res.value_fidelity:
+            is_clause_entails_claim = False
+            for r in shared_res.rejection_reasons:
+                if r not in reasons:
+                    reasons.append(r)
+
         return GateEvaluationResult(
             span_exists=is_span_exists,
             clause_entails_claim=is_clause_entails_claim,
@@ -610,5 +670,6 @@ class ClaimGateEvaluator:
             is_canonical=is_canon,
             agent_accessible=agent_acc,
             rejection_reasons=reasons,
+            reason_codes=reason_codes,
             gates=gates,
         )

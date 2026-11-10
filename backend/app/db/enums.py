@@ -40,6 +40,8 @@ class ConflictStatus(str, Enum):
     HUMAN_REVIEW_REQUIRED = "human_review_required"
     RESOLVED = "resolved"
     DISMISSED = "dismissed"
+    UNRESOLVED_AMBIGUITY = "UNRESOLVED_AMBIGUITY"
+    UNRESOLVED_AMBIGUITY_LOWER = "unresolved_ambiguity"
 
 
 class ReviewDecision(str, Enum):

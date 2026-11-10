@@ -1,0 +1,122 @@
+[
+  {
+    "case_id": "EXP-01",
+    "prompt_condition_a": "Extract policy claims from the following text chunk. Output in JSON triplet format:\n{\"subject\": \"...\", \"predicate\": \"...\", \"object\": \"...\"}",
+    "prompt_condition_b": "Extract typed, evidence-bound claims from the structured evidence packet.\nPreserve exact 2D table grid column headers, parent context restrictions, explicit reference tokens, and condition clauses.\nDo not convert cross-references or timeline references into independent values.\nOutput in rich schema format.",
+    "author": "Antigravity Validation Engine (Phase 0 Diagnostic Harness)",
+    "authored_timestamp": "2026-11-10T07:45:00Z (Prior to implementation)",
+    "evaluation_method": "Exact semantic AST match against verified ground truth contract"
+  },
+  {
+    "case_id": "EXP-02",
+    "prompt_condition_a": "Extract policy claims from the following text chunk. Output in JSON triplet format:\n{\"subject\": \"...\", \"predicate\": \"...\", \"object\": \"...\"}",
+    "prompt_condition_b": "Extract typed, evidence-bound claims from the structured evidence packet.\nPreserve exact 2D table grid column headers, parent context restrictions, explicit reference tokens, and condition clauses.\nDo not convert cross-references or timeline references into independent values.\nOutput in rich schema format.",
+    "author": "Antigravity Validation Engine (Phase 0 Diagnostic Harness)",
+    "authored_timestamp": "2026-11-10T07:45:00Z (Prior to implementation)",
+    "evaluation_method": "Exact semantic AST match against verified ground truth contract"
+  },
+  {
+    "case_id": "EXP-03",
+    "prompt_condition_a": "Extract policy claims from the following text chunk. Output in JSON triplet format:\n{\"subject\": \"...\", \"predicate\": \"...\", \"object\": \"...\"}",
+    "prompt_condition_b": "Extract typed, evidence-bound claims from the structured evidence packet.\nPreserve exact 2D table grid column headers, parent context restrictions, explicit reference tokens, and condition clauses.\nDo not convert cross-references or timeline references into independent values.\nOutput in rich schema format.",
+    "author": "Antigravity Validation Engine (Phase 0 Diagnostic Harness)",
+    "authored_timestamp": "2026-11-10T07:45:00Z (Prior to implementation)",
+    "evaluation_method": "Exact semantic AST match against verified ground truth contract"
+  },
+  {
+    "case_id": "EXP-04",
+    "prompt_condition_a": "Extract policy claims from the following text chunk. Output in JSON triplet format:\n{\"subject\": \"...\", \"predicate\": \"...\", \"object\": \"...\"}",
+    "prompt_condition_b": "Extract typed, evidence-bound claims from the structured evidence packet.\nPreserve exact 2D table grid column headers, parent context restrictions, explicit reference tokens, and condition clauses.\nDo not convert cross-references or timeline references into independent values.\nOutput in rich schema format.",
+    "author": "Antigravity Validation Engine (Phase 0 Diagnostic Harness)",
+    "authored_timestamp": "2026-11-10T07:45:00Z (Prior to implementation)",
+    "evaluation_method": "Exact semantic AST match against verified ground truth contract"
+  },
+  {
+    "case_id": "EXP-05",
+    "prompt_condition_a": "Extract policy claims from the following text chunk. Output in JSON triplet format:\n{\"subject\": \"...\", \"predicate\": \"...\", \"object\": \"...\"}",
+    "prompt_condition_b": "Extract typed, evidence-bound claims from the structured evidence packet.\nPreserve exact 2D table grid column headers, parent context restrictions, explicit reference tokens, and condition clauses.\nDo not convert cross-references or timeline references into independent values.\nOutput in rich schema format.",
+    "author": "Antigravity Validation Engine (Phase 0 Diagnostic Harness)",
+    "authored_timestamp": "2026-11-10T07:45:00Z (Prior to implementation)",
+    "evaluation_method": "Exact semantic AST match against verified ground truth contract"
+  },
+  {
+    "case_id": "EXP-06",
+    "prompt_condition_a": "Extract policy claims from the following text chunk. Output in JSON triplet format:\n{\"subject\": \"...\", \"predicate\": \"...\", \"object\": \"...\"}",
+    "prompt_condition_b": "Extract typed, evidence-bound claims from the structured evidence packet.\nPreserve exact 2D table grid column headers, parent context restrictions, explicit reference tokens, and condition clauses.\nDo not convert cross-references or timeline references into independent values.\nOutput in rich schema format.",
+    "author": "Antigravity Validation Engine (Phase 0 Diagnostic Harness)",
+    "authored_timestamp": "2026-11-10T07:45:00Z (Prior to implementation)",
+    "evaluation_method": "Exact semantic AST match against verified ground truth contract"
+  },
+  {
+    "case_id": "EXP-07",
+    "prompt_condition_a": "Extract policy claims from the following text chunk. Output in JSON triplet format:\n{\"subject\": \"...\", \"predicate\": \"...\", \"object\": \"...\"}",
+    "prompt_condition_b": "Extract typed, evidence-bound claims from the structured evidence packet.\nPreserve exact 2D table grid column headers, parent context restrictions, explicit reference tokens, and condition clauses.\nDo not convert cross-references or timeline references into independent values.\nOutput in rich schema format.",
+    "author": "Antigravity Validation Engine (Phase 0 Diagnostic Harness)",
+    "authored_timestamp": "2026-11-10T07:45:00Z (Prior to implementation)",
+    "evaluation_method": "Exact semantic AST match against verified ground truth contract"
+  },
+  {
+    "case_id": "EXP-08",
+    "prompt_condition_a": "Extract policy claims from the following text chunk. Output in JSON triplet format:\n{\"subject\": \"...\", \"predicate\": \"...\", \"object\": \"...\"}",
+    "prompt_condition_b": "Extract typed, evidence-bound claims from the structured evidence packet.\nPreserve exact 2D table grid column headers, parent context restrictions, explicit reference tokens, and condition clauses.\nDo not convert cross-references or timeline references into independent values.\nOutput in rich schema format.",
+    "author": "Antigravity Validation Engine (Phase 0 Diagnostic Harness)",
+    "authored_timestamp": "2026-11-10T07:45:00Z (Prior to implementation)",
+    "evaluation_method": "Exact semantic AST match against verified ground truth contract"
+  },
+  {
+    "case_id": "EXP-09",
+    "prompt_condition_a": "Extract policy claims from the following text chunk. Output in JSON triplet format:\n{\"subject\": \"...\", \"predicate\": \"...\", \"object\": \"...\"}",
+    "prompt_condition_b": "Extract typed, evidence-bound claims from the structured evidence packet.\nPreserve exact 2D table grid column headers, parent context restrictions, explicit reference tokens, and condition clauses.\nDo not convert cross-references or timeline references into independent values.\nOutput in rich schema format.",
+    "author": "Antigravity Validation Engine (Phase 0 Diagnostic Harness)",
+    "authored_timestamp": "2026-11-10T07:45:00Z (Prior to implementation)",
+    "evaluation_method": "Exact semantic AST match against verified ground truth contract"
+  },
+  {
+    "case_id": "EXP-10",
+    "prompt_condition_a": "Extract policy claims from the following text chunk. Output in JSON triplet format:\n{\"subject\": \"...\", \"predicate\": \"...\", \"object\": \"...\"}",
+    "prompt_condition_b": "Extract typed, evidence-bound claims from the structured evidence packet.\nPreserve exact 2D table grid column headers, parent context restrictions, explicit reference tokens, and condition clauses.\nDo not convert cross-references or timeline references into independent values.\nOutput in rich schema format.",
+    "author": "Antigravity Validation Engine (Phase 0 Diagnostic Harness)",
+    "authored_timestamp": "2026-11-10T07:45:00Z (Prior to implementation)",
+    "evaluation_method": "Exact semantic AST match against verified ground truth contract"
+  },
+  {
+    "case_id": "EXP-11",
+    "prompt_condition_a": "Extract policy claims from the following text chunk. Output in JSON triplet format:\n{\"subject\": \"...\", \"predicate\": \"...\", \"object\": \"...\"}",
+    "prompt_condition_b": "Extract typed, evidence-bound claims from the structured evidence packet.\nPreserve exact 2D table grid column headers, parent context restrictions, explicit reference tokens, and condition clauses.\nDo not convert cross-references or timeline references into independent values.\nOutput in rich schema format.",
+    "author": "Antigravity Validation Engine (Phase 0 Diagnostic Harness)",
+    "authored_timestamp": "2026-11-10T07:45:00Z (Prior to implementation)",
+    "evaluation_method": "Exact semantic AST match against verified ground truth contract"
+  },
+  {
+    "case_id": "EXP-12",
+    "prompt_condition_a": "Extract policy claims from the following text chunk. Output in JSON triplet format:\n{\"subject\": \"...\", \"predicate\": \"...\", \"object\": \"...\"}",
+    "prompt_condition_b": "Extract typed, evidence-bound claims from the structured evidence packet.\nPreserve exact 2D table grid column headers, parent context restrictions, explicit reference tokens, and condition clauses.\nDo not convert cross-references or timeline references into independent values.\nOutput in rich schema format.",
+    "author": "Antigravity Validation Engine (Phase 0 Diagnostic Harness)",
+    "authored_timestamp": "2026-11-10T07:45:00Z (Prior to implementation)",
+    "evaluation_method": "Exact semantic AST match against verified ground truth contract"
+  },
+  {
+    "case_id": "EXP-13",
+    "prompt_condition_a": "Extract policy claims from the following text chunk. Output in JSON triplet format:\n{\"subject\": \"...\", \"predicate\": \"...\", \"object\": \"...\"}",
+    "prompt_condition_b": "Extract typed, evidence-bound claims from the structured evidence packet.\nPreserve exact 2D table grid column headers, parent context restrictions, explicit reference tokens, and condition clauses.\nDo not convert cross-references or timeline references into independent values.\nOutput in rich schema format.",
+    "author": "Antigravity Validation Engine (Phase 0 Diagnostic Harness)",
+    "authored_timestamp": "2026-11-10T07:45:00Z (Prior to implementation)",
+    "evaluation_method": "Exact semantic AST match against verified ground truth contract"
+  },
+  {
+    "case_id": "EXP-14",
+    "prompt_condition_a": "Extract policy claims from the following text chunk. Output in JSON triplet format:\n{\"subject\": \"...\", \"predicate\": \"...\", \"object\": \"...\"}",
+    "prompt_condition_b": "Extract typed, evidence-bound claims from the structured evidence packet.\nPreserve exact 2D table grid column headers, parent context restrictions, explicit reference tokens, and condition clauses.\nDo not convert cross-references or timeline references into independent values.\nOutput in rich schema format.",
+    "author": "Antigravity Validation Engine (Phase 0 Diagnostic Harness)",
+    "authored_timestamp": "2026-11-10T07:45:00Z (Prior to implementation)",
+    "evaluation_method": "Exact semantic AST match against verified ground truth contract"
+  },
+  {
+    "case_id": "EXP-15",
+    "prompt_condition_a": "Extract policy claims from the following text chunk. Output in JSON triplet format:\n{\"subject\": \"...\", \"predicate\": \"...\", \"object\": \"...\"}",
+    "prompt_condition_b": "Extract typed, evidence-bound claims from the structured evidence packet.\nPreserve exact 2D table grid column headers, parent context restrictions, explicit reference tokens, and condition clauses.\nDo not convert cross-references or timeline references into independent values.\nOutput in rich schema format.",
+    "author": "Antigravity Validation Engine (Phase 0 Diagnostic Harness)",
+    "authored_timestamp": "2026-11-10T07:45:00Z (Prior to implementation)",
+    "evaluation_method": "Exact semantic AST match against verified ground truth contract"
+  }
+]
