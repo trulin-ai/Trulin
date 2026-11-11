@@ -31,7 +31,7 @@ logger = logging.getLogger(__name__)
 
 def _generate_deterministic_claim_uuid(doc_version_id: uuid.UUID, candidate: CandidateClaim) -> uuid.UUID:
     """Generates a reproducible UUID from document version and candidate claim identity to enable idempotent upserts."""
-    seed = f"{doc_version_id}:{(candidate.subject or '').strip().lower()}:{(candidate.predicate or '').strip().lower()}:{(candidate.claim_text or '').strip().lower()}"
+    seed = f"{doc_version_id}:{(candidate.subject or '').strip().lower()}:{(candidate.predicate or '').strip().lower()}:{(candidate.object or '').strip().lower()}:{(candidate.claim_text or '').strip().lower()}"
     return uuid.uuid5(uuid.NAMESPACE_URL, seed)
 
 

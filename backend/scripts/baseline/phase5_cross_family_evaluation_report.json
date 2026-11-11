@@ -1,6 +1,6 @@
 {
   "pipeline_status": "PASS",
-  "timestamp": "2026-11-10T16:57:53.370489+00:00",
+  "timestamp": "2026-11-11T02:33:13.332755+00:00",
   "contamination_audit": {
     "status": "PASS",
     "cross_family_document_isolation": true,
@@ -12,7 +12,7 @@
   },
   "family_evaluations": {
     "all_family_targets_passed": true,
-    "timestamp": "2026-11-10T16:57:53.369410+00:00",
+    "timestamp": "2026-11-11T02:33:13.328754+00:00",
     "scorecards": [
       {
         "family_id": "FAM-1",

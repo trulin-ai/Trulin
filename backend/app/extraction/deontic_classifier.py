@@ -584,6 +584,39 @@ class DeonticClassifier:
             modality = "POLICY_FACT"
             modal_op = "requires"
             claim_text = f"{subject} requires approval role: {clean_val}."
+        elif key_lower in ("summary", "overview", "quick_reference", "policy_summary"):
+            cond_list = [f"Table Column: {clean_rule_key}"] + list(conditions or [])
+            modality = "POLICY_FACT"
+            modal_op = "specifies"
+            if "return window" in subj_lower:
+                predicate = "has_return_window"
+                claim_text = f"{subject} has a return window of {clean_val}."
+            elif "refund speed" in subj_lower or "speed" in subj_lower:
+                predicate = "has_refund_processing_duration"
+                claim_text = f"{subject} processing duration: {clean_val}."
+            elif "return shipping" in subj_lower or "shipping" in subj_lower:
+                predicate = "has_return_shipping_rule"
+                claim_text = f"{subject} rule: {clean_val}."
+            elif "restocking fee" in subj_lower or "fee" in subj_lower:
+                predicate = "has_fee_rule"
+                claim_text = f"{subject} specifies fee rule: {clean_val}."
+            elif "final sale" in subj_lower:
+                predicate = "cannot_be_returned_or_refunded"
+                claim_text = f"{subject} cannot be returned or refunded: {clean_val}."
+            else:
+                slug = re.sub(r"[^a-zA-Z0-9]+", "_", subj_lower).strip("_")
+                predicate = f"specifies_{slug}_rule" if slug else "has_policy_specification"
+                claim_text = f"{subject} specifies {clean_val}."
+            return {
+                "claim_text": claim_text,
+                "subject": subject,
+                "predicate": predicate,
+                "object": clean_val,
+                "modality": modality,
+                "modal_operator": modal_op,
+                "conditions": cond_list,
+                "qualifiers": active_qualifiers,
+            }
         else:
             slug = re.sub(r"[^a-zA-Z0-9]+", "_", key_lower).strip("_")
             predicate = f"has_{slug}" if slug else "has_table_attribute"
