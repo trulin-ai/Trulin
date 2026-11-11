@@ -136,11 +136,12 @@ class UnifiedExtractionPipeline:
                 raw_bytes = content_text.encode("utf-8")
         else:
             effective_bytes = raw_bytes or b""
-            content_text = UniversalFileParser.parse_file(
+            parsed_doc = UniversalFileParser.parse_file(
                 filename=filename,
                 raw_bytes=effective_bytes,
                 doc_title=doc_title,
             )
+            content_text = parsed_doc.full_text if hasattr(parsed_doc, "full_text") else str(parsed_doc)
             if raw_bytes is None:
                 raw_bytes = effective_bytes
 
@@ -158,7 +159,10 @@ class UnifiedExtractionPipeline:
 
         # Step 3: Structured Parsing (Layer 4)
         fmt_lower = (filename.rsplit(".", 1)[-1] if "." in filename else "txt").lower()
-        if fmt_lower in ("csv", "json", "xlsx", "sql"):
+        if fmt_lower in ("xlsx", "xls"):
+            from app.ingestion.parsers.xlsx_parser import XlsxAdapter
+            evidence_result = await XlsxAdapter.parse_to_evidence(canonical_env)
+        elif fmt_lower in ("csv", "json", "sql"):
             evidence_result = await StructuredDataParser.parse(canonical_env)
         else:
             evidence_result = await DocumentParser.parse(canonical_env)

@@ -645,88 +645,23 @@ class UniversalFileParser:
     def _parse_xlsx_structured(
         cls, raw_bytes: bytes, title: str, filename: str
     ) -> Tuple[str, List[DocumentPage], List[ContentBlock], List[Dict[str, Any]], List[str]]:
-        blocks: List[ContentBlock] = []
-        tables: List[Dict[str, Any]] = []
-        warnings: List[str] = []
-        sheets_output: List[str] = []
-
+        """Parses XLSX spreadsheets using specialized XlsxAdapter with multi-sheet and merged-cell resolution."""
         try:
-            import openpyxl
-            from datetime import date, datetime
-
-            wb = openpyxl.load_workbook(io.BytesIO(raw_bytes), data_only=True)
-            for sheet_idx, ws in enumerate(wb.worksheets, start=1):
-                sheet_name = ws.title or f"Sheet_{sheet_idx}"
-                sheet_rows: List[List[str]] = []
-                sheet_headers: List[str] = []
-
-                for r_idx, row in enumerate(ws.iter_rows(values_only=False), start=1):
-                    row_vals: List[str] = []
-                    for cell in row:
-                        val = cell.value
-                        if val is None:
-                            row_vals.append("")
-                        elif isinstance(val, (datetime, date)):
-                            row_vals.append(val.isoformat())
-                        else:
-                            row_vals.append(str(val).strip())
-
-                    # Skip completely blank lines
-                    if not any(v for v in row_vals):
-                        continue
-
-                    if not sheet_headers:
-                        sheet_headers = row_vals
-                    else:
-                        # Normalize row width to header width
-                        if len(row_vals) < len(sheet_headers):
-                            row_vals.extend([""] * (len(sheet_headers) - len(row_vals)))
-                        row_vals = row_vals[:len(sheet_headers)]
-
-                    sheet_rows.append(row_vals)
-
-                if sheet_rows:
-                    col_cnt = len(sheet_headers) or len(sheet_rows[0])
-                    formatted_rows = ["| " + " | ".join(r) + " |" for r in sheet_rows]
-                    if len(formatted_rows) >= 1:
-                        sep_line = "| " + " | ".join(["---"] * col_cnt) + " |"
-                        formatted_rows.insert(1, sep_line)
-
-                    sheet_md = f"## Sheet: {sheet_name}\n\n" + "\n".join(formatted_rows)
-                    sheets_output.append(sheet_md)
-
-                    t_data = {
-                        "sheet_name": sheet_name,
-                        "headers": sheet_headers,
-                        "rows": sheet_rows,
-                        "row_count": len(sheet_rows),
-                        "col_count": col_cnt,
-                    }
-                    tables.append(t_data)
-                    blocks.append(ContentBlock(
-                        id=f"blk_xlsx_sheet_{sheet_idx}",
-                        block_type=ContentBlockType.TABLE,
-                        text=sheet_md,
-                        raw_text=sheet_md,
-                        table_data=t_data,
-                    ))
-
-            full_text = f"# {title}\n\n" + "\n\n".join(sheets_output) if sheets_output else ""
-            if full_text:
-                return full_text, [], blocks, tables, warnings
+            from app.ingestion.parsers.xlsx_parser import XlsxAdapter
+            return XlsxAdapter.parse_to_structured(raw_bytes, title, filename)
         except Exception as e:
-            warnings.append(f"openpyxl parser error: {str(e)}; attempting zip fallback")
-
-        # Fallback to XML zipfile extraction if openpyxl encountered an anomaly
-        full_text = cls._parse_xlsx(raw_bytes, title, filename)
-        if full_text:
-            blocks.append(ContentBlock(
-                id="blk_xlsx_fallback",
-                block_type=ContentBlockType.TABLE,
-                text=full_text,
-                raw_text=full_text,
-            ))
-        return full_text, [], blocks, tables, warnings
+            logger.warning("XlsxAdapter parsing error for %s: %s; attempting zip fallback", filename, e)
+            warnings = [f"XlsxAdapter parser error: {str(e)}"]
+            full_text = cls._parse_xlsx(raw_bytes, title, filename)
+            blocks = []
+            if full_text:
+                blocks.append(ContentBlock(
+                    id="blk_xlsx_fallback",
+                    block_type=ContentBlockType.TABLE,
+                    text=full_text,
+                    raw_text=full_text,
+                ))
+            return full_text, [], blocks, [], warnings
 
     @classmethod
     def _parse_pdf(cls, raw_bytes: bytes, title: str, filename: str) -> str:
@@ -740,51 +675,8 @@ class UniversalFileParser:
 
     @classmethod
     def _parse_xlsx(cls, raw_bytes: bytes, title: str, filename: str) -> str:
-        try:
-            with zipfile.ZipFile(io.BytesIO(raw_bytes)) as zf:
-                shared_strings = []
-                if "xl/sharedStrings.xml" in zf.namelist():
-                    ss_tree = ET.fromstring(zf.read("xl/sharedStrings.xml"))
-                    ns = {"main": "http://schemas.openxmlformats.org/spreadsheetml/2006/main"}
-                    for si in ss_tree.findall(".//main:si", ns):
-                        t_nodes = [t.text for t in si.findall(".//main:t", ns) if t.text]
-                        shared_strings.append("".join(t_nodes))
-
-                sheet_files = sorted([f for f in zf.namelist() if f.startswith("xl/worksheets/sheet") and f.endswith(".xml")])
-                sheets_output = []
-
-                for idx, sheet_file in enumerate(sheet_files, start=1):
-                    sheet_tree = ET.fromstring(zf.read(sheet_file))
-                    ns = {"main": "http://schemas.openxmlformats.org/spreadsheetml/2006/main"}
-                    rows_data = []
-
-                    for row in sheet_tree.findall(".//main:row", ns):
-                        row_vals = []
-                        for cell in row.findall(".//main:c", ns):
-                            cell_type = cell.get("t")
-                            v_node = cell.find("main:v", ns)
-                            if v_node is not None and v_node.text:
-                                val = v_node.text
-                                if cell_type == "s" and val.isdigit():
-                                    idx_val = int(val)
-                                    val = shared_strings[idx_val] if idx_val < len(shared_strings) else val
-                                row_vals.append(val.strip())
-                            else:
-                                t_node = cell.find("main:is/main:t", ns)
-                                if t_node is not None and t_node.text:
-                                    row_vals.append(t_node.text.strip())
-                        if row_vals and any(row_vals):
-                            rows_data.append("| " + " | ".join(row_vals) + " |")
-
-                    if rows_data:
-                        sheets_output.append(f"## Sheet {idx}\n\n" + "\n".join(rows_data))
-
-                if sheets_output:
-                    return f"# {title}\n\n" + "\n\n".join(sheets_output)
-        except Exception:
-            pass
-
-        return cls._parse_plain_text(raw_bytes, title, filename)
+        text, _, _, _, _ = cls._parse_xlsx_structured(raw_bytes, title, filename)
+        return text
 
     @classmethod
     def _parse_pptx(cls, raw_bytes: bytes, title: str, filename: str) -> str:

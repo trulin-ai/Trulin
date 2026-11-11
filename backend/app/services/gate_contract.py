@@ -304,7 +304,7 @@ class SharedGovernanceGateEngine:
         else:
             # Check physical document presence if document_text is provided
             if req.document_text is not None:
-                doc_clean = " ".join(req.document_text.split())
+                doc_clean = " ".join(req.document_text.split()).replace("|", " ")
                 ev_clean = " ".join(evidence_str.split()).replace("|", " ").replace("\x7f", " ")
                 ev_tokens = ev_clean.split()
                 if not ev_tokens:
@@ -313,7 +313,7 @@ class SharedGovernanceGateEngine:
                     codes.append(GateFailureCode.ERR_EVIDENCE_MISSING.value)
                 else:
                     pat = r"\s+".join([re.escape(t) for t in ev_tokens])
-                    if not re.search(pat, req.document_text, re.IGNORECASE):
+                    if not re.search(pat, req.document_text, re.IGNORECASE) and not re.search(pat, doc_clean, re.IGNORECASE):
                         res.evidence_grounding = False
                         reasons.append(f"Evidence grounding failure: Asserted span '{evidence_str[:60]}' not found in source document text.")
                         codes.append(GateFailureCode.ERR_EVIDENCE_FABRICATED.value)

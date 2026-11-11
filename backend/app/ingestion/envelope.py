@@ -220,7 +220,7 @@ class EnvelopeFactory:
             },
             access_scope=access_scope or {"upload_channel": "manual_file_upload"},
             raw_payload=parsed_content or raw_bytes,
-            metadata={"filename": filename, "file_size": len(raw_bytes)},
+            metadata={"filename": filename, "file_size": len(raw_bytes), "raw_bytes": raw_bytes},
             is_deleted=False,
             captured_at=datetime.now(timezone.utc),
         )
