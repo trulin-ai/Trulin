@@ -306,6 +306,8 @@ class UniversalFileParser:
             file_type = "rtf"
         elif lower_name.endswith((".md", ".markdown")):
             file_type = "markdown"
+        elif lower_name.endswith((".png", ".jpg", ".jpeg", ".tiff", ".tif", ".webp", ".bmp")):
+            file_type = "image"
         elif lower_name.endswith((".yaml", ".yml", ".toml", ".ini", ".conf", ".sql", ".log", ".env")):
             file_type = "code_or_config"
 
@@ -330,6 +332,11 @@ class UniversalFileParser:
                 full_text, pages, blocks, tables, warnings = cls._parse_xlsx_structured(
                     raw_bytes, title, filename
                 )
+            elif file_type == "image":
+                full_text, pages, blocks, warnings = cls._parse_image_structured(
+                    raw_bytes, title, filename
+                )
+                is_scanned = True
             elif file_type in ("csv", "tsv"):
                 delimiter = "\t" if file_type == "tsv" else None
                 full_text = cls._parse_csv(raw_bytes, title, delimiter=delimiter)
@@ -506,7 +513,11 @@ class UniversalFileParser:
                                 # Compare extraction quality before overwriting:
                                 # Overwrite ONLY if digital text was sparse (<40 chars) and OCR confidence is solid,
                                 # to avoid replacing valid digital text with noisy OCR.
-                                if char_count < 40 and len(ocr_repaired) >= 20 and ocr_confidence >= 0.45:
+                                from app.ingestion.parsers.ocr_adapter import OcrAdapter
+                                is_suppressed, dup_reason = OcrAdapter.prevent_duplicate_text(clean_page_text, ocr_repaired)
+                                if is_suppressed and char_count >= 40:
+                                    warnings.append(f"Page {page_num}: {dup_reason}; OCR bypassed to protect fidelity.")
+                                elif (char_count < 40 and len(ocr_repaired) >= 20 and ocr_confidence >= 0.45) or (char_count == 0 and len(ocr_repaired) > 0):
                                     clean_page_text = ocr_repaired
                                     total_chars = total_chars - char_count + len(clean_page_text)
                                     char_count = len(clean_page_text)
@@ -676,6 +687,24 @@ class UniversalFileParser:
     @classmethod
     def _parse_xlsx(cls, raw_bytes: bytes, title: str, filename: str) -> str:
         text, _, _, _, _ = cls._parse_xlsx_structured(raw_bytes, title, filename)
+        return text
+
+    @classmethod
+    def _parse_image_structured(
+        cls, raw_bytes: bytes, title: str, filename: str
+    ) -> Tuple[str, List[DocumentPage], List[ContentBlock], List[str]]:
+        """Parses standalone image files using OcrAdapter preserving bounding box coordinates and confidence."""
+        try:
+            from app.ingestion.parsers.ocr_adapter import OcrAdapter
+            return OcrAdapter.parse_image_to_structured(raw_bytes, title, filename)
+        except Exception as e:
+            logger.warning("OcrAdapter image parsing error for %s: %s", filename, e)
+            warnings = [f"OCR adapter error: {str(e)}"]
+            return "", [], [], warnings
+
+    @classmethod
+    def _parse_image(cls, raw_bytes: bytes, title: str, filename: str) -> str:
+        text, _, _, _ = cls._parse_image_structured(raw_bytes, title, filename)
         return text
 
     @classmethod

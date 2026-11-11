@@ -122,8 +122,8 @@ class CandidateDiscoveryEngine:
             if any("\u4e00" <= ch <= "\u9fff" for ch in text) and any(m in text for m in ("\u4e0d\u5f97", "\u5e94\u5f53", "\u5fc5\u987b", "\u5e94", "\u6709\u6743", "\u53ef\u4ee5")):
                 return True, ExtractionStrategyType.DOMAIN_RULES, "Chinese contract deontic policy assertion."
 
-        # 6. Document Clauses, Paragraphs, List Items, and Definitions
-        if b_type in ("clause", "paragraph", "list_item", "bullet", "definition") or unit.structure_type in ("list_item", "definition"):
+        # 6. Document Clauses, Paragraphs, List Items, Definitions, and Image OCR Units
+        if b_type in ("clause", "paragraph", "list_item", "bullet", "definition", "image_ocr") or unit.structure_type in ("list_item", "definition", "image_ocr"):
             from app.extraction.deontic_classifier import DeonticClassifier
             from app.ingestion.parsers.evidence_model import ContentRole
 

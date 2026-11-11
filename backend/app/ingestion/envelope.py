@@ -184,6 +184,13 @@ class EnvelopeFactory:
             "html": "html",
             "yaml": "yaml",
             "yml": "yaml",
+            "png": "image",
+            "jpg": "image",
+            "jpeg": "image",
+            "tiff": "image",
+            "tif": "image",
+            "webp": "image",
+            "bmp": "image",
         }
         native_format = native_format_map.get(ext, ext)
 

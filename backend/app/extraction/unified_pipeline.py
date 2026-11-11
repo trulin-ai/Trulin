@@ -162,6 +162,9 @@ class UnifiedExtractionPipeline:
         if fmt_lower in ("xlsx", "xls"):
             from app.ingestion.parsers.xlsx_parser import XlsxAdapter
             evidence_result = await XlsxAdapter.parse_to_evidence(canonical_env)
+        elif fmt_lower in ("png", "jpg", "jpeg", "tiff", "tif", "webp", "bmp"):
+            from app.ingestion.parsers.ocr_adapter import OcrAdapter
+            evidence_result = await OcrAdapter.parse_to_evidence(canonical_env)
         elif fmt_lower in ("csv", "json", "sql"):
             evidence_result = await StructuredDataParser.parse(canonical_env)
         else:
@@ -201,7 +204,7 @@ class UnifiedExtractionPipeline:
 
         deduped_candidates = list(seen_keys.values())
 
-        # Step 6: Universal 10-Gate Governance & Certification Gate (Layer 6)
+        # Step 6: 8 Universal Gate Contract Families & Certification Gate (Layer 6)
         evaluations: List[CandidateGateEvaluation] = []
         candidates_map: Dict[str, CandidateClaim] = {}
         seen_signatures: Set[str] = set()
@@ -312,6 +315,16 @@ class UnifiedExtractionPipeline:
             if gate_res.is_canonical:
                 sig = UniversalGateEvaluator.compute_semantic_signature(clean_subj, clean_pred, clean_obj)
                 seen_signatures.add(sig)
+
+            # Deliverable 3: OCR Low-confidence flagging routed to review
+            is_low_conf_ocr = (
+                cand.locator.get("is_low_confidence")
+                or (cand.structured_values and cand.structured_values.get("is_low_confidence"))
+            )
+            if is_low_conf_ocr and gate_res.certification_tier == "AUTOMATED_CERTIFIED":
+                gate_res.certification_tier = "REVIEW_REQUIRED"
+                gate_res.all_gates_passed = False
+                gate_res.rejection_reasons.append("OCR low-confidence threshold violation: Requires human verification.")
 
             tier = gate_res.certification_tier
             if tier == "AUTOMATED_CERTIFIED":
