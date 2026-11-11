@@ -129,7 +129,7 @@ class DeterministicSchemaExtractor:
 
         # 3. Structured Table Matrix Row
         elif b_type == "table_row":
-            cols = s_data.get("columns", {})
+            cols = s_data.get("columns") or getattr(unit, "cells", None) or {}
             is_ambiguous = s_data.get("is_ambiguous", False)
             ambiguity_reason = s_data.get("ambiguity_reason")
 

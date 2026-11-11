@@ -70,7 +70,7 @@ class CandidateDiscoveryEngine:
         # 4. Structured Table Rows -> Table-Aware Extraction
         if b_type == "table_row":
             table_type = s_data.get("table_type")
-            cols = s_data.get("columns", {})
+            cols = s_data.get("columns") or getattr(unit, "cells", None) or {}
             col_keys_lower = [str(k).lower().strip() for k in cols.keys()]
 
             # Filter 4A: Revision History metadata (routed to document provenance)

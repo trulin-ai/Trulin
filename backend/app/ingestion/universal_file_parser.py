@@ -129,6 +129,7 @@ class ContentBlockType(str, Enum):
     HEADER_FOOTER = "header_footer"
     IMAGE_OCR = "image_ocr"
     CODE_OR_CONFIG = "code_or_config"
+    CODE_BLOCK = "code_block"
     UNKNOWN = "unknown"
 
 
@@ -139,6 +140,7 @@ class ContentBlock(BaseModel):
     raw_text: str = ""
     page_number: Optional[int] = None
     section_heading: Optional[str] = None
+    heading_path: List[str] = Field(default_factory=list)
     table_data: Optional[Dict[str, Any]] = None  # {"headers": [...], "rows": [[...]], "row_dicts": [...]}
     start_char_offset: int = 0
     end_char_offset: int = 0
@@ -338,14 +340,10 @@ class UniversalFileParser:
                 )
                 is_scanned = True
             elif file_type in ("csv", "tsv"):
-                delimiter = "\t" if file_type == "tsv" else None
-                full_text = cls._parse_csv(raw_bytes, title, delimiter=delimiter)
-                blocks.append(ContentBlock(
-                    id="blk_csv_1",
-                    block_type=ContentBlockType.TABLE,
-                    text=full_text,
-                    raw_text=full_text,
-                ))
+                full_text, pages, blocks, tables, w_csv = cls._parse_csv_structured(
+                    raw_bytes, title, filename
+                )
+                warnings.extend(w_csv)
             elif file_type == "json":
                 full_text = cls._parse_json(raw_bytes, title, is_jsonl=lower_name.endswith(".jsonl"))
                 blocks.append(ContentBlock(
@@ -355,13 +353,10 @@ class UniversalFileParser:
                     raw_text=full_text,
                 ))
             elif file_type in ("html", "xhtml"):
-                full_text = cls._parse_html(raw_bytes, title)
-                blocks.append(ContentBlock(
-                    id="blk_html_1",
-                    block_type=ContentBlockType.PARAGRAPH,
-                    text=full_text,
-                    raw_text=full_text,
-                ))
+                full_text, pages, blocks, tables, w_html = cls._parse_html_structured(
+                    raw_bytes, title, filename
+                )
+                warnings.extend(w_html)
             elif file_type == "xml":
                 full_text = cls._parse_xml(raw_bytes, title)
                 blocks.append(ContentBlock(
@@ -379,7 +374,8 @@ class UniversalFileParser:
                     raw_text=full_text,
                 ))
             elif file_type == "markdown":
-                full_text, pages, blocks = cls._parse_markdown_structured(raw_bytes, title, filename)
+                full_text, pages, blocks, tables, w_md = cls._parse_markdown_structured(raw_bytes, title, filename)
+                warnings.extend(w_md)
             elif file_type == "code_or_config":
                 ext = lower_name.rsplit(".", 1)[-1]
                 full_text = cls._parse_code_or_config(raw_bytes, title, ext)
@@ -815,92 +811,43 @@ class UniversalFileParser:
     @classmethod
     def _parse_markdown_structured(
         cls, raw_bytes: bytes, title: str, filename: str
-    ) -> Tuple[str, List[DocumentPage], List[ContentBlock]]:
-        for enc in ("utf-8", "utf-8-sig", "latin-1", "cp1252"):
-            try:
-                text = raw_bytes.decode(enc)
-                break
-            except UnicodeDecodeError:
-                continue
-        else:
-            text = raw_bytes.decode("utf-8", errors="replace")
+    ) -> Tuple[str, List[DocumentPage], List[ContentBlock], List[Dict[str, Any]], List[str]]:
+        """Parses Markdown documents using specialized MarkdownAdapter with headings, nested lists, and pipe tables."""
+        try:
+            from app.ingestion.parsers.markdown_adapter import MarkdownAdapter
+            return MarkdownAdapter.parse_to_structured(raw_bytes, title, filename)
+        except Exception as e:
+            logger.warning("MarkdownAdapter parsing error for %s: %s", filename, e)
+            return "", [], [], [], [f"Markdown parser error: {str(e)}"]
 
-        lines = text.splitlines()
-        blocks: List[ContentBlock] = []
-        current_hier: List[str] = [title]
-        current_para: List[str] = []
-        b_idx = 1
+    @classmethod
+    def _parse_html_structured(
+        cls, raw_bytes: bytes, title: str, filename: str
+    ) -> Tuple[str, List[DocumentPage], List[ContentBlock], List[Dict[str, Any]], List[str]]:
+        """Parses HTML documents using specialized HtmlAdapter with semantic DOM element preservation."""
+        try:
+            from app.ingestion.parsers.html_adapter import HtmlAdapter
+            return HtmlAdapter.parse_to_structured(raw_bytes, title, filename)
+        except Exception as e:
+            logger.warning("HtmlAdapter parsing error for %s: %s", filename, e)
+            return "", [], [], [], [f"HTML parser error: {str(e)}"]
 
-        def flush_para():
-            nonlocal b_idx
-            if current_para:
-                para_text = " ".join(current_para).strip()
-                if para_text:
-                    blocks.append(ContentBlock(
-                        id=f"blk_md_{b_idx}",
-                        block_type=ContentBlockType.PARAGRAPH,
-                        text=para_text,
-                        raw_text=para_text,
-                        heading_path=list(current_hier),
-                        page_number=1,
-                    ))
-                    b_idx += 1
-                current_para.clear()
+    @classmethod
+    def _parse_csv_structured(
+        cls, raw_bytes: bytes, title: str, filename: str
+    ) -> Tuple[str, List[DocumentPage], List[ContentBlock], List[Dict[str, Any]], List[str]]:
+        """Parses CSV/TSV spreadsheets using specialized CsvAdapter with delimiter detection and table rows."""
+        try:
+            from app.ingestion.parsers.csv_adapter import CsvAdapter
+            return CsvAdapter.parse_to_structured(raw_bytes, title, filename)
+        except Exception as e:
+            logger.warning("CsvAdapter parsing error for %s: %s", filename, e)
+            return "", [], [], [], [f"CSV parser error: {str(e)}"]
 
-        in_yaml_frontmatter = False
-        if lines and lines[0].strip() == "---":
-            in_yaml_frontmatter = True
-            lines = lines[1:]
-
-        for line in lines:
-            if in_yaml_frontmatter:
-                if line.strip() == "---":
-                    in_yaml_frontmatter = False
-                continue
-
-            stripped = line.strip()
-            if not stripped:
-                flush_para()
-                continue
-
-            # Heading check
-            heading_m = re.match(r"^(#{1,6})\s+(.*)$", stripped)
-            if heading_m:
-                flush_para()
-                level = len(heading_m.group(1))
-                h_text = heading_m.group(2).strip()
-                current_hier = current_hier[:level] + [h_text]
-                blocks.append(ContentBlock(
-                    id=f"blk_md_{b_idx}",
-                    block_type=ContentBlockType.HEADING,
-                    text=h_text,
-                    raw_text=line,
-                    heading_path=list(current_hier),
-                    page_number=1,
-                ))
-                b_idx += 1
-                continue
-
-            # List items or quote notes
-            if re.match(r"^(?:>\s*\[!NOTE\]|>\s*|(?:\d+[\.\)]|[a-z][\.\)]|\*|-)\s+)", stripped):
-                flush_para()
-                clean_item = re.sub(r"^(?:>\s*\[!NOTE\]\s*|>\s*)", "", stripped).strip()
-                blocks.append(ContentBlock(
-                    id=f"blk_md_{b_idx}",
-                    block_type=ContentBlockType.LIST_ITEM if not stripped.startswith(">") else ContentBlockType.PARAGRAPH,
-                    text=clean_item,
-                    raw_text=line,
-                    heading_path=list(current_hier),
-                    page_number=1,
-                ))
-                b_idx += 1
-                continue
-
-            current_para.append(stripped)
-
-        flush_para()
-        pages = [DocumentPage(page_number=1, text=text, width=612.0, height=792.0)]
-        return text, pages, blocks
+    @classmethod
+    def _parse_markdown(cls, raw_bytes: bytes, title: str, filename: str) -> str:
+        text, _, _, _, _ = cls._parse_markdown_structured(raw_bytes, title, filename)
+        return text
 
     @classmethod
     def _parse_code_or_config(cls, raw_bytes: bytes, title: str, lang: str) -> str:

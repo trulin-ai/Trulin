@@ -159,13 +159,25 @@ class UnifiedExtractionPipeline:
 
         # Step 3: Structured Parsing (Layer 4)
         fmt_lower = (filename.rsplit(".", 1)[-1] if "." in filename else "txt").lower()
-        if fmt_lower in ("xlsx", "xls"):
+        if fmt_lower in ("docx", "doc"):
+            from app.ingestion.parsers.docx_parser import DocxAdapter
+            evidence_result = await DocxAdapter.parse_to_evidence(canonical_env)
+        elif fmt_lower in ("xlsx", "xls"):
             from app.ingestion.parsers.xlsx_parser import XlsxAdapter
             evidence_result = await XlsxAdapter.parse_to_evidence(canonical_env)
         elif fmt_lower in ("png", "jpg", "jpeg", "tiff", "tif", "webp", "bmp"):
             from app.ingestion.parsers.ocr_adapter import OcrAdapter
             evidence_result = await OcrAdapter.parse_to_evidence(canonical_env)
-        elif fmt_lower in ("csv", "json", "sql"):
+        elif fmt_lower in ("md", "markdown"):
+            from app.ingestion.parsers.markdown_adapter import MarkdownAdapter
+            evidence_result = await MarkdownAdapter.parse_to_evidence(canonical_env)
+        elif fmt_lower in ("html", "htm", "xhtml"):
+            from app.ingestion.parsers.html_adapter import HtmlAdapter
+            evidence_result = await HtmlAdapter.parse_to_evidence(canonical_env)
+        elif fmt_lower in ("csv", "tsv"):
+            from app.ingestion.parsers.csv_adapter import CsvAdapter
+            evidence_result = await CsvAdapter.parse_to_evidence(canonical_env)
+        elif fmt_lower in ("json", "sql"):
             evidence_result = await StructuredDataParser.parse(canonical_env)
         else:
             evidence_result = await DocumentParser.parse(canonical_env)

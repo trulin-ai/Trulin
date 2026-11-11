@@ -85,7 +85,7 @@ def run_gate():
     print(f"[Check 8 PASS] Zero fabricated strings found in source inventory")
 
     # 9. Re-run regression tests across all suites
-    print("[Check 9 Running] Executing 194 pytest tests across all 26 suites...")
+    print("[Check 9 Running] Executing 208 pytest tests across all 27 suites...")
     test_cmd = [
         os.path.join(BACKEND_DIR, ".venv", "Scripts", "python.exe"),
         "-m", "pytest",
@@ -115,11 +115,12 @@ def run_gate():
         "backend/tests/unit/test_phase6_step6_1_docx_adapter.py",
         "backend/tests/unit/test_phase6_step6_2_xlsx_adapter.py",
         "backend/tests/unit/test_phase6_step6_3_ocr_adapter.py",
+        "backend/tests/unit/test_phase6_step6_4_text_web_adapters.py",
     ]
     res_pytest = subprocess.run(test_cmd, cwd=os.path.abspath(os.path.join(BACKEND_DIR, "..")), capture_output=True, text=True)
     assert res_pytest.returncode == 0, f"Pytest failed:\n{res_pytest.stdout}\n{res_pytest.stderr}"
-    assert "194 passed" in res_pytest.stdout, f"Expected '194 passed', got:\n{res_pytest.stdout}"
-    print(f"[Check 9 PASS] 194 / 194 regression tests passed cleanly across all 26 suites")
+    assert "208 passed" in res_pytest.stdout, f"Expected '208 passed', got:\n{res_pytest.stdout}"
+    print(f"[Check 9 PASS] 208 / 208 regression tests passed cleanly across all 27 suites")
 
     # 10. Re-run golden benchmark
     print("[Check 10 Running] Executing golden benchmark...")
