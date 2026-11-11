@@ -452,7 +452,12 @@ class StagingPromotionService:
         for cid, pub in comparison_source.items():
             stg = stg_by_id.get(cid)
             if not stg:
-                diffs.append({"claim_id": cid, "diff_type": "MISSING_IN_STAGING"})
+                diffs.append({
+                    "claim_id": cid,
+                    "claim_number": uuid_to_num.get(cid),
+                    "diff_type": "MISSING_IN_STAGING",
+                    "all_phases": [],
+                })
                 continue
 
             num = uuid_to_num.get(cid)
@@ -515,14 +520,14 @@ class StagingPromotionService:
             else:
                 identical_count += 1
 
-        diffs.sort(key=lambda x: x["claim_number"] if x["claim_number"] is not None else 999)
+        diffs.sort(key=lambda x: x.get("claim_number") if x.get("claim_number") is not None else 999)
 
         # Cumulative phase breakdown
-        p22c_count = sum(1 for c in diffs if "Phase 2.2c" in c["all_phases"])
-        p23_count = sum(1 for c in diffs if "Phase 2.3" in c["all_phases"])
-        p23b_count = sum(1 for c in diffs if "Phase 2.3b" in c["all_phases"])
-        p24b_count = sum(1 for c in diffs if "Phase 2.4b" in c["all_phases"])
-        p25_count = sum(1 for c in diffs if "Phase 2.5" in c["all_phases"])
+        p22c_count = sum(1 for c in diffs if "Phase 2.2c" in c.get("all_phases", []))
+        p23_count = sum(1 for c in diffs if "Phase 2.3" in c.get("all_phases", []))
+        p23b_count = sum(1 for c in diffs if "Phase 2.3b" in c.get("all_phases", []))
+        p24b_count = sum(1 for c in diffs if "Phase 2.4b" in c.get("all_phases", []))
+        p25_count = sum(1 for c in diffs if "Phase 2.5" in c.get("all_phases", []))
         total_phase_instances = p22c_count + p23_count + p23b_count + p24b_count + p25_count
         overlap_count = total_phase_instances - len(diffs)
 

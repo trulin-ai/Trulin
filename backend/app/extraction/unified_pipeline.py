@@ -316,15 +316,30 @@ class UnifiedExtractionPipeline:
                 sig = UniversalGateEvaluator.compute_semantic_signature(clean_subj, clean_pred, clean_obj)
                 seen_signatures.add(sig)
 
-            # Deliverable 3: OCR Low-confidence flagging routed to review
-            is_low_conf_ocr = (
-                cand.locator.get("is_low_confidence")
+            # Deliverable 3, 5, 6: OCR Safety, Feature-Flagged Auto-Certification & Persisted Review Enforcement
+            is_ocr_claim = (
+                getattr(cand, "block_type", None) == "image_ocr"
+                or cand.locator.get("source_type") == "image_ocr"
+                or cand.locator.get("bbox") is not None
+                or cand.locator.get("is_low_confidence")
                 or (cand.structured_values and cand.structured_values.get("is_low_confidence"))
             )
-            if is_low_conf_ocr and gate_res.certification_tier == "AUTOMATED_CERTIFIED":
-                gate_res.certification_tier = "REVIEW_REQUIRED"
-                gate_res.all_gates_passed = False
-                gate_res.rejection_reasons.append("OCR low-confidence threshold violation: Requires human verification.")
+            from app.ingestion.parsers.ocr_adapter import OcrAdapter
+            auto_cert_enabled = OcrAdapter.is_auto_certify_enabled()
+
+            if is_ocr_claim:
+                is_low_conf = (
+                    cand.locator.get("is_low_confidence")
+                    or (cand.structured_values and cand.structured_values.get("is_low_confidence"))
+                )
+                if not auto_cert_enabled or is_low_conf:
+                    if gate_res.certification_tier == "AUTOMATED_CERTIFIED":
+                        gate_res.certification_tier = "REVIEW_REQUIRED"
+                        gate_res.all_gates_passed = False
+                        if is_low_conf:
+                            gate_res.rejection_reasons.append("OCR low-confidence threshold violation: Requires human verification.")
+                        else:
+                            gate_res.rejection_reasons.append("OCR Safety Guard: OCR-derived claim requires human review prior to certification.")
 
             tier = gate_res.certification_tier
             if tier == "AUTOMATED_CERTIFIED":
