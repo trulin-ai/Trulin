@@ -75,6 +75,7 @@ DOMAIN_SCHEMAS: Dict[str, FamilyDomainSchema] = {
             "has_ip_ownership_assignment",
             "has_termination_for_convenience",
             "has_warranty_disclaimer",
+            "has_warranty_remedy_window",
             "has_dispute_resolution_forum",
             "grants_product_license",
             "must_not_reverse_engineer",

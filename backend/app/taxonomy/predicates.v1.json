@@ -351,6 +351,25 @@
       "risk_level": "LOW"
     },
     {
+      "predicate_id": "has_warranty_remedy_window",
+      "label": "Has warranty notice remedy window",
+      "action_category": "REMEDY",
+      "allowed_subject_roles": [
+        "CUSTOMER",
+        "CLIENT",
+        "BUYER",
+        "ANY_PARTY"
+      ],
+      "allowed_object_roles": [
+        "WARRANTY",
+        "SERVICES",
+        "ANY_OBJECT"
+      ],
+      "default_modality": "ENTITLED_TO",
+      "requires_condition": true,
+      "risk_level": "LOW"
+    },
+    {
       "predicate_id": "may_review_non_microsoft_product_terms",
       "label": "May review third party / non-provider product terms prior to ordering",
       "action_category": "GOVERNANCE",

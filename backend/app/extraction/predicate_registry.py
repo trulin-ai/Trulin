@@ -123,6 +123,8 @@ class CanonicalPredicate(str, Enum):
     REFERENCES_GOVERNING_POLICIES = "references_governing_policies"
     HAS_DOCUMENT_METADATA = "has_document_metadata"
     HAS_INTELLECTUAL_PROPERTY_OWNERSHIP = "has_intellectual_property_ownership"
+    HAS_LATE_PAYMENT_PENALTY_RATE = "has_late_payment_penalty_rate"
+    HAS_WARRANTY_REMEDY_WINDOW = "has_warranty_remedy_window"
 
     # Commercial & Policy Operations (Slice 3 Refinements)
     OFFERS_STORE_CREDIT_BONUS = "offers_store_credit_bonus"

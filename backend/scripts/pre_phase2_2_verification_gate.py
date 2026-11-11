@@ -116,11 +116,12 @@ def run_gate():
         "backend/tests/unit/test_phase6_step6_2_xlsx_adapter.py",
         "backend/tests/unit/test_phase6_step6_3_ocr_adapter.py",
         "backend/tests/unit/test_phase6_step6_4_text_web_adapters.py",
+        "backend/tests/unit/test_phase6_step6_5_mca_calibration_and_dedup.py",
     ]
     res_pytest = subprocess.run(test_cmd, cwd=os.path.abspath(os.path.join(BACKEND_DIR, "..")), capture_output=True, text=True)
     assert res_pytest.returncode == 0, f"Pytest failed:\n{res_pytest.stdout}\n{res_pytest.stderr}"
-    assert "208 passed" in res_pytest.stdout, f"Expected '208 passed', got:\n{res_pytest.stdout}"
-    print(f"[Check 9 PASS] 208 / 208 regression tests passed cleanly across all 27 suites")
+    assert "216 passed" in res_pytest.stdout, f"Expected '216 passed', got:\n{res_pytest.stdout}"
+    print(f"[Check 9 PASS] 216 / 216 regression tests passed cleanly across all 28 suites")
 
     # 10. Re-run golden benchmark
     print("[Check 10 Running] Executing golden benchmark...")

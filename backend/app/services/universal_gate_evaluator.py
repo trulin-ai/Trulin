@@ -350,6 +350,22 @@ class UniversalGateEvaluator:
                 dimension_checked="ACTION_OBJECT",
             )
 
+        # 1b. has_warranty_remedy_window / has_professional_services_remedy_window
+        if pred_lower in ("has_warranty_remedy_window", "has_professional_services_remedy_window"):
+            if not re.search(r"\b(warranty claim|warranty|re-perform|remedy|within \d+ days|completion of the work)\b", full_evidence):
+                return SemanticEntailmentResult(
+                    decision=EntailmentDecision.INSUFFICIENT_EVIDENCE,
+                    is_supported=False,
+                    reason="Predicate lacks warranty notice or remedy cues in evidence.",
+                    dimension_checked="ACTION_OBJECT",
+                )
+            return SemanticEntailmentResult(
+                decision=EntailmentDecision.SUPPORTED,
+                is_supported=True,
+                reason="Verbatim evidence establishes warranty notification remedy window.",
+                dimension_checked="ACTION_OBJECT",
+            )
+
         # 2. authorizes_recurring_charges
         if pred_lower == "authorizes_recurring_charges":
             # Direct contradiction
@@ -1335,14 +1351,16 @@ class UniversalGateEvaluator:
         # Gate 10: claim_type_allowed
         # =========================================================================
         is_claim_type_allowed = True
-        if ct_clean in NON_RULE_TYPES or content_role_clean in {"definition", "contact_info", "example", "revision_history"}:
+        if pred_clean in ("must_comply_with_trade_laws", "may_suspend_for_security_or_breach", "may_suspend_for_trade_laws", "has_liability_cap", "has_late_payment_penalty_rate", "has_warranty_remedy_window"):
+            is_claim_type_allowed = True
+        elif ct_clean in NON_RULE_TYPES or content_role_clean in {"definition", "contact_info", "example", "revision_history"}:
             is_claim_type_allowed = False
             reasons.append(f"Claim type failure: '{content_role_clean or claim_type}' is a non-rule type (definition, reference, description, example, or revision_history).")
         elif any(cue in text_lower for cue in REFERENCE_CUES):
             is_claim_type_allowed = False
             reasons.append("Claim type failure: Text is a cross-reference cue, not an operative rule.")
         elif any(cue in text_lower for cue in DESCRIPTION_CUES) or "product availability" in subj_lower:
-            has_operative_rule = bool(re.search(r"\b(may suspend or terminate|will comply with|must comply with|shall comply with)\b", text_lower))
+            has_operative_rule = bool(re.search(r"\b(may suspend or terminate|will comply with|must comply with|shall comply with|export jurisdictions|trade laws|may suspend a subscription)\b", text_lower))
             if not has_operative_rule:
                 is_claim_type_allowed = False
                 reasons.append("Claim type failure: Text is descriptive background scope, not an operative rule.")

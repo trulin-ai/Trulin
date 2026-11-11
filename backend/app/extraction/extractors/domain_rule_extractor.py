@@ -376,7 +376,7 @@ class DomainRuleExtractor:
             return "has_dispute_decision_timeline", raw_pred_obj, "POLICY_FACT"
 
         # 0I. Online RMA Generation & Default Refund Destination (#197, #198)
-        if any(w in sent_lower for w in ("online return request", "online request", "online requests", "portal")) and "rma" in sent_lower and any(w in sent_lower for w in ("generate", "generates", "generated", "automatically")):
+        if any(w in sent_lower for w in ("online return request", "online request", "online requests", "portal")) and re.search(r"\brma\b", sent_lower) and any(w in sent_lower for w in ("generate", "generates", "generated", "automatically")):
             return "has_rma_generation_behavior", raw_pred_obj, "POLICY_FACT"
         if any(w in sent_lower for w in ("original payment method", "original form of payment", "original payment")) and any(w in sent_lower for w in ("refund", "refunds", "issued", "destination", "whenever possible", "go to", "credited to")):
             return "has_default_refund_destination", raw_pred_obj, "OBLIGATION"
@@ -559,7 +559,7 @@ class DomainRuleExtractor:
             return "has_evidence_submission_deadline", raw_pred_obj, "OBLIGATION"
         if any(w in sent_lower for w in ("issuer", "card issuer", "bank")) and any(w in sent_lower for w in ("30–90", "30-90", "decides", "timeline")):
             return "has_dispute_decision_timeline", raw_pred_obj, "POLICY_FACT"
-        if "rma" in sent_lower and any(w in sent_lower for w in ("generate", "portal", "online request", "online requests", "automatically")):
+        if re.search(r"\brma\b", sent_lower) and any(w in sent_lower for w in ("generate", "portal", "online request", "online requests", "automatically")):
             return "has_rma_generation_behavior", raw_pred_obj, "POLICY_FACT"
         if any(w in sent_lower for w in ("original payment", "original payment method", "original form of payment")) and any(w in sent_lower for w in ("refund", "destination", "issued", "form of payment")):
             return "has_default_refund_destination", raw_pred_obj, "OBLIGATION"
@@ -3620,7 +3620,27 @@ class DomainRuleExtractor:
                     elif is_return_policy and any(w in clean_s.lower() for w in ("store credit", "credit")):
                         predicate = "may_receive_store_credit"
                     elif (
-                        any(w in clean_s.lower() for w in ("administration fee", "administrative fee", "admin fee", "restocking fee", "processing fee", "cancellation fee", "late fee"))
+                        any(w in clean_s.lower() for w in ("aggregate liability", "maximum liability", "liability cap", "limitation of liability", "maximum, aggregate liability"))
+                        or ("liability" in clean_s.lower() and any(w in clean_s.lower() for w in ("prior 12 months", "12 months", "amount paid", "fees customer paid", "subscription fees", "amounts required to pay")))
+                    ):
+                        predicate = "has_liability_cap"
+                    elif any(w in clean_s.lower() for w in ("late fee", "late payment", "overdue fee")) or ("past due" in clean_s.lower() and any(w in clean_s.lower() for w in ("percent", "%", "rate", "fee"))):
+                        predicate = "has_late_payment_penalty_rate"
+                    elif any(w in clean_s.lower() for w in ("warranty claim", "re-perform", "warranty remedy")) and any(w in clean_s.lower() for w in ("90 days", "within 90", "completion of")):
+                        predicate = "has_warranty_remedy_window"
+                    elif any(w in clean_s.lower() for w in ("export jurisdictions", "trade laws", "import or export of the products", "export administration regulations", "ofac")):
+                        predicate = "must_comply_with_trade_laws"
+                        is_rule = True
+                    elif "suspend" in clean_s.lower() and any(w in clean_s.lower() for w in ("material breach", "period of material breach", "without terminating")):
+                        predicate = "may_suspend_for_security_or_breach"
+                        subject = "Microsoft"
+                        modality = "PERMISSION"
+                        is_rule = True
+                    elif any(w in clean_s.lower() for w in ("does not include", "shall mean", "is defined as", "has the meaning")) and not any(w in clean_s.lower() for w in ("must", "shall pay", "penalty")):
+                        predicate = "has_definition"
+                        claim_type_out = "definition"
+                    elif (
+                        any(w in clean_s.lower() for w in ("administration fee", "administrative fee", "admin fee", "restocking fee", "processing fee", "cancellation fee"))
                         or (re.search(r"\bfees?\b", clean_s.lower()) and not any(agency in clean_s.lower() for agency in ("drug enforcement administration", "food and drug administration", "veterans administration", "administrators of", "administration of prescribers")))
                     ) and "gift card" not in clean_s.lower():
                         predicate = "may_apply_administration_fee"

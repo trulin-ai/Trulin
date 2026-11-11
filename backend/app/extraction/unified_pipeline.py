@@ -197,8 +197,9 @@ class UnifiedExtractionPipeline:
             norm_c = ClaimQualityNormalizer.normalize_candidate_claim(c)
             normalized_candidates.append(norm_c if norm_c is not None else c)
 
-        # Step 5: Deduplication (preserve highest confidence & merge conditions)
+        # Step 5: Deduplication (preserve highest confidence, merge conditions, eliminate sentence-level duplicate branches)
         seen_keys: Dict[Tuple[str, str, str, str], CandidateClaim] = {}
+        seen_span_keys: Dict[Tuple[str, str, str], Tuple[Tuple[str, str, str, str], CandidateClaim]] = {}
         for c in normalized_candidates:
             key = (
                 (c.subject or "").strip().lower(),
@@ -206,13 +207,38 @@ class UnifiedExtractionPipeline:
                 str(c.object or "").strip().lower(),
                 str(c.modality or "").strip().upper(),
             )
-            if key not in seen_keys:
-                seen_keys[key] = c
-            else:
+            span_text = (c.evidence_text_span or c.claim_text or "").strip().lower()
+            span_key = (
+                (c.subject or "").strip().lower(),
+                (c.predicate or "").strip().lower(),
+                span_text,
+            )
+
+            if key in seen_keys:
                 existing = seen_keys[key]
                 # Merge conditions if any
                 if c.conditions and not existing.conditions:
                     existing.conditions = c.conditions
+                continue
+
+            if span_text and span_key in seen_span_keys:
+                old_key, existing = seen_span_keys[span_key]
+                # Same sentence, same subject, same predicate: keep the more informative/descriptive object
+                obj_new = str(c.object or "").strip().lower()
+                obj_old = str(existing.object or "").strip().lower()
+                is_new_pronoun = any(obj_new.startswith(p) for p in ("these ", "those ", "this ", "it ", "them "))
+                is_old_pronoun = any(obj_old.startswith(p) for p in ("these ", "those ", "this ", "it ", "them "))
+                if is_old_pronoun and not is_new_pronoun:
+                    seen_keys.pop(old_key, None)
+                    seen_keys[key] = c
+                    seen_span_keys[span_key] = (key, c)
+                elif c.conditions and not existing.conditions:
+                    existing.conditions = c.conditions
+                continue
+
+            seen_keys[key] = c
+            if span_text:
+                seen_span_keys[span_key] = (key, c)
 
         deduped_candidates = list(seen_keys.values())
 
