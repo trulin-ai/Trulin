@@ -633,76 +633,13 @@ class UniversalFileParser:
     def _parse_docx_structured(
         cls, raw_bytes: bytes, title: str, filename: str
     ) -> Tuple[str, List[DocumentPage], List[ContentBlock], List[Dict[str, Any]], List[str]]:
-        blocks: List[ContentBlock] = []
-        tables: List[Dict[str, Any]] = []
-        warnings: List[str] = []
-        paragraphs_text = []
-
+        """Parses DOCX using specialized DocxAdapter preserving heading hierarchy, tables, and blocks."""
         try:
-            import docx
-            from docx.text.paragraph import Paragraph
-            from docx.table import Table
-
-            doc = docx.Document(io.BytesIO(raw_bytes))
-            p_idx = 0
-            t_idx = 0
-
-            # Traverse body in document order to preserve paragraph and table sequence
-            for child in doc.element.body:
-                if child.tag.endswith('p'):
-                    p = Paragraph(child, doc)
-                    txt = p.text.strip()
-                    if not txt:
-                        continue
-                    p_idx += 1
-                    style_name = (p.style.name if hasattr(p, "style") and p.style else "").lower()
-                    is_heading = "heading" in style_name or bool(
-                        re.match(r"^(Chapter\s+\d+|Page\s+\d+|Section\s+\d+|Control\s+rule|Policy\s+\d+)", txt, re.IGNORECASE)
-                    )
-                    b_type = ContentBlockType.HEADING if is_heading else ContentBlockType.PARAGRAPH
-                    blocks.append(ContentBlock(
-                        id=f"blk_docx_{p_idx}",
-                        block_type=b_type,
-                        text=f"## {txt}" if is_heading else txt,
-                        raw_text=txt,
-                    ))
-                    paragraphs_text.append(f"## {txt}" if is_heading else txt)
-
-                elif child.tag.endswith('tbl'):
-                    table = Table(child, doc)
-                    t_idx += 1
-                    table_rows = []
-                    headers = []
-                    for r_idx, row in enumerate(table.rows):
-                        cells = [cell.text.strip() for cell in row.cells]
-                        if r_idx == 0:
-                            headers = cells
-                        table_rows.append(cells)
-
-                    if table_rows:
-                        formatted_rows = ["| " + " | ".join(r) + " |" for r in table_rows]
-                        col_cnt = len(headers) or len(table_rows[0])
-                        if len(formatted_rows) >= 1:
-                            sep_line = "| " + " | ".join(["---"] * col_cnt) + " |"
-                            formatted_rows.insert(1, sep_line)
-
-                        t_text = "\n" + "\n".join(formatted_rows) + "\n"
-                        paragraphs_text.append(t_text)
-                        t_data = {"headers": headers, "rows": table_rows}
-                        tables.append(t_data)
-                        blocks.append(ContentBlock(
-                            id=f"blk_table_{t_idx}",
-                            block_type=ContentBlockType.TABLE,
-                            text=t_text,
-                            raw_text=t_text,
-                            table_data=t_data,
-                        ))
-
-            full_text = f"# {title}\n\n" + "\n\n".join(paragraphs_text) if paragraphs_text else ""
-            return full_text, [], blocks, tables, warnings
+            from app.ingestion.parsers.docx_parser import DocxAdapter
+            return DocxAdapter.parse_to_structured(raw_bytes, title, filename)
         except Exception as e:
-            warnings.append(f"DOCX parser error: {str(e)}")
-            return "", [], [], [], warnings
+            logger.warning("DocxAdapter parsing error for %s: %s", filename, e)
+            return "", [], [], [], [f"DOCX parser error: {str(e)}"]
 
     @classmethod
     def _parse_xlsx_structured(
