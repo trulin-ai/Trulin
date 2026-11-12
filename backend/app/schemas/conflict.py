@@ -1,7 +1,8 @@
 import decimal
 import uuid
 from datetime import datetime
-from pydantic import BaseModel, ConfigDict
+from typing import Any
+from pydantic import BaseModel, ConfigDict, field_validator
 
 from app.db.enums import ConflictStatus, ReviewDecision
 from app.schemas.claim import ClaimResponse
@@ -28,6 +29,14 @@ class ConflictResponse(BaseModel):
     created_at: datetime
     claim_a: ClaimResponse | None = None
     claim_b: ClaimResponse | None = None
+    # Master Plan Structured Conflict Contract Fields
+    conflicting_fields: list[str] | None = None
+    supporting_evidence: dict | None = None
+    source_authority: dict | None = None
+    applicable_scope: dict | None = None
+    effective_dates: dict | None = None
+    reviewer_decision: str | None = None
+    resolution_rationale: str | None = None
 
     model_config = ConfigDict(from_attributes=True)
 
@@ -40,6 +49,10 @@ class ConflictClusterSide(BaseModel):
     trust_score: float
     claim_count: int
     claim_ids: list[uuid.UUID]
+    applicable_scope: dict | None = None
+    effective_dates: dict | None = None
+    authority_level: int | None = None
+    certification_status: str | None = None
 
 
 class ConflictIssueResponse(BaseModel):
@@ -55,6 +68,13 @@ class ConflictIssueResponse(BaseModel):
     conflict_ids: list[uuid.UUID]
     total_conflicts: int
     created_at: datetime
+    conflicting_fields: list[str] | None = None
+    has_exception: bool = False
+    can_one_click_resolve: bool = True
+    safety_lock_reason: str | None = None
+    precedence_rule: str | None = None
+    resolution_rationale: str | None = None
+    blast_radius_breakdown: dict[str, Any] | None = None
 
 
 class ResolveIssueRequest(BaseModel):
@@ -62,4 +82,10 @@ class ResolveIssueRequest(BaseModel):
     decision: ReviewDecision
     chosen_side: str  # "A", "B", or "DISMISS"
     reason: str | None = None
+
+    @field_validator("decision", mode="before")
+    def normalize_decision(cls, v):
+        if isinstance(v, str):
+            return v.lower()
+        return v
 

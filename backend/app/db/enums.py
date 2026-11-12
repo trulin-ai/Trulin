@@ -44,6 +44,69 @@ class ConflictStatus(str, Enum):
     UNRESOLVED_AMBIGUITY_LOWER = "unresolved_ambiguity"
 
 
+class ConflictType(str, Enum):
+    """The 10 first-class conflict types required by the Master Plan."""
+    DIRECT_CONTRADICTION = "direct_contradiction"
+    TEMPORAL_CONFLICT = "temporal_conflict"
+    SCOPE_CONFLICT = "scope_conflict"
+    AUTHORITY_CONFLICT = "authority_conflict"
+    NUMERIC_CONFLICT = "numeric_conflict"
+    MODALITY_CONFLICT = "modality_conflict"
+    EXCEPTION_CONFLICT = "exception_conflict"
+    ORGANIZATIONAL_CONFLICT = "organizational_conflict"
+    VERSION_CONFLICT = "version_conflict"
+    CONDITIONAL_CONFLICT = "conditional_conflict"
+
+    @classmethod
+    def normalize(cls, value: object) -> "ConflictType":
+        """Normalize legacy strings or partial tokens into the canonical 10 types."""
+        if isinstance(value, cls):
+            return value
+        if not value or not isinstance(value, str):
+            return cls.DIRECT_CONTRADICTION
+        v = value.lower().strip()
+        mapping = {
+            "direct_contradiction": cls.DIRECT_CONTRADICTION,
+            "contradiction": cls.DIRECT_CONTRADICTION,
+            "policy_contradiction": cls.DIRECT_CONTRADICTION,
+            "temporal_conflict": cls.TEMPORAL_CONFLICT,
+            "temporal_outdated": cls.TEMPORAL_CONFLICT,
+            "outdated": cls.TEMPORAL_CONFLICT,
+            "expired": cls.TEMPORAL_CONFLICT,
+            "temporal_expiration_precedence": cls.TEMPORAL_CONFLICT,
+            "temporal_obsolescence": cls.TEMPORAL_CONFLICT,
+            "scope_conflict": cls.SCOPE_CONFLICT,
+            "disjoint_scopes": cls.SCOPE_CONFLICT,
+            "applicability_scope_discrepancy": cls.SCOPE_CONFLICT,
+            "disjoint_applicability_scope": cls.SCOPE_CONFLICT,
+            "authority_conflict": cls.AUTHORITY_CONFLICT,
+            "authority_hierarchy_precedence": cls.AUTHORITY_CONFLICT,
+            "authority_discrepancy": cls.AUTHORITY_CONFLICT,
+            "numeric_conflict": cls.NUMERIC_CONFLICT,
+            "numerical_discrepancy": cls.NUMERIC_CONFLICT,
+            "incompatible_numeric_value": cls.NUMERIC_CONFLICT,
+            "numeric_value_mismatch": cls.NUMERIC_CONFLICT,
+            "genuine_boundary_ambiguity": cls.NUMERIC_CONFLICT,
+            "modality_conflict": cls.MODALITY_CONFLICT,
+            "deontic_opposition": cls.MODALITY_CONFLICT,
+            "modality_opposition": cls.MODALITY_CONFLICT,
+            "exception_conflict": cls.EXCEPTION_CONFLICT,
+            "lex_specialis_exception": cls.EXCEPTION_CONFLICT,
+            "compatible_exception": cls.EXCEPTION_CONFLICT,
+            "organizational_conflict": cls.ORGANIZATIONAL_CONFLICT,
+            "cross_department": cls.ORGANIZATIONAL_CONFLICT,
+            "inter_departmental": cls.ORGANIZATIONAL_CONFLICT,
+            "version_conflict": cls.VERSION_CONFLICT,
+            "temporal_version_precedence": cls.VERSION_CONFLICT,
+            "version_lineage": cls.VERSION_CONFLICT,
+            "conditional_conflict": cls.CONDITIONAL_CONFLICT,
+            "conditional_mismatch": cls.CONDITIONAL_CONFLICT,
+            "precondition_conflict": cls.CONDITIONAL_CONFLICT,
+            "non_overlapping_conditional_scope": cls.CONDITIONAL_CONFLICT,
+        }
+        return mapping.get(v, cls.DIRECT_CONTRADICTION)
+
+
 class ReviewDecision(str, Enum):
     APPROVE = "approve"
     REJECT = "reject"

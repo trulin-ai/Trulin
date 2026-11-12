@@ -118,18 +118,23 @@ async def auto_resolve_conflicts_endpoint(
     organization_id: uuid.UUID | None = Query(None, description="Optional organization ID filter"),
     user_name: str = Query(default="Autonomous Precedence Engine", description="Name of acting agent"),
     user_role: str = Query(default="system", description="Role of acting agent"),
+    shadow_mode: bool = Query(default=False, description="Run in recommendation-only mode without database mutations"),
     db: AsyncSession = Depends(get_db),
 ):
     """Autonomous enterprise conflict resolution: sweep pending conflicts, apply deterministic precedence rules, and resolve deterministic/low-blast-radius conflicts without human bottleneck."""
     service = ConflictService(db)
     activity_service = ActivityService(db)
-    result = await service.auto_resolve_conflicts(organization_id=organization_id)
+    result = await service.auto_resolve_conflicts(
+        organization_id=organization_id,
+        shadow_mode=shadow_mode,
+    )
     
     org_id = organization_id or uuid.UUID("11111111-1111-1111-1111-111111111111")
-    if result.get("auto_resolved_count", 0) > 0:
+    if not shadow_mode and result.get("auto_resolved_count", 0) > 0:
+        acting_user_id = await service._ensure_valid_reviewer(organization_id=org_id)
         await activity_service.log_activity(
             organization_id=org_id,
-            user_id=uuid.UUID("00000000-0000-0000-0000-000000000001"),
+            user_id=acting_user_id,
             user_name=user_name,
             user_role=user_role,
             action_type="AUTO_CONFLICTS_RESOLVED",
@@ -144,6 +149,9 @@ async def auto_resolve_conflicts_endpoint(
             },
         )
         await db.commit()
+    elif shadow_mode:
+        result["shadow_mode"] = True
+        result["mode"] = "RECOMMENDATION_ONLY"
         
     return result
 

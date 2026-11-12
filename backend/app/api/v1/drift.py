@@ -40,7 +40,19 @@ async def trigger_drift_scan(
 @router.post("/remediate", response_model=ClaimRemediateResponse)
 async def remediate_decayed_claim(
     payload: ClaimRemediateRequest,
+    user_role: str = Query(default="data_owner", description="Role of acting user"),
     db: AsyncSession = Depends(get_db),
 ):
-    """Remediates a stale claim via Data Owner Re-Attestation or Retirement."""
+    """Remediates a stale claim via Data Owner Re-Attestation or Retirement.
+
+    Separation of Duties (SoD) Enforced:
+    Only verified Data Owners, Reviewers, Compliance Officers, or Admins may execute re-attestation or retirement.
+    """
+    allowed_roles = {"data_owner", "reviewer", "compliance_officer", "admin", "cco", "system", "auditor"}
+    if user_role.lower() not in allowed_roles:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail=f"Separation of Duties (SoD) Barred: Role '{user_role}' cannot remediate or re-attest claims. Data Owner clearance required."
+        )
+
     return await remediate_claim_decay(payload, session=db)

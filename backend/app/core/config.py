@@ -64,6 +64,11 @@ class Settings(BaseSettings):
     okta_client_secret: str | None = None
     okta_domain: str | None = None
 
+    # Autonomous Conflict Resolution Operational Guardrails
+    autonomous_resolution_kill_switch: bool = False
+    autonomous_resolution_max_batch_size: int = 50
+    autonomous_resolution_default_canary_only: bool = True
+
     @model_validator(mode="after")
     def assemble_db_connection(self) -> "Settings":
         if not self.database_url:

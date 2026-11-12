@@ -12,7 +12,7 @@ from app.conflict_engine.compatibility_gate import CompatibilityGate
 from app.conflict_engine.facet_sharder import FacetSharder
 from app.conflict_engine.multi_agent_arbiter import MultiAgentArbiter
 from app.conflict_engine.precedence_engine import PrecedenceEngine
-from app.db.enums import ClaimStatus, ConflictStatus
+from app.db.enums import ClaimStatus, ConflictStatus, ConflictType
 from app.db.models.claim import Claim
 from app.db.models.claim_conflict import ClaimConflict
 from app.ingestion.parsers.evidence_model import ContentRole
@@ -243,22 +243,34 @@ class ConflictDetector:
 
                     # Winner / Loser determined deterministically
                     winner_id = precedence.winner_claim_id
-                    if winner_id == target_claim.id:
-                        target_claim.status = ClaimStatus.VERIFIED
-                        cand.status = ClaimStatus.OUTDATED
-                    else:
-                        cand.status = ClaimStatus.VERIFIED
-                        target_claim.status = ClaimStatus.OUTDATED
+                    winner_claim = target_claim if winner_id == target_claim.id else cand
+                    loser_claim = cand if winner_id == target_claim.id else target_claim
 
+                    # State machine: Never promote candidate or OCR claim to verified automatically
+                    if winner_claim.status == ClaimStatus.CANDIDATE or getattr(winner_claim, "claim_type", "").lower() in ("ocr", "candidate", "provisional"):
+                        winner_claim.status = ClaimStatus.CANDIDATE
+                    else:
+                        winner_claim.status = ClaimStatus.VERIFIED
+
+                    is_super = precedence.precedence_rule in ("EXPLICIT_SUPERSESSION", "TEMPORAL_VERSION_PRECEDENCE")
+                    loser_claim.status = ClaimStatus.SUPERSEDED if is_super else ClaimStatus.OUTDATED
+
+                    c_type = ConflictType.normalize(precedence.conflict_type or eval_res.conflict_type).value
                     # Record conflict as auto-resolved with full audit provenance
                     conflict = ClaimConflict(
                         claim_a_id=target_claim.id,
                         claim_b_id=cand.id,
-                        conflict_type=eval_res.conflict_type,
+                        conflict_type=c_type,
                         severity=eval_res.severity,
                         confidence=decimal.Decimal(f"{eval_res.confidence:.4f}"),
                         resolution_status=ConflictStatus.RESOLVED,
                         resolved_claim_id=winner_id,
+                        conflicting_fields=precedence.conflicting_fields,
+                        supporting_evidence=precedence.supporting_evidence,
+                        source_authority=precedence.source_authority,
+                        applicable_scope=precedence.applicable_scope,
+                        effective_dates=precedence.effective_dates,
+                        resolution_rationale=precedence.reasoning,
                     )
                     self.session.add(conflict)
                     detected_conflicts.append(conflict)
@@ -272,7 +284,7 @@ class ConflictDetector:
                 dummy_conf = ClaimConflict(
                     claim_a_id=target_claim.id,
                     claim_b_id=cand.id,
-                    conflict_type=eval_res.conflict_type,
+                    conflict_type=ConflictType.normalize(eval_res.conflict_type).value,
                     severity=eval_res.severity,
                     confidence=decimal.Decimal(f"{eval_res.confidence:.4f}"),
                 )
@@ -285,34 +297,53 @@ class ConflictDetector:
 
                 if arb_verdict.is_auto_arbitrated:
                     winner_id = arb_verdict.winner_claim_id
-                    if winner_id == target_claim.id:
-                        target_claim.status = ClaimStatus.VERIFIED
-                        cand.status = ClaimStatus.OUTDATED
+                    winner_claim = target_claim if winner_id == target_claim.id else cand
+                    loser_claim = cand if winner_id == target_claim.id else target_claim
+
+                    if winner_claim.status == ClaimStatus.VERIFIED or (getattr(winner_claim, "is_canonical", False) and winner_claim.status not in (ClaimStatus.CANDIDATE, ClaimStatus.REJECTED)):
+                        winner_claim.status = ClaimStatus.VERIFIED
                     else:
-                        cand.status = ClaimStatus.VERIFIED
-                        target_claim.status = ClaimStatus.OUTDATED
+                        winner_claim.status = ClaimStatus.CANDIDATE
+
+                    loser_claim.status = ClaimStatus.OUTDATED
 
                     conflict = ClaimConflict(
                         claim_a_id=target_claim.id,
                         claim_b_id=cand.id,
-                        conflict_type=eval_res.conflict_type,
+                        conflict_type=ConflictType.normalize(eval_res.conflict_type).value,
                         severity=eval_res.severity,
                         confidence=decimal.Decimal(f"{arb_verdict.confidence:.4f}"),
                         resolution_status=ConflictStatus.RESOLVED,
                         resolved_claim_id=winner_id,
+                        conflicting_fields=precedence.conflicting_fields,
+                        supporting_evidence=precedence.supporting_evidence,
+                        source_authority=precedence.source_authority,
+                        applicable_scope=precedence.applicable_scope,
+                        effective_dates=precedence.effective_dates,
+                        resolution_rationale=arb_verdict.judge_verdict or arb_verdict.rationale,
                     )
                     self.session.add(conflict)
                     detected_conflicts.append(conflict)
                     continue
 
-                # 3. Only Truly Ambiguous or Critical Blast Contradictions -> Queued for Human Review
+                # 3. Truly Ambiguous, Exception, or Critical Blast Contradictions -> Queued for Human Review
+                if eval_res and eval_res.conflict_type in ("INCOMPATIBLE_NUMERIC_VALUE", "CONTRADICTORY_POLICY_RULES"):
+                    c_type = eval_res.conflict_type
+                else:
+                    c_type = ConflictType.normalize(precedence.conflict_type or eval_res.conflict_type).value
                 conflict = ClaimConflict(
                     claim_a_id=target_claim.id,
                     claim_b_id=cand.id,
-                    conflict_type=eval_res.conflict_type,
+                    conflict_type=c_type,
                     severity=eval_res.severity,
                     confidence=decimal.Decimal(f"{eval_res.confidence:.4f}"),
                     resolution_status=ConflictStatus.HUMAN_REVIEW_REQUIRED,
+                    conflicting_fields=precedence.conflicting_fields,
+                    supporting_evidence=precedence.supporting_evidence,
+                    source_authority=precedence.source_authority,
+                    applicable_scope=precedence.applicable_scope,
+                    effective_dates=precedence.effective_dates,
+                    resolution_rationale=precedence.reasoning,
                 )
                 self.session.add(conflict)
 

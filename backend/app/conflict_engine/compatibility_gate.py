@@ -12,6 +12,7 @@ from dataclasses import dataclass, field
 from typing import Any, Dict, Optional, Tuple
 
 from app.conflict_engine.normalizer import ClaimNormalizer, NormalizedClaimKey
+from app.db.enums import ConflictType
 
 
 @dataclass
@@ -235,6 +236,47 @@ class CompatibilityGate:
                 details={"scope_a": key_a.scope_key, "scope_b": key_b.scope_key},
             )
 
+        # 1b. Audience Scope Check (Different employee tiers e.g. Contractors vs Full-Time do not conflict)
+        if key_a.audience and key_b.audience and key_a.audience != key_b.audience:
+            return CompatibilityOutcome(
+                is_comparable=False,
+                reason="DISJOINT_APPLICABILITY_SCOPE",
+                relationship="DISJOINT_SCOPES",
+                details={"audience_a": key_a.audience, "audience_b": key_b.audience},
+            )
+
+        # 1c. Department / Regional Scope Check (Distinct branches/jurisdictions do not conflict)
+        if key_a.department and key_b.department and key_a.department != key_b.department:
+            return CompatibilityOutcome(
+                is_comparable=False,
+                reason="DISJOINT_APPLICABILITY_SCOPE",
+                relationship="DISJOINT_REGIONAL_JURISDICTIONS",
+                details={"dept_a": key_a.department, "dept_b": key_b.department},
+            )
+
+        # 1c. Temporal Validity Window Check (Non-overlapping dates do not conflict)
+        val_recs_a = getattr(claim_a, "__dict__", {}).get("validity_records") or getattr(claim_a, "validity_records", None)
+        val_recs_b = getattr(claim_b, "__dict__", {}).get("validity_records") or getattr(claim_b, "validity_records", None)
+        if val_recs_a and val_recs_b:
+            try:
+                va = val_recs_a[0] if len(val_recs_a) > 0 else None
+                vb = val_recs_b[0] if len(val_recs_b) > 0 else None
+                if va and vb:
+                    v_from_a = getattr(va, "valid_from", None)
+                    v_until_a = getattr(va, "valid_until", None)
+                    v_from_b = getattr(vb, "valid_from", None)
+                    v_until_b = getattr(vb, "valid_until", None)
+                    if v_from_a and v_until_a and v_from_b and v_until_b:
+                        if v_until_a < v_from_b or v_until_b < v_from_a:
+                            return CompatibilityOutcome(
+                                is_comparable=False,
+                                reason="NON_OVERLAPPING_TEMPORAL_WINDOWS",
+                                relationship="TEMPORAL_INDEPENDENT",
+                                details={"interval_a": (str(v_from_a), str(v_until_a)), "interval_b": (str(v_from_b), str(v_until_b))},
+                            )
+            except Exception:
+                pass
+
         # 2. Mutually Exclusive Condition Dimension
         if cls.conditions_mutually_exclusive(key_a.condition_key, key_b.condition_key):
             return CompatibilityOutcome(
@@ -336,3 +378,53 @@ class CompatibilityGate:
                 return True, "APPLICABILITY_SCOPE_DISCREPANCY"
 
         return False, "COMPATIBLE"
+
+    @classmethod
+    def evaluate_scope_and_exceptions(cls, claim_a: Any, claim_b: Any) -> Tuple[bool, ConflictType, bool, str]:
+        """
+        Evaluates whether claims have explicit conditions, exceptions, scopes, or audience boundaries.
+        Returns:
+            (is_scope_exception_case: bool, conflict_type: ConflictType, is_compatible_coexistence: bool, reason: str)
+        """
+        key_a = ClaimNormalizer.build_key(claim_a)
+        key_b = ClaimNormalizer.build_key(claim_b)
+
+        # 1. Exception Coexistence Check (Lex Specialis)
+        # One is general baseline, other is specific exception/carveout
+        if key_a.has_exception != key_b.has_exception:
+            exc_text = key_a.exception_text if key_a.has_exception else key_b.exception_text
+            return (
+                True,
+                ConflictType.EXCEPTION_CONFLICT,
+                True,  # Coexists! Do not auto-supersede
+                f"Conditional exception ({exc_text or 'carveout'}) coexists with general baseline policy (Lex Specialis).",
+            )
+
+        # 2. Both have exceptions on same topic but different conditions
+        if key_a.has_exception and key_b.has_exception and key_a.exception_text != key_b.exception_text:
+            return (
+                True,
+                ConflictType.EXCEPTION_CONFLICT,
+                False,  # Divergent exceptions require human review
+                f"Divergent exceptions ('{key_a.exception_text}' vs '{key_b.exception_text}') require human auditor adjudication.",
+            )
+
+        # 3. Disjoint conditional activation triggers
+        if key_a.condition_key and key_b.condition_key and key_a.condition_key != key_b.condition_key:
+            return (
+                True,
+                ConflictType.CONDITIONAL_CONFLICT,
+                True,  # Distinct conditions
+                "Distinct activation conditions govern separate cases.",
+            )
+
+        # 4. Scope discrepancy
+        if key_a.scope_key and key_b.scope_key and key_a.scope_key != key_b.scope_key:
+            return (
+                True,
+                ConflictType.SCOPE_CONFLICT,
+                True,
+                "Rules govern distinct employee tiers or product categories.",
+            )
+
+        return (False, ConflictType.DIRECT_CONTRADICTION, False, "")

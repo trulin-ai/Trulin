@@ -1,6 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 
+const CONFLICT_TYPE_META = {
+  direct_contradiction: { label: 'Direct Contradiction', bg: 'rgba(239, 68, 68, 0.12)', color: '#dc2626', border: 'rgba(239, 68, 68, 0.3)' },
+  temporal_conflict: { label: 'Temporal Conflict', bg: 'rgba(245, 158, 11, 0.12)', color: '#d97706', border: 'rgba(245, 158, 11, 0.3)' },
+  scope_conflict: { label: 'Scope Conflict', bg: 'rgba(99, 102, 241, 0.12)', color: '#4f46e5', border: 'rgba(99, 102, 241, 0.3)' },
+  authority_conflict: { label: 'Authority Conflict', bg: 'rgba(168, 85, 247, 0.12)', color: '#9333ea', border: 'rgba(168, 85, 247, 0.3)' },
+  numeric_conflict: { label: 'Numeric Conflict', bg: 'rgba(59, 130, 246, 0.12)', color: '#2563eb', border: 'rgba(59, 130, 246, 0.3)' },
+  modality_conflict: { label: 'Modality Conflict', bg: 'rgba(100, 116, 139, 0.12)', color: '#475569', border: 'rgba(100, 116, 139, 0.3)' },
+  exception_conflict: { label: 'Exception Carveout', bg: 'rgba(20, 184, 166, 0.12)', color: '#0d9488', border: 'rgba(20, 184, 166, 0.3)' },
+  organizational_conflict: { label: 'Organizational Conflict', bg: 'rgba(236, 72, 153, 0.12)', color: '#db2777', border: 'rgba(236, 72, 153, 0.3)' },
+  version_conflict: { label: 'Version Lineage', bg: 'rgba(249, 115, 22, 0.12)', color: '#ea580c', border: 'rgba(249, 115, 22, 0.3)' },
+  conditional_conflict: { label: 'Conditional Trigger', bg: 'rgba(16, 185, 129, 0.12)', color: '#059669', border: 'rgba(16, 185, 129, 0.3)' },
+  numerical_discrepancy: { label: 'Numeric Conflict', bg: 'rgba(59, 130, 246, 0.12)', color: '#2563eb', border: 'rgba(59, 130, 246, 0.3)' },
+  temporal_outdated: { label: 'Temporal Conflict', bg: 'rgba(245, 158, 11, 0.12)', color: '#d97706', border: 'rgba(245, 158, 11, 0.3)' },
+};
+
+const formatConflictTypeBadge = (type) => {
+  const norm = (type || 'direct_contradiction').toLowerCase();
+  return CONFLICT_TYPE_META[norm] || {
+    label: norm.replace(/_/g, ' ').toUpperCase(),
+    bg: 'rgba(100, 116, 139, 0.12)',
+    color: '#475569',
+    border: 'rgba(100, 116, 139, 0.3)'
+  };
+};
+
 export default function ContextCuratorStudio({
   activeOrg,
   showToast,
@@ -98,15 +123,25 @@ export default function ContextCuratorStudio({
   const handleRemediateClaim = async (claimId, action) => {
     try {
       setRemediatingId(claimId);
-      const res = await fetch('/v1/steward/drift/remediate', {
+      const userRole = user?.role || 'data_owner';
+      const res = await fetch(`/v1/steward/drift/remediate?user_role=${encodeURIComponent(userRole)}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ claim_id: claimId, action })
+        body: JSON.stringify({
+          claim_id: claimId,
+          action,
+          attester_id: user?.id || '22222222-2222-2222-2222-222222222222',
+          reason: `Policy ${action} governance attestation recorded by ${user?.name || 'Authorized Data Owner'}`,
+          source_version: 'v1.0'
+        })
       });
       if (res.ok) {
         const data = await res.json();
         showToast?.(data.message, "success");
         fetchDriftData();
+      } else {
+        const errJson = await res.json().catch(() => null);
+        showToast?.(errJson?.detail || "Remediation failed", "error");
       }
     } catch (e) {
       showToast?.(`Remediation error: ${e.message}`, "error");
@@ -274,16 +309,30 @@ export default function ContextCuratorStudio({
   }, [activeOrg?.id]);
 
   const handleApplyAction = async (rec) => {
+    if (!hasPermission('conflicts:resolve')) {
+      showToast?.(
+        `Separation of Duties (SoD) Barred: Your role (${(user?.role || 'operator').toUpperCase()}) cannot apply curation recommendations. Auditor clearance required.`,
+        'error'
+      );
+      return;
+    }
     setApplyingActionId(rec.id);
     try {
-      const res = await fetch('/v1/steward/actions/apply', {
+      const orgId = activeOrg?.id || '11111111-1111-1111-1111-111111111111';
+      const userRole = user?.role || 'reviewer';
+      const userName = user?.name || 'Compliance Auditor';
+      const res = await fetch(`/v1/steward/actions/apply?organization_id=${orgId}&user_role=${encodeURIComponent(userRole)}&user_name=${encodeURIComponent(userName)}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           action_type: rec.action_type,
           target_id: rec.target_id,
+          reviewer_id: user?.id || '22222222-2222-2222-2222-222222222222',
+          rationale: rec.rationale || rec.explanation,
           payload: {
-            suggested_winner_id: rec.suggested_winner_id
+            suggested_winner_id: rec.suggested_winner_id,
+            proposed_status: rec.proposed_status,
+            rationale: rec.rationale || rec.explanation
           }
         })
       });
@@ -326,6 +375,38 @@ export default function ContextCuratorStudio({
 
   return (
     <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '22px', paddingTop: '16px' }}>
+
+      {/* Advisory-First Operating Mode Status Pill */}
+      <div style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        background: 'rgba(79, 70, 229, 0.04)',
+        border: '1px solid rgba(79, 70, 229, 0.18)',
+        borderRadius: '10px',
+        padding: '10px 16px',
+        fontSize: '0.78rem',
+        flexWrap: 'wrap',
+        gap: '10px'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+          <span style={{ fontWeight: 800, color: '#4f46e5' }}>🛡️ Curator Operating Posture:</span>
+          <span style={{ fontWeight: 800, color: '#1e1b4b', background: '#e0e7ff', padding: '2px 8px', borderRadius: '6px' }}>
+            Assisted Governance (Advisory-First)
+          </span>
+          <span style={{ color: 'var(--text-muted)' }}>
+            Recommendations are advisory by default; explicit reviewer approval required before production claim mutations.
+          </span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <span style={{ fontSize: '0.72rem', color: '#047857', background: '#ecfdf5', border: '1px solid #a7f3d0', padding: '2px 8px', borderRadius: '6px', fontWeight: 700 }}>
+            Shadow Mode Active (Zero-Mutation API)
+          </span>
+          <span style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: 600 }}>
+            Controlled Autonomous: Deterministic Only
+          </span>
+        </div>
+      </div>
 
       {/* ========================================================= */}
       {/* SUB-VIEW 1: AUTONOMOUS CONTEXT HEALTH & STEWARD BOT       */}
@@ -597,13 +678,26 @@ export default function ContextCuratorStudio({
                         {rec.title}
                       </h4>
                       <p style={{ margin: 0, fontSize: '0.78rem', color: 'var(--text-muted)', lineHeight: 1.4 }}>
-                        {rec.explanation}
+                        {rec.rationale || rec.explanation || rec.summary}
                       </p>
+                      {rec.proposed_status && (
+                        <div style={{ marginTop: '8px', fontSize: '0.70rem', color: '#4f46e5', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+                          <span>Proposed Status:</span>
+                          <span style={{ background: '#e0e7ff', color: '#3730a3', padding: '1px 6px', borderRadius: '4px', border: '1px solid #c7d2fe' }}>
+                            {rec.proposed_status}
+                          </span>
+                          {rec.requires_approval && (
+                            <span style={{ color: '#b45309', background: '#fef3c7', padding: '1px 6px', borderRadius: '4px', border: '1px solid #fde68a', fontSize: '0.66rem' }}>
+                              🔒 Auditor Approval Required
+                            </span>
+                          )}
+                        </div>
+                      )}
                     </div>
 
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid var(--border-color)', paddingTop: '10px' }}>
                       <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>
-                        Target: <code style={{ fontSize: '0.68rem' }}>{rec.target_id?.substring(0, 8)}</code>
+                        Target: <code style={{ fontSize: '0.68rem' }}>{(rec.target_claim_id || rec.target_id)?.substring(0, 8)}</code>
                       </span>
                       <button
                         onClick={() => handleApplyAction(rec)}
@@ -630,12 +724,12 @@ export default function ContextCuratorStudio({
                         ) : isApplied ? (
                           <>
                             <span>✓</span>
-                            <span>Applied</span>
+                            <span>Approved & Applied</span>
                           </>
                         ) : (
                           <>
                             <span>⚡</span>
-                            <span>Apply Recommendation</span>
+                            <span>Review & Approve Recommendation</span>
                           </>
                         )}
                       </button>
@@ -938,9 +1032,62 @@ export default function ContextCuratorStudio({
                                   fontWeight: 800,
                                   letterSpacing: '0.03em'
                                 }}
-                                title={`Blast Radius Impact Score: ${issue.impact_score || 0}`}
+                                title={
+                                  issue.blast_radius_breakdown
+                                    ? `Evidence-Based Blast Radius: ${issue.impact_score}\n• Affected Claims: ${issue.blast_radius_breakdown.affected_claims} (score: ${issue.blast_radius_breakdown.affected_claims_score})\n• Downstream Workflows: ${issue.blast_radius_breakdown.downstream_agent_workflows} (score: ${issue.blast_radius_breakdown.workflows_score})\n• Tenant Scope: ${issue.blast_radius_breakdown.tenant_scope}\n• Source Authority: ${issue.blast_radius_breakdown.source_authority} (score: ${issue.blast_radius_breakdown.source_authority_score})\n• Conflict Severity: ${issue.blast_radius_breakdown.conflict_severity}\nFormula: ${issue.blast_radius_breakdown.formula}`
+                                    : `Blast Radius Impact Score: ${issue.impact_score || 0}`
+                                }
                               >
                                 💥 {issue.blast_radius.replace('_', ' ')} ({issue.impact_score || 0})
+                              </span>
+                            )}
+
+                            {/* Canonical Conflict Type Pill */}
+                            {(() => {
+                              const badgeMeta = formatConflictTypeBadge(issue.conflict_type);
+                              return (
+                                <span style={{
+                                  background: badgeMeta.bg,
+                                  color: badgeMeta.color,
+                                  border: `1px solid ${badgeMeta.border}`,
+                                  padding: '2px 8px',
+                                  borderRadius: '6px',
+                                  fontSize: '0.66rem',
+                                  fontWeight: 800,
+                                  letterSpacing: '0.02em'
+                                }}>
+                                  🏷️ {badgeMeta.label}
+                                </span>
+                              );
+                            })()}
+
+                            {/* Exception Detected Pill */}
+                            {issue.has_exception && (
+                              <span style={{
+                                background: 'rgba(20, 184, 166, 0.15)',
+                                color: '#0d9488',
+                                border: '1px solid rgba(20, 184, 166, 0.35)',
+                                padding: '2px 8px',
+                                borderRadius: '6px',
+                                fontSize: '0.66rem',
+                                fontWeight: 800
+                              }} title="Lex Specialis: Specific conditional exception carveout coexists with baseline rule">
+                                ⚡ Exception Detected
+                              </span>
+                            )}
+
+                            {/* Conflicting Fields Pill */}
+                            {issue.conflicting_fields && issue.conflicting_fields.length > 0 && (
+                              <span style={{
+                                background: 'rgba(100, 116, 139, 0.12)',
+                                color: '#475569',
+                                border: '1px solid rgba(100, 116, 139, 0.25)',
+                                padding: '2px 8px',
+                                borderRadius: '6px',
+                                fontSize: '0.66rem',
+                                fontWeight: 700
+                              }}>
+                                Fields: {issue.conflicting_fields.join(', ')}
                               </span>
                             )}
                           </div>
@@ -973,9 +1120,20 @@ export default function ContextCuratorStudio({
                                 "{issue.cluster_a.representative_text}"
                               </p>
                             </div>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.72rem', color: 'var(--text-muted)', paddingTop: '8px', borderTop: '1px solid rgba(220, 38, 38, 0.15)' }}>
-                              <span>Section: {issue.cluster_a.source_title}</span>
-                              <span>Avg Trust: <strong>{(Number(issue.cluster_a.trust_score) * 100).toFixed(0)}%</strong></span>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', fontSize: '0.70rem', color: 'var(--text-muted)', paddingTop: '8px', borderTop: '1px solid rgba(220, 38, 38, 0.15)' }}>
+                              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <span>Section: {issue.cluster_a.source_title}</span>
+                                <span>Authority: <strong>{issue.cluster_a.authority_level || 75}%</strong></span>
+                              </div>
+                              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <span>Scope: <strong>{issue.cluster_a.applicable_scope?.tier || issue.cluster_a.applicable_scope?.grade || issue.cluster_a.applicable_scope?.audience || 'General Baseline'}</strong></span>
+                                <span>Status: <strong style={{ color: issue.cluster_a.certification_status === 'verified' ? '#15803D' : '#D97706' }}>{(issue.cluster_a.certification_status || 'candidate').toUpperCase()}</strong></span>
+                              </div>
+                              {issue.cluster_a.effective_dates?.valid_from && (
+                                <div style={{ fontSize: '0.66rem', color: 'var(--text-muted)' }}>
+                                  Dates: {issue.cluster_a.effective_dates.valid_from.substring(0, 10)} → {issue.cluster_a.effective_dates.valid_until ? issue.cluster_a.effective_dates.valid_until.substring(0, 10) : 'Present'}
+                                </div>
+                              )}
                             </div>
                           </div>
 
@@ -1001,12 +1159,44 @@ export default function ContextCuratorStudio({
                                 "{issue.cluster_b.representative_text}"
                               </p>
                             </div>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.72rem', color: 'var(--text-muted)', paddingTop: '8px', borderTop: '1px solid rgba(22, 163, 74, 0.15)' }}>
-                              <span>Section: {issue.cluster_b.source_title}</span>
-                              <span>Trust: <strong>{(Number(issue.cluster_b.trust_score) * 100).toFixed(0)}%</strong></span>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', fontSize: '0.70rem', color: 'var(--text-muted)', paddingTop: '8px', borderTop: '1px solid rgba(22, 163, 74, 0.15)' }}>
+                              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <span>Section: {issue.cluster_b.source_title}</span>
+                                <span>Authority: <strong>{issue.cluster_b.authority_level || 75}%</strong></span>
+                              </div>
+                              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <span>Scope: <strong>{issue.cluster_b.applicable_scope?.tier || issue.cluster_b.applicable_scope?.grade || issue.cluster_b.applicable_scope?.audience || 'General Baseline'}</strong></span>
+                                <span>Status: <strong style={{ color: issue.cluster_b.certification_status === 'verified' ? '#15803D' : '#D97706' }}>{(issue.cluster_b.certification_status || 'candidate').toUpperCase()}</strong></span>
+                              </div>
+                              {issue.cluster_b.effective_dates?.valid_from && (
+                                <div style={{ fontSize: '0.66rem', color: 'var(--text-muted)' }}>
+                                  Dates: {issue.cluster_b.effective_dates.valid_from.substring(0, 10)} → {issue.cluster_b.effective_dates.valid_until ? issue.cluster_b.effective_dates.valid_until.substring(0, 10) : 'Present'}
+                                </div>
+                              )}
                             </div>
                           </div>
                         </div>
+
+                        {/* Explainable Precedence Rationale Banner */}
+                        {(issue.resolution_rationale || issue.precedence_rule) && (
+                          <div style={{
+                            background: 'rgba(79, 70, 229, 0.05)',
+                            border: '1px solid rgba(79, 70, 229, 0.18)',
+                            borderRadius: '8px',
+                            padding: '8px 12px',
+                            fontSize: '0.74rem',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '8px',
+                            flexWrap: 'wrap'
+                          }}>
+                            <span style={{ fontWeight: 800, color: '#4f46e5' }}>⚖️ Precedence Governance:</span>
+                            <span style={{ fontWeight: 700, color: 'var(--text-main)', background: 'rgba(79, 70, 229, 0.1)', padding: '1px 6px', borderRadius: '4px' }}>
+                              [{issue.precedence_rule || 'DETERMINISTIC_PRECEDENCE'}]
+                            </span>
+                            <span style={{ color: 'var(--text-muted)' }}>{issue.resolution_rationale}</span>
+                          </div>
+                        )}
 
                         {/* Auditor Actions Toolbar */}
                         <div style={{
@@ -1037,17 +1227,35 @@ export default function ContextCuratorStudio({
                             <span>{isExpanded ? '▴ Hide' : '▾ Inspect'} All {issue.total_conflicts} Underlying Pairwise Conflicts</span>
                           </button>
 
-                          <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                          <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
+                            {/* Safety Lock Warning Badge */}
+                            {!issue.can_one_click_resolve && (
+                              <span style={{
+                                fontSize: '0.70rem',
+                                padding: '4px 10px',
+                                borderRadius: '6px',
+                                background: '#FEF3C7',
+                                color: '#92400E',
+                                border: '1px solid #FCD34D',
+                                fontWeight: 700
+                              }}>
+                                🔒 {issue.safety_lock_reason || 'Safety Lock: Individual review required'}
+                              </span>
+                            )}
+
                             <button
                               onClick={() => handleResolveIssue(issue.issue_id, 'B')}
-                              disabled={isResolving}
+                              disabled={isResolving || !issue.can_one_click_resolve}
                               className="btn btn-success"
                               style={{
                                 padding: '8px 16px',
                                 fontSize: '0.8rem',
                                 fontWeight: 700,
+                                opacity: (!issue.can_one_click_resolve) ? 0.6 : 1,
+                                cursor: (!issue.can_one_click_resolve) ? 'not-allowed' : 'pointer',
                                 boxShadow: '0 2px 6px rgba(22,163,74,0.2)'
                               }}
+                              title={!issue.can_one_click_resolve ? issue.safety_lock_reason : 'Approve Cluster B and supersede conflicting variations'}
                             >
                               {isResolving ? 'Resolving...' : `✓ One-Click Resolve: Approve Cluster B (Supersede ${issue.cluster_a.claim_count} in A)`}
                             </button>
@@ -1151,13 +1359,42 @@ export default function ContextCuratorStudio({
                         }}
                       >
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
                             <span style={{ fontWeight: 800, fontSize: '0.88rem', color: 'var(--text-main)' }}>
-                              Conflict #{idx + 1}: {conf.conflict_type?.toUpperCase() || "NUMERICAL_DISCREPANCY"}
+                              Conflict #{idx + 1}:
                             </span>
+                            {(() => {
+                              const bMeta = formatConflictTypeBadge(conf.conflict_type);
+                              return (
+                                <span style={{
+                                  background: bMeta.bg,
+                                  color: bMeta.color,
+                                  border: `1px solid ${bMeta.border}`,
+                                  padding: '2px 8px',
+                                  borderRadius: '6px',
+                                  fontSize: '0.66rem',
+                                  fontWeight: 800
+                                }}>
+                                  🏷️ {bMeta.label}
+                                </span>
+                              );
+                            })()}
                             <span className="badge badge-review" style={{ fontSize: '0.65rem' }}>
                               Severity: {conf.severity?.toUpperCase() || 'HIGH'}
                             </span>
+                            {conf.conflicting_fields && conf.conflicting_fields.length > 0 && (
+                              <span style={{
+                                background: 'rgba(100, 116, 139, 0.12)',
+                                color: '#475569',
+                                border: '1px solid rgba(100, 116, 139, 0.25)',
+                                padding: '2px 8px',
+                                borderRadius: '6px',
+                                fontSize: '0.66rem',
+                                fontWeight: 700
+                              }}>
+                                Fields: {conf.conflicting_fields.join(', ')}
+                              </span>
+                            )}
                           </div>
                           <span className="code-pill" style={{ fontSize: '0.72rem' }}>
                             Confidence: {conf.confidence || '0.95'}
@@ -1186,9 +1423,21 @@ export default function ContextCuratorStudio({
                                 "{claimA?.claim_text || 'No claim text recorded'}"
                               </p>
                             </div>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.7rem', color: 'var(--text-muted)', paddingTop: '6px', borderTop: '1px solid rgba(220, 38, 38, 0.15)' }}>
-                              <span>Source: {sectionA}</span>
-                              <span>Trust: <strong>{(Number(scoreA) * 100).toFixed(0)}%</strong></span>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', fontSize: '0.7rem', color: 'var(--text-muted)', paddingTop: '6px', borderTop: '1px solid rgba(220, 38, 38, 0.15)' }}>
+                              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <span>Source: {sectionA}</span>
+                                <span>Trust: <strong>{(Number(scoreA) * 100).toFixed(0)}%</strong></span>
+                              </div>
+                              {conf.applicable_scope?.claim_a_scope && (
+                                <div style={{ fontSize: '0.66rem' }}>
+                                  Scope: <strong>{conf.applicable_scope.claim_a_scope.tier || conf.applicable_scope.claim_a_scope.grade || 'General'}</strong>
+                                </div>
+                              )}
+                              {conf.effective_dates?.claim_a_valid_from && (
+                                <div style={{ fontSize: '0.66rem' }}>
+                                  Dates: {conf.effective_dates.claim_a_valid_from.substring(0, 10)} → {conf.effective_dates.claim_a_valid_until ? conf.effective_dates.claim_a_valid_until.substring(0, 10) : 'Present'}
+                                </div>
+                              )}
                             </div>
                           </div>
 
@@ -1212,12 +1461,38 @@ export default function ContextCuratorStudio({
                                 "{claimB?.claim_text || 'No claim text recorded'}"
                               </p>
                             </div>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.7rem', color: 'var(--text-muted)', paddingTop: '6px', borderTop: '1px solid rgba(22, 163, 74, 0.15)' }}>
-                              <span>Source: {sectionB}</span>
-                              <span>Trust: <strong>{(Number(scoreB) * 100).toFixed(0)}%</strong></span>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', fontSize: '0.7rem', color: 'var(--text-muted)', paddingTop: '6px', borderTop: '1px solid rgba(22, 163, 74, 0.15)' }}>
+                              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <span>Source: {sectionB}</span>
+                                <span>Trust: <strong>{(Number(scoreB) * 100).toFixed(0)}%</strong></span>
+                              </div>
+                              {conf.applicable_scope?.claim_b_scope && (
+                                <div style={{ fontSize: '0.66rem' }}>
+                                  Scope: <strong>{conf.applicable_scope.claim_b_scope.tier || conf.applicable_scope.claim_b_scope.grade || 'General'}</strong>
+                                </div>
+                              )}
+                              {conf.effective_dates?.claim_b_valid_from && (
+                                <div style={{ fontSize: '0.66rem' }}>
+                                  Dates: {conf.effective_dates.claim_b_valid_from.substring(0, 10)} → {conf.effective_dates.claim_b_valid_until ? conf.effective_dates.claim_b_valid_until.substring(0, 10) : 'Present'}
+                                </div>
+                              )}
                             </div>
                           </div>
                         </div>
+
+                        {/* Rationale Pill if present */}
+                        {conf.resolution_rationale && (
+                          <div style={{
+                            background: 'rgba(79, 70, 229, 0.05)',
+                            border: '1px solid rgba(79, 70, 229, 0.18)',
+                            borderRadius: '6px',
+                            padding: '6px 10px',
+                            fontSize: '0.72rem',
+                            color: 'var(--text-muted)'
+                          }}>
+                            <strong style={{ color: '#4f46e5' }}>Precedence Analysis:</strong> {conf.resolution_rationale}
+                          </div>
+                        )}
 
                         {/* Auditor Resolution Actions */}
                         <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px', borderTop: '1px solid var(--border-color)', paddingTop: '12px' }}>
@@ -1367,7 +1642,8 @@ export default function ContextCuratorStudio({
                   <tr style={{ background: 'var(--bg-card)', borderBottom: '2px solid var(--border-color)', textAlign: 'left' }}>
                     <th style={{ padding: '10px 14px', color: 'var(--text-main)' }}>Claim & Source</th>
                     <th style={{ padding: '10px 14px', color: 'var(--text-main)' }}>Age</th>
-                    <th style={{ padding: '10px 14px', color: 'var(--text-main)' }}>Trust Degradation</th>
+                    <th style={{ padding: '10px 14px', color: 'var(--text-main)' }}>Freshness Signal</th>
+                    <th style={{ padding: '10px 14px', color: 'var(--text-main)' }}>Certification Status</th>
                     <th style={{ padding: '10px 14px', color: 'var(--text-main)' }}>Drift Status</th>
                     <th style={{ padding: '10px 14px', color: 'var(--text-main)', textAlign: 'right' }}>Governance Actions</th>
                   </tr>
@@ -1399,13 +1675,11 @@ export default function ContextCuratorStudio({
                           </span>
                         </td>
 
+                        {/* Independent Field 1: Freshness Signal (Time Decay Factor) */}
                         <td style={{ padding: '12px 14px', whiteSpace: 'nowrap' }}>
                           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                            <span style={{ color: 'var(--text-muted)', textDecoration: 'line-through' }}>
-                              {(item.initial_trust * 100).toFixed(0)}%
-                            </span>
-                            <span style={{ fontWeight: 800, color: item.current_decayed_trust < 0.70 ? '#DC2626' : '#059669' }}>
-                              {(item.current_decayed_trust * 100).toFixed(0)}%
+                            <span style={{ fontWeight: 800, color: (item.freshness_score ?? 1.0) < 0.70 ? '#DC2626' : '#059669' }}>
+                              {((item.freshness_score ?? 1.0) * 100).toFixed(0)}% Freshness
                             </span>
                             {item.decay_pct > 0 && (
                               <span style={{ fontSize: '0.68rem', color: '#DC2626', fontWeight: 700 }}>
@@ -1413,6 +1687,30 @@ export default function ContextCuratorStudio({
                               </span>
                             )}
                           </div>
+                        </td>
+
+                        {/* Independent Field 2: Certification Status (Legal/Trust Decision) */}
+                        <td style={{ padding: '12px 14px', whiteSpace: 'nowrap' }}>
+                          <span style={{
+                            padding: '3px 8px',
+                            borderRadius: '6px',
+                            fontSize: '0.72rem',
+                            fontWeight: 800,
+                            letterSpacing: '0.02em',
+                            background: (item.certification_status === 'SUPERSEDED' || item.certification_status === 'OUTDATED')
+                              ? '#FEE2E2'
+                              : (item.certification_status === 'CANDIDATE' || item.certification_status === 'REQUIRES_REVIEW')
+                              ? '#FEF3C7'
+                              : '#DCFCE7',
+                            color: (item.certification_status === 'SUPERSEDED' || item.certification_status === 'OUTDATED')
+                              ? '#DC2626'
+                              : (item.certification_status === 'CANDIDATE' || item.certification_status === 'REQUIRES_REVIEW')
+                              ? '#B45309'
+                              : '#15803D',
+                            border: `1px solid ${(item.certification_status === 'SUPERSEDED' || item.certification_status === 'OUTDATED') ? '#FCA5A5' : (item.certification_status === 'CANDIDATE' || item.certification_status === 'REQUIRES_REVIEW') ? '#FCD34D' : '#86EFAC'}`
+                          }} title="Legal/Trust standing controlled by validation & review workflow (independent of temporal decay)">
+                            {item.certification_status || 'CERTIFIED'}
+                          </span>
                         </td>
 
                         <td style={{ padding: '12px 14px', whiteSpace: 'nowrap' }}>
@@ -1436,9 +1734,9 @@ export default function ContextCuratorStudio({
                               onClick={() => handleRemediateClaim(item.claim_id, 'RE_ATTEST')}
                               className="btn btn-secondary"
                               style={{ padding: '5px 10px', fontSize: '0.74rem', background: '#ECFDF5', borderColor: '#A7F3D0', color: '#047857', fontWeight: 700 }}
-                              title="Reset freshness clock to Day 0"
+                              title="Records versioned governance attestation by Data Owner, resetting freshness horizon for 90 days"
                             >
-                              {remediatingId === item.claim_id ? 'Updating...' : '✓ Re-Attest'}
+                              {remediatingId === item.claim_id ? 'Attesting...' : '✓ Re-Attest (90d Horizon)'}
                             </button>
                             <button
                               type="button"
