@@ -112,18 +112,21 @@ class DocumentParser:
 
         in_table = False
         table_headers: list[str] = []
+        table_header_rows: list[list[str]] = []
         table_rows_buffer: list[dict[str, Any]] = []
         table_start_char = 0
         table_start_line = 0
         table_row_count = 0
         table_semantic_type = "policy_matrix"
+        table_id_str = ""
+        current_page_num = 1
         last_prose_context: str | None = None
         last_lead_in_prose: str | None = None
 
         total_lines = len(lines)
         parsed_lines = 0
 
-        for line_raw in lines:
+        for idx_line, line_raw in enumerate(lines):
             line_str = line_raw.strip()
             line_len = len(line_raw)
             line_start_char = char_cursor
@@ -138,14 +141,25 @@ class DocumentParser:
             # 1. Heading Detection (# H1, ## H2, etc.)
             h_match = cls.HEADING_PATTERN.match(line_str)
             if h_match:
+                level = len(h_match.group(1))
+                h_title = h_match.group(2).strip()
+                page_m = re.match(r"^Page\s+(\d+)\b", h_title, re.IGNORECASE)
+                if page_m:
+                    current_page_num = int(page_m.group(1))
+                    # Peek ahead: if next non-empty line is a markdown table row, keep table open across page break
+                    next_non_empty = next((l.strip() for l in lines[idx_line + 1:] if l.strip()), "")
+                    if in_table and cls.TABLE_ROW_PATTERN.match(next_non_empty):
+                        char_cursor = line_end_char
+                        line_num += 1
+                        continue
+
                 # Flush table if was in table
                 if in_table:
                     in_table = False
                     table_headers = []
+                    table_header_rows = []
                     table_row_count = 0
 
-                level = len(h_match.group(1))
-                h_title = h_match.group(2).strip()
                 last_lead_in_prose = None
 
                 # Adjust breadcrumb hierarchy
@@ -167,6 +181,7 @@ class DocumentParser:
                         "line_end": line_num,
                         "start_char": line_start_char,
                         "end_char": line_end_char,
+                        "page_number": current_page_num,
                         "heading_path": context,
                         "paragraph_index": seq_idx,
                         **envelope.locator_metadata,
@@ -197,13 +212,47 @@ class DocumentParser:
                     line_num += 1
                     continue
 
+                # Detect 2-row grouped header: if table_row_count == 0 and next non-empty line is separator
+                # while current line looks like subheaders under table_headers
+                if in_table and table_row_count == 0:
+                    next_non_empty = next((l.strip() for l in lines[idx_line + 1:] if l.strip()), "")
+                    if cls.TABLE_ROW_PATTERN.match(next_non_empty):
+                        next_cells = [c.strip() for c in next_non_empty.strip("|").split("|")]
+                        if all(re.match(r"^:?-+:?$", c) for c in next_cells if c):
+                            # This line is a second header row before the separator
+                            table_header_rows.append(row_cells)
+                            max_c = max(len(table_headers), len(row_cells))
+                            parent_h = list(table_headers) + [""] * (max_c - len(table_headers))
+                            child_h = list(row_cells) + [""] * (max_c - len(row_cells))
+                            # Propagate non-empty grouped parent across empty trailing header slots
+                            active_parent = ""
+                            expanded_parent: list[str] = []
+                            for p_c in parent_h:
+                                if p_c.strip():
+                                    active_parent = p_c.strip()
+                                expanded_parent.append(active_parent)
+                            composed: list[str] = []
+                            for idx_h in range(max_c):
+                                p_val = expanded_parent[idx_h]
+                                c_val = child_h[idx_h].strip()
+                                if p_val and c_val and p_val.lower() != c_val.lower() and idx_h > 0:
+                                    composed.append(f"{p_val} > {c_val}")
+                                else:
+                                    composed.append(c_val or p_val or f"col_{idx_h+1}")
+                            table_headers = composed
+                            char_cursor = line_end_char
+                            line_num += 1
+                            continue
+
                 if not in_table:
                     # First row is table header
                     in_table = True
                     table_headers = row_cells
+                    table_header_rows = [row_cells]
                     table_start_char = line_start_char
                     table_start_line = line_num
                     table_row_count = 0
+                    table_id_str = f"table_line_{table_start_line}"
 
                     # Classify table semantic type from headers and hierarchical context
                     clean_hdrs = [h.lower().strip() for h in table_headers]
@@ -252,6 +301,41 @@ class DocumentParser:
                         table_semantic_type = "policy_matrix"
                 else:
                     table_id_str = f"table_line_{table_start_line}"
+                    # Skip repeated header rows inside multi-page tables
+                    if table_row_count > 0 and [c.strip().lower() for c in row_cells] == [h.strip().lower() for h in table_headers]:
+                        char_cursor = line_end_char
+                        line_num += 1
+                        continue
+
+                    # Detect 2-row grouped header even when separator appeared after row 1 (e.g. | Parent | | | \n |---|---|---| \n | Child1 | Child2 | Child3 |)
+                    if (
+                        table_row_count == 0
+                        and len(table_headers) >= 2
+                        and any(not h.strip() for h in table_headers)
+                        and len(row_cells) == len(table_headers)
+                        and all(c.strip() for c in row_cells)
+                        and not any(re.match(r"^[\$€£₹¥]?\s*\d+(?:\.\d+)?%?$", c.strip()) for c in row_cells)
+                    ):
+                        table_header_rows.append(row_cells)
+                        active_parent = ""
+                        expanded_parent: list[str] = []
+                        for p_c in table_headers:
+                            if p_c.strip():
+                                active_parent = p_c.strip()
+                            expanded_parent.append(active_parent)
+                        composed_hdrs: list[str] = []
+                        for idx_h in range(len(row_cells)):
+                            p_val = expanded_parent[idx_h]
+                            c_val = row_cells[idx_h].strip()
+                            if p_val and c_val and p_val.lower() != c_val.lower() and idx_h > 0:
+                                composed_hdrs.append(f"{p_val} > {c_val}")
+                            else:
+                                composed_hdrs.append(c_val or p_val or f"col_{idx_h+1}")
+                        table_headers = composed_hdrs
+                        char_cursor = line_end_char
+                        line_num += 1
+                        continue
+
                     # Check if this row is a multiline continuation of the previous table row (e.g. wrapped multiline cells where col 0 is empty)
                     if row_cells and not row_cells[0].strip() and units and units[-1].block_type == "table_row" and units[-1].structured_data.get("table_id") == table_id_str:
                         prev_unit = units[-1]
@@ -261,7 +345,10 @@ class DocumentParser:
                                 col_name = table_headers[idx]
                                 prev_cols[col_name] = (prev_cols.get(col_name, "") + " " + cell_val.strip()).strip()
                         prev_unit.structured_data["columns"] = prev_cols
+                        prev_unit.cells = dict(prev_cols)
                         prev_unit.content_text = " | ".join(f"{k}: {v}" for k, v in prev_cols.items())
+                        char_cursor = line_end_char
+                        line_num += 1
                         continue
 
                     # Data row
@@ -352,6 +439,7 @@ class DocumentParser:
                         structured_data={
                             "columns": row_dict,
                             "table_headers": table_headers,
+                            "raw_header_rows": table_header_rows,
                             "table_type": table_semantic_type,
                             "table_id": table_id_str,
                             "row_id": row_id_str,
@@ -359,12 +447,15 @@ class DocumentParser:
                             "is_ambiguous": is_ambiguous,
                             "ambiguity_reason": ambiguity_reason,
                             "raw_row_line": line_str,
+                            "original_blank_cols": [k for k, v in row_dict.items() if not str(v).strip()],
+                            "inherited_cols": [],
                         },
                         locator={
                             "line_start": line_num,
                             "line_end": line_num,
                             "start_char": line_start_char,
                             "end_char": line_end_char,
+                            "page_number": current_page_num,
                             "table_id": table_id_str,
                             "table_start_line": table_start_line,
                             "row_index": table_row_count,
@@ -568,7 +659,15 @@ class DocumentParser:
                         for u in table_units:
                             cols = u.structured_data.get("columns", {})
                             cur_v = cols.get(col_name, "").strip()
-                            if not cur_v or cur_v in ("-", "—", "N/A", "n/a", "None", "nil"):
+                            if not cur_v:
                                 cols[col_name] = span_val
                                 u.structured_data["columns"] = cols
+                                u.cells = dict(cols)
+                                inherited = list(u.structured_data.get("inherited_cols") or [])
+                                if col_name not in inherited:
+                                    inherited.append(col_name)
+                                u.structured_data["inherited_cols"] = inherited
                                 u.content_text = " | ".join(f"{k}: {v}" for k, v in cols.items())
+                            elif cur_v in ("-", "—", "N/A", "n/a", "None", "nil"):
+                                # Keep explicit dash/N/A untouched as original non-inherited value unless explicitly ditto
+                                pass

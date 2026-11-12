@@ -62,12 +62,22 @@ class _SemanticHTMLParser(HTMLParser):
 
         # Table state
         self.in_table = False
+        self.in_caption = False
+        self.in_thead = False
+        self.in_tfoot = False
+        self.table_caption: Optional[str] = None
+        self.caption_buffer: List[str] = []
+        self.table_header_rows: List[List[str]] = []
         self.table_headers: List[str] = []
         self.table_rows: List[List[str]] = []
+        self.table_footnotes: List[str] = []
         self.current_row: List[str] = []
+        self.current_row_has_th: bool = False
         self.current_cell: List[str] = []
         self.in_header_cell = False
         self.current_colspan = 1
+        self.current_rowspan = 1
+        self.rowspan_carry: Dict[int, Tuple[int, str]] = {}  # col_idx -> (remaining_rows, text)
 
         # Code block state
         self.in_pre = False
@@ -118,19 +128,44 @@ class _SemanticHTMLParser(HTMLParser):
         elif t == "table":
             self._flush_text()
             self.in_table = True
+            self.in_caption = False
+            self.in_thead = False
+            self.in_tfoot = False
+            self.table_caption = None
+            self.caption_buffer = []
+            self.table_header_rows = []
             self.table_headers = []
             self.table_rows = []
+            self.table_footnotes = []
+            self.rowspan_carry = {}
+
+        elif t == "caption" and self.in_table:
+            self.in_caption = True
+            self.caption_buffer = []
+
+        elif t == "thead" and self.in_table:
+            self.in_thead = True
+
+        elif t == "tfoot" and self.in_table:
+            self.in_tfoot = True
 
         elif t == "tr" and self.in_table:
             self.current_row = []
+            self.current_row_has_th = False
 
         elif t in ("td", "th") and self.in_table:
             self.current_cell = []
             self.in_header_cell = (t == "th")
+            if t == "th":
+                self.current_row_has_th = True
             try:
                 self.current_colspan = int(attr_dict.get("colspan", "1"))
             except ValueError:
                 self.current_colspan = 1
+            try:
+                self.current_rowspan = int(attr_dict.get("rowspan", "1"))
+            except ValueError:
+                self.current_rowspan = 1
 
         # Preformatted code
         elif t == "pre":
@@ -196,19 +231,59 @@ class _SemanticHTMLParser(HTMLParser):
                     "heading_path": list(self.heading_stack),
                 })
 
+        elif t == "caption" and self.in_table:
+            self.in_caption = False
+            cap_text = re.sub(r"\s+", " ", "".join(self.caption_buffer)).strip()
+            if cap_text:
+                self.table_caption = cap_text
+            self.caption_buffer = []
+
+        elif t == "thead" and self.in_table:
+            self.in_thead = False
+
+        elif t == "tfoot" and self.in_table:
+            self.in_tfoot = False
+
         # Table cells and rows
         elif t in ("td", "th") and self.in_table:
+            # Fill any active rowspan columns before placing current cell
+            while len(self.current_row) in self.rowspan_carry:
+                rem, carry_val = self.rowspan_carry[len(self.current_row)]
+                self.current_row.append(carry_val)
+                if rem <= 1:
+                    del self.rowspan_carry[len(self.current_row) - 1]
+                else:
+                    self.rowspan_carry[len(self.current_row) - 1] = (rem - 1, carry_val)
+
             cell_val = re.sub(r"\s+", " ", "".join(self.current_cell)).strip()
             cell_val = cell_val.replace("|", r"\|")
-            # Handle colspan by repeating or padding
-            for _ in range(max(1, self.current_colspan)):
+            for span_i in range(max(1, self.current_colspan)):
+                col_pos = len(self.current_row)
                 self.current_row.append(cell_val)
+                if self.current_rowspan > 1:
+                    self.rowspan_carry[col_pos] = (self.current_rowspan - 1, cell_val)
             self.current_cell.clear()
 
         elif t == "tr" and self.in_table:
+            # Flush trailing rowspan columns on this row if any
+            while len(self.current_row) in self.rowspan_carry:
+                rem, carry_val = self.rowspan_carry[len(self.current_row)]
+                self.current_row.append(carry_val)
+                if rem <= 1:
+                    del self.rowspan_carry[len(self.current_row) - 1]
+                else:
+                    self.rowspan_carry[len(self.current_row) - 1] = (rem - 1, carry_val)
+
             if self.current_row:
-                # If first row contains 'th' cells or headers are empty, treat as header
-                if not self.table_headers and (self.in_header_cell or not self.table_rows):
+                if self.in_tfoot:
+                    foot_txt = " ".join(c for c in self.current_row if c).strip()
+                    if foot_txt:
+                        self.table_footnotes.append(foot_txt)
+                elif self.in_thead or (self.current_row_has_th and not self.table_rows):
+                    self.table_header_rows.append(list(self.current_row))
+                    self.table_headers = list(self.current_row)
+                elif not self.table_headers and not self.table_rows:
+                    self.table_header_rows.append(list(self.current_row))
                     self.table_headers = list(self.current_row)
                 else:
                     self.table_rows.append(list(self.current_row))
@@ -216,15 +291,38 @@ class _SemanticHTMLParser(HTMLParser):
 
         elif t == "table" and self.in_table:
             self.in_table = False
-            if self.table_headers or self.table_rows:
+            # Compose hierarchical headers if multi-row headers exist
+            resolved_headers = list(self.table_headers)
+            if len(self.table_header_rows) > 1:
+                max_c = max(len(r) for r in self.table_header_rows)
+                leaf = list(self.table_header_rows[-1]) + [""] * (max_c - len(self.table_header_rows[-1]))
+                parent = list(self.table_header_rows[-2]) + [""] * (max_c - len(self.table_header_rows[-2]))
+                combined_hdrs: List[str] = []
+                for idx in range(max_c):
+                    p_lbl = parent[idx].strip()
+                    c_lbl = leaf[idx].strip()
+                    if p_lbl and c_lbl and p_lbl.lower() != c_lbl.lower():
+                        combined_hdrs.append(f"{p_lbl} > {c_lbl}")
+                    else:
+                        combined_hdrs.append(c_lbl or p_lbl or f"Column_{idx+1}")
+                resolved_headers = combined_hdrs
+
+            if resolved_headers or self.table_rows:
                 self.raw_elements.append({
                     "type": "table",
-                    "headers": self.table_headers,
+                    "caption": self.table_caption,
+                    "header_rows": self.table_header_rows,
+                    "headers": resolved_headers,
                     "rows": self.table_rows,
+                    "footnotes": self.table_footnotes,
                     "heading_path": list(self.heading_stack),
                 })
+            self.table_caption = None
+            self.table_header_rows = []
             self.table_headers = []
             self.table_rows = []
+            self.table_footnotes = []
+            self.rowspan_carry = {}
 
         # Preformatted code
         elif t == "pre" and self.in_pre:
@@ -252,6 +350,8 @@ class _SemanticHTMLParser(HTMLParser):
 
         if self.in_pre:
             self.code_buffer.append(data)
+        elif self.in_caption:
+            self.caption_buffer.append(data)
         elif self.in_table and self.current_tag in ("td", "th"):
             self.current_cell.append(data)
         else:
@@ -418,10 +518,21 @@ class HtmlAdapter:
                         r = r + [""] * (col_count - len(r))
                     aligned_rows.append(r[:col_count])
 
+                caption = elem.get("caption")
+                footnotes = elem.get("footnotes") or []
                 hdr_line = "| " + " | ".join(headers) + " |"
                 sep_line = "| " + " | ".join([":---"] * col_count) + " |"
                 data_lines = ["| " + " | ".join(r) + " |" for r in aligned_rows]
-                tbl_text = "\n".join([hdr_line, sep_line] + data_lines)
+                tbl_parts = []
+                if caption:
+                    tbl_parts.append(f"Table Caption: {caption}")
+                    tbl_parts.append("")
+                tbl_parts.extend([hdr_line, sep_line] + data_lines)
+                if footnotes:
+                    tbl_parts.append("")
+                    for fn in footnotes:
+                        tbl_parts.append(f"Note: {fn}")
+                tbl_text = "\n".join(tbl_parts)
 
                 row_dicts = []
                 for r in aligned_rows:
@@ -429,9 +540,12 @@ class HtmlAdapter:
 
                 t_data = {
                     "table_id": f"tbl_html_{t_idx}",
+                    "caption": caption,
+                    "header_rows": elem.get("header_rows") or [],
                     "headers": headers,
                     "rows": aligned_rows,
                     "row_dicts": row_dicts,
+                    "footnotes": footnotes,
                 }
                 tables.append(t_data)
 
@@ -615,7 +729,16 @@ class HtmlAdapter:
                         content_role=ContentRole.POLICY_RULE,
                         is_canonical=True,
                         content_text=row_text,
-                        structured_data={"columns": r_dict, **r_dict},
+                        structured_data={
+                            "columns": r_dict,
+                            "table_id": t_data.get("table_id"),
+                            "table_headers": headers,
+                            "raw_header_rows": t_data.get("header_rows") or [],
+                            "table_caption": t_data.get("caption"),
+                            "footnotes": t_data.get("footnotes") or [],
+                            "row_index": r_idx,
+                            **r_dict,
+                        },
                         locator={
                             "page_number": block.page_number,
                             "section_heading": sec_name,

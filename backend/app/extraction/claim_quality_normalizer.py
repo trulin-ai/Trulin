@@ -961,6 +961,11 @@ class ClaimQualityNormalizer:
         raw_span = getattr(candidate, "evidence_text_span", "") or ""
         combined_text = f"{raw_span} {raw_text} {raw_obj} {raw_subj}".lower()
 
+        # Preserve TCUSE context-enriched table claims without overwriting context-derived S-P-O
+        sem_ctx = getattr(candidate, "semantic_context", None)
+        if sem_ctx and sem_ctx.get("business_topic"):
+            return candidate
+
         # Specific semantic remappings for high-priority candidates (Slice 3 & Phase 6 Calibration)
         # 0a. Liability cap
         if "liability" in combined_text and any(w in combined_text for w in ("aggregate", "maximum", "limited to", "12 months", "cap", "prior 12 months")):

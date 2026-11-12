@@ -896,50 +896,101 @@ class OcrAdapter:
         low_conf_count = 0
         evidence_unit_ids = []
 
-        # Region evidence units
-        for r in regions:
-            if r.is_low_confidence:
-                low_conf_count += 1
+        # Reconstruct spatial tables from OCR bounding boxes when tabular geometry is detected
+        reconstructed_table_md = ""
+        if regions:
+            try:
+                from app.normalization.document_restructurer import DocumentSemanticRestructurer
+                word_boxes = [
+                    {
+                        "text": r.repaired_text,
+                        "bbox": [r.bbox.x_min, r.bbox.y_min, r.bbox.x_max, r.bbox.y_max],
+                    }
+                    for r in regions
+                ]
+                reconstructed_table_md = DocumentSemanticRestructurer.reconstruct_tables_from_word_boxes(word_boxes)
+            except Exception as tbl_err:
+                logger.debug("OCR spatial table reconstruction skipped: %s", tbl_err)
 
-            unit = ParsedEvidenceUnit.create(
+        has_reconstructed_table = bool(
+            reconstructed_table_md
+            and any("|---" in line or "| ---" in line for line in reconstructed_table_md.splitlines())
+        )
+
+        if has_reconstructed_table:
+            from app.ingestion.parsers.document_parser import DocumentParser
+            md_envelope = CanonicalSourceEnvelope(
                 envelope_id=envelope.envelope_id,
+                organization_id=envelope.organization_id,
+                source_id=envelope.source_id,
                 asset_id=envelope.asset_id,
-                block_type="image_ocr",
-                content_text=r.repaired_text,
-                content_role=ContentRole.POLICY_RULE,
-                structure_type="image_ocr",
-                locator={
-                    "page": r.page_index,
-                    "page_number": r.page_index,
-                    "bbox": r.bbox.model_dump(),
-                    "polygon": r.polygon,
-                    "confidence": r.confidence,
-                    "is_low_confidence": r.is_low_confidence,
-                    "source_type": "image_ocr",
-                    "reading_order_index": r.reading_order_index,
-                    "original_image_ref": r.original_image_ref,
-                },
-                structured_data={
-                    "raw_ocr_text": r.raw_ocr_text,
-                    "repaired_text": r.repaired_text,
-                    "repair_version": r.repair_version,
-                    "transformation_log": r.transformation_log,
-                    "original_image_ref": r.original_image_ref,
-                    "coordinate_mapping": r.coordinate_mapping,
-                    "ocr_confidence": r.confidence,
-                    "is_low_confidence": r.is_low_confidence,
-                    "review_reasons": r.review_reasons,
-                    "bbox": r.bbox.model_dump(),
-                    "polygon": r.polygon,
-                    "image_name": r.image_name,
-                },
-                hierarchical_context=[title, f"Page {r.page_index}"],
-                sequence_index=seq_idx,
-                section_path=[title, f"Page {r.page_index}"],
+                source_family=SourceFamily.DOCUMENT,
+                source_intent=envelope.source_intent,
+                native_format=envelope.native_format,
+                source_version=envelope.source_version,
+                content_hash=envelope.content_hash,
+                raw_payload=reconstructed_table_md,
+                locator_metadata=envelope.locator_metadata,
+                evidence_locator=envelope.evidence_locator,
+                access_scope=envelope.access_scope,
+                metadata=envelope.metadata,
             )
-            units.append(unit)
-            evidence_unit_ids.append(unit.unit_id)
-            seq_idx += 1
+            parsed_tbl = await DocumentParser.parse(md_envelope)
+            for u in parsed_tbl.units:
+                u.locator["source_type"] = "image_ocr"
+                u.locator["ocr_confidence"] = avg_conf
+                u.locator["is_low_confidence"] = avg_conf < 0.70
+                u.metadata["source_type"] = "image_ocr"
+                u.metadata["ocr_confidence"] = avg_conf
+                u.sequence_index = seq_idx
+                units.append(u)
+                evidence_unit_ids.append(u.unit_id)
+                seq_idx += 1
+        else:
+            # Region evidence units
+            for r in regions:
+                if r.is_low_confidence:
+                    low_conf_count += 1
+
+                unit = ParsedEvidenceUnit.create(
+                    envelope_id=envelope.envelope_id,
+                    asset_id=envelope.asset_id,
+                    block_type="image_ocr",
+                    content_text=r.repaired_text,
+                    content_role=ContentRole.POLICY_RULE,
+                    structure_type="image_ocr",
+                    locator={
+                        "page": r.page_index,
+                        "page_number": r.page_index,
+                        "bbox": r.bbox.model_dump(),
+                        "polygon": r.polygon,
+                        "confidence": r.confidence,
+                        "is_low_confidence": r.is_low_confidence,
+                        "source_type": "image_ocr",
+                        "reading_order_index": r.reading_order_index,
+                        "original_image_ref": r.original_image_ref,
+                    },
+                    structured_data={
+                        "raw_ocr_text": r.raw_ocr_text,
+                        "repaired_text": r.repaired_text,
+                        "repair_version": r.repair_version,
+                        "transformation_log": r.transformation_log,
+                        "original_image_ref": r.original_image_ref,
+                        "coordinate_mapping": r.coordinate_mapping,
+                        "ocr_confidence": r.confidence,
+                        "is_low_confidence": r.is_low_confidence,
+                        "review_reasons": r.review_reasons,
+                        "bbox": r.bbox.model_dump(),
+                        "polygon": r.polygon,
+                        "image_name": r.image_name,
+                    },
+                    hierarchical_context=[title, f"Page {r.page_index}"],
+                    sequence_index=seq_idx,
+                    section_path=[title, f"Page {r.page_index}"],
+                )
+                units.append(unit)
+                evidence_unit_ids.append(unit.unit_id)
+                seq_idx += 1
 
         # Container completeness ledger entry accounting for this image
         completeness_ledger.append({

@@ -217,20 +217,63 @@ class DocxAdapter:
                 table = Table(child, doc)
                 t_idx += 1
                 table_rows: List[List[str]] = []
+                cells_meta: List[List[Dict[str, Any]]] = []
                 headers: List[str] = []
+                seen_master_tcs: set[int] = set()
 
                 for r_idx, row in enumerate(table.rows):
-                    cells = [cls._clean_cell_text(cell.text) for cell in row.cells]
-                    if r_idx == 0:
-                        headers = cells
+                    cells: List[str] = []
+                    row_meta: List[Dict[str, Any]] = []
+                    for c_idx, cell in enumerate(row.cells):
+                        tc_id = id(cell._tc)
+                        is_inherited = tc_id in seen_master_tcs
+                        seen_master_tcs.add(tc_id)
+
+                        cell_txt = cls._clean_cell_text(cell.text)
+                        # Extract nested tables if present inside the cell
+                        if getattr(cell, "tables", None):
+                            nested_parts = []
+                            for n_tbl in cell.tables:
+                                for n_row in n_tbl.rows:
+                                    n_vals = [cls._clean_cell_text(nc.text) for nc in n_row.cells]
+                                    if any(n_vals):
+                                        nested_parts.append("; ".join(v for v in n_vals if v))
+                            if nested_parts:
+                                nested_str = " | ".join(nested_parts)
+                                cell_txt = f"{cell_txt} ({nested_str})".strip() if cell_txt else nested_str
+
+                        cells.append(cell_txt)
+                        row_meta.append({
+                            "row_index": r_idx,
+                            "col_index": c_idx,
+                            "is_merged": is_inherited,
+                            "is_inherited": is_inherited,
+                            "is_original_blank": (cell_txt == ""),
+                            "has_nested_tables": bool(getattr(cell, "tables", None)),
+                        })
                     table_rows.append(cells)
+                    cells_meta.append(row_meta)
 
                 if table_rows:
+                    # Detect 2-row grouped header (row 0 has horizontal merges while row 1 has distinct labels)
+                    header_row_count = 1
+                    if len(table_rows) >= 3 and any(m.get("is_merged") for m in cells_meta[0]):
+                        r0, r1 = table_rows[0], table_rows[1]
+                        if len(set(r1)) > len(set(r0)):
+                            headers = [
+                                f"{r0[i]} > {r1[i]}".strip() if r0[i] and r1[i] and r0[i].lower() != r1[i].lower() else (r1[i] or r0[i])
+                                for i in range(max(len(r0), len(r1)))
+                            ]
+                            header_row_count = 2
+                    if header_row_count == 1:
+                        headers = table_rows[0]
+
                     col_count = len(headers) or len(table_rows[0])
                     # Format markdown table
                     header_line = "| " + " | ".join(headers) + " |"
                     separator_line = "| " + " | ".join([":---"] * col_count) + " |"
-                    data_lines = ["| " + " | ".join(r) + " |" for r in table_rows[1:]] if len(table_rows) > 1 else []
+                    data_rows = table_rows[header_row_count:]
+                    data_lines = ["| " + " | ".join(r) + " |" for r in data_rows] if data_rows else []
 
                     tbl_markdown_lines = [header_line, separator_line] + data_lines
                     tbl_full_text = "\n".join(tbl_markdown_lines)
@@ -240,15 +283,17 @@ class DocxAdapter:
                     char_cursor = end_offset + 2
 
                     row_dicts = []
-                    for r in table_rows[1:]:
+                    for r in data_rows:
                         r_dict = {headers[i] if i < len(headers) else f"col_{i+1}": r[i] for i in range(len(r))}
                         row_dicts.append(r_dict)
 
                     t_data = {
                         "table_id": f"tbl_{t_idx}",
                         "headers": headers,
+                        "header_rows": table_rows[:header_row_count],
                         "rows": table_rows,
                         "row_dicts": row_dicts,
+                        "cells_meta": cells_meta,
                     }
                     tables.append(t_data)
 

@@ -143,6 +143,7 @@ ALLOWED_RULE_CLAIM_TYPES = {
     "table_rule",
     "table_row",
     "policy_matrix",
+    "metric",
 }
 
 # Text markers that indicate navigational cross-references rather than operative policy rules
@@ -536,10 +537,21 @@ class ClaimGateEvaluator:
         # 10c. Modal/operative verb preservation in normative rules
         # Exempt table rows, list items, declarative constraints, and non-rule context
         is_table_rule = bool(
-            (metadata and (metadata.get("table_grid") or metadata.get("in_table") or metadata.get("is_table")))
+            (
+                metadata
+                and (
+                    metadata.get("table_grid")
+                    or metadata.get("in_table")
+                    or metadata.get("is_table")
+                    or metadata.get("table_context")
+                    or metadata.get("semantic_context")
+                    or metadata.get("table_grid_binding")
+                )
+            )
             or ct_clean in {"table_rule", "table_row", "policy_matrix"}
             or "|" in text_clean
             or "\t" in text_clean
+            or (evidence_snippet and "|" in str(evidence_snippet))
         )
         is_list_item = bool(
             re.match(r"^\s*(?:[-*•]|\d+[\.\)])\s+", text_clean)

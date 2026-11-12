@@ -1,5 +1,5 @@
 import re
-from typing import List, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 
 class DocumentSemanticRestructurer:
@@ -41,13 +41,17 @@ class DocumentSemanticRestructurer:
             if ":" in c:
                 return False
             words = [w.lower() for w in re.findall(r"\b[a-zA-Z]+\b", c)]
-            if any(w in cls.DISALLOWED_HEADER_WORDS for w in words):
+            # Only reject if header starts with a strong narrative stopword AND looks like prose
+            if words and words[0] in {"the", "our", "this", "these", "is", "are", "was", "were"} and len(words) >= 3:
+                return False
+            if any(w in {"applies", "defined", "defines", "ensures", "provides", "designed", "serving"} for w in words):
                 return False
             # Disallow 1-2 letter fragments in headers (wh, ere, wil, l)
-            valid_short = ("id", "no", "hr", "to", "on", "in", "at", "by", "of", "or", "as", "is", "up", "if", "re")
+            valid_short = ("id", "no", "hr", "to", "on", "in", "at", "by", "of", "or", "as", "is", "up", "if", "re", "hr", "it", "us", "uk", "eu")
             if any(len(w) <= 2 and w not in valid_short for w in words):
                 return False
-            if len(c) > 35 or c.endswith((".", ",", ";", ":")):
+            max_len = 90 if len(header_cells) == 2 and header_cells.index(cell) == 1 else 45
+            if len(c) > max_len or c.endswith((".", ",", ";", ":")):
                 return False
         return True
 
@@ -63,6 +67,9 @@ class DocumentSemanticRestructurer:
             return True
         if stripped.startswith(("- ", "* ", "• ", "● ", "❖ ", "#", ">", "---", "|")):
             return True
+        # Multi-column whitespace/tab-separated lines (e.g. 'Applies to   All employees...') are tabular rows
+        if len(re.split(r'\s{3,}|\t+', stripped)) >= 2:
+            return False
         words = [w.lower() for w in re.findall(r"\b[a-zA-Z]+\b", stripped)]
         prose_markers = {
             "our", "we", "the", "this", "these", "applies", "ensures",
@@ -70,8 +77,6 @@ class DocumentSemanticRestructurer:
         }
         if len(words) >= 6 and any(w in prose_markers for w in words[:3]):
             return True
-        if len(re.split(r'\s{3,}|\t+', stripped)) >= 2:
-            return False
         return False
 
     @classmethod
@@ -194,7 +199,9 @@ class DocumentSemanticRestructurer:
                     # Handle multiline header wrapped across 2 lines
                     if len(data_rows) > 1 and all(len(c.split()) <= 2 for c in data_rows[0] if c):
                         r1 = data_rows[0]
-                        if any("Confirmed" in c or "Probation" in c or "Date" in c or "Grade" in c for c in r1):
+                        has_numeric_data = any(re.match(r"^[\$€£₹¥]?\s*\d+(?:\.\d+)?%?$", c.strip()) for c in r1 if c.strip())
+                        has_data_label = any(re.match(r"^(?:Grade|Tier|Level|Band|Class)\s+[A-Z0-9]\b", c.strip(), re.IGNORECASE) for c in r1 if c.strip())
+                        if not has_numeric_data and not has_data_label and any("Confirmed" in c or "Probation" in c or "Date" in c or "Grade" in c for c in r1):
                             header = [f"{h} {r1[idx]}".strip() if idx < len(r1) and r1[idx] else h for idx, h in enumerate(header)]
                             data_rows = data_rows[1:]
 
@@ -331,5 +338,274 @@ class DocumentSemanticRestructurer:
             reconstructed_pages.append(f"## Page {page_num}\n\n{norm_body.strip()}")
 
         title_header = (doc_header + "\n\n") if doc_header else "# Document\n\n"
-        return title_header + "\n\n".join(reconstructed_pages)
+        combined = title_header + "\n\n".join(reconstructed_pages)
+        return DocumentSemanticRestructurer.merge_multipage_markdown_tables(combined)
+
+    @classmethod
+    def merge_multipage_markdown_tables(cls, text: str) -> str:
+        """
+        Detects tables split across '## Page N' markers where the second table immediately
+        follows the page marker (with identical header or matching column count) and stitches
+        them into a single continuous Markdown table while preserving page comments.
+        """
+        if not text or "## Page " not in text:
+            return text
+
+        lines = text.split("\n")
+        out: List[str] = []
+        i = 0
+        last_table_headers: Optional[List[str]] = None
+
+        def _is_tbl_line(l: str) -> bool:
+            s = l.strip()
+            return s.startswith("|") and s.endswith("|") and s.count("|") >= 2
+
+        def _is_sep_line(l: str) -> bool:
+            s = l.strip()
+            if not _is_tbl_line(s):
+                return False
+            cells = [c.strip() for c in s.strip("|").split("|")]
+            return all(re.match(r"^:?-+:?$", c) for c in cells if c)
+
+        def _split_row(l: str) -> List[str]:
+            return [c.strip() for c in l.strip().strip("|").split("|")]
+
+        while i < len(lines):
+            cur = lines[i]
+            if _is_tbl_line(cur):
+                if not _is_sep_line(cur) and (i + 1 < len(lines) and _is_sep_line(lines[i + 1])):
+                    last_table_headers = _split_row(cur)
+                out.append(cur)
+                i += 1
+                continue
+
+            # Detect page break immediately after a table
+            if last_table_headers and cur.strip().startswith("## Page "):
+                # Look ahead past blank lines and page header
+                j = i + 1
+                while j < len(lines) and not lines[j].strip():
+                    j += 1
+                if j < len(lines) and _is_tbl_line(lines[j]):
+                    cand_row = _split_row(lines[j])
+                    has_sep = (j + 1 < len(lines) and _is_sep_line(lines[j + 1]))
+                    if has_sep and [c.lower() for c in cand_row] == [c.lower() for c in last_table_headers]:
+                        # Repeated header across page break: drop the repeated page header + table header + sep
+                        # Ensure previous trailing blank lines in out are stripped so table rows stay contiguous
+                        while out and not out[-1].strip():
+                            out.pop()
+                        i = j + 2
+                        continue
+                    elif not has_sep and len(cand_row) == len(last_table_headers):
+                        # Direct row continuation across page break
+                        while out and not out[-1].strip():
+                            out.pop()
+                        i = j
+                        continue
+                last_table_headers = None
+            elif cur.strip():
+                last_table_headers = None
+
+            out.append(cur)
+            i += 1
+
+        return "\n".join(out)
+
+    @classmethod
+    def reconstruct_tables_from_word_boxes(
+        cls,
+        word_boxes: List[Dict[str, Any]],
+        y_tolerance: float = 10.0,
+        x_cluster_gap: float = 25.0,
+    ) -> str:
+        """
+        Reconstructs spatially aligned text lines and Markdown tables from OCR / PDF word bounding boxes.
+        Each item in word_boxes should contain {'text': str, 'bbox': [x1, y1, x2, y2]}
+        (or polygon [[x1,y1],[x2,y1],[x2,y2],[x1,y2]]).
+        Handles skewed rows via y-center clustering and columns via x-start clustering.
+        """
+        if not word_boxes:
+            return ""
+
+        norm_items: List[Dict[str, Any]] = []
+        for item in word_boxes:
+            txt = str(item.get("text") or "").strip()
+            bbox = item.get("bbox")
+            if not txt or not bbox:
+                continue
+            if isinstance(bbox[0], (list, tuple)):
+                xs = [float(pt[0]) for pt in bbox]
+                ys = [float(pt[1]) for pt in bbox]
+                x1, y1, x2, y2 = min(xs), min(ys), max(xs), max(ys)
+            else:
+                x1, y1, x2, y2 = float(bbox[0]), float(bbox[1]), float(bbox[2]), float(bbox[3])
+            norm_items.append({
+                "text": txt,
+                "x1": x1,
+                "x2": x2,
+                "y_center": (y1 + y2) / 2.0,
+                "height": max(1.0, y2 - y1),
+            })
+
+        if not norm_items:
+            return ""
+
+        # Adaptive y tolerance based on median line height
+        heights = sorted(it["height"] for it in norm_items)
+        med_h = heights[len(heights) // 2]
+        eff_y_tol = max(y_tolerance, med_h * 0.55)
+
+        # Sort vertically and cluster into rows
+        norm_items.sort(key=lambda it: (it["y_center"], it["x1"]))
+        line_clusters: List[List[Dict[str, Any]]] = []
+        for it in norm_items:
+            if not line_clusters or abs(it["y_center"] - line_clusters[-1][0]["y_center"]) > eff_y_tol:
+                line_clusters.append([it])
+            else:
+                line_clusters[-1].append(it)
+
+        # Render spatially-aligned lines preserving true horizontal X-coordinates
+        min_x = min(it["x1"] for it in norm_items)
+        char_px = max(5.0, min(14.0, med_h * 0.45))
+        rendered_lines: List[str] = []
+        for cluster in line_clusters:
+            cluster.sort(key=lambda it: it["x1"])
+            line_buf: List[str] = []
+            cur_len = 0
+            prev_x2 = min_x
+            for it in cluster:
+                gap_px = max(0.0, it["x1"] - prev_x2)
+                target_col = max(cur_len, int(round((it["x1"] - min_x) / char_px)))
+                if line_buf:
+                    if gap_px >= x_cluster_gap:
+                        spaces = max(4, target_col - cur_len)
+                    else:
+                        spaces = 1
+                    line_buf.append(" " * spaces)
+                    cur_len += spaces
+                elif target_col > 0 and (it["x1"] - min_x) >= x_cluster_gap:
+                    line_buf.append(" " * target_col)
+                    cur_len += target_col
+                line_buf.append(it["text"])
+                cur_len += len(it["text"])
+                prev_x2 = max(prev_x2, it["x2"])
+            rendered_lines.append("".join(line_buf))
+
+        raw_layout = "\n".join(rendered_lines)
+        return cls.extract_tables_from_layout(raw_layout)
+
+    @classmethod
+    def extract_native_pdf_page_layout(
+        cls,
+        fitz_page: Any,
+        page_num: int,
+    ) -> Tuple[Optional[str], List[Dict[str, Any]]]:
+        """
+        Reconstructs native-text PDF page layout using PyMuPDF ruling lines,
+        cell boundaries, and word coordinates when tables are detected.
+        Returns (markdown_page_text, extracted_tables_metadata) or (None, [])
+        when no tables are detected so callers fall back to standard layout flow.
+        """
+        try:
+            tabs = fitz_page.find_tables()
+        except Exception:
+            return None, []
+
+        detected_tables = getattr(tabs, "tables", None) or []
+        if not detected_tables:
+            return None, []
+
+        table_bboxes = [tuple(t.bbox) for t in detected_tables]
+        items: List[Tuple[float, str]] = []
+        tables_meta: List[Dict[str, Any]] = []
+
+        # 1. Extract non-table text blocks in reading order
+        try:
+            blocks = fitz_page.get_text("blocks") or []
+        except Exception:
+            blocks = []
+
+        for blk in blocks:
+            if len(blk) < 7 or blk[6] != 0:
+                continue
+            bx0, by0, bx1, by1, btext = float(blk[0]), float(blk[1]), float(blk[2]), float(blk[3]), str(blk[4] or "")
+            if not btext.strip():
+                continue
+            cx = (bx0 + bx1) / 2.0
+            cy = (by0 + by1) / 2.0
+            inside_table = any(
+                (tb[0] - 2.0) <= cx <= (tb[2] + 2.0) and (tb[1] - 1.0) <= cy <= (tb[3] + 1.0)
+                for tb in table_bboxes
+            )
+            if inside_table:
+                continue
+            clean_lines = [re.sub(r"\s+", " ", ln).strip() for ln in btext.splitlines() if ln.strip()]
+            if clean_lines:
+                items.append((by0, "\n".join(clean_lines)))
+
+        # 2. Extract each table preserving cell boundaries, empty cells, and wrapped text
+        kv_header_labels = {"key", "field", "attribute", "property", "parameter", "item", "label", "name", "setting"}
+        known_kv_first_rows = {
+            "policy title", "document title", "document number", "policy number",
+            "version", "status", "effective date", "next review date", "review date",
+            "policy owner", "owner", "approving body", "applies to", "classification",
+        }
+
+        for t_idx, t in enumerate(detected_tables, start=1):
+            try:
+                raw_rows = t.extract() or []
+            except Exception:
+                continue
+
+            cleaned_rows: List[List[str]] = []
+            for r in raw_rows:
+                c_row = [re.sub(r"\s+", " ", str(c or "").replace("\n", " ")).strip() for c in r]
+                if any(c_row):
+                    cleaned_rows.append(c_row)
+
+            if not cleaned_rows:
+                continue
+
+            col_count = max(len(r) for r in cleaned_rows)
+            norm_rows = [r + [""] * (col_count - len(r)) for r in cleaned_rows]
+
+            # Detect headerless 2-column key-value tables so row 0 is not lost as a header
+            if col_count == 2 and len(norm_rows) >= 2:
+                r0_k = norm_rows[0][0].strip().lower()
+                r0_v = norm_rows[0][1].strip()
+                is_explicit_kv_hdr = r0_k in kv_header_labels and r0_v.lower() in {"value", "details", "description", "content"}
+                looks_like_data_row0 = (
+                    r0_k in known_kv_first_rows
+                    or (r0_k not in kv_header_labels and (len(r0_v) > 25 or bool(re.search(r"\d", r0_v))))
+                )
+                if not is_explicit_kv_hdr and looks_like_data_row0:
+                    norm_rows.insert(0, ["Key", "Value"])
+
+            if len(norm_rows) < 2:
+                continue
+
+            header = [h if h else f"Col_{i+1}" for i, h in enumerate(norm_rows[0])]
+            data_rows = norm_rows[1:]
+            md_lines = [
+                "| " + " | ".join(header) + " |",
+                "| " + " | ".join(["---"] * len(header)) + " |",
+            ]
+            for dr in data_rows:
+                md_lines.append("| " + " | ".join(dr) + " |")
+
+            items.append((float(t.bbox[1]), "\n".join(md_lines)))
+            tables_meta.append({
+                "table_id": f"pdf_p{page_num}_t{t_idx}",
+                "page_number": page_num,
+                "bbox": [float(v) for v in t.bbox],
+                "headers": header,
+                "row_count": len(data_rows),
+                "extraction_method": "pymupdf_spatial",
+            })
+
+        if not tables_meta:
+            return None, []
+
+        items.sort(key=lambda x: x[0])
+        return "\n\n".join(txt for _, txt in items), tables_meta
+
 

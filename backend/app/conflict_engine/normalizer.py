@@ -31,6 +31,7 @@ class NormalizedClaimKey:
     risk_band: Optional[str] = None
     channel: Optional[str] = None
     policy_domain: Optional[str] = None
+    business_topic: Optional[str] = None
 
 
 class ClaimNormalizer:
@@ -125,10 +126,15 @@ class ClaimNormalizer:
         return None, None
 
     @classmethod
-    def normalize_conditions(cls, conditions: list[str], claim_text: str) -> Dict[str, str]:
-        """Normalizes free-text conditions into canonical dimension key-value pairs."""
+    def normalize_conditions(cls, conditions: list[Any], claim_text: str) -> Dict[str, str]:
+        """Normalizes free-text or structured dict conditions into canonical dimension key-value pairs."""
         cond_dict: Dict[str, str] = {}
-        combined_text = ((" ".join(conditions) + " " + claim_text)).lower()
+        cond_parts = [
+            str(c.get("raw") or f"{c.get('field', '')} {c.get('operator', '')} {c.get('value', '')} {c.get('unit', '')}")
+            if isinstance(c, dict) else str(c)
+            for c in (conditions or [])
+        ]
+        combined_text = (" ".join(cond_parts) + " " + claim_text).lower()
 
         # 1. Employment Status Dimension
         probation_keywords = ("probation", "probationary", "during probation", "probationers")
@@ -351,6 +357,20 @@ class ClaimNormalizer:
         chan = cls.normalize_channel(search_corpus)
         p_domain = cls.normalize_policy_domain(search_corpus)
 
+        # Extract business_topic from TCUSE semantic_context or TCUSE dynamic predicate stem
+        sem_ctx = getattr(claim, "semantic_context", None)
+        b_topic: Optional[str] = None
+        if isinstance(sem_ctx, dict) and sem_ctx.get("business_topic"):
+            b_topic = re.sub(r"[^a-z0-9]+", "_", str(sem_ctx["business_topic"]).lower()).strip("_")
+        elif pred_key and "." not in pred_key and pred_key.startswith((
+            "is_entitled_to_", "is_not_entitled_to_", "is_eligible_for_", "is_not_eligible_for_", "calculates_"
+        )):
+            b_topic = re.sub(
+                r"^(?:is_entitled_to_|is_not_entitled_to_|is_eligible_for_|is_not_eligible_for_|calculates_)",
+                "",
+                pred_key.lower(),
+            ).strip("_") or None
+
         return NormalizedClaimKey(
             subject_key=subj_key,
             predicate_key=pred_key,
@@ -366,4 +386,5 @@ class ClaimNormalizer:
             risk_band=r_band,
             channel=chan,
             policy_domain=p_domain,
+            business_topic=b_topic,
         )

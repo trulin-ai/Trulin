@@ -53,12 +53,12 @@ class XlsxAdapter:
         return cleaned
 
     @classmethod
-    def _resolve_merged_cells(cls, ws: Worksheet) -> Dict[Tuple[int, int], Tuple[Any, str]]:
+    def _resolve_merged_cells(cls, ws: Worksheet) -> Dict[Tuple[int, int], Tuple[Any, str, Tuple[int, int]]]:
         """
         Resolves openpyxl merged cell ranges so that child cells inherit the master value.
-        Returns a mapping from (row_idx, col_idx) -> (master_value, merged_range_str).
+        Returns a mapping from (row_idx, col_idx) -> (master_value, merged_range_str, (min_row, min_col)).
         """
-        merged_map: Dict[Tuple[int, int], Tuple[Any, str]] = {}
+        merged_map: Dict[Tuple[int, int], Tuple[Any, str, Tuple[int, int]]] = {}
         try:
             for rng in list(ws.merged_cells.ranges):
                 min_col, min_row, max_col, max_row = rng.min_col, rng.min_row, rng.max_col, rng.max_row
@@ -67,7 +67,7 @@ class XlsxAdapter:
                 rng_str = str(rng)
                 for r in range(min_row, max_row + 1):
                     for c in range(min_col, max_col + 1):
-                        merged_map[(r, c)] = (master_val, rng_str)
+                        merged_map[(r, c)] = (master_val, rng_str, (min_row, min_col))
         except Exception as e:
             logger.debug("Merged cells resolution warning: %s", e)
         return merged_map
@@ -143,6 +143,7 @@ class XlsxAdapter:
 
         try:
             wb = openpyxl.load_workbook(io.BytesIO(raw_bytes), data_only=True)
+            wb_formulas = openpyxl.load_workbook(io.BytesIO(raw_bytes), data_only=False)
         except Exception as e:
             logger.error("Failed to load workbook %s: %s", filename, e)
             warnings.append(f"XLSX parser error: {str(e)}")
@@ -159,12 +160,16 @@ class XlsxAdapter:
 
         for sheet_idx, ws in enumerate(wb.worksheets, start=1):
             sheet_name = (ws.title or f"Sheet_{sheet_idx}").strip()
+            ws_f = wb_formulas[ws.title] if ws.title in wb_formulas.sheetnames else None
             merged_map = cls._resolve_merged_cells(ws)
+            merged_formula_map = cls._resolve_merged_cells(ws_f) if ws_f else {}
 
             sheet_raw_rows: List[List[str]] = []
             sheet_cell_meta: List[List[Dict[str, Any]]] = []
             sheet_headers: List[str] = []
+            sheet_table_title: Optional[str] = None
 
+            all_raw_rows: List[Tuple[List[str], List[Dict[str, Any]]]] = []
             for r_idx, row in enumerate(ws.iter_rows(values_only=False), start=1):
                 row_formatted: List[str] = []
                 row_meta: List[Dict[str, Any]] = []
@@ -174,9 +179,33 @@ class XlsxAdapter:
                     master_val = master_entry[0] if master_entry else None
                     is_merged = master_entry is not None
                     merged_rng = master_entry[1] if master_entry else None
+                    master_coord = master_entry[2] if master_entry else None
+                    is_inherited = bool(is_merged and master_coord != (r_idx, c_idx))
+                    is_original_blank = cell.value is None or str(cell.value).strip() == ""
+
+                    formula_str: Optional[str] = None
+                    formula_status: Optional[str] = None
+                    if ws_f is not None:
+                        f_cell = ws_f.cell(row=r_idx, column=c_idx)
+                        f_master = merged_formula_map.get((r_idx, c_idx))
+                        f_raw = f_master[0] if (f_master and f_cell.value is None) else f_cell.value
+                        if isinstance(f_raw, str) and f_raw.startswith("="):
+                            formula_str = f_raw
 
                     fmt_val, data_type, raw_val = cls._format_cell_value(cell, master_val)
+                    cached_val = raw_val if formula_str else None
+                    if formula_str:
+                        if raw_val is None and (master_val is None):
+                            # Never interpret unavailable formula result as 0
+                            formula_status = "cached_unavailable"
+                            fmt_val = formula_str
+                            data_type = "formula"
+                            raw_val = None
+                        else:
+                            formula_status = "cached_available"
+
                     coord = cell.coordinate or f"R{r_idx}C{c_idx}"
+                    num_fmt = getattr(cell, "number_format", None)
 
                     row_formatted.append(fmt_val)
                     row_meta.append({
@@ -186,21 +215,43 @@ class XlsxAdapter:
                         "formatted_value": fmt_val,
                         "raw_value": raw_val,
                         "data_type": data_type,
+                        "number_format": num_fmt,
+                        "formula": formula_str,
+                        "cached_value": cached_val,
+                        "formula_status": formula_status,
                         "is_merged": is_merged,
+                        "is_inherited": is_inherited,
+                        "is_original_blank": is_original_blank,
                         "merged_range": merged_rng,
                     })
 
-                # Skip completely empty rows
-                if not any(v for v in row_formatted):
-                    continue
+                if any(v for v in row_formatted):
+                    all_raw_rows.append((row_formatted, row_meta))
 
+            if not all_raw_rows:
+                continue
+
+            # Detect banner title row (Row 1 has 1 unique non-empty value while Row 2+ has multiple distinct columns)
+            start_row_idx = 0
+            if len(all_raw_rows) >= 3:
+                r0_non_empty = [v for v in all_raw_rows[0][0] if v]
+                r1_non_empty = [v for v in all_raw_rows[1][0] if v]
+                if len(set(r0_non_empty)) == 1 and len(r1_non_empty) >= 2:
+                    sheet_table_title = r0_non_empty[0]
+                    start_row_idx = 1
+
+            for row_formatted, row_meta in all_raw_rows[start_row_idx:]:
                 if not sheet_headers:
+                    # Trim trailing empty header columns
+                    last_non_empty = max((idx for idx, v in enumerate(row_formatted) if v), default=len(row_formatted) - 1)
+                    row_formatted = row_formatted[:last_non_empty + 1]
+                    row_meta = row_meta[:last_non_empty + 1]
                     sheet_headers = [h or f"Column_{i+1}" for i, h in enumerate(row_formatted)]
                 else:
-                    # Pad or trim row to match header width
                     if len(row_formatted) < len(sheet_headers):
                         row_formatted.extend([""] * (len(sheet_headers) - len(row_formatted)))
                     row_formatted = row_formatted[:len(sheet_headers)]
+                    row_meta = row_meta[:len(sheet_headers)]
 
                 sheet_raw_rows.append(row_formatted)
                 sheet_cell_meta.append(row_meta)
@@ -214,7 +265,10 @@ class XlsxAdapter:
             data_lines = ["| " + " | ".join(r) + " |" for r in sheet_raw_rows[1:]] if len(sheet_raw_rows) > 1 else []
 
             sheet_header_md = f"## Sheet: {sheet_name}"
-            tbl_lines = [sheet_header_md, "", header_line, separator_line] + data_lines
+            tbl_lines = [sheet_header_md, ""]
+            if sheet_table_title:
+                tbl_lines.extend([f"**{sheet_table_title}**", ""])
+            tbl_lines.extend([header_line, separator_line] + data_lines)
             sheet_full_md = "\n".join(tbl_lines)
 
             start_offset = char_cursor
@@ -230,6 +284,7 @@ class XlsxAdapter:
             t_data = {
                 "sheet_name": sheet_name,
                 "table_id": f"tbl_{sheet_idx}_{re.sub(r'[^a-zA-Z0-9]', '_', sheet_name).lower()}",
+                "table_title": sheet_table_title,
                 "headers": sheet_headers,
                 "rows": sheet_raw_rows,
                 "row_dicts": row_dicts,
@@ -327,6 +382,7 @@ class XlsxAdapter:
             for r_idx, row_vals in enumerate(rows[1:], start=1):
                 row_str = "| " + " | ".join(row_vals) + " |"
                 cols_dict = {headers[i] if i < len(headers) else f"col_{i+1}": row_vals[i] for i in range(len(row_vals))}
+                r_cells = cells_meta[r_idx] if r_idx < len(cells_meta) else []
 
                 row_unit = ParsedEvidenceUnit.create(
                     envelope_id=envelope.envelope_id,
@@ -342,9 +398,12 @@ class XlsxAdapter:
                     structured_data={
                         "table_id": table_id,
                         "sheet_name": sheet_name,
+                        "table_title": t_info.get("table_title"),
                         "row_index": r_idx,
                         "columns": cols_dict,
                         "headers": headers,
+                        "table_headers": headers,
+                        "cells_meta": r_cells,
                     },
                     hierarchical_context=[title, f"Sheet: {sheet_name}"],
                     sequence_index=seq_idx,
@@ -354,7 +413,6 @@ class XlsxAdapter:
                 seq_idx += 1
 
                 # 3. Individual TABLE_CELL Evidence Units for granular value validation
-                r_cells = cells_meta[r_idx] if r_idx < len(cells_meta) else []
                 for c_idx, cell_data in enumerate(r_cells):
                     val_str = cell_data["formatted_value"]
                     if not val_str:

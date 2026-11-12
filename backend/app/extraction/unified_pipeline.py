@@ -159,12 +159,18 @@ class UnifiedExtractionPipeline:
 
         # Step 3: Structured Parsing (Layer 4)
         fmt_lower = (filename.rsplit(".", 1)[-1] if "." in filename else "txt").lower()
-        if fmt_lower in ("docx", "doc"):
+        is_text_only_override = bool(effective_parsed and (raw_bytes is None or raw_bytes == effective_parsed.encode("utf-8")))
+        if is_text_only_override and fmt_lower in ("docx", "doc", "xlsx", "xls", "pptx", "ppt", "pdf", "png", "jpg", "jpeg", "tiff", "tif", "webp", "bmp"):
+            evidence_result = await DocumentParser.parse(canonical_env)
+        elif fmt_lower in ("docx", "doc"):
             from app.ingestion.parsers.docx_parser import DocxAdapter
             evidence_result = await DocxAdapter.parse_to_evidence(canonical_env)
         elif fmt_lower in ("xlsx", "xls"):
             from app.ingestion.parsers.xlsx_parser import XlsxAdapter
             evidence_result = await XlsxAdapter.parse_to_evidence(canonical_env)
+        elif fmt_lower in ("pptx", "ppt"):
+            from app.ingestion.parsers.pptx_adapter import PptxAdapter
+            evidence_result = await PptxAdapter.parse_to_evidence(canonical_env)
         elif fmt_lower in ("png", "jpg", "jpeg", "tiff", "tif", "webp", "bmp"):
             from app.ingestion.parsers.ocr_adapter import OcrAdapter
             evidence_result = await OcrAdapter.parse_to_evidence(canonical_env)
@@ -198,20 +204,25 @@ class UnifiedExtractionPipeline:
             normalized_candidates.append(norm_c if norm_c is not None else c)
 
         # Step 5: Deduplication (preserve highest confidence, merge conditions, eliminate sentence-level duplicate branches)
-        seen_keys: Dict[Tuple[str, str, str, str], CandidateClaim] = {}
-        seen_span_keys: Dict[Tuple[str, str, str], Tuple[Tuple[str, str, str, str], CandidateClaim]] = {}
+        seen_keys: Dict[Tuple[str, str, str, str, str], CandidateClaim] = {}
+        seen_span_keys: Dict[Tuple[str, str, str, str], Tuple[Tuple[str, str, str, str, str], CandidateClaim]] = {}
         for c in normalized_candidates:
+            cond_sig = "|".join(str(x) for x in (c.conditions or [])) if (c.table_binding or c.semantic_context) else ""
+            topic_sig = (c.semantic_context.get("business_topic") or c.semantic_context.get("table_id") or "") if c.semantic_context else ""
+            ctx_scope_sig = f"{topic_sig}:{cond_sig}".lower()
             key = (
                 (c.subject or "").strip().lower(),
                 (c.predicate or "").strip().lower(),
                 str(c.object or "").strip().lower(),
                 str(c.modality or "").strip().upper(),
+                ctx_scope_sig,
             )
             span_text = (c.evidence_text_span or c.claim_text or "").strip().lower()
             span_key = (
                 (c.subject or "").strip().lower(),
                 (c.predicate or "").strip().lower(),
                 span_text,
+                ctx_scope_sig,
             )
 
             if key in seen_keys:
@@ -260,7 +271,11 @@ class UnifiedExtractionPipeline:
             sec_heading = loc.get("section_heading") or loc.get("section")
 
             # Clean enumeration prefixes (e.g. (i), (ii), 1., etc.)
-            clean_sentence = UniversalGateEvaluator.strip_enumeration_prefix(raw_span or raw_text)
+            is_table_claim = bool(getattr(cand, "table_binding", None) or getattr(cand, "semantic_context", None) or loc.get("in_table"))
+            if is_table_claim and raw_text:
+                clean_sentence = UniversalGateEvaluator.strip_enumeration_prefix(raw_text)
+            else:
+                clean_sentence = UniversalGateEvaluator.strip_enumeration_prefix(raw_span or raw_text)
             clean_subj = UniversalGateEvaluator.strip_enumeration_prefix(raw_subj)
             clean_pred = raw_pred
             clean_obj = raw_obj
@@ -270,12 +285,17 @@ class UnifiedExtractionPipeline:
             cand.subject = clean_subj
             cand.predicate = clean_pred
 
-            # Build ImmutableEvidenceSpan
-            quote = clean_sentence or raw_text
+            # Build ImmutableEvidenceSpan (use verbatim raw_row_line when available for physical offset grounding)
+            raw_row_line = loc.get("raw_row_line")
+            doc_body = content_text or canonical_env.parsed_content or ""
+            if is_table_claim and raw_row_line and raw_row_line in doc_body:
+                quote = raw_row_line
+            else:
+                quote = raw_span or clean_sentence or raw_text
             span = ImmutableEvidenceSpan.from_content(
                 verbatim_quote=quote,
                 clause_text=raw_span or quote,
-                content=content_text or canonical_env.parsed_content or quote,
+                content=doc_body or quote,
                 page=int(raw_page) if (raw_page and str(raw_page).isdigit() and int(raw_page) > 0) else 1,
                 document_uri=f"urn:doc:{canonical_env.asset_id}",
                 section_locator=str(sec_heading) if sec_heading else None,
@@ -325,6 +345,10 @@ class UnifiedExtractionPipeline:
                 context_parts = []
                 if isinstance(hdg_context, list) and hdg_context:
                     context_parts.append(" > ".join(str(h) for h in hdg_context))
+                if cand.semantic_context and cand.semantic_context.get("table_title"):
+                    context_parts.append(f"Table Title: {cand.semantic_context['table_title']}")
+                if cand.semantic_context and cand.semantic_context.get("table_caption"):
+                    context_parts.append(f"Table Caption: {cand.semantic_context['table_caption']}")
                 if grid_hdr:
                     context_parts.append(f"Header: {grid_hdr}")
                 if raw_span or cand.claim_text:
@@ -345,14 +369,25 @@ class UnifiedExtractionPipeline:
                     metadata={
                         "table_grid": cand.locator.get("table_grid"),
                         "in_table": bool(cand.locator.get("table_grid") or getattr(cand, "table_binding", None)),
+                        "has_table_semantic_context": bool(getattr(cand, "semantic_context", None)),
+                        "semantic_context": getattr(cand, "semantic_context", None),
+                        "evidence_bindings": getattr(cand, "evidence_bindings", None),
                         "content_role": role_str,
                         "is_list": bool(cand.locator.get("is_list") or cand.claim_text.strip().startswith(("- ", "* ", "1. ", "2. ", "3. ", "• "))),
                     },
                 )
 
             if gate_res.is_canonical:
-                sig = UniversalGateEvaluator.compute_semantic_signature(clean_subj, clean_pred, clean_obj)
+                sig_pred = f"{clean_pred}:{cand.semantic_context.get('business_topic')}" if (cand.semantic_context and cand.semantic_context.get("business_topic")) else clean_pred
+                sig = UniversalGateEvaluator.compute_semantic_signature(clean_subj, sig_pred, clean_obj)
                 seen_signatures.add(sig)
+
+            # Ambiguous table context / formula unavailable -> require review rather than auto-certify
+            if cand.is_ambiguous and gate_res.certification_tier == "AUTOMATED_CERTIFIED":
+                gate_res.certification_tier = "REVIEW_REQUIRED"
+                gate_res.all_gates_passed = False
+                if cand.ambiguity_reason:
+                    gate_res.rejection_reasons.append(cand.ambiguity_reason)
 
             # Deliverable 3, 5, 6: OCR Safety, Feature-Flagged Auto-Certification & Persisted Review Enforcement
             is_ocr_claim = (
@@ -539,7 +574,7 @@ class UnifiedExtractionPipeline:
                 claim_a = deduped_candidates[i]
                 claim_b = deduped_candidates[j]
                 try:
-                    outcome = CompatibilityGate.evaluate_decision_compatibility(claim_a, claim_b)
+                    outcome = CompatibilityGate.evaluate_compatibility(claim_a, claim_b)
                     if outcome.is_comparable:
                         conflicts.append({
                             "claim_a_id": claim_a.candidate_id,
@@ -572,6 +607,7 @@ class UnifiedExtractionPipeline:
             "approved": sum(1 for e in evaluations if e.lifecycle_decision == ClaimLifecycleDecision.APPROVE),
             "review": sum(1 for e in evaluations if e.lifecycle_decision == ClaimLifecycleDecision.REVIEW),
             "rejected": sum(1 for e in evaluations if e.lifecycle_decision == ClaimLifecycleDecision.REJECT),
+            "table_context": l5_result.table_context_summary,
         }
 
         source_byte_hash = hashlib.sha256(raw_bytes).hexdigest()

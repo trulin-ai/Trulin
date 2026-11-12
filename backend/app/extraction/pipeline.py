@@ -39,6 +39,28 @@ class Layer5ExtractionPipeline:
         ledger = CompletenessLedger(envelope.envelope_id, envelope.asset_id)
         all_candidates: List[CandidateClaim] = []
 
+        # Run TCUSE across full evidence stream when tables are present
+        tcuse_claims_by_unit: dict[str, List[CandidateClaim]] = {}
+        table_context_summary: dict[str, Any] = {}
+        if any(u.block_type == "table_row" for u in evidence_result.units):
+            try:
+                from app.extraction.table_context import TableContextPipeline
+                tcuse_res = TableContextPipeline.run(
+                    evidence_result=evidence_result,
+                    envelope_id=envelope.envelope_id,
+                    asset_id=envelope.asset_id,
+                )
+                tcuse_claims_by_unit = tcuse_res.claims_by_unit_id
+                table_context_summary = {
+                    "tables_count": len(tcuse_res.tables),
+                    "interpretations": [it.model_dump() for it in tcuse_res.interpretations],
+                    "atomic_facts_count": len(tcuse_res.atomic_facts),
+                    "consistency_reports": [cr.model_dump() for cr in tcuse_res.consistency_reports],
+                    "completeness_reports": [cmp.model_dump() for cmp in tcuse_res.completeness_reports],
+                }
+            except Exception as tc_err:
+                logger.warning("TCUSE table enrichment note: %s", tc_err)
+
         total_units = len(evidence_result.units)
         candidates_found = 0
         claims_extracted_count = 0
@@ -48,7 +70,7 @@ class Layer5ExtractionPipeline:
         for unit in evidence_result.units:
             is_eligible, strategy, reason = CandidateDiscoveryEngine.is_candidate(unit)
 
-            if not is_eligible:
+            if not is_eligible and not (unit.block_type == "table_row" and unit.unit_id in tcuse_claims_by_unit):
                 ledger.record_entry(
                     unit_id=unit.unit_id,
                     block_type=unit.block_type,
@@ -61,9 +83,12 @@ class Layer5ExtractionPipeline:
 
             candidates_found += 1
 
-            # 2. Extract Claims using selected strategy
+            # 2. Extract Claims using TCUSE (for context-enriched tables) or selected strategy
             try:
-                extracted_claims = await self.router.extract(unit, strategy)
+                if unit.block_type == "table_row" and unit.unit_id in tcuse_claims_by_unit:
+                    extracted_claims = tcuse_claims_by_unit[unit.unit_id]
+                else:
+                    extracted_claims = await self.router.extract(unit, strategy)
             except Exception as e:
                 logger.error("Extraction failed for unit %s: %s", unit.unit_id, str(e))
                 ledger.record_entry(
@@ -143,6 +168,7 @@ class Layer5ExtractionPipeline:
             completeness_score=summary["completeness_score"],
             candidates=all_candidates,
             ledger_summary=summary,
+            table_context_summary=table_context_summary,
         )
 
 

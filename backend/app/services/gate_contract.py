@@ -141,8 +141,9 @@ class SharedGovernanceGateEngine:
         r"may|must|will|shall|can|cannot|should|"
         r"(?:is|are)\s+required(?:\s+to)?|approval\s+required|required|"
         r"(?:is|are)\s+accepted|accepted\s+in-store|"
-        r"(?:is|are)\s+entitled\s+to|(?:is|are)\s+eligible\s+(?:for|to)|"
+        r"(?:is|are)\s+(?:not\s+)?entitled\s+to|(?:is|are)\s+(?:not\s+)?eligible\s+(?:for|to)|"
         r"agrees?\s+to|authorizes?|grants?|retains?|warrants?|reserves?|assigns?|requires?|"
+        r"calculates?|reports?|"
         r"(?:is|are|remains)\s+responsible\s+for|has\s+a\b|has\s+the\s+right\s+to\b|"
         r"is\s+limited\s+to\b|is\s+capped\s+at\b|shall\s+be\s+limited\s+to\b|liability\s+is\s+the\b|"
         r"must\s+not|may\s+not|will\s+not|shall\s+not|neither\s+party\s+will|is\s+not\s+licensed\s+to|prohibited\s+from|"
@@ -358,9 +359,12 @@ class SharedGovernanceGateEngine:
             reasons.append(f"Predicate normativity failure: Predicate '{req.predicate}' is a deprecated verb.")
             codes.append(GateFailureCode.ERR_PREDICATE_DEPRECATED.value)
         elif pred_class != "canonical":
-            res.predicate_normativity = False
-            reasons.append(f"Predicate normativity failure: Predicate '{req.predicate}' is not a canonical registered predicate.")
-            codes.append(GateFailureCode.ERR_PREDICATE_INVALID.value)
+            if req.metadata and req.metadata.get("has_table_semantic_context") and re.match(r"^[a-z][a-z0-9_]{5,}$", pred_clean):
+                res.predicate_normativity = True
+            else:
+                res.predicate_normativity = False
+                reasons.append(f"Predicate normativity failure: Predicate '{req.predicate}' is not a canonical registered predicate.")
+                codes.append(GateFailureCode.ERR_PREDICATE_INVALID.value)
         else:
             res.predicate_normativity = True
 

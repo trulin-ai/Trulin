@@ -108,6 +108,10 @@ class TableGridBinding(BaseModel):
     row_index: int = Field(default=0, description="0-indexed row position in grid")
     col_index: int = Field(default=0, description="0-indexed column position in grid")
     is_merged_cell: bool = Field(default=False, description="Flagged true if cell spans multiple rows/cols")
+    is_inherited: bool = Field(default=False, description="True if value was inherited from a merged parent cell")
+    is_original_blank: bool = Field(default=False, description="True if original source cell was blank prior to merge inheritance")
+    formula: Optional[str] = Field(default=None, description="Original spreadsheet formula if applicable")
+    header_hierarchy: List[str] = Field(default_factory=list, description="Parent-to-child header path")
     qualifiers: List[str] = Field(default_factory=list, description="Extracted soft qualifiers (e.g. ['up_to', 'typical'])")
     typed_value: Optional[TypedValue] = Field(default=None, description="Structured typed representation of cell value")
 
@@ -161,6 +165,10 @@ class CandidateClaim(BaseModel):
     evidence_text_span: str = Field(..., description="Exact textual evidence quote from source")
     locator: dict[str, Any] = Field(default_factory=dict, description="Precision source coordinates")
     structured_values: dict[str, Any] = Field(default_factory=dict, description="Preserved native typed values or field paths")
+    semantic_context: Optional[Dict[str, Any]] = Field(default=None, description="TCUSE table-level semantic interpretation context")
+    atomic_fact: Optional[Dict[str, Any]] = Field(default=None, description="Level 1 explicit raw table fact")
+    evidence_refs: List[str] = Field(default_factory=list, description="Complete set of cell and contextual evidence unit IDs")
+    confidence_breakdown: Optional[Dict[str, float]] = Field(default=None, description="Independent extraction/reconstruction/interpretation/claim/evidence confidence scores")
     
     # Verification & Quality
     is_canonical: bool = Field(default=True, description="False if macro summary, example, revision history, or non-canonical context")
@@ -334,6 +342,7 @@ class Layer5ExtractionResult(BaseModel):
     completeness_score: float = Field(ge=0.0, le=1.0)
     candidates: List[CandidateClaim] = Field(default_factory=list)
     ledger_summary: dict[str, Any] = Field(default_factory=dict)
+    table_context_summary: dict[str, Any] = Field(default_factory=dict)
     extracted_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
     def to_dict(self) -> dict[str, Any]:
@@ -348,5 +357,6 @@ class Layer5ExtractionResult(BaseModel):
             "completeness_score": self.completeness_score,
             "candidates": [c.model_dump() for c in self.candidates],
             "ledger_summary": self.ledger_summary,
+            "table_context_summary": self.table_context_summary,
             "extracted_at": self.extracted_at.isoformat(),
         }

@@ -275,7 +275,7 @@ class UniversalFileParser:
             cache_key = default_pipeline_cache.compute_pipeline_key(
                 stage_name="universal_parser",
                 source_sha256=content_hash,
-                parser_version="v3.4",
+                parser_version="v3.6",
                 parser_config_hash=config_hash,
                 normalizer_version="v1.3",
             )
@@ -332,6 +332,11 @@ class UniversalFileParser:
                 )
             elif file_type == "xlsx":
                 full_text, pages, blocks, tables, warnings = cls._parse_xlsx_structured(
+                    raw_bytes, title, filename
+                )
+            elif file_type == "pptx":
+                from app.ingestion.parsers.pptx_adapter import PptxAdapter
+                full_text, pages, blocks, tables, warnings = PptxAdapter.parse_to_structured(
                     raw_bytes, title, filename
                 )
             elif file_type == "image":
@@ -446,9 +451,15 @@ class UniversalFileParser:
         total_ocr_confidence = 0.0
         ocr_pages_count = 0
 
+        fitz_doc = None
         try:
             import pypdf
             reader = pypdf.PdfReader(io.BytesIO(raw_bytes))
+            try:
+                import pymupdf
+                fitz_doc = pymupdf.open(stream=raw_bytes, filetype="pdf")
+            except Exception:
+                fitz_doc = None
             pages_text = []
             from app.normalization.normalizer import DocumentNormalizer
 
@@ -485,14 +496,16 @@ class UniversalFileParser:
                         ocr_engine = cls._get_ocr_engine()
                         if ocr_engine is not None and images:
                             page_ocr_lines = []
+                            page_ocr_boxes = []
                             confidences = []
                             for img in images:
                                 try:
                                     result, _ = ocr_engine(img.data)
                                     if result:
                                         for line in result:
-                                            if len(line) >= 3 and line[2] > 0.4:
+                                            if len(line) >= 3 and float(line[2]) > 0.4:
                                                 page_ocr_lines.append(line[1])
+                                                page_ocr_boxes.append({"bbox": line[0], "text": line[1]})
                                                 confidences.append(float(line[2]))
                                 except Exception as img_err:
                                     logger.warning("OCR image extraction error on page %d: %s", page_num, img_err)
@@ -503,7 +516,12 @@ class UniversalFileParser:
                                 ocr_pages_count += 1
 
                             if page_ocr_lines:
-                                raw_ocr_text = "\n".join(page_ocr_lines).strip()
+                                if page_ocr_boxes:
+                                    from app.normalization.document_restructurer import DocumentSemanticRestructurer
+                                    spatial_ocr = DocumentSemanticRestructurer.reconstruct_tables_from_word_boxes(page_ocr_boxes)
+                                    raw_ocr_text = spatial_ocr.strip() if spatial_ocr.strip() else "\n".join(page_ocr_lines).strip()
+                                else:
+                                    raw_ocr_text = "\n".join(page_ocr_lines).strip()
                                 ocr_repaired = repair_ocr_text(raw_ocr_text).strip()
 
                                 # Compare extraction quality before overwriting:
@@ -534,11 +552,20 @@ class UniversalFileParser:
                 if clean_page_text:
                     from app.normalization.document_restructurer import DocumentSemanticRestructurer
 
-                    # 1. Convert spatial layout tables to Markdown pipe tables first
-                    page_with_tables = DocumentSemanticRestructurer.extract_tables_from_layout(clean_page_text)
+                    native_md = None
+                    if not is_likely_scanned and fitz_doc is not None and (page_num - 1) < len(fitz_doc):
+                        native_md, _ = DocumentSemanticRestructurer.extract_native_pdf_page_layout(
+                            fitz_doc[page_num - 1], page_num
+                        )
 
-                    # 2. Reflow prose lines while strictly preserving Markdown table rows
-                    reflowed_page = DocumentNormalizer.reflow_fragmented_lines(page_with_tables)
+                    if native_md:
+                        reflowed_page = native_md
+                    else:
+                        # 1. Convert spatial layout tables to Markdown pipe tables first
+                        page_with_tables = DocumentSemanticRestructurer.extract_tables_from_layout(clean_page_text)
+
+                        # 2. Reflow prose lines while strictly preserving Markdown table rows
+                        reflowed_page = DocumentNormalizer.reflow_fragmented_lines(page_with_tables)
                     pages_text.append(f"## Page {page_num}\n{reflowed_page}")
 
                     # Extract paragraphs, tables, and headings into ContentBlocks
@@ -635,6 +662,12 @@ class UniversalFileParser:
             warnings.append(f"PDF extraction error: {str(e)}")
             # Fail closed: Do NOT decode raw binary PDF bytes as plain text
             return "", [], [], [], warnings, False, 0.0
+        finally:
+            if fitz_doc is not None:
+                try:
+                    fitz_doc.close()
+                except Exception:
+                    pass
 
     @classmethod
     def _parse_docx_structured(
@@ -706,25 +739,12 @@ class UniversalFileParser:
     @classmethod
     def _parse_pptx(cls, raw_bytes: bytes, title: str, filename: str) -> str:
         try:
-            with zipfile.ZipFile(io.BytesIO(raw_bytes)) as zf:
-                slide_files = sorted(
-                    [f for f in zf.namelist() if f.startswith("ppt/slides/slide") and f.endswith(".xml")],
-                    key=lambda x: int(re.search(r"\d+", x).group()) if re.search(r"\d+", x) else 0,
-                )
-                slides_output = []
-                ns = {"a": "http://schemas.openxmlformats.org/drawingml/2006/main"}
-
-                for idx, sfile in enumerate(slide_files, start=1):
-                    tree = ET.fromstring(zf.read(sfile))
-                    texts = [t.text.strip() for t in tree.findall(".//a:t", ns) if t.text and t.text.strip()]
-                    if texts:
-                        slides_output.append(f"## Slide {idx}\n" + "\n".join(texts))
-
-                if slides_output:
-                    return f"# {title}\n\n" + "\n\n".join(slides_output)
+            from app.ingestion.parsers.pptx_adapter import PptxAdapter
+            text, _, _, _, warnings = PptxAdapter.parse_to_structured(raw_bytes, title, filename)
+            if text:
+                return text
         except Exception:
             pass
-
         return cls._parse_plain_text(raw_bytes, title, filename)
 
     @classmethod

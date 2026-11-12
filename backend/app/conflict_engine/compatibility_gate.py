@@ -244,6 +244,15 @@ class CompatibilityGate:
                 details={"condition_a": key_a.condition_key, "condition_b": key_b.condition_key},
             )
 
+        # 2b. Distinct Business Topic Check (TCUSE context isolation)
+        if key_a.business_topic and key_b.business_topic and key_a.business_topic != key_b.business_topic:
+            return CompatibilityOutcome(
+                is_comparable=False,
+                reason="DIFFERENT_BUSINESS_TOPIC",
+                relationship="DISTINCT_BUSINESS_TOPICS",
+                details={"topic_a": key_a.business_topic, "topic_b": key_b.business_topic},
+            )
+
         # 3. Predicate Competition Check
         if not cls.predicates_compete(key_a.predicate_key, key_b.predicate_key):
             return CompatibilityOutcome(

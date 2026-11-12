@@ -1302,9 +1302,12 @@ class UniversalGateEvaluator:
             is_predicate_valid = False
             reasons.append(f"Predicate failure: Generic catch-all predicate '{pred_clean}' is banned; requires normalized action taxonomy.")
         elif not PredicateRegistryService.exists(pred_clean):
-            # Check if dynamically registered or allowed
-            is_predicate_valid = False
-            reasons.append(f"Predicate failure: Predicate '{pred_clean}' is not present in versioned taxonomy registry.")
+            # Allow dynamically synthesized TCUSE table-context predicates if structured and non-banned
+            if metadata and metadata.get("has_table_semantic_context") and re.match(r"^[a-z][a-z0-9_]{5,}$", pred_lower):
+                is_predicate_valid = True
+            else:
+                is_predicate_valid = False
+                reasons.append(f"Predicate failure: Predicate '{pred_clean}' is not present in versioned taxonomy registry.")
 
         # =========================================================================
         # Gate 8: atomicity_valid
@@ -1342,7 +1345,9 @@ class UniversalGateEvaluator:
             is_duplicate_valid = False
             reasons.append("Duplicate check: Claim is classified as a duplicate.")
         elif existing_signatures is not None:
-            sig = cls.compute_semantic_signature(subj_clean, pred_clean, object_text or eval_text)
+            sem_ctx = metadata.get("semantic_context") if metadata else None
+            sig_pred = f"{pred_clean}:{sem_ctx.get('business_topic')}" if (isinstance(sem_ctx, dict) and sem_ctx.get("business_topic")) else pred_clean
+            sig = cls.compute_semantic_signature(subj_clean, sig_pred, object_text or eval_text)
             if sig in existing_signatures:
                 is_duplicate_valid = False
                 reasons.append("Duplicate check: Semantic signature already exists in canonical catalog.")
@@ -1354,8 +1359,11 @@ class UniversalGateEvaluator:
         if pred_clean in ("must_comply_with_trade_laws", "may_suspend_for_security_or_breach", "may_suspend_for_trade_laws", "has_liability_cap", "has_late_payment_penalty_rate", "has_warranty_remedy_window"):
             is_claim_type_allowed = True
         elif ct_clean in NON_RULE_TYPES or content_role_clean in {"definition", "contact_info", "example", "revision_history"}:
-            is_claim_type_allowed = False
-            reasons.append(f"Claim type failure: '{content_role_clean or claim_type}' is a non-rule type (definition, reference, description, example, or revision_history).")
+            if metadata and metadata.get("has_table_semantic_context") and ct_clean == "reference":
+                is_claim_type_allowed = True
+            else:
+                is_claim_type_allowed = False
+                reasons.append(f"Claim type failure: '{content_role_clean or claim_type}' is a non-rule type (definition, reference, description, example, or revision_history).")
         elif any(cue in text_lower for cue in REFERENCE_CUES):
             is_claim_type_allowed = False
             reasons.append("Claim type failure: Text is a cross-reference cue, not an operative rule.")
@@ -1364,7 +1372,7 @@ class UniversalGateEvaluator:
             if not has_operative_rule:
                 is_claim_type_allowed = False
                 reasons.append("Claim type failure: Text is descriptive background scope, not an operative rule.")
-        elif ct_clean not in {"rule", "policy_rule", "policy", "table_rule", "table_row", "policy_matrix"}:
+        elif ct_clean not in {"rule", "policy_rule", "policy", "table_rule", "table_row", "policy_matrix", "metric"}:
             is_claim_type_allowed = False
             reasons.append(f"Claim type failure: Unrecognized claim type '{claim_type}'.")
 

@@ -293,6 +293,8 @@ class PredicateRegistry:
         p_clean = predicate.strip().lower()
         if p_clean in cls.CANONICAL_PREDICATES:
             return True
+        if cls.is_context_enriched_predicate(p_clean):
+            return True
         try:
             from app.taxonomy.registry import PredicateRegistryService
             return p_clean in PredicateRegistryService.get_instance()._predicates
@@ -391,6 +393,26 @@ class PredicateRegistry:
         "level": "has_trigger",
     }
 
+    CONTEXT_ENRICHED_PREDICATE_PATTERN = re.compile(
+        r"^(?:is_entitled_to|is_not_entitled_to|is_eligible_for|is_not_eligible_for|is_responsible_for|calculates|"
+        r"has_[a-z0-9]+_[a-z0-9_]+|has_version|has_status|has_owner|has_title|has_classification|has_signatory|has_signature|"
+        r"requires_[a-z0-9_]+|prohibits_[a-z0-9_]+|applies_to(?:_[a-z0-9_]+)?|"
+        r"approved_by|revised_by|assigned_[a-z0-9_]+|receives_[a-z0-9_]+|earns_[a-z0-9_]+)$"
+    )
+
+    @classmethod
+    def is_context_enriched_predicate(cls, predicate: str) -> bool:
+        """
+        Validates dynamically synthesized context-aware predicates (e.g. 'is_entitled_to_annual_leave')
+        while rejecting catch-alls, deprecated generic verbs, and malformed slugs.
+        """
+        p_clean = (predicate or "").strip().lower()
+        if not p_clean or p_clean in cls.CATCH_ALL_PREDICATES or p_clean in cls.DEPRECATED_PREDICATES or p_clean in cls.DISALLOWED_GENERIC_VERBS:
+            return False
+        if any(b in p_clean for b in ("summary", "validity_rule", "governing_rule", "bogus")):
+            return False
+        return bool(cls.CONTEXT_ENRICHED_PREDICATE_PATTERN.match(p_clean)) and len(p_clean) >= 8
+
     @classmethod
     def get_predicate_class(cls, predicate: str) -> str:
         """
@@ -416,6 +438,8 @@ class PredicateRegistry:
             pass
         if p_clean in cls.RAW_PHRASE_MAPPINGS:
             return "alias"
+        if cls.is_context_enriched_predicate(p_clean):
+            return "canonical"
         return "invalid"
 
     @classmethod
