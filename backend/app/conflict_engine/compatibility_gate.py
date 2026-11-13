@@ -24,6 +24,19 @@ class CompatibilityOutcome:
     details: Dict[str, Any] = field(default_factory=dict)
 
 
+def _safe_get_rel(obj: Any, attr_name: str) -> Any:
+    """Safely gets a relationship or attribute without triggering SQLAlchemy async MissingGreenlet."""
+    if obj is None:
+        return None
+    state = getattr(obj, "_sa_instance_state", None)
+    if state and attr_name in state.unloaded:
+        return None
+    try:
+        return getattr(obj, attr_name, None)
+    except Exception:
+        return None
+
+
 class CompatibilityGate:
     """
     Deterministic gate that runs prior to LLM contradiction evaluation.
@@ -255,8 +268,8 @@ class CompatibilityGate:
             )
 
         # 1c. Temporal Validity Window Check (Non-overlapping dates do not conflict)
-        val_recs_a = getattr(claim_a, "__dict__", {}).get("validity_records") or getattr(claim_a, "validity_records", None)
-        val_recs_b = getattr(claim_b, "__dict__", {}).get("validity_records") or getattr(claim_b, "validity_records", None)
+        val_recs_a = _safe_get_rel(claim_a, "validity_records")
+        val_recs_b = _safe_get_rel(claim_b, "validity_records")
         if val_recs_a and val_recs_b:
             try:
                 va = val_recs_a[0] if len(val_recs_a) > 0 else None

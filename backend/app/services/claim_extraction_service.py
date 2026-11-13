@@ -77,9 +77,11 @@ class ClaimExtractionService:
                 or (doc.metadata and isinstance(doc.metadata, dict) and doc.metadata.get("thread_ts"))
             )
             resolved_family = SourceFamily.CONVERSATION if is_thread else SourceFamily.DOCUMENT
+            doc_type_clean = str(doc.document_type or "policy").lower().strip()
+            is_governance = any(k in doc_type_clean for k in ("policy", "standard", "handbook", "guideline", "manual", "compliance", "terms", "sop", "governance"))
             resolved_intent = (
                 SourceIntent.GOVERNANCE_POLICY
-                if str(doc.document_type).lower() in ("policy", "standard")
+                if is_governance
                 else SourceIntent.OPERATIONAL_DATA
             )
             doc_filename = (

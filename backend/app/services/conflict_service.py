@@ -17,7 +17,7 @@ from app.conflict_engine.detector import (
 )
 from app.conflict_engine.compatibility_gate import CompatibilityGate
 from app.conflict_engine.multi_agent_arbiter import MultiAgentArbiter
-from app.conflict_engine.precedence_engine import PrecedenceDecision, PrecedenceEngine
+from app.conflict_engine.precedence_engine import PrecedenceDecision, PrecedenceEngine, _safe_get_rel
 from app.db.enums import ClaimStatus, ConflictStatus, ConflictType, ReviewDecision
 from app.db.models.claim import Claim
 from app.db.models.claim_conflict import ClaimConflict
@@ -456,8 +456,8 @@ class ConflictService:
             norm_a = ClaimNormalizer.build_key(side_a)
             norm_b = ClaimNormalizer.build_key(side_b)
 
-            val_recs_a = getattr(side_a, "__dict__", {}).get("validity_records") or getattr(side_a, "validity_records", None)
-            val_recs_b = getattr(side_b, "__dict__", {}).get("validity_records") or getattr(side_b, "validity_records", None)
+            val_recs_a = _safe_get_rel(side_a, "validity_records")
+            val_recs_b = _safe_get_rel(side_b, "validity_records")
             va = val_recs_a[0] if (val_recs_a and len(val_recs_a) > 0) else None
             vb = val_recs_b[0] if (val_recs_b and len(val_recs_b) > 0) else None
 

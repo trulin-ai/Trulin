@@ -2622,7 +2622,7 @@ export default function App() {
         formData.append('document_type', docInput.docType || 'policy');
         formData.append('external_id', docInput.externalId || docInput.title || uploadedFile.name);
 
-        resDoc = await fetch('/v1/documents/upload', {
+        resDoc = await fetch('/v1/documents/upload-and-extract', {
           method: 'POST',
           body: formData
         });
@@ -2643,14 +2643,17 @@ export default function App() {
 
       if (resDoc.ok) {
         const docData = await resDoc.json();
-        setIngestedDoc(docData);
-        const versionId = docData?.current_version?.id;
-
-        if (versionId) {
-          const resClaims = await fetch(`/v1/claims/extract/${versionId}?use_mock=true`, { method: 'POST' });
-          if (resClaims.ok) {
-            const claimsData = await resClaims.json();
-            setExtractedClaims(claimsData);
+        setIngestedDoc(docData.document || docData);
+        if (docData.claims && Array.isArray(docData.claims) && docData.claims.length > 0) {
+          setExtractedClaims(docData.claims);
+        } else {
+          const versionId = docData?.current_version?.id || docData?.version?.id;
+          if (versionId) {
+            const resClaims = await fetch(`/v1/claims/extract/${versionId}?use_mock=true`, { method: 'POST' });
+            if (resClaims.ok) {
+              const claimsData = await resClaims.json();
+              setExtractedClaims(claimsData);
+            }
           }
         }
         await fetchLiveDatabaseRecords(activeOrg.id);

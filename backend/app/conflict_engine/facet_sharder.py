@@ -176,7 +176,10 @@ class FacetSharder:
                 Claim.organization_id == target_claim.organization_id,
                 Claim.id != target_claim.id,
             )
-            .options(selectinload(Claim.document_version))
+            .options(
+                selectinload(Claim.document_version),
+                selectinload(Claim.validity_records),
+            )
         )
 
         # If salient tokens exist, filter using SQL OR clauses across salient tokens

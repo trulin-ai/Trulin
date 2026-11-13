@@ -651,7 +651,9 @@ async def upload_and_extract_document(
                 resolved_intent = SourceIntent(source_intent.lower().strip())
             except ValueError:
                 pass
-        elif document_type != "policy":
+        elif str(document_type).lower().strip() not in (
+            "policy", "standard", "handbook", "guidelines", "guideline", "manual", "terms", "compliance", "sop", "governance"
+        ):
             resolved_intent = SourceIntent.OPERATIONAL_DATA
 
         from app.extraction.unified_pipeline import UnifiedExtractionPipeline, UnifiedPipelineOptions
@@ -729,7 +731,7 @@ async def upload_and_extract_document(
             },
         }
     except Exception as exc:
-        logger.warning(f"6-Layer Architecture pipeline trace encountered non-fatal note: {exc}")
+        logger.warning(f"6-Layer Architecture pipeline trace encountered non-fatal note: {exc}", exc_info=True)
 
     duration_ms = round((time.time() - start_time) * 1000, 2)
 

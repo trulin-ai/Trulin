@@ -111,6 +111,9 @@ class OllamaProvider(BaseLLMProvider):
         if not (section_content or "").strip():
             return empty
 
+        if getattr(self, "_model_unavailable", False):
+            return empty
+
         user_prompt = (
             f"Document Title: {document_title}\n"
             f"Section Title: {section_title or 'General'}\n"
@@ -155,7 +158,10 @@ class OllamaProvider(BaseLLMProvider):
             else:
                 rows = []
         except (httpx.RequestError, httpx.HTTPStatusError) as e:
-            logger.warning("Ollama extract_claims network error (%s): %s", self.model, e)
+            self._model_unavailable = True
+            if not getattr(self, "_warned_missing_model", False):
+                logger.warning("Ollama extract_claims network error (%s): %s. Falling back to deterministic extractors.", self.model, e)
+                self._warned_missing_model = True
             return empty
         except json.JSONDecodeError:
             logger.warning("Ollama extract_claims non-JSON (%s): %s", self.model, raw[:400])
@@ -222,6 +228,10 @@ class OllamaProvider(BaseLLMProvider):
     async def evaluate_contradiction(
         self, claim_a_text: str, claim_b_text: str
     ) -> ContradictionResult:
+        if getattr(self, "_model_unavailable", False):
+            from app.llm.mock_provider import MockLLMProvider
+            return await MockLLMProvider().evaluate_contradiction(claim_a_text, claim_b_text)
+
         user_prompt = f"{CONTRADICTION_SYSTEM_PROMPT}\n\nClaim A: {claim_a_text}\nClaim B: {claim_b_text}"
         try:
             raw = self._clean(await self._chat(user_prompt))
@@ -234,6 +244,7 @@ class OllamaProvider(BaseLLMProvider):
                 reasoning=str(data.get("reasoning", "")),
             )
         except Exception as e:
+            self._model_unavailable = True
             if not getattr(self, "_warned_missing_model", False):
                 logger.warning(
                     "Ollama evaluate_contradiction failed (%s): %s. Falling back to deterministic contradiction evaluator.",
