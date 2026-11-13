@@ -90,7 +90,7 @@ def repair_ocr_text(raw_text: str) -> str:
             elif len(word) >= 7 and wordsegment is not None and not any(c.isdigit() for c in word):
                 try:
                     segs = wordsegment.segment(word.lower())
-                    if len(segs) > 1 and all(len(s) >= 3 for s in segs):
+                    if len(segs) > 1 and all(len(s) >= 2 or s in {"a", "i"} for s in segs):
                         if word[0].isupper():
                             segs[0] = segs[0].capitalize()
                         repaired_tokens.append(prefix + " ".join(segs) + suffix)
@@ -491,9 +491,13 @@ class UniversalFileParser:
                                     result, _ = ocr_engine(img.data)
                                     if result:
                                         for line in result:
-                                            if len(line) >= 3 and line[2] > 0.4:
+                                            try:
+                                                conf_val = float(line[2]) if len(line) >= 3 and line[2] is not None else 0.0
+                                            except (ValueError, TypeError):
+                                                conf_val = 0.0
+                                            if conf_val > 0.4:
                                                 page_ocr_lines.append(line[1])
-                                                confidences.append(float(line[2]))
+                                                confidences.append(conf_val)
                                 except Exception as img_err:
                                     logger.warning("OCR image extraction error on page %d: %s", page_num, img_err)
 

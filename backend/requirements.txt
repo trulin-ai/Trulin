@@ -31,3 +31,4 @@ openpyxl
 pillow
 rapidocr-onnxruntime
 wordsegment
+

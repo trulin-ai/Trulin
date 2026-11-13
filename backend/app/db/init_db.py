@@ -218,6 +218,16 @@ async def init_db_schema():
         "CREATE INDEX IF NOT EXISTS idx_org_invites_org ON organization_invites(organization_id);",
         "CREATE INDEX IF NOT EXISTS idx_org_invites_token ON organization_invites(token);",
         "CREATE INDEX IF NOT EXISTS idx_org_invites_email ON organization_invites(email);",
+        "ALTER TABLE claim_conflicts ADD COLUMN IF NOT EXISTS conflicting_fields JSONB DEFAULT '[]'::jsonb;",
+        "ALTER TABLE claim_conflicts ADD COLUMN IF NOT EXISTS supporting_evidence JSONB DEFAULT '{}'::jsonb;",
+        "ALTER TABLE claim_conflicts ADD COLUMN IF NOT EXISTS source_authority JSONB DEFAULT '{}'::jsonb;",
+        "ALTER TABLE claim_conflicts ADD COLUMN IF NOT EXISTS applicable_scope JSONB DEFAULT '{}'::jsonb;",
+        "ALTER TABLE claim_conflicts ADD COLUMN IF NOT EXISTS effective_dates JSONB DEFAULT '{}'::jsonb;",
+        "ALTER TABLE claim_conflicts ADD COLUMN IF NOT EXISTS reviewer_decision VARCHAR(50);",
+        "ALTER TABLE claim_conflicts ADD COLUMN IF NOT EXISTS resolution_rationale TEXT;",
+        "CREATE INDEX IF NOT EXISTS idx_conflicts_claim_a ON claim_conflicts(claim_a_id);",
+        "CREATE INDEX IF NOT EXISTS idx_conflicts_claim_b ON claim_conflicts(claim_b_id);",
+        "CREATE INDEX IF NOT EXISTS idx_conflicts_status ON claim_conflicts(resolution_status);",
     ]
 
     async with engine.begin() as conn:
