@@ -26,7 +26,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.conflict_engine.compatibility_gate import CompatibilityGate
 from app.db.enums import SourceFamily, SourceIntent
 from app.extraction.candidate_discovery import CandidateDiscoveryEngine
-from app.extraction.models import CandidateClaim, Layer5ExtractionResult
+from app.extraction.models import CandidateClaim, ExtractionStrategyType, Layer5ExtractionResult
 from app.extraction.pipeline import global_extraction_pipeline
 from app.ingestion.envelope import CanonicalSourceEnvelope, EnvelopeFactory
 from app.ingestion.parsers.document_parser import DocumentParser
@@ -259,19 +259,32 @@ class UnifiedExtractionPipeline:
             raw_page = loc.get("page_number") or loc.get("page") or 1
             sec_heading = loc.get("section_heading") or loc.get("section")
 
-            # Clean enumeration prefixes (e.g. (i), (ii), 1., etc.)
-            clean_sentence = UniversalGateEvaluator.strip_enumeration_prefix(raw_span or raw_text)
-            clean_subj = UniversalGateEvaluator.strip_enumeration_prefix(raw_subj)
+            # Phase 1: Preserve cell-bound atomic claim statements for table claims
+            is_table_claim = (
+                cand.table_binding is not None
+                or cand.extraction_strategy in (ExtractionStrategyType.TABLE_AWARE, ExtractionStrategyType.DETERMINISTIC_SCHEMA)
+                or loc.get("block_type") == "table_row"
+                or bool(loc.get("table_grid"))
+            )
+
             clean_pred = raw_pred
             clean_obj = raw_obj
 
-            if clean_sentence:
-                cand.claim_text = clean_sentence
-            cand.subject = clean_subj
-            cand.predicate = clean_pred
+            if is_table_claim:
+                # Do NOT overwrite cand.claim_text with raw_span (the full markdown table row string)
+                clean_subj = UniversalGateEvaluator.strip_enumeration_prefix(raw_subj)
+                cand.subject = clean_subj
+                quote = raw_span or raw_text
+            else:
+                # Clean enumeration prefixes (e.g. (i), (ii), 1., etc.) from prose claim text
+                clean_sentence = UniversalGateEvaluator.strip_enumeration_prefix(raw_text)
+                clean_subj = UniversalGateEvaluator.strip_enumeration_prefix(raw_subj)
+                if clean_sentence:
+                    cand.claim_text = clean_sentence
+                cand.subject = clean_subj
+                quote = clean_sentence or raw_text
 
             # Build ImmutableEvidenceSpan
-            quote = clean_sentence or raw_text
             span = ImmutableEvidenceSpan.from_content(
                 verbatim_quote=quote,
                 clause_text=raw_span or quote,
@@ -286,7 +299,10 @@ class UnifiedExtractionPipeline:
                 cand.locator["char_start"] = span.char_start
             if span.char_end is not None:
                 cand.locator["char_end"] = span.char_end
-            cand.evidence_text_span = span.verbatim_quote
+            if is_table_claim:
+                cand.evidence_text_span = raw_span or span.verbatim_quote
+            else:
+                cand.evidence_text_span = span.verbatim_quote
 
             # Check for non-atomic compound rule with multi-branch disjunctions
             is_compound = bool(

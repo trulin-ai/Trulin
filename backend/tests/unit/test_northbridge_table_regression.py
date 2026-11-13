@@ -129,3 +129,49 @@ async def test_definitions_captured_in_evidence():
     assert "RACI" in terms
     assert "SLA" in terms
     assert "TPA" in terms
+
+
+@pytest.mark.asyncio
+async def test_unified_pipeline_cell_bound_rendering_and_zero_header_claims():
+    """
+    End-to-end verification through UnifiedExtractionPipeline:
+    1. Phase 1: All table claims must have cell-bound atomic statements (no raw full-row Markdown strings).
+    2. Phase 2: Table 9 & Table 22 section header rows produce 0 claims.
+    3. Phase 3: Table 15 Checkbox matrix emits atomic requirement claims with condition remarks.
+    4. Conflict candidates collapse to 0 (no full-row false conflicts).
+    """
+    from app.extraction.unified_pipeline import UnifiedExtractionPipeline, UnifiedPipelineOptions
+
+    res = await UnifiedExtractionPipeline.execute(
+        filename="Northbridge_Benefits_Leave_Claims_Policy.docx",
+        raw_bytes=DOCX_PATH.read_bytes(),
+        options=UnifiedPipelineOptions(persist_to_db=False),
+    )
+
+    assert len(res.candidates) > 0, "No candidates extracted from UnifiedExtractionPipeline"
+
+    # 1. Phase 1: No full-row markdown table rows in claim_text
+    for i, c in enumerate(res.candidates, 1):
+        text = (c.claim_text or "").strip()
+        assert not (text.startswith("|") and text.endswith("|")), (
+            f"Candidate #{i} has unparsed raw table row in claim_text: '{text}'"
+        )
+
+    # 2. Phase 2: Table 9 & Table 22 section headers must produce 0 claims
+    header_terms = ["inpatient benefits", "outpatient and wellness", "family and maternity", "age band (years)"]
+    header_leaks = [
+        c for c in res.candidates
+        if any(h in (c.claim_text or "").lower() or h in (c.subject or "").lower() for h in header_terms)
+        and c.predicate in ("has_inpatient_benefits", "has_outpatient_and_wellness", "has_family_and_maternity")
+    ]
+    assert len(header_leaks) == 0, f"Section headers leaked into claims: {[c.claim_text for c in header_leaks]}"
+
+    # 3. Phase 3: Table 15 Checkboxes normalized
+    t15_claims = [c for c in res.candidates if c.predicate == "is_required_for_claim_types"]
+    assert len(t15_claims) >= 6, f"Expected at least 6 checkbox claims, got {len(t15_claims)}"
+    for c in t15_claims:
+        assert not (c.claim_text.startswith("|") and c.claim_text.endswith("|"))
+
+    # 4. Zero false positive conflicts from full-row collision
+    assert len(res.conflicts) == 0, f"Expected 0 conflicts, got {len(res.conflicts)}"
+
