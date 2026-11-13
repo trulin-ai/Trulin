@@ -182,6 +182,15 @@ class UnifiedExtractionPipeline:
         else:
             evidence_result = await DocumentParser.parse(canonical_env)
 
+        # Step 3.5: Prose Normative Classification (strictly gated behind block_type != "table_row")
+        from app.extraction.prose_normative_classifier import ProseNormativeClassifier
+        for evidence_unit in evidence_result.units:
+            if evidence_unit.block_type != "table_row":
+                evidence_unit.content_role = ProseNormativeClassifier.classify_unit(
+                    evidence_unit.content_text,
+                    default_role=evidence_unit.content_role,
+                )
+
         # Step 4: Candidate Discovery & Extraction (Layer 5)
         l5_result: Layer5ExtractionResult = await global_extraction_pipeline.process_envelope(
             envelope=canonical_env,

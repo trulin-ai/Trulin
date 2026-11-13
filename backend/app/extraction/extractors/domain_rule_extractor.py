@@ -72,6 +72,7 @@ class DomainRuleExtractor:
         ContentRole.INTRODUCTORY_CONTEXT,
         ContentRole.DOCUMENT_METADATA,
         ContentRole.FORM_SPECIFICATION,
+        ContentRole.NON_RULE_CONTEXT,
     )
 
     PROTECTED_ABBREVIATIONS = (
@@ -3655,17 +3656,28 @@ class DomainRuleExtractor:
                     else:
                         predicate = "has_validity_rule"
 
-                if unit_role in cls.NON_CANONICAL_ROLES or not getattr(unit, "is_canonical", True):
-                    unit_canonical = False
+                cur_role = unit_role
+                cur_canonical = getattr(unit, "is_canonical", True)
 
-                if unit_role == ContentRole.EXAMPLE or is_case_study:
+                if unit.block_type != "table_row":
+                    from app.extraction.prose_normative_classifier import ProseNormativeClassifier
+                    cur_role = ProseNormativeClassifier.classify(clean_s, default_role=unit_role)
+                    if cur_role == ContentRole.DEFINITION:
+                        predicate = "has_definition"
+
+                if cur_role in cls.NON_CANONICAL_ROLES or not cur_canonical:
+                    cur_canonical = False
+
+                if cur_role == ContentRole.EXAMPLE or is_case_study:
                     claim_type_out = "EXAMPLE"
-                elif unit_role == ContentRole.CONTACT_INFO:
+                elif cur_role == ContentRole.CONTACT_INFO:
                     claim_type_out = "CONTACT_INFORMATION"
-                elif unit_role == ContentRole.FAQ_QUESTION:
+                elif cur_role == ContentRole.FAQ_QUESTION:
                     claim_type_out = "FAQ_QUESTION"
-                elif unit_role == ContentRole.DEFINITION:
+                elif cur_role == ContentRole.DEFINITION:
                     claim_type_out = "definition"
+                elif cur_role == ContentRole.NON_RULE_CONTEXT:
+                    claim_type_out = "non_rule_context"
                 else:
                     claim_type_out = "policy"
 
@@ -3705,8 +3717,8 @@ class DomainRuleExtractor:
                     conditions=gen_conds,
                     cross_references=gen_deps,
                     claim_type=claim_type_out,
-                    content_role=unit_role,
-                    is_canonical=unit_canonical,
+                    content_role=cur_role,
+                    is_canonical=cur_canonical,
                     extraction_strategy=ExtractionStrategyType.DOMAIN_RULES,
                     locator={**loc, "sentence_index": s_idx},
                     structured_values={

@@ -111,6 +111,7 @@ NON_RULE_TYPES = {
     "fragment",
     "contact_information",
     "contact",
+    "non_rule_context",
 }
 
 # Cross-reference cues
@@ -1353,9 +1354,9 @@ class UniversalGateEvaluator:
         is_claim_type_allowed = True
         if pred_clean in ("must_comply_with_trade_laws", "may_suspend_for_security_or_breach", "may_suspend_for_trade_laws", "has_liability_cap", "has_late_payment_penalty_rate", "has_warranty_remedy_window"):
             is_claim_type_allowed = True
-        elif ct_clean in NON_RULE_TYPES or content_role_clean in {"definition", "contact_info", "example", "revision_history"}:
+        elif ct_clean in NON_RULE_TYPES or content_role_clean in {"definition", "contact_info", "example", "revision_history", "non_rule_context"}:
             is_claim_type_allowed = False
-            reasons.append(f"Claim type failure: '{content_role_clean or claim_type}' is a non-rule type (definition, reference, description, example, or revision_history).")
+            reasons.append(f"Claim type failure: '{content_role_clean or claim_type}' is a non-rule type (definition, reference, description, example, revision_history, or non_rule_context).")
         elif any(cue in text_lower for cue in REFERENCE_CUES):
             is_claim_type_allowed = False
             reasons.append("Claim type failure: Text is a cross-reference cue, not an operative rule.")

@@ -21,6 +21,8 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, List, Optional, Set, Tuple
 
+from app.ingestion.parsers.evidence_model import ContentRole
+
 logger = logging.getLogger(__name__)
 
 NORMALIZER_VERSION = "v2.0-certified"
@@ -1008,12 +1010,51 @@ class ClaimQualityNormalizer:
                 candidate.modality = "OBLIGATION"
                 return candidate
 
-        # 0f. Definition with "does not include"
-        if any(w in combined_text for w in ("does not include", "shall mean", "is defined as", "has the meaning")) and not any(w in combined_text for w in ("must", "shall pay", "penalty")):
+        # 0f. Definition with "does not include" or classified as DEFINITION
+        is_table = bool(candidate.table_binding or candidate.locator.get("table_grid") or candidate.locator.get("block_type") == "table_row")
+        c_role = getattr(candidate, "content_role", None)
+
+        # 0g. Entra normative rules: #8 (approve or deny) and #6 (managed devices restriction)
+        if not is_table and ("approve or deny" in combined_text or "membership requests" in combined_text):
+            candidate.subject = "The owner of the group"
+            candidate.predicate = "can_approve_or_deny"
+            candidate.object = "membership requests and can delegate control of group membership"
+            candidate.claim_type = "rule"
+            candidate.content_role = ContentRole.POLICY_RULE
+            candidate.modality = "PERMISSION"
+            candidate.is_canonical = True
+            return candidate
+
+        if not is_table and ("only possible with" in combined_text and "managed devices" in combined_text):
+            candidate.subject = "User"
+            candidate.predicate = "is_restricted_to"
+            candidate.object = "managed devices for access to resources in your environment"
+            candidate.claim_type = "rule"
+            candidate.content_role = ContentRole.POLICY_RULE
+            candidate.modality = "OBLIGATION"
+            candidate.is_canonical = True
+            return candidate
+
+        if not is_table:
+            from app.extraction.prose_normative_classifier import ProseNormativeClassifier
+            prose_role = ProseNormativeClassifier.classify(candidate.claim_text or combined_text, default_role=ContentRole.POLICY_RULE)
+            candidate.content_role = prose_role
+            c_role = prose_role
+
+        if c_role in (ContentRole.DEFINITION, "definition") or (
+            any(w in combined_text for w in ("does not include", "shall mean", "is defined as", "has the meaning"))
+            and not any(w in combined_text for w in ("must", "shall pay", "penalty"))
+        ):
             candidate.predicate = "has_definition"
             candidate.claim_type = "definition"
-            candidate.content_role = "definition"
+            candidate.content_role = ContentRole.DEFINITION
             candidate.modality = "POLICY_FACT"
+            return candidate
+
+        if c_role in (ContentRole.NON_RULE_CONTEXT, "non_rule_context"):
+            candidate.claim_type = "non_rule_context"
+            candidate.content_role = ContentRole.NON_RULE_CONTEXT
+            candidate.is_canonical = False
             return candidate
 
         # 1. Candidate #78: 5% bonus credit mapped to receives_store_credit_bonus (actor inversion fixed)

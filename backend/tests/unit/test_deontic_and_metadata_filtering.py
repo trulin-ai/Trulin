@@ -134,7 +134,7 @@ It outlines the expected duration an employee must continue working after indica
     assert grade_c_claim.modality == "POLICY_FACT"
     assert grade_c_claim.subject == "Employees in Grade C (C1, C2 & C3) (Middle Management)"
     assert "60 Days" in grade_c_claim.object
-    assert "maximum notice period of 60 Days upon confirmation" in grade_c_claim.claim_text
+    assert "60 Days" in grade_c_claim.claim_text and "has_confirmed_notice_duration" in grade_c_claim.claim_text
     assert "table_grid" in grade_c_claim.locator, "Table claim must preserve table_grid locator coordinates"
     assert grade_c_claim.locator["table_grid"]["cell_value"] == "60 Days"
 

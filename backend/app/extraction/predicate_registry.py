@@ -171,6 +171,8 @@ class CanonicalPredicate(str, Enum):
     IS_REQUIRED_FOR_CLAIM_TYPES = "is_required_for_claim_types"
     HAS_MILEAGE_RATE = "has_mileage_rate"
     HAS_LIMIT_PERIOD = "has_limit_period"
+    CAN_APPROVE_OR_DENY = "can_approve_or_deny"
+    IS_RESTRICTED_TO = "is_restricted_to"
 
 
 class PredicateRegistry:
@@ -248,6 +250,9 @@ class PredicateRegistry:
         "online requests generate rma": CanonicalPredicate.HAS_RMA_GENERATION_BEHAVIOR.value,
         "rma generation behavior": CanonicalPredicate.HAS_RMA_GENERATION_BEHAVIOR.value,
         "original payment method": CanonicalPredicate.HAS_DEFAULT_REFUND_DESTINATION.value,
+        "can approve or deny": CanonicalPredicate.CAN_APPROVE_OR_DENY.value,
+        "approve or deny": CanonicalPredicate.CAN_APPROVE_OR_DENY.value,
+        "only possible with": CanonicalPredicate.IS_RESTRICTED_TO.value,
         "refunded to original payment method": CanonicalPredicate.HAS_DEFAULT_REFUND_DESTINATION.value,
         "default refund destination": CanonicalPredicate.HAS_DEFAULT_REFUND_DESTINATION.value,
         "never expire": CanonicalPredicate.HAS_EXPIRATION_RULE.value,

@@ -243,6 +243,7 @@ class CandidateClaim(BaseModel):
                 ContentRole.INTRODUCTORY_CONTEXT,
                 ContentRole.DOCUMENT_METADATA,
                 ContentRole.FORM_SPECIFICATION,
+                ContentRole.NON_RULE_CONTEXT,
             ):
                 resolved_canonical = False
             else:
