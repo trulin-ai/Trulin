@@ -10,7 +10,7 @@ import re
 from typing import List, Tuple
 
 from app.extraction.models import ExtractionStrategyType
-from app.ingestion.parsers.evidence_model import ParsedEvidenceUnit
+from app.ingestion.parsers.evidence_model import ContentRole, ParsedEvidenceUnit
 
 
 class CandidateDiscoveryEngine:
@@ -103,6 +103,54 @@ class CandidateDiscoveryEngine:
             ):
                 return False, ExtractionStrategyType.TABLE_AWARE, "Table row is website sitemap navigation footer; filtered from normative policy claims."
 
+            ctx_lower = " > ".join(str(c) for c in (unit.hierarchical_context or [])).lower()
+
+            # Filter 4E: Transaction Logs / Claims Registers / Ledger Records (e.g. Table 23)
+            if any(k in ("claim id", "transaction id", "order id", "invoice no", "employee id", "amount claimed (inr)", "amount approved (inr)", "paid on") for k in col_keys_lower) and any(k in ("claim id", "transaction id", "order id", "invoice no") for k in col_keys_lower):
+                return False, ExtractionStrategyType.TABLE_AWARE, "Table row is historical transaction/claims register."
+
+            # Filter 4F: Financial Budgets & Accounting Ledgers (e.g. Table 21)
+            if (any("cost head" in k or "budget" in k or "variance" in k for k in col_keys_lower) and any("actual" in k or "variance" in k or "fy20" in k for k in col_keys_lower)) or "budget" in ctx_lower:
+                return False, ExtractionStrategyType.TABLE_AWARE, "Table row is financial accounting/budget statement."
+
+            # Filter 4G: Worked Examples / Calculation Illustrations (e.g. Table 27)
+            if any(term in ctx_lower for term in ("worked example", "sample calculation", "calculation illustration")) or any(k in ("calculation note", "billed by hospital") for k in col_keys_lower) or any("line item" in k and "calculation" in str(col_keys_lower) for k in col_keys_lower):
+                return False, ExtractionStrategyType.TABLE_AWARE, "Table row is illustrative calculation example."
+
+            # Filter 4H: Contact Directories (e.g. Table 26)
+            if (
+                any(k in ("email", "phone", "hours (ist)", "hours") for k in col_keys_lower)
+                or (getattr(unit, "content_role", None) == ContentRole.CONTACT_INFO and not any(k in ("severity", "trigger", "action", "recovery", "level") for k in col_keys_lower))
+            ):
+                return False, ExtractionStrategyType.TABLE_AWARE, "Table row is support contact directory."
+
+            # Filter 4I: Regulatory / Statute Citations (e.g. Table 28)
+            if any(k in ("regulation", "act", "reference no.", "jurisdiction") for k in col_keys_lower) and any(k in ("regulation", "act", "reference no.") for k in col_keys_lower):
+                return False, ExtractionStrategyType.TABLE_AWARE, "Table row is external regulatory citation reference."
+
+            # Filter 4J: Lexical Definitions & Acronym Glossaries (e.g. Table 5 & Table 29)
+            if (any(k in ("acronym", "meaning") for k in col_keys_lower) and len(col_keys_lower) >= 2) or (any(k in ("term", "definition") for k in col_keys_lower) and any(k in ("clause ref.", "clause ref", "definition") for k in col_keys_lower)) or any(term in ctx_lower for term in ("definitions", "glossary", "acronyms")) or getattr(unit, "content_role", None) == ContentRole.DEFINITION:
+                return False, ExtractionStrategyType.TABLE_AWARE, "Table row is lexical definition or acronym; routed to terminology glossary."
+
+            # Filter 4K: Document Control & Governance Metadata (e.g. Table 1)
+            if (any(k in ("policy title", "document number", "classification", "policy owner", "approving body") for k in col_keys_lower) or "document control" in ctx_lower) and not any(k in ("statutory", "company", "co-pay", "per diem", "allowance", "mileage") for k in col_keys_lower):
+                return False, ExtractionStrategyType.TABLE_AWARE, "Table row is document control metadata."
+
+            # Filter 4L: Claimant / Employee Declaration Form (e.g. Table 30)
+            if (
+                any("declaration" in str(ctx).lower() for ctx in (unit.hierarchical_context or []))
+                or any(k in ("i confirm the information is true and complete", "i have attached all original bills", "signature and date", "employee name", "claim reference") for k in col_keys_lower)
+            ):
+                return False, ExtractionStrategyType.TABLE_AWARE, "Table row is employee declaration form; filtered from normative policy claims."
+
+            # Filter 4M: Table Section Header Rows (e.g. repeated 'Inpatient benefits' across all plan columns)
+            non_empty_cells = [str(v).strip() for v in cols.values() if str(v).strip()]
+            if non_empty_cells and len(cols) >= 3:
+                if len(non_empty_cells) >= 2 and len(set(v.lower() for v in non_empty_cells)) == 1:
+                    return False, ExtractionStrategyType.TABLE_AWARE, "Table row is section header pseudo-row; filtered from normative policy claims."
+                if len(non_empty_cells) == 1 and len(cols) >= 3:
+                    return False, ExtractionStrategyType.TABLE_AWARE, "Table row is section header span pseudo-row; filtered from normative policy claims."
+
             # Eligible: Policy Matrix (e.g. Grade Notice Duration Matrix)
             if s_data.get("is_ambiguous"):
                 return True, ExtractionStrategyType.TABLE_AWARE, "Table row policy matrix with ambiguous/merged cell layout requiring review."
@@ -125,7 +173,6 @@ class CandidateDiscoveryEngine:
         # 6. Document Clauses, Paragraphs, List Items, Definitions, and Image OCR Units
         if b_type in ("clause", "paragraph", "list_item", "bullet", "definition", "image_ocr") or unit.structure_type in ("list_item", "definition", "image_ocr"):
             from app.extraction.deontic_classifier import DeonticClassifier
-            from app.ingestion.parsers.evidence_model import ContentRole
 
             # Operational Definition (e.g. Business Day, operational calendar, timeline basis)
             if b_type == "definition" or unit.structure_type == "definition":

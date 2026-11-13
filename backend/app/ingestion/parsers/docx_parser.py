@@ -58,6 +58,26 @@ class DocxAdapter:
         return cleaned
 
     @classmethod
+    def _extract_cell_content(cls, cell) -> str:
+        """Extracts text from a table cell, preserving bullet paragraphs and nested tables."""
+        if cell.tables:
+            nested_parts = []
+            for n_tbl in cell.tables:
+                for n_row in n_tbl.rows:
+                    r_text = " : ".join(cls._clean_cell_text(nc.text) for nc in n_row.cells if nc.text.strip())
+                    if r_text:
+                        nested_parts.append(r_text)
+            if nested_parts:
+                return " ; ".join(nested_parts)
+
+        paras = [p.text.strip() for p in cell.paragraphs if p.text.strip()]
+        if len(paras) > 1:
+            return " • ".join(cls._clean_cell_text(p) for p in paras)
+        elif len(paras) == 1:
+            return cls._clean_cell_text(paras[0])
+        return cls._clean_cell_text(cell.text)
+
+    @classmethod
     def _get_heading_level(cls, paragraph: Paragraph) -> Optional[int]:
         """Determines heading level (1 to 6) from paragraph style or heading syntax."""
         style_name = (paragraph.style.name if hasattr(paragraph, "style") and paragraph.style else "").lower()
@@ -216,13 +236,40 @@ class DocxAdapter:
             elif tag.endswith("tbl"):
                 table = Table(child, doc)
                 t_idx += 1
-                table_rows: List[List[str]] = []
-                headers: List[str] = []
+                num_rows = len(table.rows)
+                if num_rows == 0:
+                    continue
 
-                for r_idx, row in enumerate(table.rows):
-                    cells = [cls._clean_cell_text(cell.text) for cell in row.cells]
-                    if r_idx == 0:
-                        headers = cells
+                # Determine if table has a multi-tier header band
+                row0 = table.rows[0]
+                has_r0_span = any(row0.cells[c]._tc == row0.cells[c+1]._tc for c in range(len(row0.cells)-1))
+                h_count = 1
+                if has_r0_span and num_rows > 1:
+                    h_count = 2
+                    for r_idx in range(1, min(4, num_rows - 1)):
+                        r = table.rows[r_idx]
+                        has_span = any(r.cells[c]._tc == r.cells[c+1]._tc for c in range(len(r.cells)-1))
+                        if has_span:
+                            h_count = max(h_count, r_idx + 2)
+                        else:
+                            h_count = max(h_count, r_idx + 1)
+                            break
+
+                # Build hierarchical column headers
+                num_cols = len(table.columns)
+                headers: List[str] = []
+                for c in range(num_cols):
+                    parts = []
+                    for r in range(h_count):
+                        txt = cls._clean_cell_text(table.rows[r].cells[c].text)
+                        if txt and (not parts or parts[-1] != txt):
+                            parts.append(txt)
+                    headers.append(" > ".join(parts) if parts else f"Col_{c+1}")
+
+                # Collect data rows starting after header band
+                table_rows: List[List[str]] = [headers]
+                for r_idx in range(h_count, num_rows):
+                    cells = [cls._extract_cell_content(cell) for cell in table.rows[r_idx].cells]
                     table_rows.append(cells)
 
                 if table_rows:

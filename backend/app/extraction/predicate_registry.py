@@ -155,8 +155,22 @@ class CanonicalPredicate(str, Enum):
     HAS_FULL_REFUND_IF_STOPPED_ELSE_RETURN = "has_full_refund_if_stopped_else_return"
     HAS_TRIGGER = "has_trigger"
     HAS_ACTION = "has_action"
-    HAS_TARGET = "has_target"
     HAS_TYPICAL_RESOLUTION = "has_typical_resolution"
+
+    # Enterprise Policy Matrix & Governance Predicates
+    REQUIRES_ACTION = "requires_action"
+    HAS_PROCESS_OWNER = "has_process_owner"
+    HAS_TARGET_DURATION = "has_target_duration"
+    HAS_MAXIMUM_DURATION = "has_maximum_duration"
+    HAS_ESCALATION_TRIGGER = "has_escalation_trigger"
+    HAS_RECOVERY_ACTION = "has_recovery_action"
+    IS_RESPONSIBLE_FOR = "is_responsible_for"
+    IS_ACCOUNTABLE_FOR = "is_accountable_for"
+    IS_CONSULTED_FOR = "is_consulted_for"
+    IS_INFORMED_OF = "is_informed_of"
+    IS_REQUIRED_FOR_CLAIM_TYPES = "is_required_for_claim_types"
+    HAS_MILEAGE_RATE = "has_mileage_rate"
+    HAS_LIMIT_PERIOD = "has_limit_period"
 
 
 class PredicateRegistry:
@@ -383,8 +397,14 @@ class PredicateRegistry:
         "required?": "must_provide_information",
         "required": "must_provide_information",
         "example": "has_example_value",
-        "trigger": "has_trigger",
-        "action": "has_action",
+        "trigger": "has_escalation_trigger",
+        "action": "requires_action",
+        "owner": "has_process_owner",
+        "target": "has_target_duration",
+        "maximum": "has_maximum_duration",
+        "recovery": "has_recovery_action",
+        "rate": "has_mileage_rate",
+        "per": "has_limit_period",
         "meaning": "has_definition",
         "typical resolution": "has_typical_resolution",
         "code (example)": "has_definition",

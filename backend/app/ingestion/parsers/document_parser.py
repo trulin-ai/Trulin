@@ -230,8 +230,10 @@ class DocumentParser:
                         any(h in ("line item", "field", "column name", "parameter") for h in clean_hdrs)
                         and any(h in ("definition", "meaning", "format", "data type") for h in clean_hdrs)
                     )
+                    sitemap_sections = ("what's new", "microsoft store", "explore copilot", "windows 11 apps")
+                    sitemap_matches = sum(1 for h in clean_hdrs if any(w in h for w in sitemap_sections) or h.strip() in ("education", "business", "developer & it", "company"))
                     is_sitemap = (
-                        any(any(w in h for w in ("what's new", "microsoft store", "education", "business", "developer & it", "company", "explore copilot", "windows 11 apps")) for h in clean_hdrs)
+                        sitemap_matches >= 2
                         or any("sitemap" in h or "footer" in h for h in clean_hdrs)
                         or (any("copilot" in h for h in clean_hdrs) and any("surface" in h or "windows" in h for h in clean_hdrs))
                     )
@@ -297,10 +299,10 @@ class DocumentParser:
                     elif table_semantic_type in ("form_field_specification", "data_dictionary"):
                         row_content_role = ContentRole.DEFINITION
                         row_is_canonical = False
-                    elif any(w in context_str for w in ("definition", "glossary")) or ("term" in hdrs_str and "definition" in hdrs_str):
+                    elif any(w in context_str for w in ("definition", "glossary", "acronym", "abbreviation")) or ("term" in hdrs_str and "definition" in hdrs_str) or ("acronym" in hdrs_str and "meaning" in hdrs_str):
                         row_content_role = ContentRole.DEFINITION
                         row_is_canonical = False
-                    elif any(w in context_str for w in ("contact", "escalation channel", "support channel")) or any(w in hdrs_str for w in ("channel", "hours", "phone")):
+                    elif (any(w in hdrs_str for w in ("channel", "hours", "phone", "email")) or any(w in (context[-1].lower() if context else "") for w in ("contact", "support channel", "helpdesk"))) and not any(w in hdrs_str for w in ("severity", "trigger", "action", "recovery", "level")):
                         row_content_role = ContentRole.CONTACT_INFO
                         row_is_canonical = False
                     elif any(w in context_str for w in ("faq", "frequently asked")) or "question" in hdrs_str:
