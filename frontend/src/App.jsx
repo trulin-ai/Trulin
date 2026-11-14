@@ -710,6 +710,7 @@ export default function App() {
   const [profileSubTab, setProfileSubTab] = useState(() => initialUrlState?.profileSubTab || 'user_profile');
   const [mcpActiveSubView, setMcpActiveSubView] = useState(() => initialUrlState?.mcpSubView || 'tester'); // 'tester' | 'configs' | 'sdks' | 'schemas'
   const [selectedDocForViewer, setSelectedDocForViewer] = useState(null);
+  const [docExplorerTargetDocId, setDocExplorerTargetDocId] = useState(() => initialUrlState?.docId || null);
 
   // -------------------------------------------------------------
   const {
@@ -7392,6 +7393,7 @@ export default function App() {
                 user={authUser}
                 showToast={showToast}
                 readOnly={false}
+                initialDocId={docExplorerTargetDocId}
                 onClaimExtracted={() => {
                   fetchLiveDatabaseRecords();
                   fetchHealthAndConflicts(activeOrg?.id);
@@ -7875,6 +7877,11 @@ export default function App() {
               initialSection={lineageSection}
               onSectionChange={setLineageSection}
               onOpenFileBrowser={() => { setActiveTab('ingestion'); setDocExplorerView('folders'); }}
+              onLocateSource={(cleanDocId) => {
+                if (cleanDocId) setDocExplorerTargetDocId(cleanDocId);
+                setDocExplorerView('folders');
+                setActiveTab('ingestion');
+              }}
             />
           </div>
           )

@@ -208,6 +208,7 @@ export default function DocumentWorkspaceExplorer({
   onClaimExtracted,
   onDocumentUploaded,
   readOnly = false,
+  initialDocId = null,
 }) {
   // Folder tree & all documents state
   const [folders, setFolders] = useState([]);
@@ -221,7 +222,36 @@ export default function DocumentWorkspaceExplorer({
   const [searchQuery, setSearchQuery] = useState('');
 
   // Selected file & preview state
-  const [selectedDocId, setSelectedDocId] = useState(null);
+  const [selectedDocId, setSelectedDocId] = useState(() => {
+    if (initialDocId) return initialDocId;
+    if (typeof window !== 'undefined') {
+      const p = new URLSearchParams(window.location.search);
+      return p.get('doc') || p.get('docId') || null;
+    }
+    return null;
+  });
+
+  useEffect(() => {
+    if (initialDocId) {
+      setSelectedDocId(initialDocId);
+      setActiveFacilityTab('preview');
+    }
+  }, [initialDocId]);
+
+  useEffect(() => {
+    if (selectedDocId && allDocuments.length > 0) {
+      const cleanTarget = String(selectedDocId).replace(/^doc_/, '');
+      const doc = allDocuments.find(d => d.id === selectedDocId || d.id === cleanTarget || `doc_${d.id}` === selectedDocId);
+      if (doc) {
+        if (doc.id !== selectedDocId) {
+          setSelectedDocId(doc.id);
+        }
+        if (doc.folder_id) {
+          setExpandedFolders(prev => new Set([...prev, doc.folder_id]));
+        }
+      }
+    }
+  }, [selectedDocId, allDocuments]);
   const [selectedDocDetails, setSelectedDocDetails] = useState(null);
   const [selectedDocArtifacts, setSelectedDocArtifacts] = useState(null);
   const [loadingPreview, setLoadingPreview] = useState(false);

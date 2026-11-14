@@ -56,7 +56,9 @@ export default function VisualLineageGraph({
   onAssetChange,
   onClaimChange,
   initialSection = 'summary',
-  onSectionChange
+  onSectionChange,
+  onOpenFileBrowser,
+  onLocateSource
 }) {
   const { user } = useAuth();
   const [deleteTargetAsset, setDeleteTargetAsset] = useState(null);
@@ -3128,6 +3130,13 @@ export default function VisualLineageGraph({
                     claims={selectedAsset360.claims}
                     allConflictedClaimIds={allConflictedClaimIds}
                     graphData={graphData}
+                    onLocateSource={(claim, cleanDocId) => {
+                      if (onLocateSource) {
+                        onLocateSource(cleanDocId, claim);
+                      } else if (onOpenFileBrowser) {
+                        onOpenFileBrowser(cleanDocId);
+                      }
+                    }}
                     onLocateInDoc={(claim) => {
                       handleSectionChange('summary');
                       setIsFileViewerOpen(true);

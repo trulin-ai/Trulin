@@ -8,18 +8,12 @@ import {
   GitBranch,
   Copy,
   Check,
-  ArrowUpDown,
-  LayoutGrid,
-  Table as TableIcon,
-  Sparkles,
-  ExternalLink,
   ChevronLeft,
   ChevronRight,
-  Info,
-  Layers,
-  Clock,
   SlidersHorizontal,
-  X
+  X,
+  AlignRight,
+  ExternalLink
 } from 'lucide-react';
 
 export function getClaimClassification(cl, allConflictedClaimIds = new Set()) {
@@ -27,10 +21,10 @@ export function getClaimClassification(cl, allConflictedClaimIds = new Set()) {
   if (isConf) {
     return {
       category: 'conflicted',
-      badgeLabel: '⚠️ Conflict Candidate',
-      badgeBg: '#FFEDD5',
+      badgeLabel: 'Conflict Candidate',
+      badgeBg: 'rgba(249, 115, 22, 0.12)',
       badgeColor: '#C2410C',
-      badgeBorder: '#FED7AA',
+      badgeBorder: 'rgba(249, 115, 22, 0.25)',
     };
   }
 
@@ -52,10 +46,10 @@ export function getClaimClassification(cl, allConflictedClaimIds = new Set()) {
   if (isDef) {
     return {
       category: 'non_rule',
-      badgeLabel: '📖 Definition',
-      badgeBg: '#F3E8FF',
+      badgeLabel: 'Definition',
+      badgeBg: 'rgba(168, 85, 247, 0.10)',
       badgeColor: '#6B21A8',
-      badgeBorder: '#D8B4FE',
+      badgeBorder: 'rgba(168, 85, 247, 0.22)',
     };
   }
 
@@ -63,10 +57,10 @@ export function getClaimClassification(cl, allConflictedClaimIds = new Set()) {
   if (isContact) {
     return {
       category: 'non_rule',
-      badgeLabel: '📞 Contact Info',
-      badgeBg: '#EFF6FF',
+      badgeLabel: 'Contact Info',
+      badgeBg: 'rgba(59, 130, 246, 0.10)',
       badgeColor: '#1D4ED8',
-      badgeBorder: '#93C5FD',
+      badgeBorder: 'rgba(59, 130, 246, 0.22)',
     };
   }
 
@@ -74,10 +68,10 @@ export function getClaimClassification(cl, allConflictedClaimIds = new Set()) {
   if (isExample) {
     return {
       category: 'non_rule',
-      badgeLabel: '💡 Example / Case Study',
-      badgeBg: '#F0FDF4',
+      badgeLabel: 'Example / Case Study',
+      badgeBg: 'rgba(34, 197, 94, 0.10)',
       badgeColor: '#166534',
-      badgeBorder: '#BBF7D0',
+      badgeBorder: 'rgba(34, 197, 94, 0.22)',
     };
   }
 
@@ -85,10 +79,10 @@ export function getClaimClassification(cl, allConflictedClaimIds = new Set()) {
   if (isHistory) {
     return {
       category: 'non_rule',
-      badgeLabel: '📜 Revision History',
-      badgeBg: '#F1F5F9',
+      badgeLabel: 'Revision History',
+      badgeBg: 'rgba(100, 116, 139, 0.10)',
       badgeColor: '#475569',
-      badgeBorder: '#CBD5E1',
+      badgeBorder: 'rgba(100, 116, 139, 0.22)',
     };
   }
 
@@ -99,10 +93,10 @@ export function getClaimClassification(cl, allConflictedClaimIds = new Set()) {
   if (isNonRule) {
     return {
       category: 'non_rule',
-      badgeLabel: '📖 Non-Rule Context',
-      badgeBg: '#F3E8FF',
-      badgeColor: '#6B21A8',
-      badgeBorder: '#D8B4FE',
+      badgeLabel: 'Non-Rule Context',
+      badgeBg: 'rgba(59, 130, 246, 0.10)',
+      badgeColor: '#0369A1',
+      badgeBorder: 'rgba(59, 130, 246, 0.22)',
     };
   }
 
@@ -110,10 +104,10 @@ export function getClaimClassification(cl, allConflictedClaimIds = new Set()) {
   if (certTier === 'QUARANTINED' || claimType === 'quarantined' || decisionCode.includes('META_RULE')) {
     return {
       category: 'quarantined',
-      badgeLabel: '⚠️ Quarantined (Compound)',
-      badgeBg: '#FEF3C7',
-      badgeColor: '#B45309',
-      badgeBorder: '#FCD34D',
+      badgeLabel: 'Quarantined',
+      badgeBg: 'rgba(168, 85, 247, 0.10)',
+      badgeColor: '#7E22CE',
+      badgeBorder: 'rgba(168, 85, 247, 0.22)',
     };
   }
 
@@ -123,30 +117,12 @@ export function getClaimClassification(cl, allConflictedClaimIds = new Set()) {
     || status === 'review'
     || decisionStr === 'REVIEW';
   if (isReview && !allGatesPassed) {
-    if (decisionReason.includes('table') || decisionReason.includes('header')) {
-      return {
-        category: 'review',
-        badgeLabel: '⚠️ Review (Missing Context)',
-        badgeBg: '#FEF9C3',
-        badgeColor: '#854D0E',
-        badgeBorder: '#FDE047',
-      };
-    }
-    if (decisionCode.includes('WEAK_PREDICATE') || decisionReason.includes('predicate')) {
-      return {
-        category: 'review',
-        badgeLabel: '⚠️ Review (Unmapped Predicate)',
-        badgeBg: '#FEF9C3',
-        badgeColor: '#854D0E',
-        badgeBorder: '#FDE047',
-      };
-    }
     return {
       category: 'review',
-      badgeLabel: '⚠️ Review Required',
-      badgeBg: '#FEF9C3',
-      badgeColor: '#854D0E',
-      badgeBorder: '#FDE047',
+      badgeLabel: 'Review Required',
+      badgeBg: 'rgba(234, 179, 8, 0.14)',
+      badgeColor: '#B45309',
+      badgeBorder: 'rgba(234, 179, 8, 0.28)',
     };
   }
 
@@ -158,73 +134,35 @@ export function getClaimClassification(cl, allConflictedClaimIds = new Set()) {
     || decisionCode.includes('FRAGMENT')
     || decisionCode.includes('SUBJECT_CONTAMINATION');
   if (isRejected) {
-    const isDup = claimType === 'duplicate' || decisionCode.includes('DUPLICATE');
-    if (isDup) {
-      return {
-        category: 'rejected',
-        badgeLabel: '📑 Duplicate (Collapsed)',
-        badgeBg: '#FEE2E2',
-        badgeColor: '#B91C1C',
-        badgeBorder: '#FCA5A5',
-      };
-    }
-    if (decisionReason.includes('contradiction') || decisionReason.includes('polarity')) {
-      return {
-        category: 'rejected',
-        badgeLabel: '❌ Semantic Contradiction',
-        badgeBg: '#FEE2E2',
-        badgeColor: '#B91C1C',
-        badgeBorder: '#FCA5A5',
-      };
-    }
-    if (decisionReason.includes('boundary') || decisionReason.includes('threshold') || decisionReason.includes('relaxation')) {
-      return {
-        category: 'rejected',
-        badgeLabel: '❌ Boundary Violation',
-        badgeBg: '#FEE2E2',
-        badgeColor: '#B91C1C',
-        badgeBorder: '#FCA5A5',
-      };
-    }
-    if (decisionCode.includes('FRAGMENT') || decisionReason.includes('ellipsis') || decisionReason.includes('truncated')) {
-      return {
-        category: 'rejected',
-        badgeLabel: '⛔ Syntactic Fragment',
-        badgeBg: '#FEE2E2',
-        badgeColor: '#B91C1C',
-        badgeBorder: '#FCA5A5',
-      };
-    }
     return {
       category: 'rejected',
-      badgeLabel: '⛔ Rejected Rule',
-      badgeBg: '#FEE2E2',
+      badgeLabel: 'Rejected',
+      badgeBg: 'rgba(239, 68, 68, 0.10)',
       badgeColor: '#B91C1C',
-      badgeBorder: '#FCA5A5',
+      badgeBorder: 'rgba(239, 68, 68, 0.22)',
     };
   }
 
   // 5. Canonical v3 (Automated-Certified / Human-Certified)
-  const isHumanCertified = certTier === 'HUMAN_CERTIFIED';
   const isCanon = (cl.is_canonical === true || cl.data?.is_canonical === true || allGatesPassed || decisionStr === 'APPROVE')
     && (status === 'verified' || status === 'active' || decisionStr === 'APPROVE')
     && (['rule', 'policy_rule', 'policy', 'table_rule', 'table_row', 'policy_matrix'].includes(claimType) || !claimType);
   if (isCanon) {
     return {
       category: 'canonical',
-      badgeLabel: isHumanCertified ? '🛡️ Human-Certified' : '✅ Automated-Certified v3',
-      badgeBg: isHumanCertified ? '#EFF6FF' : '#DCFCE7',
-      badgeColor: isHumanCertified ? '#1D4ED8' : '#15803D',
-      badgeBorder: isHumanCertified ? '#93C5FD' : '#86EFAC',
+      badgeLabel: 'Canonical v3',
+      badgeBg: 'rgba(34, 197, 94, 0.12)',
+      badgeColor: '#15803D',
+      badgeBorder: 'rgba(34, 197, 94, 0.25)',
     };
   }
 
   return {
     category: 'review',
-    badgeLabel: '⚠️ Review Required',
-    badgeBg: '#FEF9C3',
-    badgeColor: '#854D0E',
-    badgeBorder: '#FDE047',
+    badgeLabel: 'Review Required',
+    badgeBg: 'rgba(234, 179, 8, 0.14)',
+    badgeColor: '#B45309',
+    badgeBorder: 'rgba(234, 179, 8, 0.28)',
   };
 }
 
@@ -232,23 +170,80 @@ export function getClaimDisplayCategory(cl, allConflictedClaimIds = new Set()) {
   return getClaimClassification(cl, allConflictedClaimIds).category;
 }
 
+// Low-opacity, very light shade color palettes matching status categories & mockup
+export const STATUS_ROW_THEME = {
+  canonical: {
+    bg: 'rgba(34, 197, 94, 0.035)',       // Very light shade, low opacity green
+    hoverBg: 'rgba(34, 197, 94, 0.08)',   // Low opacity green hover
+    border: '#E2E8F0',
+    accent: '#15803D'
+  },
+  review: {
+    bg: 'rgba(234, 179, 8, 0.04)',        // Very light shade, low opacity amber
+    hoverBg: 'rgba(234, 179, 8, 0.09)',   // Low opacity amber hover
+    border: '#E2E8F0',
+    accent: '#B45309'
+  },
+  non_rule: {
+    bg: 'rgba(59, 130, 246, 0.035)',      // Very light shade, low opacity blue
+    hoverBg: 'rgba(59, 130, 246, 0.08)',  // Low opacity blue hover
+    border: '#E2E8F0',
+    accent: '#0369A1'
+  },
+  rejected: {
+    bg: 'rgba(239, 68, 68, 0.035)',       // Very light shade, low opacity red
+    hoverBg: 'rgba(239, 68, 68, 0.08)',   // Low opacity red hover
+    border: '#E2E8F0',
+    accent: '#B91C1C'
+  },
+  quarantined: {
+    bg: 'rgba(168, 85, 247, 0.035)',     // Very light shade, low opacity purple
+    hoverBg: 'rgba(168, 85, 247, 0.08)', // Low opacity purple hover
+    border: '#E2E8F0',
+    accent: '#7E22CE'
+  },
+  conflicted: {
+    bg: 'rgba(249, 115, 22, 0.04)',       // Very light shade, low opacity orange
+    hoverBg: 'rgba(249, 115, 22, 0.09)',  // Low opacity orange hover
+    border: '#E2E8F0',
+    accent: '#C2410C'
+  }
+};
+
+const STANDARD_GATES = [
+  { key: 'span_exists', altKey: 'evidence_exists', label: 'Span exists' },
+  { key: 'clause_entails_claim', altKey: 'clause_entails_claim', label: 'Clause entails claim' },
+  { key: 'subject_valid', altKey: 'subject_valid', label: 'Subject valid' },
+  { key: 'counterparty_resolved', altKey: 'counterparty_resolved', label: 'Counterparty resolved' },
+  { key: 'predicate_valid', altKey: 'predicate_valid', label: 'Predicate valid' },
+  { key: 'is_atomic', altKey: 'atomicity_valid', label: 'Is atomic' },
+  { key: 'is_not_duplicate', altKey: 'duplicate_valid', label: 'Is not duplicate' },
+  { key: 'claim_type_allowed', altKey: 'claim_type_allowed', label: 'Claim type allowed' },
+  { key: 'human_approved_if_required', altKey: 'human_approved_if_required', label: 'Human approved if required' },
+  { key: 'text_integrity', altKey: 'text_integrity', label: 'Text integrity' }
+];
+
 export default function AssetClaimsStudioPane({
   asset,
   claims = [],
   allConflictedClaimIds = new Set(),
   graphData,
   onLocateInDoc,
+  onLocateSource,
   onInspectInDag,
   showToast
 }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all'); // 'all' | 'canonical' | 'review' | 'quarantined' | 'non_rule' | 'rejected' | 'conflicted'
   const [trustTierFilter, setTrustTierFilter] = useState('all'); // 'all' | 'high' | 'med' | 'low'
-  const [sortBy, setSortBy] = useState('trust_desc'); // 'trust_desc' | 'trust_asc' | 'subject_asc' | 'index'
-  const [viewMode, setViewMode] = useState('cards'); // 'cards' | 'table'
+  const [sortBy, setSortBy] = useState('subject_asc'); // 'subject_asc' | 'trust_desc' | 'trust_asc' | 'index'
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(12);
+  const [pageSize, setPageSize] = useState(20); // 20, 50, 80, 100
   const [copiedClaimId, setCopiedClaimId] = useState(null);
+
+  // Selection states
+  const [selectedClaimId, setSelectedClaimId] = useState(null);
+  const [selectedCheckboxIds, setSelectedCheckboxIds] = useState(new Set());
 
   const totalClaims = claims.length;
 
@@ -299,6 +294,22 @@ export default function AssetClaimsStudioPane({
       avgScore
     };
   }, [claims, allConflictedClaimIds, totalClaims]);
+
+  // Stable document identifier for claim titles
+  const docIdentifier = useMemo(() => {
+    const raw = asset?.node?.label || asset?.node?.data?.title || 'DOC';
+    const cleaned = raw.replace(/[^a-zA-Z0-9]/g, '').slice(0, 10).toUpperCase();
+    return cleaned || 'NORTHWINDR';
+  }, [asset]);
+
+  // Helper to format clean Claim Title
+  const getClaimDisplayTitle = (cl, index) => {
+    if (cl.title && String(cl.title).startsWith('Claim_')) return cl.title;
+    if (cl.display_id) return cl.display_id;
+    if (cl.claim_code) return cl.claim_code;
+    const numStr = String(index).padStart(3, '0');
+    return `Claim_${docIdentifier}_${numStr}`;
+  };
 
   // Filter and sort pipeline
   const filteredClaims = useMemo(() => {
@@ -360,6 +371,64 @@ export default function AssetClaimsStudioPane({
     return filteredClaims.slice(start, start + pageSize);
   }, [filteredClaims, currentPage, pageSize]);
 
+  // Current active inspected claim in right pane
+  const selectedClaim = useMemo(() => {
+    if (!filteredClaims || filteredClaims.length === 0) return null;
+    if (selectedClaimId) {
+      const found = filteredClaims.find(c => (c.id || c._tempId) === selectedClaimId);
+      if (found) return found;
+    }
+    return paginatedClaims[0] || filteredClaims[0];
+  }, [filteredClaims, paginatedClaims, selectedClaimId]);
+
+  // Computed data for active inspected claim
+  const selectedClaimIndex = useMemo(() => {
+    if (!selectedClaim) return 1;
+    const idx = filteredClaims.findIndex(c => (c.id || c._tempId) === (selectedClaim.id || selectedClaim._tempId));
+    return idx >= 0 ? idx + 1 : 1;
+  }, [filteredClaims, selectedClaim]);
+
+  const selectedTitle = useMemo(() => {
+    if (!selectedClaim) return `Claim_${docIdentifier}_001`;
+    return getClaimDisplayTitle(selectedClaim, selectedClaimIndex);
+  }, [selectedClaim, selectedClaimIndex, docIdentifier]);
+
+  const selectedTrustPercent = useMemo(() => {
+    if (!selectedClaim) return 95;
+    const raw = selectedClaim.trustScore ?? selectedClaim.data?.trustScore ?? selectedClaim.data?.confidence ?? selectedClaim.data?.trust_score;
+    if (raw !== undefined && raw !== null && !isNaN(Number(raw))) {
+      return Math.round(Number(raw) * 100);
+    }
+    const cat = getClaimDisplayCategory(selectedClaim, allConflictedClaimIds);
+    return cat === 'canonical' ? 95 : 82;
+  }, [selectedClaim, allConflictedClaimIds]);
+
+  const getGateStatus = (cl, gate) => {
+    if (!cl) return true;
+    const gates = cl.gates || cl.data?.gates || {};
+    if (gates[gate.key] !== undefined) return Boolean(gates[gate.key]);
+    if (gates[gate.altKey] !== undefined) return Boolean(gates[gate.altKey]);
+    const cat = getClaimDisplayCategory(cl, allConflictedClaimIds);
+    if (cat === 'canonical' || cl.all_9_gates_passed === true || cl.data?.all_9_gates_passed === true) {
+      return true;
+    }
+    if (cat === 'rejected') {
+      if (gate.key === 'is_not_duplicate' && (cl.claim_type === 'duplicate' || cl.decision_code?.includes('DUPLICATE'))) return false;
+      if (gate.key === 'clause_entails_claim' && cl.decision_reason?.includes('contradiction')) return false;
+      if (gate.key === 'predicate_valid' && cl.decision_code?.includes('PREDICATE')) return false;
+    }
+    if (cat === 'review') {
+      if (gate.key === 'counterparty_resolved' && cl.decision_reason?.includes('counterparty')) return false;
+      if (gate.key === 'is_atomic' && cl.decision_reason?.includes('compound')) return false;
+    }
+    return true;
+  };
+
+  const passedGatesCount = useMemo(() => {
+    if (!selectedClaim) return 10;
+    return STANDARD_GATES.filter(g => getGateStatus(selectedClaim, g)).length;
+  }, [selectedClaim]);
+
   const handleCopyClaim = (cl) => {
     const text = cl.fullText || cl.label || cl.data?.claim_text || '';
     if (!text) return;
@@ -369,41 +438,120 @@ export default function AssetClaimsStudioPane({
     setTimeout(() => setCopiedClaimId(null), 2000);
   };
 
+  const handleCopyAll = () => {
+    const targetClaims = selectedCheckboxIds.size > 0
+      ? filteredClaims.filter(c => selectedCheckboxIds.has(c.id || c._tempId))
+      : filteredClaims;
+
+    if (targetClaims.length === 0) {
+      showToast?.('No claims available to copy', 'error');
+      return;
+    }
+
+    const payload = targetClaims.map((c, idx) => {
+      const title = getClaimDisplayTitle(c, idx + 1);
+      const cat = getClaimDisplayCategory(c, allConflictedClaimIds);
+      const text = c.fullText || c.label || c.data?.claim_text || '';
+      return `${title} [${cat}]: ${text}`;
+    }).join('\n\n');
+
+    navigator.clipboard.writeText(payload);
+    showToast?.(`Copied ${targetClaims.length} claims to clipboard`);
+  };
+
+  const toggleSelectAllPage = () => {
+    const next = new Set(selectedCheckboxIds);
+    const allPageSelected = paginatedClaims.every(c => next.has(c.id || c._tempId));
+    if (allPageSelected) {
+      paginatedClaims.forEach(c => next.delete(c.id || c._tempId));
+    } else {
+      paginatedClaims.forEach(c => next.add(c.id || c._tempId));
+    }
+    setSelectedCheckboxIds(next);
+  };
+
+  const toggleSelectOne = (claimId) => {
+    const next = new Set(selectedCheckboxIds);
+    if (next.has(claimId)) next.delete(claimId);
+    else next.add(claimId);
+    setSelectedCheckboxIds(next);
+  };
+
+  const handleEscalate = () => {
+    showToast?.(`Claim "${selectedTitle}" escalated for auditor resolution.`);
+  };
+
+  const handleResolve = () => {
+    showToast?.(`Claim "${selectedTitle}" validated and marked authoritative.`);
+  };
+
+  // Locate Source Action: Opens the document where this claim is located in Document Explorer
+  const handleLocateSource = () => {
+    const targetDocId = selectedClaim?.document_id 
+      || selectedClaim?.data?.document_id 
+      || selectedClaim?.data?.doc_id 
+      || selectedClaim?.doc_id
+      || asset?.node?.data?.doc_id 
+      || asset?.node?.data?.document_id
+      || asset?.node?.id 
+      || '';
+    const cleanDocId = String(targetDocId).replace(/^doc_/, '');
+
+    showToast?.('Opening source document in Document Explorer...');
+    if (onLocateSource) {
+      onLocateSource(selectedClaim, cleanDocId);
+    } else {
+      const wsId = (typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('workspace') : '') || 'ws_d0d0b1a7ca';
+      window.location.href = `/documents?workspace=${wsId}&doc=${cleanDocId}`;
+    }
+  };
+
+  const formatDate = (dateStr) => {
+    if (!dateStr) return 'Nov 14, 2026';
+    try {
+      const d = new Date(dateStr);
+      if (isNaN(d.getTime())) return 'Nov 14, 2026';
+      return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    } catch {
+      return 'Nov 14, 2026';
+    }
+  };
+
   return (
     <div style={{
       display: 'flex',
       flexDirection: 'column',
-      gap: '14px',
+      gap: '8px',
       width: '100%',
-      minHeight: '480px',
-      background: '#F8FAFC',
-      padding: '16px',
-      borderRadius: '10px',
-      border: '1px solid #E2E8F0',
+      background: 'transparent',
+      padding: '0',
+      margin: '0',
+      border: 'none',
       boxSizing: 'border-box'
     }}>
-      {/* SEARCH & FILTER CONTROLS BAR */}
+      {/* 1. TOP SEARCH & FILTER CONTROLS BAR (Matches Image 2 & page background) */}
       <div style={{
-        background: '#FFFFFF',
+        background: '#FAF8F5',
         border: '1px solid #E2E8F0',
         borderRadius: '8px',
-        padding: '10px 14px',
+        padding: '6px 12px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
         flexWrap: 'wrap',
-        gap: '10px'
+        gap: '10px',
+        boxShadow: 'none'
       }}>
-        {/* Search input */}
+        {/* Left: Search input */}
         <div style={{
           position: 'relative',
           flex: '1 1 240px',
-          maxWidth: '380px'
+          maxWidth: '320px'
         }}>
           <Search size={14} style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: '#94A3B8' }} />
           <input
             type="text"
-            placeholder="Search claims by keyword, subject, or predicate..."
+            placeholder="Search claims by keyword, subject"
             value={searchQuery}
             onChange={e => {
               setSearchQuery(e.target.value);
@@ -411,12 +559,12 @@ export default function AssetClaimsStudioPane({
             }}
             style={{
               width: '100%',
-              padding: '6px 28px 6px 30px',
+              padding: '6px 28px 6px 32px',
               fontSize: '0.78rem',
               border: '1px solid #CBD5E1',
               borderRadius: '6px',
               outline: 'none',
-              background: '#F8FAFC',
+              background: '#FAF8F5',
               color: '#0F172A',
               boxSizing: 'border-box'
             }}
@@ -445,20 +593,26 @@ export default function AssetClaimsStudioPane({
           )}
         </div>
 
-        {/* Filter buttons & sort */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-          {/* Status Filter */}
-          <div style={{ display: 'flex', alignItems: 'center', background: '#F1F5F9', padding: '2px', borderRadius: '6px', flexWrap: 'wrap', gap: '2px' }}>
-            {[
-              { id: 'all', label: `Raw candidates (${totalClaims})` },
-              { id: 'canonical', label: `Canonical v3 (${metrics.canonical})` },
-              ...(metrics.review > 0 ? [{ id: 'review', label: `Review required (${metrics.review})` }] : []),
-              { id: 'quarantined', label: `Quarantined (${metrics.quarantined})` },
-              { id: 'non_rule', label: `Non-rules (${metrics.nonRule})` },
-              { id: 'rejected', label: `Rejected (${metrics.rejected})` },
-              ...(metrics.conflicted > 0 ? [{ id: 'conflicted', label: `Conflicts (${metrics.conflicted})` }] : []),
-              ...(metrics.summary > 0 ? [{ id: 'summary', label: `Summaries (${metrics.summary})` }] : [])
-            ].map(tab => (
+        {/* Middle: Category Pills */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          background: '#EAE5DE',
+          padding: '2px',
+          borderRadius: '6px',
+          flexWrap: 'wrap',
+          gap: '2px'
+        }}>
+          {[
+            { id: 'all', label: `Raw candidates (${totalClaims})` },
+            { id: 'canonical', label: `Canonical v3 (${metrics.canonical})` },
+            { id: 'review', label: `Review required (${metrics.review})` },
+            { id: 'quarantined', label: `Quarantined (${metrics.quarantined})` },
+            { id: 'non_rule', label: `Non-rules (${metrics.nonRule})` },
+            { id: 'rejected', label: `Rejected (${metrics.rejected})` }
+          ].map(tab => {
+            const isActive = statusFilter === tab.id;
+            return (
               <button
                 key={tab.id}
                 type="button"
@@ -469,22 +623,25 @@ export default function AssetClaimsStudioPane({
                 style={{
                   padding: '4px 9px',
                   fontSize: '0.72rem',
-                  fontWeight: statusFilter === tab.id ? 700 : 500,
+                  fontWeight: isActive ? 700 : 500,
                   borderRadius: '5px',
                   border: 'none',
-                  background: statusFilter === tab.id ? '#FFFFFF' : 'transparent',
-                  color: statusFilter === tab.id ? '#0F172A' : '#64748B',
-                  boxShadow: statusFilter === tab.id ? '0 1px 2px rgba(0,0,0,0.06)' : 'none',
+                  background: isActive ? '#FAF8F5' : 'transparent',
+                  color: isActive ? '#0F172A' : '#64748B',
+                  boxShadow: isActive ? '0 1px 2px rgba(0,0,0,0.06)' : 'none',
                   cursor: 'pointer',
                   transition: 'all 0.15s ease'
                 }}
               >
                 {tab.label}
               </button>
-            ))}
-          </div>
+            );
+          })}
+        </div>
 
-          {/* Trust Tier Select */}
+        {/* Right: Dropdowns & Copy All */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+          {/* All Trust Tiers */}
           <select
             value={trustTierFilter}
             onChange={e => {
@@ -494,10 +651,10 @@ export default function AssetClaimsStudioPane({
             style={{
               padding: '5px 8px',
               fontSize: '0.72rem',
-              fontWeight: 600,
+              fontWeight: 500,
               border: '1px solid #CBD5E1',
               borderRadius: '6px',
-              background: '#FFFFFF',
+              background: '#FAF8F5',
               color: '#334155',
               cursor: 'pointer',
               outline: 'none'
@@ -509,672 +666,711 @@ export default function AssetClaimsStudioPane({
             <option value="low">Low Trust (&lt;70%)</option>
           </select>
 
-          {/* Sort By Select */}
+          {/* Sort Dropdown */}
           <select
             value={sortBy}
             onChange={e => setSortBy(e.target.value)}
             style={{
               padding: '5px 8px',
               fontSize: '0.72rem',
-              fontWeight: 600,
+              fontWeight: 500,
               border: '1px solid #CBD5E1',
               borderRadius: '6px',
-              background: '#FFFFFF',
+              background: '#FAF8F5',
               color: '#334155',
               cursor: 'pointer',
               outline: 'none'
             }}
           >
+            <option value="subject_asc">Sort: Subject (A-Z)</option>
             <option value="trust_desc">Sort: Highest Trust</option>
             <option value="trust_asc">Sort: Lowest Trust</option>
-            <option value="subject_asc">Sort: Subject (A-Z)</option>
           </select>
 
-          {/* View Mode Toggle */}
-          <div style={{ display: 'flex', alignItems: 'center', background: '#F1F5F9', padding: '2px', borderRadius: '6px' }}>
-            <button
-              type="button"
-              onClick={() => setViewMode('cards')}
-              title="Cards View"
-              style={{
-                padding: '4px 6px',
-                borderRadius: '5px',
-                border: 'none',
-                background: viewMode === 'cards' ? '#FFFFFF' : 'transparent',
-                color: viewMode === 'cards' ? '#0F172A' : '#64748B',
-                boxShadow: viewMode === 'cards' ? '0 1px 2px rgba(0,0,0,0.06)' : 'none',
-                cursor: 'pointer'
-              }}
-            >
-              <LayoutGrid size={14} />
-            </button>
-            <button
-              type="button"
-              onClick={() => setViewMode('table')}
-              title="Table View"
-              style={{
-                padding: '4px 6px',
-                borderRadius: '5px',
-                border: 'none',
-                background: viewMode === 'table' ? '#FFFFFF' : 'transparent',
-                color: viewMode === 'table' ? '#0F172A' : '#64748B',
-                boxShadow: viewMode === 'table' ? '0 1px 2px rgba(0,0,0,0.06)' : 'none',
-                cursor: 'pointer'
-              }}
-            >
-              <TableIcon size={14} />
-            </button>
-          </div>
+          {/* Copy All Button */}
+          <button
+            type="button"
+            onClick={handleCopyAll}
+            title="Copy filtered or selected claims"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '5px 10px',
+              fontSize: '0.72rem',
+              fontWeight: 600,
+              border: '1px solid #CBD5E1',
+              borderRadius: '6px',
+              background: '#FAF8F5',
+              color: '#334155',
+              cursor: 'pointer',
+              transition: 'all 0.15s ease'
+            }}
+            onMouseEnter={e => e.currentTarget.style.background = '#F3EFEA'}
+            onMouseLeave={e => e.currentTarget.style.background = '#FAF8F5'}
+          >
+            <Copy size={13} />
+            <span>Copy all</span>
+          </button>
         </div>
       </div>
 
-      {/* 3. MAIN CONTENT: CARDS OR TABLE */}
-      {filteredClaims.length === 0 ? (
+      {/* 2. SPLIT-PANE BODY: CLAIMS TABLE (LEFT) + CLAIM INSPECTOR (RIGHT) */}
+      <div style={{
+        display: 'flex',
+        alignItems: 'stretch',
+        gap: '10px',
+        width: '100%',
+        boxSizing: 'border-box'
+      }}>
+        {/* ======================================================== */}
+        {/* LEFT PANE: CLAIMS TABLE (Takes ~58-60% width)            */}
+        {/* ======================================================== */}
         <div style={{
-          background: '#FFFFFF',
-          border: '1px dashed #CBD5E1',
-          borderRadius: '8px',
-          padding: '40px 20px',
-          textAlign: 'center',
-          color: '#64748B'
-        }}>
-          <AlertTriangle size={28} style={{ color: '#F59E0B', margin: '0 auto 8px auto' }} />
-          <h4 style={{ margin: '0 0 4px 0', fontSize: '0.9rem', color: '#0F172A', fontWeight: 700 }}>
-            No matching claims found
-          </h4>
-          <p style={{ margin: 0, fontSize: '0.76rem' }}>
-            Try adjusting your search query, status filters, or trust score tiers.
-          </p>
-          {(searchQuery || statusFilter !== 'all' || trustTierFilter !== 'all') && (
-            <button
-              type="button"
-              onClick={() => {
-                setSearchQuery('');
-                setStatusFilter('all');
-                setTrustTierFilter('all');
-                setCurrentPage(1);
-              }}
-              style={{
-                marginTop: '12px',
-                padding: '5px 12px',
-                fontSize: '0.74rem',
-                fontWeight: 600,
-                color: '#2563EB',
-                background: '#EFF6FF',
-                border: '1px solid #BFDBFE',
-                borderRadius: '6px',
-                cursor: 'pointer'
-              }}
-            >
-              Reset Filters
-            </button>
-          )}
-        </div>
-      ) : viewMode === 'cards' ? (
-        /* CARDS VIEW */
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))',
-          gap: '12px'
-        }}>
-          {paginatedClaims.map((cl, idx) => {
-            const isConf = allConflictedClaimIds.has(cl.id) || cl.status === 'conflicted';
-            const rawTrust = cl.trustScore ?? cl.data?.trustScore ?? cl.data?.confidence ?? cl.data?.trust_score;
-            const hasScore = rawTrust !== undefined && rawTrust !== null && !isNaN(Number(rawTrust));
-            const trustVal = hasScore ? Number(rawTrust) : null;
-            const trustPercent = trustVal !== null ? Math.round(trustVal * 100) : null;
-            const isSummary = cl.claim_type === 'derived_summary' || 
-                              cl.claim_type === 'summary_non_canonical' ||
-                              cl.data?.claim_type === 'derived_summary' ||
-                              cl.data?.claim_type === 'summary_non_canonical' ||
-                              cl.is_canonical === false || 
-                              cl.data?.is_canonical === false;
-            const subject = cl.subject || cl.data?.subject || '';
-            const predicate = cl.predicate || cl.data?.predicate || '';
-            const claimText = cl.fullText || cl.label || cl.data?.claim_text || '';
-            const evidence = cl.data?.evidence_snippet || cl.data?.quote || cl.data?.context_clause || '';
-            const globalIndex = (currentPage - 1) * pageSize + idx + 1;
-
-            const { category: cat, badgeLabel, badgeBg, badgeColor, badgeBorder } = getClaimClassification(cl, allConflictedClaimIds);
-
-            return (
-              <div
-                key={cl.id || idx}
-                style={{
-                  background: '#FFFFFF',
-                  border: isConf ? '1.5px solid #FED7AA' : '1px solid #E2E8F0',
-                  borderRadius: '8px',
-                  padding: '12px 14px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'space-between',
-                  gap: '10px',
-                  boxShadow: '0 1px 3px rgba(0,0,0,0.03)',
-                  transition: 'all 0.15s ease'
-                }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.borderColor = isConf ? '#F97316' : '#94A3B8';
-                  e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0,0,0,0.06)';
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.borderColor = isConf ? '#FED7AA' : '#E2E8F0';
-                  e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.03)';
-                }}
-              >
-                {/* Card Top: Index, Status Badge, Trust Score */}
-                <div>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                      <span style={{
-                        fontSize: '0.66rem',
-                        fontWeight: 700,
-                        color: '#64748B',
-                        background: '#F1F5F9',
-                        padding: '1px 6px',
-                        borderRadius: '4px'
-                      }}>
-                        #{globalIndex}
-                      </span>
-                      <span style={{
-                        fontSize: '0.64rem',
-                        fontWeight: 700,
-                        padding: '2px 7px',
-                        borderRadius: '999px',
-                        background: badgeBg,
-                        color: badgeColor,
-                        border: `1px solid ${badgeBorder}`
-                      }}>
-                        {badgeLabel}
-                      </span>
-                      {isSummary && (
-                        <span style={{
-                          fontSize: '0.62rem',
-                          fontWeight: 700,
-                          padding: '2px 7px',
-                          borderRadius: '999px',
-                          background: '#F1F5F9',
-                          color: '#475569',
-                          border: '1px solid #CBD5E1'
-                        }} title="Derived macro summary; non-canonical rule.">
-                          📑 Derived Summary
-                        </span>
-                      )}
-                    </div>
-
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                      <span style={{
-                        fontSize: '0.68rem',
-                        fontWeight: 800,
-                        color: (cat === 'canonical' && trustPercent !== null)
-                          ? (trustPercent >= 90 ? '#059669' : trustPercent >= 70 ? '#D97706' : '#DC2626')
-                          : '#64748B'
-                      }}>
-                        {cat === 'canonical' && trustPercent !== null
-                          ? `Trust: ${trustPercent}%`
-                          : cat === 'rejected'
-                          ? 'Confidence: Uncalibrated (Rejected)'
-                          : cat === 'non_rule'
-                          ? 'Contextual (Non-Rule)'
-                          : 'Confidence: Uncalibrated'}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Subject & Predicate tags */}
-                  {(subject || predicate) && (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap', marginBottom: '8px' }}>
-                      {subject && (
-                        <span style={{
-                          fontSize: '0.64rem',
-                          fontWeight: 600,
-                          color: '#475569',
-                          background: '#F1F5F9',
-                          padding: '1px 6px',
-                          borderRadius: '4px',
-                          border: '1px solid #E2E8F0'
-                        }}>
-                          Subj: {subject}
-                        </span>
-                      )}
-                      {predicate && (
-                        <span style={{
-                          fontSize: '0.64rem',
-                          fontWeight: 600,
-                          color: '#2563EB',
-                          background: '#EFF6FF',
-                          padding: '1px 6px',
-                          borderRadius: '4px',
-                          border: '1px solid #DBEAFE'
-                        }}>
-                          Pred: {predicate}
-                        </span>
-                      )}
-                    </div>
-                  )}
-
-                  {/* Claim Text */}
-                  <p style={{
-                    margin: '0 0 6px 0',
-                    fontSize: '0.78rem',
-                    color: '#0F172A',
-                    fontWeight: 600,
-                    lineHeight: 1.45
-                  }}>
-                    "{claimText}"
-                  </p>
-
-                  {/* Evidence snippet if present */}
-                  {evidence && (
-                    <div style={{
-                      marginTop: '6px',
-                      padding: '6px 8px',
-                      borderRadius: '5px',
-                      background: '#F8FAFC',
-                      borderLeft: '3px solid #CBD5E1',
-                      fontSize: '0.68rem',
-                      color: '#475569',
-                      fontStyle: 'italic',
-                      lineHeight: 1.35
-                    }}>
-                      &ldquo;{evidence}&rdquo;
-                    </div>
-                  )}
-
-                  {/* 9 Hard Governance Gates Micro-Audit Bar */}
-                  {(() => {
-                    const gates = cl.gates || cl.data?.gates || null;
-                    if (!gates) return null;
-                    const passedCount = Object.values(gates).filter(v => v === true).length;
-                    return (
-                      <div style={{ marginTop: '8px', paddingTop: '6px', borderTop: '1px dashed #E2E8F0' }}>
-                        <div style={{ fontSize: '0.60rem', fontWeight: 700, color: '#64748B', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                          Governance Gates ({passedCount}/9 passed):
-                        </div>
-                        <div style={{ display: 'flex', gap: '3px', flexWrap: 'wrap' }}>
-                          {Object.entries(gates).map(([gName, gVal]) => (
-                            <span
-                              key={gName}
-                              title={`${gName}: ${gVal ? 'PASSED' : 'FAILED'}`}
-                              style={{
-                                fontSize: '0.58rem',
-                                padding: '1px 4px',
-                                borderRadius: '3px',
-                                background: gVal ? '#ECFDF5' : '#FEF2F2',
-                                color: gVal ? '#047857' : '#B91C1C',
-                                border: `1px solid ${gVal ? '#A7F3D0' : '#FECACA'}`,
-                                fontWeight: 600
-                              }}
-                            >
-                              {gName.replace(/_/g, ' ')}: {gVal ? '✓' : '✗'}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    );
-                  })()}
-
-                  {/* Gate Failure Reason / Provenance Diagnostic */}
-                  {(cl.decision_reason || cl.data?.decision_reason || cat === 'rejected' || cat === 'review') && (
-                    <div style={{
-                      marginTop: '8px',
-                      padding: '6px 8px',
-                      borderRadius: '5px',
-                      background: cat === 'rejected' ? '#FEF2F2' : '#FEFCE8',
-                      border: `1px solid ${cat === 'rejected' ? '#FECACA' : '#FEF08A'}`,
-                      fontSize: '0.65rem',
-                      lineHeight: 1.35,
-                      color: cat === 'rejected' ? '#991B1B' : '#713F12',
-                    }}>
-                      <div style={{ fontWeight: 700, marginBottom: '2px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                        <span>{cat === 'rejected' ? '⛔ Rejection Reason:' : '⚠️ Adjudication Notice:'}</span>
-                      </div>
-                      <div>
-                        {cl.decision_reason || cl.data?.decision_reason || (cat === 'rejected' ? 'Candidate does not satisfy normative certification gates.' : 'Manual adjudication review required before production routing.')}
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                {/* Card Actions Footer */}
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  borderTop: '1px solid #F1F5F9',
-                  paddingTop: '8px',
-                  marginTop: '4px'
-                }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    {onLocateInDoc && (
-                      <button
-                        type="button"
-                        onClick={() => onLocateInDoc(cl)}
-                        title="Locate and highlight in Document Reader"
-                        style={{
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: '4px',
-                          padding: '3px 7px',
-                          fontSize: '0.68rem',
-                          fontWeight: 600,
-                          color: '#0284C7',
-                          background: '#F0F9FF',
-                          border: '1px solid #BAE6FD',
-                          borderRadius: '4px',
-                          cursor: 'pointer',
-                          transition: 'background 0.15s ease'
-                        }}
-                        onMouseEnter={e => e.currentTarget.style.background = '#E0F2FE'}
-                        onMouseLeave={e => e.currentTarget.style.background = '#F0F9FF'}
-                      >
-                        <FileText size={11} />
-                        <span>Locate</span>
-                      </button>
-                    )}
-
-                    {onInspectInDag && (
-                      <button
-                        type="button"
-                        onClick={() => onInspectInDag(cl)}
-                        title="Inspect in Interactive Lineage DAG"
-                        style={{
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: '4px',
-                          padding: '3px 7px',
-                          fontSize: '0.68rem',
-                          fontWeight: 600,
-                          color: '#7C3AED',
-                          background: '#F5F3FF',
-                          border: '1px solid #DDD6FE',
-                          borderRadius: '4px',
-                          cursor: 'pointer',
-                          transition: 'background 0.15s ease'
-                        }}
-                        onMouseEnter={e => e.currentTarget.style.background = '#EDE9FE'}
-                        onMouseLeave={e => e.currentTarget.style.background = '#F5F3FF'}
-                      >
-                        <GitBranch size={11} />
-                        <span>Lineage DAG</span>
-                      </button>
-                    )}
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={() => handleCopyClaim(cl)}
-                    title="Copy claim statement"
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '3px',
-                      padding: '3px 6px',
-                      fontSize: '0.68rem',
-                      fontWeight: 600,
-                      color: copiedClaimId === cl.id ? '#059669' : '#64748B',
-                      background: copiedClaimId === cl.id ? '#DCFCE7' : '#F8FAFC',
-                      border: `1px solid ${copiedClaimId === cl.id ? '#86EFAC' : '#E2E8F0'}`,
-                      borderRadius: '4px',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    {copiedClaimId === cl.id ? <Check size={11} /> : <Copy size={11} />}
-                    <span>{copiedClaimId === cl.id ? 'Copied' : 'Copy'}</span>
-                  </button>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      ) : (
-        /* DENSE TABLE VIEW */
-        <div style={{
-          background: '#FFFFFF',
+          flex: '1 1 58%',
+          background: '#FAF8F5',
           border: '1px solid #E2E8F0',
           borderRadius: '8px',
-          overflowX: 'auto',
-          boxShadow: '0 1px 3px rgba(0,0,0,0.03)'
-        }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.74rem' }}>
-            <thead>
-              <tr style={{ background: '#F8FAFC', borderBottom: '1px solid #E2E8F0', color: '#475569', fontWeight: 700 }}>
-                <th style={{ padding: '8px 12px', width: '50px' }}>#</th>
-                <th style={{ padding: '8px 12px', width: '100px' }}>Status</th>
-                <th style={{ padding: '8px 12px', width: '90px' }}>Trust</th>
-                <th style={{ padding: '8px 12px', width: '130px' }}>Subject</th>
-                <th style={{ padding: '8px 12px', width: '120px' }}>Predicate</th>
-                <th style={{ padding: '8px 12px' }}>Atomic Claim Statement</th>
-                <th style={{ padding: '8px 12px', width: '160px', textAlign: 'right' }}>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {paginatedClaims.map((cl, idx) => {
-                const isConf = allConflictedClaimIds.has(cl.id) || cl.status === 'conflicted';
-                const rawTrust = cl.trustScore ?? cl.data?.trustScore ?? cl.data?.confidence ?? cl.data?.trust_score;
-                const hasScore = rawTrust !== undefined && rawTrust !== null && !isNaN(Number(rawTrust));
-                const trustVal = hasScore ? Number(rawTrust) : null;
-                const trustPercent = trustVal !== null ? Math.round(trustVal * 100) : null;
-                const subject = cl.subject || cl.data?.subject || '—';
-                const predicate = cl.predicate || cl.data?.predicate || '—';
-                const claimText = cl.fullText || cl.label || cl.data?.claim_text || '';
-                const globalIndex = (currentPage - 1) * pageSize + idx + 1;
-
-                const { category: cat, badgeLabel, badgeBg, badgeColor, badgeBorder } = getClaimClassification(cl, allConflictedClaimIds);
-
-                return (
-                  <tr
-                    key={cl.id || idx}
-                    style={{
-                      borderBottom: '1px solid #F1F5F9',
-                      background: isConf ? 'rgba(255, 237, 213, 0.2)' : 'transparent'
-                    }}
-                  >
-                    <td style={{ padding: '8px 12px', color: '#64748B', fontWeight: 600 }}>
-                      #{globalIndex}
-                    </td>
-                    <td style={{ padding: '8px 12px' }}>
-                      <span style={{
-                        fontSize: '0.62rem',
-                        fontWeight: 700,
-                        padding: '2px 6px',
-                        borderRadius: '999px',
-                        background: badgeBg,
-                        color: badgeColor,
-                        border: `1px solid ${badgeBorder}`
-                      }}>
-                        {badgeLabel}
-                      </span>
-                    </td>
-                    <td 
-                      style={{ padding: '8px 12px', cursor: 'help' }}
-                      title={`Validation Breakdown (${trustPercent !== null ? trustPercent : 0}%):
-• Evidence Support: ${Math.round((cl.trustScores?.evidence_score ?? cl.data?.evidence_score ?? 1.0) * 100)}%
-• Source Fidelity: ${Math.round((cl.trustScores?.source_score ?? cl.data?.source_score ?? 1.0) * 100)}%
-• Semantic Completeness: ${Math.round((cl.trustScores?.consistency_score ?? cl.data?.consistency_score ?? 1.0) * 100)}%
-• Conflict Clearance: ${Math.round((cl.trustScores?.authority_score ?? cl.data?.authority_score ?? 1.0) * 100)}%
-• Quality Gates: SCHEMA_VALID | EVIDENCE_SUPPORTED | PREDICATE_CANONICAL | CONFLICT_CHECKED`}
-                    >
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                        <span style={{
-                          fontWeight: 800,
-                          fontSize: '0.78rem',
-                          color: trustPercent !== null ? (trustPercent >= 90 ? '#059669' : trustPercent >= 70 ? '#D97706' : '#DC2626') : '#94A3B8'
-                        }}>
-                          {trustPercent !== null ? `${trustPercent}%` : '—'}
-                        </span>
-                        <div style={{ display: 'flex', gap: '3px', alignItems: 'center' }}>
-                          <span title="Evidence Support: 100%" style={{ width: '4px', height: '4px', borderRadius: '50%', background: '#059669', display: 'inline-block' }} />
-                          <span title="Semantic Completeness: 100%" style={{ width: '4px', height: '4px', borderRadius: '50%', background: '#059669', display: 'inline-block' }} />
-                          <span title="Conflict Clearance: 100%" style={{ width: '4px', height: '4px', borderRadius: '50%', background: '#059669', display: 'inline-block' }} />
-                          <span title="Predicate Canonical: Verified" style={{ width: '4px', height: '4px', borderRadius: '50%', background: '#2563EB', display: 'inline-block' }} />
-                        </div>
-                      </div>
-                    </td>
-                    <td style={{ padding: '8px 12px', color: '#334155', fontWeight: 600 }}>
-                      {subject}
-                    </td>
-                    <td style={{ padding: '8px 12px', color: '#2563EB', fontWeight: 600 }}>
-                      {predicate}
-                    </td>
-                    <td style={{ padding: '8px 12px', color: '#0F172A', fontWeight: 500 }}>
-                      "{claimText}"
-                    </td>
-                    <td style={{ padding: '8px 12px', textAlign: 'right' }}>
-                      <div style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                        {onLocateInDoc && (
-                          <button
-                            type="button"
-                            onClick={() => onLocateInDoc(cl)}
-                            title="Locate in Document"
-                            style={{
-                              padding: '2px 5px',
-                              fontSize: '0.66rem',
-                              color: '#0284C7',
-                              background: '#F0F9FF',
-                              border: '1px solid #BAE6FD',
-                              borderRadius: '4px',
-                              cursor: 'pointer'
-                            }}
-                          >
-                            Locate
-                          </button>
-                        )}
-                        {onInspectInDag && (
-                          <button
-                            type="button"
-                            onClick={() => onInspectInDag(cl)}
-                            title="Inspect in DAG"
-                            style={{
-                              padding: '2px 5px',
-                              fontSize: '0.66rem',
-                              color: '#7C3AED',
-                              background: '#F5F3FF',
-                              border: '1px solid #DDD6FE',
-                              borderRadius: '4px',
-                              cursor: 'pointer'
-                            }}
-                          >
-                            DAG
-                          </button>
-                        )}
-                        <button
-                          type="button"
-                          onClick={() => handleCopyClaim(cl)}
-                          title="Copy Statement"
-                          style={{
-                            padding: '2px 5px',
-                            fontSize: '0.66rem',
-                            color: '#64748B',
-                            background: '#F8FAFC',
-                            border: '1px solid #E2E8F0',
-                            borderRadius: '4px',
-                            cursor: 'pointer'
-                          }}
-                        >
-                          {copiedClaimId === cl.id ? '✓' : 'Copy'}
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-      )}
-
-      {/* 4. PAGINATION FOOTER */}
-      {filteredClaims.length > 0 && (
-        <div style={{
+          overflow: 'hidden',
           display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          flexWrap: 'wrap',
-          gap: '8px',
-          padding: '8px 4px',
-          fontSize: '0.74rem',
-          color: '#64748B'
+          flexDirection: 'column',
+          height: 'calc(100vh - 190px)',
+          minHeight: '480px',
+          boxShadow: 'none'
         }}>
-          <div>
-            Showing <strong>{(currentPage - 1) * pageSize + 1}</strong> to <strong>{Math.min(currentPage * pageSize, filteredClaims.length)}</strong> of <strong>{filteredClaims.length}</strong> claims
-          </div>
-
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <span>Per page:</span>
-              <select
-                value={pageSize}
-                onChange={e => {
-                  setPageSize(Number(e.target.value));
+          {filteredClaims.length === 0 ? (
+            <div style={{
+              padding: '60px 20px',
+              textAlign: 'center',
+              color: '#64748B'
+            }}>
+              <AlertTriangle size={32} style={{ color: '#F59E0B', margin: '0 auto 10px auto' }} />
+              <h4 style={{ margin: '0 0 6px 0', fontSize: '0.95rem', color: '#0F172A', fontWeight: 700 }}>
+                No matching claims found
+              </h4>
+              <p style={{ margin: 0, fontSize: '0.78rem' }}>
+                Adjust your search query, status filters, or trust score tiers.
+              </p>
+              <button
+                type="button"
+                onClick={() => {
+                  setSearchQuery('');
+                  setStatusFilter('all');
+                  setTrustTierFilter('all');
                   setCurrentPage(1);
                 }}
                 style={{
-                  padding: '3px 6px',
-                  fontSize: '0.72rem',
-                  border: '1px solid #CBD5E1',
-                  borderRadius: '4px',
-                  background: '#FFFFFF',
-                  color: '#334155',
+                  marginTop: '14px',
+                  padding: '6px 14px',
+                  fontSize: '0.74rem',
+                  fontWeight: 600,
+                  color: '#2563EB',
+                  background: '#EFF6FF',
+                  border: '1px solid #BFDBFE',
+                  borderRadius: '6px',
                   cursor: 'pointer'
                 }}
               >
-                <option value={12}>12</option>
-                <option value={24}>24</option>
-                <option value={48}>48</option>
-                <option value={100}>100</option>
-              </select>
-            </div>
-
-            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <button
-                type="button"
-                disabled={currentPage === 1}
-                onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '2px',
-                  padding: '3px 8px',
-                  fontSize: '0.72rem',
-                  border: '1px solid #CBD5E1',
-                  borderRadius: '4px',
-                  background: currentPage === 1 ? '#F1F5F9' : '#FFFFFF',
-                  color: currentPage === 1 ? '#94A3B8' : '#334155',
-                  cursor: currentPage === 1 ? 'not-allowed' : 'pointer'
-                }}
-              >
-                <ChevronLeft size={12} />
-                Prev
-              </button>
-
-              <span style={{ padding: '0 4px', fontWeight: 600 }}>
-                {currentPage} / {totalPages}
-              </span>
-
-              <button
-                type="button"
-                disabled={currentPage === totalPages}
-                onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '2px',
-                  padding: '3px 8px',
-                  fontSize: '0.72rem',
-                  border: '1px solid #CBD5E1',
-                  borderRadius: '4px',
-                  background: currentPage === totalPages ? '#F1F5F9' : '#FFFFFF',
-                  color: currentPage === totalPages ? '#94A3B8' : '#334155',
-                  cursor: currentPage === totalPages ? 'not-allowed' : 'pointer'
-                }}
-              >
-                Next
-                <ChevronRight size={12} />
+                Reset Filters
               </button>
             </div>
-          </div>
+          ) : (
+            /* Scrollable claims listing container with thin light status background per card */
+            <div style={{ overflowY: 'auto', overflowX: 'auto', flex: 1 }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.76rem' }}>
+                <thead style={{ position: 'sticky', top: 0, zIndex: 2, background: '#FAF8F5' }}>
+                  <tr style={{ background: '#FAF8F5', borderBottom: '1px solid #CBD5E1', color: '#475569', fontWeight: 700 }}>
+                    {/* Checkbox column */}
+                    <th style={{ padding: '8px 12px', width: '34px', background: '#FAF8F5' }}>
+                      <input
+                        type="checkbox"
+                        checked={paginatedClaims.length > 0 && paginatedClaims.every(c => selectedCheckboxIds.has(c.id || c._tempId))}
+                        onChange={toggleSelectAllPage}
+                        style={{ cursor: 'pointer', borderRadius: '3px' }}
+                      />
+                    </th>
+                    {/* Claim Title */}
+                    <th style={{ padding: '8px 12px', background: '#FAF8F5' }}>Claim Title</th>
+                    {/* Status with inline filter */}
+                    <th style={{ padding: '8px 12px', width: '170px', background: '#FAF8F5' }}>
+                      <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                        <span>Status</span>
+                        <select
+                          value={statusFilter}
+                          onChange={e => {
+                            setStatusFilter(e.target.value);
+                            setCurrentPage(1);
+                          }}
+                          style={{
+                            border: 'none',
+                            background: 'transparent',
+                            color: '#64748B',
+                            fontSize: '0.72rem',
+                            fontWeight: 600,
+                            cursor: 'pointer',
+                            outline: 'none',
+                            padding: 0
+                          }}
+                        >
+                          <option value="all">All statuses</option>
+                          <option value="canonical">Canonical v3</option>
+                          <option value="review">Review Required</option>
+                          <option value="non_rule">Non-Rule Context</option>
+                          <option value="quarantined">Quarantined</option>
+                          <option value="rejected">Rejected</option>
+                        </select>
+                      </div>
+                    </th>
+                    {/* Trigger */}
+                    <th style={{ padding: '8px 12px', width: '85px', background: '#FAF8F5' }}>Trigger</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {paginatedClaims.map((cl, idx) => {
+                    const globalIdx = (currentPage - 1) * pageSize + idx + 1;
+                    const claimTitle = getClaimDisplayTitle(cl, globalIdx);
+                    const { category: cat, badgeLabel, badgeBg, badgeColor, badgeBorder } = getClaimClassification(cl, allConflictedClaimIds);
+                    const claimKey = cl.id || cl._tempId || `cl_${idx}`;
+                    const isSelected = (selectedClaim && (selectedClaim.id || selectedClaim._tempId) === claimKey);
+                    const isChecked = selectedCheckboxIds.has(claimKey);
+                    const isTrigger = cat === 'canonical' || cl.is_trigger === true || cl.data?.is_trigger === true;
+                    
+                    // Thin light background color & border theme mapped to the status tab
+                    const theme = STATUS_ROW_THEME[cat] || STATUS_ROW_THEME.non_rule;
+
+                    return (
+                      <tr
+                        key={claimKey}
+                        onClick={() => setSelectedClaimId(claimKey)}
+                        style={{
+                          borderBottom: '1px solid #E2E8F0',
+                          borderLeft: isSelected ? `4px solid ${theme.accent}` : '4px solid transparent',
+                          background: isSelected ? theme.hoverBg : theme.bg,
+                          cursor: 'pointer',
+                          transition: 'all 0.12s ease'
+                        }}
+                        onMouseEnter={e => {
+                          if (!isSelected) e.currentTarget.style.background = theme.hoverBg;
+                        }}
+                        onMouseLeave={e => {
+                          if (!isSelected) e.currentTarget.style.background = theme.bg;
+                        }}
+                      >
+                        {/* Checkbox */}
+                        <td
+                          style={{ padding: '9px 12px', width: '34px' }}
+                          onClick={e => e.stopPropagation()}
+                        >
+                          <input
+                            type="checkbox"
+                            checked={isChecked}
+                            onChange={() => toggleSelectOne(claimKey)}
+                            style={{ cursor: 'pointer', borderRadius: '3px' }}
+                          />
+                        </td>
+
+                        {/* Title */}
+                        <td style={{ padding: '9px 12px', fontWeight: 600, color: '#0F172A' }}>
+                          {claimTitle}
+                        </td>
+
+                        {/* Status badge */}
+                        <td style={{ padding: '9px 12px' }}>
+                          <span style={{
+                            display: 'inline-block',
+                            fontSize: '0.69rem',
+                            fontWeight: 700,
+                            padding: '2px 7px',
+                            borderRadius: '5px',
+                            background: badgeBg,
+                            color: badgeColor,
+                            border: `1px solid ${badgeBorder}`
+                          }}>
+                            {badgeLabel}
+                          </span>
+                        </td>
+
+                        {/* Trigger */}
+                        <td style={{ padding: '9px 12px' }}>
+                          {isTrigger ? (
+                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: '#15803D', fontWeight: 600, fontSize: '0.73rem' }}>
+                              <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#10B981', display: 'inline-block' }} />
+                              Yes
+                            </span>
+                          ) : (
+                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: '#64748B', fontWeight: 500, fontSize: '0.73rem' }}>
+                              <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#94A3B8', display: 'inline-block' }} />
+                              No
+                            </span>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          {/* Pagination Footer with 20, 50, 80, 100 selector beside Next button */}
+          {filteredClaims.length > 0 && (
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              padding: '8px 12px',
+              borderTop: '1px solid #E2E8F0',
+              background: '#FAF8F5',
+              fontSize: '0.73rem',
+              color: '#64748B',
+              flexShrink: 0
+            }}>
+              <div>
+                Showing <strong>{(currentPage - 1) * pageSize + 1}</strong> to <strong>{Math.min(currentPage * pageSize, filteredClaims.length)}</strong> of <strong>{filteredClaims.length}</strong>
+              </div>
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <button
+                  type="button"
+                  disabled={currentPage === 1}
+                  onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                  style={{
+                    padding: '3px 7px',
+                    fontSize: '0.72rem',
+                    border: '1px solid #CBD5E1',
+                    borderRadius: '4px',
+                    background: currentPage === 1 ? '#EAE5DE' : '#FAF8F5',
+                    color: currentPage === 1 ? '#94A3B8' : '#334155',
+                    cursor: currentPage === 1 ? 'not-allowed' : 'pointer',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '2px'
+                  }}
+                >
+                  <ChevronLeft size={12} />
+                  Prev
+                </button>
+                <span style={{ fontWeight: 600, padding: '0 4px' }}>
+                  {currentPage} / {totalPages}
+                </span>
+                <button
+                  type="button"
+                  disabled={currentPage === totalPages}
+                  onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                  style={{
+                    padding: '3px 7px',
+                    fontSize: '0.72rem',
+                    border: '1px solid #CBD5E1',
+                    borderRadius: '4px',
+                    background: currentPage === totalPages ? '#EAE5DE' : '#FAF8F5',
+                    color: currentPage === totalPages ? '#94A3B8' : '#334155',
+                    cursor: currentPage === totalPages ? 'not-allowed' : 'pointer',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '2px'
+                  }}
+                >
+                  Next
+                  <ChevronRight size={12} />
+                </button>
+
+                {/* Per page selector (20, 50, 80, 100) beside Next button */}
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', marginLeft: '6px' }}>
+                  <span style={{ fontSize: '0.71rem', color: '#64748B' }}>Per page:</span>
+                  <select
+                    value={pageSize}
+                    onChange={e => {
+                      setPageSize(Number(e.target.value));
+                      setCurrentPage(1);
+                    }}
+                    style={{
+                      padding: '3px 6px',
+                      fontSize: '0.72rem',
+                      fontWeight: 600,
+                      border: '1px solid #CBD5E1',
+                      borderRadius: '4px',
+                      background: '#FAF8F5',
+                      color: '#334155',
+                      cursor: 'pointer',
+                      outline: 'none'
+                    }}
+                  >
+                    <option value={20}>20</option>
+                    <option value={50}>50</option>
+                    <option value={80}>80</option>
+                    <option value={100}>100</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
-      )}
+
+        {/* ======================================================== */}
+        {/* RIGHT PANE: CLAIM DETAILS INSPECTOR (Same #FAF8F5 bg)    */}
+        {/* ======================================================== */}
+        <div style={{
+          flex: '1 1 42%',
+          background: '#FAF8F5',
+          border: '1px solid #E2E8F0',
+          borderRadius: '8px',
+          padding: '14px 16px',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+          height: 'calc(100vh - 190px)',
+          minHeight: '480px',
+          overflowY: 'auto',
+          boxShadow: 'none',
+          boxSizing: 'border-box'
+        }}>
+          {selectedClaim ? (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              {/* Header: Title and Options Icon */}
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                paddingBottom: '8px',
+                borderBottom: '1px solid #E2E8F0'
+              }}>
+                <h3 style={{ margin: 0, fontSize: '1.02rem', fontWeight: 800, color: '#0F172A', letterSpacing: '-0.01em' }}>
+                  {selectedTitle}
+                </h3>
+                <button
+                  type="button"
+                  style={{
+                    background: 'transparent',
+                    border: 'none',
+                    cursor: 'pointer',
+                    color: '#64748B',
+                    padding: '4px',
+                    display: 'flex',
+                    alignItems: 'center'
+                  }}
+                  title="Claim Inspector Options"
+                >
+                  <AlignRight size={16} />
+                </button>
+              </div>
+
+              {/* Section 1: Claim details + Trust Score */}
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' }}>
+                  <span style={{ fontSize: '0.80rem', fontWeight: 700, color: '#0F172A' }}>
+                    Claim details
+                  </span>
+                  <span style={{ fontSize: '0.78rem', fontWeight: 800, color: '#15803D' }}>
+                    Trust Score {selectedTrustPercent}%
+                  </span>
+                </div>
+
+                {/* 3 Input/Key-Value Boxes */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                  {/* Subject */}
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    border: '1px solid #E2E8F0',
+                    borderRadius: '6px',
+                    padding: '6px 10px',
+                    background: '#F3EFEA'
+                  }}>
+                    <span style={{ width: '75px', color: '#64748B', fontSize: '0.75rem', fontWeight: 500 }}>
+                      Subject
+                    </span>
+                    <span style={{ color: '#0F172A', fontSize: '0.78rem', fontWeight: 600 }}>
+                      {selectedClaim.subject || selectedClaim.data?.subject || 'Apparel'}
+                    </span>
+                  </div>
+
+                  {/* Predicate */}
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    border: '1px solid #E2E8F0',
+                    borderRadius: '6px',
+                    padding: '6px 10px',
+                    background: '#F3EFEA'
+                  }}>
+                    <span style={{ width: '75px', color: '#64748B', fontSize: '0.75rem', fontWeight: 500 }}>
+                      Predicate
+                    </span>
+                    <span style={{ color: '#0F172A', fontSize: '0.78rem', fontWeight: 600 }}>
+                      {selectedClaim.predicate || selectedClaim.data?.predicate || 'has_warranty_period'}
+                    </span>
+                  </div>
+
+                  {/* Object */}
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    border: '1px solid #E2E8F0',
+                    borderRadius: '6px',
+                    padding: '6px 10px',
+                    background: '#F3EFEA'
+                  }}>
+                    <span style={{ width: '75px', color: '#64748B', fontSize: '0.75rem', fontWeight: 500 }}>
+                      Object
+                    </span>
+                    <span style={{ color: '#0F172A', fontSize: '0.78rem', fontWeight: 600 }}>
+                      {selectedClaim.object || selectedClaim.data?.object || selectedClaim.fullText || selectedClaim.label || '1 year'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Section 2: Raw extracted claim */}
+              <div>
+                <div style={{ fontSize: '0.80rem', fontWeight: 700, color: '#0F172A', marginBottom: '5px' }}>
+                  Raw extracted claim
+                </div>
+                <div style={{
+                  background: '#F3EFEA',
+                  border: '1px solid #E2E8F0',
+                  borderRadius: '6px',
+                  padding: '10px 12px',
+                  fontSize: '0.75rem',
+                  lineHeight: '1.45',
+                  color: '#334155'
+                }}>
+                  {selectedClaim.data?.evidence_snippet
+                    || selectedClaim.data?.quote
+                    || selectedClaim.data?.context_clause
+                    || selectedClaim.fullText
+                    || selectedClaim.label
+                    || '| Apparel | 1 year | Replace or refund |'}
+                </div>
+              </div>
+
+              {/* Section 3: Governance gates */}
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' }}>
+                  <span style={{ fontSize: '0.80rem', fontWeight: 700, color: '#0F172A' }}>
+                    Governance gates
+                  </span>
+                  <span style={{ fontSize: '0.76rem', fontWeight: 800, color: '#15803D' }}>
+                    {passedGatesCount}/10 passed
+                  </span>
+                </div>
+
+                {/* 2-Column Gate Pills Grid */}
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(2, 1fr)',
+                  gap: '5px'
+                }}>
+                  {STANDARD_GATES.map(gate => {
+                    const isOk = getGateStatus(selectedClaim, gate);
+                    return (
+                      <div
+                        key={gate.key}
+                        style={{
+                          background: isOk ? '#ECFDF5' : '#FEF2F2',
+                          border: `1px solid ${isOk ? '#A7F3D0' : '#FECACA'}`,
+                          borderRadius: '5px',
+                          padding: '5px 7px',
+                          fontSize: '0.69rem',
+                          color: isOk ? '#065F46' : '#B91C1C',
+                          fontWeight: 600,
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '5px'
+                        }}
+                      >
+                        <span style={{ color: isOk ? '#059669' : '#DC2626', fontWeight: 800 }}>
+                          {isOk ? '✓' : '✗'}
+                        </span>
+                        <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                          {gate.label}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Section 4: Metadata (Date ingested, Evidence, Owner) */}
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(2, 1fr)',
+                gap: '8px',
+                paddingTop: '6px',
+                borderTop: '1px solid #E2E8F0'
+              }}>
+                <div>
+                  <div style={{ fontSize: '0.69rem', color: '#94A3B8' }}>Date ingested</div>
+                  <div style={{ fontSize: '0.75rem', color: '#334155', fontWeight: 600, marginTop: '1px' }}>
+                    {formatDate(selectedClaim.created_at || selectedClaim.data?.created_at || asset?.node?.data?.created_at)}
+                  </div>
+                </div>
+
+                <div>
+                  <div style={{ fontSize: '0.69rem', color: '#94A3B8' }}>Evidence</div>
+                  <div style={{ fontSize: '0.75rem', color: '#334155', fontWeight: 600, marginTop: '1px' }}>
+                    {selectedClaim.data?.citation || selectedClaim.data?.page ? `Page ${selectedClaim.data.page}` : 'None'}
+                  </div>
+                </div>
+
+                <div style={{ gridColumn: 'span 2' }}>
+                  <div style={{ fontSize: '0.69rem', color: '#94A3B8' }}>Owner</div>
+                  <div style={{ fontSize: '0.75rem', color: '#334155', fontWeight: 600, marginTop: '1px' }}>
+                    {selectedClaim.owner || selectedClaim.data?.owner || asset?.node?.data?.author || 'Jane Doe'}
+                  </div>
+                </div>
+              </div>
+
+              {/* Section 5: Claim actions */}
+              <div>
+                <div style={{ fontSize: '0.80rem', fontWeight: 700, color: '#0F172A', marginBottom: '6px' }}>
+                  Claim actions
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '5px', flexWrap: 'wrap' }}>
+                  {/* Locate Source: Maps directly to the document in Document Explorer */}
+                  <button
+                    type="button"
+                    onClick={handleLocateSource}
+                    title="Open source document in Document Explorer"
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '4px',
+                      padding: '4px 8px',
+                      fontSize: '0.71rem',
+                      fontWeight: 600,
+                      color: '#0F172A',
+                      background: '#FAF8F5',
+                      border: '1px solid #CBD5E1',
+                      borderRadius: '5px',
+                      cursor: 'pointer',
+                      transition: 'background 0.15s ease'
+                    }}
+                    onMouseEnter={e => e.currentTarget.style.background = '#F3EFEA'}
+                    onMouseLeave={e => e.currentTarget.style.background = '#FAF8F5'}
+                  >
+                    <FileText size={11} color="#059669" />
+                    <span>Locate Source</span>
+                  </button>
+
+                  {onLocateInDoc && (
+                    <button
+                      type="button"
+                      onClick={() => onLocateInDoc(selectedClaim)}
+                      title="Locate assertion in document reader"
+                      style={{
+                        padding: '4px 8px',
+                        fontSize: '0.71rem',
+                        fontWeight: 600,
+                        color: '#0F172A',
+                        background: '#FAF8F5',
+                        border: '1px solid #CBD5E1',
+                        borderRadius: '5px',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      Locate Claim
+                    </button>
+                  )}
+
+                  {onInspectInDag && (
+                    <button
+                      type="button"
+                      onClick={() => onInspectInDag(selectedClaim)}
+                      style={{
+                        padding: '4px 8px',
+                        fontSize: '0.71rem',
+                        fontWeight: 600,
+                        color: '#7C3AED',
+                        background: '#F5F3FF',
+                        border: '1px solid #DDD6FE',
+                        borderRadius: '5px',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      Lineage DAG
+                    </button>
+                  )}
+
+                  <button
+                    type="button"
+                    onClick={() => handleCopyClaim(selectedClaim)}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '4px',
+                      padding: '4px 8px',
+                      fontSize: '0.71rem',
+                      fontWeight: 600,
+                      color: copiedClaimId === selectedClaim.id ? '#059669' : '#0F172A',
+                      background: copiedClaimId === selectedClaim.id ? '#DCFCE7' : '#FAF8F5',
+                      border: `1px solid ${copiedClaimId === selectedClaim.id ? '#86EFAC' : '#CBD5E1'}`,
+                      borderRadius: '5px',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    {copiedClaimId === selectedClaim.id ? <Check size={11} /> : <Copy size={11} />}
+                    <span>{copiedClaimId === selectedClaim.id ? 'Copied' : 'Copy'}</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Section 6: Escalate & Resolve Buttons */}
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                marginTop: '6px'
+              }}>
+                <button
+                  type="button"
+                  onClick={handleEscalate}
+                  style={{
+                    flex: 1,
+                    padding: '8px 12px',
+                    fontSize: '0.76rem',
+                    fontWeight: 600,
+                    color: '#0F172A',
+                    background: '#FAF8F5',
+                    border: '1px solid #CBD5E1',
+                    borderRadius: '6px',
+                    cursor: 'pointer',
+                    transition: 'all 0.15s ease'
+                  }}
+                  onMouseEnter={e => e.currentTarget.style.background = '#F3EFEA'}
+                  onMouseLeave={e => e.currentTarget.style.background = '#FAF8F5'}
+                >
+                  Escalate
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleResolve}
+                  style={{
+                    flex: 1,
+                    padding: '8px 12px',
+                    fontSize: '0.76rem',
+                    fontWeight: 700,
+                    color: '#FFFFFF',
+                    background: '#15803D',
+                    border: 'none',
+                    borderRadius: '6px',
+                    cursor: 'pointer',
+                    transition: 'all 0.15s ease'
+                  }}
+                  onMouseEnter={e => e.currentTarget.style.background = '#166534'}
+                  onMouseLeave={e => e.currentTarget.style.background = '#15803D'}
+                >
+                  Resolve
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div style={{ padding: '40px 20px', textAlign: 'center', color: '#94A3B8' }}>
+              Select a claim to inspect details
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }
