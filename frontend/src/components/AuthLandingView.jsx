@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   Shield,
-  Zap,
+  Layers,
   Users,
   AlertCircle,
   CheckCircle2,
@@ -267,7 +267,7 @@ export default function AuthLandingView() {
                   flexShrink: 0
                 }}
               >
-                <Zap size={16} strokeWidth={2.2} />
+                <Layers size={16} strokeWidth={2.2} />
               </div>
               <div>
                 <div style={{ fontSize: '0.84rem', fontWeight: 700, color: '#111827' }}>

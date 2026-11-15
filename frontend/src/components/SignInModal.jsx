@@ -821,7 +821,7 @@ export default function SignInModal() {
                     gap: '8px'
                   }}
                 >
-                  <Sparkles size={15} style={{ flexShrink: 0, color: '#2563EB' }} />
+                  <Info size={15} style={{ flexShrink: 0, color: '#2563EB' }} />
                   <span>
                     <strong>Preview Deployment Active:</strong> 1-Click enterprise sandbox SSO is enabled without requiring domain redirect whitelisting.
                   </span>

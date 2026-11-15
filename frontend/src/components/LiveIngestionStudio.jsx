@@ -845,7 +845,7 @@ export default function LiveIngestionStudio({
                   fontWeight: selectedFolderId ? 600 : 400
                 }}
               >
-                <option value="">✨ Smart Auto-Route (Domain & Topic Driven)</option>
+                <option value="">Smart Auto-Route (Domain & Topic Driven)</option>
                 {folders.map((f) => (
                   <option key={f.id} value={f.id}>
                     {f.is_system ? '🏛️ ' : '📁 '} {f.name}
@@ -857,7 +857,7 @@ export default function LiveIngestionStudio({
             {/* Extraction Engine */}
             <div>
               <label style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.70rem', fontWeight: 700, color: 'var(--text-muted)', marginBottom: '5px', textTransform: 'uppercase' }}>
-                <Zap size={11} color="#EA580C" />
+                <Layers size={11} color="#EA580C" />
                 <span>L5: Strategy Router & Engine</span>
               </label>
               <select
@@ -935,7 +935,7 @@ export default function LiveIngestionStudio({
               </>
             ) : (
               <>
-                <Zap size={15} />
+                <ArrowRight size={15} />
                 <span>
                   Launch 11-Layer Pipeline {stagedFiles.length > 0 ? `(${stagedFiles.length} File${stagedFiles.length > 1 ? 's' : ''})` : ''}
                 </span>
@@ -1193,7 +1193,7 @@ export default function LiveIngestionStudio({
                       📁 Subfolder Preservation
                     </span>
                     <span className="sim-chip-tag" style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', color: '#475569' }}>
-                      ⚡ 11-Layer Progressive Ingestion
+                      11-Layer Progressive Ingestion
                     </span>
                     <span className="sim-chip-tag" style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', color: '#475569' }}>
                       🔒 SHA-256 Envelope Seal

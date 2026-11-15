@@ -1776,7 +1776,7 @@ export default function DocumentWorkspaceExplorer({
                     onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 2px 5px rgba(234, 88, 12, 0.22)'; }}
                     title="Open document in full 360° Lineage Studio"
                   >
-                    <Sparkles size={12} />
+                    <Maximize2 size={12} />
                     <span>360° Studio</span>
                   </button>
 
@@ -2229,7 +2229,7 @@ export default function DocumentWorkspaceExplorer({
                         className="btn btn-primary"
                         style={{ padding: '5px 14px', fontSize: '0.74rem', display: 'flex', alignItems: 'center', gap: '5px', background: '#EA580C', borderColor: '#EA580C', color: '#FFFFFF', fontWeight: 700 }}
                       >
-                        <Sparkles size={13} />
+                        <Maximize2 size={13} />
                         <span>Deep-Dive in 360° Studio ↗</span>
                       </button>
                     </div>
@@ -2548,7 +2548,7 @@ export default function DocumentWorkspaceExplorer({
                             }}
                             title="Open full interactive DAG in 360° Studio"
                           >
-                            <Sparkles size={12} />
+                            <Maximize2 size={12} />
                             <span>Launch 360° Canvas DAG ↗</span>
                           </button>
                         </div>
@@ -2825,7 +2825,7 @@ export default function DocumentWorkspaceExplorer({
                             }}
                           >
                             <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '3px' }}>
-                              <Bot size={13} style={{ color: '#059669' }} />
+                              <ShieldCheck size={13} style={{ color: '#059669' }} />
                               <span style={{ fontSize: '0.74rem', fontWeight: 800, color: '#0F172A' }}>AI Assistant Grounding</span>
                             </div>
                             <div style={{ fontSize: '0.64rem', color: '#64748B' }}>
@@ -2913,7 +2913,7 @@ export default function DocumentWorkspaceExplorer({
                               fontWeight: 600
                             }}
                           >
-                            <Sparkles size={12} style={{ color: '#EA580C' }} />
+                            <Maximize2 size={12} style={{ color: '#EA580C' }} />
                             <span>Interactive Studio</span>
                           </button>
                         </div>
@@ -3006,7 +3006,7 @@ export default function DocumentWorkspaceExplorer({
                   }}
                   title="Automatically organize all unclassified files into domain & connector folders"
                 >
-                  <Sparkles size={13} className={isAutoOrganizing ? 'spin' : ''} style={{ color: '#F59E0B' }} />
+                  <RefreshCw size={13} className={isAutoOrganizing ? 'spin' : ''} style={{ color: '#F59E0B' }} />
                   <span>{isAutoOrganizing ? 'Filing...' : 'Auto-Organize'}</span>
                 </button>
               </div>
@@ -3380,7 +3380,7 @@ export default function DocumentWorkspaceExplorer({
                 className="context-menu-item"
                 style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '6px 8px', fontSize: '0.76rem', border: 'none', background: 'none', borderRadius: '4px', cursor: 'pointer', textAlign: 'left', color: '#EA580C', fontWeight: 700 }}
               >
-                <Sparkles size={13} style={{ color: '#EA580C' }} />
+                <Maximize2 size={13} style={{ color: '#EA580C' }} />
                 <span>Open 360° Studio ↗</span>
               </button>
 
@@ -4157,7 +4157,7 @@ export default function DocumentWorkspaceExplorer({
                     className="btn btn-primary"
                     style={{ padding: '5px 14px', fontSize: '0.74rem', background: '#EA580C', borderColor: '#EA580C', color: '#FFFFFF', fontWeight: 700 }}
                   >
-                    <Sparkles size={13} style={{ marginRight: '5px', display: 'inline' }} />
+                    <Maximize2 size={13} style={{ marginRight: '5px', display: 'inline' }} />
                     <span>Open 360° Studio ↗</span>
                   </button>
                 </div>

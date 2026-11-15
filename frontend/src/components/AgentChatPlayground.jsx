@@ -26,7 +26,7 @@ const PROCESS_STEPS = [
   {
     action: "Evaluating governance thresholds & synthesizing answer",
     tag: "Context Gate",
-    icon: "✨"
+    icon: "🎯"
   }
 ];
 
@@ -404,7 +404,7 @@ function CopilotEmblem({ size = 22 }) {
 }
 
 const COPILOT_MODES = [
-  { id: 'quick', label: 'Quick response', icon: '⚡', desc: 'Direct bottom-line answer with synthesized takeaways' },
+  { id: 'quick', label: 'Quick response', icon: '💬', desc: 'Direct bottom-line answer with synthesized takeaways' },
   { id: 'policy', label: 'Policy Governance', icon: '🛡️', desc: 'Deep contextual audit with freshness decay & verified citations' },
   { id: 'decision', label: 'Action Gatekeeper', icon: '⚖️', desc: 'Evaluates policy thresholds and ALLOW / BLOCK gates' },
   { id: 'audit', label: 'Contradiction Audit', icon: '⚠️', desc: 'Scans cross-source policy conflicts and disputed claims' }

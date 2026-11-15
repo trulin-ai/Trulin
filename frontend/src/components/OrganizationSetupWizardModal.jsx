@@ -1084,7 +1084,7 @@ export default function OrganizationSetupWizardModal({
                 lineHeight: '1.5'
               }}>
                 <div style={{ fontWeight: 700, color: 'var(--text-main)', marginBottom: '4px' }}>
-                  ⚡ What happens when you click 'Complete Setup':
+                  What happens when you click 'Complete Setup':
                 </div>
                 <ul style={{ paddingLeft: '18px', margin: 0 }}>
                   <li>Isolated tenant partition <code>{orgSlug || 'tenant'}</code> registered with domain whitelist.</li>
@@ -1255,7 +1255,7 @@ export default function OrganizationSetupWizardModal({
                 className="btn btn-primary"
                 style={{ fontSize: '0.82rem', padding: '8px 22px' }}
               >
-                <Sparkles size={15} />
+                <Check size={15} />
                 <span>{isSubmitting ? 'Configuring Tenant...' : 'Complete Setup & Launch'}</span>
               </button>
             )}

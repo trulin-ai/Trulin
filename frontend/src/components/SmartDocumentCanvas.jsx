@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import {
   AlertTriangle,
-  Zap,
+  CheckCircle2,
   Check,
   Copy,
   X,
@@ -14,7 +14,8 @@ import {
   Layers,
   BookOpen,
   FileText,
-  GripVertical
+  GripVertical,
+  Network
 } from 'lucide-react';
 
 /**
@@ -806,7 +807,7 @@ export default function SmartDocumentCanvas({
             position: (isSelected || isCardPinned) ? 'relative' : 'static',
             zIndex: (isSelected || isCardPinned) ? 2 : 1
           }}
-          title={isConflicted ? '⚠️ Contradicted Rule: Click to pin action card & inspect Lineage' : '⚡ Verified Rule: Click to pin action card & inspect Lineage'}
+          title={isConflicted ? '⚠️ Contradicted Rule: Click to pin action card & inspect Lineage' : 'Verified Rule: Click to pin action card & inspect Lineage'}
         >
           {sentenceText}
         </span>
@@ -1221,7 +1222,7 @@ export default function SmartDocumentCanvas({
               }}
               title="Show all verified atomic policy rules"
             >
-              <Zap size={isCompact ? 11 : 12} strokeWidth={2.4} color={highlightFilter === 'claims' ? '#FFFFFF' : '#34D399'} />
+              <CheckCircle2 size={isCompact ? 11 : 12} strokeWidth={2.4} color={highlightFilter === 'claims' ? '#FFFFFF' : '#34D399'} />
               <span>{isUltraCompact ? `(${claimsCount})` : `Claims (${claimsCount})`}</span>
             </button>
 
@@ -1384,7 +1385,7 @@ export default function SmartDocumentCanvas({
                   color: activeCardClaim.hasConflict ? '#EA580C' : '#059669',
                   border: activeCardClaim.hasConflict ? '1px solid #FED7AA' : '1px solid #A7F3D0'
                 }}>
-                  {activeCardClaim.hasConflict ? '⚠️ ACTIVE CONTRADICTION' : '⚡ VERIFIED ATOMIC RULE'}
+                  {activeCardClaim.hasConflict ? '⚠️ ACTIVE CONTRADICTION' : 'VERIFIED ATOMIC RULE'}
                 </span>
                 {isPinned && (
                   <span style={{
@@ -1532,7 +1533,7 @@ export default function SmartDocumentCanvas({
                     cursor: 'pointer'
                   }}
                 >
-                  <Zap size={12} />
+                  <Network size={12} />
                   <span>Inspect Lineage</span>
                 </button>
               </div>

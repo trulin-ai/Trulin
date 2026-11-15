@@ -3462,7 +3462,7 @@ export default function VisualLineageGraph({
                 }}
                 title="Trace policy rules directly to AI Copilot decisions"
               >
-                <span>🤖 AI Impact</span>
+                <span>AI Impact</span>
               </button>
 
               <button
@@ -4202,7 +4202,7 @@ export default function VisualLineageGraph({
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                 <span style={{ background: '#EA580C', color: '#FFFFFF', padding: '2px 7px', borderRadius: '4px', fontWeight: 800, fontSize: '0.66rem', letterSpacing: '0.04em' }}>
-                  ⚡ DRAFT LINEAGE
+                  DRAFT LINEAGE
                 </span>
                 <span style={{ fontWeight: 600 }}>
                   {draftAddedEdges.length > 0 && <span style={{ color: '#4ADE80', marginRight: '6px' }}>+{draftAddedEdges.length} Connected</span>}
@@ -4566,7 +4566,7 @@ export default function VisualLineageGraph({
               let borderColor = '#3b82f6';
               let badgeBg = '#f0f7ff';
               let badgeColor = '#2563eb';
-              let nodeIcon = '⚡';
+              let nodeIcon = '📋';
               let categoryLabel = 'ATOMIC CLAIM';
               let subtitleText = `SCOPE / ${node.data?.scope || 'ENTERPRISE'}`;
 
@@ -4595,7 +4595,7 @@ export default function VisualLineageGraph({
                 borderColor = '#7c3aed';
                 badgeBg = '#faf5ff';
                 badgeColor = '#7c3aed';
-                nodeIcon = '🤖';
+                nodeIcon = '🎯';
                 categoryLabel = 'AI DECISION';
                 subtitleText = `ACTOR / ${node.actor || 'AGENT_EVAL'}`;
               }
@@ -4753,7 +4753,7 @@ export default function VisualLineageGraph({
                               {cl.label}
                             </p>
 
-                            {/* Right Output Dot (Port - ⚡ Draggable Handle) */}
+                            {/* Right Output Dot (Port Draggable Handle) */}
                             <div
                               onMouseDown={(e) => handlePortMouseDown(e, cl.id)}
                               style={{
@@ -4776,7 +4776,7 @@ export default function VisualLineageGraph({
                               }}
                               title="Hold and drag to wire to Decision Agent or Contradiction"
                             >
-                              ⚡
+                              <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#FFFFFF' }} />
                             </div>
                           </div>
                         );
@@ -4952,7 +4952,7 @@ export default function VisualLineageGraph({
                       </p>
                     </div>
                     <div style={{ borderTop: '1px solid #CBD5E1', paddingTop: '4px', fontSize: '0.66rem', color: '#2563EB', fontWeight: 700, textAlign: 'center' }}>
-                      ⚡ Click to Expand All
+                      Click to Expand All
                     </div>
                   </div>
                 );
@@ -5118,7 +5118,7 @@ export default function VisualLineageGraph({
                         e.currentTarget.style.backgroundColor = '#2563EB';
                       }}
                     >
-                      <span style={{ fontSize: '9px', color: '#FFFFFF', lineHeight: 1, pointerEvents: 'none' }}>⚡</span>
+                      <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#FFFFFF', pointerEvents: 'none' }} />
                     </div>
                   )}
 
@@ -5377,7 +5377,7 @@ export default function VisualLineageGraph({
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <span style={{ fontSize: '22px' }}>
-                {selectedNode.type === 'source' ? '🔌' : selectedNode.type === 'document' ? '📄' : selectedNode.type === 'claim' ? '⚡' : selectedNode.type === 'conflict' ? '⚖️' : '🤖'}
+                {selectedNode.type === 'source' ? '🔌' : selectedNode.type === 'document' ? '📄' : selectedNode.type === 'claim' ? '📋' : selectedNode.type === 'conflict' ? '⚖️' : '🎯'}
               </span>
               <div>
                 <h3 style={{ margin: 0, fontSize: '0.98rem', fontWeight: 800, color: 'var(--text-main)' }}>
@@ -5479,7 +5479,7 @@ export default function VisualLineageGraph({
                           cursor: 'pointer'
                         }}
                       >
-                        ⚡ Isolate Conflict DAG
+                        Isolate Conflict DAG
                       </button>
                     </div>
                   </div>
@@ -5522,7 +5522,7 @@ export default function VisualLineageGraph({
               </div>
             ) : (
               <div style={{ background: 'var(--bg-card)', padding: '14px', borderRadius: '10px', border: '1px solid var(--border-color)', fontSize: '0.78rem', color: 'var(--text-muted)' }}>
-                <strong style={{ color: 'var(--text-main)' }}>Lineage Context:</strong> Select an individual <strong>Atomic Claim (⚡)</strong> or <strong>Contradiction (⚖️)</strong> to inspect connected rules and downstream AI decisions.
+                <strong style={{ color: 'var(--text-main)' }}>Lineage Context:</strong> Select an individual <strong>Atomic Claim</strong> or <strong>Contradiction (⚖️)</strong> to inspect connected rules and downstream AI decisions.
               </div>
             )}
           </div>
@@ -6129,7 +6129,7 @@ export default function VisualLineageGraph({
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px', borderBottom: '1px solid #F1F5F9', paddingBottom: '12px' }}>
               <div>
                 <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 800, color: '#0F172A', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <span>⚡ Extracted Atomic Claims & Evaluated AI Decisions</span>
+                  <span>Extracted Atomic Claims & Evaluated AI Decisions</span>
                 </h3>
                 <p style={{ margin: '3px 0 0 0', fontSize: '0.76rem', color: '#64748B' }}>
                   Search and inspect normalized atomic assertions. Filter by document or connector provenance, or visualize in the lineage DAG.
@@ -6141,7 +6141,7 @@ export default function VisualLineageGraph({
                   { id: 'all', label: `All Claims (${allClaimsRaw.length})` },
                   { id: 'verified', label: '✅ Verified' },
                   { id: 'conflicted', label: '⚠️ In Conflict' },
-                  { id: 'decisions', label: `🤖 AI Decisions (${decisionsList.length})` }
+                  { id: 'decisions', label: `AI Decisions (${decisionsList.length})` }
                 ].map(f => {
                   const isSel = vaultClaimFilter === f.id;
                   return (
@@ -6309,7 +6309,7 @@ export default function VisualLineageGraph({
                     >
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                         <span style={{ fontSize: '0.64rem', fontWeight: 800, color: '#7C3AED', background: '#EDE9FE', padding: '2px 7px', borderRadius: '4px' }}>
-                          🤖 AI GOVERNANCE DECISION
+                          AI GOVERNANCE DECISION
                         </span>
                         <span className={dec.verdict === 'ALLOW' ? 'badge badge-verified' : 'badge badge-warning'} style={{ fontSize: '0.66rem' }}>
                           {dec.verdict || 'EVALUATED'}
@@ -6539,7 +6539,6 @@ export default function VisualLineageGraph({
             }}>
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <span style={{ fontSize: '18px' }}>⚡</span>
                   <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 800, color: '#0f172a' }}>
                     Enterprise Atomic Claims Explorer
                   </h3>
@@ -7034,7 +7033,7 @@ export default function VisualLineageGraph({
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
                   <h4 style={{ margin: 0, fontSize: '0.84rem', fontWeight: 800, color: '#7C3AED', display: 'flex', alignItems: 'center', gap: '5px' }}>
-                    <span>🤖</span> Downstream Blast Radius ({connectedNodeMap.down.size})
+                    Downstream Blast Radius ({connectedNodeMap.down.size})
                   </h4>
                   <span style={{ fontSize: '0.68rem', color: '#64748B' }}>AI decisions & workflows influenced</span>
                 </div>
