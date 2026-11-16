@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import {
   Zap,
   Filter,
@@ -2858,10 +2859,209 @@ export default function VisualLineageGraph({
           );
         };
 
+        const topHeaderSlot = typeof document !== 'undefined' ? document.getElementById('top-header-left-slot') : null;
+
+        const assetTopRowContent = selectedAsset360 ? (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0, overflow: 'hidden' }}>
+            <button
+              type="button"
+              onClick={() => {
+                setOpenedAssetId(null);
+                onAssetChange?.(null);
+              }}
+              style={{
+                width: '28px',
+                height: '28px',
+                borderRadius: '6px',
+                border: '1px solid #E2E8F0',
+                background: '#FFFFFF',
+                color: '#0F172A',
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                padding: 0,
+                boxShadow: 'none',
+                flexShrink: 0,
+                transition: 'all 0.18s cubic-bezier(0.16, 1, 0.3, 1)'
+              }}
+              title={`Back to ${vaultSubTab === 'documents' ? 'Documents' : 'Connectors'} list`}
+              onMouseEnter={e => {
+                e.currentTarget.style.background = '#FFF7ED';
+                e.currentTarget.style.borderColor = '#FED7AA';
+                e.currentTarget.style.color = '#EA580C';
+                e.currentTarget.style.transform = 'translateX(-2px)';
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.background = '#FFFFFF';
+                e.currentTarget.style.borderColor = '#E2E8F0';
+                e.currentTarget.style.color = '#0F172A';
+                e.currentTarget.style.transform = 'none';
+              }}
+            >
+              <ChevronLeft size={16} strokeWidth={2.5} />
+            </button>
+
+            <h2 style={{
+              margin: 0,
+              fontSize: '1.05rem',
+              fontWeight: 800,
+              color: '#0F172A',
+              letterSpacing: '-0.01em',
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              maxWidth: '380px'
+            }} title={selectedAsset360.node.label}>
+              {selectedAsset360.node.label}
+            </h2>
+
+            {/* Universal File Viewer Trigger Button: Available only in Overview tab when minimized */}
+            {asset360Section === 'summary' && !isFileViewerOpen && (
+              <button
+                type="button"
+                onClick={() => {
+                  setIsFileViewerOpen(true);
+                  showToast?.("Document preview opened");
+                }}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '5px',
+                  padding: '3px 8px',
+                  borderRadius: '6px',
+                  border: '1px solid #EA580C',
+                  background: '#FFF7ED',
+                  color: '#EA580C',
+                  fontSize: '0.72rem',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  whiteSpace: 'nowrap',
+                  flexShrink: 0,
+                  boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
+                  transition: 'all 0.15s ease'
+                }}
+                title="Open document preview"
+              >
+                <FileText size={12} color="#EA580C" />
+                <span>Open Preview</span>
+              </button>
+            )}
+
+            {selectedAsset360.mode === 'document' && (
+              <a
+                href={`/v1/documents/${selectedAsset360.node.data?.doc_id || String(selectedAsset360.node.id || '').replace(/^doc_/, '')}/file`}
+                target="_blank"
+                rel="noreferrer"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  padding: '3px 8px',
+                  borderRadius: '6px',
+                  border: '1px solid #E2E8F0',
+                  background: '#FFFFFF',
+                  color: '#0284C7',
+                  fontSize: '0.72rem',
+                  fontWeight: 600,
+                  textDecoration: 'none',
+                  whiteSpace: 'nowrap',
+                  flexShrink: 0,
+                  boxShadow: '0 1px 2px rgba(0,0,0,0.04)'
+                }}
+                title="Open document file in a new browser tab"
+              >
+                <ExternalLink size={12} />
+                <span>Open File ↗</span>
+              </a>
+            )}
+
+            {/* Details Symbol Toggle Button */}
+            <button
+              type="button"
+              onClick={() => {
+                setIsDetailsOpen(prev => !prev);
+                showToast?.(!isDetailsOpen ? "Details pane opened in split view" : "Details pane closed");
+              }}
+              title={isDetailsOpen ? "Hide Asset Details" : "Show Asset Details"}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '4px',
+                padding: '3px 8px',
+                borderRadius: '6px',
+                border: isDetailsOpen ? '1px solid #EA580C' : '1px solid #E2E8F0',
+                background: isDetailsOpen ? '#FFF7ED' : '#FFFFFF',
+                color: isDetailsOpen ? '#EA580C' : '#475569',
+                fontSize: '0.72rem',
+                fontWeight: 600,
+                cursor: 'pointer',
+                whiteSpace: 'nowrap',
+                flexShrink: 0,
+                boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
+                transition: 'all 0.15s ease'
+              }}
+            >
+              <Info size={12} color={isDetailsOpen ? '#EA580C' : '#64748B'} />
+              <span>Details</span>
+            </button>
+
+            {user?.role === 'admin' && (
+              <button
+                type="button"
+                onClick={() => setDeleteTargetAsset(selectedAsset360.node)}
+                title={`Decommission or Purge ${selectedAsset360.node.label}`}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  padding: '3px 8px',
+                  borderRadius: '6px',
+                  border: '1px solid #FCA5A5',
+                  background: '#FEF2F2',
+                  color: '#DC2626',
+                  fontSize: '0.72rem',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  whiteSpace: 'nowrap',
+                  flexShrink: 0,
+                  boxShadow: '0 1px 2px rgba(220,38,38,0.06)',
+                  transition: 'all 0.15s ease'
+                }}
+                onMouseEnter={e => { e.currentTarget.style.background = '#FEE2E2'; }}
+                onMouseLeave={e => { e.currentTarget.style.background = '#FEF2F2'; }}
+              >
+                <Trash2 size={12} strokeWidth={2.2} />
+                <span>Delete Asset</span>
+              </button>
+            )}
+          </div>
+        ) : null;
+
         return (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', width: '100%' }}>
 
-            {/* CLEAN MINIMALIST EXECUTIVE HEADER: MINIMAL BACK BUTTON (<), FILE NAME, TOGGLE FILE VIEW, & UNDERLINED TABS */}
+            {/* Top Row: Portaled directly into the top breadcrumb slot next to workspace selector, or fallback inline */}
+            {selectedAsset360 && (
+              topHeaderSlot ? createPortal(assetTopRowContent, topHeaderSlot) : (
+                <div style={{
+                  background: 'transparent',
+                  border: 'none',
+                  boxShadow: 'none',
+                  padding: '0',
+                  marginBottom: '2px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  flexWrap: 'wrap',
+                  gap: '10px'
+                }}>
+                  {assetTopRowContent}
+                </div>
+              )
+            )}
+
+            {/* CLEAN MINIMALIST EXECUTIVE HEADER: UNDERLINED TABS */}
             {selectedAsset360 && (
               <div style={{
                 background: 'transparent',
@@ -2873,165 +3073,6 @@ export default function VisualLineageGraph({
                 flexDirection: 'column',
                 gap: '4px'
               }}>
-                {/* Top Row: Minimal Back Button (<), File Name, and File Viewer Toggle / Stepper */}
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setOpenedAssetId(null);
-                        onAssetChange?.(null);
-                      }}
-                      style={{
-                        width: '28px',
-                        height: '28px',
-                        borderRadius: '6px',
-                        border: '1px solid #E2E8F0',
-                        background: '#FFFFFF',
-                        color: '#0F172A',
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        cursor: 'pointer',
-                        padding: 0,
-                        boxShadow: 'none',
-                        transition: 'all 0.18s cubic-bezier(0.16, 1, 0.3, 1)'
-                      }}
-                      title={`Back to ${vaultSubTab === 'documents' ? 'Documents' : 'Connectors'} list`}
-                      onMouseEnter={e => {
-                        e.currentTarget.style.background = '#FFF7ED';
-                        e.currentTarget.style.borderColor = '#FED7AA';
-                        e.currentTarget.style.color = '#EA580C';
-                        e.currentTarget.style.transform = 'translateX(-2px)';
-                      }}
-                      onMouseLeave={e => {
-                        e.currentTarget.style.background = '#FFFFFF';
-                        e.currentTarget.style.borderColor = '#E2E8F0';
-                        e.currentTarget.style.color = '#0F172A';
-                        e.currentTarget.style.transform = 'none';
-                      }}
-                    >
-                      <ChevronLeft size={16} strokeWidth={2.5} />
-                    </button>
-
-                    <h2 style={{ margin: 0, fontSize: '1.12rem', fontWeight: 800, color: '#0F172A', letterSpacing: '-0.01em' }}>
-                      {selectedAsset360.node.label}
-                    </h2>
-
-                    {/* Universal File Viewer Trigger Button: Available only in Overview tab when minimized */}
-                    {asset360Section === 'summary' && !isFileViewerOpen && (
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setIsFileViewerOpen(true);
-                          showToast?.("Document preview opened");
-                        }}
-                        style={{
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: '6px',
-                          padding: '4px 10px',
-                          borderRadius: '6px',
-                          border: '1px solid #EA580C',
-                          background: '#FFF7ED',
-                          color: '#EA580C',
-                          fontSize: '0.74rem',
-                          fontWeight: 700,
-                          cursor: 'pointer',
-                          boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
-                          transition: 'all 0.15s ease'
-                        }}
-                        title="Open document preview"
-                      >
-                        <FileText size={13} color="#EA580C" />
-                        <span>Open Document Preview</span>
-                      </button>
-                    )}
-
-                    {selectedAsset360.mode === 'document' && (
-                      <a
-                        href={`/v1/documents/${selectedAsset360.node.data?.doc_id || String(selectedAsset360.node.id || '').replace(/^doc_/, '')}/file`}
-                        target="_blank"
-                        rel="noreferrer"
-                        style={{
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: '5px',
-                          padding: '4px 9px',
-                          borderRadius: '6px',
-                          border: '1px solid #E2E8F0',
-                          background: '#FFFFFF',
-                          color: '#0284C7',
-                          fontSize: '0.74rem',
-                          fontWeight: 600,
-                          textDecoration: 'none',
-                          boxShadow: '0 1px 2px rgba(0,0,0,0.04)'
-                        }}
-                        title="Open document file in a new browser tab"
-                      >
-                        <ExternalLink size={12} />
-                        <span>Open File ↗</span>
-                      </a>
-                    )}
-
-                    {/* Details Symbol Toggle Button (Placed at top of filename, right after Open File) */}
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setIsDetailsOpen(prev => !prev);
-                        showToast?.(!isDetailsOpen ? "Details pane opened in split view" : "Details pane closed");
-                      }}
-                      title={isDetailsOpen ? "Hide Asset Details" : "Show Asset Details"}
-                      style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '5px',
-                        padding: '4px 9px',
-                        borderRadius: '6px',
-                        border: isDetailsOpen ? '1px solid #EA580C' : '1px solid #E2E8F0',
-                        background: isDetailsOpen ? '#FFF7ED' : '#FFFFFF',
-                        color: isDetailsOpen ? '#EA580C' : '#475569',
-                        fontSize: '0.74rem',
-                        fontWeight: 600,
-                        cursor: 'pointer',
-                        boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
-                        transition: 'all 0.15s ease'
-                      }}
-                    >
-                      <Info size={13} color={isDetailsOpen ? '#EA580C' : '#64748B'} />
-                      <span>Details</span>
-                    </button>
-
-                    {user?.role === 'admin' && (
-                      <button
-                        type="button"
-                        onClick={() => setDeleteTargetAsset(selectedAsset360.node)}
-                        title={`Decommission or Purge ${selectedAsset360.node.label}`}
-                        style={{
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: '5px',
-                          padding: '4px 10px',
-                          borderRadius: '6px',
-                          border: '1px solid #FCA5A5',
-                          background: '#FEF2F2',
-                          color: '#DC2626',
-                          fontSize: '0.74rem',
-                          fontWeight: 700,
-                          cursor: 'pointer',
-                          boxShadow: '0 1px 2px rgba(220,38,38,0.06)',
-                          transition: 'all 0.15s ease'
-                        }}
-                        onMouseEnter={e => { e.currentTarget.style.background = '#FEE2E2'; }}
-                        onMouseLeave={e => { e.currentTarget.style.background = '#FEF2F2'; }}
-                      >
-                        <Trash2 size={13} strokeWidth={2.2} />
-                        <span>Delete Asset</span>
-                      </button>
-                    )}
-                  </div>
-                </div>
-
                 {/* Plane Text Tabs with Separator Line */}
                 <div style={{
                   display: 'flex',

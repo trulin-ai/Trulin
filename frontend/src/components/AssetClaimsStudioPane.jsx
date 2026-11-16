@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
   Search,
   Filter,
@@ -236,13 +236,14 @@ export default function AssetClaimsStudioPane({
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all'); // 'all' | 'canonical' | 'review' | 'quarantined' | 'non_rule' | 'rejected' | 'conflicted'
   const [trustTierFilter, setTrustTierFilter] = useState('all'); // 'all' | 'high' | 'med' | 'low'
-  const [sortBy, setSortBy] = useState('subject_asc'); // 'subject_asc' | 'trust_desc' | 'trust_asc' | 'index'
+  const [sortBy, setSortBy] = useState('sl_asc'); // 'sl_asc' | 'sl_desc' | 'subject_asc' | 'trust_desc' | 'trust_asc'
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(20); // 20, 50, 80, 100
   const [copiedClaimId, setCopiedClaimId] = useState(null);
 
   // Selection states
   const [selectedClaimId, setSelectedClaimId] = useState(null);
+  const [isInspectorOpen, setIsInspectorOpen] = useState(false);
   const [selectedCheckboxIds, setSelectedCheckboxIds] = useState(new Set());
 
   const totalClaims = claims.length;
@@ -295,20 +296,65 @@ export default function AssetClaimsStudioPane({
     };
   }, [claims, allConflictedClaimIds, totalClaims]);
 
-  // Stable document identifier for claim titles
-  const docIdentifier = useMemo(() => {
+  // Fixed permanent sequential index for every raw candidate claim (1-based: 1, 2, 3... 401)
+  // Computed once from the full master claims array, guaranteeing Sl.No is permanently fixed regardless of filters.
+  const rawClaimIndexMap = useMemo(() => {
+    const map = new Map();
+    (claims || []).forEach((cl, index) => {
+      const key = cl.id || cl._tempId || cl.data?.claim_id || `cl_${index}`;
+      map.set(key, index + 1);
+    });
+    return map;
+  }, [claims]);
+
+  // Short Title Slug (e.g. "Northbridge Benefits Leave" -> "NBLEAVE", "Northcave Benefits Leave" -> "NCAVE" / "NBLEAVE")
+  const shortTitleSlug = useMemo(() => {
     const raw = asset?.node?.label || asset?.node?.data?.title || 'DOC';
-    const cleaned = raw.replace(/[^a-zA-Z0-9]/g, '').slice(0, 10).toUpperCase();
-    return cleaned || 'NORTHWINDR';
+    const cleanTitle = raw.replace(/[^a-zA-Z0-9\s]/g, ' ').trim();
+    const words = cleanTitle.split(/\s+/).filter(w => w.length > 0);
+    const stopWords = new Set(['POLICY', 'AGREEMENT', 'HANDBOOK', 'DOCUMENT', 'STANDARDS', 'STANDARD', 'GUIDELINES', 'CLAIMS', 'FOR', 'OF', 'AND', 'THE', 'IN', 'ON', 'TO']);
+    const meaningfulWords = words.filter(w => !stopWords.has(w.toUpperCase()));
+    const targetWords = meaningfulWords.length > 0 ? meaningfulWords : words;
+
+    if (targetWords.length === 0) return 'DOC';
+    if (targetWords.length === 1) {
+      return targetWords[0].slice(0, 7).toUpperCase();
+    }
+    if (targetWords.length === 2) {
+      const firstInitial = targetWords[0].charAt(0).toUpperCase();
+      const secondWord = targetWords[1].toUpperCase();
+      return (firstInitial + secondWord).slice(0, 8);
+    }
+    // 3 or more words: e.g. ["Northbridge", "Benefits", "Leave"] -> leading initials + last word (N + B + LEAVE = NBLEAVE)
+    const leadingInitials = targetWords.slice(0, -1).map(w => w.charAt(0).toUpperCase()).join('');
+    const lastWord = targetWords[targetWords.length - 1].toUpperCase();
+    return (leadingInitials + lastWord).slice(0, 8);
   }, [asset]);
 
-  // Helper to format clean Claim Title
-  const getClaimDisplayTitle = (cl, index) => {
-    if (cl.title && String(cl.title).startsWith('Claim_')) return cl.title;
-    if (cl.display_id) return cl.display_id;
-    if (cl.claim_code) return cl.claim_code;
-    const numStr = String(index).padStart(3, '0');
-    return `Claim_${docIdentifier}_${numStr}`;
+  // Document Unique Hash: 4-character hex from the document UUID (e.g. "9DA3" or "C710")
+  const docHash = useMemo(() => {
+    const rawDocId = asset?.node?.data?.doc_id
+      || asset?.node?.data?.document_id
+      || asset?.node?.id
+      || asset?.id
+      || '';
+    const clean = String(rawDocId).replace(/^doc_/, '').replace(/[^a-zA-Z0-9]/g, '');
+    return clean.slice(0, 4).toUpperCase() || 'DOC1';
+  }, [asset]);
+
+  // Helper to format clean Claim Title: Claim_[Short-Title-Slug]_[Doc-Unique-Hash]_[claim-id]
+  // where claim-id is the short UUID of 8 characters (fixed, collision-free, independent of filter indexes)
+  const getClaimDisplayTitle = (cl) => {
+    if (!cl) return `Claim_${shortTitleSlug}_${docHash}_UNKNOWN`;
+    const rawClaimId = cl.data?.claim_id || cl.id || cl._tempId || '';
+    const cleanClaimId = String(rawClaimId)
+      .replace(/^cl_/, '')
+      .replace(/[^a-zA-Z0-9]/g, '')
+      .slice(0, 8)
+      .toUpperCase();
+
+    const paddedClaimId = (cleanClaimId || '00000000').padEnd(8, '0').slice(0, 8);
+    return `Claim_${shortTitleSlug}_${docHash}_${paddedClaimId}`;
   };
 
   // Filter and sort pipeline
@@ -350,6 +396,21 @@ export default function AssetClaimsStudioPane({
 
       return true;
     }).sort((a, b) => {
+      if (sortBy === 'sl_asc') {
+        const keyA = a.id || a._tempId || a.data?.claim_id;
+        const keyB = b.id || b._tempId || b.data?.claim_id;
+        const idxA = rawClaimIndexMap.get(keyA) ?? 999999;
+        const idxB = rawClaimIndexMap.get(keyB) ?? 999999;
+        return idxA - idxB;
+      }
+      if (sortBy === 'sl_desc') {
+        const keyA = a.id || a._tempId || a.data?.claim_id;
+        const keyB = b.id || b._tempId || b.data?.claim_id;
+        const idxA = rawClaimIndexMap.get(keyA) ?? 0;
+        const idxB = rawClaimIndexMap.get(keyB) ?? 0;
+        return idxB - idxA;
+      }
+
       const scoreA = Number(a.trustScore ?? a.data?.trustScore ?? a.data?.confidence ?? a.data?.trust_score ?? 0.0);
       const scoreB = Number(b.trustScore ?? b.data?.trustScore ?? b.data?.confidence ?? b.data?.trust_score ?? 0.0);
 
@@ -362,7 +423,7 @@ export default function AssetClaimsStudioPane({
       }
       return 0;
     });
-  }, [claims, allConflictedClaimIds, statusFilter, trustTierFilter, searchQuery, sortBy]);
+  }, [claims, allConflictedClaimIds, statusFilter, trustTierFilter, searchQuery, sortBy, rawClaimIndexMap]);
 
   // Pagination calculation
   const totalPages = Math.max(1, Math.ceil(filteredClaims.length / pageSize));
@@ -372,26 +433,49 @@ export default function AssetClaimsStudioPane({
   }, [filteredClaims, currentPage, pageSize]);
 
   // Current active inspected claim in right pane
+  // When isInspectorOpen is true, keeps the panel open across filter switches
   const selectedClaim = useMemo(() => {
-    if (!filteredClaims || filteredClaims.length === 0) return null;
+    if (!isInspectorOpen) return null;
     if (selectedClaimId) {
-      const found = filteredClaims.find(c => (c.id || c._tempId) === selectedClaimId);
-      if (found) return found;
+      // 1. Try to find the selected claim in the current filtered list
+      const foundInFiltered = (filteredClaims || []).find(c => (c.id || c._tempId) === selectedClaimId);
+      if (foundInFiltered) return foundInFiltered;
+
+      // 2. If not found in filtered list, auto-select the first claim of the new filter
+      if (filteredClaims && filteredClaims.length > 0) {
+        return filteredClaims[0];
+      }
+
+      // 3. Fallback to master claims if filtered list is empty
+      const foundInMaster = (claims || []).find(c => (c.id || c._tempId) === selectedClaimId);
+      if (foundInMaster) return foundInMaster;
+    } else if (filteredClaims && filteredClaims.length > 0) {
+      return filteredClaims[0];
     }
-    return paginatedClaims[0] || filteredClaims[0];
-  }, [filteredClaims, paginatedClaims, selectedClaimId]);
+    return null;
+  }, [filteredClaims, claims, selectedClaimId, isInspectorOpen]);
+
+  // Keep selectedClaimId in sync with the active inspected claim when filters change
+  useEffect(() => {
+    if (isInspectorOpen && selectedClaim) {
+      const claimKey = selectedClaim.id || selectedClaim._tempId || selectedClaim.data?.claim_id;
+      if (claimKey && claimKey !== selectedClaimId) {
+        setSelectedClaimId(claimKey);
+      }
+    }
+  }, [isInspectorOpen, selectedClaim, selectedClaimId]);
 
   // Computed data for active inspected claim
-  const selectedClaimIndex = useMemo(() => {
+  const selectedSerialNumber = useMemo(() => {
     if (!selectedClaim) return 1;
-    const idx = filteredClaims.findIndex(c => (c.id || c._tempId) === (selectedClaim.id || selectedClaim._tempId));
-    return idx >= 0 ? idx + 1 : 1;
-  }, [filteredClaims, selectedClaim]);
+    const key = selectedClaim.id || selectedClaim._tempId || selectedClaim.data?.claim_id;
+    return rawClaimIndexMap.get(key) || 1;
+  }, [selectedClaim, rawClaimIndexMap]);
 
   const selectedTitle = useMemo(() => {
-    if (!selectedClaim) return `Claim_${docIdentifier}_001`;
-    return getClaimDisplayTitle(selectedClaim, selectedClaimIndex);
-  }, [selectedClaim, selectedClaimIndex, docIdentifier]);
+    if (!selectedClaim) return `Claim_${shortTitleSlug}_${docHash}_00000000`;
+    return getClaimDisplayTitle(selectedClaim);
+  }, [selectedClaim, shortTitleSlug, docHash]);
 
   const selectedTrustPercent = useMemo(() => {
     if (!selectedClaim) return 95;
@@ -448,11 +532,13 @@ export default function AssetClaimsStudioPane({
       return;
     }
 
-    const payload = targetClaims.map((c, idx) => {
-      const title = getClaimDisplayTitle(c, idx + 1);
+    const payload = targetClaims.map((c) => {
+      const claimKey = c.id || c._tempId || c.data?.claim_id;
+      const serialNumber = rawClaimIndexMap.get(claimKey) || 1;
+      const title = getClaimDisplayTitle(c);
       const cat = getClaimDisplayCategory(c, allConflictedClaimIds);
       const text = c.fullText || c.label || c.data?.claim_text || '';
-      return `${title} [${cat}]: ${text}`;
+      return `#${serialNumber} ${title} [${cat}]: ${text}`;
     }).join('\n\n');
 
     navigator.clipboard.writeText(payload);
@@ -682,6 +768,8 @@ export default function AssetClaimsStudioPane({
               outline: 'none'
             }}
           >
+            <option value="sl_asc">Sort: Sl.No (Ascending)</option>
+            <option value="sl_desc">Sort: Sl.No (Descending)</option>
             <option value="subject_asc">Sort: Subject (A-Z)</option>
             <option value="trust_desc">Sort: Highest Trust</option>
             <option value="trust_asc">Sort: Lowest Trust</option>
@@ -718,25 +806,28 @@ export default function AssetClaimsStudioPane({
       {/* 2. SPLIT-PANE BODY: CLAIMS TABLE (LEFT) + CLAIM INSPECTOR (RIGHT) */}
       <div style={{
         display: 'flex',
-        alignItems: 'stretch',
-        gap: '10px',
+        alignItems: 'flex-start',
+        gap: '12px',
         width: '100%',
         boxSizing: 'border-box'
       }}>
         {/* ======================================================== */}
-        {/* LEFT PANE: CLAIMS TABLE (Takes ~58-60% width)            */}
+        {/* LEFT PANE: CLAIMS TABLE (Full width when closed, 58% when open) */}
         {/* ======================================================== */}
         <div style={{
-          flex: '1 1 58%',
+          flex: isInspectorOpen ? '1 1 58%' : '1 1 100%',
+          width: isInspectorOpen ? '58%' : '100%',
+          minWidth: 0,
           background: '#FAF8F5',
           border: '1px solid #E2E8F0',
           borderRadius: '8px',
           overflow: 'hidden',
           display: 'flex',
           flexDirection: 'column',
-          height: 'calc(100vh - 190px)',
+          height: 'calc(100vh - 170px)',
           minHeight: '480px',
-          boxShadow: 'none'
+          boxShadow: 'none',
+          transition: 'all 0.2s ease'
         }}>
           {filteredClaims.length === 0 ? (
             <div style={{
@@ -789,6 +880,10 @@ export default function AssetClaimsStudioPane({
                         style={{ cursor: 'pointer', borderRadius: '3px' }}
                       />
                     </th>
+                    {/* Sl.No Column */}
+                    <th style={{ padding: '8px 10px', width: '56px', background: '#FAF8F5', color: '#64748B', fontWeight: 700 }}>
+                      Sl.No
+                    </th>
                     {/* Claim Title */}
                     <th style={{ padding: '8px 12px', background: '#FAF8F5' }}>Claim Title</th>
                     {/* Status with inline filter */}
@@ -827,10 +922,10 @@ export default function AssetClaimsStudioPane({
                 </thead>
                 <tbody>
                   {paginatedClaims.map((cl, idx) => {
-                    const globalIdx = (currentPage - 1) * pageSize + idx + 1;
-                    const claimTitle = getClaimDisplayTitle(cl, globalIdx);
+                    const claimKey = cl.id || cl._tempId || cl.data?.claim_id || `cl_${idx}`;
+                    const serialNumber = rawClaimIndexMap.get(claimKey) || (idx + 1);
+                    const claimTitle = getClaimDisplayTitle(cl);
                     const { category: cat, badgeLabel, badgeBg, badgeColor, badgeBorder } = getClaimClassification(cl, allConflictedClaimIds);
-                    const claimKey = cl.id || cl._tempId || `cl_${idx}`;
                     const isSelected = (selectedClaim && (selectedClaim.id || selectedClaim._tempId) === claimKey);
                     const isChecked = selectedCheckboxIds.has(claimKey);
                     const isTrigger = cat === 'canonical' || cl.is_trigger === true || cl.data?.is_trigger === true;
@@ -841,7 +936,10 @@ export default function AssetClaimsStudioPane({
                     return (
                       <tr
                         key={claimKey}
-                        onClick={() => setSelectedClaimId(claimKey)}
+                        onClick={() => {
+                          setSelectedClaimId(claimKey);
+                          setIsInspectorOpen(true);
+                        }}
                         style={{
                           borderBottom: '1px solid #E2E8F0',
                           borderLeft: isSelected ? `4px solid ${theme.accent}` : '4px solid transparent',
@@ -869,8 +967,13 @@ export default function AssetClaimsStudioPane({
                           />
                         </td>
 
+                        {/* Sl.No */}
+                        <td style={{ padding: '9px 10px', width: '56px', color: '#64748B', fontWeight: 700, fontSize: '0.74rem' }}>
+                          {serialNumber}
+                        </td>
+
                         {/* Title */}
-                        <td style={{ padding: '9px 12px', fontWeight: 600, color: '#0F172A' }}>
+                        <td style={{ padding: '9px 12px', fontWeight: 600, color: '#0F172A', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace', fontSize: '0.74rem' }}>
                           {claimTitle}
                         </td>
 
@@ -1007,38 +1110,59 @@ export default function AssetClaimsStudioPane({
         </div>
 
         {/* ======================================================== */}
-        {/* RIGHT PANE: CLAIM DETAILS INSPECTOR (Same #FAF8F5 bg)    */}
+        {/* RIGHT PANE: CLAIM DETAILS INSPECTOR (Sticky right side)  */}
         {/* ======================================================== */}
-        <div style={{
-          flex: '1 1 42%',
-          background: '#FAF8F5',
-          border: '1px solid #E2E8F0',
-          borderRadius: '8px',
-          padding: '14px 16px',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-          height: 'calc(100vh - 190px)',
-          minHeight: '480px',
-          overflowY: 'auto',
-          boxShadow: 'none',
-          boxSizing: 'border-box'
-        }}>
-          {selectedClaim ? (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              {/* Header: Title and Options Icon */}
+        {isInspectorOpen && (
+          <div style={{
+            flex: '0 0 42%',
+            width: '42%',
+            maxWidth: '560px',
+            minWidth: '340px',
+            position: 'sticky',
+            top: '0px',
+            background: '#FAF8F5',
+            border: '1px solid #E2E8F0',
+            borderRadius: '8px',
+            padding: '14px 16px',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            height: 'calc(100vh - 170px)',
+            minHeight: '480px',
+            overflowY: 'auto',
+            boxShadow: '0 2px 10px rgba(0,0,0,0.05)',
+            boxSizing: 'border-box'
+          }}>
+            {selectedClaim ? (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              {/* Header: Title and Close Icon */}
               <div style={{
                 display: 'flex',
-                alignItems: 'center',
+                alignItems: 'flex-start',
                 justifyContent: 'space-between',
                 paddingBottom: '8px',
-                borderBottom: '1px solid #E2E8F0'
+                borderBottom: '1px solid #E2E8F0',
+                gap: '8px'
               }}>
-                <h3 style={{ margin: 0, fontSize: '1.02rem', fontWeight: 800, color: '#0F172A', letterSpacing: '-0.01em' }}>
-                  {selectedTitle}
-                </h3>
+                <div>
+                  <h3 style={{ margin: 0, fontSize: '1.02rem', fontWeight: 800, color: '#0F172A', letterSpacing: '-0.01em', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace' }}>
+                    {selectedTitle}
+                  </h3>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '4px' }}>
+                    <span style={{ fontSize: '0.68rem', fontWeight: 800, color: '#0284C7', background: '#EFF6FF', border: '1px solid #BAE6FD', padding: '1px 6px', borderRadius: '4px' }}>
+                      Sl.No {selectedSerialNumber}
+                    </span>
+                    <span style={{ fontSize: '0.68rem', color: '#64748B' }}>
+                      Raw Candidate #{selectedSerialNumber} of {totalClaims}
+                    </span>
+                  </div>
+                </div>
                 <button
                   type="button"
+                  onClick={() => {
+                    setIsInspectorOpen(false);
+                    setSelectedClaimId(null);
+                  }}
                   style={{
                     background: 'transparent',
                     border: 'none',
@@ -1046,11 +1170,15 @@ export default function AssetClaimsStudioPane({
                     color: '#64748B',
                     padding: '4px',
                     display: 'flex',
-                    alignItems: 'center'
+                    alignItems: 'center',
+                    borderRadius: '4px',
+                    transition: 'all 0.15s ease'
                   }}
-                  title="Claim Inspector Options"
+                  title="Close Claim Inspector"
+                  onMouseEnter={e => { e.currentTarget.style.color = '#0F172A'; e.currentTarget.style.background = '#E2E8F0'; }}
+                  onMouseLeave={e => { e.currentTarget.style.color = '#64748B'; e.currentTarget.style.background = 'transparent'; }}
                 >
-                  <AlignRight size={16} />
+                  <X size={18} strokeWidth={2.2} />
                 </button>
               </div>
 
@@ -1132,7 +1260,11 @@ export default function AssetClaimsStudioPane({
                   padding: '10px 12px',
                   fontSize: '0.75rem',
                   lineHeight: '1.45',
-                  color: '#334155'
+                  color: '#334155',
+                  maxHeight: '160px',
+                  overflowY: 'auto',
+                  wordBreak: 'break-word',
+                  whiteSpace: 'pre-wrap'
                 }}>
                   {selectedClaim.data?.evidence_snippet
                     || selectedClaim.data?.quote
@@ -1364,12 +1496,40 @@ export default function AssetClaimsStudioPane({
                 </button>
               </div>
             </div>
-          ) : (
-            <div style={{ padding: '40px 20px', textAlign: 'center', color: '#94A3B8' }}>
-              Select a claim to inspect details
-            </div>
-          )}
-        </div>
+            ) : (
+              <div style={{ display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'space-between' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid #E2E8F0', paddingBottom: '8px' }}>
+                  <span style={{ fontSize: '0.84rem', fontWeight: 700, color: '#64748B' }}>Claim Details</span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsInspectorOpen(false);
+                      setSelectedClaimId(null);
+                    }}
+                    style={{
+                      background: 'transparent',
+                      border: 'none',
+                      cursor: 'pointer',
+                      color: '#64748B',
+                      padding: '4px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      borderRadius: '4px'
+                    }}
+                    title="Close Claim Inspector"
+                  >
+                    <X size={18} strokeWidth={2.2} />
+                  </button>
+                </div>
+                <div style={{ padding: '60px 20px', textAlign: 'center', color: '#94A3B8' }}>
+                  <p style={{ margin: '0 0 6px 0', fontSize: '0.88rem', fontWeight: 700, color: '#0F172A' }}>No claims match active filter</p>
+                  <p style={{ margin: 0, fontSize: '0.74rem' }}>Select another filter or reset search</p>
+                </div>
+                <div />
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
