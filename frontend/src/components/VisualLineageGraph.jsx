@@ -144,6 +144,7 @@ export default function VisualLineageGraph({
   const [docReaderSearch, setDocReaderSearch] = useState('');
   const [docReaderClauseFilter, setDocReaderClauseFilter] = useState('all'); // 'all' | 'conflicted' | 'verified'
   const [highlightedClaimIdInReader, setHighlightedClaimIdInReader] = useState(null);
+  const [locateDocClaimTrigger, setLocateDocClaimTrigger] = useState(null);
   const [isAssetDirectoryOpen, setIsAssetDirectoryOpen] = useState(false);
   const [isAssetDropdownOpen, setIsAssetDropdownOpen] = useState(false);
   const [assetDropdownSearch, setAssetDropdownSearch] = useState('');
@@ -2872,7 +2873,7 @@ export default function VisualLineageGraph({
               style={{
                 width: '28px',
                 height: '28px',
-                borderRadius: '6px',
+                borderRadius: 0,
                 border: '1px solid #E2E8F0',
                 background: '#FFFFFF',
                 color: '#0F172A',
@@ -2929,7 +2930,7 @@ export default function VisualLineageGraph({
                   alignItems: 'center',
                   gap: '5px',
                   padding: '3px 8px',
-                  borderRadius: '6px',
+                  borderRadius: 0,
                   border: '1px solid #EA580C',
                   background: '#FFF7ED',
                   color: '#EA580C',
@@ -2958,7 +2959,7 @@ export default function VisualLineageGraph({
                   alignItems: 'center',
                   gap: '4px',
                   padding: '3px 8px',
-                  borderRadius: '6px',
+                  borderRadius: 0,
                   border: '1px solid #E2E8F0',
                   background: '#FFFFFF',
                   color: '#0284C7',
@@ -2989,7 +2990,7 @@ export default function VisualLineageGraph({
                 alignItems: 'center',
                 gap: '4px',
                 padding: '3px 8px',
-                borderRadius: '6px',
+                borderRadius: 0,
                 border: isDetailsOpen ? '1px solid #EA580C' : '1px solid #E2E8F0',
                 background: isDetailsOpen ? '#FFF7ED' : '#FFFFFF',
                 color: isDetailsOpen ? '#EA580C' : '#475569',
@@ -3016,7 +3017,7 @@ export default function VisualLineageGraph({
                   alignItems: 'center',
                   gap: '4px',
                   padding: '3px 8px',
-                  borderRadius: '6px',
+                  borderRadius: 0,
                   border: '1px solid #FCA5A5',
                   background: '#FEF2F2',
                   color: '#DC2626',
@@ -3190,7 +3191,8 @@ export default function VisualLineageGraph({
                       setSelectedNodeId(actualNodeId);
                       setInteractiveRootId(actualNodeId);
                       fetchBlastRadius(cid);
-                      showToast?.(`Locating claim in document canvas: "${(claim.label || claim.fullText || '').substring(0, 45)}..."`);
+                      setLocateDocClaimTrigger({ claim, timestamp: Date.now() });
+                      showToast?.(`Locating claim in document: "${(claim.label || claim.fullText || '').substring(0, 45)}..."`);
                     }}
                     onInspectInDag={(claim) => {
                       const cid = claim.cleanId || String(claim.id || '').replace(/^cl_/, '');
@@ -3247,7 +3249,8 @@ export default function VisualLineageGraph({
                       setSelectedNodeId(actualNodeId);
                       setInteractiveRootId(actualNodeId);
                       fetchBlastRadius(cid);
-                      showToast?.(`Locating assertion in document canvas: "${(claim.label || claim.fullText || '').substring(0, 45)}..."`);
+                      setLocateDocClaimTrigger({ claim, timestamp: Date.now() });
+                      showToast?.(`Locating assertion in document: "${(claim.label || claim.fullText || '').substring(0, 45)}..."`);
                     }}
                     showToast={showToast}
                   />
@@ -3308,6 +3311,8 @@ export default function VisualLineageGraph({
                       setTimeout(() => handleFitView(), 320);
                     }}
                     selectedClaimId={activeClaimInspector?.cleanId || activeClaimInspector?.id}
+                    selectedClaim={activeClaimInspector}
+                    locateTarget={locateDocClaimTrigger}
                   />
                 ) : (
                   <div style={{
