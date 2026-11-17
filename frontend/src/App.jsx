@@ -120,7 +120,7 @@ export const DEFAULT_WORKSPACES = [
 ];
 
 export const VAULT_SUBTABS = ['claims', 'dag'];
-export const CURATOR_SUBVIEWS = ['health', 'conflicts', 'drift'];
+export const CURATOR_SUBVIEWS = ['health', 'approvals', 'conflicts', 'drift'];
 export const DOC_EXPLORER_VIEWS = ['folders', 'documents', 'ingest', 'connectors', 'connect', 'claims'];
 export const MCP_SUBVIEWS = ['tester', 'configs', 'sdks', 'schemas'];
 export const TEAM_SUBTABS = ['directory', 'activity', 'domains'];
@@ -183,6 +183,11 @@ export const parseUrlState = (workspacesList) => {
   else if (rawPath === '/conflicts') {
     tab = 'conflicts';
     curatorSubView = 'conflicts';
+  }
+  // 3b. Approvals standalone routing
+  else if (rawPath === '/approvals' || rawPath === '/candidate-approvals') {
+    tab = 'context_curator';
+    curatorSubView = 'approvals';
   }
   // 4. Ingestion / Document Explorer routing
   else if (rawPath === '/documents' || rawPath === '/ingestion' || rawPath.startsWith('/documents/') || rawPath.startsWith('/ingestion/')) {
@@ -323,6 +328,10 @@ export const computeUrlFromState = ({
     case 'context_curator':
       if (curatorSubView === 'conflicts') {
         pathname = '/curator/conflicts';
+      } else if (curatorSubView === 'approvals') {
+        pathname = '/curator/approvals';
+      } else if (curatorSubView === 'drift') {
+        pathname = '/curator/drift';
       } else {
         pathname = '/curator';
       }
@@ -3818,6 +3827,7 @@ export default function App() {
                 <div className={`sidebar-accordion-wrapper ${openSidebarMenu === 'curator' ? 'expanded' : ''}`}>
                   <div className="sidebar-accordion-inner">
                     {[
+                      { id: 'approvals', label: 'Candidate Approvals', count: null },
                       { id: 'conflicts', label: 'Pairwise Conflict Resolver', count: conflicts.length > 0 ? `${conflicts.length} Pending` : null, isAlert: conflicts.length > 0 },
                       { id: 'health', label: 'Context Health & Heuristics', count: null },
                       { id: 'drift', label: 'Drift & Claim Decay', count: null }
@@ -7411,6 +7421,11 @@ export default function App() {
                   setVaultSubTab('documents');
                   setActiveTab('visual_lineage');
                 }}
+                onNavigateToCuratorApprovals={(docId) => {
+                  setCuratorSubView('approvals');
+                  setActiveTab('context_curator');
+                  window.history.pushState(null, '', `/curator/approvals?doc=${docId}`);
+                }}
               />
             )}
 
@@ -7908,6 +7923,12 @@ export default function App() {
               onRefreshConflicts={() => fetchHealthAndConflicts(activeOrg?.id)}
               initialSubView={activeTab === 'conflicts' ? 'conflicts' : curatorSubView}
               onSubViewChange={setCuratorSubView}
+              initialDocId={urlState?.docId || null}
+              onNavigateToDocument={(docId) => {
+                setActiveTab('ingestion');
+                setDocExplorerView('folders');
+                window.history.pushState(null, '', `/documents?doc=${docId}`);
+              }}
             />
           </div>
           )

@@ -1414,7 +1414,7 @@ async def get_document_artifacts(
 async def list_documents(
     organization_id: uuid.UUID = Query(..., description="Organization ID"),
     source_id: uuid.UUID | None = Query(None, description="Optional Source ID filter"),
-    limit: int = Query(50, ge=1, le=100),
+    limit: int = Query(500, ge=1, le=5000),
     offset: int = Query(0, ge=0),
     include_archived: bool = Query(False, description="Whether to include decommissioned/archived documents"),
     db: AsyncSession = Depends(get_db),

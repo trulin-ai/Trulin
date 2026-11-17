@@ -118,6 +118,14 @@ class SubjectNormalizer:
 
         # Statutory & Contract Employment Subjects (DOC-002)
         "no engagement on contract basis": "engagement on contract basis",
+        "can't get a refund on apps": "Customer",
+        "can't get a refund on apps and games": "Customer",
+        "get an exchange or refund on": "Customer",
+        "get an exchange or refund on devices": "Customer",
+        "how to get a refund on": "Customer",
+        "how to get a refund on a microsoft subscription": "Customer",
+        "get a refund for apps and": "Customer",
+        "get a refund for apps and games": "Customer",
         "period of engagement on contract basis": "Period of engagement on contract basis",
         "the rate of monthly remuneration of contract employee": "rate of monthly remuneration of contract employee",
         "all contract employees": "Contract employees",
@@ -241,6 +249,10 @@ class SubjectNormalizer:
                 return "Employer", True
             if "customer" in ctx_lower or "client" in ctx_lower:
                 return "Customer", True
+        # Resolve truncated "Data" when context refers to Data Controller
+        if cleaned_lower == "data" and ("data controller" in ctx_lower or "data controllers" in ctx_lower):
+            return "Data Controller", True
+
         combined = f"{cleaned_lower} {ctx_lower}"
 
         # Subject contamination protection: General policy must NOT absorb Case Study subjects

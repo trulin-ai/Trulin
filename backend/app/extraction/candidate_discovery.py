@@ -151,6 +151,21 @@ class CandidateDiscoveryEngine:
                 if len(non_empty_cells) == 1 and len(cols) >= 3:
                     return False, ExtractionStrategyType.TABLE_AWARE, "Table row is section header span pseudo-row; filtered from normative policy claims."
 
+            # Filter 4N: Navigation Grid / Category Directory Tables (e.g. DOC-061 Category Index)
+            if (
+                any("apps" in k.lower() for k in col_keys_lower)
+                and any("analytics" in k.lower() for k in col_keys_lower)
+                and any("threat protection" in k.lower() for k in col_keys_lower)
+            ) or (
+                len(col_keys_lower) >= 4
+                and all(any(c in k for c in ("storage", "security", "auditing", "analytics", "broker", "management")) for k in col_keys_lower)
+            ):
+                return False, ExtractionStrategyType.TABLE_AWARE, "Table row is category navigation directory grid; filtered from normative policy claims."
+
+            # Filter 4O: Orphan Column Index Tables (e.g. col0, col1, col2 or bullet-only headers)
+            if cols and all(re.match(r"^(?:col\d+|●+|[\s•●❖\-_|*✓✔✗✘\.]+)$", str(k).strip()) or len(str(k).strip()) <= 2 for k in cols.keys()):
+                return False, ExtractionStrategyType.TABLE_AWARE, "Table row lacks semantic column headers; filtered from normative policy claims."
+
             # Eligible: Policy Matrix (e.g. Grade Notice Duration Matrix)
             if s_data.get("is_ambiguous"):
                 return True, ExtractionStrategyType.TABLE_AWARE, "Table row policy matrix with ambiguous/merged cell layout requiring review."
@@ -202,8 +217,24 @@ class CandidateDiscoveryEngine:
             # Filter out running page headers / footers and pagination artifacts
             if re.search(r"\bPage\s+\d+\s+of\s+\d+\b", text, re.IGNORECASE) and len(text.split()) < 20:
                 return False, ExtractionStrategyType.DOMAIN_RULES, "Running header/footer pagination artifact."
+            if re.search(r"\b(?:[A-Za-z0-9_\-\.]{3,30}\s+Page\s+\d+\s+of\s+\d+|Document\s+[A-Za-z0-9_\-]+)\b", text, re.IGNORECASE) and len(text.split()) < 25:
+                return False, ExtractionStrategyType.DOMAIN_RULES, "Document code / pagination footer artifact."
             if re.match(r"^(?:Vendor Agreement|Agreement Template)\b", text.strip(), re.IGNORECASE) and len(text.split()) < 10:
                 return False, ExtractionStrategyType.DOMAIN_RULES, "Running document header template artifact."
+            if re.match(r"^(?:[A-Za-z]+\s+\d{4}\s+\d+\s+IMPORTANT[—\-–]READ CAREFULLY|IMPORTANT[—\-–]READ CAREFULLY)\b", text.strip(), re.IGNORECASE):
+                return False, ExtractionStrategyType.DOMAIN_RULES, "Document notice banner / title slug."
+            if re.search(r"##\s*Page\s+\d+\b|^#\s+[A-Za-z\s]+Agreement\s*$", text.strip(), re.IGNORECASE) and len(text.split()) < 15:
+                return False, ExtractionStrategyType.DOMAIN_RULES, "Markdown document/page title heading marker."
+
+            # Filter out raw markdown table separators and empty cell fragments
+            if text.strip().startswith("|") and ("---" in text or len(text.strip().replace("|", "").strip()) < 3):
+                return False, ExtractionStrategyType.DOMAIN_RULES, "Markdown table syntax or empty cell fragment."
+
+            # Filter out web portal navigation breadcrumbs and icon font glyphs
+            if any(glyph in text for glyph in ("\ue70d", "\ue70e", "\ue700", "\ue710")):
+                return False, ExtractionStrategyType.DOMAIN_RULES, "Web portal UI icon glyph / navigation fragment."
+            if re.search(r"\b(?:Purchases and downloads\s+Manage your billing|Help with purchases\s+Gift cards|Support\s+Microsoft 365\s+Office Products|Devices\s+Account & billing Resources)\b", text, re.IGNORECASE):
+                return False, ExtractionStrategyType.DOMAIN_RULES, "Web support portal navigation breadcrumb menu."
 
             # Filter out contact directory hours, phone numbers, and call-center preparatory steps
             if re.search(r"\b(?:1-800-\d{3}-\d{4}|Mon-Fri\s+\d|Pacific Time|call center hours|Please have your order number)\b", text, re.IGNORECASE):
@@ -225,8 +256,10 @@ class CandidateDiscoveryEngine:
                 return False, ExtractionStrategyType.DOMAIN_RULES, "Standard contractual cross-reference / forum election clause."
             if re.search(r"\bClauses \d+ to\s*$", text) or re.match(r"^\d+\s+for any data to which it\b", text):
                 return False, ExtractionStrategyType.DOMAIN_RULES, "Broken sentence fragment or wrapped clause citation."
-            if re.search(r"\b(?:best efforts to|from time to time by\s*[a-z]?)$", text.strip(), re.IGNORECASE):
+            if re.search(r"\b(?:best efforts to|from time to time by\s*[a-z]?|by exercising its rights under this|in accordance with section \d+\.?)$", text.strip(), re.IGNORECASE):
                 return False, ExtractionStrategyType.DOMAIN_RULES, "Dangling broken clause fragment."
+            if re.match(r"^(?:Section \d+\.?|Clauses? \d+ to \d+\.?|Article \d+\.?)$", text.strip(), re.IGNORECASE):
+                return False, ExtractionStrategyType.DOMAIN_RULES, "Standalone section title fragment without operative rule text."
 
             has_obligations = (
                 any(ob.search(eval_text) for ob in DeonticClassifier.OBLIGATION_PATTERNS)
@@ -246,6 +279,12 @@ class CandidateDiscoveryEngine:
                 return False, ExtractionStrategyType.DOMAIN_RULES, "Procedural UI instruction or click in how-to guide; non-normative action."
 
             modality, _, is_decision_eligible = DeonticClassifier.classify_text(eval_text)
+
+            # Apply ProseNormativeClassifier for prose units: filter out non-rule corporate PR, hedging, and capability prose
+            from app.extraction.prose_normative_classifier import ProseNormativeClassifier
+            prose_role = ProseNormativeClassifier.classify_unit(eval_text, default_role=ContentRole.POLICY_RULE)
+            if prose_role == ContentRole.NON_RULE_CONTEXT and not has_obligations:
+                return False, ExtractionStrategyType.LLM_SEMANTIC, "Prose unit classified as non-rule context (hedging, capability, promotional)."
 
             # Filter out purpose/goal statements and preamble outlines
             if re.search(r"\b(?:primary goal is|aims to|outlines the expected|purpose of this policy|is designed to|is intended to|serves as|provides guidance)\b", text, re.IGNORECASE):

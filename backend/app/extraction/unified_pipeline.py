@@ -279,15 +279,30 @@ class UnifiedExtractionPipeline:
             clean_pred = raw_pred
             clean_obj = raw_obj
 
+            # Runtime predicate normalization against canonical registry
+            from app.extraction.predicate_registry import PredicateRegistry
+            norm_pred, is_canonical_pred = PredicateRegistry.normalize_predicate(clean_pred)
+            if is_canonical_pred and norm_pred:
+                clean_pred = norm_pred
+                cand.predicate = norm_pred
+
             if is_table_claim:
                 # Do NOT overwrite cand.claim_text with raw_span (the full markdown table row string)
                 clean_subj = UniversalGateEvaluator.strip_enumeration_prefix(raw_subj)
+                from app.extraction.subject_normalizer import SubjectNormalizer
+                norm_subj, subj_valid = SubjectNormalizer.normalize(clean_subj, context=raw_span or raw_text)
+                if subj_valid and norm_subj:
+                    clean_subj = norm_subj
                 cand.subject = clean_subj
                 quote = raw_span or raw_text
             else:
                 # Clean enumeration prefixes (e.g. (i), (ii), 1., etc.) from prose claim text
                 clean_sentence = UniversalGateEvaluator.strip_enumeration_prefix(raw_text)
                 clean_subj = UniversalGateEvaluator.strip_enumeration_prefix(raw_subj)
+                from app.extraction.subject_normalizer import SubjectNormalizer
+                norm_subj, subj_valid = SubjectNormalizer.normalize(clean_subj, context=clean_sentence or raw_text)
+                if subj_valid and norm_subj:
+                    clean_subj = norm_subj
                 if clean_sentence:
                     cand.claim_text = clean_sentence
                 cand.subject = clean_subj

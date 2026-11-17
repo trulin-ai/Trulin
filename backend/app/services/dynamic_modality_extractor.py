@@ -115,6 +115,17 @@ class DynamicModalityExtractor:
                         error_reason=f"Modality consistency failure: Prohibition predicate '{predicate_name}' contradicts affirmative claim text lacking negation.",
                     )
 
+            # Check Obligation predicate vs Permissive text
+            if pred_low.startswith("must_") and extracted == ModalityType.MAY:
+                has_obligation = any(re.search(pat, t_low) for pat in cls.OBLIGATION_PATTERNS)
+                if not has_obligation:
+                    return ModalityExtractionResult(
+                        modality=extracted,
+                        is_consistent=False,
+                        detected_phrase="permission_vs_obligation",
+                        error_reason=f"Modality consistency failure: Obligation predicate '{predicate_name}' contradicts permissive modal ('may/can') in text.",
+                    )
+
         return ModalityExtractionResult(
             modality=extracted,
             is_consistent=True,

@@ -2,13 +2,15 @@
   "document_id": "DOC-065",
   "filename": "Transfer Azure product billing ownership to a Microsoft Customer Agreement - Microsoft Cost Management _ Microsoft Learn.pdf",
   "page_count": 17,
-  "total_characters": 16970,
-  "block_count": 110,
-  "table_count": 0,
-  "parsing_status": "PASS",
+  "total_characters": 17492,
+  "block_count": 116,
+  "table_count": 1,
+  "parsing_status": "PASS_WITH_MINOR_ISSUES",
   "major_issues": [],
-  "minor_issues": [],
-  "all_issues_count": 0,
+  "minor_issues": [
+    "Header/footer repetition in body text: 1 repeating phrases detected"
+  ],
+  "all_issues_count": 1,
   "reading_order_fidelity": "PASS",
   "table_fidelity": "PASS"
 }

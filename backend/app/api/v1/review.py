@@ -46,7 +46,8 @@ class ClaimReviewSummaryResponse(BaseModel):
 @router.get("/queue", response_model=list[ClaimResponse])
 async def list_review_queue(
     organization_id: uuid.UUID = Query(..., description="Organization ID"),
-    limit: int = Query(50, ge=1, le=100),
+    document_id: Optional[uuid.UUID] = Query(None, description="Optional document filter"),
+    limit: int = Query(200, ge=1, le=1000),
     offset: int = Query(0, ge=0),
     db: AsyncSession = Depends(get_db),
 ):
@@ -54,12 +55,16 @@ async def list_review_queue(
     Returns candidate claims queued for human triage and review
     (status == CANDIDATE, low confidence, or unnormalized/ambiguous).
     """
+    conditions = [
+        Claim.organization_id == organization_id,
+        Claim.status == ClaimStatus.CANDIDATE,
+    ]
+    if document_id is not None:
+        conditions.append(Claim.document_id == document_id)
+
     stmt = (
         select(Claim)
-        .where(
-            Claim.organization_id == organization_id,
-            Claim.status == ClaimStatus.CANDIDATE,
-        )
+        .where(*conditions)
         .order_by(Claim.created_at.desc())
         .offset(offset)
         .limit(limit)

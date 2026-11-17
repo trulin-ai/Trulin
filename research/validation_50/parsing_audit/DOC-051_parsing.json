@@ -2,13 +2,15 @@
   "document_id": "DOC-051",
   "filename": "Agreement_for_leasing_or_renting_certain_Microsoft_Software_Products.pdf",
   "page_count": 6,
-  "total_characters": 19001,
-  "block_count": 43,
-  "table_count": 1,
-  "parsing_status": "PASS",
+  "total_characters": 20301,
+  "block_count": 50,
+  "table_count": 3,
+  "parsing_status": "PASS_WITH_MINOR_ISSUES",
   "major_issues": [],
-  "minor_issues": [],
-  "all_issues_count": 0,
+  "minor_issues": [
+    "Header/footer repetition in body text: 1 repeating phrases detected"
+  ],
+  "all_issues_count": 1,
   "reading_order_fidelity": "PASS",
   "table_fidelity": "PASS"
 }

@@ -14,7 +14,7 @@
     "DOC-051": {
       "document_id": "DOC-051",
       "filename": "Agreement_for_leasing_or_renting_certain_Microsoft_Software_Products.pdf",
-      "file_path": "B:\\Context_Layer_Ai\\research\\validation_50\\raw_documents\\Microsoft\\Contracts\\Agreement_for_leasing_or_renting_certain_Microsoft_Software_Products.pdf",
+      "file_path": "B:\\Trulin\\research\\validation_50\\raw_documents\\Microsoft\\Contracts\\Agreement_for_leasing_or_renting_certain_Microsoft_Software_Products.pdf",
       "source_sha256": "f3edef519480829a92868f48df4c7629589a71eacc4f7ad8e8479bb4002ea644",
       "file_size_bytes": 139414,
       "document_type": "contract",
@@ -26,7 +26,7 @@
     "DOC-052": {
       "document_id": "DOC-052",
       "filename": "Checklist Microsoft Customer Agreement Billing Migration - Microsoft Cost Management _ Microsoft Learn.pdf",
-      "file_path": "B:\\Context_Layer_Ai\\research\\validation_50\\raw_documents\\Microsoft\\Contracts\\Checklist Microsoft Customer Agreement Billing Migration - Microsoft Cost Management _ Microsoft Learn.pdf",
+      "file_path": "B:\\Trulin\\research\\validation_50\\raw_documents\\Microsoft\\Contracts\\Checklist Microsoft Customer Agreement Billing Migration - Microsoft Cost Management _ Microsoft Learn.pdf",
       "source_sha256": "5e0f12fa4aaa35f2114c0f9cfd42fbd68c6a6f323ffd5699b5aa3e1371ed8b49",
       "file_size_bytes": 185644,
       "document_type": "invoice",
@@ -38,7 +38,7 @@
     "DOC-053": {
       "document_id": "DOC-053",
       "filename": "Enterprise Agreement.pdf",
-      "file_path": "B:\\Context_Layer_Ai\\research\\validation_50\\raw_documents\\Microsoft\\Contracts\\Enterprise Agreement.pdf",
+      "file_path": "B:\\Trulin\\research\\validation_50\\raw_documents\\Microsoft\\Contracts\\Enterprise Agreement.pdf",
       "source_sha256": "c6f591b236a2df8f3fc2965202144521bea7a42264e3ad7fde6e87abba1cd8d0",
       "file_size_bytes": 206208,
       "document_type": "contract",
@@ -50,7 +50,7 @@
     "DOC-054": {
       "document_id": "DOC-054",
       "filename": "Enterprise Subscription Enrollment (Indirect).pdf",
-      "file_path": "B:\\Context_Layer_Ai\\research\\validation_50\\raw_documents\\Microsoft\\Contracts\\Enterprise Subscription Enrollment (Indirect).pdf",
+      "file_path": "B:\\Trulin\\research\\validation_50\\raw_documents\\Microsoft\\Contracts\\Enterprise Subscription Enrollment (Indirect).pdf",
       "source_sha256": "a99910b33726b02146ae1f60b815f98c7bf502b864ebe0603a27ced076cfc9e9",
       "file_size_bytes": 263284,
       "document_type": "contract",
@@ -62,7 +62,7 @@
     "DOC-055": {
       "document_id": "DOC-055",
       "filename": "mcaps-MSFT-GSA-Commercial-Supplier-Agreement-Terms.pdf",
-      "file_path": "B:\\Context_Layer_Ai\\research\\validation_50\\raw_documents\\Microsoft\\Contracts\\mcaps-MSFT-GSA-Commercial-Supplier-Agreement-Terms.pdf",
+      "file_path": "B:\\Trulin\\research\\validation_50\\raw_documents\\Microsoft\\Contracts\\mcaps-MSFT-GSA-Commercial-Supplier-Agreement-Terms.pdf",
       "source_sha256": "16123bbf66fd013a69c00c7b2971d4c8ef7bdbf9bea1855e8671c69a323e9074",
       "file_size_bytes": 3030368,
       "document_type": "contract",
@@ -74,7 +74,7 @@
     "DOC-056": {
       "document_id": "DOC-056",
       "filename": "Microsoft Business and Services Agreement.pdf",
-      "file_path": "B:\\Context_Layer_Ai\\research\\validation_50\\raw_documents\\Microsoft\\Contracts\\Microsoft Business and Services Agreement.pdf",
+      "file_path": "B:\\Trulin\\research\\validation_50\\raw_documents\\Microsoft\\Contracts\\Microsoft Business and Services Agreement.pdf",
       "source_sha256": "a659358a9cf8b46f3e5364a783327811cf0d905542c4e05b39266867d8396728",
       "file_size_bytes": 254272,
       "document_type": "contract",
@@ -86,7 +86,7 @@
     "DOC-057": {
       "document_id": "DOC-057",
       "filename": "Microsoft Customer Agreement.pdf",
-      "file_path": "B:\\Context_Layer_Ai\\research\\validation_50\\raw_documents\\Microsoft\\Contracts\\Microsoft Customer Agreement.pdf",
+      "file_path": "B:\\Trulin\\research\\validation_50\\raw_documents\\Microsoft\\Contracts\\Microsoft Customer Agreement.pdf",
       "source_sha256": "6e8bb0dc3d50d164d6ad1551e96c95d8b16044f14e5274fbe9db1e45f6e96a41",
       "file_size_bytes": 208300,
       "document_type": "contract",
@@ -98,7 +98,7 @@
     "DOC-058": {
       "document_id": "DOC-058",
       "filename": "Microsoft Partner Agreement (Direct).docx",
-      "file_path": "B:\\Context_Layer_Ai\\research\\validation_50\\raw_documents\\Microsoft\\Contracts\\Microsoft Partner Agreement (Direct).docx",
+      "file_path": "B:\\Trulin\\research\\validation_50\\raw_documents\\Microsoft\\Contracts\\Microsoft Partner Agreement (Direct).docx",
       "source_sha256": "daa272d0f64422bd4f5113d0ad2ba22ac4ef66aa036378363d62f1265f151bd7",
       "file_size_bytes": 125291,
       "document_type": "contract",
@@ -110,7 +110,7 @@
     "DOC-059": {
       "document_id": "DOC-059",
       "filename": "Microsoft Partner Agreement (Indirect).docx",
-      "file_path": "B:\\Context_Layer_Ai\\research\\validation_50\\raw_documents\\Microsoft\\Contracts\\Microsoft Partner Agreement (Indirect).docx",
+      "file_path": "B:\\Trulin\\research\\validation_50\\raw_documents\\Microsoft\\Contracts\\Microsoft Partner Agreement (Indirect).docx",
       "source_sha256": "232a05abfb9e455144901e3e01063b9b3d25f478844c04bd1115079058ca8a19",
       "file_size_bytes": 115452,
       "document_type": "contract",
@@ -122,7 +122,7 @@
     "DOC-060": {
       "document_id": "DOC-060",
       "filename": "Migrate EA to Microsoft Customer Agreement APIs - Azure - Microsoft Cost Management _ Microsoft Learn.pdf",
-      "file_path": "B:\\Context_Layer_Ai\\research\\validation_50\\raw_documents\\Microsoft\\Contracts\\Migrate EA to Microsoft Customer Agreement APIs - Azure - Microsoft Cost Management _ Microsoft Learn.pdf",
+      "file_path": "B:\\Trulin\\research\\validation_50\\raw_documents\\Microsoft\\Contracts\\Migrate EA to Microsoft Customer Agreement APIs - Azure - Microsoft Cost Management _ Microsoft Learn.pdf",
       "source_sha256": "e28c330b679919ecddfb67cdee6bc0f3968ec2555147e6fe182dc10d69ba24fa",
       "file_size_bytes": 418278,
       "document_type": "contract",
@@ -134,7 +134,7 @@
     "DOC-061": {
       "document_id": "DOC-061",
       "filename": "Modern-Work-Plan-Comparison-SMB.pdf",
-      "file_path": "B:\\Context_Layer_Ai\\research\\validation_50\\raw_documents\\Microsoft\\Contracts\\Modern-Work-Plan-Comparison-SMB.pdf",
+      "file_path": "B:\\Trulin\\research\\validation_50\\raw_documents\\Microsoft\\Contracts\\Modern-Work-Plan-Comparison-SMB.pdf",
       "source_sha256": "9d56012359376c2acd6ecd9349699080ab00ec263d7ef6c6c7c0fa903bf9168c",
       "file_size_bytes": 1060961,
       "document_type": "contract",
@@ -146,7 +146,7 @@
     "DOC-062": {
       "document_id": "DOC-062",
       "filename": "Services Provider License Agreement (Indirect).pdf",
-      "file_path": "B:\\Context_Layer_Ai\\research\\validation_50\\raw_documents\\Microsoft\\Contracts\\Services Provider License Agreement (Indirect).pdf",
+      "file_path": "B:\\Trulin\\research\\validation_50\\raw_documents\\Microsoft\\Contracts\\Services Provider License Agreement (Indirect).pdf",
       "source_sha256": "b770dfcc2c16fafb6a4a96b1edfed6a7c2cf16c5aef956326a960a34fce06456",
       "file_size_bytes": 520732,
       "document_type": "contract",
@@ -158,7 +158,7 @@
     "DOC-063": {
       "document_id": "DOC-063",
       "filename": "Set up billing for Microsoft Customer Agreement - Azure - Microsoft Cost Management _ Microsoft Learn.pdf",
-      "file_path": "B:\\Context_Layer_Ai\\research\\validation_50\\raw_documents\\Microsoft\\Contracts\\Set up billing for Microsoft Customer Agreement - Azure - Microsoft Cost Management _ Microsoft Learn.pdf",
+      "file_path": "B:\\Trulin\\research\\validation_50\\raw_documents\\Microsoft\\Contracts\\Set up billing for Microsoft Customer Agreement - Azure - Microsoft Cost Management _ Microsoft Learn.pdf",
       "source_sha256": "84df4ef8cf8de64566de8b291016a5fb7245d677b664a420caa72c81d450d077",
       "file_size_bytes": 1745048,
       "document_type": "invoice",
@@ -170,7 +170,7 @@
     "DOC-064": {
       "document_id": "DOC-064",
       "filename": "Software Licensing Terms - English _ Microsoft Learn.pdf",
-      "file_path": "B:\\Context_Layer_Ai\\research\\validation_50\\raw_documents\\Microsoft\\Contracts\\Software Licensing Terms - English _ Microsoft Learn.pdf",
+      "file_path": "B:\\Trulin\\research\\validation_50\\raw_documents\\Microsoft\\Contracts\\Software Licensing Terms - English _ Microsoft Learn.pdf",
       "source_sha256": "34d9d0e1b18ef23df2291c15511642e4d02e35066e61a60e5f97c644e25a0788",
       "file_size_bytes": 74699,
       "document_type": "contract",
@@ -182,7 +182,7 @@
     "DOC-065": {
       "document_id": "DOC-065",
       "filename": "Transfer Azure product billing ownership to a Microsoft Customer Agreement - Microsoft Cost Management _ Microsoft Learn.pdf",
-      "file_path": "B:\\Context_Layer_Ai\\research\\validation_50\\raw_documents\\Microsoft\\Contracts\\Transfer Azure product billing ownership to a Microsoft Customer Agreement - Microsoft Cost Management _ Microsoft Learn.pdf",
+      "file_path": "B:\\Trulin\\research\\validation_50\\raw_documents\\Microsoft\\Contracts\\Transfer Azure product billing ownership to a Microsoft Customer Agreement - Microsoft Cost Management _ Microsoft Learn.pdf",
       "source_sha256": "b8081067cf13de0f8af99c314206fb5eb78500fd118f0ba1fc75f8298af322fa",
       "file_size_bytes": 1973187,
       "document_type": "invoice",
@@ -194,7 +194,7 @@
     "DOC-066": {
       "document_id": "DOC-066",
       "filename": "MicrosoftProductandServicesDPA(WW)(English)(May2026)(CR).docx",
-      "file_path": "B:\\Context_Layer_Ai\\research\\validation_50\\raw_documents\\Microsoft\\Difficult PDFs\\MicrosoftProductandServicesDPA(WW)(English)(May2026)(CR).docx",
+      "file_path": "B:\\Trulin\\research\\validation_50\\raw_documents\\Microsoft\\Difficult PDFs\\MicrosoftProductandServicesDPA(WW)(English)(May2026)(CR).docx",
       "source_sha256": "d79e06734ddff63593375c5134f3e362da7ddf6d265308776a2c7db4b7233f41",
       "file_size_bytes": 6510568,
       "document_type": "regulatory_compliance",
@@ -206,7 +206,7 @@
     "DOC-067": {
       "document_id": "DOC-067",
       "filename": "Supplier Security and Privacy Assurance Program - Microsoft Service Assurance _ Microsoft Learn.pdf",
-      "file_path": "B:\\Context_Layer_Ai\\research\\validation_50\\raw_documents\\Microsoft\\Difficult PDFs\\Supplier Security and Privacy Assurance Program - Microsoft Service Assurance _ Microsoft Learn.pdf",
+      "file_path": "B:\\Trulin\\research\\validation_50\\raw_documents\\Microsoft\\Difficult PDFs\\Supplier Security and Privacy Assurance Program - Microsoft Service Assurance _ Microsoft Learn.pdf",
       "source_sha256": "49e1d609fe514226dad1653a823b98a82e887211456dbe45c20145e87ed6ca8c",
       "file_size_bytes": 76590,
       "document_type": "regulatory_compliance",
@@ -218,7 +218,7 @@
     "DOC-068": {
       "document_id": "DOC-068",
       "filename": "How-Microsoft-is-reinventing-HR-with-Microsoft-Copilot.pdf",
-      "file_path": "B:\\Context_Layer_Ai\\research\\validation_50\\raw_documents\\Microsoft\\Hr Policies\\How-Microsoft-is-reinventing-HR-with-Microsoft-Copilot.pdf",
+      "file_path": "B:\\Trulin\\research\\validation_50\\raw_documents\\Microsoft\\Hr Policies\\How-Microsoft-is-reinventing-HR-with-Microsoft-Copilot.pdf",
       "source_sha256": "f6f4b74ce69201c43db307494a6cd0ca3f4f492d89a1c149c891ea450d2290c9",
       "file_size_bytes": 143693,
       "document_type": "hr_policy",
@@ -230,7 +230,7 @@
     "DOC-069": {
       "document_id": "DOC-069",
       "filename": "Human-Rights-Transparency-Report-2025.pdf",
-      "file_path": "B:\\Context_Layer_Ai\\research\\validation_50\\raw_documents\\Microsoft\\Hr Policies\\Human-Rights-Transparency-Report-2025.pdf",
+      "file_path": "B:\\Trulin\\research\\validation_50\\raw_documents\\Microsoft\\Hr Policies\\Human-Rights-Transparency-Report-2025.pdf",
       "source_sha256": "5e795619b6d78ea476d7aad13e28f1b440d42d6f9097edc5d77881eebd6ff87f",
       "file_size_bytes": 33436727,
       "document_type": "hr_policy",
@@ -242,7 +242,7 @@
     "DOC-070": {
       "document_id": "DOC-070",
       "filename": "Privacy in Microsoft Cloud Services.pdf",
-      "file_path": "B:\\Context_Layer_Ai\\research\\validation_50\\raw_documents\\Microsoft\\Hr Policies\\Privacy in Microsoft Cloud Services.pdf",
+      "file_path": "B:\\Trulin\\research\\validation_50\\raw_documents\\Microsoft\\Hr Policies\\Privacy in Microsoft Cloud Services.pdf",
       "source_sha256": "ff28b5b5a8486f2ffa835ac7885f3196d604e90e156745aee8b61991d7d0758c",
       "file_size_bytes": 1379646,
       "document_type": "hr_policy",
@@ -254,7 +254,7 @@
     "DOC-071": {
       "document_id": "DOC-071",
       "filename": "SupplierComm Refresh July 2024 WebVersion.pdf",
-      "file_path": "B:\\Context_Layer_Ai\\research\\validation_50\\raw_documents\\Microsoft\\Hr Policies\\SupplierComm Refresh July 2024 WebVersion.pdf",
+      "file_path": "B:\\Trulin\\research\\validation_50\\raw_documents\\Microsoft\\Hr Policies\\SupplierComm Refresh July 2024 WebVersion.pdf",
       "source_sha256": "7ee83d54305254189564fb4386eed00e0176e86beb702eb11cef001968584c30",
       "file_size_bytes": 210511,
       "document_type": "hr_policy",
@@ -266,7 +266,7 @@
     "DOC-072": {
       "document_id": "DOC-072",
       "filename": "Download Azure billing invoice - Microsoft Cost Management _ Microsoft Learn.pdf",
-      "file_path": "B:\\Context_Layer_Ai\\research\\validation_50\\raw_documents\\Microsoft\\Invoices or forms\\Download Azure billing invoice - Microsoft Cost Management _ Microsoft Learn.pdf",
+      "file_path": "B:\\Trulin\\research\\validation_50\\raw_documents\\Microsoft\\Invoices or forms\\Download Azure billing invoice - Microsoft Cost Management _ Microsoft Learn.pdf",
       "source_sha256": "7e244ae21c24e1bf979ef1a327e0f5d1b420ace594613bbf60089bf20783c005",
       "file_size_bytes": 243055,
       "document_type": "invoice",
@@ -278,7 +278,7 @@
     "DOC-073": {
       "document_id": "DOC-073",
       "filename": "Microsoft volume licensing invoices _ Microsoft Learn.pdf",
-      "file_path": "B:\\Context_Layer_Ai\\research\\validation_50\\raw_documents\\Microsoft\\Invoices or forms\\Microsoft volume licensing invoices _ Microsoft Learn.pdf",
+      "file_path": "B:\\Trulin\\research\\validation_50\\raw_documents\\Microsoft\\Invoices or forms\\Microsoft volume licensing invoices _ Microsoft Learn.pdf",
       "source_sha256": "57f799b0d72eea2b9e898da20622e02bcb8e1528f74a5afea4fb3cfe8bd8308c",
       "file_size_bytes": 369454,
       "document_type": "invoice",
@@ -290,7 +290,7 @@
     "DOC-074": {
       "document_id": "DOC-074",
       "filename": "Understand IRS tax forms issued by Microsoft - Marketplace publisher _ Microsoft Learn.pdf",
-      "file_path": "B:\\Context_Layer_Ai\\research\\validation_50\\raw_documents\\Microsoft\\Invoices or forms\\Understand IRS tax forms issued by Microsoft - Marketplace publisher _ Microsoft Learn.pdf",
+      "file_path": "B:\\Trulin\\research\\validation_50\\raw_documents\\Microsoft\\Invoices or forms\\Understand IRS tax forms issued by Microsoft - Marketplace publisher _ Microsoft Learn.pdf",
       "source_sha256": "8f45cf505a85986f924b5c804fc880a9a682ce72d1100cbc4f551bc1bbab2658",
       "file_size_bytes": 102164,
       "document_type": "invoice",
@@ -302,7 +302,7 @@
     "DOC-075": {
       "document_id": "DOC-075",
       "filename": "Understand your invoice for your Microsoft MOSA billing account _ Microsoft Learn.pdf",
-      "file_path": "B:\\Context_Layer_Ai\\research\\validation_50\\raw_documents\\Microsoft\\Invoices or forms\\Understand your invoice for your Microsoft MOSA billing account _ Microsoft Learn.pdf",
+      "file_path": "B:\\Trulin\\research\\validation_50\\raw_documents\\Microsoft\\Invoices or forms\\Understand your invoice for your Microsoft MOSA billing account _ Microsoft Learn.pdf",
       "source_sha256": "d510abff7343139d00b2d59eb353a19d22a3c8a53c7a921f68afdf5d3ea60def",
       "file_size_bytes": 706250,
       "document_type": "invoice",
@@ -314,7 +314,7 @@
     "DOC-076": {
       "document_id": "DOC-076",
       "filename": "View or download your invoice in the Microsoft 365 admin center _ Microsoft Learn.pdf",
-      "file_path": "B:\\Context_Layer_Ai\\research\\validation_50\\raw_documents\\Microsoft\\Invoices or forms\\View or download your invoice in the Microsoft 365 admin center _ Microsoft Learn.pdf",
+      "file_path": "B:\\Trulin\\research\\validation_50\\raw_documents\\Microsoft\\Invoices or forms\\View or download your invoice in the Microsoft 365 admin center _ Microsoft Learn.pdf",
       "source_sha256": "45cbd0c289234aaebd4fcca4f30ebc17fc0b6673d86708e2843d0c53490f70ae",
       "file_size_bytes": 120080,
       "document_type": "invoice",
@@ -326,7 +326,7 @@
     "DOC-077": {
       "document_id": "DOC-077",
       "filename": "View your Microsoft Store order history _ Microsoft Support.pdf",
-      "file_path": "B:\\Context_Layer_Ai\\research\\validation_50\\raw_documents\\Microsoft\\Invoices or forms\\View your Microsoft Store order history _ Microsoft Support.pdf",
+      "file_path": "B:\\Trulin\\research\\validation_50\\raw_documents\\Microsoft\\Invoices or forms\\View your Microsoft Store order history _ Microsoft Support.pdf",
       "source_sha256": "e232903f0d0872dbbcb737ee403056638dfce3cb34ecb992a17321b80e0a4ab1",
       "file_size_bytes": 327469,
       "document_type": "invoice",
@@ -338,7 +338,7 @@
     "DOC-078": {
       "document_id": "DOC-078",
       "filename": "Can't get a refund on apps and games from Microsoft Store _ Microsoft Support.pdf",
-      "file_path": "B:\\Context_Layer_Ai\\research\\validation_50\\raw_documents\\Microsoft\\Refund and return policies\\Can't get a refund on apps and games from Microsoft Store _ Microsoft Support.pdf",
+      "file_path": "B:\\Trulin\\research\\validation_50\\raw_documents\\Microsoft\\Refund and return policies\\Can't get a refund on apps and games from Microsoft Store _ Microsoft Support.pdf",
       "source_sha256": "f19ba3ecae89d65c79ee5e43514cc64471fc358c56c6d2c772e3106cc85911f7",
       "file_size_bytes": 310484,
       "document_type": "refund_policy",
@@ -350,7 +350,7 @@
     "DOC-079": {
       "document_id": "DOC-079",
       "filename": "Cancel a Microsoft 365 subscription _ Microsoft Support.pdf",
-      "file_path": "B:\\Context_Layer_Ai\\research\\validation_50\\raw_documents\\Microsoft\\Refund and return policies\\Cancel a Microsoft 365 subscription _ Microsoft Support.pdf",
+      "file_path": "B:\\Trulin\\research\\validation_50\\raw_documents\\Microsoft\\Refund and return policies\\Cancel a Microsoft 365 subscription _ Microsoft Support.pdf",
       "source_sha256": "1fea1dd64d709e715a9283f232b39e6e905e76e5986d135e44771b2f55a6e6a1",
       "file_size_bytes": 299277,
       "document_type": "refund_policy",
@@ -362,7 +362,7 @@
     "DOC-080": {
       "document_id": "DOC-080",
       "filename": "Check the status of your Microsoft Store return or refund _ Microsoft Support.pdf",
-      "file_path": "B:\\Context_Layer_Ai\\research\\validation_50\\raw_documents\\Microsoft\\Refund and return policies\\Check the status of your Microsoft Store return or refund _ Microsoft Support.pdf",
+      "file_path": "B:\\Trulin\\research\\validation_50\\raw_documents\\Microsoft\\Refund and return policies\\Check the status of your Microsoft Store return or refund _ Microsoft Support.pdf",
       "source_sha256": "7fc1b31cdc46808b99f24a214888cdd679cda9326600bd4a8d1f3ec08c245ec8",
       "file_size_bytes": 308097,
       "document_type": "refund_policy",
@@ -374,7 +374,7 @@
     "DOC-081": {
       "document_id": "DOC-081",
       "filename": "Get a refund for apps and games purchased from Microsoft Store _ Microsoft Support.pdf",
-      "file_path": "B:\\Context_Layer_Ai\\research\\validation_50\\raw_documents\\Microsoft\\Refund and return policies\\Get a refund for apps and games purchased from Microsoft Store _ Microsoft Support.pdf",
+      "file_path": "B:\\Trulin\\research\\validation_50\\raw_documents\\Microsoft\\Refund and return policies\\Get a refund for apps and games purchased from Microsoft Store _ Microsoft Support.pdf",
       "source_sha256": "cb16eee1916effb4855ef36094d6a05203736e68af79f584aa6631d148a8afa9",
       "file_size_bytes": 292450,
       "document_type": "refund_policy",
@@ -386,7 +386,7 @@
     "DOC-082": {
       "document_id": "DOC-082",
       "filename": "Get an exchange or refund on devices bought from Microsoft _ Microsoft Support.pdf",
-      "file_path": "B:\\Context_Layer_Ai\\research\\validation_50\\raw_documents\\Microsoft\\Refund and return policies\\Get an exchange or refund on devices bought from Microsoft _ Microsoft Support.pdf",
+      "file_path": "B:\\Trulin\\research\\validation_50\\raw_documents\\Microsoft\\Refund and return policies\\Get an exchange or refund on devices bought from Microsoft _ Microsoft Support.pdf",
       "source_sha256": "6dd243ddb3d072bf915abf9cba00bab1a16eb42d7c928e88aa7299050758e2de",
       "file_size_bytes": 333996,
       "document_type": "refund_policy",
@@ -398,7 +398,7 @@
     "DOC-083": {
       "document_id": "DOC-083",
       "filename": "How to get a refund on a Microsoft subscription _ Microsoft Support.pdf",
-      "file_path": "B:\\Context_Layer_Ai\\research\\validation_50\\raw_documents\\Microsoft\\Refund and return policies\\How to get a refund on a Microsoft subscription _ Microsoft Support.pdf",
+      "file_path": "B:\\Trulin\\research\\validation_50\\raw_documents\\Microsoft\\Refund and return policies\\How to get a refund on a Microsoft subscription _ Microsoft Support.pdf",
       "source_sha256": "8f3f4bbdc6edefc0bf0d1d27dcae9829282242821affce6f7a2ed549dcc4b5a0",
       "file_size_bytes": 298932,
       "document_type": "refund_policy",
@@ -410,7 +410,7 @@
     "DOC-084": {
       "document_id": "DOC-084",
       "filename": "Microsoft subscription refund policy _ Microsoft Support.pdf",
-      "file_path": "B:\\Context_Layer_Ai\\research\\validation_50\\raw_documents\\Microsoft\\Refund and return policies\\Microsoft subscription refund policy _ Microsoft Support.pdf",
+      "file_path": "B:\\Trulin\\research\\validation_50\\raw_documents\\Microsoft\\Refund and return policies\\Microsoft subscription refund policy _ Microsoft Support.pdf",
       "source_sha256": "f73772f88dd7731b1bbbd51d07f7b39c5474baba2dc699a825db9b69aa36bbfc",
       "file_size_bytes": 322880,
       "document_type": "refund_policy",
@@ -422,7 +422,7 @@
     "DOC-085": {
       "document_id": "DOC-085",
       "filename": "Microsoft Entra deployment plans - Microsoft Entra _ Microsoft Learn.pdf",
-      "file_path": "B:\\Context_Layer_Ai\\research\\validation_50\\raw_documents\\Microsoft\\Technical documentation\\Microsoft Entra deployment plans - Microsoft Entra _ Microsoft Learn.pdf",
+      "file_path": "B:\\Trulin\\research\\validation_50\\raw_documents\\Microsoft\\Technical documentation\\Microsoft Entra deployment plans - Microsoft Entra _ Microsoft Learn.pdf",
       "source_sha256": "c8076c8cb04a3f5eb7140d92a4754cfbe0a4dae3f5f7db2d0ad29de347618614",
       "file_size_bytes": 135089,
       "document_type": "technical_documentation",
@@ -434,7 +434,7 @@
     "DOC-086": {
       "document_id": "DOC-086",
       "filename": "Microsoft Entra operations reference guide - Microsoft Entra _ Microsoft Learn.pdf",
-      "file_path": "B:\\Context_Layer_Ai\\research\\validation_50\\raw_documents\\Microsoft\\Technical documentation\\Microsoft Entra operations reference guide - Microsoft Entra _ Microsoft Learn.pdf",
+      "file_path": "B:\\Trulin\\research\\validation_50\\raw_documents\\Microsoft\\Technical documentation\\Microsoft Entra operations reference guide - Microsoft Entra _ Microsoft Learn.pdf",
       "source_sha256": "a1e1c8ab9bb8f342769b02cbf5a29e0fb5c1194192a88b5b364f1b45ea8151b0",
       "file_size_bytes": 55951,
       "document_type": "technical_documentation",
@@ -446,7 +446,7 @@
     "DOC-087": {
       "document_id": "DOC-087",
       "filename": "Microsoft Entra security operations guide - Microsoft Entra _ Microsoft Learn.pdf",
-      "file_path": "B:\\Context_Layer_Ai\\research\\validation_50\\raw_documents\\Microsoft\\Technical documentation\\Microsoft Entra security operations guide - Microsoft Entra _ Microsoft Learn.pdf",
+      "file_path": "B:\\Trulin\\research\\validation_50\\raw_documents\\Microsoft\\Technical documentation\\Microsoft Entra security operations guide - Microsoft Entra _ Microsoft Learn.pdf",
       "source_sha256": "b070d939a2847414f1ec73f82a841835c98ad3fd44dc8afc862ca84e5bb36b5f",
       "file_size_bytes": 193079,
       "document_type": "technical_documentation",
@@ -458,7 +458,7 @@
     "DOC-088": {
       "document_id": "DOC-088",
       "filename": "Protect APIs by using Azure Application Gateway and Azure API Management - Azure Architecture Center _ Microsoft Learn.pdf",
-      "file_path": "B:\\Context_Layer_Ai\\research\\validation_50\\raw_documents\\Microsoft\\Technical documentation\\Protect APIs by using Azure Application Gateway and Azure API Management - Azure Architecture Center _ Microsoft Learn.pdf",
+      "file_path": "B:\\Trulin\\research\\validation_50\\raw_documents\\Microsoft\\Technical documentation\\Protect APIs by using Azure Application Gateway and Azure API Management - Azure Architecture Center _ Microsoft Learn.pdf",
       "source_sha256": "7f96eb0e67038af44f1420b1bbdc37adfa42772c1e5b113cd769c90b8fbef640",
       "file_size_bytes": 250713,
       "document_type": "technical_documentation",
@@ -470,7 +470,7 @@
     "DOC-089": {
       "document_id": "DOC-089",
       "filename": "Security Copilot in Microsoft Entra _ Microsoft Learn.pdf",
-      "file_path": "B:\\Context_Layer_Ai\\research\\validation_50\\raw_documents\\Microsoft\\Technical documentation\\Security Copilot in Microsoft Entra _ Microsoft Learn.pdf",
+      "file_path": "B:\\Trulin\\research\\validation_50\\raw_documents\\Microsoft\\Technical documentation\\Security Copilot in Microsoft Entra _ Microsoft Learn.pdf",
       "source_sha256": "9b35610536d03750238452df1874670ab0191f1752edbe81d7109259b19518f4",
       "file_size_bytes": 210632,
       "document_type": "technical_documentation",
@@ -482,7 +482,7 @@
     "DOC-090": {
       "document_id": "DOC-090",
       "filename": "What is Microsoft Entra_ - Microsoft Entra _ Microsoft Learn.pdf",
-      "file_path": "B:\\Context_Layer_Ai\\research\\validation_50\\raw_documents\\Microsoft\\Technical documentation\\What is Microsoft Entra_ - Microsoft Entra _ Microsoft Learn.pdf",
+      "file_path": "B:\\Trulin\\research\\validation_50\\raw_documents\\Microsoft\\Technical documentation\\What is Microsoft Entra_ - Microsoft Entra _ Microsoft Learn.pdf",
       "source_sha256": "a06ed12a7fea184cef3e673ab45a7360c8109bca418575daa511825fc65d9f1a",
       "file_size_bytes": 117008,
       "document_type": "technical_documentation",

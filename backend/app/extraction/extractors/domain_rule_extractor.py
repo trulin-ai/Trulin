@@ -3645,16 +3645,47 @@ class DomainRuleExtractor:
                         or (re.search(r"\bfees?\b", clean_s.lower()) and not any(agency in clean_s.lower() for agency in ("drug enforcement administration", "food and drug administration", "veterans administration", "administrators of", "administration of prescribers")))
                     ) and "gift card" not in clean_s.lower():
                         predicate = "may_apply_administration_fee"
-                    elif any(w in clean_s.lower() for w in ("valid", "validity", "expires", "duration")):
-                        predicate = "has_validity_rule"
+                    elif any(w in clean_s.lower() for w in ("governed by", "laws of the state", "laws of ireland", "governing law")):
+                        predicate = "has_governing_law"
+                    elif any(w in clean_s.lower() for w in ("written notice", "prior written notice", "days' notice", "days prior notice", "days' prior written notice")):
+                        predicate = "has_notice_period" if re.search(r"\b\d+\s*(?:calendar\s+)?days?\b", clean_s.lower()) else "requires_written_notice"
+                    elif any(w in clean_s.lower() for w in ("disclaims all implied", "without warranty", "as is without warranty", "disclaim all warranties")):
+                        predicate = "disclaims_implied_warranties"
+                    elif any(w in clean_s.lower() for w in ("warrants that", "represents and warrants", "warrant that")):
+                        predicate = "has_warranty_obligation"
+                    elif any(w in clean_s.lower() for w in ("may not assign", "cannot assign", "without prior written consent")):
+                        predicate = "restricts_assignment"
+                    elif any(w in clean_s.lower() for w in ("material breach", "terminate for breach")):
+                        predicate = "may_terminate_for_material_breach_on_30_days_notice"
+                    elif any(w in clean_s.lower() for w in ("terminate this agreement without cause", "terminate without cause")):
+                        predicate = "may_terminate_without_cause"
+                    elif any(w in clean_s.lower() for w in ("audit and verify", "audit rights", "relevant records", "verify compliance")):
+                        predicate = "has_audit_verification_right"
+                    elif any(w in clean_s.lower() for w in ("responsible for all taxes", "pay all applicable taxes", "taxes based on")):
+                        predicate = "requires_tax_payment"
+                    elif any(w in clean_s.lower() for w in ("support services", "continuous basis", "technical support")) and "support" in clean_s.lower():
+                        predicate = "provides_technical_support"
+                    elif any(w in clean_s.lower() for w in ("delete customer data", "delete data", "securely delete")):
+                        if any(w in clean_s.lower() for w in ("must", "shall", "will")):
+                            predicate = "must_delete_data"
+                        else:
+                            predicate = "has_retention_policy"
+                    elif any(w in clean_s.lower() for w in ("severable", "distinct and severable", "severability")):
+                        predicate = "has_severability_terms"
+                    elif any(w in clean_s.lower() for w in ("confidentiality obligations survive", "survive termination")):
+                        predicate = "has_confidentiality_survival"
+                    elif any(w in clean_s.lower() for w in ("remains liable", "remain liable", "responsible for the performance")):
+                        predicate = "remains_liable_for"
+                    elif any(w in clean_s.lower() for w in ("may use", "permitted use", "scope of use")):
+                        predicate = "has_permitted_use_scope"
                     elif "intellectual property" in clean_s.lower():
                         predicate = "has_intellectual_property_ownership"
                     elif is_return_policy and any(w in clean_s.lower() for w in ("refund", "refunds", "return")):
                         predicate = "has_refund_eligibility"
-                    elif len(clean_s.split()) > 15 or not any(w in clean_s.lower() for w in ("rule", "policy", "requirement", "standard", "must", "shall", "obligat")):
-                        continue
-                    else:
+                    elif any(w in clean_s.lower() for w in ("valid for", "validity", "expires")):
                         predicate = "has_validity_rule"
+                    else:
+                        continue
 
                 cur_role = unit_role
                 cur_canonical = getattr(unit, "is_canonical", True)

@@ -4,18 +4,18 @@
   "document_type": "technical_documentation",
   "evaluation_methodology": "AUTOMATED_GATE_HEURISTIC (Awaiting Human Gold Reference)",
   "claim_counts": {
-    "candidate_claims": 2,
-    "valid": 1,
-    "invalid": 1,
+    "candidate_claims": 7,
+    "valid": 0,
+    "invalid": 2,
     "missed": 0,
     "duplicate": 0,
-    "ambiguous": 0,
+    "ambiguous": 5,
     "malformed": 0
   },
   "metrics": {
-    "claim_precision": 0.5,
+    "claim_precision": 0.0,
     "claim_recall": 1.0,
-    "f1": 0.5,
+    "f1": 0.0,
     "evidence_supported_rate": 1.0,
     "locator_accuracy_rate": 1.0,
     "duplicate_rate": 0.0
@@ -24,22 +24,72 @@
   "failure_patterns": [],
   "claims": [
     {
-      "subject": "Users",
-      "predicate": "participate",
-      "object": "in a pilot program",
-      "disposition": "AUTOMATED_CHECKS_PASSED",
-      "trust_score": 0.99,
-      "decision_reason": "APPROVED: All 6 dimensions verified. Trust score: 99.0%.",
+      "subject": "Sponsor",
+      "predicate": "has_responsibility",
+      "object": "An enterprise senior leader with authority to approve or assign budget and resources.",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Predicate failure: Predicate 'has_responsibility' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'has_responsibility' is not a canonical registered predicate.",
       "evidence_supported": true,
       "locator_valid": true
     },
     {
-      "subject": "Users",
+      "subject": "User",
+      "predicate": "participate",
+      "object": "in a pilot program",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Predicate failure: Predicate 'participate' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'participate' is not a canonical registered predicate.",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
+      "subject": "IT Support Manager",
+      "predicate": "has_responsibility",
+      "object": "Provides input on the supportability of proposed changes",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[REVIEW_SCORE_BELOW_THRESHOLD] Predicate failure: Predicate 'has_responsibility' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'has_responsibility' is not a canonical registered predicate.; Modality mismatch failure: Rule assertion lacks operative deontic modal verb (must, may, shall, cannot) or normative table indicator (required, free, deducted, not eligible, no, yes).",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
+      "subject": "Identity architect",
+      "predicate": "has_responsibility",
+      "object": "Defines how the change aligns with identity management infrastructure",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[REVIEW_SCORE_BELOW_THRESHOLD] Predicate failure: Predicate 'has_responsibility' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'has_responsibility' is not a canonical registered predicate.; Modality mismatch failure: Rule assertion lacks operative deontic modal verb (must, may, shall, cannot) or normative table indicator (required, free, deducted, not eligible, no, yes).",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
+      "subject": "Security owner Confirms the change plan meets security requirements Compliance",
+      "predicate": "ensures",
+      "object": "compliance with corporate, industry, or governmental requirements Manager RACI Responsible, Accountable, Consulted, and Informed (responsible/accountable/consulted/informed (RACI)) is a model for the participation by various roles to complete tasks or deliverables for a project or business process",
+      "disposition": "AUTOMATED_CHECKS_FAILED",
+      "trust_score": 0.0,
+      "decision_reason": "[FRAGMENT_ASSERTION_DISCARDED] Text integrity failure: Normative rule is missing an operative modal phrase ('may', 'must', 'will', 'shall', etc.).; Predicate failure: Predicate 'ensures' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'ensures' is not a canonical registered predicate.; Modality mismatch failure: Rule assertion lacks operative deontic modal verb (must, may, shall, cannot) or normative table indicator (required, free, deducted, not eligible, no, yes).",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
+      "subject": "User",
       "predicate": "delegate",
       "object": "others to help deliver the work",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Predicate failure: Predicate 'delegate' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'delegate' is not a canonical registered predicate.",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
+      "subject": "Pilot",
+      "predicate": "has_definition",
+      "object": "Phase 1 In your first phase, target IT, usability, and other users who can test and provide feedback.",
       "disposition": "AUTOMATED_CHECKS_FAILED",
-      "trust_score": 0.8,
-      "decision_reason": "REJECTED: Semantic grounding failure. Subject-Evidence mismatch: asserted subject 'Users' has no grounding in the underlying evidence span.",
+      "trust_score": 0.5,
+      "decision_reason": "[REJECT_DESCRIPTIVE_PURPOSE] Claim type failure: 'policy_rule' is a non-rule type (definition, reference, description, example, revision_history, or non_rule_context).",
       "evidence_supported": true,
       "locator_valid": true
     }

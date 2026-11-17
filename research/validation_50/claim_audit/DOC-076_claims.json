@@ -6,10 +6,10 @@
   "claim_counts": {
     "candidate_claims": 4,
     "valid": 0,
-    "invalid": 3,
+    "invalid": 0,
     "missed": 0,
     "duplicate": 0,
-    "ambiguous": 1,
+    "ambiguous": 4,
     "malformed": 0
   },
   "metrics": {
@@ -24,42 +24,42 @@
   "failure_patterns": [],
   "claims": [
     {
-      "subject": "Users",
+      "subject": "User",
       "predicate": "at",
       "object": "least a Billing Administrator to do the steps described in this article",
-      "disposition": "AUTOMATED_CHECKS_FAILED",
-      "trust_score": 0.8,
-      "decision_reason": "REJECTED: Semantic grounding failure. Subject-Evidence mismatch: asserted subject 'Users' has no grounding in the underlying evidence span.",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Predicate failure: Predicate 'at' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'at' is not a canonical registered predicate.",
       "evidence_supported": true,
       "locator_valid": true
     },
     {
-      "subject": "Users",
+      "subject": "User",
       "predicate": "able",
       "object": "to sign in to the Microsoft 365 admin center",
-      "disposition": "AUTOMATED_CHECKS_FAILED",
-      "trust_score": 0.8,
-      "decision_reason": "REJECTED: Semantic grounding failure. Subject-Evidence mismatch: asserted subject 'Users' has no grounding in the underlying evidence span.",
-      "evidence_supported": true,
-      "locator_valid": true
-    },
-    {
-      "subject": "Before you begin Watch",
-      "predicate": "has_definition",
-      "object": "View, download, or print your bill or invoice https://learn-video.azurefd.net/vod/player?id=a03436f9-660b-4cb3-906d- bdcd86ee21d9&locale=en-us&embedUrl=%2Fmicrosoft-365%2Fcommerce%2Fbilling- and-payments%2Fview-your-bill-or-invoice",
       "disposition": "AMBIGUOUS_NEEDS_REVIEW",
-      "trust_score": 0.9875,
-      "decision_reason": "NON-CANONICAL CONTEXT: Retained for overview display; excluded from active decision gate to prevent duplicate evaluation against atomic row claims.",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Predicate failure: Predicate 'able' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'able' is not a canonical registered predicate.",
       "evidence_supported": true,
       "locator_valid": true
     },
     {
-      "subject": "Users",
+      "subject": "Credit",
+      "predicate": "has_description",
+      "object": "Indicates a credit was applied to your account.",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[REVIEW_SCORE_BELOW_THRESHOLD] Predicate failure: Predicate 'has_description' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'has_description' is not a canonical registered predicate.; Modality mismatch failure: Rule assertion lacks operative deontic modal verb (must, may, shall, cannot) or normative table indicator (required, free, deducted, not eligible, no, yes).",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
+      "subject": "User",
       "predicate": "download",
       "object": "your tax receipt in certain jurisdictions from the Billing > Billing and payments page",
-      "disposition": "AUTOMATED_CHECKS_FAILED",
-      "trust_score": 0.8,
-      "decision_reason": "REJECTED: Semantic grounding failure. Subject-Evidence mismatch: asserted subject 'Users' has no grounding in the underlying evidence span.",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Predicate failure: Predicate 'download' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'download' is not a canonical registered predicate.",
       "evidence_supported": true,
       "locator_valid": true
     }

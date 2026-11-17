@@ -1,1493 +1,1037 @@
 {
   "document_id": "DOC-057",
   "filename": "Microsoft Customer Agreement.pdf",
+  "document_type": "contract",
+  "evaluation_methodology": "AUTOMATED_GATE_HEURISTIC (Awaiting Human Gold Reference)",
   "claim_counts": {
-    "candidate_claims": 97,
-    "valid": 75,
+    "candidate_claims": 101,
+    "valid": 33,
     "invalid": 12,
     "missed": 0,
-    "duplicate": 7,
-    "ambiguous": 19,
+    "duplicate": 1,
+    "ambiguous": 56,
     "malformed": 0
   },
   "metrics": {
-    "precision": 1.0,
-    "recall": 1.0,
-    "f1": 1.0,
+    "claim_precision": 0.3267,
+    "claim_recall": 1.0,
+    "f1": 0.3267,
     "evidence_supported_rate": 1.0,
     "locator_accuracy_rate": 1.0,
-    "duplicate_rate": 0.0722
+    "duplicate_rate": 0.0098
   },
+  "human_review_required": true,
+  "failure_patterns": [],
   "claims": [
     {
-      "claim_id": "doc057:af:001",
       "subject": "Microsoft",
       "predicate": "grants_product_license",
-      "object": "a nonexclusive, limited license to Customer to use Products ordered as provided in this Agreement",
-      "modality": "PERMISSION",
-      "category": "POLICY_CLAIM",
-      "conditions": [
-        "upon Microsoft acceptance of order",
-        "subject to Customer compliance"
-      ],
+      "object": "a nonexclusive and limited license to use the Products ordered as provided in this Agreement",
       "disposition": "AUTOMATED_CHECKS_PASSED",
       "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'grants_product_license'.",
+      "decision_reason": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED.",
       "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "Microsoft grants Customer a nonexclusive and limited license to use the Products ordered as provided in this Agreement.",
-      "locator": {
-        "page": 1,
-        "section": "License to use Microsoft Products (a)"
-      }
+      "locator_valid": true
     },
     {
-      "claim_id": "doc057:af:003",
       "subject": "Customer",
-      "predicate": "must_control_end_user_access",
-      "object": "access to, and use of, the Products by End Users",
-      "modality": "OBLIGATION",
-      "category": "POLICY_CLAIM",
-      "conditions": [],
-      "disposition": "AUTOMATED_CHECKS_PASSED",
-      "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'must_control_end_user_access'.",
+      "predicate": "control",
+      "object": "access to, and use of, the Products by End Users and is responsible for any use of the Products that does not comply with this Agreement",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Predicate failure: Predicate 'control' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'control' is not a canonical registered predicate.",
       "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "Customer will control access to, and use of, the Products by End Users and is responsible for any use of the Products that does not comply with this Agreement.",
-      "locator": {
-        "page": 1,
-        "section": "End Users (c)"
-      }
+      "locator_valid": true
     },
     {
-      "claim_id": "doc057:af:004",
       "subject": "Customer",
       "predicate": "may_order_for_affiliate",
       "object": "Products for use by its Affiliates",
-      "modality": "PERMISSION",
-      "category": "POLICY_CLAIM",
-      "conditions": [],
       "disposition": "AUTOMATED_CHECKS_PASSED",
       "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'may_order_for_affiliate'.",
+      "decision_reason": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED.",
       "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "Customer may order Products for use by its Affiliates.",
-      "locator": {
-        "page": 1,
-        "section": "Affiliates (d)"
-      }
+      "locator_valid": true
     },
     {
-      "claim_id": "doc057:af:005",
       "subject": "Customer",
-      "predicate": "retains_enforcement_rights",
-      "object": "the sole right to enforce this Agreement against Microsoft on behalf of Affiliates",
-      "modality": "ENTITLEMENT",
-      "category": "POLICY_CLAIM",
-      "conditions": [],
+      "predicate": "applies_to_contract_orders",
+      "object": "such Affiliates",
       "disposition": "AUTOMATED_CHECKS_PASSED",
       "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'retains_enforcement_rights'.",
+      "decision_reason": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED.",
       "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "Customer will have the sole right to enforce this Agreement against Microsoft.",
-      "locator": {
-        "page": 1,
-        "section": "Affiliates (d)"
-      }
+      "locator_valid": true
     },
     {
-      "claim_id": "doc057:af:007",
       "subject": "Customer",
-      "predicate": "prohibited_from_reverse_engineering",
-      "object": "any Product or Services Deliverable, or attempting to do so (except where permitted by law)",
-      "modality": "PROHIBITION",
-      "category": "POLICY_CLAIM",
-      "conditions": [],
-      "disposition": "AUTOMATED_CHECKS_PASSED",
-      "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'prohibited_from_reverse_engineering'.",
+      "predicate": "has_validity_rule",
+      "object": "have the sole right to enforce this Agreement against Microsoft",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Predicate failure: Generic catch-all predicate 'has_validity_rule' is banned; requires normalized action taxonomy.; Predicate normativity failure: Predicate 'has_validity_rule' is an unconstrained catch-all.",
       "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "Customer must not (and is not licensed to): (i) reverse engineer, decompile, or disassemble any Product or Services Deliverable...",
-      "locator": {
-        "page": 1,
-        "section": "Restrictions (f)(i)"
-      }
+      "locator_valid": true
     },
     {
-      "claim_id": "doc057:af:008",
       "subject": "Customer",
-      "predicate": "prohibited_from_licensing_interference",
-      "object": "install or use non-Microsoft software in any way that subjects Microsoft IP to third-party license terms",
-      "modality": "PROHIBITION",
-      "category": "POLICY_CLAIM",
-      "conditions": [],
-      "disposition": "AUTOMATED_CHECKS_PASSED",
-      "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'prohibited_from_licensing_interference'.",
+      "predicate": "remain",
+      "object": "responsible for all obligations under this Agreement and for its Affiliates' compliance with this Agreement",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Predicate failure: Predicate 'remain' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'remain' is not a canonical registered predicate.",
       "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "(ii) install or use non-Microsoft software or technology in any way that would subject Microsoft's intellectual property to any other license terms;",
-      "locator": {
-        "page": 1,
-        "section": "Restrictions (f)(ii)"
-      }
+      "locator_valid": true
     },
     {
-      "claim_id": "doc057:af:009",
       "subject": "Customer",
-      "predicate": "prohibited_from_circumventing_limits",
-      "object": "work around any technical limitations in a Product/Deliverable or restrictions in Product documentation",
-      "modality": "PROHIBITION",
-      "category": "POLICY_CLAIM",
-      "conditions": [],
-      "disposition": "AUTOMATED_CHECKS_PASSED",
-      "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'prohibited_from_circumventing_limits'.",
+      "predicate": "transfer",
+      "object": "fully-paid, perpetual licenses to (1) an Affiliate or (2) a third party solely in connection with the transfer of hardware to which, or employees to whom, the licenses have been assigned as part of (a) a divestiture of all or part of an Affiliate or (b) a merger involving Customer or an Affiliate",
+      "disposition": "AUTOMATED_CHECKS_FAILED",
+      "trust_score": 0.5,
+      "decision_reason": "[META_RULE_NOT_ATOMIC] Predicate failure: Predicate 'transfer' is not present in versioned taxonomy registry.; Atomicity failure: Multi-branch transfer disjunction requires decomposition into atomic child claims.; Predicate normativity failure: Predicate 'transfer' is not a canonical registered predicate.",
       "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "(iii) work around any technical limitations in a Product or Services Deliverable or restrictions in Product documentation;",
-      "locator": {
-        "page": 1,
-        "section": "Restrictions (f)(iii)"
-      }
+      "locator_valid": true
     },
     {
-      "claim_id": "doc057:af:010",
       "subject": "Customer",
-      "predicate": "prohibited_from_multi_device_splitting",
-      "object": "separate and run parts of a Product or Services Deliverable on more than one device",
-      "modality": "PROHIBITION",
-      "category": "POLICY_CLAIM",
-      "conditions": [],
-      "disposition": "AUTOMATED_CHECKS_PASSED",
-      "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'prohibited_from_multi_device_splitting'.",
+      "predicate": "uninstall",
+      "object": "and discontinue using the licensed Product and render any copies unusable",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Predicate failure: Predicate 'uninstall' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'uninstall' is not a canonical registered predicate.",
       "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "(iv) separate and run parts of a Product or Services Deliverable on more than one device;",
-      "locator": {
-        "page": 1,
-        "section": "Restrictions (f)(iv)"
-      }
+      "locator_valid": true
     },
     {
-      "claim_id": "doc057:af:011",
       "subject": "Customer",
-      "predicate": "prohibited_from_version_downgrading",
-      "object": "upgrade or downgrade parts of a Product at different times",
-      "modality": "PROHIBITION",
-      "category": "POLICY_CLAIM",
-      "conditions": [],
-      "disposition": "AUTOMATED_CHECKS_PASSED",
-      "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'prohibited_from_version_downgrading'.",
+      "predicate": "provide",
+      "object": "the transferee a copy of these General Terms, the applicable Product Terms and any other documents necessary to show the scope, purpose and limitations of the licenses transferred",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Predicate failure: Predicate 'provide' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'provide' is not a canonical registered predicate.",
       "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "(v) upgrade or downgrade parts of a Product at different times;",
-      "locator": {
-        "page": 1,
-        "section": "Restrictions (f)(v)"
-      }
+      "locator_valid": true
     },
     {
-      "claim_id": "doc057:af:012",
-      "subject": "Customer",
-      "predicate": "prohibited_from_separate_transfers",
-      "object": "transfer parts of a Product separately",
-      "modality": "PROHIBITION",
-      "category": "POLICY_CLAIM",
-      "conditions": [],
-      "disposition": "AUTOMATED_CHECKS_PASSED",
-      "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'prohibited_from_separate_transfers'.",
-      "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "(vi) transfer parts of a Product separately; or",
-      "locator": {
-        "page": 1,
-        "section": "Restrictions (f)(vi)"
-      }
-    },
-    {
-      "claim_id": "doc057:af:013",
-      "subject": "Customer",
-      "predicate": "prohibited_from_commercial_hosting",
-      "object": "distribute, sublicense, rent, lease, or lend Products/Deliverables, or use them to offer hosting services to third parties",
-      "modality": "PROHIBITION",
-      "category": "POLICY_CLAIM",
-      "conditions": [],
-      "disposition": "AUTOMATED_CHECKS_PASSED",
-      "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'prohibited_from_commercial_hosting'.",
-      "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "(vii) distribute, sublicense, rent, lease, or lend any Products or Services Deliverables, in whole or in part, or use them to offer hosting services to a third party.",
-      "locator": {
-        "page": 2,
-        "section": "Restrictions (f)(vii)"
-      }
-    },
-    {
-      "claim_id": "doc057:af:014",
-      "subject": "Customer",
-      "predicate": "may_transfer_perpetual_license",
-      "object": "to an Affiliate for fully-paid, perpetual licenses",
-      "modality": "PERMISSION",
-      "category": "POLICY_CLAIM",
-      "conditions": [],
-      "disposition": "AUTOMATED_CHECKS_PASSED",
-      "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'may_transfer_perpetual_license'.",
-      "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "Customer may only transfer fully-paid, perpetual licenses to (1) an Affiliate...",
-      "locator": {
-        "page": 2,
-        "section": "License transfers (g)"
-      }
-    },
-    {
-      "claim_id": "doc057:af:015",
-      "subject": "Customer",
-      "predicate": "may_transfer_perpetual_license",
-      "object": "to a third party solely in connection with transferred hardware or employees assigned to the license",
-      "modality": "PERMISSION",
-      "category": "POLICY_CLAIM",
-      "conditions": [
-        "permitted hardware transfer",
-        "permitted employee assignment"
-      ],
-      "disposition": "AUTOMATED_CHECKS_PASSED",
-      "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'may_transfer_perpetual_license'.",
-      "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "or (2) a third party solely in connection with the transfer of hardware to which, or employees to whom, the licenses have been assigned...",
-      "locator": {
-        "page": 2,
-        "section": "License transfers (g)"
-      }
-    },
-    {
-      "claim_id": "doc057:af:016",
-      "subject": "Customer",
-      "predicate": "may_transfer_perpetual_license",
-      "object": "as part of a divestiture of an Affiliate or merger involving Customer or an Affiliate",
-      "modality": "PERMISSION",
-      "category": "POLICY_CLAIM",
-      "conditions": [
-        "corporate divestiture",
-        "corporate merger"
-      ],
-      "disposition": "AUTOMATED_CHECKS_PASSED",
-      "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'may_transfer_perpetual_license'.",
-      "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "as part of (a) a divestiture of all or part of an Affiliate or (b) a merger involving Customer or an Affiliate.",
-      "locator": {
-        "page": 2,
-        "section": "License transfers (g)"
-      }
-    },
-    {
-      "claim_id": "doc057:af:017",
-      "subject": "Customer",
-      "predicate": "must_uninstall_upon_transfer",
-      "object": "and discontinue using the licensed Product and render any copies unusable upon transfer",
-      "modality": "OBLIGATION",
-      "category": "POLICY_CLAIM",
-      "conditions": [],
-      "disposition": "AUTOMATED_CHECKS_PASSED",
-      "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'must_uninstall_upon_transfer'.",
-      "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "Upon such transfer, Customer must uninstall and discontinue using the licensed Product and render any copies unusable.",
-      "locator": {
-        "page": 2,
-        "section": "License transfers (g)"
-      }
-    },
-    {
-      "claim_id": "doc057:af:018",
-      "subject": "Customer",
-      "predicate": "must_provide_transfer_documentation",
-      "object": "a copy of General Terms, Product Terms, and scope documents to the transferee",
-      "modality": "OBLIGATION",
-      "category": "POLICY_CLAIM",
-      "conditions": [],
-      "disposition": "AUTOMATED_CHECKS_PASSED",
-      "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'must_provide_transfer_documentation'.",
-      "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "Customer must provide the transferee a copy of these General Terms, the applicable Product Terms and any other documents necessary...",
-      "locator": {
-        "page": 2,
-        "section": "License transfers (g)"
-      }
-    },
-    {
-      "claim_id": "doc057:af:019",
-      "subject": "Customer",
-      "predicate": "must_meet_eligibility_criteria",
-      "object": "respective eligibility requirements if purchasing academic, government, or nonprofit Products",
-      "modality": "ELIGIBILITY",
-      "category": "POLICY_CLAIM",
-      "conditions": [],
-      "disposition": "AUTOMATED_CHECKS_PASSED",
-      "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'must_meet_eligibility_criteria'.",
-      "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "Customer agrees that if it is purchasing academic, government or nonprofit Products, Customer meets the respective eligibility requirements...",
-      "locator": {
-        "page": 2,
-        "section": "Customer Eligibility (h)"
-      }
-    },
-    {
-      "claim_id": "doc057:af:020",
       "subject": "Microsoft",
-      "predicate": "may_verify_and_suspend_eligibility",
-      "object": "verify eligibility and suspend Product use if eligibility requirements are not met",
-      "modality": "PERMISSION",
-      "category": "POLICY_CLAIM",
-      "conditions": [],
+      "predicate": "must_verify_refund_conditions",
+      "object": "verify eligibility and suspend Product use if requirements are not met",
       "disposition": "AUTOMATED_CHECKS_PASSED",
       "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'may_verify_and_suspend_eligibility'.",
+      "decision_reason": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED.",
       "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "Microsoft reserves the right to verify eligibility and suspend Product use if requirements are not met.",
-      "locator": {
-        "page": 2,
-        "section": "Customer Eligibility (h)"
-      }
+      "locator_valid": true
     },
     {
-      "claim_id": "doc057:af:021",
-      "subject": "Microsoft",
-      "predicate": "warrants_professional_standards",
-      "object": "perform ordered Professional Services as provided in the Agreement and applicable Statement of Services",
-      "modality": "OBLIGATION",
-      "category": "POLICY_CLAIM",
-      "conditions": [],
-      "disposition": "AUTOMATED_CHECKS_PASSED",
-      "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'warrants_professional_standards'.",
-      "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "Microsoft will perform the Professional Services ordered as provided in this Agreement and the applicable Statement of Services.",
-      "locator": {
-        "page": 2,
-        "section": "Performance of Professional Services (a)"
-      }
-    },
-    {
-      "claim_id": "doc057:af:022",
       "subject": "Each party",
       "predicate": "may_use_preexisting_work",
-      "object": "reproduce, and modify the other party's Pre-existing Work only as needed for Professional Services",
-      "modality": "PERMISSION",
-      "category": "POLICY_CLAIM",
-      "conditions": [],
-      "disposition": "AUTOMATED_CHECKS_PASSED",
-      "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'may_use_preexisting_work'.",
+      "object": "reproduce, and modify the other party's Pre-existing Work only as needed to perform obligations related to Professional Services",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Predicate failure: Predicate 'may_use_preexisting_work' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'may_use_preexisting_work' is not a canonical registered predicate.",
       "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "Each party may use, reproduce, and modify the other party\u2019s Pre-existing Work only as needed to perform obligations related to Professional Services.",
-      "locator": {
-        "page": 2,
-        "section": "Pre-existing Work (c)"
-      }
+      "locator_valid": true
     },
     {
-      "claim_id": "doc057:af:023",
       "subject": "Microsoft",
       "predicate": "grants_deliverables_license",
-      "object": "a non-exclusive, limited license to Customer to use and modify Services Deliverables for own business purposes",
-      "modality": "PERMISSION",
-      "category": "POLICY_CLAIM",
-      "conditions": [],
-      "disposition": "AUTOMATED_CHECKS_PASSED",
-      "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'grants_deliverables_license'.",
+      "object": "a non-exclusive, limited license to use and modify the Services Deliverables as provided in this Agreement, including, without limitation, the reservation of rights, restrictio ns, and license transfer provisions under the section entitled License to use Microsoft Products",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Predicate failure: Predicate 'grants_deliverables_license' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'grants_deliverables_license' is not a canonical registered predicate.",
       "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "Microsoft grants Customer a non-exclusive, limited license to use and modify the Services Deliverables as provided in this Agreement...",
-      "locator": {
-        "page": 2,
-        "section": "Services Deliverables (d)"
-      }
+      "locator_valid": true
     },
     {
-      "claim_id": "doc057:af:024",
       "subject": "Customer",
-      "predicate": "may_sublicense_deliverables",
-      "object": "its rights in Services Deliverables to its Affiliates (Affiliates may not further sublicense)",
-      "modality": "PERMISSION",
-      "category": "POLICY_CLAIM",
-      "conditions": [],
-      "disposition": "AUTOMATED_CHECKS_PASSED",
-      "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'may_sublicense_deliverables'.",
+      "predicate": "sublicense",
+      "object": "its rights in Services Deliverables to its Affiliates",
+      "disposition": "AUTOMATED_CHECKS_FAILED",
+      "trust_score": 0.5,
+      "decision_reason": "[META_RULE_NOT_ATOMIC] Predicate failure: Predicate 'sublicense' is not present in versioned taxonomy registry.; Atomicity failure: Mixed polarity (permission + prohibition) requires splitting into child claims.; Predicate normativity failure: Predicate 'sublicense' is not a canonical registered predicate.",
       "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "Customer may sublicense its rights in Services Deliverables to its Affiliates, but Customer\u2019s Affiliates may not sublicense these rights.",
-      "locator": {
-        "page": 2,
-        "section": "Affiliates rights (e)"
-      }
+      "locator_valid": true
     },
     {
-      "claim_id": "doc057:af:025",
       "subject": "Customer",
-      "predicate": "must_keep_compliance_records",
-      "object": "relating to Products it and its Affiliates use or distribute",
-      "modality": "OBLIGATION",
-      "category": "POLICY_CLAIM",
-      "conditions": [],
-      "disposition": "AUTOMATED_CHECKS_PASSED",
-      "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'must_keep_compliance_records'.",
+      "predicate": "has_validity_rule",
+      "object": "have an opportunity to review those terms prior to placing an order for a Non-Microsoft Product through a Microsoft online store or Online Service",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Predicate failure: Generic catch-all predicate 'has_validity_rule' is banned; requires normalized action taxonomy.; Predicate normativity failure: Predicate 'has_validity_rule' is an unconstrained catch-all.",
       "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "Customer must keep records relating to Products it and its Affiliates use or distribute.",
-      "locator": {
-        "page": 2,
-        "section": "Verification process (a)"
-      }
+      "locator_valid": true
     },
     {
-      "claim_id": "doc057:af:026",
       "subject": "Microsoft",
-      "predicate": "may_conduct_compliance_audit",
-      "object": "verify Customer's and Affiliates' compliance upon 30 days notice at Microsoft's expense",
-      "modality": "PERMISSION",
-      "category": "POLICY_CLAIM",
-      "conditions": [
-        "30 days written notice",
-        "Microsoft expense"
-      ],
-      "disposition": "AUTOMATED_CHECKS_PASSED",
-      "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'may_conduct_compliance_audit'.",
+      "predicate": "provide",
+      "object": "Customer's contact information and transaction details to the Publisher",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Predicate failure: Predicate 'provide' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'provide' is not a canonical registered predicate.",
       "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "At Microsoft\u2019s expense, Microsoft may verify Customer\u2019s and its Affiliates\u2019 compliance with this Agreement at any time upon 30 days\u2019 notice.",
-      "locator": {
-        "page": 2,
-        "section": "Verification process (a)"
-      }
+      "locator_valid": true
     },
     {
-      "claim_id": "doc057:af:027",
       "subject": "Customer",
-      "predicate": "must_provide_audit_access",
-      "object": "promptly provide information, documents, and visual access to systems running Products reasonably requested for audit",
-      "modality": "OBLIGATION",
-      "category": "POLICY_CLAIM",
-      "conditions": [],
-      "disposition": "AUTOMATED_CHECKS_PASSED",
-      "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'must_provide_audit_access'.",
+      "predicate": "keep",
+      "object": "records relating to Products it and its Affiliates use or distribute",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Predicate failure: Predicate 'keep' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'keep' is not a canonical registered predicate.",
       "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "Customer must promptly provide any information and documents that Microsoft or the auditor reasonably requests related to the verification and visual access...",
-      "locator": {
-        "page": 2,
-        "section": "Verification process (a)"
-      }
+      "locator_valid": true
     },
     {
-      "claim_id": "doc057:af:028",
+      "subject": "Microsoft",
+      "predicate": "must_verify_refund_conditions",
+      "object": "verify Customer's and its Affiliates' compliance with this Agreement at any time upon 30 days' notice",
+      "disposition": "AUTOMATED_CHECKS_FAILED",
+      "trust_score": 0.0,
+      "decision_reason": "[FRAGMENT_ASSERTION_DISCARDED] Modality consistency failure: Obligation predicate 'must_verify_refund_conditions' contradicts permissive modal ('may/can') in text.",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
+      "subject": "Microsoft",
+      "predicate": "engage",
+      "object": "an independent auditor under nondisclosure obligations to perform the verification",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Predicate failure: Predicate 'engage' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'engage' is not a canonical registered predicate.",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
       "subject": "Customer",
-      "predicate": "must_acquire_unlicensed_usage",
-      "object": "order sufficient licenses within 30 days to cover unlicensed use revealed during audit",
-      "modality": "OBLIGATION",
-      "category": "POLICY_CLAIM",
-      "conditions": [
-        "within 30 days of audit finding"
-      ],
-      "disposition": "AUTOMATED_CHECKS_PASSED",
-      "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'must_acquire_unlicensed_usage'.",
+      "predicate": "promptly_provide",
+      "object": "any information and documents that Microsoft or the auditor reasonably requests related to the verification and visual Microsoft Customer Agreement",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Predicate failure: Predicate 'promptly_provide' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'promptly_provide' is not a canonical registered predicate.",
       "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "Customer must, within 30 days, order sufficient licenses to cover the period of its unlicensed use.",
-      "locator": {
-        "page": 3,
-        "section": "Remedies for non-compliance (b)"
-      }
+      "locator_valid": true
     },
     {
-      "claim_id": "doc057:af:029",
       "subject": "Customer",
-      "predicate": "must_reimburse_audit_penalty",
-      "object": "verification costs and acquire licenses at 125% of price if unlicensed use is 5% or more of total use",
-      "modality": "OBLIGATION",
-      "category": "POLICY_CLAIM",
-      "conditions": [
-        "unlicensed use >= 5%"
-      ],
-      "disposition": "AUTOMATED_CHECKS_PASSED",
-      "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'must_reimburse_audit_penalty'.",
+      "predicate": "has_refund_reimbursement_window",
+      "object": "reimburse Microsoft for its costs incurred in verification and acquire sufficient licenses to cover its unlicensed use at 125% of the then-current Customer price or the maximum allowed under applicable law, if less",
+      "disposition": "AUTOMATED_CHECKS_FAILED",
+      "trust_score": 0.5,
+      "decision_reason": "[META_RULE_NOT_ATOMIC] Clause entailment failure [CONTRADICTED - ACTION_OBJECT]: Table cell value contradiction: evidence cell specifies 5%, which contradicts asserted claim percentage 125%.; Predicate failure: Predicate 'has_refund_reimbursement_window' is not present in versioned taxonomy registry.; Atomicity failure: Compound audit remedies combining reimbursement and penalty license acquisition.; Predicate normativity failure: Predicate 'has_refund_reimbursement_window' is not a canonical registered predicate.",
       "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "if unlicensed use is 5% or more of Customer\u2019s total use of all Products, Customer must reimburse Microsoft for its costs incurred in verification and acquire sufficient licenses at 125%...",
-      "locator": {
-        "page": 3,
-        "section": "Remedies for non-compliance (b)"
-      }
+      "locator_valid": true
     },
     {
-      "claim_id": "doc057:af:031",
       "subject": "Customer",
-      "predicate": "must_obtain_privacy_consents",
-      "object": "obtain all required third-party consents before providing Personal Data to Microsoft under applicable privacy laws",
-      "modality": "OBLIGATION",
-      "category": "POLICY_CLAIM",
-      "conditions": [],
-      "disposition": "AUTOMATED_CHECKS_PASSED",
-      "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'must_obtain_privacy_consents'.",
+      "predicate": "obtain",
+      "object": "all required consents from third parties (including Customer's contacts, Partners, distributors, administrators, and employees) under applicable privacy and data protection laws",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Predicate failure: Predicate 'obtain' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'obtain' is not a canonical registered predicate.",
       "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "Customer will obtain all required consents from third parties (including Customer\u2019s contacts, Partners, distributors, administrators, and employees) under applicable privacy and data protection laws.",
-      "locator": {
-        "page": 3,
-        "section": "Data Protection and Processing"
-      }
+      "locator_valid": true
     },
     {
-      "claim_id": "doc057:af:032",
+      "subject": "Customers",
+      "predicate": "has_definition",
+      "object": "Confidential Information does not include information that (1) becomes publicly available without a breach of a confidentiality obligation; (2) the receiving party received lawfully from another source without a confidentiality obligation; (3) is independently developed; or (4) is a comment or suggestion volunteered about the other party's business, products, or services.",
+      "disposition": "AUTOMATED_CHECKS_FAILED",
+      "trust_score": 0.5,
+      "decision_reason": "[REJECT_DESCRIPTIVE_PURPOSE] Claim type failure: 'definition' is a non-rule type (definition, reference, description, example, revision_history, or non_rule_context).",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
       "subject": "Each party",
-      "predicate": "must_maintain_confidentiality",
-      "object": "take reasonable steps to protect the other's Confidential Information and use it only for business relationship purposes",
-      "modality": "OBLIGATION",
-      "category": "POLICY_CLAIM",
-      "conditions": [],
-      "disposition": "AUTOMATED_CHECKS_PASSED",
-      "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'must_maintain_confidentiality'.",
+      "predicate": "take",
+      "object": "reasonable steps to protect the other's Confidential Information and will use the other party's Confidential Information only for purposes of the parties' business relationship",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Predicate failure: Predicate 'take' is invalid or a generic stopword.; Predicate normativity failure: Predicate 'take' is not a canonical registered predicate.",
       "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "Each party will take reasonable steps to protect the other\u2019s Confidential Information and will use the other party\u2019s Confidential Information only for purposes of the parties\u2019 business relationship.",
-      "locator": {
-        "page": 3,
-        "section": "Protection of Confidential Information (b)"
-      }
+      "locator_valid": true
     },
     {
-      "claim_id": "doc057:af:033",
-      "subject": "Neither party",
+      "subject": "Each party",
       "predicate": "prohibited_from_unauthorized_disclosure",
-      "object": "disclose Confidential Information to third parties except to Representatives on need-to-know basis under protective NDA",
-      "modality": "PROHIBITION",
-      "category": "POLICY_CLAIM",
-      "conditions": [],
-      "disposition": "AUTOMATED_CHECKS_PASSED",
-      "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'prohibited_from_unauthorized_disclosure'.",
+      "object": "Confidential Information to third parties, except to its Representatives, and then only on a need-to-know basis under nondisclosure obligations at least as protective as this Agreement",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Predicate failure: Predicate 'prohibited_from_unauthorized_disclosure' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'prohibited_from_unauthorized_disclosure' is not a canonical registered predicate.",
       "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "Neither party will disclose Confidential Information to third parties, except to its Representatives, and then only on a need-to-know basis under nondisclosure obligations at least as protective as this Agreement.",
-      "locator": {
-        "page": 3,
-        "section": "Protection of Confidential Information (b)"
-      }
+      "locator_valid": true
     },
     {
-      "claim_id": "doc057:af:034",
       "subject": "Each party",
-      "predicate": "must_notify_unauthorized_disclosure",
-      "object": "promptly notify the other party in the event of discovery of any unauthorized use or disclosure",
-      "modality": "OBLIGATION",
-      "category": "POLICY_CLAIM",
-      "conditions": [],
+      "predicate": "remains_responsible_for",
+      "object": "the use of Confidential Information by its Representatives and, in the event of discovery of any unauthorized use or disclosure, must promptly notify the other party",
       "disposition": "AUTOMATED_CHECKS_PASSED",
       "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'must_notify_unauthorized_disclosure'.",
+      "decision_reason": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED.",
       "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "Each party remains responsible for the use of Confidential Information by its Representatives and, in the event of discovery of any unauthorized use or disclosure, must promptly notify the other party.",
-      "locator": {
-        "page": 3,
-        "section": "Protection of Confidential Information (b)"
-      }
+      "locator_valid": true
     },
     {
-      "claim_id": "doc057:af:035",
-      "subject": "Either party",
-      "predicate": "may_disclose_under_legal_mandate",
-      "object": "the other's Confidential Information if required by law, only after providing notice to enable seeking a protective order",
-      "modality": "PERMISSION",
-      "category": "POLICY_CLAIM",
-      "conditions": [],
-      "disposition": "AUTOMATED_CHECKS_PASSED",
-      "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'may_disclose_under_legal_mandate'.",
+      "subject": "A party",
+      "predicate": "disclose",
+      "object": "the other's Confidential Information if required by law, but only after it notifies the other party (if legally permissible) to enable the other party to seek a protective order",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Predicate failure: Predicate 'disclose' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'disclose' is not a canonical registered predicate.",
       "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "A party may disclose the other\u2019s Confidential Information if required by law, but only after it notifies the other party (if legally permissible) to enable the other party to seek a protective order.",
-      "locator": {
-        "page": 3,
-        "section": "Disclosure required by law (c)"
-      }
+      "locator_valid": true
     },
     {
-      "claim_id": "doc057:af:036",
-      "subject": "Neither party",
-      "predicate": "is_not_required_to_restrict_assignments",
-      "object": "work assignments of Representatives who had access to Confidential Information based on unaided memory",
-      "modality": "PERMISSION",
-      "category": "POLICY_CLAIM",
-      "conditions": [],
-      "disposition": "AUTOMATED_CHECKS_PASSED",
-      "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'is_not_required_to_restrict_assignments'.",
-      "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "Neither party is required to restrict work assignments of its Representatives who have had access to Confidential Information.",
-      "locator": {
-        "page": 3,
-        "section": "Residual information (d)"
-      }
-    },
-    {
-      "claim_id": "doc057:af:037",
       "subject": "Each party",
-      "predicate": "must_observe_confidentiality_duration",
-      "object": "maintain confidentiality until Customer Data is deleted from Online Services, and for five years post-receipt for other information",
-      "modality": "OBLIGATION",
-      "category": "POLICY_CLAIM",
-      "conditions": [],
-      "disposition": "AUTOMATED_CHECKS_PASSED",
-      "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'must_observe_confidentiality_duration'.",
+      "predicate": "restrict",
+      "object": "work assignments of its Representatives who have had access to Confidential Information",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Predicate failure: Predicate 'restrict' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'restrict' is not a canonical registered predicate.",
       "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "These obligations apply: (1) for Customer Data, until it is deleted from the Online Services; and (2) for all other Confidential Information, for a period of five years after a party receives the Confidential Information.",
-      "locator": {
-        "page": 3,
-        "section": "Duration of Confidentiality (e)"
-      }
+      "locator_valid": true
     },
     {
-      "claim_id": "doc057:af:038",
       "subject": "Microsoft",
-      "predicate": "warrants_service_level_agreement",
-      "object": "each Online Service will perform in accordance with applicable SLA during Customer's use",
-      "modality": "OBLIGATION",
-      "category": "POLICY_CLAIM",
-      "conditions": [],
+      "predicate": "warrants_professional_standards",
+      "object": "Professional Services with the applicable professional standard of care and skill in the industry",
       "disposition": "AUTOMATED_CHECKS_PASSED",
       "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'warrants_service_level_agreement'.",
+      "decision_reason": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED.",
       "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "Microsoft warrants that each Online Service will perform in accordance with the applicable SLA during Customer\u2019s use.",
-      "locator": {
-        "page": 4,
-        "section": "Online Services Warranty (a)(i)"
-      }
+      "locator_valid": true
     },
     {
-      "claim_id": "doc057:af:039",
-      "subject": "Microsoft",
-      "predicate": "warrants_software_performance",
-      "object": "Software will perform substantially as described in Product docs for one year from license acquisition",
-      "modality": "OBLIGATION",
-      "category": "POLICY_CLAIM",
-      "conditions": [],
-      "disposition": "AUTOMATED_CHECKS_PASSED",
-      "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'warrants_software_performance'.",
-      "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "Microsoft warrants that the Software version that is current at the time Customer acquires it will perform substantially as described in the applicable Product documentation for one year...",
-      "locator": {
-        "page": 4,
-        "section": "Software Warranty (a)(ii)"
-      }
-    },
-    {
-      "claim_id": "doc057:af:040",
       "subject": "Customer",
-      "predicate": "must_notify_warranty_claim_within_window",
-      "object": "notify Microsoft within 90 days from completion of work for Professional Services warranty claims",
-      "modality": "OBLIGATION",
-      "category": "POLICY_CLAIM",
-      "conditions": [
-        "within 90 days from completion"
-      ],
+      "predicate": "has_warranty_remedy_window",
+      "object": "If Microsoft fails to do so, and Customer notifies Microsoft within 90 days from the completion of the work giving rise to the warranty claim, then Microsoft will, at its discretion, either re-perform the Professional Services or return the amount Customer paid for them.",
       "disposition": "AUTOMATED_CHECKS_PASSED",
       "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'must_notify_warranty_claim_within_window'.",
+      "decision_reason": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED.",
       "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "Customer notifies Microsoft within 90 days from the completion of the work giving rise to the warranty claim...",
-      "locator": {
-        "page": 4,
-        "section": "Professional Services Warranty (a)(iii)"
-      }
+      "locator_valid": true
     },
     {
-      "claim_id": "doc057:af:041",
+      "subject": "Each party",
+      "predicate": "provide",
+      "object": "the defending party with all requested assistance, information, and authority",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Predicate failure: Predicate 'provide' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'provide' is not a canonical registered predicate.",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
+      "subject": "Each party",
+      "predicate": "has_refund_reimbursement_window",
+      "object": "reimburse the other party for reasonable out-of-pocket expenses it incurs in providing assistance",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Predicate failure: Predicate 'has_refund_reimbursement_window' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'has_refund_reimbursement_window' is not a canonical registered predicate.",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
       "subject": "Microsoft",
       "predicate": "must_defend_ip_claims",
-      "object": "defend Customer against third-party claims alleging fee-based Products/Deliverables infringe patent, copyright, trademark, or trade secret",
-      "modality": "OBLIGATION",
-      "category": "POLICY_CLAIM",
-      "conditions": [],
+      "object": "Customer against any third-party claim to the extent it alleges that a Product or Services Deliverable made available by Microsoft for a fee and used within the scope of the license granted under this Agreement (unmodified from the form provided by Microsoft and not combined with anything else), misappropriates a trade secret or directly infringes a patent, copyright, trademark, or other proprietary right of a third party",
       "disposition": "AUTOMATED_CHECKS_PASSED",
       "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'must_defend_ip_claims'.",
+      "decision_reason": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED.",
       "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "Microsoft will defend Customer against any third-party claim to the extent it alleges that a Product or Services Deliverable made available by Microsoft for a fee... misappropriates a trade secret or directly infringes a patent, copyright, trademark...",
-      "locator": {
-        "page": 4,
-        "section": "Defense of third-party claims (a)"
-      }
+      "locator_valid": true
     },
     {
-      "claim_id": "doc057:af:042",
+      "subject": "Customer",
+      "predicate": "has_refund_eligibility",
+      "object": "If Microsoft is unable to resolve a claim of misappropriation or infringement, it may, at its option, either (1) modify or replace the Product or Services Deliverable with a functional equivalent or (2) terminate Customer's license and refund any license fees (less depreciation for perpetual licenses), including amounts paid in advance for unused consumption for any usage period after the termination date.",
+      "disposition": "AUTOMATED_CHECKS_PASSED",
+      "trust_score": 0.99,
+      "decision_reason": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED.",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
+      "subject": "Microsoft",
+      "predicate": "has_validity_rule",
+      "object": "be liable for any claims or damages due to Customer's continued use of a Product or Services Deliverable after being notified to stop due to a third-party claim",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Predicate failure: Generic catch-all predicate 'has_validity_rule' is banned; requires normalized action taxonomy.; Predicate normativity failure: Predicate 'has_validity_rule' is an unconstrained catch-all.",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
       "subject": "Customer",
       "predicate": "must_defend_ip_claims",
-      "object": "defend Microsoft and Affiliates against third-party claims alleging Customer Data or Non-MS Products infringe third-party IP",
-      "modality": "OBLIGATION",
-      "category": "POLICY_CLAIM",
-      "conditions": [],
+      "object": "Microsoft and its Affiliates against any third-party claim to the extent it alleges that: (1) any Customer Data or Non- Microsoft Product hosted in an Online Service by Microsoft on Customer's behalf misappropriates a trade secret or directly infringes a patent, copyright, trademark, or other proprietary right of a third party; or (2) Customer's use of any Product or Services Deliverable, alone or in combination with anything else, violates the law or harms a third party",
       "disposition": "AUTOMATED_CHECKS_PASSED",
       "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'must_defend_ip_claims'.",
+      "decision_reason": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED.",
       "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "Customer will defend Microsoft and its Affiliates against any third-party claim to the extent it alleges that: (1) any Customer Data or Non-Microsoft Product hosted in an Online Service... infringes a patent, copyright, trademark...",
-      "locator": {
-        "page": 4,
-        "section": "Defense of third-party claims (b)"
-      }
+      "locator_valid": true
     },
     {
-      "claim_id": "doc057:af:043",
-      "subject": "Each party",
-      "predicate": "must_provide_defense_cooperation",
-      "object": "provide defending party with prompt written notice, right to control defense/settlement, and requested assistance",
-      "modality": "OBLIGATION",
-      "category": "POLICY_CLAIM",
-      "conditions": [],
-      "disposition": "AUTOMATED_CHECKS_PASSED",
-      "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'must_provide_defense_cooperation'.",
-      "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "The party being defended must provide the defending party with all requested assistance, information, and authority. The defending party will reimburse the other party for reasonable out-of-pocket expenses...",
-      "locator": {
-        "page": 4,
-        "section": "Defense of third-party claims intro"
-      }
-    },
-    {
-      "claim_id": "doc057:af:044",
-      "subject": "Each party",
+      "subject": "Customers",
       "predicate": "has_liability_cap",
-      "object": "aggregate liability for perpetual licenses is capped at the amount Customer paid for the applicable licenses",
-      "modality": "OBLIGATION",
-      "category": "POLICY_CLAIM",
-      "conditions": [],
+      "object": "Limitation of liability Subject to the Exclusions, Exceptions and Applicability provisions in subsections e, f, and g, each party's liability to the other party for each Product or Professional Service provided under this Agreement is limited to direct damages finally awarded, not to exceed an amount determined as follows:",
       "disposition": "AUTOMATED_CHECKS_PASSED",
       "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'has_liability_cap'.",
+      "decision_reason": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED.",
       "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "For each Product licensed on a perpetual basis, each party\u2019s maximum, aggregate liability is the amount Customer paid for the applicable licenses.",
-      "locator": {
-        "page": 5,
-        "section": "Perpetual Licenses Liability (a)"
-      }
+      "locator_valid": true
     },
     {
-      "claim_id": "doc057:af:045",
-      "subject": "Each party",
+      "subject": "Customers",
       "predicate": "has_liability_cap",
-      "object": "aggregate liability for subscriptions is capped at fees paid by Customer during the 12 months preceding the incident",
-      "modality": "OBLIGATION",
-      "category": "POLICY_CLAIM",
-      "conditions": [],
+      "object": "For each Product licensed on a subscription basis, each party's maximum, aggregate liability is the total amount of subscription fees Customer paid to use the Product during the 12 months preceding the most recent incident giving rise to the claim(s).",
       "disposition": "AUTOMATED_CHECKS_PASSED",
       "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'has_liability_cap'.",
+      "decision_reason": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED.",
       "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "For each Product licensed on a subscription basis, each party\u2019s maximum, aggregate liability is the total amount of subscription fees Customer paid to use the Product during the 12 months preceding the most recent incident...",
-      "locator": {
-        "page": 5,
-        "section": "Subscriptions Liability (b)"
-      }
+      "locator_valid": true
     },
     {
-      "claim_id": "doc057:af:047",
-      "subject": "Neither party",
-      "predicate": "excludes_consequential_damages",
-      "object": "will be liable for indirect, incidental, special, punitive, or consequential damages, or lost profits/revenues",
-      "modality": "PROHIBITION",
-      "category": "POLICY_CLAIM",
-      "conditions": [],
-      "disposition": "AUTOMATED_CHECKS_PASSED",
-      "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'excludes_consequential_damages'.",
-      "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "In no event will either party be liable for indirect, incidental, special, punitive, or consequential damages; loss of revenue, profits, or anticipated savings...",
-      "locator": {
-        "page": 5,
-        "section": "Liability Exclusions (e)"
-      }
-    },
-    {
-      "claim_id": "doc057:af:048",
       "subject": "Customer",
-      "predicate": "must_select_replacement_partner",
-      "object": "select an authorized replacement Partner or purchase directly from Microsoft if Partner distribution rights terminate",
-      "modality": "OBLIGATION",
-      "category": "POLICY_CLAIM",
-      "conditions": [
-        "upon Partner distribution termination"
-      ],
+      "predicate": "has_liability_cap",
+      "object": "To the extent permitted by applicable law, the limitations, exclusions, and exceptions set forth in this Limitation of Liability section apply to all claims and damages under or relating to this Agreement or the Products or Professional Services provided u nder this Agreement, including, without limitation, breach of contract, breach of warranty, strict liability, and negligence and other torts, even if the parties knew or should have known about the possibility of the damages.",
       "disposition": "AUTOMATED_CHECKS_PASSED",
       "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'must_select_replacement_partner'.",
+      "decision_reason": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED.",
       "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "If the Partner\u2019s distribution right is terminated, Customer must select an authorized replacement Partner or purchase directly from Microsoft.",
-      "locator": {
-        "page": 5,
-        "section": "Selecting a Partner (a)"
-      }
+      "locator_valid": true
     },
     {
-      "claim_id": "doc057:af:049",
       "subject": "Customer",
-      "predicate": "may_terminate_partner_privileges",
-      "object": "terminate Partner administrative privileges at any time",
-      "modality": "PERMISSION",
-      "category": "POLICY_CLAIM",
-      "conditions": [],
-      "disposition": "AUTOMATED_CHECKS_PASSED",
-      "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'may_terminate_partner_privileges'.",
+      "predicate": "choose",
+      "object": "to provide that Partner with administrator privileges",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Predicate failure: Predicate 'choose' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'choose' is not a canonical registered predicate.",
       "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "Customer may terminate the Partner\u2019s administrative privileges at any time.",
-      "locator": {
-        "page": 5,
-        "section": "Partner Administrator Privileges (b)"
-      }
+      "locator_valid": true
     },
     {
-      "claim_id": "doc057:af:050",
+      "subject": "Partner",
+      "predicate": "process",
+      "object": "such data according to the terms of Partner's agreement with Customer, and its privacy commitments may differ from Microsoft's",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Predicate failure: Predicate 'process' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'process' is not a canonical registered predicate.",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
       "subject": "Customer",
-      "predicate": "must_provide_payment_method",
-      "object": "provide a valid payment method or, if eligible, choose to be invoiced for purchases made on its account",
-      "modality": "OBLIGATION",
-      "category": "POLICY_CLAIM",
-      "conditions": [],
+      "predicate": "may_terminate_without_cause",
+      "object": "the Partner's administrative privileges at any time",
       "disposition": "AUTOMATED_CHECKS_PASSED",
       "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'must_provide_payment_method'.",
+      "decision_reason": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED.",
       "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "Customer must provide a payment method or, if eligible, choose to be invoiced for purchases made on its account.",
-      "locator": {
-        "page": 6,
-        "section": "Payment method (a)"
-      }
+      "locator_valid": true
     },
     {
-      "claim_id": "doc057:af:051",
+      "subject": "Partner",
+      "predicate": "provide",
+      "object": "support for Products and other value-added services, and Partner is responsible for the performance of any services it provides",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Predicate failure: Predicate 'provide' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'provide' is not a canonical registered predicate.",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
+      "subject": "Microsoft",
+      "predicate": "has_validity_rule",
+      "object": "be responsible for the performance of those services subject to the terms of this Agreement",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Predicate failure: Generic catch-all predicate 'has_validity_rule' is banned; requires normalized action taxonomy.; Predicate normativity failure: Predicate 'has_validity_rule' is an unconstrained catch-all.",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
+      "subject": "Customer",
+      "predicate": "provide",
+      "object": "a payment method or, if eligible, choose to be invoiced for purchases made on its account",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Predicate failure: Predicate 'provide' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'provide' is not a canonical registered predicate.",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
+      "subject": "Microsoft",
+      "predicate": "invoice",
+      "object": "eligible Customers",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Predicate failure: Predicate 'invoice' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'invoice' is not a canonical registered predicate.",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
+      "subject": "Customer",
+      "predicate": "authorizes_financial_assessment",
+      "object": "Microsoft to obtain information about Customer's financial condition, which may include credit reports, to assess Customer's eligibility for invoicing",
+      "disposition": "AUTOMATED_CHECKS_PASSED",
+      "trust_score": 0.99,
+      "decision_reason": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED.",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
+      "subject": "Customer",
+      "predicate": "has_validity_rule",
+      "object": "be required to provide its balance sheet, profit and loss and cash flow statements to Microsoft",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Predicate failure: Generic catch-all predicate 'has_validity_rule' is banned; requires normalized action taxonomy.; Predicate normativity failure: Predicate 'has_validity_rule' is an unconstrained catch-all.",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
+      "subject": "Customer",
+      "predicate": "may_be_required_to_provide_security_for_invoicing",
+      "object": "be required to provide security in a form acceptable to Microsoft to be eligible for invoicing",
+      "disposition": "AUTOMATED_CHECKS_PASSED",
+      "trust_score": 0.99,
+      "decision_reason": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED.",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
       "subject": "Microsoft",
       "predicate": "may_withdraw_invoicing_eligibility",
-      "object": "Customer's invoicing eligibility at any time and for any reason",
-      "modality": "PERMISSION",
-      "category": "POLICY_CLAIM",
-      "conditions": [],
-      "disposition": "AUTOMATED_CHECKS_PASSED",
-      "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'may_withdraw_invoicing_eligibility'.",
+      "object": "Customer's eligibility at any time and for any reason",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Predicate failure: Predicate 'may_withdraw_invoicing_eligibility' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'may_withdraw_invoicing_eligibility' is not a canonical registered predicate.",
       "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "Microsoft may withdraw Customer\u2019s eligibility at any time and for any reason.",
-      "locator": {
-        "page": 6,
-        "section": "Invoices (b)"
-      }
+      "locator_valid": true
     },
     {
-      "claim_id": "doc057:af:052",
       "subject": "Customer",
-      "predicate": "must_promptly_notify_changes",
-      "object": "Microsoft of changes in company name, location, ownership, structure, or operational activities",
-      "modality": "OBLIGATION",
-      "category": "POLICY_CLAIM",
-      "conditions": [],
+      "predicate": "promptly_notify",
+      "object": "Microsoft of any changes in its company name or location and of any significant changes in the ownership, structure, or operational activities of the organization",
       "disposition": "AUTOMATED_CHECKS_PASSED",
       "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'must_promptly_notify_changes'.",
+      "decision_reason": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED.",
       "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "Customer must promptly notify Microsoft of any changes in its company name or location and of any significant changes in the ownership, structure, or operational activities...",
-      "locator": {
-        "page": 6,
-        "section": "Invoices (b)"
-      }
+      "locator_valid": true
     },
     {
-      "claim_id": "doc057:af:053",
-      "subject": "Customer",
-      "predicate": "must_pay_within_30_days",
-      "object": "all invoiced amounts due within thirty (30) calendar days following invoice date",
-      "modality": "OBLIGATION",
-      "category": "POLICY_CLAIM",
-      "conditions": [
-        "within 30 calendar days of invoice date"
-      ],
-      "disposition": "AUTOMATED_CHECKS_PASSED",
-      "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'must_pay_within_30_days'.",
-      "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "Customer will pay all amounts due within thirty (30) calendar days following the invoice date.",
-      "locator": {
-        "page": 6,
-        "section": "Invoice Payment terms (c)"
-      }
-    },
-    {
-      "claim_id": "doc057:af:054",
       "subject": "Microsoft",
-      "predicate": "may_assess_late_fee",
-      "object": "late fee of up to 2% monthly on payments overdue by more than 15 calendar days (or legal maximum if less)",
-      "modality": "PERMISSION",
-      "category": "POLICY_CLAIM",
-      "conditions": [
-        "payment overdue > 15 calendar days"
-      ],
+      "predicate": "has_late_payment_penalty_rate",
+      "object": "Microsoft may, at its option, assess a late fee on any payments to Microsoft that are more than fifteen (15) calendar days past due at a rate of up to two percent (2%) of the total amount payable, calculated and payable monthly, or the highest amount allo wed by law, if less.",
       "disposition": "AUTOMATED_CHECKS_PASSED",
       "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'may_assess_late_fee'.",
+      "decision_reason": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED.",
       "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "Microsoft may, at its option, assess a late fee on any payments to Microsoft that are more than fifteen (15) calendar days past due at a rate of up to two percent (2%) of the total amount payable...",
-      "locator": {
-        "page": 6,
-        "section": "Late Payment (d)"
-      }
+      "locator_valid": true
     },
     {
-      "claim_id": "doc057:af:055",
+      "subject": "Customer",
+      "predicate": "can_cancel_before_shipment",
+      "object": "be charged a cancelation fee",
+      "disposition": "AUTOMATED_CHECKS_PASSED",
+      "trust_score": 0.99,
+      "decision_reason": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED.",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
+      "subject": "Customer",
+      "predicate": "can_cancel_before_shipment",
+      "object": "be found in the Product Terms",
+      "disposition": "AUTOMATED_CHECKS_FAILED",
+      "trust_score": 0.5,
+      "decision_reason": "[REJECT_DESCRIPTIVE_PURPOSE] Claim type failure: Text is a cross-reference cue, not an operative rule.",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
       "subject": "Customer",
       "predicate": "authorizes_recurring_charges",
-      "object": "Microsoft to charge payment method periodically for each subscription or billing period until terminated",
-      "modality": "PERMISSION",
-      "category": "POLICY_CLAIM",
-      "conditions": [],
+      "object": "Microsoft to charge Customer's payment method periodically for each subscription or billing period until the subscription is terminated",
       "disposition": "AUTOMATED_CHECKS_PASSED",
       "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'authorizes_recurring_charges'.",
+      "decision_reason": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED.",
       "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "For subscriptions that renew automatically, Customer authorizes Microsoft to charge Customer\u2019s payment method periodically for each subscription or billing period until the subscription is terminated.",
-      "locator": {
-        "page": 6,
-        "section": "Recurring Payments (f)"
-      }
+      "locator_valid": true
     },
     {
-      "claim_id": "doc057:af:056",
+      "subject": "Customer",
+      "predicate": "authorizes_financial_assessment",
+      "object": "Microsoft to store Customer's payment details and process such payments as either electronic debits or fund transfers, or as electronic drafts from the designated bank account (in the case of automated clearing house or similar debits), as charges to the designated card account (in the case of credit card or similar payments) (collectively, \"Electronic Payments\")",
+      "disposition": "AUTOMATED_CHECKS_PASSED",
+      "trust_score": 0.99,
+      "decision_reason": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED.",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
+      "subject": "Customer",
+      "predicate": "may_receive_store_credit",
+      "object": "If any payment is returned unpaid or if any credit card or similar transaction is rejected or denied, Microsoft or its service providers reserve the right to collect any applicable return item, rejection or insufficient funds fee to the maximum extent permitted by applicable law and to process any such fees as an Electronic Payment or to invoice Customer for the amount due.",
+      "disposition": "AUTOMATED_CHECKS_PASSED",
+      "trust_score": 0.99,
+      "decision_reason": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED.",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
       "subject": "Customer",
       "predicate": "must_pay_applicable_taxes",
-      "object": "all applicable value added, GST, sales, gross receipts taxes, and stamp taxes owed under the Agreement",
-      "modality": "OBLIGATION",
-      "category": "POLICY_CLAIM",
-      "conditions": [],
-      "disposition": "AUTOMATED_CHECKS_PASSED",
-      "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'must_pay_applicable_taxes'.",
+      "object": "any applicable value added, goods and services, sales, gross receipts, or other transaction taxes, fees, charg es, or surcharges, or any regulatory cost recovery surcharges or similar amounts that are owed under this Agreement and that Microsoft is permitted to collect from Customer",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Predicate failure: Predicate 'must_pay_applicable_taxes' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'must_pay_applicable_taxes' is not a canonical registered predicate.",
       "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "Customer will also pay any applicable value added, goods and services, sales, gross receipts, or other transaction taxes, fees, charges, or surcharges... and for all other taxes it is legally obligated to pay...",
-      "locator": {
-        "page": 6,
-        "section": "Taxes (g)"
-      }
+      "locator_valid": true
     },
     {
-      "claim_id": "doc057:af:057",
-      "subject": "Microsoft",
-      "predicate": "must_pay_income_taxes",
-      "object": "all taxes based upon its net income, gross receipts in lieu of income taxes, and property ownership taxes",
-      "modality": "OBLIGATION",
-      "category": "POLICY_CLAIM",
-      "conditions": [],
-      "disposition": "AUTOMATED_CHECKS_PASSED",
-      "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'must_pay_income_taxes'.",
-      "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "Microsoft will be responsible for all taxes based upon its net income, gross receipts taxes imposed in lieu of taxes on income or profits, and taxes on its property ownership.",
-      "locator": {
-        "page": 7,
-        "section": "Taxes (g)"
-      }
-    },
-    {
-      "claim_id": "doc057:af:058",
       "subject": "Customer",
-      "predicate": "may_deduct_withheld_taxes",
-      "object": "deduct required tax withholdings from payments invoiced by Microsoft upon providing official receipts to Microsoft",
-      "modality": "PERMISSION",
-      "category": "POLICY_CLAIM",
-      "conditions": [
-        "prompt official receipt provided"
-      ],
-      "disposition": "AUTOMATED_CHECKS_PASSED",
-      "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'may_deduct_withheld_taxes'.",
+      "predicate": "has_validity_rule",
+      "object": "be responsible for any applicable stamp taxes and for all other Microsoft Customer Agreement",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Predicate failure: Generic catch-all predicate 'has_validity_rule' is banned; requires normalized action taxonomy.; Predicate normativity failure: Predicate 'has_validity_rule' is an unconstrained catch-all.",
       "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "If any taxes are required to be withheld on payments invoiced by Microsoft, Customer may deduct such taxes from the amount owed and pay them to the appropriate taxing authority, but only if Customer promptly provides Microsoft an official receipt...",
-      "locator": {
-        "page": 7,
-        "section": "Taxes (g)"
-      }
+      "locator_valid": true
     },
     {
-      "claim_id": "doc057:af:059",
-      "subject": "Either party",
+      "subject": "Microsoft",
+      "predicate": "has_validity_rule",
+      "object": "be responsible for all taxes based upon its net income, gross receipts taxes imposed in lieu of taxes on income or profits, and taxes on its property ownership",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Predicate failure: Generic catch-all predicate 'has_validity_rule' is banned; requires normalized action taxonomy.; Predicate normativity failure: Predicate 'has_validity_rule' is an unconstrained catch-all.",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
+      "subject": "Customer",
+      "predicate": "deduct",
+      "object": "such taxes from the amount owed and pay them to the appropriate taxing authority, but only if Customer promptly provides Microsoft an official receipt for those withholdings and other documents reasonably requested to allow Microsoft to claim a foreign tax credit or refund",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Predicate failure: Predicate 'deduct' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'deduct' is not a canonical registered predicate.",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
+      "subject": "Customer",
+      "predicate": "ensure",
+      "object": "that any taxes withheld are minimized to the extent possible under applicable law",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Predicate failure: Predicate 'ensure' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'ensure' is not a canonical registered predicate.",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
+      "subject": "Each party",
       "predicate": "may_terminate_without_cause",
-      "object": "the Agreement without cause on sixty (60) days written notice",
-      "modality": "PERMISSION",
-      "category": "POLICY_CLAIM",
-      "conditions": [
-        "60 days written notice"
-      ],
+      "object": "this Agreement without cause on 60 days' notice",
       "disposition": "AUTOMATED_CHECKS_PASSED",
       "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'may_terminate_without_cause'.",
+      "decision_reason": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED.",
       "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "Either party may terminate this Agreement without cause on 60 days\u2019 notice.",
-      "locator": {
-        "page": 7,
-        "section": "Termination without cause (b)"
-      }
+      "locator_valid": true
     },
     {
-      "claim_id": "doc057:af:060",
-      "subject": "Either party",
-      "predicate": "may_terminate_for_material_breach",
-      "object": "the Agreement on 30 days notice for material breach if the other party fails to cure within 30-day cure period",
-      "modality": "PERMISSION",
-      "category": "POLICY_CLAIM",
-      "conditions": [
-        "uncured material breach",
-        "30 days cure notice"
-      ],
+      "subject": "Termination without cause",
+      "predicate": "affect",
+      "object": "Customer's perpetual licenses",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Subject failure: Subject 'Termination without cause' is a syntax fragment or non-actor token.; Predicate failure: Predicate 'affect' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'affect' is not a canonical registered predicate.",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
+      "subject": "Customer",
+      "predicate": "provides_technical_support",
+      "object": "Licenses granted on a subscription basis and access to Online Services and Microsoft Support Services will continue for the remainder of the then-current subscription period(s) or support term, subject to the terms of this Agreement.",
       "disposition": "AUTOMATED_CHECKS_PASSED",
       "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'may_terminate_for_material_breach'.",
+      "decision_reason": "[APPROVE_ALL_PASSED] Condition lost: Source evidence contains operative condition ('if/when/provided') that was omitted from structured claim.",
       "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "either party may terminate this Agreement on 30 days\u2019 notice for material breach if the other party fails to cure the breach within the 30-day notice period.",
-      "locator": {
-        "page": 7,
-        "section": "Termination for cause (c)"
-      }
+      "locator_valid": true
     },
     {
-      "claim_id": "doc057:af:061",
+      "subject": "Without limiting other remedies it",
+      "predicate": "has_validity_rule",
+      "object": "have, either party may terminate this Agreement on 30 days' notice for material breach if the other party fails to cure the breach within the 30-day notice period",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Subject failure: Subject 'Without limiting other remedies it' is a syntax fragment or non-actor token.; Predicate failure: Generic catch-all predicate 'has_validity_rule' is banned; requires normalized action taxonomy.; Predicate normativity failure: Predicate 'has_validity_rule' is an unconstrained catch-all.",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
+      "subject": "the following",
+      "predicate": "has_validity_rule",
+      "object": "apply",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Subject failure: Subject 'the following' is a syntax fragment or non-actor token.; Predicate failure: Generic catch-all predicate 'has_validity_rule' is banned; requires normalized action taxonomy.; Predicate normativity failure: Predicate 'has_validity_rule' is an unconstrained catch-all.",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
       "subject": "Customer",
       "predicate": "becomes_due_immediately",
-      "object": "all amounts due under any unpaid invoices immediately upon termination for cause",
-      "modality": "OBLIGATION",
-      "category": "POLICY_CLAIM",
-      "conditions": [
-        "upon termination"
-      ],
-      "disposition": "AUTOMATED_CHECKS_PASSED",
-      "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'becomes_due_immediately'.",
+      "object": "due and payable immediately",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Predicate failure: Predicate 'becomes_due_immediately' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'becomes_due_immediately' is not a canonical registered predicate.",
       "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "All amounts due under any unpaid invoices shall become due and payable immediately.",
-      "locator": {
-        "page": 7,
-        "section": "Termination for cause (c)(ii)"
-      }
+      "locator_valid": true
     },
     {
-      "claim_id": "doc057:af:062",
       "subject": "Customer",
-      "predicate": "must_pay_unpaid_usage",
-      "object": "for all unpaid usage and Professional Services provided as of termination date immediately upon receipt of invoice",
-      "modality": "OBLIGATION",
-      "category": "POLICY_CLAIM",
-      "conditions": [
-        "upon termination"
-      ],
+      "predicate": "must_pay_unpaid_invoices_immediately",
+      "object": "for all unpaid usage as of the termination date immediately upon receipt of an invoice",
       "disposition": "AUTOMATED_CHECKS_PASSED",
       "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'must_pay_unpaid_usage'.",
+      "decision_reason": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED.",
       "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "Customer must pay for all unpaid usage as of the termination date immediately upon receipt of an invoice. Customer must pay for all Professional Services provided as of the termination date immediately upon receipt of an invoice.",
-      "locator": {
-        "page": 7,
-        "section": "Termination for cause (c)(ii-iv)"
-      }
+      "locator_valid": true
     },
     {
-      "claim_id": "doc057:af:063",
       "subject": "Customer",
-      "predicate": "will_receive_refund_on_breach",
-      "object": "credit or refund for any Subscription fees paid in advance for unused consumption if Microsoft is in breach",
-      "modality": "ENTITLEMENT",
-      "category": "POLICY_CLAIM",
-      "conditions": [
-        "Microsoft in material breach"
-      ],
+      "predicate": "must_pay_unpaid_invoices_immediately",
+      "object": "for all Professional Services provided as of the termination date immediately upon receipt of an invoice",
       "disposition": "AUTOMATED_CHECKS_PASSED",
       "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'will_receive_refund_on_breach'.",
+      "decision_reason": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED.",
       "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "If Microsoft is in breach, Customer will receive a credit for any Subscription fees, including amounts paid in advance for unused consumption for any usage period after the termination date.",
-      "locator": {
-        "page": 7,
-        "section": "Termination for cause (c)(iii)"
-      }
+      "locator_valid": true
     },
     {
-      "claim_id": "doc057:af:064",
+      "subject": "Microsoft",
+      "predicate": "may_suspend_for_security_or_breach",
+      "object": "a Subscription or Statement of Services without terminating this Agreement",
+      "disposition": "AUTOMATED_CHECKS_PASSED",
+      "trust_score": 0.99,
+      "decision_reason": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED.",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
       "subject": "Microsoft",
       "predicate": "must_provide_notice_before_suspension",
-      "object": "Customer 30 days notice before suspension for material breach (unless immediate suspension needed for security/fraud)",
-      "modality": "OBLIGATION",
-      "category": "POLICY_CLAIM",
-      "conditions": [
-        "30 days notice required unless security emergency"
-      ],
-      "disposition": "AUTOMATED_CHECKS_PASSED",
-      "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'must_provide_notice_before_suspension'.",
+      "object": "Customer 30 days' notice before such suspension unless Microsoft's charge against Customer's payment method is declined or Microsoft reasonably believes immediate suspension is required to prevent unauthorized access to Customer Data or to ensure the ongoing confidentiality, integrity, availability, or resilience of Microsoft's systems and services",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Predicate failure: Predicate 'must_provide_notice_before_suspension' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'must_provide_notice_before_suspension' is not a canonical registered predicate.",
       "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "Microsoft will give Customer 30 days\u2019 notice before such suspension unless Microsoft\u2019s charge against Customer\u2019s payment method is declined or Microsoft reasonably believes immediate suspension is required...",
-      "locator": {
-        "page": 7,
-        "section": "Suspension (d)"
-      }
+      "locator_valid": true
     },
     {
-      "claim_id": "doc057:af:065",
       "subject": "Microsoft",
-      "predicate": "may_update_agreement",
-      "object": "Agreement from time to time, with changes applying to new orders and renewals",
-      "modality": "PERMISSION",
-      "category": "POLICY_CLAIM",
-      "conditions": [],
+      "predicate": "may_modify_or_discontinue_product",
+      "object": "or discontinue offering a Product or Professional Service and/or terminate a Subscription or Statement of Services for that Product or Professional Service in any country or jurisdiction where there is any current or future government requirement or obligation that (1) subjects Microsoft to any regulation or requirement that is not generally applicable to businesses operating there; (2) presents a hardship for Microsoft to continue offering the Product or Professional Service without modification; or (3) causes Microsoft to believe this Agreement or the Product or Professional Services offering may conflict with any such requirement or obligation",
       "disposition": "AUTOMATED_CHECKS_PASSED",
       "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'may_update_agreement'.",
+      "decision_reason": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED.",
       "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "Microsoft may update this Agreement from time to time. No changes will apply to perpetual Software licenses previously acquired. Changes will apply to new orders and to existing Subscriptions...",
-      "locator": {
-        "page": 8,
-        "section": "Modifications to this Agreement intro"
-      }
+      "locator_valid": true
     },
     {
-      "claim_id": "doc057:af:066",
       "subject": "Customer",
-      "predicate": "must_receive_60_days_modification_notice",
-      "object": "written notice at least 60 days before changes take effect to General Terms",
-      "modality": "OBLIGATION",
-      "category": "POLICY_CLAIM",
-      "conditions": [
-        "at least 60 days notice"
-      ],
+      "predicate": "will_issue_refund",
+      "object": "receive, as its sole remedy, a refund for any amount paid in advance for any period after termination",
       "disposition": "AUTOMATED_CHECKS_PASSED",
       "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'must_receive_60_days_modification_notice'.",
+      "decision_reason": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED.",
       "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "Customer will be notified at least 60 days before changes take effect to these General Terms or any other terms that are part of the Agreement...",
-      "locator": {
-        "page": 8,
-        "section": "Modifications - Other terms (c)"
-      }
+      "locator_valid": true
     },
     {
-      "claim_id": "doc057:af:067",
       "subject": "Customer",
-      "predicate": "must_stop_use_and_disable_billing",
-      "object": "Products and Professional Services by end of term and turn off recurring billing if Customer rejects Agreement changes",
-      "modality": "OBLIGATION",
-      "category": "POLICY_CLAIM",
-      "conditions": [
-        "Customer rejects changes"
-      ],
+      "predicate": "must_pay_for_services_before_termination",
+      "object": "for all services provided or used before termination",
       "disposition": "AUTOMATED_CHECKS_PASSED",
       "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'must_stop_use_and_disable_billing'.",
+      "decision_reason": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED.",
       "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "If Customer does not agree to the changes, it must stop using the Products and Professional Services by the end of the Subscription or support term and turn off recurring billing for any Subscriptions that are set to renew automatically.",
-      "locator": {
-        "page": 8,
-        "section": "Modifications - Other terms (c)"
-      }
+      "locator_valid": true
     },
     {
-      "claim_id": "doc057:af:068",
+      "subject": "Microsoft",
+      "predicate": "update",
+      "object": "this Agreement from time to time",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Predicate failure: Predicate 'update' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'update' is not a canonical registered predicate.",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
+      "subject": "No changes",
+      "predicate": "apply_to",
+      "object": "perpetual Software licenses previously acquired",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Subject failure: Subject 'No changes' is a syntax fragment or non-actor token.; Predicate failure: Predicate 'apply_to' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'apply_to' is not a canonical registered predicate.",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
+      "subject": "Changes",
+      "predicate": "apply_to",
+      "object": "new orders and to existing Subscriptions and Statements of Services as follows",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Subject failure: Subject 'Changes' is a syntax fragment or non-actor token.; Predicate failure: Predicate 'apply_to' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'apply_to' is not a canonical registered predicate.",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
+      "subject": "Customer",
+      "predicate": "has_validity_rule",
+      "object": "be required to accept revised or additional terms when placing a new order",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Predicate failure: Generic catch-all predicate 'has_validity_rule' is banned; requires normalized action taxonomy.; Predicate normativity failure: Predicate 'has_validity_rule' is an unconstrained catch-all.",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
+      "subject": "Customer",
+      "predicate": "has_validity_rule",
+      "object": "be notified at least 60 days before changes take effect to these General Terms or any other terms that are part of the Agreement except the DPA, SLA, and Product Terms, which have separate terms for updates",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Predicate failure: Generic catch-all predicate 'has_validity_rule' is banned; requires normalized action taxonomy.; Predicate normativity failure: Predicate 'has_validity_rule' is an unconstrained catch-all.",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
+      "subject": "Such changes",
+      "predicate": "take",
+      "object": "effect upon renewal unless Customer accepts them earlier in the manner specified in the notice and will not supersede or modify any amendments to this Agreement",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Subject failure: Subject 'Such changes' is a syntax fragment or non-actor token.; Predicate failure: Predicate 'take' is invalid or a generic stopword.; Predicate normativity failure: Predicate 'take' is not a canonical registered predicate.",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
       "subject": "Customer",
       "predicate": "must_not_modify_agreement",
-      "object": "this Agreement; conflicting terms in Customer purchase orders are expressly rejected and void",
-      "modality": "PROHIBITION",
-      "category": "POLICY_CLAIM",
-      "conditions": [],
+      "object": "this Agreement",
       "disposition": "AUTOMATED_CHECKS_PASSED",
       "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'must_not_modify_agreement'.",
+      "decision_reason": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED.",
       "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "Customer may not modify this Agreement. Any additional or conflicting terms contained in a purchase order or otherwise presented by Customer are expressly rejected and will not apply.",
-      "locator": {
-        "page": 8,
-        "section": "Changes proposed by Customer (d)"
-      }
+      "locator_valid": true
     },
     {
-      "claim_id": "doc057:af:069",
-      "subject": "Either party",
-      "predicate": "may_assign_to_affiliate",
-      "object": "this Agreement to an Affiliate upon written notice to the other party",
-      "modality": "PERMISSION",
-      "category": "POLICY_CLAIM",
-      "conditions": [
-        "written notice required"
-      ],
-      "disposition": "AUTOMATED_CHECKS_PASSED",
-      "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'may_assign_to_affiliate'.",
-      "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "Either party may assign this Agreement to an Affiliate, but it must notify the other party in writing of the assignment.",
-      "locator": {
-        "page": 8,
-        "section": "Assignment (c)"
-      }
-    },
-    {
-      "claim_id": "doc057:af:070",
       "subject": "Customer",
-      "predicate": "consents_to_payment_assignment",
-      "object": "to assignment to Microsoft Affiliates or third parties of rights to receive payment without prior notice",
-      "modality": "PERMISSION",
-      "category": "POLICY_CLAIM",
-      "conditions": [],
-      "disposition": "AUTOMATED_CHECKS_PASSED",
-      "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'consents_to_payment_assignment'.",
+      "predicate": "develop",
+      "object": "products independently without using the other's Confidential Information",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Predicate failure: Predicate 'develop' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'develop' is not a canonical registered predicate.",
       "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "Customer consents to the assignment to an Affiliate or third party, without prior notice, of any rights Microsoft may have under this Agreement to receive payment and enforce Customer's payment obligations...",
-      "locator": {
-        "page": 8,
-        "section": "Assignment (c)"
-      }
+      "locator_valid": true
     },
     {
-      "claim_id": "doc057:af:071",
+      "subject": "Each party",
+      "predicate": "assign",
+      "object": "this Agreement to an Affiliate",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Predicate failure: Predicate 'assign' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'assign' is not a canonical registered predicate.",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
+      "subject": "Each party",
+      "predicate": "notify",
+      "object": "the other party in writing of the assignment",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Predicate failure: Predicate 'notify' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'notify' is not a canonical registered predicate.",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
       "subject": "Customer",
       "predicate": "requires_written_approval",
-      "object": "from the non-assigning party in writing for any other proposed assignment; unauthorized assignment is void",
-      "modality": "OBLIGATION",
-      "category": "POLICY_CLAIM",
-      "conditions": [],
-      "disposition": "AUTOMATED_CHECKS_PASSED",
-      "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'requires_written_approval'.",
+      "object": "by the non-assigning party in writing",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Predicate failure: Predicate 'requires_written_approval' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'requires_written_approval' is not a canonical registered predicate.",
       "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "Any other proposed assignment of this Agreement must be approved by the non-assigning party in writing. Any attempted assignment without required approval will be void.",
-      "locator": {
-        "page": 8,
-        "section": "Assignment (c)"
-      }
+      "locator_valid": true
     },
     {
-      "claim_id": "doc057:af:072",
-      "subject": "Either party",
-      "predicate": "requires_written_agreement",
-      "object": "for any waiver to be valid, which must be in writing and signed by the waiving party",
-      "modality": "OBLIGATION",
-      "category": "POLICY_CLAIM",
-      "conditions": [],
-      "disposition": "AUTOMATED_CHECKS_PASSED",
-      "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'requires_written_agreement'.",
+      "subject": "Assignment",
+      "predicate": "relieve",
+      "object": "the assigning party of its obligations under the assigned Agreement",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Subject failure: Subject 'Assignment' is a stopword or grammatical noun phrase.; Predicate failure: Predicate 'relieve' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'relieve' is not a canonical registered predicate.",
       "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "Failure to enforce any provision of this Agreement will not constitute a waiver. Any waiver must be in writing and signed by the waiving party.",
-      "locator": {
-        "page": 8,
-        "section": "Waiver (e)"
-      }
+      "locator_valid": true
     },
     {
-      "claim_id": "doc057:af:073",
+      "subject": "Any attempted assignment without required approval",
+      "predicate": "has_validity_rule",
+      "object": "be void",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Subject failure: Subject 'Any attempted assignment without required approval' is a syntax fragment or non-actor token.; Predicate failure: Generic catch-all predicate 'has_validity_rule' is banned; requires normalized action taxonomy.; Predicate normativity failure: Predicate 'has_validity_rule' is an unconstrained catch-all.",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
+      "subject": "Failure to enforce any provision of this Agreement",
+      "predicate": "constitute",
+      "object": "a waiver",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Subject failure: Subject 'Failure to enforce any provision of this Agreement' is a syntax fragment or non-actor token.; Predicate failure: Predicate 'constitute' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'constitute' is not a canonical registered predicate.",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
       "subject": "Either party",
       "predicate": "must_be_in_writing",
-      "object": "all notices must be in writing to designated address (Microsoft Corp, Reno, NV)",
-      "modality": "OBLIGATION",
-      "category": "POLICY_CLAIM",
-      "conditions": [],
-      "disposition": "AUTOMATED_CHECKS_PASSED",
-      "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'must_be_in_writing'.",
+      "object": "writing and signed by the waiving party",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[DEONTIC_MODALITY_MISMATCH] Clause entailment failure [INSUFFICIENT_EVIDENCE - CONDITION]: Condition omission: predicate 'must_be_in_writing' drops the essential cumulative requirement that the waiver be signed.",
       "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "All notices must be in writing. Except for notices relating to arbitration... notices to Microsoft must be sent to the following address...",
-      "locator": {
-        "page": 9,
-        "section": "Notices (h)"
-      }
+      "locator_valid": true
     },
     {
-      "claim_id": "doc057:af:074",
+      "subject": "Either party",
+      "predicate": "must_be_in_writing",
+      "object": "writing",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[DEONTIC_MODALITY_MISMATCH] Clause entailment failure [INSUFFICIENT_EVIDENCE - SUBJECT]: Subject mismatch: subject for notice requirement must be 'Notice', not generic contracting entity.",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
       "subject": "Microsoft",
-      "predicate": "may_provide_electronic_notice",
-      "object": "information and notices electronically via email, service portal, or designated website",
-      "modality": "PERMISSION",
-      "category": "POLICY_CLAIM",
-      "conditions": [],
-      "disposition": "AUTOMATED_CHECKS_PASSED",
-      "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'may_provide_electronic_notice'.",
+      "predicate": "provide",
+      "object": "Customer with information and notices electronically, including via email, through the portal for an Online Service, or through a web site that Microsoft identifies",
+      "disposition": "AUTOMATED_CHECKS_FAILED",
+      "trust_score": 0.0,
+      "decision_reason": "[FRAGMENT_ASSERTION_DISCARDED] Text integrity failure: Claim text contains unstripped postal address artifact.; Predicate failure: Predicate 'provide' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'provide' is not a canonical registered predicate.",
       "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "Microsoft may provide Customer with information and notices electronically, including via email, through the portal for an Online Service, or through a web site that Microsoft identifies.",
-      "locator": {
-        "page": 9,
-        "section": "Notices (h)"
-      }
+      "locator_valid": true
     },
     {
-      "claim_id": "doc057:af:075",
-      "subject": "Each party",
-      "predicate": "submits_to_governing_jurisdiction",
-      "object": "to Washington State and US federal governing law (CISG excluded) with exclusive venue in King County, Washington or Ireland",
-      "modality": "OBLIGATION",
-      "category": "POLICY_CLAIM",
-      "conditions": [],
+      "subject": "Microsoft",
+      "predicate": "may_perform_through_affiliates_and_subcontractors",
+      "object": "its obligations under this Agreement through its Affiliates and use subcontractors to provide certain services",
       "disposition": "AUTOMATED_CHECKS_PASSED",
       "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'submits_to_governing_jurisdiction'.",
+      "decision_reason": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED.",
       "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "This Agreement will be governed by and construed in accordance with the laws of the State of Washington and federal laws of the United States. The 1980 United Nations Convention on Contracts for the International Sale of Goods... will not apply... When bringing any action arising under this Agreement, the parties agree to the following exclusive venues: King County, State of Washington... Europe... Ireland.",
-      "locator": {
-        "page": 9,
-        "section": "Applicable law and Dispute resolution (i-j)"
-      }
+      "locator_valid": true
     },
     {
-      "claim_id": "doc057:af:076",
-      "subject": "Each party",
-      "predicate": "applies_order_of_precedence",
-      "object": "controlling priority in case of conflict: (1) DPA, (2) General Terms, (3) Product Terms, (4) SLA, (5) Order terms",
-      "modality": "OBLIGATION",
-      "category": "POLICY_CLAIM",
-      "conditions": [],
-      "disposition": "AUTOMATED_CHECKS_PASSED",
-      "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'applies_order_of_precedence'.",
+      "subject": "Microsoft",
+      "predicate": "remains_responsible_for",
+      "object": "their performance",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[SUBJECT_CONTAMINATION] Counterparty failure: Ungrounded pronoun 'their' lacks clear antecedent party resolution.",
       "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "order from highest to lowest priority: (1) DPA; (2) these General Terms; (3) Product Terms; (4) SLA; and (5) any additional terms presented when an order is placed.",
-      "locator": {
-        "page": 9,
-        "section": "Order of precedence (k)"
-      }
+      "locator_valid": true
     },
     {
-      "claim_id": "doc057:af:077",
       "subject": "Customer",
-      "predicate": "warrants_government_procurement_compliance",
-      "object": "compliance with all applicable government procurement laws and authority to enter into Agreement if a government entity",
-      "modality": "ELIGIBILITY",
-      "category": "POLICY_CLAIM",
-      "conditions": [],
-      "disposition": "AUTOMATED_CHECKS_PASSED",
-      "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'warrants_government_procurement_compliance'.",
+      "predicate": "must_comply_with_restrictions",
+      "object": "all applicable government procurement laws and regulations; (2) it is authorized to enter into this Agreement; and (3) this Agreement satisfies all applicable procurement requirements",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Predicate failure: Predicate 'must_comply_with_restrictions' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'must_comply_with_restrictions' is not a canonical registered predicate.",
       "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "Customer represents and warrants that (1) it has complied and will comply with all applicable government procurement laws and regulations; (2) it is authorized to enter into this Agreement...",
-      "locator": {
-        "page": 9,
-        "section": "Government procurement rules (m)"
-      }
+      "locator_valid": true
     },
     {
-      "claim_id": "doc057:af:078",
       "subject": "Each party",
       "predicate": "must_comply_with_trade_laws",
-      "object": "all applicable import/export and OFAC sanctions regulations",
-      "modality": "OBLIGATION",
-      "category": "POLICY_CLAIM",
-      "conditions": [],
-      "disposition": "AUTOMATED_CHECKS_PASSED",
-      "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'must_comply_with_trade_laws'.",
+      "object": "Compliance with Trade Laws.",
+      "disposition": "AUTOMATED_CHECKS_FAILED",
+      "trust_score": 0.0,
+      "decision_reason": "[FRAGMENT_ASSERTION_DISCARDED] Text integrity failure: Normative rule is missing an operative modal phrase ('may', 'must', 'will', 'shall', etc.).",
       "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "Each party will comply with all laws and regulations applicable to the import or export of the Products and Services Deliverables, including, without limitation, trade laws such as the U.S. Export Administration Regulations and International Traffic in Arms Regulations and sanctions...",
-      "locator": {
-        "page": 9,
-        "section": "Compliance with Trade Laws (n)"
-      }
+      "locator_valid": true
     },
     {
-      "claim_id": "doc057:af:079",
-      "subject": "Microsoft",
-      "predicate": "may_suspend_for_trade_laws",
-      "object": "suspend or terminate Agreement if performance would cause it to violate Trade Laws or risk sanctions",
-      "modality": "PERMISSION",
-      "category": "POLICY_CLAIM",
-      "conditions": [],
+      "subject": "Each party",
+      "predicate": "must_comply_with_trade_laws",
+      "object": "be subject to U.S. and other countries' export jurisdictions",
+      "disposition": "AUTOMATED_CHECKS_FAILED",
+      "trust_score": 0.0,
+      "decision_reason": "[FRAGMENT_ASSERTION_DISCARDED] Modality consistency failure: Obligation predicate 'must_comply_with_trade_laws' contradicts permissive modal ('may/can') in text.; Condition lost: Source evidence contains operative condition ('if/when/provided') that was omitted from structured claim.",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
+      "subject": "Each party",
+      "predicate": "must_comply_with_trade_laws",
+      "object": "all laws and regulations applicable to the import or export of the Products and Services Deliverables, including, without limit ation, trade laws such as the U.S. Export Administration Regulations and International Traffic in Arms Regulations and sanctions regulations administered by the U.S. Office of Foreign Assets Control (\"OFAC\") (\"Trade Laws\")",
       "disposition": "AUTOMATED_CHECKS_PASSED",
       "trust_score": 0.99,
-      "decision_reason": "APPROVED: Sprint AF verified atomic claim. Normalized predicate 'may_suspend_for_trade_laws'.",
+      "decision_reason": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED.",
       "evidence_supported": true,
-      "locator_valid": true,
-      "evidence_span": "Microsoft may suspend or terminate this Agreement to the extent that Microsoft reasonably believes that performance would cause it to violate Trade Laws or put it at risk of becoming subject to sanctions...",
-      "locator": {
-        "page": 9,
-        "section": "Compliance with Trade Laws (n)"
-      }
+      "locator_valid": true
+    },
+    {
+      "subject": "Microsoft",
+      "predicate": "may_suspend_for_security_or_breach",
+      "object": "or terminate this Agreement to the extent that Microsoft reasonably believes that performance would cause it to violate Trade Laws or put it at risk of becoming s ubject to sanctions and penalties under such laws",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[DEONTIC_MODALITY_MISMATCH] Clause entailment failure [INSUFFICIENT_EVIDENCE - CONDITION]: Scope/Trigger mismatch: evidence authorizes suspension to prevent trade law violations or comply with sanctions, not for security risks or material breach.",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
+      "subject": "Product",
+      "predicate": "varies_by_region",
+      "object": "by region",
+      "disposition": "AUTOMATED_CHECKS_FAILED",
+      "trust_score": 0.5,
+      "decision_reason": "[REJECT_DESCRIPTIVE_PURPOSE] Predicate failure: Predicate 'varies_by_region' is not present in versioned taxonomy registry.; Claim type failure: Text is descriptive background scope, not an operative rule.; Predicate normativity failure: Predicate 'varies_by_region' is not a canonical registered predicate.",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
+      "subject": "Customers",
+      "predicate": "has_definition",
+      "object": "\"Product\" does not include Non-Microsoft Products.",
+      "disposition": "AUTOMATED_CHECKS_FAILED",
+      "trust_score": 0.5,
+      "decision_reason": "[REJECT_DESCRIPTIVE_PURPOSE] Claim type failure: 'definition' is a non-rule type (definition, reference, description, example, revision_history, or non_rule_context).",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
+      "subject": "Software",
+      "predicate": "has_definition",
+      "object": "be part of an Online Service",
+      "disposition": "AUTOMATED_CHECKS_FAILED",
+      "trust_score": 0.5,
+      "decision_reason": "[REJECT_DESCRIPTIVE_PURPOSE] Claim type failure: 'definition' is a non-rule type (definition, reference, description, example, revision_history, or non_rule_context).",
+      "evidence_supported": true,
+      "locator_valid": true
     }
   ]
 }

@@ -77,6 +77,10 @@ INVALID_SUBJECT_PATTERNS = [
     r"^page\s+\d+",
     r"^section\s+[\d\.]+",
     r"^article\s+\d+",
+    r"^(?:and|but|or|so|yet|for|nor|because|although|whereas|if|when|where|while|however)\s+\b",
+    r"^(?:appendix|schedule|exhibit|attachment|table|figure)\b",
+    r"^for\s+purposes\s+of\b",
+    r"^data$",
 ] + PAGE_HEADER_PATTERNS + POSTAL_ADDRESS_PATTERNS
 
 # Operative contractual modal verbs required in normative rules
@@ -399,6 +403,23 @@ class UniversalGateEvaluator:
                 is_supported=True,
                 reason="Verbatim evidence establishes authorization of recurring charges.",
                 dimension_checked="ACTION",
+            )
+
+        # 2b. authorizes_financial_assessment
+        if pred_lower == "authorizes_financial_assessment":
+            has_financial = bool(re.search(r"\b(financial|credit report|credit reports|financial condition|assess.*eligibility|invoicing terms|credit check)\b", full_evidence))
+            if not has_financial:
+                return SemanticEntailmentResult(
+                    decision=EntailmentDecision.INSUFFICIENT_EVIDENCE,
+                    is_supported=False,
+                    reason="Predicate 'authorizes_financial_assessment' lacks financial condition or credit assessment cues in evidence.",
+                    dimension_checked="ACTION_OBJECT",
+                )
+            return SemanticEntailmentResult(
+                decision=EntailmentDecision.SUPPORTED,
+                is_supported=True,
+                reason="Verbatim evidence establishes customer authorization for financial condition or credit assessment.",
+                dimension_checked="ACTION_OBJECT",
             )
 
         # 3. has_refund_eligibility
@@ -1148,6 +1169,22 @@ class UniversalGateEvaluator:
             is_text_integrity = False
             reasons.append("Text integrity failure: Claim text contains unstripped postal address artifact.")
 
+        # 3b-1. Disallow Markdown heading prefixes in claim text or evidence quote
+        ev_quote = getattr(evidence, "verbatim_quote", None) or ""
+        if re.match(r"^\s*#{1,6}\s+", raw_text) or re.match(r"^\s*#{1,6}\s+", ev_quote):
+            is_text_integrity = False
+            reasons.append("Text integrity failure: Claim text or evidence span begins with a Markdown heading artifact ('#').")
+
+        # 3b-2. Disallow Unicode Private Use Area glyphs (U+E700 to U+E7FF)
+        if re.search(r"[\ue700-\ue7ff]", raw_text) or re.search(r"[\ue700-\ue7ff]", ev_quote):
+            is_text_integrity = False
+            reasons.append("Text integrity failure: Claim text or evidence span contains Unicode Private Use Area glyphs.")
+
+        # 3b-3. Disallow publication timestamps and metadata dates as normative rules
+        if re.search(r"^(?:last\s+updated|published\s+in|effective\s+date\s*:)\b", eval_text, re.IGNORECASE):
+            is_text_integrity = False
+            reasons.append("Text integrity failure: Claim text is a publication date or metadata timestamp.")
+
         # 3c. Disallow truncated sentences
         if eval_text.startswith("...") or eval_text.endswith("..."):
             is_text_integrity = False
@@ -1163,11 +1200,13 @@ class UniversalGateEvaluator:
             or ct_clean in {"table_rule", "table_row", "policy_matrix"}
             or "|" in raw_text
         )
-        is_list_item = bool(
+        raw_is_list = bool(
             re.match(r"^\s*(?:[-*•]|\d+[\.\)])\s+", eval_text)
             or (metadata and (metadata.get("is_list") or metadata.get("evidence_structure") == "list_item"))
             or (kwargs.get("locator") and (kwargs["locator"].get("is_list") or kwargs["locator"].get("evidence_structure") == "list_item"))
         )
+        # Bullet fragments without operative modal or obligation indicator are section headers/labels
+        is_list_item = raw_is_list and (len(eval_text.split()) >= 6 or bool(re.search(MODAL_OPERATIVE_PATTERN, text_lower)))
         is_declarative_constraint = bool(
             re.search(
                 r"\b(?:approval|approved by|manager approval|tier \d+|lead approval|director approval|"

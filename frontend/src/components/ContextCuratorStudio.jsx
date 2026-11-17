@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
+import CandidateApprovalsStudio from './CandidateApprovalsStudio';
 
 const CONFLICT_TYPE_META = {
   direct_contradiction: { label: 'Direct Contradiction', bg: 'rgba(239, 68, 68, 0.12)', color: '#dc2626', border: 'rgba(239, 68, 68, 0.3)' },
@@ -33,7 +34,9 @@ export default function ContextCuratorStudio({
   onResolveConflict,
   onRefreshConflicts,
   initialSubView = 'health',
-  onSubViewChange
+  onSubViewChange,
+  initialDocId = null,
+  onNavigateToDocument
 }) {
   const { user, token, hasPermission } = useAuth();
   const [curatorSubView, setCuratorSubView] = useState(initialSubView); // 'health' | 'conflicts'
@@ -405,6 +408,60 @@ export default function ContextCuratorStudio({
           <span style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: 600 }}>
             Controlled Autonomous: Deterministic Only
           </span>
+        </div>
+      </div>
+
+      {/* ── CURATOR SUB-NAV BAR: HEALTH | APPROVALS | CONFLICTS | DRIFT ── */}
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        background: '#FAF8F5',
+        border: '1px solid #E2E8F0',
+        borderRadius: '10px',
+        padding: '6px 12px',
+        flexWrap: 'wrap',
+        gap: '8px'
+      }}>
+        <div style={{ display: 'inline-flex', background: '#E2E8F0', padding: '3px', borderRadius: '8px', gap: '3px' }}>
+          {[
+            { id: 'health', label: 'Context Health & Heuristics', icon: '🛡️' },
+            { id: 'approvals', label: 'Candidate Approvals', icon: '⚠️' },
+            { id: 'conflicts', label: 'Pairwise Conflict Resolver', icon: '⚡', count: conflicts.length > 0 ? conflicts.length : null },
+            { id: 'drift', label: 'Drift & Claim Decay', icon: '⏱️' }
+          ].map(tab => {
+            const isActive = curatorSubView === tab.id;
+            return (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => handleSelectSubView(tab.id)}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  padding: '5px 12px',
+                  fontSize: '0.76rem',
+                  fontWeight: isActive ? 700 : 500,
+                  borderRadius: '6px',
+                  border: isActive ? '1px solid rgba(0,0,0,0.06)' : '1px solid transparent',
+                  background: isActive ? '#FFFFFF' : 'transparent',
+                  color: isActive ? '#0F172A' : '#64748B',
+                  cursor: 'pointer',
+                  boxShadow: isActive ? '0 1px 3px rgba(0,0,0,0.08)' : 'none',
+                  transition: 'all 0.15s ease'
+                }}
+              >
+                <span>{tab.icon}</span>
+                <span>{tab.label}</span>
+                {typeof tab.count === 'number' && (
+                  <span style={{ fontSize: '0.64rem', fontWeight: 800, padding: '1px 6px', borderRadius: '10px', background: '#FEF2F2', color: '#DC2626', border: '1px solid #FECACA' }}>
+                    {tab.count}
+                  </span>
+                )}
+              </button>
+            );
+          })}
         </div>
       </div>
 
@@ -830,7 +887,21 @@ export default function ContextCuratorStudio({
       )}
 
       {/* ========================================================= */}
-      {/* SUB-VIEW 2: CLUSTERED GOVERNANCE ISSUES & CONFLICT QUEUE   */}
+      {/* SUB-VIEW 2: CANDIDATE CLAIM APPROVALS & HITL TRIAGE       */}
+      {/* ========================================================= */}
+      {curatorSubView === 'approvals' && (
+        <CandidateApprovalsStudio
+          activeOrg={activeOrg}
+          token={token}
+          user={user}
+          showToast={showToast}
+          initialDocId={initialDocId}
+          onNavigateToDocument={onNavigateToDocument}
+        />
+      )}
+
+      {/* ========================================================= */}
+      {/* SUB-VIEW 3: CLUSTERED GOVERNANCE ISSUES & CONFLICT QUEUE   */}
       {/* ========================================================= */}
       {curatorSubView === 'conflicts' && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>

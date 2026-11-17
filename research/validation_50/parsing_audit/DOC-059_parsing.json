@@ -1,16 +1,14 @@
 {
   "document_id": "DOC-059",
   "filename": "Microsoft Partner Agreement (Indirect).docx",
-  "page_count": 1,
-  "total_characters": 101651,
+  "page_count": 30,
+  "total_characters": 101676,
   "block_count": 297,
   "table_count": 2,
-  "parsing_status": "PASS_WITH_MINOR_ISSUES",
+  "parsing_status": "PASS",
   "major_issues": [],
-  "minor_issues": [
-    "Header/footer repetition in body text: 2 repeating phrases detected"
-  ],
-  "all_issues_count": 1,
+  "minor_issues": [],
+  "all_issues_count": 0,
   "reading_order_fidelity": "PASS",
   "table_fidelity": "PASS"
 }

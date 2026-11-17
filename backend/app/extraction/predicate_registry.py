@@ -174,6 +174,30 @@ class CanonicalPredicate(str, Enum):
     CAN_APPROVE_OR_DENY = "can_approve_or_deny"
     IS_RESTRICTED_TO = "is_restricted_to"
 
+    # Commercial Agreement & Service Policy Predicates
+    HAS_EFFECTIVE_DATE = "has_effective_date"
+    HAS_NOTICE_PERIOD = "has_notice_period"
+    REQUIRES_PRIOR_WRITTEN_NOTICE = "requires_prior_written_notice"
+    HAS_PERMITTED_USE_SCOPE = "has_permitted_use_scope"
+    REQUIRES_REASONABLE_EFFORTS = "requires_reasonable_efforts"
+    PROVIDES_CUSTOMER_OPTION = "provides_customer_option"
+    REQUIRES_COMPLIANCE_VERIFICATION = "requires_compliance_verification"
+    HAS_WARRANTY_OBLIGATION = "has_warranty_obligation"
+    DISCLAIMS_IMPLIED_WARRANTIES = "disclaims_implied_warranties"
+    REMAINS_LIABLE_FOR = "remains_liable_for"
+    REQUIRES_RECORD_RETENTION = "requires_record_retention"
+    HAS_AUDIT_VERIFICATION_RIGHT = "has_audit_verification_right"
+    MAY_SUSPEND_FOR_BREACH = "may_suspend_for_breach"
+    PROMPTLY_NOTIFIES_OF_BREACH = "promptly_notifies_of_breach"
+    MAY_ASSIGN_AGREEMENT = "may_assign_agreement"
+    RESTRICTS_ASSIGNMENT = "restricts_assignment"
+    REQUIRES_TAX_PAYMENT = "requires_tax_payment"
+    HAS_CONFIDENTIALITY_SURVIVAL = "has_confidentiality_survival"
+    HAS_SEVERABILITY_TERMS = "has_severability_terms"
+    REQUIRES_MUTUAL_INDEMNIFICATION = "requires_mutual_indemnification"
+    MAY_CHOOSE_ALTERNATIVE_OFFERING = "may_choose_alternative_offering"
+    HAS_GOVERNING_LAW = "has_governing_law"
+
 
 class PredicateRegistry:
     """
@@ -302,6 +326,81 @@ class PredicateRegistry:
         "damaged item valued under $40": CanonicalPredicate.MAY_ISSUE_REFUND_WITHOUT_RETURN.value,
         "funds are debited": CanonicalPredicate.HAS_FUNDS_DEBIT_OUTCOME.value,
         "has funds debit outcome": CanonicalPredicate.HAS_FUNDS_DEBIT_OUTCOME.value,
+
+        # Commercial Agreement & Governance Phrase Normalizations
+        "take effect on": CanonicalPredicate.HAS_EFFECTIVE_DATE.value,
+        "takes effect on": CanonicalPredicate.HAS_EFFECTIVE_DATE.value,
+        "shall take effect on": CanonicalPredicate.HAS_EFFECTIVE_DATE.value,
+        "takes effect": CanonicalPredicate.HAS_EFFECTIVE_DATE.value,
+        "take place upon": CanonicalPredicate.HAS_NOTICE_PERIOD.value,
+        "takes place upon": CanonicalPredicate.HAS_NOTICE_PERIOD.value,
+        "not fewer than 30-days' notice": CanonicalPredicate.REQUIRES_PRIOR_WRITTEN_NOTICE.value,
+        "not fewer than 30 days notice": CanonicalPredicate.REQUIRES_PRIOR_WRITTEN_NOTICE.value,
+        "use commercially reasonable efforts": CanonicalPredicate.REQUIRES_REASONABLE_EFFORTS.value,
+        "commercially reasonable efforts": CanonicalPredicate.REQUIRES_REASONABLE_EFFORTS.value,
+        "use the information obtained in compliance": CanonicalPredicate.HAS_PERMITTED_USE_SCOPE.value,
+        "compliance verification": CanonicalPredicate.REQUIRES_COMPLIANCE_VERIFICATION.value,
+        "provide customer a choice": CanonicalPredicate.PROVIDES_CUSTOMER_OPTION.value,
+        "provide customer choice": CanonicalPredicate.PROVIDES_CUSTOMER_OPTION.value,
+        "customer choice": CanonicalPredicate.MAY_CHOOSE_ALTERNATIVE_OFFERING.value,
+        "warrants that": CanonicalPredicate.HAS_WARRANTY_OBLIGATION.value,
+        "warrant that": CanonicalPredicate.HAS_WARRANTY_OBLIGATION.value,
+        "represents and warrants": CanonicalPredicate.HAS_WARRANTY_OBLIGATION.value,
+        "represent and warrant": CanonicalPredicate.HAS_WARRANTY_OBLIGATION.value,
+        "disclaims all implied warranties": CanonicalPredicate.DISCLAIMS_IMPLIED_WARRANTIES.value,
+        "disclaim all implied warranties": CanonicalPredicate.DISCLAIMS_IMPLIED_WARRANTIES.value,
+        "without warranty of any kind": CanonicalPredicate.DISCLAIMS_IMPLIED_WARRANTIES.value,
+        "as is without warranty": CanonicalPredicate.DISCLAIMS_IMPLIED_WARRANTIES.value,
+        "remains liable for": CanonicalPredicate.REMAINS_LIABLE_FOR.value,
+        "remain liable for": CanonicalPredicate.REMAINS_LIABLE_FOR.value,
+        "are responsible for": CanonicalPredicate.REMAINS_LIABLE_FOR.value,
+        "is responsible for": CanonicalPredicate.IS_RESPONSIBLE_FOR.value,
+        "retain all books and records": CanonicalPredicate.REQUIRES_RECORD_RETENTION.value,
+        "retain all records": CanonicalPredicate.REQUIRES_RECORD_RETENTION.value,
+        "retain records for": CanonicalPredicate.REQUIRES_RECORD_RETENTION.value,
+        "audit rights": CanonicalPredicate.HAS_AUDIT_VERIFICATION_RIGHT.value,
+        "right to audit": CanonicalPredicate.HAS_AUDIT_VERIFICATION_RIGHT.value,
+        "audit and verify compliance": CanonicalPredicate.HAS_AUDIT_VERIFICATION_RIGHT.value,
+        "may suspend for breach": CanonicalPredicate.MAY_SUSPEND_FOR_BREACH.value,
+        "suspend for breach": CanonicalPredicate.MAY_SUSPEND_FOR_BREACH.value,
+        "may suspend or terminate the agreement": CanonicalPredicate.MAY_SUSPEND_FOR_BREACH.value,
+        "may suspend or terminate": CanonicalPredicate.MAY_SUSPEND_FOR_BREACH.value,
+        "prompt written notice": CanonicalPredicate.PROMPTLY_NOTIFIES_OF_BREACH.value,
+        "promptly notify": CanonicalPredicate.PROMPTLY_NOTIFIES_OF_BREACH.value,
+        "promptly notifies": CanonicalPredicate.PROMPTLY_NOTIFIES_OF_BREACH.value,
+        "may assign": CanonicalPredicate.MAY_ASSIGN_AGREEMENT.value,
+        "may not assign": CanonicalPredicate.RESTRICTS_ASSIGNMENT.value,
+        "cannot assign": CanonicalPredicate.RESTRICTS_ASSIGNMENT.value,
+        "assignment is restricted": CanonicalPredicate.RESTRICTS_ASSIGNMENT.value,
+        "without prior written consent": CanonicalPredicate.RESTRICTS_ASSIGNMENT.value,
+        "responsible for all taxes": CanonicalPredicate.REQUIRES_TAX_PAYMENT.value,
+        "pay all applicable taxes": CanonicalPredicate.REQUIRES_TAX_PAYMENT.value,
+        "confidentiality obligations survive": CanonicalPredicate.HAS_CONFIDENTIALITY_SURVIVAL.value,
+        "survives termination": CanonicalPredicate.HAS_CONFIDENTIALITY_SURVIVAL.value,
+        "governed by the laws": CanonicalPredicate.HAS_GOVERNING_LAW.value,
+        "governed by the laws of": CanonicalPredicate.HAS_GOVERNING_LAW.value,
+        "distinct and severable": CanonicalPredicate.HAS_SEVERABILITY_TERMS.value,
+        "severability": CanonicalPredicate.HAS_SEVERABILITY_TERMS.value,
+        "mutual indemnification": CanonicalPredicate.REQUIRES_MUTUAL_INDEMNIFICATION.value,
+        "may use": CanonicalPredicate.HAS_PERMITTED_USE_SCOPE.value,
+        "can use": CanonicalPredicate.HAS_PERMITTED_USE_SCOPE.value,
+        "access": CanonicalPredicate.HAS_PERMITTED_USE_SCOPE.value,
+        "has access": CanonicalPredicate.HAS_PERMITTED_USE_SCOPE.value,
+        "provide technical support": "provides_technical_support",
+        "support services": "provides_technical_support",
+        "technical support": "provides_technical_support",
+        "must provide information": CanonicalPredicate.MUST_PROVIDE_INFORMATION.value,
+        "requested assistance and information": CanonicalPredicate.MUST_PROVIDE_INFORMATION.value,
+        "delete": "must_delete_data",
+        "must delete": "must_delete_data",
+        "material breach": "may_terminate_for_material_breach_on_30_days_notice",
+        "terminate for breach": "may_terminate_for_material_breach_on_30_days_notice",
+        "terminate without cause": "may_terminate_without_cause",
+        "taxes": CanonicalPredicate.REQUIRES_TAX_PAYMENT.value,
+        "pay all applicable taxes": CanonicalPredicate.REQUIRES_TAX_PAYMENT.value,
+        "responsible for all taxes": CanonicalPredicate.REQUIRES_TAX_PAYMENT.value,
+        "remains liable": CanonicalPredicate.REMAINS_LIABLE_FOR.value,
+        "remain liable": CanonicalPredicate.REMAINS_LIABLE_FOR.value,
     }
 
     @classmethod
@@ -342,16 +441,20 @@ class PredicateRegistry:
 
         cleaned = raw_pred.strip().lower()
 
-        # 1. Direct registry hit
-        if cleaned in cls.CANONICAL_PREDICATES:
+        # 1. Direct registry hit (checks both CanonicalPredicate and versioned taxonomy registry)
+        if cls.is_canonical(cleaned):
             return cleaned, True
 
-        # 2. Known raw phrase mapping
+        # 2. Known raw phrase mapping (check both raw token and space-separated phrase)
         if cleaned in cls.RAW_PHRASE_MAPPINGS:
             return cls.RAW_PHRASE_MAPPINGS[cleaned], True
 
+        cleaned_spaced = cleaned.replace("_", " ").strip()
+        if cleaned_spaced in cls.RAW_PHRASE_MAPPINGS:
+            return cls.RAW_PHRASE_MAPPINGS[cleaned_spaced], True
+
         for phrase, mapped in cls.RAW_PHRASE_MAPPINGS.items():
-            if phrase in cleaned:
+            if phrase in cleaned or phrase in cleaned_spaced:
                 return mapped, True
 
         # 3. Disallowed generic token

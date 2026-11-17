@@ -398,11 +398,15 @@ class DeterministicSchemaExtractor:
                     scope_dict = {k: cols[k] for k in scope_keys}
 
                 for k in rule_keys:
-                    # Phase 6: Skip standalone currency or unit columns (folded into monetary/scope attributes)
+                    # Skip standalone currency or unit columns (folded into monetary/scope attributes)
                     if k.lower() in ("currency", "unit") and len(rule_keys) > 1:
                         continue
                     # Skip redundant annual column when corresponding monthly premium is already extracted
                     if " > annual" in k.lower() and any("monthly" in rk.lower() for rk in rule_keys):
+                        continue
+                    # Skip columns whose header is an OCR fragment or col index artifact
+                    k_clean_lower = re.sub(r"[¹²³⁴⁵⁶⁷⁸⁹⁰]+$", "", k).strip().lower()
+                    if re.match(r"^col\d+$", k_clean_lower) or k_clean_lower in ("table_attribute", "unmapped", "only produ", "cts and mic", "ect or"):
                         continue
                     v = cols[k]
                     val_str = str(v).strip()
