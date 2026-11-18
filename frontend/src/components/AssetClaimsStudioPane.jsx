@@ -13,7 +13,8 @@ import {
   SlidersHorizontal,
   X,
   AlignRight,
-  ExternalLink
+  ExternalLink,
+  Target
 } from 'lucide-react';
 
 export function getClaimClassification(cl, allConflictedClaimIds = new Set()) {
@@ -311,7 +312,7 @@ export default function AssetClaimsStudioPane({
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all'); // 'all' | 'canonical' | 'review' | 'quarantined' | 'non_rule' | 'rejected' | 'conflicted'
   const [trustTierFilter, setTrustTierFilter] = useState('all'); // 'all' | 'high' | 'med' | 'low'
-  const [sortBy, setSortBy] = useState('sl_asc'); // 'sl_asc' | 'sl_desc' | 'subject_asc' | 'trust_desc' | 'trust_asc'
+  const [sortBy, setSortBy] = useState('subject_asc'); // 'subject_asc' | 'trust_desc' | 'trust_asc'
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(20); // 20, 50, 80, 100
   const [copiedClaimId, setCopiedClaimId] = useState(null);
@@ -431,17 +432,35 @@ export default function AssetClaimsStudioPane({
 
   // Filter and sort pipeline
   const filteredClaims = useMemo(() => {
+    // Normalization helper: lowercases and replaces hyphens/underscores/extra spaces
+    const norm = (str) => String(str || '').toLowerCase().replace(/[-_]/g, ' ').replace(/\s+/g, ' ').trim();
+    const rawQ = (searchQuery || '').trim();
+    const qLower = rawQ.toLowerCase();
+    const qNorm = norm(rawQ);
+
+    // Check if search query specifically targets a known status category or status keyword
+    const isStatusQuery = qNorm.length > 0 && (
+      qNorm.includes('canon') || qNorm.includes('v3') || qNorm.includes('verified') || qNorm.includes('certif')
+      || qNorm.includes('review') || qNorm.includes('candidat')
+      || qNorm.includes('non rule') || qNorm.includes('nonrule') || qNorm.includes('definit') || qNorm.includes('contact') || qNorm.includes('example') || qNorm.includes('history')
+      || qNorm.includes('quarant')
+      || qNorm.includes('reject')
+      || qNorm.includes('conflict')
+    );
+
     return claims.filter(cl => {
       const cat = getClaimDisplayCategory(cl, allConflictedClaimIds);
 
-      // Status filter
-      if (statusFilter === 'canonical' && cat !== 'canonical') return false;
-      if (statusFilter === 'verified' && cat !== 'canonical') return false;
-      if (statusFilter === 'review' && cat !== 'review') return false;
-      if (statusFilter === 'quarantined' && cat !== 'quarantined') return false;
-      if (statusFilter === 'non_rule' && cat !== 'non_rule') return false;
-      if (statusFilter === 'rejected' && cat !== 'rejected') return false;
-      if (statusFilter === 'conflicted' && cat !== 'conflicted') return false;
+      // Status filter dropdown (applied unless the user explicitly searched for a status in the search box)
+      if (statusFilter !== 'all' && !isStatusQuery) {
+        if (statusFilter === 'canonical' && cat !== 'canonical') return false;
+        if (statusFilter === 'verified' && cat !== 'canonical') return false;
+        if (statusFilter === 'review' && cat !== 'review') return false;
+        if (statusFilter === 'quarantined' && cat !== 'quarantined') return false;
+        if (statusFilter === 'non_rule' && cat !== 'non_rule') return false;
+        if (statusFilter === 'rejected' && cat !== 'rejected') return false;
+        if (statusFilter === 'conflicted' && cat !== 'conflicted') return false;
+      }
 
       // Trust tier filter
       const score = getClaimDynamicTrustScore(cl, allConflictedClaimIds);
@@ -449,37 +468,65 @@ export default function AssetClaimsStudioPane({
       if (trustTierFilter === 'med' && (score < 0.7 || score >= 0.9)) return false;
       if (trustTierFilter === 'low' && score >= 0.7) return false;
 
-      // Search query filter
-      if (searchQuery.trim()) {
-        const q = searchQuery.toLowerCase();
-        const text = (cl.fullText || cl.label || cl.data?.claim_text || '').toLowerCase();
-        const subj = (cl.subject || cl.data?.subject || '').toLowerCase();
-        const pred = (cl.predicate || cl.data?.predicate || '').toLowerCase();
-        const obj = (cl.object || cl.data?.object || '').toLowerCase();
-        const id = String(cl.id || '').toLowerCase();
+      // Search query filter: Searches title, status, subject, predicate, object, raw text, and Sl.No
+      if (rawQ) {
+        const title = getClaimDisplayTitle(cl).toLowerCase();
+        const id = String(cl.id || cl._tempId || cl.data?.claim_id || '').toLowerCase();
+        const subj = String(cl.subject || cl.data?.subject || '');
+        const pred = String(cl.predicate || cl.data?.predicate || '');
+        const obj = String(cl.object || cl.data?.object || '');
+        const fullText = String(cl.fullText || cl.label || cl.data?.claim_text || '');
+        const quote = String(cl.data?.evidence_snippet || cl.data?.quote || cl.data?.context_clause || '');
 
-        if (!text.includes(q) && !subj.includes(q) && !pred.includes(q) && !obj.includes(q) && !id.includes(q)) {
+        // Status matching
+        const classif = getClaimClassification(cl, allConflictedClaimIds);
+        const badgeLabelNorm = norm(classif.badgeLabel);
+        const categoryNorm = norm(cat);
+        const rawStatusNorm = norm(cl.status || cl.data?.status);
+        const certTierNorm = norm(cl.certification_tier || cl.data?.certification_tier);
+
+        let statusMatches = badgeLabelNorm.includes(qNorm)
+          || categoryNorm.includes(qNorm)
+          || rawStatusNorm.includes(qNorm)
+          || certTierNorm.includes(qNorm);
+
+        if (!statusMatches) {
+          if (cat === 'canonical' && (qNorm.includes('canon') || qNorm.includes('v3') || qNorm.includes('verified') || qNorm.includes('certif') || qNorm.includes('active'))) {
+            statusMatches = true;
+          } else if (cat === 'review' && (qNorm.includes('review') || qNorm.includes('candidat') || qNorm.includes('under review'))) {
+            statusMatches = true;
+          } else if (cat === 'non_rule' && (qNorm.includes('non') || qNorm.includes('rule') || qNorm.includes('nonrule') || qNorm.includes('context') || qNorm.includes('definit') || qNorm.includes('contact') || qNorm.includes('example') || qNorm.includes('history'))) {
+            statusMatches = true;
+          } else if (cat === 'quarantined' && (qNorm.includes('quarant') || qNorm.includes('compound'))) {
+            statusMatches = true;
+          } else if (cat === 'rejected' && (qNorm.includes('reject') || qNorm.includes('duplicat') || qNorm.includes('contradict'))) {
+            statusMatches = true;
+          } else if (cat === 'conflicted' && (qNorm.includes('conflict') || qNorm.includes('dispute'))) {
+            statusMatches = true;
+          }
+        }
+
+        // Sl.No matching
+        const key = cl.id || cl._tempId || cl.data?.claim_id;
+        const slNoStr = String(rawClaimIndexMap.get(key) || '');
+
+        const matches = statusMatches
+          || title.includes(qLower)
+          || id.includes(qLower)
+          || norm(subj).includes(qNorm)
+          || norm(pred).includes(qNorm)
+          || norm(obj).includes(qNorm)
+          || norm(fullText).includes(qNorm)
+          || norm(quote).includes(qNorm)
+          || (qLower === slNoStr);
+
+        if (!matches) {
           return false;
         }
       }
 
       return true;
     }).sort((a, b) => {
-      if (sortBy === 'sl_asc') {
-        const keyA = a.id || a._tempId || a.data?.claim_id;
-        const keyB = b.id || b._tempId || b.data?.claim_id;
-        const idxA = rawClaimIndexMap.get(keyA) ?? 999999;
-        const idxB = rawClaimIndexMap.get(keyB) ?? 999999;
-        return idxA - idxB;
-      }
-      if (sortBy === 'sl_desc') {
-        const keyA = a.id || a._tempId || a.data?.claim_id;
-        const keyB = b.id || b._tempId || b.data?.claim_id;
-        const idxA = rawClaimIndexMap.get(keyA) ?? 0;
-        const idxB = rawClaimIndexMap.get(keyB) ?? 0;
-        return idxB - idxA;
-      }
-
       const scoreA = getClaimDynamicTrustScore(a, allConflictedClaimIds);
       const scoreB = getClaimDynamicTrustScore(b, allConflictedClaimIds);
 
@@ -492,7 +539,7 @@ export default function AssetClaimsStudioPane({
       }
       return 0;
     });
-  }, [claims, allConflictedClaimIds, statusFilter, trustTierFilter, searchQuery, sortBy, rawClaimIndexMap]);
+  }, [claims, allConflictedClaimIds, statusFilter, trustTierFilter, searchQuery, sortBy, rawClaimIndexMap, shortTitleSlug, docHash]);
 
   // Pagination calculation
   const totalPages = Math.max(1, Math.ceil(filteredClaims.length / pageSize));
@@ -687,7 +734,7 @@ export default function AssetClaimsStudioPane({
           <Search size={14} style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: '#94A3B8' }} />
           <input
             type="text"
-            placeholder="Search claims by keyword, subject"
+            placeholder="Search claims by title, status, SPO, keyword..."
             value={searchQuery}
             onChange={e => {
               setSearchQuery(e.target.value);
@@ -698,7 +745,7 @@ export default function AssetClaimsStudioPane({
               padding: '6px 28px 6px 32px',
               fontSize: '0.78rem',
               border: '1px solid #CBD5E1',
-              borderRadius: 0,
+              borderRadius: '6px',
               outline: 'none',
               background: '#FAF8F5',
               color: '#0F172A',
@@ -743,7 +790,7 @@ export default function AssetClaimsStudioPane({
               fontSize: '0.72rem',
               fontWeight: 500,
               border: '1px solid #CBD5E1',
-              borderRadius: 0,
+              borderRadius: '6px',
               background: '#FAF8F5',
               color: '#334155',
               cursor: 'pointer',
@@ -765,15 +812,13 @@ export default function AssetClaimsStudioPane({
               fontSize: '0.72rem',
               fontWeight: 500,
               border: '1px solid #CBD5E1',
-              borderRadius: 0,
+              borderRadius: '6px',
               background: '#FAF8F5',
               color: '#334155',
               cursor: 'pointer',
               outline: 'none'
             }}
           >
-            <option value="sl_asc">Sort: Sl.No (Ascending)</option>
-            <option value="sl_desc">Sort: Sl.No (Descending)</option>
             <option value="subject_asc">Sort: Subject (A-Z)</option>
             <option value="trust_desc">Sort: Highest Trust</option>
             <option value="trust_asc">Sort: Lowest Trust</option>
@@ -792,7 +837,7 @@ export default function AssetClaimsStudioPane({
               fontSize: '0.72rem',
               fontWeight: 600,
               border: '1px solid #CBD5E1',
-              borderRadius: 0,
+              borderRadius: '6px',
               background: '#FAF8F5',
               color: '#334155',
               cursor: 'pointer',
@@ -810,10 +855,16 @@ export default function AssetClaimsStudioPane({
       {/* 2. SPLIT-PANE BODY: CLAIMS TABLE (LEFT) + CLAIM INSPECTOR (RIGHT) */}
       <div style={{
         display: 'flex',
-        alignItems: 'flex-start',
+        alignItems: 'stretch',
         gap: 0,
         width: '100%',
-        boxSizing: 'border-box'
+        boxSizing: 'border-box',
+        border: '1px solid #CBD5E1',
+        borderRadius: 0,
+        background: '#FAF8F5',
+        overflow: 'hidden',
+        height: 'calc(100vh - 170px)',
+        minHeight: '480px'
       }}>
         {/* ======================================================== */}
         {/* LEFT PANE: CLAIMS TABLE (Full width when closed, 58% when open) */}
@@ -823,14 +874,13 @@ export default function AssetClaimsStudioPane({
           width: isInspectorOpen ? '58%' : '100%',
           minWidth: 0,
           background: '#FAF8F5',
-          border: '1px solid #E2E8F0',
-          borderRight: isInspectorOpen ? 'none' : '1px solid #E2E8F0',
+          border: 'none',
+          borderRight: isInspectorOpen ? '1px solid #CBD5E1' : 'none',
           borderRadius: 0,
           overflow: 'hidden',
           display: 'flex',
           flexDirection: 'column',
-          height: 'calc(100vh - 170px)',
-          minHeight: '480px',
+          height: '100%',
           boxShadow: 'none',
           transition: 'all 0.2s ease'
         }}>
@@ -1128,63 +1178,72 @@ export default function AssetClaimsStudioPane({
             width: '42%',
             maxWidth: '560px',
             minWidth: '340px',
-            position: 'sticky',
-            top: '0px',
             background: '#FAF8F5',
             border: 'none',
             borderRadius: 0,
-            padding: '14px 16px',
             display: 'flex',
             flexDirection: 'column',
-            justifyContent: 'space-between',
-            height: 'calc(100vh - 170px)',
-            minHeight: '480px',
-            overflowY: 'auto',
+            height: '100%',
+            overflow: 'hidden',
             boxShadow: 'none',
             boxSizing: 'border-box'
           }}>
             {selectedClaim ? (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-              {/* Header: Title and Close Icon */}
-              <div style={{
-                display: 'flex',
-                alignItems: 'flex-start',
-                justifyContent: 'space-between',
-                paddingBottom: '4px',
-                gap: '8px'
-              }}>
-                <div>
-                  <h3 style={{ margin: 0, fontSize: '0.96rem', fontWeight: 700, color: '#0F172A', letterSpacing: '-0.01em', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace' }}>
-                    {selectedTitle}
-                  </h3>
+              <div style={{ display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden' }}>
+                {/* Header: Title and Close Icon with bottom single line like table header sl.no line */}
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  padding: '8px 16px',
+                  borderBottom: '1px solid #CBD5E1',
+                  background: '#FAF8F5',
+                  gap: '8px',
+                  flexShrink: 0
+                }}>
+                  <div>
+                    <h3 style={{ margin: 0, fontSize: '0.96rem', fontWeight: 700, color: '#0F172A', letterSpacing: '-0.01em', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace' }}>
+                      {selectedTitle}
+                    </h3>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsInspectorOpen(false);
+                      setSelectedClaimId(null);
+                    }}
+                    style={{
+                      background: 'transparent',
+                      border: 'none',
+                      cursor: 'pointer',
+                      color: '#64748B',
+                      padding: '4px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      borderRadius: 0,
+                      transition: 'all 0.15s ease'
+                    }}
+                    title="Close Claim Inspector"
+                    onMouseEnter={e => { e.currentTarget.style.color = '#0F172A'; e.currentTarget.style.background = '#E2E8F0'; }}
+                    onMouseLeave={e => { e.currentTarget.style.color = '#64748B'; e.currentTarget.style.background = 'transparent'; }}
+                  >
+                    <X size={18} strokeWidth={2.2} />
+                  </button>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setIsInspectorOpen(false);
-                    setSelectedClaimId(null);
-                  }}
-                  style={{
-                    background: 'transparent',
-                    border: 'none',
-                    cursor: 'pointer',
-                    color: '#64748B',
-                    padding: '4px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    borderRadius: 0,
-                    transition: 'all 0.15s ease'
-                  }}
-                  title="Close Claim Inspector"
-                  onMouseEnter={e => { e.currentTarget.style.color = '#0F172A'; e.currentTarget.style.background = '#E2E8F0'; }}
-                  onMouseLeave={e => { e.currentTarget.style.color = '#64748B'; e.currentTarget.style.background = 'transparent'; }}
-                >
-                  <X size={18} strokeWidth={2.2} />
-                </button>
-              </div>
 
-              {/* 1. Raw Extracted Claim (Ordered above Claim details, no background box, normal text) */}
-              <div>
+                {/* Scrollable Inspector Body Content */}
+                <div style={{
+                  flex: 1,
+                  overflowY: 'auto',
+                  padding: '14px 16px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  gap: '14px'
+                }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                    {/* 1. Raw Extracted Claim (Ordered above Claim details, no background box, normal text) */}
+                    <div>
                 <div style={{ fontSize: '0.80rem', fontWeight: 700, color: '#0F172A', marginBottom: '6px' }}>
                   Raw extracted claim
                 </div>
@@ -1272,7 +1331,7 @@ export default function AssetClaimsStudioPane({
                   <button
                     type="button"
                     onClick={handleLocateSource}
-                    title="Open source document in Document Explorer"
+                    title="Locate source document in Document Explorer"
                     style={{
                       display: 'inline-flex',
                       alignItems: 'center',
@@ -1283,7 +1342,7 @@ export default function AssetClaimsStudioPane({
                       color: '#0F172A',
                       background: '#FAF8F5',
                       border: '1px solid #CBD5E1',
-                      borderRadius: 0,
+                      borderRadius: '6px',
                       cursor: 'pointer',
                       transition: 'background 0.15s ease'
                     }}
@@ -1298,19 +1357,26 @@ export default function AssetClaimsStudioPane({
                     <button
                       type="button"
                       onClick={() => onLocateInDoc(selectedClaim)}
-                      title="Locate assertion in document reader"
+                      title="Locate claim in document viewer"
                       style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '4px',
                         padding: '4px 8px',
                         fontSize: '0.71rem',
                         fontWeight: 600,
                         color: '#0F172A',
                         background: '#FAF8F5',
                         border: '1px solid #CBD5E1',
-                        borderRadius: 0,
-                        cursor: 'pointer'
+                        borderRadius: '6px',
+                        cursor: 'pointer',
+                        transition: 'background 0.15s ease'
                       }}
+                      onMouseEnter={e => e.currentTarget.style.background = '#F3EFEA'}
+                      onMouseLeave={e => e.currentTarget.style.background = '#FAF8F5'}
                     >
-                      Locate Claim
+                      <Target size={11} color="#2563EB" />
+                      <span>Locate Claim</span>
                     </button>
                   )}
 
@@ -1318,24 +1384,34 @@ export default function AssetClaimsStudioPane({
                     <button
                       type="button"
                       onClick={() => onInspectInDag(selectedClaim)}
+                      title="Inspect node in Lineage DAG"
                       style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '4px',
                         padding: '4px 8px',
                         fontSize: '0.71rem',
                         fontWeight: 600,
-                        color: '#7C3AED',
-                        background: '#F5F3FF',
-                        border: '1px solid #DDD6FE',
-                        borderRadius: 0,
-                        cursor: 'pointer'
+                        color: '#0F172A',
+                        background: '#FAF8F5',
+                        border: '1px solid #CBD5E1',
+                        borderRadius: '6px',
+                        cursor: 'pointer',
+                        boxShadow: 'none',
+                        transition: 'background 0.15s ease'
                       }}
+                      onMouseEnter={e => e.currentTarget.style.background = '#F3EFEA'}
+                      onMouseLeave={e => e.currentTarget.style.background = '#FAF8F5'}
                     >
-                      Lineage DAG
+                      <GitBranch size={11} color="#0F172A" />
+                      <span>Lineage DAG</span>
                     </button>
                   )}
 
                   <button
                     type="button"
                     onClick={() => handleCopyClaim(selectedClaim)}
+                    title="Copy claim to clipboard"
                     style={{
                       display: 'inline-flex',
                       alignItems: 'center',
@@ -1346,9 +1422,12 @@ export default function AssetClaimsStudioPane({
                       color: copiedClaimId === selectedClaim.id ? '#059669' : '#0F172A',
                       background: copiedClaimId === selectedClaim.id ? '#DCFCE7' : '#FAF8F5',
                       border: `1px solid ${copiedClaimId === selectedClaim.id ? '#86EFAC' : '#CBD5E1'}`,
-                      borderRadius: 0,
-                      cursor: 'pointer'
+                      borderRadius: '6px',
+                      cursor: 'pointer',
+                      transition: 'background 0.15s ease'
                     }}
+                    onMouseEnter={e => { e.currentTarget.style.background = copiedClaimId === selectedClaim.id ? '#DCFCE7' : '#F3EFEA'; }}
+                    onMouseLeave={e => { e.currentTarget.style.background = copiedClaimId === selectedClaim.id ? '#DCFCE7' : '#FAF8F5'; }}
                   >
                     {copiedClaimId === selectedClaim.id ? <Check size={11} /> : <Copy size={11} />}
                     <span>{copiedClaimId === selectedClaim.id ? 'Copied' : 'Copy'}</span>
@@ -1356,16 +1435,25 @@ export default function AssetClaimsStudioPane({
                 </div>
               </div>
             </div>
-            ) : (
-              <div style={{ display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'space-between' }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: '8px' }}>
-                  <span style={{ fontSize: '0.84rem', fontWeight: 700, color: '#64748B' }}>Claim Details</span>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsInspectorOpen(false);
-                      setSelectedClaimId(null);
-                    }}
+          </div>
+        </div>
+      ) : (
+          <div style={{ display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'space-between' }}>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              padding: '8px 16px',
+              borderBottom: '1px solid #CBD5E1',
+              background: '#FAF8F5'
+            }}>
+              <span style={{ fontSize: '0.84rem', fontWeight: 700, color: '#64748B' }}>Claim Details</span>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsInspectorOpen(false);
+                  setSelectedClaimId(null);
+                }}
                     style={{
                       background: 'transparent',
                       border: 'none',
