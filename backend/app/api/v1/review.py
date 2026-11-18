@@ -14,8 +14,10 @@ from app.db.enums import ClaimStatus
 from app.db.models.claim import Claim
 from app.db.models.claim_trust_score import ClaimTrustScore
 from app.db.models.claim_validity import ClaimValidity
+from app.db.models.document_version import DocumentVersion
 from app.db.models.hitl_escalation import HitlEscalation
 from app.schemas.claim import ClaimResponse
+from app.services.claim_clustering_engine import ClaimClusteringEngine
 
 router = APIRouter(prefix="/review", tags=["review"])
 
@@ -32,6 +34,23 @@ class ClaimReviewActionRequest(BaseModel):
     reviewer_id: Optional[uuid.UUID] = Field(default=None, description="Identifier of human reviewer")
     reviewer_notes: Optional[str] = Field(default=None, description="Review justification / audit remarks")
     escalation_reason: Optional[str] = Field(default=None, description="Reason for escalation to HITL queue")
+
+
+class BatchPatternActionRequest(BaseModel):
+    action: Literal["approve", "reject", "hold", "escalate"] = Field(
+        ...,
+        description="Batch action: approve, reject, hold, or escalate",
+    )
+    selected_claim_ids: Optional[list[uuid.UUID]] = Field(
+        default=None,
+        description="Explicit subset of claim IDs to mutate. If omitted, applies to all claims in the cluster.",
+    )
+    reviewer_id: Optional[uuid.UUID] = Field(default=None, description="Identifier of human reviewer")
+    reviewer_notes: Optional[str] = Field(default=None, description="Review justification / audit remarks")
+
+
+class BatchRevertRequest(BaseModel):
+    batch_id: str = Field(..., description="UUID of batch transaction to revert")
 
 
 class ClaimReviewSummaryResponse(BaseModel):
@@ -59,12 +78,9 @@ async def list_review_queue(
         Claim.organization_id == organization_id,
         Claim.status == ClaimStatus.CANDIDATE,
     ]
-    if document_id is not None:
-        conditions.append(Claim.document_id == document_id)
 
     stmt = (
         select(Claim)
-        .where(*conditions)
         .order_by(Claim.created_at.desc())
         .offset(offset)
         .limit(limit)
@@ -74,6 +90,15 @@ async def list_review_queue(
             selectinload(Claim.trust_scores),
         )
     )
+
+    if document_id is not None:
+        stmt = stmt.join(DocumentVersion, Claim.document_version_id == DocumentVersion.id).where(
+            DocumentVersion.document_id == document_id,
+            *conditions,
+        )
+    else:
+        stmt = stmt.where(*conditions)
+
     result = await db.execute(stmt)
     claims = result.scalars().all()
     return [ClaimResponse.model_validate(c) for c in claims]
@@ -112,6 +137,81 @@ async def get_review_summary(
     )
 
 
+# ─── PATTERN APPROVAL BOARD (10-MINUTE EXTREME BATCH ADJUDICATION) ───────
+
+@router.get("/patterns")
+async def list_claim_patterns(
+    organization_id: uuid.UUID = Query(..., description="Organization ID"),
+    document_id: Optional[uuid.UUID] = Query(None, description="Optional document filter"),
+    db: AsyncSession = Depends(get_db),
+) -> dict[str, Any]:
+    """
+    Clusters candidate claims into ~30-45 high-leverage policy patterns for 10-minute batch review.
+    Returns categorized patterns, representative quotes, confidence tiers, and triage burn-down summary.
+    """
+    return await ClaimClusteringEngine.cluster_candidate_claims(
+        db=db,
+        organization_id=organization_id,
+        document_id=document_id,
+    )
+
+
+@router.get("/patterns/{pattern_id}/claims")
+async def list_pattern_claims(
+    pattern_id: str,
+    organization_id: uuid.UUID = Query(..., description="Organization ID"),
+    document_id: Optional[uuid.UUID] = Query(None, description="Optional document filter"),
+    db: AsyncSession = Depends(get_db),
+) -> list[dict[str, Any]]:
+    """
+    Retrieves all individual claims within a cluster for outlier inspection and pre-selection checkboxes.
+    """
+    return await ClaimClusteringEngine.get_pattern_claims(
+        db=db,
+        pattern_id=pattern_id,
+        organization_id=organization_id,
+        document_id=document_id,
+    )
+
+
+@router.post("/patterns/{pattern_id}/action")
+async def execute_pattern_batch_action(
+    pattern_id: str,
+    req: BatchPatternActionRequest,
+    organization_id: uuid.UUID = Query(..., description="Organization ID"),
+    db: AsyncSession = Depends(get_db),
+) -> dict[str, Any]:
+    """
+    Executes a reversible batch triage action across all selected claims in a pattern.
+    Applies canonical normalization, trust boost, validity records, and records a reversible transaction.
+    """
+    return await ClaimClusteringEngine.apply_batch_pattern_action(
+        db=db,
+        pattern_id=pattern_id,
+        action=req.action,
+        organization_id=organization_id,
+        reviewer_id=req.reviewer_id,
+        reviewer_notes=req.reviewer_notes,
+        selected_claim_ids=req.selected_claim_ids,
+    )
+
+
+@router.post("/patterns/batch_revert")
+async def revert_batch_action(
+    req: BatchRevertRequest,
+    db: AsyncSession = Depends(get_db),
+) -> dict[str, Any]:
+    """
+    Reverts a batch transaction, restoring claims to their candidate state.
+    """
+    return await ClaimClusteringEngine.revert_batch_transaction(
+        db=db,
+        batch_id=req.batch_id,
+    )
+
+
+# ─── INDIVIDUAL CLAIM TRIAGE ACTIONS ─────────────────────────────────────
+
 @router.post("/{claim_id}/action", response_model=ClaimResponse)
 async def execute_claim_review_action(
     claim_id: uuid.UUID,
@@ -119,7 +219,7 @@ async def execute_claim_review_action(
     db: AsyncSession = Depends(get_db),
 ):
     """
-    Executes a triage action (approve, reject, edit, escalate) on a queued candidate claim.
+    Executes an individual triage action (approve, reject, edit, escalate) on a queued candidate claim.
     """
     stmt = (
         select(Claim)
@@ -223,4 +323,3 @@ async def get_ae3_dashboard_metrics() -> dict[str, Any]:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="AE-3 reconciliation report not found.")
     data = json.loads(report_path.read_text(encoding="utf-8"))
     return data.get("dashboard_metrics", {})
-

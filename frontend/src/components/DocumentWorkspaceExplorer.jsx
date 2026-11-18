@@ -56,9 +56,9 @@ const renderFormattedMarkdown = (text) => {
   const flushList = () => {
     if (currentList.length > 0) {
       elements.push(
-        <ul key={`list-${elements.length}`} style={{ margin: '8px 0 14px 0', paddingLeft: '22px', display: 'flex', flexDirection: 'column', gap: '5px' }}>
+        <ul key={`list-${elements.length}`} style={{ margin: '4px 0 6px 0', paddingLeft: '18px', display: 'flex', flexDirection: 'column', gap: '3px' }}>
           {currentList.map((item, idx) => (
-            <li key={idx} style={{ fontSize: '0.84rem', color: '#334155', lineHeight: 1.6 }}>
+            <li key={idx} style={{ fontSize: '0.82rem', color: '#334155', lineHeight: 1.45 }}>
               {item}
             </li>
           ))}
@@ -74,13 +74,13 @@ const renderFormattedMarkdown = (text) => {
         <pre key={`code-${elements.length}`} style={{
           background: '#0F172A',
           color: '#F8FAFC',
-          padding: '12px 16px',
-          borderRadius: '6px',
-          fontSize: '0.76rem',
+          padding: '10px 14px',
+          borderRadius: 0,
+          fontSize: '0.74rem',
           fontFamily: 'Consolas, Monaco, monospace',
           overflowX: 'auto',
-          margin: '8px 0 14px 0',
-          lineHeight: 1.5
+          margin: '6px 0 10px 0',
+          lineHeight: 1.45
         }}>
           <code>{codeBuffer.join('\n')}</code>
         </pre>
@@ -120,14 +120,14 @@ const renderFormattedMarkdown = (text) => {
       const title = trimmed.substring(2).replace(/^#+\s*/, '');
       elements.push(
         <div key={`h1-${i}`} style={{
-          fontSize: '1.25rem',
+          fontSize: '1.10rem',
           fontWeight: 800,
           color: '#0F172A',
-          margin: '12px 0 14px 0',
-          lineHeight: 1.35,
-          letterSpacing: '-0.02em',
-          borderBottom: '1.5px solid #F1F5F9',
-          paddingBottom: '8px'
+          margin: '6px 0 8px 0',
+          lineHeight: 1.3,
+          letterSpacing: '-0.01em',
+          borderBottom: '1px solid #F1F5F9',
+          paddingBottom: '4px'
         }}>
           {title}
         </div>
@@ -139,15 +139,15 @@ const renderFormattedMarkdown = (text) => {
       const sub = trimmed.substring(3).trim();
       elements.push(
         <div key={`h2-${i}`} style={{
-          fontSize: '0.98rem',
+          fontSize: '0.92rem',
           fontWeight: 700,
           color: '#1E293B',
-          margin: '16px 0 8px 0',
+          margin: '8px 0 4px 0',
           display: 'flex',
           alignItems: 'center',
-          gap: '8px'
+          gap: '6px'
         }}>
-          <span style={{ width: '4px', height: '14px', background: '#3B82F6', borderRadius: '2px', display: 'inline-block' }} />
+          <span style={{ width: '3px', height: '12px', background: '#3B82F6', display: 'inline-block' }} />
           <span>{sub}</span>
         </div>
       );
@@ -158,10 +158,10 @@ const renderFormattedMarkdown = (text) => {
       const sub = trimmed.substring(4).trim();
       elements.push(
         <div key={`h3-${i}`} style={{
-          fontSize: '0.88rem',
+          fontSize: '0.84rem',
           fontWeight: 700,
           color: '#334155',
-          margin: '12px 0 6px 0'
+          margin: '6px 0 3px 0'
         }}>
           {sub}
         </div>
@@ -180,10 +180,10 @@ const renderFormattedMarkdown = (text) => {
       flushList();
       elements.push(
         <p key={`p-${i}`} style={{
-          fontSize: '0.84rem',
+          fontSize: '0.82rem',
           color: '#334155',
-          lineHeight: 1.65,
-          margin: '0 0 12px 0',
+          lineHeight: 1.5,
+          margin: '0 0 6px 0',
           wordBreak: 'break-word'
         }}>
           {trimmed}
@@ -1464,7 +1464,25 @@ export default function DocumentWorkspaceExplorer({
   };
 
   return (
-    <div style={{ display: 'flex', gap: '14px', width: '100%', maxWidth: '100%', overflowX: 'hidden', alignItems: 'stretch' }}>
+    <div
+      style={{
+        display: 'flex',
+        gap: 0,
+        width: '100%',
+        maxWidth: '100%',
+        minHeight: 0,
+        height: '100%',
+        flex: 1,
+        background: '#FFFFFF',
+        borderRadius: 0,
+        border: '1px solid var(--border-subtle, #E2E8F0)',
+        borderLeft: 'none',
+        borderRight: 'none',
+        overflow: 'hidden',
+        boxShadow: 'none',
+        alignItems: 'stretch'
+      }}
+    >
       
       {/* ── LEFT PANE: DIRECTORY TREE (FOLDERS & FILES) ── */}
       <div
@@ -1475,35 +1493,45 @@ export default function DocumentWorkspaceExplorer({
           }
         }}
         style={{
-          width: '280px',
-          minWidth: '250px',
-          maxWidth: '310px',
+          width: '260px',
+          minWidth: '220px',
+          maxWidth: '280px',
           flexShrink: 0,
-          background: '#FAF8F5',
-          borderRadius: '10px',
-          border: '1px solid var(--border-subtle)',
+          background: '#FFFFFF',
+          borderRadius: 0,
+          borderRight: '1px solid var(--border-subtle, #E2E8F0)',
           display: 'flex',
           flexDirection: 'column',
-          boxShadow: 'none',
+          height: '100%',
           overflow: 'hidden'
         }}
       >
         {/* Directory Top Bar */}
         <div
           style={{
-            padding: '10px 12px',
-            borderBottom: '1px solid var(--border-subtle)',
-            background: '#FAF8F5',
+            padding: '8px 12px',
+            borderBottom: '1px solid var(--border-subtle, #E2E8F0)',
+            background: '#faf8f5',
+            borderRadius: 0,
             display: 'flex',
             flexDirection: 'column',
-            gap: '8px'
+            gap: '6px',
+            flexShrink: 0
           }}
         >
           {/* Header Title + Actions */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <span style={{ fontSize: '0.78rem', fontWeight: 800, color: 'var(--text-main)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-              Directory Explorer
-            </span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span style={{ fontSize: '0.78rem', fontWeight: 800, color: 'var(--text-main)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                Directory
+              </span>
+              <span
+                title="Tip: Right-click any folder or file for options (rename, move, delete, upload)"
+                style={{ display: 'inline-flex', alignItems: 'center', cursor: 'help' }}
+              >
+                <Info size={13} style={{ color: '#94A3B8' }} />
+              </span>
+            </div>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
               {readOnly && (
@@ -1511,7 +1539,7 @@ export default function DocumentWorkspaceExplorer({
                   style={{
                     fontSize: '0.68rem',
                     padding: '2px 8px',
-                    borderRadius: '12px',
+                    borderRadius: 0,
                     background: '#F1F5F9',
                     color: '#64748B',
                     fontWeight: 600,
@@ -1526,6 +1554,34 @@ export default function DocumentWorkspaceExplorer({
                   <ShieldCheck size={11} style={{ color: '#10B981' }} />
                   Read-Only
                 </span>
+              )}
+
+              {/* + New Root Folder Action */}
+              {!readOnly && (
+                <button
+                  type="button"
+                  onClick={() => startInlineCreate(null)}
+                  style={{
+                    background: '#F8FAFC',
+                    border: '1px solid #CBD5E1',
+                    borderRadius: 0,
+                    cursor: 'pointer',
+                    color: '#2563EB',
+                    padding: '2px 6px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '3px',
+                    fontSize: '0.70rem',
+                    fontWeight: 600,
+                    transition: 'all 0.15s ease'
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.background = '#EFF6FF'; e.currentTarget.style.borderColor = '#93C5FD'; }}
+                  onMouseLeave={e => { e.currentTarget.style.background = '#F8FAFC'; e.currentTarget.style.borderColor = '#CBD5E1'; }}
+                  title="Create New Root Folder (or right-click canvas)"
+                >
+                  <FolderPlus size={13} />
+                  <span>+ Root</span>
+                </button>
               )}
 
               {/* Refresh */}
@@ -1545,15 +1601,15 @@ export default function DocumentWorkspaceExplorer({
             <Search size={13} style={{ position: 'absolute', left: '8px', color: '#94A3B8' }} />
             <input
               type="text"
-              placeholder="Filter folders and files..."
+              placeholder="Filter files... (right-click for options)"
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
               style={{
                 width: '100%',
-                padding: '5px 8px 5px 26px',
+                padding: '4px 8px 4px 26px',
                 fontSize: '0.76rem',
-                borderRadius: '5px',
-                border: '1px solid #CBD5E1',
+                borderRadius: 0,
+                
                 background: '#FFFFFF'
               }}
             />
@@ -1573,10 +1629,11 @@ export default function DocumentWorkspaceExplorer({
         <div
           className="tree-blank-area"
           style={{
-            minHeight: '380px',
-            maxHeight: '520px',
+            flex: 1,
+            minHeight: 0,
             overflowY: 'auto',
-            padding: '8px 4px'
+            padding: '6px 2px',
+            background: '#faf8f5'
           }}
         >
           {initialLoading && folderTree.length === 0 ? (
@@ -1597,31 +1654,6 @@ export default function DocumentWorkspaceExplorer({
             </>
           )}
         </div>
-
-        {/* Directory Bottom Bar */}
-        <div
-          style={{
-            padding: '6px 12px',
-            background: '#F8FAFC',
-            borderTop: '1px solid var(--border-subtle, #E2E8F0)',
-            fontSize: '0.70rem',
-            color: 'var(--text-muted)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between'
-          }}
-        >
-          <span>{readOnly ? 'Vault Directory • Read-Only Inspection' : 'Right-click any folder or file for options'}</span>
-          {!readOnly && (
-            <button
-              type="button"
-              onClick={() => startInlineCreate(null)}
-              style={{ background: 'none', border: 'none', color: '#2563EB', cursor: 'pointer', fontSize: '0.70rem', fontWeight: 600 }}
-            >
-              + New Root
-            </button>
-          )}
-        </div>
       </div>
 
       {/* ── RIGHT PANE: LIVE DOCUMENT PREVIEW & WORKSPACE ── */}
@@ -1631,15 +1663,11 @@ export default function DocumentWorkspaceExplorer({
           minWidth: 0,
           maxWidth: '100%',
           overflowX: 'hidden',
-          background: '#FAF8F5',
-          borderRadius: '10px',
-          border: '1px solid var(--border-subtle)',
+          background: '#faf8f5',
           display: 'flex',
           flexDirection: 'column',
-          boxShadow: '0 1px 3px rgba(0,0,0,0.03)',
-          overflow: 'hidden',
-          minHeight: '560px',
-          maxHeight: 'calc(100vh - 190px)'
+          height: '100%',
+          overflow: 'hidden'
         }}
       >
         {selectedDocDetails ? (() => {
@@ -1688,165 +1716,82 @@ export default function DocumentWorkspaceExplorer({
 
           return (
             <>
-              {/* 1. Header Bar: Document Identity & Quick Actions */}
+           
+
+              {/* 2. Full Document Content & Ingestion Preview (Seamless white surface, no outer padding gap) */}
               <div
                 style={{
-                  padding: '10px 16px',
-                  borderBottom: '1px solid #E2E8F0',
+                  flex: 1,
+                  minHeight: 0,
+                  overflowY: 'auto',
+                  overflowX: 'hidden',
+                  background: '#f6efe3a4',
+                  padding: '1px 18px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '8px'
+                }}
+              >
+                {loadingPreview ? (
+                  <div style={{ textAlign: 'center', padding: '40px 20px', color: 'var(--text-muted)', fontSize: '0.80rem' }}>
+                    <RefreshCw size={18} className="spin" style={{ margin: '0 auto 8px auto', display: 'block', color: '#2563EB' }} />
+                    <span>Loading policy document preview...</span>
+                  </div>
+                ) : (
+                  <>
+                    {/* Dossier Sheet Header */}
+                    <div
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        borderBottom: '1px solid #E2E8F0',
+                        paddingBottom: '6px',
+                        fontSize: '0.68rem',
+                        color: '#64748B',
+                        flexShrink: 0
+                      }}
+                    >
+                    
+                    
+                    </div>
+
+                    {/* Markdown Parsed Document Body */}
+                    <div style={{ minHeight: '80px' }}>
+                      {rawReaderContent ? (
+                        renderFormattedMarkdown(rawReaderContent)
+                      ) : (
+                        <div style={{ padding: '20px 10px', textAlign: 'center', color: '#94A3B8', fontSize: '0.80rem' }}>
+                          No text content available for this document.
+                        </div>
+                      )}
+                    </div>
+                  </>
+                )}
+              </div>
+
+              {/* Bottom Metadata & Navigation Bridges to Curator and Vault */}
+              <div
+                style={{
+                  padding: '8px 16px',
+                  borderTop: '1px solid #E2E8F0',
                   background: '#FFFFFF',
+                  borderRadius: 0,
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
-                  gap: '12px',
-                  minWidth: 0,
+                  fontSize: '0.74rem',
+                  gap: '10px',
+                  flexWrap: 'wrap',
                   flexShrink: 0
                 }}
               >
-                {/* Left: Doc Title */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0, flex: 1, overflow: 'hidden' }}>
-                  <FileText size={16} style={{ color: '#2563EB', flexShrink: 0 }} />
-                  <span
-                    style={{
-                      fontSize: '0.88rem',
-                      fontWeight: 700,
-                      color: '#0F172A',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      whiteSpace: 'nowrap'
-                    }}
-                    title={selectedDocDetails.title}
-                  >
-                    {selectedDocDetails.title}
-                  </span>
-                </div>
-
-                {/* Right: Open File Only */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const url = `/v1/documents/${selectedDocDetails.id}/file`;
-                      window.open(url, '_blank');
-                    }}
-                    style={{
-                      padding: '5px 12px',
-                      fontSize: '0.74rem',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '5px',
-                      background: '#FFFFFF',
-                      color: '#0284C7',
-                      border: '1px solid #CBD5E1',
-                      borderRadius: '6px',
-                      cursor: 'pointer',
-                      fontWeight: 600,
-                      transition: 'all 0.15s ease'
-                    }}
-                    onMouseEnter={e => { e.currentTarget.style.background = '#F0F9FF'; e.currentTarget.style.borderColor = '#7DD3FC'; }}
-                    onMouseLeave={e => { e.currentTarget.style.background = '#FFFFFF'; e.currentTarget.style.borderColor = '#CBD5E1'; }}
-                    title="Open document file in a new browser tab"
-                  >
-                    <ExternalLink size={13} />
-                    <span>Open File</span>
-                  </button>
-                </div>
-              </div>
-
-              {/* 2. Full Document Content & Ingestion Preview */}
-              <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', display: 'flex', flexDirection: 'column' }}>
-                <div
-                  style={{
-                    flex: 1,
-                    overflowY: 'auto',
-                    overflowX: 'hidden',
-                    background: '#FAF8F5',
-                    padding: '16px 20px'
-                  }}
-                >
-                  {loadingPreview ? (
-                    <div style={{ textAlign: 'center', padding: '50px 20px', color: 'var(--text-muted)', fontSize: '0.80rem' }}>
-                      <RefreshCw size={18} className="spin" style={{ margin: '0 auto 8px auto', display: 'block', color: '#2563EB' }} />
-                      <span>Loading policy document preview...</span>
-                    </div>
-                  ) : (
-                    <div
-                      style={{
-                        background: '#FFFFFF',
-                        borderRadius: '8px',
-                        border: '1px solid #E2E8F0',
-                        boxShadow: '0 4px 20px -2px rgba(15, 23, 42, 0.05), 0 1px 3px rgba(0,0,0,0.03)',
-                        padding: '22px 26px',
-                        minHeight: '260px',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '12px'
-                      }}
-                    >
-                      {/* Dossier Sheet Header */}
-                      <div
-                        style={{
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          alignItems: 'center',
-                          borderBottom: '1px solid #E2E8F0',
-                          paddingBottom: '10px',
-                          fontSize: '0.68rem',
-                          color: '#64748B'
-                        }}
-                      >
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                          <span style={{ fontWeight: 800, color: '#0F172A', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                            {selectedDocDetails.document_type || 'Policy'} Document Sheet
-                          </span>
-                          <span style={{ width: '4px', height: '4px', borderRadius: '50%', background: '#94A3B8' }} />
-                          <span style={{ color: '#16A34A', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
-                            <CheckCircle2 size={11} /> Verified Ingestion
-                          </span>
-                        </div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.66rem' }}>
-                          <span>Page 1 of 1</span>
-                          <span style={{ color: '#CBD5E1' }}>|</span>
-                          <span style={{ fontFamily: 'monospace', color: '#475569' }}>
-                            SHA: {selectedDocDetails.content_hash?.substring(0, 8)}...
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* Markdown Parsed Document Body */}
-                      <div style={{ minHeight: '120px' }}>
-                        {rawReaderContent ? (
-                          renderFormattedMarkdown(rawReaderContent)
-                        ) : (
-                          <div style={{ padding: '30px 10px', textAlign: 'center', color: '#94A3B8', fontSize: '0.80rem' }}>
-                            No text content available for this document.
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                {/* Bottom Metadata & Navigation Bridges to Curator and Vault */}
-                <div
-                  style={{
-                    padding: '10px 18px',
-                    borderTop: '1px solid #E2E8F0',
-                    background: '#FFFFFF',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    fontSize: '0.74rem',
-                    gap: '10px',
-                    flexWrap: 'wrap',
-                    flexShrink: 0
-                  }}
-                >
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <span
                       style={{
                         fontSize: '0.68rem',
                         padding: '2px 8px',
-                        borderRadius: '12px',
+                        borderRadius: 0,
                         background: '#F0FDF4',
                         color: '#15803D',
                         border: '1px solid #BBF7D0',
@@ -1856,7 +1801,7 @@ export default function DocumentWorkspaceExplorer({
                       {claimsList.length} Extracted Claim{claimsList.length === 1 ? '' : 's'}
                     </span>
                     <span style={{ color: '#64748B' }}>
-                      Hash: <code style={{ fontSize: '0.70rem', background: '#F1F5F9', padding: '1px 4px', borderRadius: '3px' }}>{selectedDocDetails.content_hash?.substring(0, 10)}...</code>
+                      Hash: <code style={{ fontSize: '0.70rem', background: '#F1F5F9', padding: '1px 4px', borderRadius: 0 }}>{selectedDocDetails.content_hash?.substring(0, 10)}...</code>
                     </span>
                     <button
                       type="button"
@@ -1880,14 +1825,14 @@ export default function DocumentWorkspaceExplorer({
                         }
                       }}
                       style={{
-                        padding: '5px 12px',
+                        padding: '4px 10px',
                         fontSize: '0.74rem',
                         display: 'flex',
                         alignItems: 'center',
                         gap: '5px',
                         background: candidateCount > 0 ? '#FEF3C7' : '#F1F5F9',
                         border: `1px solid ${candidateCount > 0 ? '#FDE68A' : '#CBD5E1'}`,
-                        borderRadius: '6px',
+                        borderRadius: 0,
                         cursor: 'pointer',
                         color: candidateCount > 0 ? '#B45309' : '#475569',
                         fontWeight: 700,
@@ -1910,7 +1855,7 @@ export default function DocumentWorkspaceExplorer({
                         }
                       }}
                       style={{
-                        padding: '5px 12px',
+                        padding: '4px 10px',
                         fontSize: '0.74rem',
                         display: 'flex',
                         alignItems: 'center',
@@ -1918,10 +1863,9 @@ export default function DocumentWorkspaceExplorer({
                         background: 'linear-gradient(135deg, #EA580C 0%, #F97316 100%)',
                         border: 'none',
                         color: '#FFFFFF',
-                        borderRadius: '6px',
+                        borderRadius: 0,
                         cursor: 'pointer',
                         fontWeight: 700,
-                        boxShadow: '0 2px 5px rgba(234, 88, 12, 0.22)',
                         transition: 'all 0.15s ease'
                       }}
                       title="Inspect full 360° Lineage DAG & Evidence in Context Vault"
@@ -1931,7 +1875,6 @@ export default function DocumentWorkspaceExplorer({
                     </button>
                   </div>
                 </div>
-              </div>
 
             </>
           );
@@ -1942,7 +1885,7 @@ export default function DocumentWorkspaceExplorer({
               flex: 1,
               display: 'flex',
               flexDirection: 'column',
-              background: '#FAF8F5',
+              background: '#FFFFFF',
               overflowY: 'auto',
               minHeight: '440px'
             }}
@@ -1954,8 +1897,8 @@ export default function DocumentWorkspaceExplorer({
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 padding: '10px 16px',
-                borderBottom: '1px solid var(--border-subtle)',
-                background: '#FAF8F5',
+                borderBottom: '1px solid var(--border-subtle, #E2E8F0)',
+                background: '#FFFFFF',
                 flexWrap: 'wrap',
                 gap: '8px'
               }}
@@ -1981,7 +1924,7 @@ export default function DocumentWorkspaceExplorer({
                           transition: 'background 0.15s ease'
                         }}
                         onMouseEnter={e => {
-                          if (!isLast) e.currentTarget.style.background = '#F0ECE4';
+                          if (!isLast) e.currentTarget.style.background = '#F8FAFC';
                         }}
                         onMouseLeave={e => {
                           if (!isLast) e.currentTarget.style.background = 'transparent';
@@ -2062,10 +2005,10 @@ export default function DocumentWorkspaceExplorer({
                   )}
                 </div>
               ) : (
-                <div style={{ overflowX: 'auto', background: '#FFFFFF', borderRadius: '8px', border: '1px solid var(--border-subtle)' }}>
+                <div style={{ overflowX: 'auto', background: '#FFFFFF', borderRadius: '8px', border: '1px solid var(--border-subtle, #E2E8F0)' }}>
                   <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.76rem' }}>
                     <thead>
-                      <tr style={{ background: '#FAF8F5', borderBottom: '1px solid var(--border-subtle)', color: 'var(--text-muted)' }}>
+                      <tr style={{ background: '#F8FAFC', borderBottom: '1px solid var(--border-subtle, #E2E8F0)', color: 'var(--text-muted)' }}>
                         <th style={{ padding: '8px 12px', fontWeight: 600 }}>Document</th>
                         <th style={{ padding: '8px 12px', fontWeight: 600 }}>Origin Source</th>
                         <th style={{ padding: '8px 12px', fontWeight: 600 }}>Domain</th>
@@ -2079,7 +2022,7 @@ export default function DocumentWorkspaceExplorer({
                         <tr
                           key={doc.id}
                           style={{ borderBottom: '1px solid #F1F5F9', transition: 'background 0.1s ease' }}
-                          onMouseEnter={e => e.currentTarget.style.background = '#FAF8F5'}
+                          onMouseEnter={e => e.currentTarget.style.background = '#F8FAFC'}
                           onMouseLeave={e => e.currentTarget.style.background = '#FFFFFF'}
                         >
                           <td style={{ padding: '8px 12px' }}>

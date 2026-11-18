@@ -20,8 +20,10 @@ import {
   ArrowUpRight,
   Layers,
   Inbox,
-  UserCheck
+  UserCheck,
+  Zap
 } from 'lucide-react';
+import PatternApprovalBoard from './PatternApprovalBoard';
 
 export default function CandidateApprovalsStudio({
   activeOrg,
@@ -39,6 +41,9 @@ export default function CandidateApprovalsStudio({
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
   const [batchActionLoading, setBatchActionLoading] = useState(false);
+
+  // View Mode: 'patterns' (10-minute batch adjudication) vs 'stream' (individual HITL)
+  const [viewMode, setViewMode] = useState('patterns');
 
   // Search & Filters
   const [searchQuery, setSearchQuery] = useState('');
@@ -393,18 +398,132 @@ export default function CandidateApprovalsStudio({
         </div>
       </div>
 
-      {/* ── FILTER & SCOPE TOOLBAR ── */}
+      {/* ── WORKSPACE MODE SWITCHER (10-MIN PATTERN BOARD VS DETAILED STREAM) ── */}
       <div style={{
-        background: '#FAF8F5',
-        border: '1px solid #E2E8F0',
-        borderRadius: '10px',
-        padding: '10px 14px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
+        background: '#FFFFFF',
+        padding: '6px 10px',
+        borderRadius: '8px',
+        border: '1px solid #E2E8F0',
         flexWrap: 'wrap',
-        gap: '10px'
+        gap: '8px',
+        boxShadow: '0 1px 2px rgba(0,0,0,0.02)'
       }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <button
+            type="button"
+            onClick={() => setViewMode('patterns')}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '6px 12px',
+              fontSize: '0.78rem',
+              fontWeight: viewMode === 'patterns' ? 800 : 600,
+              borderRadius: '6px',
+              border: viewMode === 'patterns' ? '1px solid #F59E0B' : '1px solid transparent',
+              background: viewMode === 'patterns' ? '#FEF3C7' : 'transparent',
+              color: viewMode === 'patterns' ? '#92400E' : '#64748B',
+              cursor: 'pointer',
+              transition: 'all 0.15s ease'
+            }}
+          >
+            <Zap size={14} style={{ color: viewMode === 'patterns' ? '#D97706' : '#94A3B8' }} />
+            <span>⚡ 10-Minute Pattern Approval Board</span>
+            <span style={{
+              fontSize: '0.65rem',
+              padding: '1px 6px',
+              background: '#FFFFFF',
+              borderRadius: '10px',
+              color: '#92400E',
+              fontWeight: 800,
+              boxShadow: '0 1px 2px rgba(0,0,0,0.05)'
+            }}>
+              Fast Track
+            </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setViewMode('stream')}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '6px 12px',
+              fontSize: '0.78rem',
+              fontWeight: viewMode === 'stream' ? 800 : 600,
+              borderRadius: '6px',
+              border: viewMode === 'stream' ? '1px solid #CBD5E1' : '1px solid transparent',
+              background: viewMode === 'stream' ? '#F1F5F9' : 'transparent',
+              color: viewMode === 'stream' ? '#0F172A' : '#64748B',
+              cursor: 'pointer',
+              transition: 'all 0.15s ease'
+            }}
+          >
+            <Layers size={14} style={{ color: viewMode === 'stream' ? '#2563EB' : '#94A3B8' }} />
+            <span>📋 Detailed Stream (One-by-One HITL)</span>
+            <span style={{ fontSize: '0.68rem', color: '#94A3B8', fontWeight: 600 }}>
+              ({candidates.length})
+            </span>
+          </button>
+        </div>
+
+        {/* Global Document Scope Filter */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <span style={{ fontSize: '0.72rem', color: '#64748B', fontWeight: 600 }}>Document Scope:</span>
+          <select
+            value={selectedDocFilter}
+            onChange={e => setSelectedDocFilter(e.target.value)}
+            style={{
+              height: '28px',
+              padding: '0 8px',
+              fontSize: '0.74rem',
+              fontWeight: 600,
+              color: '#0F172A',
+              background: '#F8FAFC',
+              border: '1px solid #CBD5E1',
+              borderRadius: '5px',
+              outline: 'none',
+              cursor: 'pointer',
+              maxWidth: '240px'
+            }}
+          >
+            <option value="all">All Documents ({documents.length})</option>
+            {documents.map(d => (
+              <option key={d.id} value={d.id}>{d.title || d.file_name}</option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      {/* ── MODE 1: PATTERN APPROVAL BOARD (10-MIN BATCH TRIAGE) ── */}
+      {viewMode === 'patterns' ? (
+        <PatternApprovalBoard
+          activeOrg={activeOrg}
+          token={token}
+          user={user}
+          showToast={showToast}
+          selectedDocFilter={selectedDocFilter}
+          documents={documents}
+          onReviewSuccess={fetchData}
+        />
+      ) : (
+        <>
+          {/* ── FILTER & SCOPE TOOLBAR ── */}
+          <div style={{
+            background: '#FAF8F5',
+            border: '1px solid #E2E8F0',
+            borderRadius: '10px',
+            padding: '10px 14px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: '10px'
+          }}>
         {/* Left: Document Scope Selector & Search */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap', flex: 1, minWidth: '300px' }}>
           
@@ -1075,6 +1194,8 @@ export default function CandidateApprovalsStudio({
           )}
         </div>
       </div>
+    </>
+  )}
     </div>
   );
 }

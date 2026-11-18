@@ -3409,7 +3409,7 @@ export default function App() {
   const isEnvironmentReady = Boolean(isOrgReady && isWorkspaceReady);
 
   return (
-    <div className={`app-layout ${activeTab === 'playground' ? 'app-layout-fixed' : ''}`}>
+    <div className={`app-layout ${activeTab === 'playground' || (activeTab === 'ingestion' && (docExplorerView === 'folders' || docExplorerView === 'documents')) ? 'app-layout-fixed' : ''}`}>
 
       {/* Toast Notification */}
       {notification && (
@@ -3958,7 +3958,7 @@ export default function App() {
       {/* ========================================================= */}
       {/* MAIN CONTENT AREA                                         */}
       {/* ========================================================= */}
-      <main className={`main-content ${activeTab === 'playground' ? 'main-content-fixed' : ''}`}>
+      <main className={`main-content ${activeTab === 'playground' || (activeTab === 'ingestion' && (docExplorerView === 'folders' || docExplorerView === 'documents')) ? 'main-content-fixed' : ''}`}>
 
         {/* ========================================================= */}
         {/* TOP HEADER CONTROLS (Identical position for all tabs/pages) */}
@@ -3969,14 +3969,16 @@ export default function App() {
         </div>
 
         {/* Enterprise Organization Setup Progress Checklist Banner */}
-        <OrganizationSetupChecklistBanner
-          activeOrg={activeOrg}
-          onLaunchWizard={(recommendedStep) => {
-            setSetupWizardTargetOrg(activeOrg);
-            setIsSetupWizardOpen(true);
-          }}
-          refreshTrigger={orgSetupRefreshTrigger}
-        />
+        {!(activeTab === 'ingestion' && (docExplorerView === 'folders' || docExplorerView === 'documents')) && (
+          <OrganizationSetupChecklistBanner
+            activeOrg={activeOrg}
+            onLaunchWizard={(recommendedStep) => {
+              setSetupWizardTargetOrg(activeOrg);
+              setIsSetupWizardOpen(true);
+            }}
+            refreshTrigger={orgSetupRefreshTrigger}
+          />
+        )}
 
         {/* Pending Organization Invitations Notification Banner */}
         {isAuthenticated && myInvitations && myInvitations.length > 0 && (
@@ -5550,57 +5552,65 @@ export default function App() {
               showToast={showToast}
             />
           ) : (
-          <div>
-            {/* Clean Document Explorer Header */}
-            <div style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              marginBottom: '16px',
-              flexWrap: 'wrap',
-              gap: '12px'
-            }}>
-              <div>
-                <h1 className="tab-main-heading" style={{ margin: 0, textAlign: 'left', fontSize: '1.45rem' }}>
-                  {(docExplorerView === 'folders' || docExplorerView === 'documents') && 'File Browser & Organization'}
-                  {docExplorerView === 'ingest' && 'Upload & Ingestion Studio'}
-                  {docExplorerView === 'connectors' && 'Live Connectors'}
-                  {docExplorerView === 'connect' && 'Connect Enterprise Data Source'}
-                  {docExplorerView === 'claims' && 'Atomic Claims Browser'}
-                </h1>
-                <p className="tab-subtitle" style={{ margin: '4px 0 0 0', textAlign: 'left' }}>
-                  {(docExplorerView === 'folders' || docExplorerView === 'documents') && 'Create and organize files into nested folders, upload documents directly to folders, and manage directory hierarchy.'}
-                  {docExplorerView === 'ingest' && 'Upload raw policy files or markdown to parse atomic claims with 9-gate verification into PostgreSQL.'}
-                  {docExplorerView === 'connectors' && 'Manage live external data source connectors, real-time synchronization schedules, and automated schema ingestion.'}
-                  {docExplorerView === 'connect' && 'Configure automated schema extraction, governance rules, and continuous synchronization.'}
-                  {docExplorerView === 'claims' && 'Inspect atomic claims extracted from stored enterprise policies across all active workspaces.'}
-                </p>
-              </div>
-
-              {docExplorerView === 'connect' && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <button
-                    type="button"
-                    onClick={() => { setDocExplorerView('connectors'); setTestConnectionResult(null); }}
-                    style={{
-                      padding: '8px 16px',
-                      fontSize: '0.82rem',
-                      fontWeight: 700,
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '6px',
-                      background: '#F1F5F9',
-                      color: '#334155',
-                      border: '1px solid #CBD5E1',
-                      borderRadius: '8px',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    <span>← Back to Live Connectors</span>
-                  </button>
+          <div style={{
+            flex: 1,
+            minHeight: 0,
+            display: 'flex',
+            flexDirection: 'column',
+            ...(docExplorerView === 'folders' || docExplorerView === 'documents'
+              ? { margin: '0 -24px -16px -24px', width: 'calc(100% + 48px)', height: '100%' }
+              : {})
+          }}>
+            {/* Clean Document Explorer Header - Only show for sub-views other than folders/documents */}
+            {docExplorerView !== 'folders' && docExplorerView !== 'documents' && (
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginBottom: '16px',
+                flexWrap: 'wrap',
+                gap: '12px'
+              }}>
+                <div>
+                  <h1 className="tab-main-heading" style={{ margin: 0, textAlign: 'left', fontSize: '1.45rem' }}>
+                    {docExplorerView === 'ingest' && 'Upload & Ingestion Studio'}
+                    {docExplorerView === 'connectors' && 'Live Connectors'}
+                    {docExplorerView === 'connect' && 'Connect Enterprise Data Source'}
+                    {docExplorerView === 'claims' && 'Atomic Claims Browser'}
+                  </h1>
+                  <p className="tab-subtitle" style={{ margin: '4px 0 0 0', textAlign: 'left' }}>
+                    {docExplorerView === 'ingest' && 'Upload raw policy files or markdown to parse atomic claims with 9-gate verification into PostgreSQL.'}
+                    {docExplorerView === 'connectors' && 'Manage live external data source connectors, real-time synchronization schedules, and automated schema ingestion.'}
+                    {docExplorerView === 'connect' && 'Configure automated schema extraction, governance rules, and continuous synchronization.'}
+                    {docExplorerView === 'claims' && 'Inspect atomic claims extracted from stored enterprise policies across all active workspaces.'}
+                  </p>
                 </div>
-              )}
-            </div>
+
+                {docExplorerView === 'connect' && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <button
+                      type="button"
+                      onClick={() => { setDocExplorerView('connectors'); setTestConnectionResult(null); }}
+                      style={{
+                        padding: '8px 16px',
+                        fontSize: '0.82rem',
+                        fontWeight: 700,
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        background: '#F1F5F9',
+                        color: '#334155',
+                        border: '1px solid #CBD5E1',
+                        borderRadius: '8px',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      <span>← Back to Live Connectors</span>
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* VIEW 0: CONNECTORS HUB (LIVE CONNECTORS & SYNCHRONIZED CONNECTORS WORKFLOW) */}
             {docExplorerView === 'connectors' && (() => {
@@ -7396,37 +7406,39 @@ export default function App() {
 
             {/* VIEW 2: DOCUMENT WORKSPACE & FOLDER EXPLORER (CAN CREATE, ORGANIZE, RENAME, UPLOAD) */}
             {(docExplorerView === 'folders' || docExplorerView === 'documents') && (
-              <DocumentWorkspaceExplorer
-                activeOrg={activeOrg}
-                token={authToken}
-                user={authUser}
-                showToast={showToast}
-                readOnly={false}
-                onClaimExtracted={() => {
-                  fetchLiveDatabaseRecords();
-                  fetchHealthAndConflicts(activeOrg?.id);
-                }}
-                onDocumentUploaded={() => {
-                  fetchLiveDatabaseRecords();
-                  fetchHealthAndConflicts(activeOrg?.id);
-                }}
-                onInspectDocument={(doc) => setInspectorState({
-                  isOpen: true,
-                  assetType: 'document',
-                  assetId: doc.id,
-                  assetTitle: doc.title
-                })}
-                onViewClaims={(doc) => {
-                  setSelectedLineageAssetId(doc.id);
-                  setVaultSubTab('documents');
-                  setActiveTab('visual_lineage');
-                }}
-                onNavigateToCuratorApprovals={(docId) => {
-                  setCuratorSubView('approvals');
-                  setActiveTab('context_curator');
-                  window.history.pushState(null, '', `/curator/approvals?doc=${docId}`);
-                }}
-              />
+              <div style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column', height: '100%', width: '100%' }}>
+                <DocumentWorkspaceExplorer
+                  activeOrg={activeOrg}
+                  token={authToken}
+                  user={authUser}
+                  showToast={showToast}
+                  readOnly={false}
+                  onClaimExtracted={() => {
+                    fetchLiveDatabaseRecords();
+                    fetchHealthAndConflicts(activeOrg?.id);
+                  }}
+                  onDocumentUploaded={() => {
+                    fetchLiveDatabaseRecords();
+                    fetchHealthAndConflicts(activeOrg?.id);
+                  }}
+                  onInspectDocument={(doc) => setInspectorState({
+                    isOpen: true,
+                    assetType: 'document',
+                    assetId: doc.id,
+                    assetTitle: doc.title
+                  })}
+                  onViewClaims={(doc) => {
+                    setSelectedLineageAssetId(doc.id);
+                    setVaultSubTab('documents');
+                    setActiveTab('visual_lineage');
+                  }}
+                  onNavigateToCuratorApprovals={(docId) => {
+                    setCuratorSubView('approvals');
+                    setActiveTab('context_curator');
+                    window.history.pushState(null, '', `/curator/approvals?doc=${docId}`);
+                  }}
+                />
+              </div>
             )}
 
             {/* VIEW 3: ATOMIC CLAIMS BROWSER (MILLION-SCALE DISCOVERY ENGINE) */}
@@ -7923,7 +7935,7 @@ export default function App() {
               onRefreshConflicts={() => fetchHealthAndConflicts(activeOrg?.id)}
               initialSubView={activeTab === 'conflicts' ? 'conflicts' : curatorSubView}
               onSubViewChange={setCuratorSubView}
-              initialDocId={urlState?.docId || null}
+              initialDocId={selectedLineageAssetId || (typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('doc') : null)}
               onNavigateToDocument={(docId) => {
                 setActiveTab('ingestion');
                 setDocExplorerView('folders');
