@@ -1,5 +1,6 @@
 import decimal
 import logging
+import re
 import uuid
 from typing import Any
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -184,15 +185,27 @@ class ChatService:
 
         # 3. Detect operational mode (Mode A: Document Q&A vs Mode B: Action Evaluation)
         q_lower = content.lower().strip()
-        action_patterns = [
-            "can i ", "can we ", "may i ", "may we ", "am i allowed to", "is the agent allowed to",
-            "can this agent", "approve ", "issue refund", "grant access", "override", "open port",
-            "bypass", "execute ", "authorize ", "permitted to "
-        ]
-        is_action_eval = any(p in q_lower for p in action_patterns) or (
-            any(k in q_lower for k in ["refund", "credit", "firewall", "port 22", "bypass", "access"]) and
-            any(v in q_lower for v in ["can", "may", "allowed", "approve", "authorize", "issue"])
-        )
+
+        # Questions asking for policy terms, explanations, or definitions are strictly Document Q&A
+        is_explicit_document_inquiry = q_lower.startswith((
+            "what is ", "what are ", "what does ", "what must ", "how long ", "what notice ",
+            "does this ", "explain ", "describe ", "which ", "who "
+        ))
+
+        is_action_eval = False
+        if not is_explicit_document_inquiry:
+            action_eval_patterns = [
+                r"\bcan\s+(?:i|we|the\s+agent|an\s+agent|a\s+user|support|tier\s*2)\b",
+                r"\bmay\s+(?:i|we|the\s+agent|an\s+agent|a\s+user|support)\b",
+                r"\b(?:is|are)\s+(?:the\s+agent|an\s+agent|users?)\s+allowed\s+to\b",
+                r"\bam\s+i\s+allowed\s+to\b",
+                r"\b(?:approve|issue\s+refund|grant\s+access|override|open\s+port|bypass|execute|wire\s+transfer)\b",
+            ]
+            has_action_actor = any(re.search(p, q_lower) for p in action_eval_patterns)
+            has_action_verb = bool(re.search(r"\b(?:can|may|allowed|approve|authoriz\w*|issue|wire|disburse|bypass)\b", q_lower))
+            has_action_target = bool(re.search(r"\b(?:refund|credit|firewall|port\s*22|bypass|wire\s*transfer|wire|payment|disbursement|sign-off)\b", q_lower))
+            is_action_eval = has_action_actor or (has_action_verb and has_action_target)
+
         mode = "action_evaluation" if is_action_eval else "document_qa"
 
         # 4. Resolve conversational query for multi-turn context and query Context Retrieval Engine
@@ -242,6 +255,15 @@ class ChatService:
                 "page": item.source.page if item.source else None,
                 "validity": item.validity.status if item.validity else "active",
                 "evidence": item.evidence,
+                "subject": item.governed_package.actor if item.governed_package else getattr(item, "subject", "Customer"),
+                "predicate": getattr(item, "predicate", "governs"),
+                "object": item.governed_package.recipient if item.governed_package else getattr(item, "object", item.claim),
+                "modality": item.governed_package.modality if item.governed_package else "MUST",
+                "certification_tier": getattr(item.governed_package, "certification_provenance", "AUTOMATED_CERTIFIED"),
+                "section_context": [
+                    sc.model_dump() if hasattr(sc, "model_dump") else sc
+                    for sc in getattr(item, "section_context", [])
+                ],
             })
 
         warnings = []
@@ -281,6 +303,16 @@ class ChatService:
             confidence = round(max(0.70, avg_trust), 2)
             answer_status = "EVALUATED"
 
+            action_eval_data = {
+                "verdict": decision,
+                "reason": eval_res.reasons[0] if eval_res.reasons else "Evaluated against enterprise baseline policies.",
+                "matched_claims": [c.claim for c in decision_contexts],
+                "missing_requirements": [r for r in eval_res.reasons if any(k in r.lower() for k in ["missing", "not authorized", "insufficient", "approval", "required", "blocked", "role"])],
+                "audit_id": audit_id,
+                "suggested_action": eval_res.suggested_action,
+                "risk_level": risk_level,
+            }
+
             # Format authoritative decision report
             bullet_reasons = "\n".join(f"- {r}" for r in eval_res.reasons) if eval_res.reasons else "- Evaluated against enterprise baseline policies."
             next_action_str = f"\n\n**Recommended Next Action:** {eval_res.suggested_action}" if eval_res.suggested_action else ""
@@ -292,43 +324,31 @@ class ChatService:
                 f"🔒 **Governance Audit ID:** `{audit_id}` • **Risk Assessment:** {risk_level}"
             )
         else:
-            # Mode A: Document Q&A Synthesis with multi-turn history
-            synthesized_answer = await self.llm.generate_grounded_answer(
+            # Mode A: Document Q&A Synthesis with typed PolicyAnswerContract
+            from app.services.policy_answer_synthesizer import PolicyAnswerSynthesizer
+
+            structured_contract = PolicyAnswerSynthesizer.synthesize_structured(
                 query=content,
                 citations=citations,
                 has_conflicts=has_conflicts,
+                conflicts_data=context_res.conflicts,
                 warnings=warnings,
                 history=recent_history,
+                workspace=effective_workspace,
             )
+            synthesized_answer = PolicyAnswerSynthesizer.render_markdown(structured_contract)
+            answer_status = structured_contract.verification_status
 
-            ans_lower = synthesized_answer.lower()
-            is_gap_or_escalation = any(k in ans_lower for k in [
-                "does not specify", "do not specify", "missing specification",
-                "does not contain", "do not contain", "not covered", "not addressed",
-                "no explicit", "not explicitly", "neither permitted nor",
-                "escalat", "unverified figure", "recommend consulting", "consult your",
-                "consult the", "internal controls", "sox compliance", "segregation of duties",
-                "segregation-of-duties", "no numeric window", "unverified"
-            ])
-
-            if not included_claims:
-                answer_status = "CLARIFICATION_NEEDED"
+            if answer_status == "NO_VERIFIED_RULE":
                 decision = "CLARIFY"
                 confidence = 0.50
-            elif has_conflicts:
-                answer_status = "DISPUTED"
+            elif answer_status == "DISPUTED":
                 decision = "REVIEW"
                 confidence = round(max(0.65, avg_trust * 0.85), 2)
-            elif is_gap_or_escalation:
-                answer_status = "PARTIAL"
-                decision = "REVIEW"
-                confidence = round(max(0.65, avg_trust * 0.85), 2)
-            elif avg_trust >= 0.70:
-                answer_status = "ANSWERED"
+            elif answer_status == "VERIFIED":
                 decision = "ALLOW"
-                confidence = round(min(0.99, avg_trust), 2)
+                confidence = round(min(0.99, max(0.85, avg_trust)), 2)
             else:
-                answer_status = "REVIEW_RECOMMENDED"
                 decision = "REVIEW"
                 confidence = round(avg_trust, 2)
 
@@ -370,6 +390,8 @@ class ChatService:
             "conflicts": context_res.conflicts,
             "total_evaluated_claims": len(context_res.context),
             "verification": verification_result.to_dict(),
+            "structured_answer": structured_contract.model_dump() if "structured_contract" in locals() else None,
+            "action_evaluation": action_eval_data if "action_eval_data" in locals() else None,
         }
 
         # 8. Store assistant message in DB

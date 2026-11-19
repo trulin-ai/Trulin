@@ -1472,6 +1472,7 @@ export default function DocumentWorkspaceExplorer({
         maxWidth: '100%',
         minHeight: 0,
         height: '100%',
+        maxHeight: '100%',
         flex: 1,
         background: '#FFFFFF',
         borderRadius: 0,
@@ -1495,9 +1496,9 @@ export default function DocumentWorkspaceExplorer({
           }
         }}
         style={{
-          width: '260px',
-          minWidth: '220px',
-          maxWidth: '280px',
+          width: '280px',
+          minWidth: '240px',
+          maxWidth: '340px',
           flexShrink: 0,
           background: '#FFFFFF',
           borderRadius: 0,
@@ -1505,6 +1506,7 @@ export default function DocumentWorkspaceExplorer({
           display: 'flex',
           flexDirection: 'column',
           height: '100%',
+          maxHeight: '100%',
           overflow: 'hidden',
           boxSizing: 'border-box'
         }}
@@ -1636,7 +1638,7 @@ export default function DocumentWorkspaceExplorer({
             minHeight: 0,
             overflowY: 'auto',
             overflowX: 'hidden',
-            padding: '6px 2px 24px 2px',
+            padding: '6px 4px 32px 4px',
             background: '#faf8f5',
             boxSizing: 'border-box'
           }}
@@ -1672,6 +1674,7 @@ export default function DocumentWorkspaceExplorer({
           display: 'flex',
           flexDirection: 'column',
           height: '100%',
+          maxHeight: '100%',
           overflow: 'hidden',
           boxSizing: 'border-box'
         }}
@@ -1730,7 +1733,7 @@ export default function DocumentWorkspaceExplorer({
                   overflowY: 'auto',
                   overflowX: 'hidden',
                   background: '#FFFFFF',
-                  padding: '14px 24px 20px 24px',
+                  padding: '16px 24px 32px 24px',
                   display: 'flex',
                   flexDirection: 'column',
                   gap: '8px',
@@ -1769,7 +1772,7 @@ export default function DocumentWorkspaceExplorer({
                   gap: '10px',
                   flexWrap: 'wrap',
                   flexShrink: 0,
-                  minHeight: '40px',
+                  minHeight: '44px',
                   boxSizing: 'border-box'
                 }}
               >

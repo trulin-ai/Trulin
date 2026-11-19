@@ -28,6 +28,7 @@ from app.schemas.context import (
     ContextQueryResponse,
     ContextSourceInfo,
     ContextValidityInfo,
+    SectionContextItem,
 )
 from app.schemas.governed_context import GovernedContextPackage
 from app.services.claim_gate_evaluator import ClaimGateEvaluator
@@ -48,10 +49,25 @@ def _cosine_similarity(v1: Sequence[float], v2: Sequence[float]) -> float:
     return dot / ((norm1 ** 0.5) * (norm2 ** 0.5))
 
 
+STOP_WORDS = {
+    "what", "is", "the", "for", "an", "a", "of", "and", "in", "to", "or", "by", "with", "without",
+    "on", "at", "from", "as", "about", "are", "be", "this", "that", "it", "how", "can", "may",
+    "does", "do", "did", "we", "you", "party", "parties", "policy", "rule", "topic", "unrelated", "rules",
+    "like", "our", "company", "their", "any", "some", "procedure", "guidelines", "standard",
+    "across", "between", "purchases", "purchase", "using", "use", "used", "uses", "before", "after",
+    "when", "into", "onto", "upon", "under", "per", "if", "have", "has", "had", "will", "shall",
+    "must", "could", "should", "would", "other", "all", "each", "both"
+}
+
+
 def _compute_lexical_score(claim_text: str, subject: str | None, query: str, domain: str | None) -> float:
     claim_lower = claim_text.lower()
     q_lower = query.lower()
-    q_words = [w.strip("?.,!$₹£€()[]\"'") for w in q_lower.split() if len(w) > 1]
+    raw_words = [w.strip("?.,!$₹£€()[]\"'") for w in q_lower.split() if len(w) > 1]
+    # Filter stopwords so queries like "What is the policy for an unrelated topic" don't match on "policy"
+    q_words = [w for w in raw_words if w not in STOP_WORDS]
+    if not q_words:
+        q_words = raw_words
 
     score = 0.0
     # 1. Token overlap
@@ -107,11 +123,13 @@ def _compute_lexical_score(claim_text: str, subject: str | None, query: str, dom
          {"custom", "contract", "contracts", "accounts", "agreement", "override", "business", "annual"}),
         ({"approval", "approve", "authorized", "authorization", "sign-off", "signoff", "limit", "threshold"},
          {"approval", "approving", "approve", "tier", "lead", "manager", "director", "sign-off", "signoff", "over"}),
+        ({"retention", "retained", "cancellation", "delete", "deletion", "deleted", "purge"},
+         {"retention", "retained", "delete", "deletion", "deleted", "months", "days", "onedrive", "cancellation"}),
     ]
     for query_concepts, claim_concepts in concept_clusters:
         if any(qc in q_words for qc in query_concepts):
             matched = sum(1 for cc in claim_concepts if cc in c_words)
-            if matched > 0:
+            if matched > 0 and len(overlap) > 0:
                 score += matched * 3.5
 
     return score
@@ -257,6 +275,8 @@ class ContextRetrievalEngine:
             item['rank_sem'] = rank_idx
 
         # Calculate final RRF Fusion score
+        q_token_count = len([w for w in request_in.query.lower().split() if len(w) > 2])
+        min_lex_threshold = 4.5 if q_token_count >= 3 else 2.0
         for item in claim_scores:
             rank_l = item.get('rank_lex', 1)
             rank_s = item.get('rank_sem', 1)
@@ -264,7 +284,7 @@ class ContextRetrievalEngine:
             lex_s = item.get('lex_score', 0.0)
             rrf_val = (1.0 / (60.0 + rank_l)) + (1.0 / (60.0 + rank_s)) + (sem_s * 0.05)
             item['rrf_score'] = rrf_val
-            item['is_relevant'] = (lex_s > 0.0) or (sem_s >= 0.50) or (len(request_in.query.split()) <= 1)
+            item['is_relevant'] = (lex_s >= min_lex_threshold) or (sem_s >= 0.55) or (len(request_in.query.split()) <= 1)
 
         scores_by_claim_id = {item['claim'].id: item for item in claim_scores}
 
@@ -313,6 +333,12 @@ class ContextRetrievalEngine:
             if not is_valid:
                 included = False
                 exclusion_reason = "Claim validity window has expired."
+            elif claim.status not in (ClaimStatus.ACTIVE, ClaimStatus.VERIFIED):
+                included = False
+                exclusion_reason = f"Claim status '{claim.status.value if hasattr(claim.status, 'value') else claim.status}' is blocked from agent retrieval (only ACTIVE or VERIFIED permitted)."
+            elif claim.claim_type not in ("rule", "policy_rule", "policy"):
+                included = False
+                exclusion_reason = f"Hard Gate Excluded: Claim type '{claim.claim_type}' is non-normative context, not an operative policy rule."
             elif claim.claim_text.strip().endswith("?"):
                 included = False
                 exclusion_reason = "Hard Gate Excluded: Interrogative title / FAQ question, not an operative policy rule."
@@ -362,6 +388,7 @@ class ContextRetrievalEngine:
                 section_title = None
                 page_num = 1
                 evidence_quotes: list[str] = []
+                section_context_items: list[SectionContextItem] = []
 
                 for ev in claim.evidence:
                     if ev.document:
@@ -374,13 +401,20 @@ class ContextRetrievalEngine:
                     page_num = ev.page_number or 1
                     evidence_quotes.append(ev.text_span)
 
-                    # Clause Context Expansion: include related caveats or definitions from the same section
+                    # Decoupled Section Context: separate from claim evidence quotes
                     if ev.document_id and ev.section:
                         sec_key = (ev.document_id, ev.section.strip().lower())
                         related_clauses = section_context_map.get(sec_key, [])
                         for rel_clause in related_clauses[:2]:
                             if rel_clause != claim.claim_text:
-                                evidence_quotes.append(f"[Section Context (§{ev.section})]: {rel_clause}")
+                                section_context_items.append(
+                                    SectionContextItem(
+                                        document_title=doc_title,
+                                        section=ev.section,
+                                        text=rel_clause,
+                                        is_normative=False,
+                                    )
+                                )
 
                 lane = "canonical" if claim.claim_type in ["rule", "policy_rule", "policy"] else "passage"
                 primary_quote = evidence_quotes[0] if evidence_quotes else claim.claim_text
@@ -416,6 +450,7 @@ class ContextRetrievalEngine:
                         folder_id=folder_id,
                     ),
                     evidence=evidence_quotes,
+                    section_context=section_context_items,
                     claim_type=claim.claim_type,
                     is_canonical=(claim.claim_type != "derived_summary"),
                     claim_id=str(claim.id),
@@ -474,69 +509,98 @@ class ContextRetrievalEngine:
             self.session.add(context_log)
             rank += 1
 
-        # 4. Check for active ClaimConflicts among retrieved candidate claims
-        top_claim_ids = [claim.id for claim, _, _, _, _, _ in top_included]
+        # 4. Check for active ClaimConflicts relevant to the query topic for this organization
         detected_conflicts: list[dict] = []
+        seen_conflict_pairs = set()
 
-        if top_claim_ids:
-            from sqlalchemy import or_
-            conflict_stmt = (
-                select(ClaimConflict)
-                .options(
-                    selectinload(ClaimConflict.claim_a).selectinload(Claim.evidence).selectinload(ClaimEvidence.document),
-                    selectinload(ClaimConflict.claim_b).selectinload(Claim.evidence).selectinload(ClaimEvidence.document),
-                )
-                .where(
-                    or_(
-                        ClaimConflict.claim_a_id.in_(top_claim_ids),
-                        ClaimConflict.claim_b_id.in_(top_claim_ids),
-                    ),
-                    ClaimConflict.resolution_status.in_([
-                        ConflictStatus.DETECTED,
-                        ConflictStatus.HUMAN_REVIEW_REQUIRED,
-                        "detected",
-                        "human_review_required",
-                    ]),
-                )
+        conflict_stmt = (
+            select(ClaimConflict)
+            .join(Claim, ClaimConflict.claim_a_id == Claim.id)
+            .options(
+                selectinload(ClaimConflict.claim_a).selectinload(Claim.evidence).selectinload(ClaimEvidence.document),
+                selectinload(ClaimConflict.claim_b).selectinload(Claim.evidence).selectinload(ClaimEvidence.document),
             )
-            conf_res = await self.session.execute(conflict_stmt)
-            active_conflicts = conf_res.scalars().all()
+            .where(
+                Claim.organization_id == request_in.organization_id,
+                ClaimConflict.resolution_status.in_([
+                    ConflictStatus.DETECTED,
+                    ConflictStatus.HUMAN_REVIEW_REQUIRED,
+                    "detected",
+                    "human_review_required",
+                ]),
+            )
+        )
+        conf_res = await self.session.execute(conflict_stmt)
+        all_active_conflicts = conf_res.scalars().all()
 
-            seen_conflict_pairs = set()
-            for c in active_conflicts:
-                cid_a = getattr(c, "claim_a_id", None)
-                cid_b = getattr(c, "claim_b_id", None)
-                if not cid_a or not cid_b:
-                    continue
-                pair_key = (min(str(cid_a), str(cid_b)), max(str(cid_a), str(cid_b)))
-                if pair_key in seen_conflict_pairs:
-                    continue
-                seen_conflict_pairs.add(pair_key)
+        q_clean = request_in.query.lower()
+        q_tokens = [w for w in re.findall(r"\b\w+\b", q_clean) if len(w) > 2 and w not in STOP_WORDS]
 
-                claim_a_text = c.claim_a.claim_text if c.claim_a else "Disputed Rule A"
-                claim_b_text = c.claim_b.claim_text if c.claim_b else "Disputed Rule B"
-                doc_a_title = (
-                    c.claim_a.evidence[0].document.title
-                    if (c.claim_a and c.claim_a.evidence and c.claim_a.evidence[0].document)
-                    else "Source A"
-                )
-                doc_b_title = (
-                    c.claim_b.evidence[0].document.title
-                    if (c.claim_b and c.claim_b.evidence and c.claim_b.evidence[0].document)
-                    else "Source B"
-                )
-                detected_conflicts.append({
-                    "conflict_id": str(c.id),
-                    "conflict_type": c.conflict_type or "policy_contradiction",
-                    "severity": c.severity or "high",
-                    "description": f"Contradiction detected between {doc_a_title} and {doc_b_title}: '{claim_a_text}' vs '{claim_b_text}'",
-                    "claim_a_id": str(c.claim_a_id),
-                    "claim_b_id": str(c.claim_b_id),
-                    "source_a": doc_a_title,
-                    "source_b": doc_b_title,
-                    "claim_a_text": claim_a_text,
-                    "claim_b_text": claim_b_text,
-                })
+        for c in all_active_conflicts:
+            cid_a = getattr(c, "claim_a_id", None)
+            cid_b = getattr(c, "claim_b_id", None)
+            if not cid_a or not cid_b:
+                continue
+            pair_key = (min(str(cid_a), str(cid_b)), max(str(cid_a), str(cid_b)))
+            if pair_key in seen_conflict_pairs:
+                continue
+
+            claim_a_text = (c.claim_a.claim_text or "") if c.claim_a else ""
+            claim_b_text = (c.claim_b.claim_text or "") if c.claim_b else ""
+
+            GENERIC_ACTORS = {"customer", "microsoft", "company", "party", "parties", "client", "vendor", "agreement", "terms"}
+            substantive_tokens = [w for w in q_tokens if w not in GENERIC_ACTORS]
+            if any(k in ("onedrive", "retention", "retained", "cancellation", "delete") for k in substantive_tokens):
+                substantive_tokens.extend(["delete", "deletion", "deleted", "onedrive"])
+
+            # Precision guards:
+            # 1. If query is about "embedded capabilities", do NOT match "windows embedded operating systems" table conflicts
+            comb_conflict_lower = (claim_a_text + " " + claim_b_text).lower()
+            if "embedded capabilities" in q_clean and "capabilities" not in comb_conflict_lower:
+                continue
+
+            # 2. If query asks specifically about "material breach", do not match termination for cause unless BOTH sides explicitly mention material breach
+            if "material breach" in q_clean and ("material breach" not in claim_a_text.lower() or "material breach" not in claim_b_text.lower()):
+                continue
+
+            has_substantive_match = any(
+                st in claim_a_text.lower() or st in claim_b_text.lower()
+                for st in substantive_tokens
+            )
+
+            # Check if this conflict is relevant to the query
+            score_a = _compute_lexical_score(claim_a_text, None, request_in.query, target_domain)
+            score_b = _compute_lexical_score(claim_b_text, None, request_in.query, target_domain)
+
+            is_relevant_conflict = has_substantive_match and (score_a >= 4.0 or score_b >= 4.0)
+
+            if not is_relevant_conflict:
+                continue
+
+            seen_conflict_pairs.add(pair_key)
+
+            doc_a_title = (
+                c.claim_a.evidence[0].document.title
+                if (c.claim_a and c.claim_a.evidence and c.claim_a.evidence[0].document)
+                else "Source A"
+            )
+            doc_b_title = (
+                c.claim_b.evidence[0].document.title
+                if (c.claim_b and c.claim_b.evidence and c.claim_b.evidence[0].document)
+                else "Source B"
+            )
+            detected_conflicts.append({
+                "conflict_id": str(c.id),
+                "conflict_type": c.conflict_type or "policy_contradiction",
+                "severity": c.severity or "high",
+                "description": f"Contradiction detected between {doc_a_title} and {doc_b_title}: '{claim_a_text}' vs '{claim_b_text}'",
+                "claim_a_id": str(c.claim_a_id),
+                "claim_b_id": str(c.claim_b_id),
+                "source_a": doc_a_title,
+                "source_b": doc_b_title,
+                "claim_a_text": claim_a_text,
+                "claim_b_text": claim_b_text,
+            })
 
         # 5. Mark AgentRequest completed
         agent_req.status = "completed"

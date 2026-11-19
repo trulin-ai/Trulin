@@ -5506,7 +5506,7 @@ export default function App() {
               showToast={showToast}
             />
           ) : (
-            <div style={{ flex: 1, minHeight: 0, height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+            <div style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
               <AgentChatPlayground
                 activeOrg={activeOrg}
                 activePersona={activePersona}
@@ -7408,7 +7408,7 @@ export default function App() {
 
             {/* VIEW 2: DOCUMENT WORKSPACE & FOLDER EXPLORER (CAN CREATE, ORGANIZE, RENAME, UPLOAD) */}
             {(docExplorerView === 'folders' || docExplorerView === 'documents') && (
-              <div style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column', width: '100%', height: '100%', overflow: 'hidden', boxSizing: 'border-box' }}>
+              <div style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column', width: '100%', height: '100%', maxHeight: '100%', overflow: 'hidden', boxSizing: 'border-box' }}>
                 <DocumentWorkspaceExplorer
                   activeOrg={activeOrg}
                   token={authToken}

@@ -34,12 +34,20 @@ class ContextValidityInfo(BaseModel):
     valid_until: str | None = None
 
 
+class SectionContextItem(BaseModel):
+    document_title: str
+    section: str | None = None
+    text: str
+    is_normative: bool = False
+
+
 class ContextItemResponse(BaseModel):
     claim: str
     trust_score: decimal.Decimal
     validity: ContextValidityInfo
     source: ContextSourceInfo
     evidence: list[str] = []
+    section_context: list[SectionContextItem] = Field(default_factory=list)
     claim_type: str | None = None
     is_canonical: bool = True
     claim_id: str | None = None

@@ -70,6 +70,19 @@ class AnswerVerifier:
                 hallucination_warnings=["Synthesized answer is empty."],
             )
 
+        lower_ans = synthesized_answer.lower()
+        if "no verified rule found" in lower_ans or "no verified policy records" in lower_ans:
+            return AnswerVerificationResult(
+                is_verified=True,
+                verification_status="NO_VERIFIED_RULE",
+                grounding_score=1.0,
+                cited_source_indices=[],
+                invalid_source_indices=[],
+                unverified_numbers=[],
+                hallucination_warnings=[],
+                disputed_conflict_flagged=False,
+            )
+
         num_citations = len(citations)
         warnings: list[str] = []
 

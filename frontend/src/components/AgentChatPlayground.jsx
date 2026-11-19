@@ -316,6 +316,65 @@ function RichAnswerContent({ content, onCitationClick }) {
       continue;
     }
 
+    // Handle blockquotes: `> ` including `> [!NOTE]`
+    if (line.startsWith('>')) {
+      const blockquoteLines = [];
+      while (i < rawLines.length && rawLines[i].trim().startsWith('>')) {
+        const bLine = rawLines[i].trim().replace(/^>\s*/, '');
+        blockquoteLines.push(bLine);
+        i++;
+      }
+      i--; // adjust loop counter
+      const isNote = blockquoteLines.some(l => l.includes('[!NOTE]') || l.includes('Section Context'));
+      elements.push(
+        <div key={`callout-${i}`} style={{
+          margin: '10px 0',
+          padding: '10px 14px',
+          background: isNote ? '#F8FAFC' : '#F5F5F4',
+          borderLeft: isNote ? '3px solid #3B82F6' : '3px solid #78716C',
+          borderRadius: '0 8px 8px 0',
+          fontSize: '0.86rem',
+          lineHeight: 1.55,
+          color: '#475569'
+        }}>
+          {isNote && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px', fontWeight: 600, color: '#1E40AF', fontSize: '0.78rem' }}>
+              <span>📖 Explanatory Context (Non-Normative)</span>
+            </div>
+          )}
+          {blockquoteLines.map((bl, blIdx) => {
+            if (bl.startsWith('[!NOTE]')) return null;
+            return <div key={blIdx} style={{ fontStyle: bl.startsWith('"') ? 'italic' : 'normal', marginTop: blIdx > 0 ? '3px' : 0 }}>{renderInlineFormatted(bl)}</div>;
+          })}
+        </div>
+      );
+      continue;
+    }
+
+    // Handle Verification Status Footer
+    if (line.startsWith('🔒 **Verification Status:**') || line.startsWith('🔒 Verification Status:')) {
+      flushBulletList();
+      elements.push(
+        <div key={`verif-bar-${i}`} style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px',
+          marginTop: '14px',
+          padding: '6px 10px',
+          borderRadius: '6px',
+          background: 'rgba(0, 0, 0, 0.03)',
+          border: '1px solid rgba(0, 0, 0, 0.06)',
+          fontSize: '0.74rem',
+          color: '#57534E',
+          fontWeight: 500
+        }}>
+          <Shield size={12} color="#059669" />
+          <div>{renderInlineFormatted(line.replace(/^🔒\s*/, ''))}</div>
+        </div>
+      );
+      continue;
+    }
+
     // Check for bullet items: `- `, `* `, `• `, `1. `
     const bulletMatch = line.match(/^([-*•]|\d+\.)\s+(.+)$/);
     if (bulletMatch) {
@@ -328,15 +387,28 @@ function RichAnswerContent({ content, onCitationClick }) {
     // Clean Markdown Headers `### `, `## ` or standalone `**Heading:**`
     if (line.startsWith('### ') || line.startsWith('## ')) {
       const headerText = line.replace(/^#+\s*/, '');
+      const isBottomLine = headerText.toLowerCase().includes('bottom-line');
+      const isCond = headerText.toLowerCase().includes('conditions');
+      const isClaims = headerText.toLowerCase().includes('verified operative') || headerText.toLowerCase().includes('verified claims');
+      const isPathways = headerText.toLowerCase().includes('policy pathways') || headerText.toLowerCase().includes('conflict audit');
+      const isContext = headerText.toLowerCase().includes('supporting context');
+
       elements.push(
-        <h4 key={`header-${i}`} style={{
-          fontSize: '0.98rem',
-          fontWeight: 600,
-          color: '#1C1917',
-          margin: '14px 0 6px 0'
+        <div key={`header-${i}`} style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '6px',
+          margin: isBottomLine ? '6px 0 6px 0' : '14px 0 6px 0',
+          fontSize: '0.84rem',
+          fontWeight: 700,
+          color: isBottomLine ? '#0F766E' : isCond ? '#B45309' : isPathways ? '#B91C1C' : isContext ? '#2563EB' : '#1C1917',
+          textTransform: 'uppercase',
+          letterSpacing: '0.04em'
         }}>
-          {renderInlineFormatted(headerText)}
-        </h4>
+          {isBottomLine && <ShieldCheck size={14} color="#0F766E" />}
+          {isPathways && <AlertTriangle size={14} color="#B91C1C" />}
+          <span>{renderInlineFormatted(headerText)}</span>
+        </div>
       );
       continue;
     }
@@ -1467,6 +1539,70 @@ export default function AgentChatPlayground({
                         </div>
                       )}
 
+                      {/* Verification Status Pill */}
+                      {meta.answer_status === 'VERIFIED' && (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+                          <span style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '4px',
+                            fontSize: '0.68rem',
+                            fontWeight: 600,
+                            padding: '2px 8px',
+                            borderRadius: '12px',
+                            background: 'rgba(16, 185, 129, 0.08)',
+                            color: '#047857',
+                            border: '1px solid rgba(16, 185, 129, 0.25)'
+                          }}>
+                            <ShieldCheck size={11} color="#059669" />
+                            Verified Policy Rule
+                          </span>
+                          {meta.trust_score && (
+                            <span style={{ fontSize: '0.68rem', color: '#78716C', fontFamily: 'monospace' }}>
+                              Trust: {(meta.trust_score * 100).toFixed(0)}%
+                            </span>
+                          )}
+                        </div>
+                      )}
+                      {meta.answer_status === 'DISPUTED' && (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+                          <span style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '4px',
+                            fontSize: '0.68rem',
+                            fontWeight: 600,
+                            padding: '2px 8px',
+                            borderRadius: '12px',
+                            background: 'rgba(239, 68, 68, 0.08)',
+                            color: '#B91C1C',
+                            border: '1px solid rgba(239, 68, 68, 0.25)'
+                          }}>
+                            <AlertTriangle size={11} color="#DC2626" />
+                            Policy Dispute • Pathways Identified
+                          </span>
+                        </div>
+                      )}
+                      {meta.answer_status === 'NO_VERIFIED_RULE' && (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+                          <span style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '4px',
+                            fontSize: '0.68rem',
+                            fontWeight: 600,
+                            padding: '2px 8px',
+                            borderRadius: '12px',
+                            background: 'rgba(120, 113, 108, 0.08)',
+                            color: '#57534E',
+                            border: '1px solid rgba(120, 113, 108, 0.25)'
+                          }}>
+                            <Clock size={11} color="#78716C" />
+                            No Verified Rule in Policy
+                          </span>
+                        </div>
+                      )}
+
                       {/* Clean Natural Prose Response - NO extra background, NO ai slop cards */}
                       <RichAnswerContent
                         content={msg.content}
@@ -1543,20 +1679,33 @@ export default function AgentChatPlayground({
                       })()}
 
                       {/* Conflict Warnings & HITL Escalation Alert */}
-                      {(warnings.length > 0 || meta.answer_status === 'DISPUTED') && (
+                      {(warnings.length > 0 || meta.answer_status === 'DISPUTED' || meta.structured_answer?.conflict_analysis) && (
                         <div style={{
                           marginTop: '10px',
-                          background: 'rgba(239, 68, 68, 0.06)',
-                          border: '1px solid rgba(239, 68, 68, 0.2)',
+                          background: 'rgba(239, 68, 68, 0.05)',
+                          border: '1px solid rgba(239, 68, 68, 0.25)',
                           borderRadius: '10px',
-                          padding: '10px 14px',
+                          padding: '12px 14px',
                           fontSize: '0.78rem',
                           color: '#991B1B'
                         }}>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px', marginBottom: '8px' }}>
                             <div style={{ fontWeight: 700, display: 'flex', alignItems: 'center', gap: '6px' }}>
-                              <AlertTriangle size={14} color="#DC2626" />
+                              <AlertTriangle size={15} color="#DC2626" />
                               <span>Contradiction & Policy Dispute Alert</span>
+                              {meta.structured_answer?.conflict_analysis?.conflict_type && (
+                                <span style={{
+                                  fontSize: '0.68rem',
+                                  padding: '1px 6px',
+                                  borderRadius: '6px',
+                                  background: '#FEE2E2',
+                                  color: '#991B1B',
+                                  fontWeight: 700,
+                                  fontFamily: 'monospace'
+                                }}>
+                                  {meta.structured_answer.conflict_analysis.conflict_type}
+                                </span>
+                              )}
                             </div>
                             <button
                               type="button"
@@ -1584,6 +1733,29 @@ export default function AgentChatPlayground({
                               <span>Escalate to Data Steward</span>
                             </button>
                           </div>
+                          {meta.structured_answer?.conflict_analysis?.pathways && meta.structured_answer.conflict_analysis.pathways.length > 0 && (
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '8px', margin: '8px 0' }}>
+                              {meta.structured_answer.conflict_analysis.pathways.map((pw, pwi) => (
+                                <div key={pwi} style={{
+                                  background: '#FFFFFF',
+                                  border: '1px solid rgba(239, 68, 68, 0.2)',
+                                  borderRadius: '6px',
+                                  padding: '8px 10px',
+                                  color: '#334155'
+                                }}>
+                                  <div style={{ fontWeight: 700, fontSize: '0.74rem', color: '#B91C1C', marginBottom: '2px' }}>
+                                    {pw.path_label}
+                                  </div>
+                                  <div style={{ fontSize: '0.72rem', color: '#64748B', marginBottom: '4px' }}>
+                                    {pw.source_title}
+                                  </div>
+                                  <div style={{ fontSize: '0.76rem', color: '#1E293B', lineHeight: 1.4 }}>
+                                    {pw.rule_summary}
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          )}
                           {warnings.map((w, wi) => (
                             <div key={wi} style={{ lineHeight: 1.4, marginTop: '4px' }}>{w}</div>
                           ))}
