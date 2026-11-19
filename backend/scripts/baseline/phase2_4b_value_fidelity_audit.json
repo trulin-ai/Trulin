@@ -1,0 +1,1570 @@
+{
+  "1": {
+    "number": 1,
+    "value_fidelity_passed": true,
+    "object_value": "Standard policy terms",
+    "evidence_snippet": "\u007f  Business customers on standard accounts (custom contracts may override these ",
+    "reason_codes": []
+  },
+  "2": {
+    "number": 2,
+    "value_fidelity_passed": true,
+    "object_value": "30 days from delivery (60 days for Northwind Rewards Gold members)",
+    "evidence_snippet": "| Return window | 30 days from delivery (60 days for Northwind Rewards Gold memb",
+    "reason_codes": []
+  },
+  "3": {
+    "number": 3,
+    "value_fidelity_passed": true,
+    "object_value": "3-5 business days after we receive and inspect the return",
+    "evidence_snippet": "| Refund speed | 3-5 business days after we receive and inspect the return |",
+    "reason_codes": []
+  },
+  "4": {
+    "number": 4,
+    "value_fidelity_passed": true,
+    "object_value": "Free for defective or incorrect items; $6.95 deducted otherwise",
+    "evidence_snippet": "| Return shipping | Free for defective or incorrect items; $6.95 deducted otherw",
+    "reason_codes": []
+  },
+  "5": {
+    "number": 5,
+    "value_fidelity_passed": true,
+    "object_value": "None on most items; 15% on special-order and bulk items",
+    "evidence_snippet": "| Restocking fee | None on most items; 15% on special-order and bulk items |",
+    "reason_codes": []
+  },
+  "6": {
+    "number": 6,
+    "value_fidelity_passed": true,
+    "object_value": "Not eligible for refund or exchange",
+    "evidence_snippet": "| Final sale items | Not eligible for refund or exchange |",
+    "reason_codes": []
+  },
+  "7": {
+    "number": 7,
+    "value_fidelity_passed": true,
+    "object_value": "Return of money to the original payment method or store credit following an approved return or cancellation.",
+    "evidence_snippet": "| Refund | Return of money to the original payment method or store credit follow",
+    "reason_codes": []
+  },
+  "8": {
+    "number": 8,
+    "value_fidelity_passed": true,
+    "object_value": "Sending a purchased item back to Northwind by mail or in-store drop-off.",
+    "evidence_snippet": "| Return | Sending a purchased item back to Northwind by mail or in-store drop-o",
+    "reason_codes": []
+  },
+  "9": {
+    "number": 9,
+    "value_fidelity_passed": true,
+    "object_value": "Replacing an item with a different size, colour or product of equal or greater value.",
+    "evidence_snippet": "| Exchange | Replacing an item with a different size, colour or product of equal",
+    "reason_codes": []
+  },
+  "10": {
+    "number": 10,
+    "value_fidelity_passed": true,
+    "object_value": "A balance issued to a customer account, redeemable online and in stores",
+    "evidence_snippet": "| Store Credit | A balance issued to a customer account, redeemable online and i",
+    "reason_codes": []
+  },
+  "11": {
+    "number": 11,
+    "value_fidelity_passed": true,
+    "object_value": "Return Merchandise Authorization number, e.g. RMA-2026-004815, required for mailed returns.",
+    "evidence_snippet": "| RMA | Return Merchandise Authorization number, e.g. RMA-2026-004815, required ",
+    "reason_codes": []
+  },
+  "12": {
+    "number": 12,
+    "value_fidelity_passed": true,
+    "object_value": "cannot be returned",
+    "evidence_snippet": "Final Sale                     Items marked 'Final Sale' at the time of purchase",
+    "reason_codes": []
+  },
+  "13": {
+    "number": 13,
+    "value_fidelity_passed": true,
+    "object_value": "30 days",
+    "evidence_snippet": "| Standard merchandise | 30 days |",
+    "reason_codes": []
+  },
+  "14": {
+    "number": 14,
+    "value_fidelity_passed": true,
+    "object_value": "60 days",
+    "evidence_snippet": "| Northwind Rewards Gold members | 60 days |",
+    "reason_codes": []
+  },
+  "15": {
+    "number": 15,
+    "value_fidelity_passed": true,
+    "object_value": "Until January 31 of the following year",
+    "evidence_snippet": "| Holiday purchases (Nov 1 - Dec 24) | Until January 31 of the following year |",
+    "reason_codes": []
+  },
+  "16": {
+    "number": 16,
+    "value_fidelity_passed": true,
+    "object_value": "45 days",
+    "evidence_snippet": "| Footwear (worn indoors only) | 45 days |",
+    "reason_codes": []
+  },
+  "17": {
+    "number": 17,
+    "value_fidelity_passed": true,
+    "object_value": "60 days",
+    "evidence_snippet": "| Camping tents and sleeping bags (unused) | 60 days |",
+    "reason_codes": []
+  },
+  "18": {
+    "number": 18,
+    "value_fidelity_passed": true,
+    "object_value": "Covered by warranty - see Section 14",
+    "evidence_snippet": "| Defective items | Covered by warranty - see Section 14 |",
+    "reason_codes": []
+  },
+  "19": {
+    "number": 19,
+    "value_fidelity_passed": true,
+    "object_value": "store credit at lowest price in last 90 days",
+    "evidence_snippet": "Returns without proof of purchase are accepted in-store only, for store credit a",
+    "reason_codes": []
+  },
+  "20": {
+    "number": 20,
+    "value_fidelity_passed": true,
+    "object_value": "A government-issued photo ID is required and scanned",
+    "evidence_snippet": "A government-issued photo ID is required and scanned.",
+    "reason_codes": []
+  },
+  "21": {
+    "number": 21,
+    "value_fidelity_passed": true,
+    "object_value": "3 receipt-less returns per customer per 12-month period",
+    "evidence_snippet": "A limit of three receipt-less returns per customer per 12-month period applies.",
+    "reason_codes": []
+  },
+  "22": {
+    "number": 22,
+    "value_fidelity_passed": true,
+    "object_value": "verify each condition before approving a refund over $50.00",
+    "evidence_snippet": "Support agents must verify each condition before approving a refund over $50.00.",
+    "reason_codes": []
+  },
+  "23": {
+    "number": 23,
+    "value_fidelity_passed": true,
+    "object_value": "be verified in our systems",
+    "evidence_snippet": "\u007f  The order number or proof of purchase can be verified in our systems.",
+    "reason_codes": []
+  },
+  "24": {
+    "number": 24,
+    "value_fidelity_passed": true,
+    "object_value": "be issued when an item shows signs of use beyond inspection, is missing parts, or is returned without original packaging",
+    "evidence_snippet": "A partial refund may be issued when an item shows signs of use beyond inspection",
+    "reason_codes": []
+  },
+  "25": {
+    "number": 25,
+    "value_fidelity_passed": true,
+    "object_value": "100%",
+    "evidence_snippet": "| Like new, tags attached | 100% |",
+    "reason_codes": []
+  },
+  "26": {
+    "number": 26,
+    "value_fidelity_passed": true,
+    "object_value": "100%",
+    "evidence_snippet": "| Opened packaging, item unused | 100% |",
+    "reason_codes": []
+  },
+  "27": {
+    "number": 27,
+    "value_fidelity_passed": true,
+    "object_value": "90%",
+    "evidence_snippet": "| Missing original box (non-fragile) | 90% |",
+    "reason_codes": []
+  },
+  "28": {
+    "number": 28,
+    "value_fidelity_passed": true,
+    "object_value": "Refund minus gift value",
+    "evidence_snippet": "| Missing accessories or free gift | Refund minus gift value |",
+    "reason_codes": []
+  },
+  "29": {
+    "number": 29,
+    "value_fidelity_passed": true,
+    "object_value": "50% - 75%",
+    "evidence_snippet": "| Light wear or signs of use | 50% - 75% |",
+    "reason_codes": []
+  },
+  "30": {
+    "number": 30,
+    "value_fidelity_passed": true,
+    "object_value": "0% - 25% (agent discretion, manager approval)",
+    "evidence_snippet": "| Damaged by customer / heavy use | 0% - 25% (agent discretion, manager approval",
+    "reason_codes": []
+  },
+  "31": {
+    "number": 31,
+    "value_fidelity_passed": true,
+    "object_value": "Not eligible",
+    "evidence_snippet": "| Washed, altered or stained | Not eligible |",
+    "reason_codes": []
+  },
+  "32": {
+    "number": 32,
+    "value_fidelity_passed": true,
+    "object_value": "Tier 1 Customer Support Agent",
+    "evidence_snippet": "Up to $100: Tier 1 agent may approve.",
+    "reason_codes": []
+  },
+  "33": {
+    "number": 33,
+    "value_fidelity_passed": true,
+    "object_value": "Tier 2 Support Lead",
+    "evidence_snippet": "\u007f  $100.01 - $500: Tier 2 agent or team lead approval required.",
+    "reason_codes": []
+  },
+  "34": {
+    "number": 34,
+    "value_fidelity_passed": true,
+    "object_value": "Customer Experience Manager",
+    "evidence_snippet": "\u007f  Over $500: Customer Experience Manager approval required.",
+    "reason_codes": []
+  },
+  "35": {
+    "number": 35,
+    "value_fidelity_passed": true,
+    "object_value": "Finance Director",
+    "evidence_snippet": "\u007f  Over $2,000: Finance Director approval and fraud review required.",
+    "reason_codes": []
+  },
+  "36": {
+    "number": 36,
+    "value_fidelity_passed": true,
+    "object_value": "Secondary fraud review required",
+    "evidence_snippet": "\u007f  Over $2,000: Finance Director approval and fraud review required.",
+    "reason_codes": []
+  },
+  "37": {
+    "number": 37,
+    "value_fidelity_passed": true,
+    "object_value": "cannot be resold",
+    "evidence_snippet": "Custom products are made specifically for the customer and cannot be resold.",
+    "reason_codes": []
+  },
+  "38": {
+    "number": 38,
+    "value_fidelity_passed": true,
+    "object_value": "be provided if the item arrives damaged, is materially different from its description, or was shipped in error",
+    "evidence_snippet": "Even for non-refundable items, a full refund or replacement will be provided if ",
+    "reason_codes": []
+  },
+  "39": {
+    "number": 39,
+    "value_fidelity_passed": true,
+    "object_value": "processed immediately; bank may take 3-5 days to post the credit",
+    "evidence_snippet": "In-store refunds to the original card are processed immediately; the bank may ta",
+    "reason_codes": []
+  },
+  "40": {
+    "number": 40,
+    "value_fidelity_passed": true,
+    "object_value": "NW-10482391",
+    "evidence_snippet": "| Order number | NW-10482391 | Yes |",
+    "reason_codes": []
+  },
+  "41": {
+    "number": 41,
+    "value_fidelity_passed": true,
+    "object_value": "Yes",
+    "evidence_snippet": "| Order number | NW-10482391 | Yes |",
+    "reason_codes": []
+  },
+  "42": {
+    "number": 42,
+    "value_fidelity_passed": true,
+    "object_value": "jane.doe@example.com",
+    "evidence_snippet": "| Email on order | jane.doe@example.com | Yes |",
+    "reason_codes": []
+  },
+  "43": {
+    "number": 43,
+    "value_fidelity_passed": true,
+    "object_value": "Email on order",
+    "evidence_snippet": "Email on order jane.doe@example.com Yes",
+    "reason_codes": []
+  },
+  "44": {
+    "number": 44,
+    "value_fidelity_passed": true,
+    "object_value": "TNT-4P-GRN / Summit 4-Person Tent",
+    "evidence_snippet": "| Item SKU / name | TNT-4P-GRN / Summit 4-Person Tent | Yes |",
+    "reason_codes": []
+  },
+  "45": {
+    "number": 45,
+    "value_fidelity_passed": true,
+    "object_value": "Yes",
+    "evidence_snippet": "| Item SKU / name | TNT-4P-GRN / Summit 4-Person Tent | Yes |",
+    "reason_codes": []
+  },
+  "46": {
+    "number": 46,
+    "value_fidelity_passed": true,
+    "object_value": "Wrong size",
+    "evidence_snippet": "| Reason for return | Wrong size | Yes |",
+    "reason_codes": []
+  },
+  "47": {
+    "number": 47,
+    "value_fidelity_passed": true,
+    "object_value": "Yes",
+    "evidence_snippet": "| Reason for return | Wrong size | Yes |",
+    "reason_codes": []
+  },
+  "48": {
+    "number": 48,
+    "value_fidelity_passed": true,
+    "object_value": "Damage close-up",
+    "evidence_snippet": "| Photos | Damage close-up | If damaged |",
+    "reason_codes": []
+  },
+  "49": {
+    "number": 49,
+    "value_fidelity_passed": true,
+    "object_value": "If damaged",
+    "evidence_snippet": "| Photos | Damage close-up | If damaged |",
+    "reason_codes": []
+  },
+  "50": {
+    "number": 50,
+    "value_fidelity_passed": true,
+    "object_value": "Refund to card",
+    "evidence_snippet": "| Preferred resolution | Refund to card | Yes |",
+    "reason_codes": []
+  },
+  "51": {
+    "number": 51,
+    "value_fidelity_passed": true,
+    "object_value": "Yes",
+    "evidence_snippet": "| Preferred resolution | Refund to card | Yes |",
+    "reason_codes": []
+  },
+  "52": {
+    "number": 52,
+    "value_fidelity_passed": true,
+    "object_value": "Instantly online; up to 1 hour by phone",
+    "evidence_snippet": "| RMA issued after request | Instantly online; up to 1 hour by phone |",
+    "reason_codes": []
+  },
+  "53": {
+    "number": 53,
+    "value_fidelity_passed": true,
+    "object_value": "3-7 business days (domestic)",
+    "evidence_snippet": "| Return transit to warehouse | 3-7 business days (domestic) |",
+    "reason_codes": []
+  },
+  "54": {
+    "number": 54,
+    "value_fidelity_passed": true,
+    "object_value": "1-2 business days",
+    "evidence_snippet": "| Warehouse receipt and inspection | 1-2 business days |",
+    "reason_codes": []
+  },
+  "55": {
+    "number": 55,
+    "value_fidelity_passed": true,
+    "object_value": "Within 1 business day of inspection",
+    "evidence_snippet": "| Refund approved and issued | Within 1 business day of inspection |",
+    "reason_codes": []
+  },
+  "56": {
+    "number": 56,
+    "value_fidelity_passed": true,
+    "object_value": "3-5 business days",
+    "evidence_snippet": "| Credit card refund posted by bank | 3-5 business days |",
+    "reason_codes": []
+  },
+  "57": {
+    "number": 57,
+    "value_fidelity_passed": true,
+    "object_value": "5-10 business days",
+    "evidence_snippet": "| Debit card / bank transfer | 5-10 business days |",
+    "reason_codes": []
+  },
+  "58": {
+    "number": 58,
+    "value_fidelity_passed": true,
+    "object_value": "Within 24 hours of issue",
+    "evidence_snippet": "| PayPal | Within 24 hours of issue |",
+    "reason_codes": []
+  },
+  "59": {
+    "number": 59,
+    "value_fidelity_passed": true,
+    "object_value": "Immediate",
+    "evidence_snippet": "| Store credit | Immediate |",
+    "reason_codes": []
+  },
+  "60": {
+    "number": 60,
+    "value_fidelity_passed": true,
+    "object_value": "10-15 business days",
+    "evidence_snippet": "| Check (by request, over $1,000) | 10-15 business days |",
+    "reason_codes": []
+  },
+  "61": {
+    "number": 61,
+    "value_fidelity_passed": true,
+    "object_value": "Original card",
+    "evidence_snippet": "| Visa / Mastercard / Amex | Original card | 3-5 business days to post |",
+    "reason_codes": []
+  },
+  "62": {
+    "number": 62,
+    "value_fidelity_passed": true,
+    "object_value": "3-5 business days to post",
+    "evidence_snippet": "| Visa / Mastercard / Amex | Original card | 3-5 business days to post |",
+    "reason_codes": []
+  },
+  "63": {
+    "number": 63,
+    "value_fidelity_passed": true,
+    "object_value": "Original card",
+    "evidence_snippet": "| Debit card | Original card | Up to 10 business days |",
+    "reason_codes": []
+  },
+  "64": {
+    "number": 64,
+    "value_fidelity_passed": true,
+    "object_value": "Up to 10 business days",
+    "evidence_snippet": "| Debit card | Original card | Up to 10 business days |",
+    "reason_codes": []
+  },
+  "65": {
+    "number": 65,
+    "value_fidelity_passed": true,
+    "object_value": "PayPal balance",
+    "evidence_snippet": "| PayPal | PayPal balance | Usually within 24 hours |",
+    "reason_codes": []
+  },
+  "66": {
+    "number": 66,
+    "value_fidelity_passed": true,
+    "object_value": "Usually within 24 hours",
+    "evidence_snippet": "PayPal PayPal balance Usually within 24 hours",
+    "reason_codes": []
+  },
+  "67": {
+    "number": 67,
+    "value_fidelity_passed": true,
+    "object_value": "Underlying card",
+    "evidence_snippet": "Apple Pay / Google Pay Underlying card Same as card",
+    "reason_codes": []
+  },
+  "68": {
+    "number": 68,
+    "value_fidelity_passed": true,
+    "object_value": "Same as card",
+    "evidence_snippet": "| Apple Pay / Google Pay | Underlying card | Same as card |",
+    "reason_codes": []
+  },
+  "69": {
+    "number": 69,
+    "value_fidelity_passed": true,
+    "object_value": "Provider reduces balance",
+    "evidence_snippet": "| Buy Now Pay Later (e.g. Klarna) | Provider reduces balance | Provider timeline",
+    "reason_codes": []
+  },
+  "70": {
+    "number": 70,
+    "value_fidelity_passed": true,
+    "object_value": "Provider timelines apply",
+    "evidence_snippet": "| Buy Now Pay Later (e.g. Klarna) | Provider reduces balance | Provider timeline",
+    "reason_codes": []
+  },
+  "71": {
+    "number": 71,
+    "value_fidelity_passed": true,
+    "object_value": "New gift card or store credit",
+    "evidence_snippet": "| Gift card | New gift card or store credit | Instant |",
+    "reason_codes": []
+  },
+  "72": {
+    "number": 72,
+    "value_fidelity_passed": true,
+    "object_value": "Instant",
+    "evidence_snippet": "| Gift card | New gift card or store credit | Instant |",
+    "reason_codes": []
+  },
+  "73": {
+    "number": 73,
+    "value_fidelity_passed": true,
+    "object_value": "Cash up to $50, then store credit/card",
+    "evidence_snippet": "| Cash (in-store) | Cash up to $50, then store credit/card | ID required over $5",
+    "reason_codes": []
+  },
+  "74": {
+    "number": 74,
+    "value_fidelity_passed": true,
+    "object_value": "ID required over $50",
+    "evidence_snippet": "| Cash (in-store) | Cash up to $50, then store credit/card | ID required over $5",
+    "reason_codes": []
+  },
+  "75": {
+    "number": 75,
+    "value_fidelity_passed": true,
+    "object_value": "Proportionally to each method",
+    "evidence_snippet": "| Split payments | Proportionally to each method | Gift card portion first |",
+    "reason_codes": []
+  },
+  "76": {
+    "number": 76,
+    "value_fidelity_passed": true,
+    "object_value": "Gift card portion first",
+    "evidence_snippet": "| Split payments | Proportionally to each method | Gift card portion first |",
+    "reason_codes": []
+  },
+  "77": {
+    "number": 77,
+    "value_fidelity_passed": true,
+    "object_value": "5% bonus on credit value, maximum bonus $25.00 per return",
+    "evidence_snippet": "Customers who choose store credit instead of a refund to the original payment me",
+    "reason_codes": []
+  },
+  "78": {
+    "number": 78,
+    "value_fidelity_passed": true,
+    "object_value": "be applied retroactively once a refund has been issued to the card",
+    "evidence_snippet": "Bonus credit cannot be applied retroactively once a refund has been issued to th",
+    "reason_codes": []
+  },
+  "79": {
+    "number": 79,
+    "value_fidelity_passed": true,
+    "object_value": "Yes, in full",
+    "evidence_snippet": "| Defective or damaged | Yes, in full | Free |",
+    "reason_codes": []
+  },
+  "80": {
+    "number": 80,
+    "value_fidelity_passed": true,
+    "object_value": "Free",
+    "evidence_snippet": "| Defective or damaged | Yes, in full | Free |",
+    "reason_codes": []
+  },
+  "81": {
+    "number": 81,
+    "value_fidelity_passed": true,
+    "object_value": "Yes, in full",
+    "evidence_snippet": "| Wrong item sent | Yes, in full | Free |",
+    "reason_codes": []
+  },
+  "82": {
+    "number": 82,
+    "value_fidelity_passed": true,
+    "object_value": "Free",
+    "evidence_snippet": "| Wrong item sent | Yes, in full | Free |",
+    "reason_codes": []
+  },
+  "83": {
+    "number": 83,
+    "value_fidelity_passed": true,
+    "object_value": "Yes, in full",
+    "evidence_snippet": "| Not as described | Yes, in full | Free |",
+    "reason_codes": []
+  },
+  "84": {
+    "number": 84,
+    "value_fidelity_passed": true,
+    "object_value": "Free",
+    "evidence_snippet": "| Not as described | Yes, in full | Free |",
+    "reason_codes": []
+  },
+  "85": {
+    "number": 85,
+    "value_fidelity_passed": true,
+    "object_value": "No",
+    "evidence_snippet": "| Changed mind / wrong size | No | $6.95 deducted from refund |",
+    "reason_codes": []
+  },
+  "86": {
+    "number": 86,
+    "value_fidelity_passed": true,
+    "object_value": "$6.95 deducted from refund",
+    "evidence_snippet": "| Changed mind / wrong size | No | $6.95 deducted from refund |",
+    "reason_codes": []
+  },
+  "87": {
+    "number": 87,
+    "value_fidelity_passed": true,
+    "object_value": "No",
+    "evidence_snippet": "| Gold member, any reason | No | Free |",
+    "reason_codes": []
+  },
+  "88": {
+    "number": 88,
+    "value_fidelity_passed": true,
+    "object_value": "Free",
+    "evidence_snippet": "| Gold member, any reason | No | Free |",
+    "reason_codes": []
+  },
+  "89": {
+    "number": 89,
+    "value_fidelity_passed": true,
+    "object_value": "N/A",
+    "evidence_snippet": "| Exchange | N/A | Free both ways |",
+    "reason_codes": []
+  },
+  "90": {
+    "number": 90,
+    "value_fidelity_passed": true,
+    "object_value": "Free both ways",
+    "evidence_snippet": "| Exchange | N/A | Free both ways |",
+    "reason_codes": []
+  },
+  "91": {
+    "number": 91,
+    "value_fidelity_passed": true,
+    "object_value": "No",
+    "evidence_snippet": "Order over $150, any reason No Free",
+    "reason_codes": []
+  },
+  "92": {
+    "number": 92,
+    "value_fidelity_passed": true,
+    "object_value": "Free",
+    "evidence_snippet": "Order over $150, any reason No Free",
+    "reason_codes": []
+  },
+  "93": {
+    "number": 93,
+    "value_fidelity_passed": true,
+    "object_value": "$49.00 flat return freight fee deducted from refund",
+    "evidence_snippet": "Return freight for change-of-mind returns is a flat $49.00, deducted from the re",
+    "reason_codes": []
+  },
+  "94": {
+    "number": 94,
+    "value_fidelity_passed": true,
+    "object_value": "with our logistics team at least 3 business days in advance",
+    "evidence_snippet": "Freight pickups must be scheduled with our logistics team at least 3 business da",
+    "reason_codes": []
+  },
+  "95": {
+    "number": 95,
+    "value_fidelity_passed": true,
+    "object_value": "their own carrier",
+    "evidence_snippet": "Customers may use their own carrier.",
+    "reason_codes": []
+  },
+  "96": {
+    "number": 96,
+    "value_fidelity_passed": true,
+    "object_value": "$12.00 and only for approved defective returns, with a receipt",
+    "evidence_snippet": "Reimbursement for carrier costs is limited to $12.00 and only for approved defec",
+    "reason_codes": []
+  },
+  "97": {
+    "number": 97,
+    "value_fidelity_passed": true,
+    "object_value": "be dropped at over 15,000 carrier locations and all Northwind stores",
+    "evidence_snippet": "Prepaid labels can be dropped at over 15,000 carrier locations and all Northwind",
+    "reason_codes": []
+  },
+  "98": {
+    "number": 98,
+    "value_fidelity_passed": true,
+    "object_value": "drop-off receipt until refund has been confirmed",
+    "evidence_snippet": "Keep the drop-off receipt until your refund has been confirmed.",
+    "reason_codes": []
+  },
+  "99": {
+    "number": 99,
+    "value_fidelity_passed": true,
+    "object_value": "Same item shipped with free expedited shipping",
+    "evidence_snippet": "| Replacement | Same item shipped with free expedited shipping | 2-3 business da",
+    "reason_codes": []
+  },
+  "100": {
+    "number": 100,
+    "value_fidelity_passed": true,
+    "object_value": "2-3 business days",
+    "evidence_snippet": "| Replacement | Same item shipped with free expedited shipping | 2-3 business da",
+    "reason_codes": []
+  },
+  "101": {
+    "number": 101,
+    "value_fidelity_passed": true,
+    "object_value": "Item price plus shipping and tax",
+    "evidence_snippet": "| Full refund | Item price plus shipping and tax | 3-5 business days |",
+    "reason_codes": []
+  },
+  "102": {
+    "number": 102,
+    "value_fidelity_passed": true,
+    "object_value": "3-5 business days",
+    "evidence_snippet": "| Full refund | Item price plus shipping and tax | 3-5 business days |",
+    "reason_codes": []
+  },
+  "103": {
+    "number": 103,
+    "value_fidelity_passed": true,
+    "object_value": "Offered for minor cosmetic flaws",
+    "evidence_snippet": "| Partial refund (keep item) | Offered for minor cosmetic flaws | Immediate |",
+    "reason_codes": []
+  },
+  "104": {
+    "number": 104,
+    "value_fidelity_passed": true,
+    "object_value": "For eligible products under warranty",
+    "evidence_snippet": "| Repair | For eligible products under warranty | 7-14 business days |",
+    "reason_codes": []
+  },
+  "105": {
+    "number": 105,
+    "value_fidelity_passed": true,
+    "object_value": "7-14 business days",
+    "evidence_snippet": "| Repair | For eligible products under warranty | 7-14 business days |",
+    "reason_codes": []
+  },
+  "106": {
+    "number": 106,
+    "value_fidelity_passed": true,
+    "object_value": "refund without requiring item return ('Keep It' policy)",
+    "evidence_snippet": "For damaged items valued under $40.00, we may issue a refund without requiring t",
+    "reason_codes": []
+  },
+  "107": {
+    "number": 107,
+    "value_fidelity_passed": true,
+    "object_value": "two instances per customer per year",
+    "evidence_snippet": "This is limited to two instances per customer per year.",
+    "reason_codes": []
+  },
+  "108": {
+    "number": 108,
+    "value_fidelity_passed": true,
+    "object_value": "Once an order has shipped, it must be handled as a return.",
+    "evidence_snippet": "Once an order has shipped, it must be handled as a return.",
+    "reason_codes": []
+  },
+  "109": {
+    "number": 109,
+    "value_fidelity_passed": true,
+    "object_value": "Refund Pending (within 1 hour) self-service full refund and immediate authorization release",
+    "evidence_snippet": "Refund Pending (within 1 hour)                Yes - self-service                ",
+    "reason_codes": []
+  },
+  "110": {
+    "number": 110,
+    "value_fidelity_passed": true,
+    "object_value": "No",
+    "evidence_snippet": "Shipped No Refuse delivery or return",
+    "reason_codes": []
+  },
+  "111": {
+    "number": 111,
+    "value_fidelity_passed": true,
+    "object_value": "Refuse delivery or return",
+    "evidence_snippet": "Shipped No Refuse delivery or return",
+    "reason_codes": []
+  },
+  "112": {
+    "number": 112,
+    "value_fidelity_passed": true,
+    "object_value": "No",
+    "evidence_snippet": "Delivered No Standard return policy",
+    "reason_codes": []
+  },
+  "113": {
+    "number": 113,
+    "value_fidelity_passed": true,
+    "object_value": "Standard return policy",
+    "evidence_snippet": "Delivered No Standard return policy",
+    "reason_codes": []
+  },
+  "114": {
+    "number": 114,
+    "value_fidelity_passed": true,
+    "object_value": "Yes, until 7 days before release",
+    "evidence_snippet": "Pre-order Yes, until 7 days before release Full refund",
+    "reason_codes": []
+  },
+  "115": {
+    "number": 115,
+    "value_fidelity_passed": true,
+    "object_value": "Full refund",
+    "evidence_snippet": "Pre-order Yes, until 7 days before release Full refund",
+    "reason_codes": []
+  },
+  "116": {
+    "number": 116,
+    "value_fidelity_passed": true,
+    "object_value": "Yes, anytime",
+    "evidence_snippet": "Backordered Yes, anytime Full refund",
+    "reason_codes": []
+  },
+  "117": {
+    "number": 117,
+    "value_fidelity_passed": true,
+    "object_value": "Full refund",
+    "evidence_snippet": "Backordered Yes, anytime Full refund",
+    "reason_codes": []
+  },
+  "118": {
+    "number": 118,
+    "value_fidelity_passed": true,
+    "object_value": "an order for reasons including stock errors, pricing errors, suspected fraud, or inability to verify payment",
+    "evidence_snippet": "We may cancel an order for reasons including stock errors, pricing errors, suspe",
+    "reason_codes": []
+  },
+  "119": {
+    "number": 119,
+    "value_fidelity_passed": true,
+    "object_value": "14 days of purchase for one-time refund of difference",
+    "evidence_snippet": "If an item you purchased drops in price within 14 days of purchase, contact us f",
+    "reason_codes": []
+  },
+  "120": {
+    "number": 120,
+    "value_fidelity_passed": true,
+    "object_value": "Full refund if cancelled within 48 hours of renewal and box not shipped",
+    "evidence_snippet": "| Trailhead Box | Monthly, 1st of month | Anytime before the 25th | Full refund ",
+    "reason_codes": []
+  },
+  "121": {
+    "number": 121,
+    "value_fidelity_passed": true,
+    "object_value": "Pro-rated refund within 30 days of renewal; none afterwards",
+    "evidence_snippet": "| Rewards Plus | Annual | Anytime | Pro-rated refund within 30 days of renewal; ",
+    "reason_codes": []
+  },
+  "122": {
+    "number": 122,
+    "value_fidelity_passed": true,
+    "object_value": "No refund for current month; cancel effective next cycle",
+    "evidence_snippet": "| Gear Care Plan | Monthly | Anytime | No refund for current month; cancel effec",
+    "reason_codes": []
+  },
+  "123": {
+    "number": 123,
+    "value_fidelity_passed": true,
+    "object_value": "without charge",
+    "evidence_snippet": "If you cancel before the trial ends, you will not be charged.",
+    "reason_codes": []
+  },
+  "124": {
+    "number": 124,
+    "value_fidelity_passed": true,
+    "object_value": "within 7 days for a full refund of the first charge",
+    "evidence_snippet": "If you forget to cancel and are charged, contact us within 7 days for a full ref",
+    "reason_codes": []
+  },
+  "125": {
+    "number": 125,
+    "value_fidelity_passed": true,
+    "object_value": "treat the renewal as accidental and refund in full within 30 days",
+    "evidence_snippet": "If you did not receive a reminder due to an invalid email address, we will treat",
+    "reason_codes": []
+  },
+  "126": {
+    "number": 126,
+    "value_fidelity_passed": true,
+    "object_value": "for up to 3 months, once per year, from the account page",
+    "evidence_snippet": "Trailhead Box subscribers can pause for up to 3 months, once per year, from the ",
+    "reason_codes": []
+  },
+  "127": {
+    "number": 127,
+    "value_fidelity_passed": true,
+    "object_value": "within 7 days",
+    "evidence_snippet": "Video courses may be refunded within 7 days if less than 20% of the content has ",
+    "reason_codes": []
+  },
+  "128": {
+    "number": 128,
+    "value_fidelity_passed": true,
+    "object_value": "Full refund within 14 days for corrupt or inaccessible files",
+    "evidence_snippet": "If a file is corrupt or inaccessible, we will provide a working copy or a full r",
+    "reason_codes": []
+  },
+  "129": {
+    "number": 129,
+    "value_fidelity_passed": true,
+    "object_value": "Cash (except where required by law, e.g. California, balances under $10)",
+    "evidence_snippet": "Gift cards are not refundable for cash, except where required by law (e.g. Calif",
+    "reason_codes": []
+  },
+  "130": {
+    "number": 130,
+    "value_fidelity_passed": true,
+    "object_value": "\u007f Gift cards never expire and carry no fees.",
+    "evidence_snippet": "\u007f  Gift cards never expire and carry no fees.",
+    "reason_codes": []
+  },
+  "131": {
+    "number": 131,
+    "value_fidelity_passed": true,
+    "object_value": "Replaced with original proof of purchase and remaining balance verifiable",
+    "evidence_snippet": "\u007f  Lost or stolen gift cards can be replaced if the card number is provided, min",
+    "reason_codes": []
+  },
+  "132": {
+    "number": 132,
+    "value_fidelity_passed": true,
+    "object_value": "be cancelled once the code is delivered by email",
+    "evidence_snippet": "Gift card purchases cannot be cancelled once the code is delivered by email.",
+    "reason_codes": []
+  },
+  "133": {
+    "number": 133,
+    "value_fidelity_passed": true,
+    "object_value": "return items with a gift receipt for store credit equal to the price paid, or exchange for another item",
+    "evidence_snippet": "Gift recipients can return items with a gift receipt for store credit equal to t",
+    "reason_codes": []
+  },
+  "134": {
+    "number": 134,
+    "value_fidelity_passed": true,
+    "object_value": "The purchaser is not notified of the return.",
+    "evidence_snippet": "The purchaser is not notified of the return.",
+    "reason_codes": []
+  },
+  "135": {
+    "number": 135,
+    "value_fidelity_passed": true,
+    "object_value": "Without a gift receipt, credit is issued at the lowest recent selling price.",
+    "evidence_snippet": "Without a gift receipt, credit is issued at the lowest recent selling price.",
+    "reason_codes": []
+  },
+  "136": {
+    "number": 136,
+    "value_fidelity_passed": true,
+    "object_value": "2 years",
+    "evidence_snippet": "| Tents and shelters | 2 years | Repair, replace or refund |",
+    "reason_codes": []
+  },
+  "137": {
+    "number": 137,
+    "value_fidelity_passed": true,
+    "object_value": "Repair, replace or refund",
+    "evidence_snippet": "| Tents and shelters | 2 years | Repair, replace or refund |",
+    "reason_codes": []
+  },
+  "138": {
+    "number": 138,
+    "value_fidelity_passed": true,
+    "object_value": "Lifetime (manufacturing defects)",
+    "evidence_snippet": "| Sleeping bags | Lifetime (manufacturing defects) | Repair or replace |",
+    "reason_codes": []
+  },
+  "139": {
+    "number": 139,
+    "value_fidelity_passed": true,
+    "object_value": "Repair or replace",
+    "evidence_snippet": "| Sleeping bags | Lifetime (manufacturing defects) | Repair or replace |",
+    "reason_codes": []
+  },
+  "140": {
+    "number": 140,
+    "value_fidelity_passed": true,
+    "object_value": "5 years",
+    "evidence_snippet": "| Backpacks | 5 years | Repair or replace |",
+    "reason_codes": []
+  },
+  "141": {
+    "number": 141,
+    "value_fidelity_passed": true,
+    "object_value": "Repair or replace",
+    "evidence_snippet": "| Backpacks | 5 years | Repair or replace |",
+    "reason_codes": []
+  },
+  "142": {
+    "number": 142,
+    "value_fidelity_passed": true,
+    "object_value": "1 year",
+    "evidence_snippet": "| Footwear | 1 year | Replace or refund |",
+    "reason_codes": []
+  },
+  "143": {
+    "number": 143,
+    "value_fidelity_passed": true,
+    "object_value": "Replace or refund",
+    "evidence_snippet": "| Footwear | 1 year | Replace or refund |",
+    "reason_codes": []
+  },
+  "144": {
+    "number": 144,
+    "value_fidelity_passed": true,
+    "object_value": "1 year",
+    "evidence_snippet": "| Apparel | 1 year | Replace or refund |",
+    "reason_codes": []
+  },
+  "145": {
+    "number": 145,
+    "value_fidelity_passed": true,
+    "object_value": "Replace or refund",
+    "evidence_snippet": "| Apparel | 1 year | Replace or refund |",
+    "reason_codes": []
+  },
+  "146": {
+    "number": 146,
+    "value_fidelity_passed": true,
+    "object_value": "1 year",
+    "evidence_snippet": "| Electronics (headlamps, GPS) | 1 year | Repair or replace |",
+    "reason_codes": []
+  },
+  "147": {
+    "number": 147,
+    "value_fidelity_passed": true,
+    "object_value": "Repair or replace",
+    "evidence_snippet": "| Electronics (headlamps, GPS) | 1 year | Repair or replace |",
+    "reason_codes": []
+  },
+  "148": {
+    "number": 148,
+    "value_fidelity_passed": true,
+    "object_value": "2 years",
+    "evidence_snippet": "| Stoves and cookware | 2 years | Repair or replace |",
+    "reason_codes": []
+  },
+  "149": {
+    "number": 149,
+    "value_fidelity_passed": true,
+    "object_value": "Repair or replace",
+    "evidence_snippet": "| Stoves and cookware | 2 years | Repair or replace |",
+    "reason_codes": []
+  },
+  "150": {
+    "number": 150,
+    "value_fidelity_passed": true,
+    "object_value": "1 year",
+    "evidence_snippet": "| Water filters | 1 year | Replace |",
+    "reason_codes": []
+  },
+  "151": {
+    "number": 151,
+    "value_fidelity_passed": true,
+    "object_value": "Replace",
+    "evidence_snippet": "| Water filters | 1 year | Replace |",
+    "reason_codes": []
+  },
+  "152": {
+    "number": 152,
+    "value_fidelity_passed": true,
+    "object_value": "Items shipped directly by third-party sellers follow the seller's policy, but Northwind's A-to-Z Guarantee ensures a refund if the seller fails to respond within 5 business days.",
+    "evidence_snippet": "Items shipped directly by third-party sellers follow the seller's policy, but No",
+    "reason_codes": []
+  },
+  "153": {
+    "number": 153,
+    "value_fidelity_passed": true,
+    "object_value": "30 days",
+    "evidence_snippet": "| United States | 30 days | See Section 9 | Included |",
+    "reason_codes": []
+  },
+  "154": {
+    "number": 154,
+    "value_fidelity_passed": true,
+    "object_value": "See Section 9",
+    "evidence_snippet": "| United States | 30 days | See Section 9 | Included |",
+    "reason_codes": []
+  },
+  "155": {
+    "number": 155,
+    "value_fidelity_passed": true,
+    "object_value": "Included",
+    "evidence_snippet": "| United States | 30 days | See Section 9 | Included |",
+    "reason_codes": []
+  },
+  "156": {
+    "number": 156,
+    "value_fidelity_passed": true,
+    "object_value": "30 days",
+    "evidence_snippet": "| Canada | 30 days | Customer pays unless defective | Duties refunded on approve",
+    "reason_codes": []
+  },
+  "157": {
+    "number": 157,
+    "value_fidelity_passed": true,
+    "object_value": "Customer pays unless defective",
+    "evidence_snippet": "| Canada | 30 days | Customer pays unless defective | Duties refunded on approve",
+    "reason_codes": []
+  },
+  "158": {
+    "number": 158,
+    "value_fidelity_passed": true,
+    "object_value": "Duties refunded on approved returns",
+    "evidence_snippet": "| Canada | 30 days | Customer pays unless defective | Duties refunded on approve",
+    "reason_codes": []
+  },
+  "159": {
+    "number": 159,
+    "value_fidelity_passed": true,
+    "object_value": "30 days (14-day statutory minimum)",
+    "evidence_snippet": "| UK | 30 days (14-day statutory minimum) | Customer pays unless defective | VAT",
+    "reason_codes": []
+  },
+  "160": {
+    "number": 160,
+    "value_fidelity_passed": true,
+    "object_value": "Customer pays unless defective",
+    "evidence_snippet": "| UK | 30 days (14-day statutory minimum) | Customer pays unless defective | VAT",
+    "reason_codes": []
+  },
+  "161": {
+    "number": 161,
+    "value_fidelity_passed": true,
+    "object_value": "VAT refunded, duty via customs claim",
+    "evidence_snippet": "| UK | 30 days (14-day statutory minimum) | Customer pays unless defective | VAT",
+    "reason_codes": []
+  },
+  "162": {
+    "number": 162,
+    "value_fidelity_passed": true,
+    "object_value": "30 days (14-day statutory minimum)",
+    "evidence_snippet": "| EU | 30 days (14-day statutory minimum) | Customer pays unless defective | VAT",
+    "reason_codes": []
+  },
+  "163": {
+    "number": 163,
+    "value_fidelity_passed": true,
+    "object_value": "Customer pays unless defective",
+    "evidence_snippet": "| EU | 30 days (14-day statutory minimum) | Customer pays unless defective | VAT",
+    "reason_codes": []
+  },
+  "164": {
+    "number": 164,
+    "value_fidelity_passed": true,
+    "object_value": "VAT refunded",
+    "evidence_snippet": "| EU | 30 days (14-day statutory minimum) | Customer pays unless defective | VAT",
+    "reason_codes": []
+  },
+  "165": {
+    "number": 165,
+    "value_fidelity_passed": true,
+    "object_value": "30 days",
+    "evidence_snippet": "| Australia | 30 days | Customer pays unless defective | GST refunded |",
+    "reason_codes": []
+  },
+  "166": {
+    "number": 166,
+    "value_fidelity_passed": true,
+    "object_value": "Customer pays unless defective",
+    "evidence_snippet": "| Australia | 30 days | Customer pays unless defective | GST refunded |",
+    "reason_codes": []
+  },
+  "167": {
+    "number": 167,
+    "value_fidelity_passed": true,
+    "object_value": "GST refunded",
+    "evidence_snippet": "| Australia | 30 days | Customer pays unless defective | GST refunded |",
+    "reason_codes": []
+  },
+  "168": {
+    "number": 168,
+    "value_fidelity_passed": true,
+    "object_value": "14 days",
+    "evidence_snippet": "| Rest of world | 14 days | Customer pays | Not refundable |",
+    "reason_codes": []
+  },
+  "169": {
+    "number": 169,
+    "value_fidelity_passed": true,
+    "object_value": "Customer pays",
+    "evidence_snippet": "| Rest of world | 14 days | Customer pays | Not refundable |",
+    "reason_codes": []
+  },
+  "170": {
+    "number": 170,
+    "value_fidelity_passed": true,
+    "object_value": "Not refundable",
+    "evidence_snippet": "| Rest of world | 14 days | Customer pays | Not refundable |",
+    "reason_codes": []
+  },
+  "171": {
+    "number": 171,
+    "value_fidelity_passed": true,
+    "object_value": "currency of the original charge",
+    "evidence_snippet": "Refunds are issued in the currency of the original charge.",
+    "reason_codes": []
+  },
+  "172": {
+    "number": 172,
+    "value_fidelity_passed": true,
+    "object_value": "Refund currency follows original charge; exchange differences are not compensated",
+    "evidence_snippet": "Exchange rate differences between the purchase and refund date are not compensat",
+    "reason_codes": []
+  },
+  "173": {
+    "number": 173,
+    "value_fidelity_passed": true,
+    "object_value": "filing customs duty drawback claims",
+    "evidence_snippet": "Customers are responsible for filing customs duty drawback claims where availabl",
+    "reason_codes": []
+  },
+  "174": {
+    "number": 174,
+    "value_fidelity_passed": true,
+    "object_value": "commercial invoice and proof of return",
+    "evidence_snippet": "Northwind will provide a commercial invoice and proof of return upon request.",
+    "reason_codes": []
+  },
+  "175": {
+    "number": 175,
+    "value_fidelity_passed": true,
+    "object_value": "Refused deliveries at customs are refunded minus outbound and return shipping.",
+    "evidence_snippet": "Refused deliveries at customs are refunded minus outbound and return shipping.",
+    "reason_codes": []
+  },
+  "176": {
+    "number": 176,
+    "value_fidelity_passed": true,
+    "object_value": "Submits dispute evidence within 7 days",
+    "evidence_snippet": "\u007f  We submit evidence (order record, delivery confirmation, communications) with",
+    "reason_codes": []
+  },
+  "177": {
+    "number": 177,
+    "value_fidelity_passed": true,
+    "object_value": "Decides dispute outcome within 30\u201390 days",
+    "evidence_snippet": "\u007f  The issuer decides within 30-90 days.",
+    "reason_codes": []
+  },
+  "178": {
+    "number": 178,
+    "value_fidelity_passed": true,
+    "object_value": "Transaction funds are debited from Northwind account",
+    "evidence_snippet": "\u007f  If the dispute is lost, funds are debited; a $15 administration fee may apply",
+    "reason_codes": []
+  },
+  "179": {
+    "number": 179,
+    "value_fidelity_passed": true,
+    "object_value": "$15 administration fee may apply for fraudulent claims",
+    "evidence_snippet": "\u007f  If the dispute is lost, funds are debited; a $15 administration fee may apply",
+    "reason_codes": []
+  },
+  "180": {
+    "number": 180,
+    "value_fidelity_passed": true,
+    "object_value": "Cardholder dispute / not as described",
+    "evidence_snippet": "4853 Cardholder dispute / not as described Refund or evidence submission",
+    "reason_codes": []
+  },
+  "181": {
+    "number": 181,
+    "value_fidelity_passed": true,
+    "object_value": "Refund or evidence submission",
+    "evidence_snippet": "4853 Cardholder dispute / not as described Refund or evidence submission",
+    "reason_codes": []
+  },
+  "182": {
+    "number": 182,
+    "value_fidelity_passed": true,
+    "object_value": "No cardholder authorisation (fraud)",
+    "evidence_snippet": "4837 No cardholder authorisation (fraud) Fraud investigation",
+    "reason_codes": []
+  },
+  "183": {
+    "number": 183,
+    "value_fidelity_passed": true,
+    "object_value": "Fraud investigation",
+    "evidence_snippet": "4837 No cardholder authorisation (fraud) Fraud investigation",
+    "reason_codes": []
+  },
+  "184": {
+    "number": 184,
+    "value_fidelity_passed": true,
+    "object_value": "Goods or services not provided",
+    "evidence_snippet": "4855 Goods or services not provided Provide tracking proof or refund",
+    "reason_codes": []
+  },
+  "185": {
+    "number": 185,
+    "value_fidelity_passed": true,
+    "object_value": "Provide tracking proof or refund",
+    "evidence_snippet": "4855 Goods or services not provided Provide tracking proof or refund",
+    "reason_codes": []
+  },
+  "186": {
+    "number": 186,
+    "value_fidelity_passed": true,
+    "object_value": "Duplicate processing",
+    "evidence_snippet": "4834 Duplicate processing Verify and refund duplicate",
+    "reason_codes": []
+  },
+  "187": {
+    "number": 187,
+    "value_fidelity_passed": true,
+    "object_value": "Verify and refund duplicate",
+    "evidence_snippet": "4834 Duplicate processing Verify and refund duplicate",
+    "reason_codes": []
+  },
+  "188": {
+    "number": 188,
+    "value_fidelity_passed": true,
+    "object_value": "Cancelled recurring transaction",
+    "evidence_snippet": "4841 Cancelled recurring transaction Check cancellation record",
+    "reason_codes": []
+  },
+  "189": {
+    "number": 189,
+    "value_fidelity_passed": true,
+    "object_value": "Check cancellation record",
+    "evidence_snippet": "4841 Cancelled recurring transaction Check cancellation record",
+    "reason_codes": []
+  },
+  "190": {
+    "number": 190,
+    "value_fidelity_passed": true,
+    "object_value": "Return rate 30-40%",
+    "evidence_snippet": "Notice Return rate 30-40% Email reminder of policy",
+    "reason_codes": []
+  },
+  "191": {
+    "number": 191,
+    "value_fidelity_passed": true,
+    "object_value": "Email reminder of policy",
+    "evidence_snippet": "Notice Return rate 30-40% Email reminder of policy",
+    "reason_codes": []
+  },
+  "192": {
+    "number": 192,
+    "value_fidelity_passed": true,
+    "object_value": "Return rate over 40% or one confirmed abuse case",
+    "evidence_snippet": "Restricted Return rate over 40% or one confirmed abuse case Store credit only; r",
+    "reason_codes": []
+  },
+  "193": {
+    "number": 193,
+    "value_fidelity_passed": true,
+    "object_value": "Store credit only; returns need manager approval",
+    "evidence_snippet": "Restricted Return rate over 40% or one confirmed abuse case Store credit only; r",
+    "reason_codes": []
+  },
+  "194": {
+    "number": 194,
+    "value_fidelity_passed": true,
+    "object_value": "Multiple confirmed abuse cases",
+    "evidence_snippet": "Suspended Multiple confirmed abuse cases Account suspended for 12 months",
+    "reason_codes": []
+  },
+  "195": {
+    "number": 195,
+    "value_fidelity_passed": true,
+    "object_value": "Account suspended for 12 months",
+    "evidence_snippet": "Suspended Multiple confirmed abuse cases Account suspended for 12 months",
+    "reason_codes": []
+  },
+  "196": {
+    "number": 196,
+    "value_fidelity_passed": true,
+    "object_value": "Fraud or counterfeit return",
+    "evidence_snippet": "Permanent Fraud or counterfeit return Account closed; referral to law enforcemen",
+    "reason_codes": []
+  },
+  "197": {
+    "number": 197,
+    "value_fidelity_passed": true,
+    "object_value": "Account closed; referral to law enforcement where appropriate",
+    "evidence_snippet": "Permanent Fraud or counterfeit return Account closed; referral to law enforcemen",
+    "reason_codes": []
+  },
+  "198": {
+    "number": 198,
+    "value_fidelity_passed": true,
+    "object_value": "restrictions in writing to appeals@northwind-demo.example within 30 days",
+    "evidence_snippet": "Customers may appeal restrictions in writing to appeals@northwind-demo.example w",
+    "reason_codes": []
+  },
+  "199": {
+    "number": 199,
+    "value_fidelity_passed": true,
+    "object_value": "Return history is stored per our Privacy Policy, retained for 7 years for audit purposes, and never sold to third parties.",
+    "evidence_snippet": "Return history is stored per our Privacy Policy, retained for 7 years for audit ",
+    "reason_codes": []
+  },
+  "200": {
+    "number": 200,
+    "value_fidelity_passed": true,
+    "object_value": "requested within 30 days",
+    "evidence_snippet": "Standard returns must be requested within 30 days.",
+    "reason_codes": []
+  },
+  "201": {
+    "number": 201,
+    "value_fidelity_passed": true,
+    "object_value": "offer store credit at a manager's discretion for unused items within 90 days",
+    "evidence_snippet": "After that we may offer store credit at a manager's discretion for unused items ",
+    "reason_codes": []
+  },
+  "202": {
+    "number": 202,
+    "value_fidelity_passed": true,
+    "object_value": "be returned in any store or by mail using the RMA process with your receipt or loyalty account lookup",
+    "evidence_snippet": "Items bought in-store can be returned in any store or by mail using the RMA proc",
+    "reason_codes": []
+  },
+  "203": {
+    "number": 203,
+    "value_fidelity_passed": true,
+    "object_value": "One courtesy replacement per customer per year for packages under $200",
+    "evidence_snippet": "We offer one courtesy replacement per customer per year for packages under $200.",
+    "reason_codes": []
+  },
+  "204": {
+    "number": 204,
+    "value_fidelity_passed": true,
+    "object_value": "1-800-555-0142",
+    "evidence_snippet": "| Phone (US/Canada) | 1-800-555-0142 | Mon-Fri 8am-8pm; Sat 9am-5pm |",
+    "reason_codes": []
+  },
+  "205": {
+    "number": 205,
+    "value_fidelity_passed": true,
+    "object_value": "Mon-Fri 8am-8pm; Sat 9am-5pm",
+    "evidence_snippet": "| Phone (US/Canada) | 1-800-555-0142 | Mon-Fri 8am-8pm; Sat 9am-5pm |",
+    "reason_codes": []
+  },
+  "206": {
+    "number": 206,
+    "value_fidelity_passed": true,
+    "object_value": "+44 20 7946 0142",
+    "evidence_snippet": "| Phone (UK) | +44 20 7946 0142 | Mon-Fri 9am-5pm GMT |",
+    "reason_codes": []
+  },
+  "207": {
+    "number": 207,
+    "value_fidelity_passed": true,
+    "object_value": "Mon-Fri 9am-5pm GMT",
+    "evidence_snippet": "| Phone (UK) | +44 20 7946 0142 | Mon-Fri 9am-5pm GMT |",
+    "reason_codes": []
+  },
+  "208": {
+    "number": 208,
+    "value_fidelity_passed": true,
+    "object_value": "support@northwind-demo.example",
+    "evidence_snippet": "| Email | support@northwind-demo.example | Response within 24 hours |",
+    "reason_codes": []
+  },
+  "209": {
+    "number": 209,
+    "value_fidelity_passed": true,
+    "object_value": "Response within 24 hours",
+    "evidence_snippet": "| Email | support@northwind-demo.example | Response within 24 hours |",
+    "reason_codes": []
+  },
+  "210": {
+    "number": 210,
+    "value_fidelity_passed": true,
+    "object_value": "northwind-demo.example/chat",
+    "evidence_snippet": "| Live chat | northwind-demo.example/chat | Daily 7am-10pm |",
+    "reason_codes": []
+  },
+  "211": {
+    "number": 211,
+    "value_fidelity_passed": true,
+    "object_value": "Daily 7am-10pm",
+    "evidence_snippet": "| Live chat | northwind-demo.example/chat | Daily 7am-10pm |",
+    "reason_codes": []
+  },
+  "212": {
+    "number": 212,
+    "value_fidelity_passed": true,
+    "object_value": "1-800-555-0177",
+    "evidence_snippet": "| Refund status line | 1-800-555-0177 | 24/7 automated |",
+    "reason_codes": []
+  },
+  "213": {
+    "number": 213,
+    "value_fidelity_passed": true,
+    "object_value": "24/7 automated",
+    "evidence_snippet": "| Refund status line | 1-800-555-0177 | 24/7 automated |",
+    "reason_codes": []
+  },
+  "214": {
+    "number": 214,
+    "value_fidelity_passed": true,
+    "object_value": "Returns Dept., 200 Cascade Way, Portland, OR 97201, USA",
+    "evidence_snippet": "| Mail | Returns Dept., 200 Cascade Way, Portland, OR 97201, USA | N/A |",
+    "reason_codes": []
+  },
+  "215": {
+    "number": 215,
+    "value_fidelity_passed": true,
+    "object_value": "N/A",
+    "evidence_snippet": "| Mail | Returns Dept., 200 Cascade Way, Portland, OR 97201, USA | N/A |",
+    "reason_codes": []
+  },
+  "216": {
+    "number": 216,
+    "value_fidelity_passed": true,
+    "object_value": "escalations@northwind-demo.example",
+    "evidence_snippet": "| Escalations | escalations@northwind-demo.example | Response within 2 business ",
+    "reason_codes": []
+  },
+  "217": {
+    "number": 217,
+    "value_fidelity_passed": true,
+    "object_value": "Response within 2 business days",
+    "evidence_snippet": "| Escalations | escalations@northwind-demo.example | Response within 2 business ",
+    "reason_codes": []
+  },
+  "218": {
+    "number": 218,
+    "value_fidelity_passed": true,
+    "object_value": "24 hours",
+    "evidence_snippet": "| First response by email | 24 hours |",
+    "reason_codes": []
+  },
+  "219": {
+    "number": 219,
+    "value_fidelity_passed": true,
+    "object_value": "Under 2 minutes",
+    "evidence_snippet": "| First response by chat | Under 2 minutes |",
+    "reason_codes": []
+  },
+  "220": {
+    "number": 220,
+    "value_fidelity_passed": true,
+    "object_value": "Within 3 business days",
+    "evidence_snippet": "| Resolution of standard refund query | Within 3 business days |",
+    "reason_codes": []
+  },
+  "221": {
+    "number": 221,
+    "value_fidelity_passed": true,
+    "object_value": "10 business days",
+    "evidence_snippet": "| Escalated complaint resolution | 10 business days |",
+    "reason_codes": []
+  },
+  "222": {
+    "number": 222,
+    "value_fidelity_passed": true,
+    "object_value": "4.0 Mar 1, 2025 Gold member window raised from 45 to 60 days",
+    "evidence_snippet": "0             Mar 1, 2025                Gold member window raised from 45 to 60",
+    "reason_codes": []
+  },
+  "223": {
+    "number": 223,
+    "value_fidelity_passed": true,
+    "object_value": "\u007f Perishable goods such as freeze-dried meals past 14 days from delivery.",
+    "evidence_snippet": "\u007f  Perishable goods such as freeze-dried meals past 14 days from delivery.",
+    "reason_codes": []
+  },
+  "224": {
+    "number": 224,
+    "value_fidelity_passed": true,
+    "object_value": "Not eligible for return or refund",
+    "evidence_snippet": "Items returned more than 90 days after delivery.",
+    "reason_codes": []
+  }
+}

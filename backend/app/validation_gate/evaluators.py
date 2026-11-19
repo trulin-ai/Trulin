@@ -707,20 +707,33 @@ class TableCellCoverageAuditor:
             return {"status": "SKIPPED", "missing_columns": [], "total_cells": 0, "covered_cells": 0, "is_complete": True}
 
         col_keys = list(cols.keys())
-        scope_keywords = ("level", "grade", "group", "role", "tier", "department", "category", "scope")
-        scope_keys = [k for k in col_keys if any(sk in k.lower() for sk in scope_keywords)]
-        if not scope_keys and col_keys:
-            scope_keys = [col_keys[0]]
+        scope_keywords = ("level", "grade", "group", "role", "tier", "department", "category", "scope", "tenure", "plan", "region", "currency", "unit", "document", "activity", "term")
+        primary_key = col_keys[0]
+        scope_keys = [primary_key] + [k for k in col_keys[1:] if any(sk in k.lower() for sk in scope_keywords)]
+        seen_sk = set()
+        scope_keys = [k for k in scope_keys if not (k in seen_sk or seen_sk.add(k))]
 
         rule_keys = [k for k in col_keys if k not in scope_keys]
         if not rule_keys and len(col_keys) > 1:
             rule_keys = [col_keys[-1]]
             scope_keys = col_keys[:-1]
 
+        # In pricing/premium matrices, annual premium columns are mathematical multiples of monthly columns
+        if any("monthly" in k.lower() for k in rule_keys):
+            rule_keys = [k for k in rule_keys if not ("annual" in k.lower() and any(k.lower().replace("annual", "monthly") == rk.lower() for rk in rule_keys))]
+
         covered_columns = set()
         for c in claims:
             if c.table_binding and c.table_binding.column_header:
                 covered_columns.add(c.table_binding.column_header)
+            if c.scope:
+                for sk in c.scope.keys():
+                    covered_columns.add(sk)
+            if hasattr(c, "structured_values") and isinstance(c.structured_values, dict):
+                sc = c.structured_values.get("scope", {})
+                if isinstance(sc, dict):
+                    for sk in sc.keys():
+                        covered_columns.add(sk)
 
         missing_columns = [k for k in rule_keys if k not in covered_columns]
         is_complete = len(missing_columns) == 0

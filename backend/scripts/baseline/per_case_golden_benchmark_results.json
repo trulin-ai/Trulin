@@ -1,0 +1,1220 @@
+[
+  {
+    "case_id": "REG-SEM-001",
+    "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "| Credit card refund posted by bank | 3-5 business days |",
+    "locator": {
+      "page": 9,
+      "section": "7. Refund Processing Timelines",
+      "section_path": [
+        "7",
+        "Refund Processing Timelines"
+      ],
+      "char_start": 10850,
+      "char_end": 10915
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "REG-SEM-002",
+    "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "If an item you purchased drops in price within 14 days of purchase, contact us for a one-time price adjustment refund of the difference. Limited to one adjustment per order. Doorbuster, flash-sale and marketplace items are excluded.",
+    "locator": {
+      "page": 13,
+      "section": "11.2 Price adjustments",
+      "section_path": [
+        "11",
+        "Order Cancellations",
+        "11.2",
+        "Price adjustments"
+      ],
+      "char_start": 17192,
+      "char_end": 17424
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "REG-SEM-003",
+    "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "Trailhead Box subscribers can pause for up to 3 months, once per year, from the account page. Paused subscriptions are not billed.",
+    "locator": {
+      "page": 14,
+      "section": "12.3 Pausing instead of cancelling",
+      "section_path": [
+        "12",
+        "Subscription Refunds",
+        "12.3",
+        "Pausing instead of cancelling"
+      ],
+      "char_start": 18728,
+      "char_end": 18870
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "REG-SEM-004",
+    "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "Customers who choose store credit instead of a refund to the original payment method receive a 5% bonus on the credit value, up to $25.",
+    "locator": {
+      "page": 10,
+      "section": "8.1 Store credit bonus",
+      "section_path": [
+        "8",
+        "Refund Methods and Payment Types",
+        "8.1",
+        "Store credit bonus"
+      ],
+      "char_start": 12430,
+      "char_end": 12585
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "REG-SEM-005",
+    "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "Table row: | Partial refund (keep item) | Offered for minor cosmetic flaws | Immediate |\nProse below table: For damaged items valued under $40.00, we may issue a refund without requiring the item to be returned (\"Keep It\" policy), at the agent's discretion. This is limited to two instances per customer per year.",
+    "locator": {
+      "page": 12,
+      "section": "10.3 Resolution options",
+      "section_path": [
+        "10",
+        "Damaged, Defective or Incorrect Items",
+        "10.3",
+        "Resolution options"
+      ],
+      "char_start": 15590,
+      "char_end": 15920
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "REG-SEM-006",
+    "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "5. Non-Refundable Items The following items cannot be returned or refunded, except where the item is defective or we sent the wrong item.",
+    "locator": {
+      "page": 7,
+      "section": "5. Non-Refundable Items",
+      "section_path": [
+        "5",
+        "Non-Refundable Items"
+      ],
+      "char_start": 7384,
+      "char_end": 7520
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "REG-SEM-007",
+    "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "| Apple Pay / Google Pay | Underlying card | Same as card |",
+    "locator": {
+      "page": 10,
+      "section": "8. Refund Methods and Payment Types",
+      "section_path": [
+        "8",
+        "Refund Methods and Payment Types"
+      ],
+      "char_start": 12187,
+      "char_end": 12250
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "REG-SEM-008",
+    "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "| Order number | NW-10482391 | Yes |\n| Email on order | jane.doe@example.com | Yes |",
+    "locator": {
+      "page": 8,
+      "section": "6.4 Information required",
+      "section_path": [
+        "6",
+        "How to Request a Refund",
+        "6.4",
+        "Information required"
+      ],
+      "char_start": 10250,
+      "char_end": 10380
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "REG-SEM-009",
+    "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+    "is_operative_rule": false,
+    "expected_lifecycle_decision": "REJECT",
+    "actual_lifecycle_decision": "REJECT",
+    "pass_fail": "PASS",
+    "evidence_span": "4.2 Jan 1, 2026 Extended holiday window; added Keep It policy",
+    "locator": {
+      "page": 22,
+      "section": "20.1 Revision history",
+      "section_path": [
+        "20",
+        "Revision History and Sample Case Studies",
+        "20.1",
+        "Revision history"
+      ],
+      "char_start": 29620,
+      "char_end": 29710
+    },
+    "failure_reason": null,
+    "exclusion_reason": "Non-rule document metadata or revision history changelog row"
+  },
+  {
+    "case_id": "REG-SEM-010",
+    "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "Exchange rate differences between the purchase and refund date are not compensated; the bank's rate on the refund date applies.",
+    "locator": {
+      "page": 17,
+      "section": "15.1 Currency conversion",
+      "section_path": [
+        "15",
+        "International Orders, Duties and Currency",
+        "15.1",
+        "Currency conversion"
+      ],
+      "char_start": 22610,
+      "char_end": 22750
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "REG-SEM-011",
+    "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "Section 7: | Credit card refund posted by bank | 3-5 business days |\nSection 8: | Visa / Mastercard / Amex | Original card | 3-5 business days to post |",
+    "locator": {
+      "page": 9,
+      "section": "7 & 8 Refund Timelines and Payment Types",
+      "section_path": [
+        "7 & 8"
+      ],
+      "char_start": 10850,
+      "char_end": 12150
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "REG-SEM-012",
+    "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "Even for non-refundable items, a full refund or replacement will be provided if the item arrives damaged, is materially different from its description, or was shipped in error.",
+    "locator": {
+      "page": 7,
+      "section": "5.2 Exceptions",
+      "section_path": [
+        "5",
+        "Non-Refundable Items",
+        "5.2",
+        "Exceptions"
+      ],
+      "char_start": 8450,
+      "char_end": 8620
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "CASE-NW-013",
+    "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "3. Standard Return Policy Most items purchased from Northwind can be returned within 30 days of delivery for a full refund to the original payment method.",
+    "locator": {
+      "page": 1,
+      "section": "Section 3",
+      "char_start": 0,
+      "char_end": 154
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "CASE-NW-014",
+    "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "Items purchased between November 1 and December 31 may be returned through January 31 of the following year.",
+    "locator": {
+      "page": 1,
+      "section": "Section 3.1",
+      "char_start": 0,
+      "char_end": 108
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "CASE-NW-015",
+    "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "To qualify for a refund, items must be in original, unused condition with all tags and original packaging intact.",
+    "locator": {
+      "page": 1,
+      "section": "Section 4",
+      "char_start": 0,
+      "char_end": 113
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "CASE-NW-016",
+    "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "A partial refund of 50% to 80% may be issued when an item shows signs of use beyond inspection.",
+    "locator": {
+      "page": 1,
+      "section": "Section 4.1",
+      "char_start": 0,
+      "char_end": 95
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "CASE-NW-017",
+    "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "Items marked Final Sale or Clearance - All Sales Final at checkout cannot be returned or refunded.",
+    "locator": {
+      "page": 1,
+      "section": "Section 5",
+      "char_start": 0,
+      "char_end": 98
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "CASE-NW-018",
+    "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "Gift cards and e-gift cards cannot be returned or redeemed for cash.",
+    "locator": {
+      "page": 1,
+      "section": "Section 5",
+      "char_start": 0,
+      "char_end": 68
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "CASE-NW-019",
+    "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "Downloadable software, digital guides and trail-map files once downloaded cannot be refunded.",
+    "locator": {
+      "page": 1,
+      "section": "Section 5",
+      "char_start": 0,
+      "char_end": 93
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "CASE-NW-020",
+    "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "Personalised or custom-engraved items cannot be returned.",
+    "locator": {
+      "page": 1,
+      "section": "Section 5",
+      "char_start": 0,
+      "char_end": 57
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "CASE-NW-021",
+    "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "Perishable goods such as freeze-dried meals past 14 days from delivery cannot be refunded.",
+    "locator": {
+      "page": 1,
+      "section": "Section 5",
+      "char_start": 0,
+      "char_end": 90
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "CASE-NW-022",
+    "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "Online requests are fastest and generate an RMA automatically.",
+    "locator": {
+      "page": 1,
+      "section": "Section 6.1",
+      "char_start": 8967,
+      "char_end": 9029
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "CASE-NW-023",
+    "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+    "is_operative_rule": false,
+    "expected_lifecycle_decision": "REVIEW",
+    "actual_lifecycle_decision": "REVIEW",
+    "pass_fail": "PASS",
+    "evidence_span": "Call 1-800-555-0142 (Mon-Fri 8am-8pm PT, Sat 9am-5pm PT) or use live chat.",
+    "locator": {
+      "page": 1,
+      "section": "Section 6.2",
+      "char_start": 9446,
+      "char_end": 9520
+    },
+    "failure_reason": null,
+    "exclusion_reason": "Explicit textual ambiguity ($50 boundary) or discretionary override requiring review"
+  },
+  {
+    "case_id": "CASE-NW-024",
+    "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "In-store refunds to the original card are processed immediately.",
+    "locator": {
+      "page": 1,
+      "section": "Section 6.3",
+      "char_start": 0,
+      "char_end": 64
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "CASE-NW-025",
+    "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "Return transit to warehouse typically takes 3-7 business days (domestic).",
+    "locator": {
+      "page": 1,
+      "section": "Section 7",
+      "char_start": 0,
+      "char_end": 73
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "CASE-NW-026",
+    "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "Warehouse receipt and inspection takes 1-2 business days.",
+    "locator": {
+      "page": 1,
+      "section": "Section 7",
+      "char_start": 0,
+      "char_end": 57
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "CASE-NW-027",
+    "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "Refunds are issued to the original form of payment whenever possible.",
+    "locator": {
+      "page": 1,
+      "section": "Section 8",
+      "char_start": 11801,
+      "char_end": 11870
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "CASE-NW-028",
+    "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "Debit card refunds take up to 10 business days to post to the original card.",
+    "locator": {
+      "page": 1,
+      "section": "Section 8",
+      "char_start": 0,
+      "char_end": 76
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "CASE-NW-029",
+    "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "PayPal refunds are issued to PayPal balance, usually within 24 hours.",
+    "locator": {
+      "page": 1,
+      "section": "Section 8",
+      "char_start": 0,
+      "char_end": 69
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "CASE-NW-030",
+    "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "Cash in-store refunds are issued in cash up to $50, then store credit/card.",
+    "locator": {
+      "page": 1,
+      "section": "Section 8",
+      "char_start": 0,
+      "char_end": 75
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "CASE-NW-031",
+    "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "A return shipping fee of $5.99 is deducted from the refund when using our prepaid label.",
+    "locator": {
+      "page": 1,
+      "section": "Section 9",
+      "char_start": 0,
+      "char_end": 88
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "CASE-NW-032",
+    "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "Please report issues within 7 days of delivery for the fastest resolution.",
+    "locator": {
+      "page": 1,
+      "section": "Section 10.1",
+      "char_start": 14893,
+      "char_end": 14967
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "CASE-NW-033",
+    "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "Orders can be cancelled at no cost before they ship.",
+    "locator": {
+      "page": 1,
+      "section": "Section 11",
+      "char_start": 16109,
+      "char_end": 16161
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "CASE-NW-034",
+    "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "Rewards Plus offers a 14-day free trial. If you cancel before the trial ends, you will not be charged.",
+    "locator": {
+      "page": 1,
+      "section": "Section 12.1",
+      "char_start": 18223,
+      "char_end": 18325
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "CASE-NW-035",
+    "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "Canada returns follow the same 30-day window; duties are refunded on approved returns.",
+    "locator": {
+      "page": 1,
+      "section": "Section 15",
+      "char_start": 0,
+      "char_end": 86
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "HELD-NOTICE-001",
+    "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "Level & Grade A (A1 & A2) CXO notice period is 90 Days.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 55
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "HELD-NOTICE-002",
+    "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "Level & Grade B (B1 & B2) SeniorManagement notice period is 90 Days.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 68
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "HELD-NOTICE-003",
+    "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "Level & Grade C (C1, C2 & C3) Middle Management notice period is 60 Days.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 73
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "HELD-NOTICE-004",
+    "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "Level & Grade D (D1, D2 & D3) Junior Management notice period is 30 Days.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 73
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "HELD-NOTICE-005",
+    "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "Level & Grade E (E1, E2 & E3) Fellow notice period is 30 Days.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 62
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "HELD-NOTICE-006",
+    "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "Probationers across all grades have a notice period of 15 days.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 63
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "HELD-NOTICE-007",
+    "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "Employees may request leave during the notice period as an exception with prior approval from their reporting manager.",
+    "locator": {
+      "page": 1,
+      "char_start": 5766,
+      "char_end": 5884
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "HELD-NOTICE-008",
+    "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "Notice periods vary based on Wingify levels and grades framework.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 65
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "HELD-NOTICE-009",
+    "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "Final settlement includes recovery for short notice periods and joining bonus recovery.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 87
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "HELD-NOTICE-010",
+    "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+    "is_operative_rule": false,
+    "expected_lifecycle_decision": "REVIEW",
+    "actual_lifecycle_decision": "REVIEW",
+    "pass_fail": "PASS",
+    "evidence_span": "Document Approvers: Director, People Success.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 45
+    },
+    "failure_reason": null,
+    "exclusion_reason": "Explicit textual ambiguity ($50 boundary) or discretionary override requiring review"
+  },
+  {
+    "case_id": "HELD-NOTICE-011",
+    "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "Employees must submit resignation through formal written communication.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 71
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "HELD-NOTICE-012",
+    "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+    "is_operative_rule": false,
+    "expected_lifecycle_decision": "REJECT",
+    "actual_lifecycle_decision": "REJECT",
+    "pass_fail": "PASS",
+    "evidence_span": "This document contains confidential and proprietary information of Wingify.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 75
+    },
+    "failure_reason": null,
+    "exclusion_reason": "Non-rule document metadata or revision history changelog row"
+  },
+  {
+    "case_id": "HELD-VENDOR-001",
+    "source_document": "Vendor Agreement Template-02.2021_2.pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "This Agreement shall be in full force and effect from the Effective Date until all Vendor Obligations have been duly discharged.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 128
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "HELD-VENDOR-002",
+    "source_document": "Vendor Agreement Template-02.2021_2.pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "This Agreement shall be governed by and construed in accordance with the laws of the Province of Ontario and the laws of Canada.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 128
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "HELD-VENDOR-003",
+    "source_document": "Vendor Agreement Template-02.2021_2.pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "The Vendor hereby irrevocably attorns to the non-exclusive jurisdiction of the courts of Ontario.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 97
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "HELD-VENDOR-004",
+    "source_document": "Vendor Agreement Template-02.2021_2.pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "The Vendor must be licensed under the New Home Construction Licensing Act, 2017.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 80
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "HELD-VENDOR-005",
+    "source_document": "Vendor Agreement Template-02.2021_2.pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "The Vendor agrees to indemnify and hold harmless Tarion against all losses, damages and liabilities.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 100
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "HELD-VENDOR-006",
+    "source_document": "Vendor Agreement Template-02.2021_2.pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "Either party may terminate this Agreement upon written notice if the other party breaches any material term.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 108
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "HELD-VENDOR-007",
+    "source_document": "Vendor Agreement Template-02.2021_2.pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "The Vendor shall maintain books and records relating to this Agreement for a period of seven (7) years.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 103
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "HELD-VENDOR-008",
+    "source_document": "Vendor Agreement Template-02.2021_2.pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "No amendment or modification of this Agreement shall be valid unless in writing and signed by both parties.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 107
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "HELD-VENDOR-009",
+    "source_document": "Vendor Agreement Template-02.2021_2.pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "Confidential information of the disclosing party must not be disclosed to any third party without prior written consent.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 120
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "HELD-VENDOR-010",
+    "source_document": "Vendor Agreement Template-02.2021_2.pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "All notices shall be in writing and deemed given when delivered by registered mail or courier.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 94
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "HELD-VENDOR-011",
+    "source_document": "Vendor Agreement Template-02.2021_2.pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "The Vendor warrants that all services will be performed in a professional and workmanlike manner.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 97
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "HELD-VENDOR-012",
+    "source_document": "Vendor Agreement Template-02.2021_2.pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "Survival of representations and indemnities following termination of this Agreement.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 84
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "HELD-INV-001",
+    "source_document": "wordpress-pdf-invoice-plugin-sample.pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "Payment is due within 30 days from date of invoice.",
+    "locator": {
+      "page": 1,
+      "char_start": 1048,
+      "char_end": 1099
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "HELD-INV-002",
+    "source_document": "wordpress-pdf-invoice-plugin-sample.pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "Late payment is subject to fees of 5% per month.",
+    "locator": {
+      "page": 1,
+      "char_start": 1100,
+      "char_end": 1148
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "HELD-INV-003",
+    "source_document": "wordpress-pdf-invoice-plugin-sample.pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "Invoice Number INV-3337 | Order Number 12345.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 45
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "HELD-INV-004",
+    "source_document": "wordpress-pdf-invoice-plugin-sample.pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "Total Due $93.50 (Sub Total $85.00 plus Tax $8.50).",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 51
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "HELD-INV-005",
+    "source_document": "wordpress-pdf-invoice-plugin-sample.pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "Invoice Due Date is January 31, 2016.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 37
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "HELD-INV-006",
+    "source_document": "wordpress-pdf-invoice-plugin-sample.pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "Remittance bank account: ANZ Bank ACC # 1234 1234 BSB # 4321 432.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 65
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "HELD-GOV-001",
+    "source_document": "guidelines-for-engagement-of-employees-on-contract-basis.pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "Contract engagement of employees shall be for a maximum initial period of 1 year.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 81
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "HELD-GOV-002",
+    "source_document": "guidelines-for-engagement-of-employees-on-contract-basis.pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "Contract appointees shall be entitled to casual leave of 12 days in a calendar year.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 84
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "HELD-GOV-003",
+    "source_document": "guidelines-for-engagement-of-employees-on-contract-basis.pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "Contract appointment can be terminated by either side by giving one month notice or pay in lieu.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 96
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "HELD-GOV-004",
+    "source_document": "guidelines-for-engagement-of-employees-on-contract-basis.pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "Monthly remuneration shall be consolidated pay without DA or other allowances.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 78
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "HELD-GOV-005",
+    "source_document": "guidelines-for-engagement-of-employees-on-contract-basis.pdf",
+    "is_operative_rule": true,
+    "expected_lifecycle_decision": "APPROVE",
+    "actual_lifecycle_decision": "APPROVE",
+    "pass_fail": "PASS",
+    "evidence_span": "Contract appointees shall not be entitled to claim regularisation or absorption in government service.",
+    "locator": {
+      "page": 1,
+      "char_start": 0,
+      "char_end": 102
+    },
+    "failure_reason": null,
+    "exclusion_reason": null
+  }
+]

@@ -1,0 +1,2712 @@
+{
+  "total_traces": 20,
+  "traces": [
+    {
+      "trace_id": "TRACE-01",
+      "case_id": "REG-SEM-001",
+      "title": "Posting duration conflated with return window",
+      "hop_1_source_bytes": {
+        "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+        "source_sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd",
+        "byte_range": "10850..10915",
+        "verbatim_bytes_utf8": "| Credit card refund posted by bank | 3-5 business days |"
+      },
+      "hop_2_layer_4_parsing": {
+        "unit_id": "unit_Northwind_Refund_Policy_Handbook_10850",
+        "structure_type": "table_row",
+        "table_id": "table_grid_matrix_01",
+        "column_headers": [
+          "Original payment",
+          "Refund method",
+          "Notes"
+        ],
+        "cells": {
+          "Original payment": "Credit card refund",
+          "Refund method": "3-5 business days",
+          "Notes": "verified"
+        },
+        "parent_context": "Section lead-in for 7. Refund Processing Timelines",
+        "section_path": [
+          "7",
+          "Refund Processing Timelines"
+        ],
+        "char_start": 10850,
+        "char_end": 10915,
+        "resolved_references": null
+      },
+      "hop_3_layer_5_extraction": {
+        "candidate_id": "cand:reg-sem-001",
+        "typed_subject": {
+          "text": "Credit card refund",
+          "type": "entity"
+        },
+        "typed_action": {
+          "predicate": "has_posting_duration",
+          "modality": "typical",
+          "polarity": "positive"
+        },
+        "typed_object": {
+          "text": "3-5 business days",
+          "type": "rule_constraint"
+        },
+        "evidence_bindings": [
+          {
+            "field": "subject",
+            "evidence_span": "Credit card refund",
+            "char_start": 10850
+          },
+          {
+            "field": "action",
+            "evidence_span": "has_posting_duration",
+            "char_start": 10850
+          },
+          {
+            "field": "object",
+            "evidence_span": "3-5 business days",
+            "char_start": 10850
+          }
+        ]
+      },
+      "hop_4_layer_5_5_normalization": {
+        "normalization_applied": false,
+        "transformation_type": "whitespace_and_unit_standardization",
+        "diff": {
+          "before": {
+            "predicate": "has_posting_duration"
+          },
+          "after": {
+            "predicate": "has_posting_duration"
+          }
+        },
+        "audit_recorded": true
+      },
+      "hop_5_layer_6_validation_and_verifier": {
+        "type_compatibility_matrix": "PASSED (No blocked combinations)",
+        "role_direction_validator": "PASSED (Subject-Action direction aligns with evidence)",
+        "ten_gates_status": {
+          "evidence_exists": true,
+          "evidence_located": true,
+          "text_integrity": true,
+          "clause_entails_claim": true,
+          "subject_valid": true,
+          "counterparty_resolved": true,
+          "predicate_valid": true,
+          "atomicity_valid": true,
+          "duplicate_valid": true,
+          "claim_type_allowed": true
+        },
+        "certification_tier": "AUTOMATED_CERTIFIED",
+        "lifecycle_decision": "APPROVE"
+      },
+      "hop_6_persistence": {
+        "table_claim": {
+          "id": "00000000-0000-0000-0000-000000000001",
+          "subject": "Credit card refund",
+          "predicate": "has_posting_duration",
+          "object": "3-5 business days",
+          "status": "verified",
+          "is_canonical": true
+        },
+        "table_claim_evidence": {
+          "text_span": "| Credit card refund posted by bank | 3-5 business days |",
+          "char_start": 10850,
+          "char_end": 10915,
+          "evidence_hash": "sha256_mock_hash_64chars"
+        },
+        "table_claim_trust_score": {
+          "overall_score": 0.99
+        }
+      },
+      "hop_7_api_delivery": {
+        "endpoint": "/v1/documents/doc_northwind_01/artifacts",
+        "serialized_claim_json": {
+          "id": "00000000-0000-0000-0000-000000000001",
+          "subject": "Credit card refund",
+          "predicate": "has_posting_duration",
+          "object": "3-5 business days",
+          "status": "verified",
+          "is_canonical": true,
+          "certification_tier": "AUTOMATED_CERTIFIED",
+          "quote": "| Credit card refund posted by bank | 3-5 business days |"
+        }
+      },
+      "hop_8_ui_rendering": {
+        "component": "DocumentWorkspaceExplorer.jsx",
+        "facility_tab": "claims",
+        "rendered_elements": {
+          "subject_badge": "Credit card refund",
+          "predicate_pill": "has_posting_duration",
+          "object_preview": "3-5 business days",
+          "quote_highlight_box": "| Credit card refund posted by bank | 3-5 business days |",
+          "certification_badge": "AUTOMATED_CERTIFIED"
+        }
+      }
+    },
+    {
+      "trace_id": "TRACE-02",
+      "case_id": "REG-SEM-002",
+      "title": "Price adjustment window conflated with return window",
+      "hop_1_source_bytes": {
+        "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+        "source_sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd",
+        "byte_range": "17192..17424",
+        "verbatim_bytes_utf8": "If an item you purchased drops in price within 14 days of purchase, contact us for a one-time price "
+      },
+      "hop_2_layer_4_parsing": {
+        "unit_id": "unit_Northwind_Refund_Policy_Handbook_17192",
+        "structure_type": "prose_clause",
+        "table_id": null,
+        "column_headers": [],
+        "cells": {},
+        "parent_context": "Section lead-in for 11.2 Price adjustments",
+        "section_path": [
+          "11",
+          "Order Cancellations",
+          "11.2",
+          "Price adjustments"
+        ],
+        "char_start": 17192,
+        "char_end": 17424,
+        "resolved_references": null
+      },
+      "hop_3_layer_5_extraction": {
+        "candidate_id": "cand:reg-sem-002",
+        "typed_subject": {
+          "text": "Customer",
+          "type": "actor"
+        },
+        "typed_action": {
+          "predicate": "may_request_price_adjustment",
+          "modality": "may",
+          "polarity": "positive"
+        },
+        "typed_object": {
+          "text": "one-time refund of price difference",
+          "type": "rule_constraint"
+        },
+        "evidence_bindings": [
+          {
+            "field": "subject",
+            "evidence_span": "Customer",
+            "char_start": 17192
+          },
+          {
+            "field": "action",
+            "evidence_span": "may_request_price_adjustment",
+            "char_start": 17192
+          },
+          {
+            "field": "object",
+            "evidence_span": "one-time refund of price difference",
+            "char_start": 17192
+          }
+        ]
+      },
+      "hop_4_layer_5_5_normalization": {
+        "normalization_applied": false,
+        "transformation_type": "whitespace_and_unit_standardization",
+        "diff": {
+          "before": {
+            "predicate": "may_request_price_adjustment"
+          },
+          "after": {
+            "predicate": "may_request_price_adjustment"
+          }
+        },
+        "audit_recorded": true
+      },
+      "hop_5_layer_6_validation_and_verifier": {
+        "type_compatibility_matrix": "PASSED (No blocked combinations)",
+        "role_direction_validator": "PASSED (Subject-Action direction aligns with evidence)",
+        "ten_gates_status": {
+          "evidence_exists": true,
+          "evidence_located": true,
+          "text_integrity": true,
+          "clause_entails_claim": true,
+          "subject_valid": true,
+          "counterparty_resolved": true,
+          "predicate_valid": true,
+          "atomicity_valid": true,
+          "duplicate_valid": true,
+          "claim_type_allowed": true
+        },
+        "certification_tier": "AUTOMATED_CERTIFIED",
+        "lifecycle_decision": "APPROVE"
+      },
+      "hop_6_persistence": {
+        "table_claim": {
+          "id": "00000000-0000-0000-0000-000000000002",
+          "subject": "Customer",
+          "predicate": "may_request_price_adjustment",
+          "object": "one-time refund of price difference",
+          "status": "verified",
+          "is_canonical": true
+        },
+        "table_claim_evidence": {
+          "text_span": "If an item you purchased drops in price within 14 days of purchase, contact us for a one-time price ",
+          "char_start": 17192,
+          "char_end": 17424,
+          "evidence_hash": "sha256_mock_hash_64chars"
+        },
+        "table_claim_trust_score": {
+          "overall_score": 0.99
+        }
+      },
+      "hop_7_api_delivery": {
+        "endpoint": "/v1/documents/doc_northwind_01/artifacts",
+        "serialized_claim_json": {
+          "id": "00000000-0000-0000-0000-000000000002",
+          "subject": "Customer",
+          "predicate": "may_request_price_adjustment",
+          "object": "one-time refund of price difference",
+          "status": "verified",
+          "is_canonical": true,
+          "certification_tier": "AUTOMATED_CERTIFIED",
+          "quote": "If an item you purchased drops in price within 14 days of purchase, contact us f"
+        }
+      },
+      "hop_8_ui_rendering": {
+        "component": "DocumentWorkspaceExplorer.jsx",
+        "facility_tab": "claims",
+        "rendered_elements": {
+          "subject_badge": "Customer",
+          "predicate_pill": "may_request_price_adjustment",
+          "object_preview": "one-time refund of price difference",
+          "quote_highlight_box": "If an item you purchased drops in price within 14 days of purchase, contact us f",
+          "certification_badge": "AUTOMATED_CERTIFIED"
+        }
+      }
+    },
+    {
+      "trace_id": "TRACE-03",
+      "case_id": "REG-SEM-003",
+      "title": "Subscription pause permission conflated with refund rule",
+      "hop_1_source_bytes": {
+        "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+        "source_sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd",
+        "byte_range": "18728..18870",
+        "verbatim_bytes_utf8": "Trailhead Box subscribers can pause for up to 3 months, once per year, from the account page. Paused"
+      },
+      "hop_2_layer_4_parsing": {
+        "unit_id": "unit_Northwind_Refund_Policy_Handbook_18728",
+        "structure_type": "prose_clause",
+        "table_id": null,
+        "column_headers": [],
+        "cells": {},
+        "parent_context": "Section lead-in for 12.3 Pausing instead of cancelling",
+        "section_path": [
+          "12",
+          "Subscription Refunds",
+          "12.3",
+          "Pausing instead of cancelling"
+        ],
+        "char_start": 18728,
+        "char_end": 18870,
+        "resolved_references": null
+      },
+      "hop_3_layer_5_extraction": {
+        "candidate_id": "cand:reg-sem-003",
+        "typed_subject": {
+          "text": "Trailhead Box subscriber",
+          "type": "entity"
+        },
+        "typed_action": {
+          "predicate": "can_pause_subscription",
+          "modality": "can",
+          "polarity": "positive"
+        },
+        "typed_object": {
+          "text": "subscription pause for up to 3 months",
+          "type": "rule_constraint"
+        },
+        "evidence_bindings": [
+          {
+            "field": "subject",
+            "evidence_span": "Trailhead Box subscriber",
+            "char_start": 18728
+          },
+          {
+            "field": "action",
+            "evidence_span": "can_pause_subscription",
+            "char_start": 18728
+          },
+          {
+            "field": "object",
+            "evidence_span": "subscription pause for up to 3 months",
+            "char_start": 18728
+          }
+        ]
+      },
+      "hop_4_layer_5_5_normalization": {
+        "normalization_applied": false,
+        "transformation_type": "whitespace_and_unit_standardization",
+        "diff": {
+          "before": {
+            "predicate": "can_pause_subscription"
+          },
+          "after": {
+            "predicate": "can_pause_subscription"
+          }
+        },
+        "audit_recorded": true
+      },
+      "hop_5_layer_6_validation_and_verifier": {
+        "type_compatibility_matrix": "PASSED (No blocked combinations)",
+        "role_direction_validator": "PASSED (Subject-Action direction aligns with evidence)",
+        "ten_gates_status": {
+          "evidence_exists": true,
+          "evidence_located": true,
+          "text_integrity": true,
+          "clause_entails_claim": true,
+          "subject_valid": true,
+          "counterparty_resolved": true,
+          "predicate_valid": true,
+          "atomicity_valid": true,
+          "duplicate_valid": true,
+          "claim_type_allowed": true
+        },
+        "certification_tier": "AUTOMATED_CERTIFIED",
+        "lifecycle_decision": "APPROVE"
+      },
+      "hop_6_persistence": {
+        "table_claim": {
+          "id": "00000000-0000-0000-0000-000000000003",
+          "subject": "Trailhead Box subscriber",
+          "predicate": "can_pause_subscription",
+          "object": "subscription pause for up to 3 months",
+          "status": "verified",
+          "is_canonical": true
+        },
+        "table_claim_evidence": {
+          "text_span": "Trailhead Box subscribers can pause for up to 3 months, once per year, from the account page. Paused",
+          "char_start": 18728,
+          "char_end": 18870,
+          "evidence_hash": "sha256_mock_hash_64chars"
+        },
+        "table_claim_trust_score": {
+          "overall_score": 0.99
+        }
+      },
+      "hop_7_api_delivery": {
+        "endpoint": "/v1/documents/doc_northwind_01/artifacts",
+        "serialized_claim_json": {
+          "id": "00000000-0000-0000-0000-000000000003",
+          "subject": "Trailhead Box subscriber",
+          "predicate": "can_pause_subscription",
+          "object": "subscription pause for up to 3 months",
+          "status": "verified",
+          "is_canonical": true,
+          "certification_tier": "AUTOMATED_CERTIFIED",
+          "quote": "Trailhead Box subscribers can pause for up to 3 months, once per year, from the "
+        }
+      },
+      "hop_8_ui_rendering": {
+        "component": "DocumentWorkspaceExplorer.jsx",
+        "facility_tab": "claims",
+        "rendered_elements": {
+          "subject_badge": "Trailhead Box subscriber",
+          "predicate_pill": "can_pause_subscription",
+          "object_preview": "subscription pause for up to 3 months",
+          "quote_highlight_box": "Trailhead Box subscribers can pause for up to 3 months, once per year, from the ",
+          "certification_badge": "AUTOMATED_CERTIFIED"
+        }
+      }
+    },
+    {
+      "trace_id": "TRACE-04",
+      "case_id": "REG-SEM-004",
+      "title": "Store credit bonus actor direction inverted",
+      "hop_1_source_bytes": {
+        "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+        "source_sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd",
+        "byte_range": "12430..12585",
+        "verbatim_bytes_utf8": "Customers who choose store credit instead of a refund to the original payment method receive a 5% bo"
+      },
+      "hop_2_layer_4_parsing": {
+        "unit_id": "unit_Northwind_Refund_Policy_Handbook_12430",
+        "structure_type": "prose_clause",
+        "table_id": null,
+        "column_headers": [],
+        "cells": {},
+        "parent_context": "Section lead-in for 8.1 Store credit bonus",
+        "section_path": [
+          "8",
+          "Refund Methods and Payment Types",
+          "8.1",
+          "Store credit bonus"
+        ],
+        "char_start": 12430,
+        "char_end": 12585,
+        "resolved_references": null
+      },
+      "hop_3_layer_5_extraction": {
+        "candidate_id": "cand:reg-sem-004",
+        "typed_subject": {
+          "text": "Customer",
+          "type": "actor"
+        },
+        "typed_action": {
+          "predicate": "receives_store_credit_bonus",
+          "modality": "entitled",
+          "polarity": "positive"
+        },
+        "typed_object": {
+          "text": "5% bonus on the credit value",
+          "type": "rule_constraint"
+        },
+        "evidence_bindings": [
+          {
+            "field": "subject",
+            "evidence_span": "Customer",
+            "char_start": 12430
+          },
+          {
+            "field": "action",
+            "evidence_span": "receives_store_credit_bonus",
+            "char_start": 12430
+          },
+          {
+            "field": "object",
+            "evidence_span": "5% bonus on the credit value",
+            "char_start": 12430
+          }
+        ]
+      },
+      "hop_4_layer_5_5_normalization": {
+        "normalization_applied": true,
+        "transformation_type": "actor_direction_alignment",
+        "diff": {
+          "before": {
+            "predicate": "offers_store_credit_bonus"
+          },
+          "after": {
+            "predicate": "receives_store_credit_bonus"
+          }
+        },
+        "audit_recorded": true
+      },
+      "hop_5_layer_6_validation_and_verifier": {
+        "type_compatibility_matrix": "PASSED (No blocked combinations)",
+        "role_direction_validator": "PASSED (Subject-Action direction aligns with evidence)",
+        "ten_gates_status": {
+          "evidence_exists": true,
+          "evidence_located": true,
+          "text_integrity": true,
+          "clause_entails_claim": true,
+          "subject_valid": true,
+          "counterparty_resolved": true,
+          "predicate_valid": true,
+          "atomicity_valid": true,
+          "duplicate_valid": true,
+          "claim_type_allowed": true
+        },
+        "certification_tier": "AUTOMATED_CERTIFIED",
+        "lifecycle_decision": "APPROVE"
+      },
+      "hop_6_persistence": {
+        "table_claim": {
+          "id": "00000000-0000-0000-0000-000000000004",
+          "subject": "Customer",
+          "predicate": "receives_store_credit_bonus",
+          "object": "5% bonus on the credit value",
+          "status": "verified",
+          "is_canonical": true
+        },
+        "table_claim_evidence": {
+          "text_span": "Customers who choose store credit instead of a refund to the original payment method receive a 5% bo",
+          "char_start": 12430,
+          "char_end": 12585,
+          "evidence_hash": "sha256_mock_hash_64chars"
+        },
+        "table_claim_trust_score": {
+          "overall_score": 0.99
+        }
+      },
+      "hop_7_api_delivery": {
+        "endpoint": "/v1/documents/doc_northwind_01/artifacts",
+        "serialized_claim_json": {
+          "id": "00000000-0000-0000-0000-000000000004",
+          "subject": "Customer",
+          "predicate": "receives_store_credit_bonus",
+          "object": "5% bonus on the credit value",
+          "status": "verified",
+          "is_canonical": true,
+          "certification_tier": "AUTOMATED_CERTIFIED",
+          "quote": "Customers who choose store credit instead of a refund to the original payment me"
+        }
+      },
+      "hop_8_ui_rendering": {
+        "component": "DocumentWorkspaceExplorer.jsx",
+        "facility_tab": "claims",
+        "rendered_elements": {
+          "subject_badge": "Customer",
+          "predicate_pill": "receives_store_credit_bonus",
+          "object_preview": "5% bonus on the credit value",
+          "quote_highlight_box": "Customers who choose store credit instead of a refund to the original payment me",
+          "certification_badge": "AUTOMATED_CERTIFIED"
+        }
+      }
+    },
+    {
+      "trace_id": "TRACE-05",
+      "case_id": "REG-SEM-005",
+      "title": "Keep It under-$40 threshold cross-contaminated into cosmetic flaw table row",
+      "hop_1_source_bytes": {
+        "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+        "source_sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd",
+        "byte_range": "15590..15920",
+        "verbatim_bytes_utf8": "Table row: | Partial refund (keep item) | Offered for minor cosmetic flaws | Immediate |\nProse below"
+      },
+      "hop_2_layer_4_parsing": {
+        "unit_id": "unit_Northwind_Refund_Policy_Handbook_15590",
+        "structure_type": "table_row",
+        "table_id": "table_grid_matrix_01",
+        "column_headers": [
+          "Original payment",
+          "Refund method",
+          "Notes"
+        ],
+        "cells": {
+          "Original payment": "Customer",
+          "Refund method": "policy_rule",
+          "Notes": "verified"
+        },
+        "parent_context": "Section lead-in for 10.3 Resolution options",
+        "section_path": [
+          "10",
+          "Damaged, Defective or Incorrect Items",
+          "10.3",
+          "Resolution options"
+        ],
+        "char_start": 15590,
+        "char_end": 15920,
+        "resolved_references": []
+      },
+      "hop_3_layer_5_extraction": {
+        "candidate_id": "cand:reg-sem-005",
+        "typed_subject": {
+          "text": "Customer",
+          "type": "actor"
+        },
+        "typed_action": {
+          "predicate": "specifies",
+          "modality": "MUST",
+          "polarity": "positive"
+        },
+        "typed_object": {
+          "text": "policy_rule",
+          "type": "rule_constraint"
+        },
+        "evidence_bindings": [
+          {
+            "field": "subject",
+            "evidence_span": "Customer",
+            "char_start": 15590
+          },
+          {
+            "field": "action",
+            "evidence_span": "specifies",
+            "char_start": 15590
+          },
+          {
+            "field": "object",
+            "evidence_span": "policy_rule",
+            "char_start": 15590
+          }
+        ]
+      },
+      "hop_4_layer_5_5_normalization": {
+        "normalization_applied": false,
+        "transformation_type": "whitespace_and_unit_standardization",
+        "diff": {
+          "before": {
+            "predicate": "specifies"
+          },
+          "after": {
+            "predicate": "specifies"
+          }
+        },
+        "audit_recorded": true
+      },
+      "hop_5_layer_6_validation_and_verifier": {
+        "type_compatibility_matrix": "PASSED (No blocked combinations)",
+        "role_direction_validator": "PASSED (Subject-Action direction aligns with evidence)",
+        "ten_gates_status": {
+          "evidence_exists": true,
+          "evidence_located": true,
+          "text_integrity": true,
+          "clause_entails_claim": true,
+          "subject_valid": true,
+          "counterparty_resolved": true,
+          "predicate_valid": true,
+          "atomicity_valid": true,
+          "duplicate_valid": true,
+          "claim_type_allowed": true
+        },
+        "certification_tier": "AUTOMATED_CERTIFIED",
+        "lifecycle_decision": "APPROVE"
+      },
+      "hop_6_persistence": {
+        "table_claim": {
+          "id": "00000000-0000-0000-0000-000000000005",
+          "subject": "Customer",
+          "predicate": "specifies",
+          "object": "policy_rule",
+          "status": "verified",
+          "is_canonical": true
+        },
+        "table_claim_evidence": {
+          "text_span": "Table row: | Partial refund (keep item) | Offered for minor cosmetic flaws | Immediate |\nProse below",
+          "char_start": 15590,
+          "char_end": 15920,
+          "evidence_hash": "sha256_mock_hash_64chars"
+        },
+        "table_claim_trust_score": {
+          "overall_score": 0.99
+        }
+      },
+      "hop_7_api_delivery": {
+        "endpoint": "/v1/documents/doc_northwind_01/artifacts",
+        "serialized_claim_json": {
+          "id": "00000000-0000-0000-0000-000000000005",
+          "subject": "Customer",
+          "predicate": "specifies",
+          "object": "policy_rule",
+          "status": "verified",
+          "is_canonical": true,
+          "certification_tier": "AUTOMATED_CERTIFIED",
+          "quote": "Table row: | Partial refund (keep item) | Offered for minor cosmetic flaws | Imm"
+        }
+      },
+      "hop_8_ui_rendering": {
+        "component": "DocumentWorkspaceExplorer.jsx",
+        "facility_tab": "claims",
+        "rendered_elements": {
+          "subject_badge": "Customer",
+          "predicate_pill": "specifies",
+          "object_preview": "policy_rule",
+          "quote_highlight_box": "Table row: | Partial refund (keep item) | Offered for minor cosmetic flaws | Imm",
+          "certification_badge": "AUTOMATED_CERTIFIED"
+        }
+      }
+    },
+    {
+      "trace_id": "TRACE-06",
+      "case_id": "REG-SEM-006",
+      "title": "Non-refundable parent exception dropped",
+      "hop_1_source_bytes": {
+        "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+        "source_sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd",
+        "byte_range": "7384..7520",
+        "verbatim_bytes_utf8": "5. Non-Refundable Items The following items cannot be returned or refunded, except where the item is"
+      },
+      "hop_2_layer_4_parsing": {
+        "unit_id": "unit_Northwind_Refund_Policy_Handbook_7384",
+        "structure_type": "prose_clause",
+        "table_id": null,
+        "column_headers": [],
+        "cells": {},
+        "parent_context": "Section lead-in for 5. Non-Refundable Items",
+        "section_path": [
+          "5",
+          "Non-Refundable Items"
+        ],
+        "char_start": 7384,
+        "char_end": 7520,
+        "resolved_references": null
+      },
+      "hop_3_layer_5_extraction": {
+        "candidate_id": "cand:reg-sem-006",
+        "typed_subject": {
+          "text": "Non-refundable items listed in Section 5",
+          "type": "entity"
+        },
+        "typed_action": {
+          "predicate": "cannot_be_returned_or_refunded",
+          "modality": "cannot",
+          "polarity": "positive"
+        },
+        "typed_object": {
+          "text": "return or refund",
+          "type": "rule_constraint"
+        },
+        "evidence_bindings": [
+          {
+            "field": "subject",
+            "evidence_span": "Non-refundable items listed in Section 5",
+            "char_start": 7384
+          },
+          {
+            "field": "action",
+            "evidence_span": "cannot_be_returned_or_refunded",
+            "char_start": 7384
+          },
+          {
+            "field": "object",
+            "evidence_span": "return or refund",
+            "char_start": 7384
+          }
+        ]
+      },
+      "hop_4_layer_5_5_normalization": {
+        "normalization_applied": false,
+        "transformation_type": "whitespace_and_unit_standardization",
+        "diff": {
+          "before": {
+            "predicate": "cannot_be_returned_or_refunded"
+          },
+          "after": {
+            "predicate": "cannot_be_returned_or_refunded"
+          }
+        },
+        "audit_recorded": true
+      },
+      "hop_5_layer_6_validation_and_verifier": {
+        "type_compatibility_matrix": "PASSED (No blocked combinations)",
+        "role_direction_validator": "PASSED (Subject-Action direction aligns with evidence)",
+        "ten_gates_status": {
+          "evidence_exists": true,
+          "evidence_located": true,
+          "text_integrity": true,
+          "clause_entails_claim": true,
+          "subject_valid": true,
+          "counterparty_resolved": true,
+          "predicate_valid": true,
+          "atomicity_valid": true,
+          "duplicate_valid": true,
+          "claim_type_allowed": true
+        },
+        "certification_tier": "AUTOMATED_CERTIFIED",
+        "lifecycle_decision": "APPROVE"
+      },
+      "hop_6_persistence": {
+        "table_claim": {
+          "id": "00000000-0000-0000-0000-000000000006",
+          "subject": "Non-refundable items listed in Section 5",
+          "predicate": "cannot_be_returned_or_refunded",
+          "object": "return or refund",
+          "status": "verified",
+          "is_canonical": true
+        },
+        "table_claim_evidence": {
+          "text_span": "5. Non-Refundable Items The following items cannot be returned or refunded, except where the item is",
+          "char_start": 7384,
+          "char_end": 7520,
+          "evidence_hash": "sha256_mock_hash_64chars"
+        },
+        "table_claim_trust_score": {
+          "overall_score": 0.99
+        }
+      },
+      "hop_7_api_delivery": {
+        "endpoint": "/v1/documents/doc_northwind_01/artifacts",
+        "serialized_claim_json": {
+          "id": "00000000-0000-0000-0000-000000000006",
+          "subject": "Non-refundable items listed in Section 5",
+          "predicate": "cannot_be_returned_or_refunded",
+          "object": "return or refund",
+          "status": "verified",
+          "is_canonical": true,
+          "certification_tier": "AUTOMATED_CERTIFIED",
+          "quote": "5. Non-Refundable Items The following items cannot be returned or refunded, exce"
+        }
+      },
+      "hop_8_ui_rendering": {
+        "component": "DocumentWorkspaceExplorer.jsx",
+        "facility_tab": "claims",
+        "rendered_elements": {
+          "subject_badge": "Non-refundable items listed in Section 5",
+          "predicate_pill": "cannot_be_returned_or_refunded",
+          "object_preview": "return or refund",
+          "quote_highlight_box": "5. Non-Refundable Items The following items cannot be returned or refunded, exce",
+          "certification_badge": "AUTOMATED_CERTIFIED"
+        }
+      }
+    },
+    {
+      "trace_id": "TRACE-07",
+      "case_id": "REG-SEM-007",
+      "title": "Table cell 'Same as card' misclassified as standalone duration instead of reference",
+      "hop_1_source_bytes": {
+        "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+        "source_sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd",
+        "byte_range": "12187..12250",
+        "verbatim_bytes_utf8": "| Apple Pay / Google Pay | Underlying card | Same as card |"
+      },
+      "hop_2_layer_4_parsing": {
+        "unit_id": "unit_Northwind_Refund_Policy_Handbook_12187",
+        "structure_type": "table_row",
+        "table_id": "table_grid_matrix_01",
+        "column_headers": [
+          "Original payment",
+          "Refund method",
+          "Notes"
+        ],
+        "cells": {
+          "Original payment": "Apple Pay / Google Pay purchases",
+          "Refund method": "policy_rule",
+          "Notes": "verified"
+        },
+        "parent_context": "Section lead-in for 8. Refund Methods and Payment Types",
+        "section_path": [
+          "8",
+          "Refund Methods and Payment Types"
+        ],
+        "char_start": 12187,
+        "char_end": 12250,
+        "resolved_references": "timeline_reference"
+      },
+      "hop_3_layer_5_extraction": {
+        "candidate_id": "cand:reg-sem-007",
+        "typed_subject": {
+          "text": "Apple Pay / Google Pay purchases",
+          "type": "entity"
+        },
+        "typed_action": {
+          "predicate": "references_underlying_payment_timeline",
+          "modality": "specifies",
+          "polarity": "positive"
+        },
+        "typed_object": {
+          "text": "policy_rule",
+          "type": "rule_constraint"
+        },
+        "evidence_bindings": [
+          {
+            "field": "subject",
+            "evidence_span": "Apple Pay / Google Pay purchases",
+            "char_start": 12187
+          },
+          {
+            "field": "action",
+            "evidence_span": "references_underlying_payment_timeline",
+            "char_start": 12187
+          },
+          {
+            "field": "object",
+            "evidence_span": "policy_rule",
+            "char_start": 12187
+          }
+        ]
+      },
+      "hop_4_layer_5_5_normalization": {
+        "normalization_applied": false,
+        "transformation_type": "whitespace_and_unit_standardization",
+        "diff": {
+          "before": {
+            "predicate": "references_underlying_payment_timeline"
+          },
+          "after": {
+            "predicate": "references_underlying_payment_timeline"
+          }
+        },
+        "audit_recorded": true
+      },
+      "hop_5_layer_6_validation_and_verifier": {
+        "type_compatibility_matrix": "PASSED (No blocked combinations)",
+        "role_direction_validator": "PASSED (Subject-Action direction aligns with evidence)",
+        "ten_gates_status": {
+          "evidence_exists": true,
+          "evidence_located": true,
+          "text_integrity": true,
+          "clause_entails_claim": true,
+          "subject_valid": true,
+          "counterparty_resolved": true,
+          "predicate_valid": true,
+          "atomicity_valid": true,
+          "duplicate_valid": true,
+          "claim_type_allowed": true
+        },
+        "certification_tier": "AUTOMATED_CERTIFIED",
+        "lifecycle_decision": "APPROVE"
+      },
+      "hop_6_persistence": {
+        "table_claim": {
+          "id": "00000000-0000-0000-0000-000000000007",
+          "subject": "Apple Pay / Google Pay purchases",
+          "predicate": "references_underlying_payment_timeline",
+          "object": "policy_rule",
+          "status": "verified",
+          "is_canonical": true
+        },
+        "table_claim_evidence": {
+          "text_span": "| Apple Pay / Google Pay | Underlying card | Same as card |",
+          "char_start": 12187,
+          "char_end": 12250,
+          "evidence_hash": "sha256_mock_hash_64chars"
+        },
+        "table_claim_trust_score": {
+          "overall_score": 0.99
+        }
+      },
+      "hop_7_api_delivery": {
+        "endpoint": "/v1/documents/doc_northwind_01/artifacts",
+        "serialized_claim_json": {
+          "id": "00000000-0000-0000-0000-000000000007",
+          "subject": "Apple Pay / Google Pay purchases",
+          "predicate": "references_underlying_payment_timeline",
+          "object": "policy_rule",
+          "status": "verified",
+          "is_canonical": true,
+          "certification_tier": "AUTOMATED_CERTIFIED",
+          "quote": "| Apple Pay / Google Pay | Underlying card | Same as card |"
+        }
+      },
+      "hop_8_ui_rendering": {
+        "component": "DocumentWorkspaceExplorer.jsx",
+        "facility_tab": "claims",
+        "rendered_elements": {
+          "subject_badge": "Apple Pay / Google Pay purchases",
+          "predicate_pill": "references_underlying_payment_timeline",
+          "object_preview": "policy_rule",
+          "quote_highlight_box": "| Apple Pay / Google Pay | Underlying card | Same as card |",
+          "certification_badge": "AUTOMATED_CERTIFIED"
+        }
+      }
+    },
+    {
+      "trace_id": "TRACE-08",
+      "case_id": "REG-SEM-008",
+      "title": "Table example values in Section 6.4 extracted as operative rules",
+      "hop_1_source_bytes": {
+        "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+        "source_sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd",
+        "byte_range": "10250..10380",
+        "verbatim_bytes_utf8": "| Order number | NW-10482391 | Yes |\n| Email on order | jane.doe@example.com | Yes |"
+      },
+      "hop_2_layer_4_parsing": {
+        "unit_id": "unit_Northwind_Refund_Policy_Handbook_10250",
+        "structure_type": "table_row",
+        "table_id": "table_grid_matrix_01",
+        "column_headers": [
+          "Original payment",
+          "Refund method",
+          "Notes"
+        ],
+        "cells": {
+          "Original payment": "Customer submitting refund request",
+          "Refund method": "Order number",
+          "Notes": "verified"
+        },
+        "parent_context": "Section lead-in for 6.4 Information required",
+        "section_path": [
+          "6",
+          "How to Request a Refund",
+          "6.4",
+          "Information required"
+        ],
+        "char_start": 10250,
+        "char_end": 10380,
+        "resolved_references": null
+      },
+      "hop_3_layer_5_extraction": {
+        "candidate_id": "cand:reg-sem-008",
+        "typed_subject": {
+          "text": "Customer submitting refund request",
+          "type": "entity"
+        },
+        "typed_action": {
+          "predicate": "must_provide_information",
+          "modality": "must",
+          "polarity": "positive"
+        },
+        "typed_object": {
+          "text": "Order number",
+          "type": "rule_constraint"
+        },
+        "evidence_bindings": [
+          {
+            "field": "subject",
+            "evidence_span": "Customer submitting refund request",
+            "char_start": 10250
+          },
+          {
+            "field": "action",
+            "evidence_span": "must_provide_information",
+            "char_start": 10250
+          },
+          {
+            "field": "object",
+            "evidence_span": "Order number",
+            "char_start": 10250
+          }
+        ]
+      },
+      "hop_4_layer_5_5_normalization": {
+        "normalization_applied": false,
+        "transformation_type": "whitespace_and_unit_standardization",
+        "diff": {
+          "before": {
+            "predicate": "must_provide_information"
+          },
+          "after": {
+            "predicate": "must_provide_information"
+          }
+        },
+        "audit_recorded": true
+      },
+      "hop_5_layer_6_validation_and_verifier": {
+        "type_compatibility_matrix": "PASSED (No blocked combinations)",
+        "role_direction_validator": "PASSED (Subject-Action direction aligns with evidence)",
+        "ten_gates_status": {
+          "evidence_exists": true,
+          "evidence_located": true,
+          "text_integrity": true,
+          "clause_entails_claim": true,
+          "subject_valid": true,
+          "counterparty_resolved": true,
+          "predicate_valid": true,
+          "atomicity_valid": true,
+          "duplicate_valid": true,
+          "claim_type_allowed": true
+        },
+        "certification_tier": "AUTOMATED_CERTIFIED",
+        "lifecycle_decision": "APPROVE"
+      },
+      "hop_6_persistence": {
+        "table_claim": {
+          "id": "00000000-0000-0000-0000-000000000008",
+          "subject": "Customer submitting refund request",
+          "predicate": "must_provide_information",
+          "object": "Order number",
+          "status": "verified",
+          "is_canonical": true
+        },
+        "table_claim_evidence": {
+          "text_span": "| Order number | NW-10482391 | Yes |\n| Email on order | jane.doe@example.com | Yes |",
+          "char_start": 10250,
+          "char_end": 10380,
+          "evidence_hash": "sha256_mock_hash_64chars"
+        },
+        "table_claim_trust_score": {
+          "overall_score": 0.99
+        }
+      },
+      "hop_7_api_delivery": {
+        "endpoint": "/v1/documents/doc_northwind_01/artifacts",
+        "serialized_claim_json": {
+          "id": "00000000-0000-0000-0000-000000000008",
+          "subject": "Customer submitting refund request",
+          "predicate": "must_provide_information",
+          "object": "Order number",
+          "status": "verified",
+          "is_canonical": true,
+          "certification_tier": "AUTOMATED_CERTIFIED",
+          "quote": "| Order number | NW-10482391 | Yes |\n| Email on order | jane.doe@example.com | Y"
+        }
+      },
+      "hop_8_ui_rendering": {
+        "component": "DocumentWorkspaceExplorer.jsx",
+        "facility_tab": "claims",
+        "rendered_elements": {
+          "subject_badge": "Customer submitting refund request",
+          "predicate_pill": "must_provide_information",
+          "object_preview": "Order number",
+          "quote_highlight_box": "| Order number | NW-10482391 | Yes |\n| Email on order | jane.doe@example.com | Y",
+          "certification_badge": "AUTOMATED_CERTIFIED"
+        }
+      }
+    },
+    {
+      "trace_id": "TRACE-09",
+      "case_id": "REG-SEM-009",
+      "title": "Revision history row extracted as operative customer rule",
+      "hop_1_source_bytes": {
+        "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+        "source_sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd",
+        "byte_range": "29620..29710",
+        "verbatim_bytes_utf8": "4.2 Jan 1, 2026 Extended holiday window; added Keep It policy"
+      },
+      "hop_2_layer_4_parsing": {
+        "unit_id": "unit_Northwind_Refund_Policy_Handbook_29620",
+        "structure_type": "prose_clause",
+        "table_id": null,
+        "column_headers": [],
+        "cells": {},
+        "parent_context": "Section lead-in for 20.1 Revision history",
+        "section_path": [
+          "20",
+          "Revision History and Sample Case Studies",
+          "20.1",
+          "Revision history"
+        ],
+        "char_start": 29620,
+        "char_end": 29710,
+        "resolved_references": null
+      },
+      "hop_3_layer_5_extraction": {
+        "candidate_id": "cand:reg-sem-009",
+        "typed_subject": {
+          "text": "Document Version 4.2",
+          "type": "entity"
+        },
+        "typed_action": {
+          "predicate": "has_revision_entry",
+          "modality": "MUST",
+          "polarity": "positive"
+        },
+        "typed_object": {
+          "text": "Extended holiday window; added Keep It policy",
+          "type": "rule_constraint"
+        },
+        "evidence_bindings": [
+          {
+            "field": "subject",
+            "evidence_span": "Document Version 4.2",
+            "char_start": 29620
+          },
+          {
+            "field": "action",
+            "evidence_span": "has_revision_entry",
+            "char_start": 29620
+          },
+          {
+            "field": "object",
+            "evidence_span": "Extended holiday window; added Keep It policy",
+            "char_start": 29620
+          }
+        ]
+      },
+      "hop_4_layer_5_5_normalization": {
+        "normalization_applied": false,
+        "transformation_type": "whitespace_and_unit_standardization",
+        "diff": {
+          "before": {
+            "predicate": "has_revision_entry"
+          },
+          "after": {
+            "predicate": "has_revision_entry"
+          }
+        },
+        "audit_recorded": true
+      },
+      "hop_5_layer_6_validation_and_verifier": {
+        "type_compatibility_matrix": "PASSED (No blocked combinations)",
+        "role_direction_validator": "PASSED (Subject-Action direction aligns with evidence)",
+        "ten_gates_status": {
+          "evidence_exists": true,
+          "evidence_located": true,
+          "text_integrity": true,
+          "clause_entails_claim": true,
+          "subject_valid": true,
+          "counterparty_resolved": true,
+          "predicate_valid": true,
+          "atomicity_valid": true,
+          "duplicate_valid": true,
+          "claim_type_allowed": true
+        },
+        "certification_tier": "REVIEW_REQUIRED",
+        "lifecycle_decision": "REJECT"
+      },
+      "hop_6_persistence": {
+        "table_claim": {
+          "id": "00000000-0000-0000-0000-000000000009",
+          "subject": "Document Version 4.2",
+          "predicate": "has_revision_entry",
+          "object": "Extended holiday window; added Keep It policy",
+          "status": "candidate",
+          "is_canonical": false
+        },
+        "table_claim_evidence": {
+          "text_span": "4.2 Jan 1, 2026 Extended holiday window; added Keep It policy",
+          "char_start": 29620,
+          "char_end": 29710,
+          "evidence_hash": "sha256_mock_hash_64chars"
+        },
+        "table_claim_trust_score": {
+          "overall_score": 0.85
+        }
+      },
+      "hop_7_api_delivery": {
+        "endpoint": "/v1/documents/doc_northwind_01/artifacts",
+        "serialized_claim_json": {
+          "id": "00000000-0000-0000-0000-000000000009",
+          "subject": "Document Version 4.2",
+          "predicate": "has_revision_entry",
+          "object": "Extended holiday window; added Keep It policy",
+          "status": "candidate",
+          "is_canonical": false,
+          "certification_tier": "REVIEW_REQUIRED",
+          "quote": "4.2 Jan 1, 2026 Extended holiday window; added Keep It policy"
+        }
+      },
+      "hop_8_ui_rendering": {
+        "component": "DocumentWorkspaceExplorer.jsx",
+        "facility_tab": "claims",
+        "rendered_elements": {
+          "subject_badge": "Document Version 4.2",
+          "predicate_pill": "has_revision_entry",
+          "object_preview": "Extended holiday window; added Keep It policy",
+          "quote_highlight_box": "4.2 Jan 1, 2026 Extended holiday window; added Keep It policy",
+          "certification_badge": "REVIEW_REQUIRED"
+        }
+      }
+    },
+    {
+      "trace_id": "TRACE-10",
+      "case_id": "REG-SEM-010",
+      "title": "International currency settlement loss of exchange rate not compensated",
+      "hop_1_source_bytes": {
+        "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+        "source_sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd",
+        "byte_range": "22610..22750",
+        "verbatim_bytes_utf8": "Exchange rate differences between the purchase and refund date are not compensated; the bank's rate "
+      },
+      "hop_2_layer_4_parsing": {
+        "unit_id": "unit_Northwind_Refund_Policy_Handbook_22610",
+        "structure_type": "prose_clause",
+        "table_id": null,
+        "column_headers": [],
+        "cells": {},
+        "parent_context": "Section lead-in for 15.1 Currency conversion",
+        "section_path": [
+          "15",
+          "International Orders, Duties and Currency",
+          "15.1",
+          "Currency conversion"
+        ],
+        "char_start": 22610,
+        "char_end": 22750,
+        "resolved_references": null
+      },
+      "hop_3_layer_5_extraction": {
+        "candidate_id": "cand:reg-sem-010",
+        "typed_subject": {
+          "text": "Northwind",
+          "type": "actor"
+        },
+        "typed_action": {
+          "predicate": "does_not_compensate_exchange_fluctuations",
+          "modality": "will_not",
+          "polarity": "positive"
+        },
+        "typed_object": {
+          "text": "exchange rate differences between purchase date and refund date",
+          "type": "rule_constraint"
+        },
+        "evidence_bindings": [
+          {
+            "field": "subject",
+            "evidence_span": "Northwind",
+            "char_start": 22610
+          },
+          {
+            "field": "action",
+            "evidence_span": "does_not_compensate_exchange_fluctuations",
+            "char_start": 22610
+          },
+          {
+            "field": "object",
+            "evidence_span": "exchange rate differences between purchase date and refund date",
+            "char_start": 22610
+          }
+        ]
+      },
+      "hop_4_layer_5_5_normalization": {
+        "normalization_applied": false,
+        "transformation_type": "whitespace_and_unit_standardization",
+        "diff": {
+          "before": {
+            "predicate": "does_not_compensate_exchange_fluctuations"
+          },
+          "after": {
+            "predicate": "does_not_compensate_exchange_fluctuations"
+          }
+        },
+        "audit_recorded": true
+      },
+      "hop_5_layer_6_validation_and_verifier": {
+        "type_compatibility_matrix": "PASSED (No blocked combinations)",
+        "role_direction_validator": "PASSED (Subject-Action direction aligns with evidence)",
+        "ten_gates_status": {
+          "evidence_exists": true,
+          "evidence_located": true,
+          "text_integrity": true,
+          "clause_entails_claim": true,
+          "subject_valid": true,
+          "counterparty_resolved": true,
+          "predicate_valid": true,
+          "atomicity_valid": true,
+          "duplicate_valid": true,
+          "claim_type_allowed": true
+        },
+        "certification_tier": "AUTOMATED_CERTIFIED",
+        "lifecycle_decision": "APPROVE"
+      },
+      "hop_6_persistence": {
+        "table_claim": {
+          "id": "00000000-0000-0000-0000-000000000010",
+          "subject": "Northwind",
+          "predicate": "does_not_compensate_exchange_fluctuations",
+          "object": "exchange rate differences between purchase date and refund date",
+          "status": "verified",
+          "is_canonical": true
+        },
+        "table_claim_evidence": {
+          "text_span": "Exchange rate differences between the purchase and refund date are not compensated; the bank's rate ",
+          "char_start": 22610,
+          "char_end": 22750,
+          "evidence_hash": "sha256_mock_hash_64chars"
+        },
+        "table_claim_trust_score": {
+          "overall_score": 0.99
+        }
+      },
+      "hop_7_api_delivery": {
+        "endpoint": "/v1/documents/doc_northwind_01/artifacts",
+        "serialized_claim_json": {
+          "id": "00000000-0000-0000-0000-000000000010",
+          "subject": "Northwind",
+          "predicate": "does_not_compensate_exchange_fluctuations",
+          "object": "exchange rate differences between purchase date and refund date",
+          "status": "verified",
+          "is_canonical": true,
+          "certification_tier": "AUTOMATED_CERTIFIED",
+          "quote": "Exchange rate differences between the purchase and refund date are not compensat"
+        }
+      },
+      "hop_8_ui_rendering": {
+        "component": "DocumentWorkspaceExplorer.jsx",
+        "facility_tab": "claims",
+        "rendered_elements": {
+          "subject_badge": "Northwind",
+          "predicate_pill": "does_not_compensate_exchange_fluctuations",
+          "object_preview": "exchange rate differences between purchase date and refund date",
+          "quote_highlight_box": "Exchange rate differences between the purchase and refund date are not compensat",
+          "certification_badge": "AUTOMATED_CERTIFIED"
+        }
+      }
+    },
+    {
+      "trace_id": "TRACE-11",
+      "case_id": "REG-SEM-011",
+      "title": "Duplicate unlinked posting duration extraction across sections",
+      "hop_1_source_bytes": {
+        "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+        "source_sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd",
+        "byte_range": "10850..12150",
+        "verbatim_bytes_utf8": "Section 7: | Credit card refund posted by bank | 3-5 business days |\nSection 8: | Visa / Mastercard "
+      },
+      "hop_2_layer_4_parsing": {
+        "unit_id": "unit_Northwind_Refund_Policy_Handbook_10850",
+        "structure_type": "table_row",
+        "table_id": "table_grid_matrix_01",
+        "column_headers": [
+          "Original payment",
+          "Refund method",
+          "Notes"
+        ],
+        "cells": {
+          "Original payment": "Customer",
+          "Refund method": "policy_rule",
+          "Notes": "verified"
+        },
+        "parent_context": "Section lead-in for 7 & 8 Refund Timelines and Payment Types",
+        "section_path": [
+          "7 & 8"
+        ],
+        "char_start": 10850,
+        "char_end": 12150,
+        "resolved_references": []
+      },
+      "hop_3_layer_5_extraction": {
+        "candidate_id": "cand:reg-sem-011",
+        "typed_subject": {
+          "text": "Customer",
+          "type": "actor"
+        },
+        "typed_action": {
+          "predicate": "specifies",
+          "modality": "MUST",
+          "polarity": "positive"
+        },
+        "typed_object": {
+          "text": "policy_rule",
+          "type": "rule_constraint"
+        },
+        "evidence_bindings": [
+          {
+            "field": "subject",
+            "evidence_span": "Customer",
+            "char_start": 10850
+          },
+          {
+            "field": "action",
+            "evidence_span": "specifies",
+            "char_start": 10850
+          },
+          {
+            "field": "object",
+            "evidence_span": "policy_rule",
+            "char_start": 10850
+          }
+        ]
+      },
+      "hop_4_layer_5_5_normalization": {
+        "normalization_applied": false,
+        "transformation_type": "whitespace_and_unit_standardization",
+        "diff": {
+          "before": {
+            "predicate": "specifies"
+          },
+          "after": {
+            "predicate": "specifies"
+          }
+        },
+        "audit_recorded": true
+      },
+      "hop_5_layer_6_validation_and_verifier": {
+        "type_compatibility_matrix": "PASSED (No blocked combinations)",
+        "role_direction_validator": "PASSED (Subject-Action direction aligns with evidence)",
+        "ten_gates_status": {
+          "evidence_exists": true,
+          "evidence_located": true,
+          "text_integrity": true,
+          "clause_entails_claim": true,
+          "subject_valid": true,
+          "counterparty_resolved": true,
+          "predicate_valid": true,
+          "atomicity_valid": true,
+          "duplicate_valid": true,
+          "claim_type_allowed": true
+        },
+        "certification_tier": "AUTOMATED_CERTIFIED",
+        "lifecycle_decision": "APPROVE"
+      },
+      "hop_6_persistence": {
+        "table_claim": {
+          "id": "00000000-0000-0000-0000-000000000011",
+          "subject": "Customer",
+          "predicate": "specifies",
+          "object": "policy_rule",
+          "status": "verified",
+          "is_canonical": true
+        },
+        "table_claim_evidence": {
+          "text_span": "Section 7: | Credit card refund posted by bank | 3-5 business days |\nSection 8: | Visa / Mastercard ",
+          "char_start": 10850,
+          "char_end": 12150,
+          "evidence_hash": "sha256_mock_hash_64chars"
+        },
+        "table_claim_trust_score": {
+          "overall_score": 0.99
+        }
+      },
+      "hop_7_api_delivery": {
+        "endpoint": "/v1/documents/doc_northwind_01/artifacts",
+        "serialized_claim_json": {
+          "id": "00000000-0000-0000-0000-000000000011",
+          "subject": "Customer",
+          "predicate": "specifies",
+          "object": "policy_rule",
+          "status": "verified",
+          "is_canonical": true,
+          "certification_tier": "AUTOMATED_CERTIFIED",
+          "quote": "Section 7: | Credit card refund posted by bank | 3-5 business days |\nSection 8: "
+        }
+      },
+      "hop_8_ui_rendering": {
+        "component": "DocumentWorkspaceExplorer.jsx",
+        "facility_tab": "claims",
+        "rendered_elements": {
+          "subject_badge": "Customer",
+          "predicate_pill": "specifies",
+          "object_preview": "policy_rule",
+          "quote_highlight_box": "Section 7: | Credit card refund posted by bank | 3-5 business days |\nSection 8: ",
+          "certification_badge": "AUTOMATED_CERTIFIED"
+        }
+      }
+    },
+    {
+      "trace_id": "TRACE-12",
+      "case_id": "REG-SEM-012",
+      "title": "Malformed clause/grammar fragment extracted as actor/subject",
+      "hop_1_source_bytes": {
+        "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+        "source_sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd",
+        "byte_range": "8450..8620",
+        "verbatim_bytes_utf8": "Even for non-refundable items, a full refund or replacement will be provided if the item arrives dam"
+      },
+      "hop_2_layer_4_parsing": {
+        "unit_id": "unit_Northwind_Refund_Policy_Handbook_8450",
+        "structure_type": "prose_clause",
+        "table_id": null,
+        "column_headers": [],
+        "cells": {},
+        "parent_context": "Section lead-in for 5.2 Exceptions",
+        "section_path": [
+          "5",
+          "Non-Refundable Items",
+          "5.2",
+          "Exceptions"
+        ],
+        "char_start": 8450,
+        "char_end": 8620,
+        "resolved_references": null
+      },
+      "hop_3_layer_5_extraction": {
+        "candidate_id": "cand:reg-sem-012",
+        "typed_subject": {
+          "text": "Northwind",
+          "type": "actor"
+        },
+        "typed_action": {
+          "predicate": "will_provide_refund_or_replacement",
+          "modality": "will",
+          "polarity": "positive"
+        },
+        "typed_object": {
+          "text": "full refund or replacement",
+          "type": "rule_constraint"
+        },
+        "evidence_bindings": [
+          {
+            "field": "subject",
+            "evidence_span": "Northwind",
+            "char_start": 8450
+          },
+          {
+            "field": "action",
+            "evidence_span": "will_provide_refund_or_replacement",
+            "char_start": 8450
+          },
+          {
+            "field": "object",
+            "evidence_span": "full refund or replacement",
+            "char_start": 8450
+          }
+        ]
+      },
+      "hop_4_layer_5_5_normalization": {
+        "normalization_applied": false,
+        "transformation_type": "whitespace_and_unit_standardization",
+        "diff": {
+          "before": {
+            "predicate": "will_provide_refund_or_replacement"
+          },
+          "after": {
+            "predicate": "will_provide_refund_or_replacement"
+          }
+        },
+        "audit_recorded": true
+      },
+      "hop_5_layer_6_validation_and_verifier": {
+        "type_compatibility_matrix": "PASSED (No blocked combinations)",
+        "role_direction_validator": "PASSED (Subject-Action direction aligns with evidence)",
+        "ten_gates_status": {
+          "evidence_exists": true,
+          "evidence_located": true,
+          "text_integrity": true,
+          "clause_entails_claim": true,
+          "subject_valid": true,
+          "counterparty_resolved": true,
+          "predicate_valid": true,
+          "atomicity_valid": true,
+          "duplicate_valid": true,
+          "claim_type_allowed": true
+        },
+        "certification_tier": "AUTOMATED_CERTIFIED",
+        "lifecycle_decision": "APPROVE"
+      },
+      "hop_6_persistence": {
+        "table_claim": {
+          "id": "00000000-0000-0000-0000-000000000012",
+          "subject": "Northwind",
+          "predicate": "will_provide_refund_or_replacement",
+          "object": "full refund or replacement",
+          "status": "verified",
+          "is_canonical": true
+        },
+        "table_claim_evidence": {
+          "text_span": "Even for non-refundable items, a full refund or replacement will be provided if the item arrives dam",
+          "char_start": 8450,
+          "char_end": 8620,
+          "evidence_hash": "sha256_mock_hash_64chars"
+        },
+        "table_claim_trust_score": {
+          "overall_score": 0.99
+        }
+      },
+      "hop_7_api_delivery": {
+        "endpoint": "/v1/documents/doc_northwind_01/artifacts",
+        "serialized_claim_json": {
+          "id": "00000000-0000-0000-0000-000000000012",
+          "subject": "Northwind",
+          "predicate": "will_provide_refund_or_replacement",
+          "object": "full refund or replacement",
+          "status": "verified",
+          "is_canonical": true,
+          "certification_tier": "AUTOMATED_CERTIFIED",
+          "quote": "Even for non-refundable items, a full refund or replacement will be provided if "
+        }
+      },
+      "hop_8_ui_rendering": {
+        "component": "DocumentWorkspaceExplorer.jsx",
+        "facility_tab": "claims",
+        "rendered_elements": {
+          "subject_badge": "Northwind",
+          "predicate_pill": "will_provide_refund_or_replacement",
+          "object_preview": "full refund or replacement",
+          "quote_highlight_box": "Even for non-refundable items, a full refund or replacement will be provided if ",
+          "certification_badge": "AUTOMATED_CERTIFIED"
+        }
+      }
+    },
+    {
+      "trace_id": "TRACE-13",
+      "case_id": "CASE-NW-013",
+      "title": "Verified Northwind section ground truth",
+      "hop_1_source_bytes": {
+        "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+        "source_sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd",
+        "byte_range": "0..154",
+        "verbatim_bytes_utf8": "3. Standard Return Policy Most items purchased from Northwind can be returned within 30 days of deli"
+      },
+      "hop_2_layer_4_parsing": {
+        "unit_id": "unit_Northwind_Refund_Policy_Handbook_0",
+        "structure_type": "prose_clause",
+        "table_id": null,
+        "column_headers": [],
+        "cells": {},
+        "parent_context": "Section lead-in for Section 3",
+        "section_path": [
+          "Section 3"
+        ],
+        "char_start": 0,
+        "char_end": 154,
+        "resolved_references": []
+      },
+      "hop_3_layer_5_extraction": {
+        "candidate_id": "cand:case-nw-013",
+        "typed_subject": {
+          "text": "Most items purchased from Northwind",
+          "type": "entity"
+        },
+        "typed_action": {
+          "predicate": "can_be_returned",
+          "modality": "CAN",
+          "polarity": "positive"
+        },
+        "typed_object": {
+          "text": "full refund to original payment method",
+          "type": "rule_constraint"
+        },
+        "evidence_bindings": [
+          {
+            "field": "subject",
+            "evidence_span": "Most items purchased from Northwind",
+            "char_start": 0
+          },
+          {
+            "field": "action",
+            "evidence_span": "can_be_returned",
+            "char_start": 0
+          },
+          {
+            "field": "object",
+            "evidence_span": "full refund to original payment method",
+            "char_start": 0
+          }
+        ]
+      },
+      "hop_4_layer_5_5_normalization": {
+        "normalization_applied": false,
+        "transformation_type": "whitespace_and_unit_standardization",
+        "diff": {
+          "before": {
+            "predicate": "can_be_returned"
+          },
+          "after": {
+            "predicate": "can_be_returned"
+          }
+        },
+        "audit_recorded": true
+      },
+      "hop_5_layer_6_validation_and_verifier": {
+        "type_compatibility_matrix": "PASSED (No blocked combinations)",
+        "role_direction_validator": "PASSED (Subject-Action direction aligns with evidence)",
+        "ten_gates_status": {
+          "evidence_exists": true,
+          "evidence_located": true,
+          "text_integrity": true,
+          "clause_entails_claim": true,
+          "subject_valid": true,
+          "counterparty_resolved": true,
+          "predicate_valid": true,
+          "atomicity_valid": true,
+          "duplicate_valid": true,
+          "claim_type_allowed": true
+        },
+        "certification_tier": "AUTOMATED_CERTIFIED",
+        "lifecycle_decision": "APPROVE"
+      },
+      "hop_6_persistence": {
+        "table_claim": {
+          "id": "00000000-0000-0000-0000-000000000013",
+          "subject": "Most items purchased from Northwind",
+          "predicate": "can_be_returned",
+          "object": "full refund to original payment method",
+          "status": "verified",
+          "is_canonical": true
+        },
+        "table_claim_evidence": {
+          "text_span": "3. Standard Return Policy Most items purchased from Northwind can be returned within 30 days of deli",
+          "char_start": 0,
+          "char_end": 154,
+          "evidence_hash": "sha256_mock_hash_64chars"
+        },
+        "table_claim_trust_score": {
+          "overall_score": 0.99
+        }
+      },
+      "hop_7_api_delivery": {
+        "endpoint": "/v1/documents/doc_northwind_01/artifacts",
+        "serialized_claim_json": {
+          "id": "00000000-0000-0000-0000-000000000013",
+          "subject": "Most items purchased from Northwind",
+          "predicate": "can_be_returned",
+          "object": "full refund to original payment method",
+          "status": "verified",
+          "is_canonical": true,
+          "certification_tier": "AUTOMATED_CERTIFIED",
+          "quote": "3. Standard Return Policy Most items purchased from Northwind can be returned wi"
+        }
+      },
+      "hop_8_ui_rendering": {
+        "component": "DocumentWorkspaceExplorer.jsx",
+        "facility_tab": "claims",
+        "rendered_elements": {
+          "subject_badge": "Most items purchased from Northwind",
+          "predicate_pill": "can_be_returned",
+          "object_preview": "full refund to original payment method",
+          "quote_highlight_box": "3. Standard Return Policy Most items purchased from Northwind can be returned wi",
+          "certification_badge": "AUTOMATED_CERTIFIED"
+        }
+      }
+    },
+    {
+      "trace_id": "TRACE-14",
+      "case_id": "CASE-NW-014",
+      "title": "Verified Northwind section ground truth",
+      "hop_1_source_bytes": {
+        "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+        "source_sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd",
+        "byte_range": "0..108",
+        "verbatim_bytes_utf8": "Items purchased between November 1 and December 31 may be returned through January 31 of the followi"
+      },
+      "hop_2_layer_4_parsing": {
+        "unit_id": "unit_Northwind_Refund_Policy_Handbook_0",
+        "structure_type": "prose_clause",
+        "table_id": null,
+        "column_headers": [],
+        "cells": {},
+        "parent_context": "Section lead-in for Section 3.1",
+        "section_path": [
+          "Section 3.1"
+        ],
+        "char_start": 0,
+        "char_end": 108,
+        "resolved_references": []
+      },
+      "hop_3_layer_5_extraction": {
+        "candidate_id": "cand:case-nw-014",
+        "typed_subject": {
+          "text": "Holiday purchases",
+          "type": "entity"
+        },
+        "typed_action": {
+          "predicate": "may_be_returned",
+          "modality": "MAY",
+          "polarity": "positive"
+        },
+        "typed_object": {
+          "text": "extended return window through January 31",
+          "type": "rule_constraint"
+        },
+        "evidence_bindings": [
+          {
+            "field": "subject",
+            "evidence_span": "Holiday purchases",
+            "char_start": 0
+          },
+          {
+            "field": "action",
+            "evidence_span": "may_be_returned",
+            "char_start": 0
+          },
+          {
+            "field": "object",
+            "evidence_span": "extended return window through January 31",
+            "char_start": 0
+          }
+        ]
+      },
+      "hop_4_layer_5_5_normalization": {
+        "normalization_applied": false,
+        "transformation_type": "whitespace_and_unit_standardization",
+        "diff": {
+          "before": {
+            "predicate": "may_be_returned"
+          },
+          "after": {
+            "predicate": "may_be_returned"
+          }
+        },
+        "audit_recorded": true
+      },
+      "hop_5_layer_6_validation_and_verifier": {
+        "type_compatibility_matrix": "PASSED (No blocked combinations)",
+        "role_direction_validator": "PASSED (Subject-Action direction aligns with evidence)",
+        "ten_gates_status": {
+          "evidence_exists": true,
+          "evidence_located": true,
+          "text_integrity": true,
+          "clause_entails_claim": true,
+          "subject_valid": true,
+          "counterparty_resolved": true,
+          "predicate_valid": true,
+          "atomicity_valid": true,
+          "duplicate_valid": true,
+          "claim_type_allowed": true
+        },
+        "certification_tier": "AUTOMATED_CERTIFIED",
+        "lifecycle_decision": "APPROVE"
+      },
+      "hop_6_persistence": {
+        "table_claim": {
+          "id": "00000000-0000-0000-0000-000000000014",
+          "subject": "Holiday purchases",
+          "predicate": "may_be_returned",
+          "object": "extended return window through January 31",
+          "status": "verified",
+          "is_canonical": true
+        },
+        "table_claim_evidence": {
+          "text_span": "Items purchased between November 1 and December 31 may be returned through January 31 of the followi",
+          "char_start": 0,
+          "char_end": 108,
+          "evidence_hash": "sha256_mock_hash_64chars"
+        },
+        "table_claim_trust_score": {
+          "overall_score": 0.99
+        }
+      },
+      "hop_7_api_delivery": {
+        "endpoint": "/v1/documents/doc_northwind_01/artifacts",
+        "serialized_claim_json": {
+          "id": "00000000-0000-0000-0000-000000000014",
+          "subject": "Holiday purchases",
+          "predicate": "may_be_returned",
+          "object": "extended return window through January 31",
+          "status": "verified",
+          "is_canonical": true,
+          "certification_tier": "AUTOMATED_CERTIFIED",
+          "quote": "Items purchased between November 1 and December 31 may be returned through Janua"
+        }
+      },
+      "hop_8_ui_rendering": {
+        "component": "DocumentWorkspaceExplorer.jsx",
+        "facility_tab": "claims",
+        "rendered_elements": {
+          "subject_badge": "Holiday purchases",
+          "predicate_pill": "may_be_returned",
+          "object_preview": "extended return window through January 31",
+          "quote_highlight_box": "Items purchased between November 1 and December 31 may be returned through Janua",
+          "certification_badge": "AUTOMATED_CERTIFIED"
+        }
+      }
+    },
+    {
+      "trace_id": "TRACE-15",
+      "case_id": "CASE-NW-015",
+      "title": "Verified Northwind section ground truth",
+      "hop_1_source_bytes": {
+        "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+        "source_sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd",
+        "byte_range": "0..113",
+        "verbatim_bytes_utf8": "To qualify for a refund, items must be in original, unused condition with all tags and original pack"
+      },
+      "hop_2_layer_4_parsing": {
+        "unit_id": "unit_Northwind_Refund_Policy_Handbook_0",
+        "structure_type": "prose_clause",
+        "table_id": null,
+        "column_headers": [],
+        "cells": {},
+        "parent_context": "Section lead-in for Section 4",
+        "section_path": [
+          "Section 4"
+        ],
+        "char_start": 0,
+        "char_end": 113,
+        "resolved_references": []
+      },
+      "hop_3_layer_5_extraction": {
+        "candidate_id": "cand:case-nw-015",
+        "typed_subject": {
+          "text": "Items",
+          "type": "entity"
+        },
+        "typed_action": {
+          "predicate": "must_be_in_condition",
+          "modality": "MUST",
+          "polarity": "positive"
+        },
+        "typed_object": {
+          "text": "original, unused condition with tags and packaging",
+          "type": "rule_constraint"
+        },
+        "evidence_bindings": [
+          {
+            "field": "subject",
+            "evidence_span": "Items",
+            "char_start": 0
+          },
+          {
+            "field": "action",
+            "evidence_span": "must_be_in_condition",
+            "char_start": 0
+          },
+          {
+            "field": "object",
+            "evidence_span": "original, unused condition with tags and packaging",
+            "char_start": 0
+          }
+        ]
+      },
+      "hop_4_layer_5_5_normalization": {
+        "normalization_applied": false,
+        "transformation_type": "whitespace_and_unit_standardization",
+        "diff": {
+          "before": {
+            "predicate": "must_be_in_condition"
+          },
+          "after": {
+            "predicate": "must_be_in_condition"
+          }
+        },
+        "audit_recorded": true
+      },
+      "hop_5_layer_6_validation_and_verifier": {
+        "type_compatibility_matrix": "PASSED (No blocked combinations)",
+        "role_direction_validator": "PASSED (Subject-Action direction aligns with evidence)",
+        "ten_gates_status": {
+          "evidence_exists": true,
+          "evidence_located": true,
+          "text_integrity": true,
+          "clause_entails_claim": true,
+          "subject_valid": true,
+          "counterparty_resolved": true,
+          "predicate_valid": true,
+          "atomicity_valid": true,
+          "duplicate_valid": true,
+          "claim_type_allowed": true
+        },
+        "certification_tier": "AUTOMATED_CERTIFIED",
+        "lifecycle_decision": "APPROVE"
+      },
+      "hop_6_persistence": {
+        "table_claim": {
+          "id": "00000000-0000-0000-0000-000000000015",
+          "subject": "Items",
+          "predicate": "must_be_in_condition",
+          "object": "original, unused condition with tags and packaging",
+          "status": "verified",
+          "is_canonical": true
+        },
+        "table_claim_evidence": {
+          "text_span": "To qualify for a refund, items must be in original, unused condition with all tags and original pack",
+          "char_start": 0,
+          "char_end": 113,
+          "evidence_hash": "sha256_mock_hash_64chars"
+        },
+        "table_claim_trust_score": {
+          "overall_score": 0.99
+        }
+      },
+      "hop_7_api_delivery": {
+        "endpoint": "/v1/documents/doc_northwind_01/artifacts",
+        "serialized_claim_json": {
+          "id": "00000000-0000-0000-0000-000000000015",
+          "subject": "Items",
+          "predicate": "must_be_in_condition",
+          "object": "original, unused condition with tags and packaging",
+          "status": "verified",
+          "is_canonical": true,
+          "certification_tier": "AUTOMATED_CERTIFIED",
+          "quote": "To qualify for a refund, items must be in original, unused condition with all ta"
+        }
+      },
+      "hop_8_ui_rendering": {
+        "component": "DocumentWorkspaceExplorer.jsx",
+        "facility_tab": "claims",
+        "rendered_elements": {
+          "subject_badge": "Items",
+          "predicate_pill": "must_be_in_condition",
+          "object_preview": "original, unused condition with tags and packaging",
+          "quote_highlight_box": "To qualify for a refund, items must be in original, unused condition with all ta",
+          "certification_badge": "AUTOMATED_CERTIFIED"
+        }
+      }
+    },
+    {
+      "trace_id": "TRACE-16",
+      "case_id": "CASE-NW-016",
+      "title": "Verified Northwind section ground truth",
+      "hop_1_source_bytes": {
+        "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+        "source_sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd",
+        "byte_range": "0..95",
+        "verbatim_bytes_utf8": "A partial refund of 50% to 80% may be issued when an item shows signs of use beyond inspection."
+      },
+      "hop_2_layer_4_parsing": {
+        "unit_id": "unit_Northwind_Refund_Policy_Handbook_0",
+        "structure_type": "prose_clause",
+        "table_id": null,
+        "column_headers": [],
+        "cells": {},
+        "parent_context": "Section lead-in for Section 4.1",
+        "section_path": [
+          "Section 4.1"
+        ],
+        "char_start": 0,
+        "char_end": 95,
+        "resolved_references": []
+      },
+      "hop_3_layer_5_extraction": {
+        "candidate_id": "cand:case-nw-016",
+        "typed_subject": {
+          "text": "Northwind",
+          "type": "actor"
+        },
+        "typed_action": {
+          "predicate": "may_issue_partial_refund",
+          "modality": "MAY",
+          "polarity": "positive"
+        },
+        "typed_object": {
+          "text": "50% to 80% refund",
+          "type": "rule_constraint"
+        },
+        "evidence_bindings": [
+          {
+            "field": "subject",
+            "evidence_span": "Northwind",
+            "char_start": 0
+          },
+          {
+            "field": "action",
+            "evidence_span": "may_issue_partial_refund",
+            "char_start": 0
+          },
+          {
+            "field": "object",
+            "evidence_span": "50% to 80% refund",
+            "char_start": 0
+          }
+        ]
+      },
+      "hop_4_layer_5_5_normalization": {
+        "normalization_applied": false,
+        "transformation_type": "whitespace_and_unit_standardization",
+        "diff": {
+          "before": {
+            "predicate": "may_issue_partial_refund"
+          },
+          "after": {
+            "predicate": "may_issue_partial_refund"
+          }
+        },
+        "audit_recorded": true
+      },
+      "hop_5_layer_6_validation_and_verifier": {
+        "type_compatibility_matrix": "PASSED (No blocked combinations)",
+        "role_direction_validator": "PASSED (Subject-Action direction aligns with evidence)",
+        "ten_gates_status": {
+          "evidence_exists": true,
+          "evidence_located": true,
+          "text_integrity": true,
+          "clause_entails_claim": true,
+          "subject_valid": true,
+          "counterparty_resolved": true,
+          "predicate_valid": true,
+          "atomicity_valid": true,
+          "duplicate_valid": true,
+          "claim_type_allowed": true
+        },
+        "certification_tier": "AUTOMATED_CERTIFIED",
+        "lifecycle_decision": "APPROVE"
+      },
+      "hop_6_persistence": {
+        "table_claim": {
+          "id": "00000000-0000-0000-0000-000000000016",
+          "subject": "Northwind",
+          "predicate": "may_issue_partial_refund",
+          "object": "50% to 80% refund",
+          "status": "verified",
+          "is_canonical": true
+        },
+        "table_claim_evidence": {
+          "text_span": "A partial refund of 50% to 80% may be issued when an item shows signs of use beyond inspection.",
+          "char_start": 0,
+          "char_end": 95,
+          "evidence_hash": "sha256_mock_hash_64chars"
+        },
+        "table_claim_trust_score": {
+          "overall_score": 0.99
+        }
+      },
+      "hop_7_api_delivery": {
+        "endpoint": "/v1/documents/doc_northwind_01/artifacts",
+        "serialized_claim_json": {
+          "id": "00000000-0000-0000-0000-000000000016",
+          "subject": "Northwind",
+          "predicate": "may_issue_partial_refund",
+          "object": "50% to 80% refund",
+          "status": "verified",
+          "is_canonical": true,
+          "certification_tier": "AUTOMATED_CERTIFIED",
+          "quote": "A partial refund of 50% to 80% may be issued when an item shows signs of use bey"
+        }
+      },
+      "hop_8_ui_rendering": {
+        "component": "DocumentWorkspaceExplorer.jsx",
+        "facility_tab": "claims",
+        "rendered_elements": {
+          "subject_badge": "Northwind",
+          "predicate_pill": "may_issue_partial_refund",
+          "object_preview": "50% to 80% refund",
+          "quote_highlight_box": "A partial refund of 50% to 80% may be issued when an item shows signs of use bey",
+          "certification_badge": "AUTOMATED_CERTIFIED"
+        }
+      }
+    },
+    {
+      "trace_id": "TRACE-17",
+      "case_id": "CASE-NW-017",
+      "title": "Verified Northwind section ground truth",
+      "hop_1_source_bytes": {
+        "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+        "source_sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd",
+        "byte_range": "0..98",
+        "verbatim_bytes_utf8": "Items marked Final Sale or Clearance - All Sales Final at checkout cannot be returned or refunded."
+      },
+      "hop_2_layer_4_parsing": {
+        "unit_id": "unit_Northwind_Refund_Policy_Handbook_0",
+        "structure_type": "prose_clause",
+        "table_id": null,
+        "column_headers": [],
+        "cells": {},
+        "parent_context": "Section lead-in for Section 5",
+        "section_path": [
+          "Section 5"
+        ],
+        "char_start": 0,
+        "char_end": 98,
+        "resolved_references": []
+      },
+      "hop_3_layer_5_extraction": {
+        "candidate_id": "cand:case-nw-017",
+        "typed_subject": {
+          "text": "Items marked Final Sale or Clearance",
+          "type": "entity"
+        },
+        "typed_action": {
+          "predicate": "cannot_be_refunded",
+          "modality": "CANNOT",
+          "polarity": "positive"
+        },
+        "typed_object": {
+          "text": "return or refund",
+          "type": "rule_constraint"
+        },
+        "evidence_bindings": [
+          {
+            "field": "subject",
+            "evidence_span": "Items marked Final Sale or Clearance",
+            "char_start": 0
+          },
+          {
+            "field": "action",
+            "evidence_span": "cannot_be_refunded",
+            "char_start": 0
+          },
+          {
+            "field": "object",
+            "evidence_span": "return or refund",
+            "char_start": 0
+          }
+        ]
+      },
+      "hop_4_layer_5_5_normalization": {
+        "normalization_applied": false,
+        "transformation_type": "whitespace_and_unit_standardization",
+        "diff": {
+          "before": {
+            "predicate": "cannot_be_refunded"
+          },
+          "after": {
+            "predicate": "cannot_be_refunded"
+          }
+        },
+        "audit_recorded": true
+      },
+      "hop_5_layer_6_validation_and_verifier": {
+        "type_compatibility_matrix": "PASSED (No blocked combinations)",
+        "role_direction_validator": "PASSED (Subject-Action direction aligns with evidence)",
+        "ten_gates_status": {
+          "evidence_exists": true,
+          "evidence_located": true,
+          "text_integrity": true,
+          "clause_entails_claim": true,
+          "subject_valid": true,
+          "counterparty_resolved": true,
+          "predicate_valid": true,
+          "atomicity_valid": true,
+          "duplicate_valid": true,
+          "claim_type_allowed": true
+        },
+        "certification_tier": "AUTOMATED_CERTIFIED",
+        "lifecycle_decision": "APPROVE"
+      },
+      "hop_6_persistence": {
+        "table_claim": {
+          "id": "00000000-0000-0000-0000-000000000017",
+          "subject": "Items marked Final Sale or Clearance",
+          "predicate": "cannot_be_refunded",
+          "object": "return or refund",
+          "status": "verified",
+          "is_canonical": true
+        },
+        "table_claim_evidence": {
+          "text_span": "Items marked Final Sale or Clearance - All Sales Final at checkout cannot be returned or refunded.",
+          "char_start": 0,
+          "char_end": 98,
+          "evidence_hash": "sha256_mock_hash_64chars"
+        },
+        "table_claim_trust_score": {
+          "overall_score": 0.99
+        }
+      },
+      "hop_7_api_delivery": {
+        "endpoint": "/v1/documents/doc_northwind_01/artifacts",
+        "serialized_claim_json": {
+          "id": "00000000-0000-0000-0000-000000000017",
+          "subject": "Items marked Final Sale or Clearance",
+          "predicate": "cannot_be_refunded",
+          "object": "return or refund",
+          "status": "verified",
+          "is_canonical": true,
+          "certification_tier": "AUTOMATED_CERTIFIED",
+          "quote": "Items marked Final Sale or Clearance - All Sales Final at checkout cannot be ret"
+        }
+      },
+      "hop_8_ui_rendering": {
+        "component": "DocumentWorkspaceExplorer.jsx",
+        "facility_tab": "claims",
+        "rendered_elements": {
+          "subject_badge": "Items marked Final Sale or Clearance",
+          "predicate_pill": "cannot_be_refunded",
+          "object_preview": "return or refund",
+          "quote_highlight_box": "Items marked Final Sale or Clearance - All Sales Final at checkout cannot be ret",
+          "certification_badge": "AUTOMATED_CERTIFIED"
+        }
+      }
+    },
+    {
+      "trace_id": "TRACE-18",
+      "case_id": "CASE-NW-018",
+      "title": "Verified Northwind section ground truth",
+      "hop_1_source_bytes": {
+        "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+        "source_sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd",
+        "byte_range": "0..68",
+        "verbatim_bytes_utf8": "Gift cards and e-gift cards cannot be returned or redeemed for cash."
+      },
+      "hop_2_layer_4_parsing": {
+        "unit_id": "unit_Northwind_Refund_Policy_Handbook_0",
+        "structure_type": "prose_clause",
+        "table_id": null,
+        "column_headers": [],
+        "cells": {},
+        "parent_context": "Section lead-in for Section 5",
+        "section_path": [
+          "Section 5"
+        ],
+        "char_start": 0,
+        "char_end": 68,
+        "resolved_references": []
+      },
+      "hop_3_layer_5_extraction": {
+        "candidate_id": "cand:case-nw-018",
+        "typed_subject": {
+          "text": "Gift cards and e-gift cards",
+          "type": "entity"
+        },
+        "typed_action": {
+          "predicate": "cannot_be_redeemed_for_cash",
+          "modality": "CANNOT",
+          "polarity": "positive"
+        },
+        "typed_object": {
+          "text": "cash redemption",
+          "type": "rule_constraint"
+        },
+        "evidence_bindings": [
+          {
+            "field": "subject",
+            "evidence_span": "Gift cards and e-gift cards",
+            "char_start": 0
+          },
+          {
+            "field": "action",
+            "evidence_span": "cannot_be_redeemed_for_cash",
+            "char_start": 0
+          },
+          {
+            "field": "object",
+            "evidence_span": "cash redemption",
+            "char_start": 0
+          }
+        ]
+      },
+      "hop_4_layer_5_5_normalization": {
+        "normalization_applied": false,
+        "transformation_type": "whitespace_and_unit_standardization",
+        "diff": {
+          "before": {
+            "predicate": "cannot_be_redeemed_for_cash"
+          },
+          "after": {
+            "predicate": "cannot_be_redeemed_for_cash"
+          }
+        },
+        "audit_recorded": true
+      },
+      "hop_5_layer_6_validation_and_verifier": {
+        "type_compatibility_matrix": "PASSED (No blocked combinations)",
+        "role_direction_validator": "PASSED (Subject-Action direction aligns with evidence)",
+        "ten_gates_status": {
+          "evidence_exists": true,
+          "evidence_located": true,
+          "text_integrity": true,
+          "clause_entails_claim": true,
+          "subject_valid": true,
+          "counterparty_resolved": true,
+          "predicate_valid": true,
+          "atomicity_valid": true,
+          "duplicate_valid": true,
+          "claim_type_allowed": true
+        },
+        "certification_tier": "AUTOMATED_CERTIFIED",
+        "lifecycle_decision": "APPROVE"
+      },
+      "hop_6_persistence": {
+        "table_claim": {
+          "id": "00000000-0000-0000-0000-000000000018",
+          "subject": "Gift cards and e-gift cards",
+          "predicate": "cannot_be_redeemed_for_cash",
+          "object": "cash redemption",
+          "status": "verified",
+          "is_canonical": true
+        },
+        "table_claim_evidence": {
+          "text_span": "Gift cards and e-gift cards cannot be returned or redeemed for cash.",
+          "char_start": 0,
+          "char_end": 68,
+          "evidence_hash": "sha256_mock_hash_64chars"
+        },
+        "table_claim_trust_score": {
+          "overall_score": 0.99
+        }
+      },
+      "hop_7_api_delivery": {
+        "endpoint": "/v1/documents/doc_northwind_01/artifacts",
+        "serialized_claim_json": {
+          "id": "00000000-0000-0000-0000-000000000018",
+          "subject": "Gift cards and e-gift cards",
+          "predicate": "cannot_be_redeemed_for_cash",
+          "object": "cash redemption",
+          "status": "verified",
+          "is_canonical": true,
+          "certification_tier": "AUTOMATED_CERTIFIED",
+          "quote": "Gift cards and e-gift cards cannot be returned or redeemed for cash."
+        }
+      },
+      "hop_8_ui_rendering": {
+        "component": "DocumentWorkspaceExplorer.jsx",
+        "facility_tab": "claims",
+        "rendered_elements": {
+          "subject_badge": "Gift cards and e-gift cards",
+          "predicate_pill": "cannot_be_redeemed_for_cash",
+          "object_preview": "cash redemption",
+          "quote_highlight_box": "Gift cards and e-gift cards cannot be returned or redeemed for cash.",
+          "certification_badge": "AUTOMATED_CERTIFIED"
+        }
+      }
+    },
+    {
+      "trace_id": "TRACE-19",
+      "case_id": "CASE-NW-019",
+      "title": "Verified Northwind section ground truth",
+      "hop_1_source_bytes": {
+        "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+        "source_sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd",
+        "byte_range": "0..93",
+        "verbatim_bytes_utf8": "Downloadable software, digital guides and trail-map files once downloaded cannot be refunded."
+      },
+      "hop_2_layer_4_parsing": {
+        "unit_id": "unit_Northwind_Refund_Policy_Handbook_0",
+        "structure_type": "prose_clause",
+        "table_id": null,
+        "column_headers": [],
+        "cells": {},
+        "parent_context": "Section lead-in for Section 5",
+        "section_path": [
+          "Section 5"
+        ],
+        "char_start": 0,
+        "char_end": 93,
+        "resolved_references": []
+      },
+      "hop_3_layer_5_extraction": {
+        "candidate_id": "cand:case-nw-019",
+        "typed_subject": {
+          "text": "Downloadable software and digital guides",
+          "type": "entity"
+        },
+        "typed_action": {
+          "predicate": "cannot_be_refunded",
+          "modality": "CANNOT",
+          "polarity": "positive"
+        },
+        "typed_object": {
+          "text": "refund",
+          "type": "rule_constraint"
+        },
+        "evidence_bindings": [
+          {
+            "field": "subject",
+            "evidence_span": "Downloadable software and digital guides",
+            "char_start": 0
+          },
+          {
+            "field": "action",
+            "evidence_span": "cannot_be_refunded",
+            "char_start": 0
+          },
+          {
+            "field": "object",
+            "evidence_span": "refund",
+            "char_start": 0
+          }
+        ]
+      },
+      "hop_4_layer_5_5_normalization": {
+        "normalization_applied": false,
+        "transformation_type": "whitespace_and_unit_standardization",
+        "diff": {
+          "before": {
+            "predicate": "cannot_be_refunded"
+          },
+          "after": {
+            "predicate": "cannot_be_refunded"
+          }
+        },
+        "audit_recorded": true
+      },
+      "hop_5_layer_6_validation_and_verifier": {
+        "type_compatibility_matrix": "PASSED (No blocked combinations)",
+        "role_direction_validator": "PASSED (Subject-Action direction aligns with evidence)",
+        "ten_gates_status": {
+          "evidence_exists": true,
+          "evidence_located": true,
+          "text_integrity": true,
+          "clause_entails_claim": true,
+          "subject_valid": true,
+          "counterparty_resolved": true,
+          "predicate_valid": true,
+          "atomicity_valid": true,
+          "duplicate_valid": true,
+          "claim_type_allowed": true
+        },
+        "certification_tier": "AUTOMATED_CERTIFIED",
+        "lifecycle_decision": "APPROVE"
+      },
+      "hop_6_persistence": {
+        "table_claim": {
+          "id": "00000000-0000-0000-0000-000000000019",
+          "subject": "Downloadable software and digital guides",
+          "predicate": "cannot_be_refunded",
+          "object": "refund",
+          "status": "verified",
+          "is_canonical": true
+        },
+        "table_claim_evidence": {
+          "text_span": "Downloadable software, digital guides and trail-map files once downloaded cannot be refunded.",
+          "char_start": 0,
+          "char_end": 93,
+          "evidence_hash": "sha256_mock_hash_64chars"
+        },
+        "table_claim_trust_score": {
+          "overall_score": 0.99
+        }
+      },
+      "hop_7_api_delivery": {
+        "endpoint": "/v1/documents/doc_northwind_01/artifacts",
+        "serialized_claim_json": {
+          "id": "00000000-0000-0000-0000-000000000019",
+          "subject": "Downloadable software and digital guides",
+          "predicate": "cannot_be_refunded",
+          "object": "refund",
+          "status": "verified",
+          "is_canonical": true,
+          "certification_tier": "AUTOMATED_CERTIFIED",
+          "quote": "Downloadable software, digital guides and trail-map files once downloaded cannot"
+        }
+      },
+      "hop_8_ui_rendering": {
+        "component": "DocumentWorkspaceExplorer.jsx",
+        "facility_tab": "claims",
+        "rendered_elements": {
+          "subject_badge": "Downloadable software and digital guides",
+          "predicate_pill": "cannot_be_refunded",
+          "object_preview": "refund",
+          "quote_highlight_box": "Downloadable software, digital guides and trail-map files once downloaded cannot",
+          "certification_badge": "AUTOMATED_CERTIFIED"
+        }
+      }
+    },
+    {
+      "trace_id": "TRACE-20",
+      "case_id": "CASE-NW-020",
+      "title": "Verified Northwind section ground truth",
+      "hop_1_source_bytes": {
+        "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+        "source_sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd",
+        "byte_range": "0..57",
+        "verbatim_bytes_utf8": "Personalised or custom-engraved items cannot be returned."
+      },
+      "hop_2_layer_4_parsing": {
+        "unit_id": "unit_Northwind_Refund_Policy_Handbook_0",
+        "structure_type": "prose_clause",
+        "table_id": null,
+        "column_headers": [],
+        "cells": {},
+        "parent_context": "Section lead-in for Section 5",
+        "section_path": [
+          "Section 5"
+        ],
+        "char_start": 0,
+        "char_end": 57,
+        "resolved_references": []
+      },
+      "hop_3_layer_5_extraction": {
+        "candidate_id": "cand:case-nw-020",
+        "typed_subject": {
+          "text": "Personalised or custom-engraved items",
+          "type": "entity"
+        },
+        "typed_action": {
+          "predicate": "cannot_be_returned",
+          "modality": "CANNOT",
+          "polarity": "positive"
+        },
+        "typed_object": {
+          "text": "return",
+          "type": "rule_constraint"
+        },
+        "evidence_bindings": [
+          {
+            "field": "subject",
+            "evidence_span": "Personalised or custom-engraved items",
+            "char_start": 0
+          },
+          {
+            "field": "action",
+            "evidence_span": "cannot_be_returned",
+            "char_start": 0
+          },
+          {
+            "field": "object",
+            "evidence_span": "return",
+            "char_start": 0
+          }
+        ]
+      },
+      "hop_4_layer_5_5_normalization": {
+        "normalization_applied": false,
+        "transformation_type": "whitespace_and_unit_standardization",
+        "diff": {
+          "before": {
+            "predicate": "cannot_be_returned"
+          },
+          "after": {
+            "predicate": "cannot_be_returned"
+          }
+        },
+        "audit_recorded": true
+      },
+      "hop_5_layer_6_validation_and_verifier": {
+        "type_compatibility_matrix": "PASSED (No blocked combinations)",
+        "role_direction_validator": "PASSED (Subject-Action direction aligns with evidence)",
+        "ten_gates_status": {
+          "evidence_exists": true,
+          "evidence_located": true,
+          "text_integrity": true,
+          "clause_entails_claim": true,
+          "subject_valid": true,
+          "counterparty_resolved": true,
+          "predicate_valid": true,
+          "atomicity_valid": true,
+          "duplicate_valid": true,
+          "claim_type_allowed": true
+        },
+        "certification_tier": "AUTOMATED_CERTIFIED",
+        "lifecycle_decision": "APPROVE"
+      },
+      "hop_6_persistence": {
+        "table_claim": {
+          "id": "00000000-0000-0000-0000-000000000020",
+          "subject": "Personalised or custom-engraved items",
+          "predicate": "cannot_be_returned",
+          "object": "return",
+          "status": "verified",
+          "is_canonical": true
+        },
+        "table_claim_evidence": {
+          "text_span": "Personalised or custom-engraved items cannot be returned.",
+          "char_start": 0,
+          "char_end": 57,
+          "evidence_hash": "sha256_mock_hash_64chars"
+        },
+        "table_claim_trust_score": {
+          "overall_score": 0.99
+        }
+      },
+      "hop_7_api_delivery": {
+        "endpoint": "/v1/documents/doc_northwind_01/artifacts",
+        "serialized_claim_json": {
+          "id": "00000000-0000-0000-0000-000000000020",
+          "subject": "Personalised or custom-engraved items",
+          "predicate": "cannot_be_returned",
+          "object": "return",
+          "status": "verified",
+          "is_canonical": true,
+          "certification_tier": "AUTOMATED_CERTIFIED",
+          "quote": "Personalised or custom-engraved items cannot be returned."
+        }
+      },
+      "hop_8_ui_rendering": {
+        "component": "DocumentWorkspaceExplorer.jsx",
+        "facility_tab": "claims",
+        "rendered_elements": {
+          "subject_badge": "Personalised or custom-engraved items",
+          "predicate_pill": "cannot_be_returned",
+          "object_preview": "return",
+          "quote_highlight_box": "Personalised or custom-engraved items cannot be returned.",
+          "certification_badge": "AUTOMATED_CERTIFIED"
+        }
+      }
+    }
+  ]
+}

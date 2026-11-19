@@ -1,266 +1,266 @@
 {
-  "start_time": "2026-10-22T12:32:03.482140+00:00",
+  "start_time": "2026-11-14T05:39:39.735522+00:00",
   "total_documents": 40,
   "processed_documents": 40,
-  "total_raw_candidates": 2414,
-  "canonical_certified": 104,
-  "review_required": 2114,
-  "quarantined_compound": 20,
-  "non_rules": 17,
-  "rejected_malformed": 156,
-  "collapsed_duplicates": 3,
+  "total_raw_candidates": 3066,
+  "canonical_certified": 359,
+  "review_required": 2122,
+  "quarantined_compound": 21,
+  "non_rules": 82,
+  "rejected_malformed": 470,
+  "collapsed_duplicates": 12,
   "document_type_breakdown": {
     "contract": {
       "documents": 12,
-      "raw_candidates": 1958,
-      "canonical_certified": 74,
-      "review_required": 1729,
-      "quarantined_compound": 20,
-      "non_rules": 13,
-      "rejected": 120,
-      "duplicates": 2
+      "raw_candidates": 2441,
+      "canonical_certified": 316,
+      "review_required": 1662,
+      "quarantined_compound": 21,
+      "non_rules": 64,
+      "rejected": 367,
+      "duplicates": 11
     },
     "invoice": {
       "documents": 9,
-      "raw_candidates": 112,
-      "canonical_certified": 3,
-      "review_required": 104,
+      "raw_candidates": 133,
+      "canonical_certified": 7,
+      "review_required": 107,
       "quarantined_compound": 0,
-      "non_rules": 0,
-      "rejected": 5,
+      "non_rules": 4,
+      "rejected": 15,
       "duplicates": 0
     },
     "regulatory_compliance": {
       "documents": 2,
-      "raw_candidates": 140,
-      "canonical_certified": 5,
-      "review_required": 118,
+      "raw_candidates": 142,
+      "canonical_certified": 18,
+      "review_required": 106,
       "quarantined_compound": 0,
-      "non_rules": 3,
-      "rejected": 13,
+      "non_rules": 5,
+      "rejected": 12,
       "duplicates": 1
     },
     "hr_policy": {
       "documents": 4,
-      "raw_candidates": 135,
-      "canonical_certified": 7,
-      "review_required": 118,
+      "raw_candidates": 223,
+      "canonical_certified": 10,
+      "review_required": 178,
       "quarantined_compound": 0,
-      "non_rules": 1,
-      "rejected": 9,
+      "non_rules": 4,
+      "rejected": 31,
       "duplicates": 0
     },
     "refund_policy": {
       "documents": 7,
-      "raw_candidates": 39,
-      "canonical_certified": 15,
-      "review_required": 15,
+      "raw_candidates": 91,
+      "canonical_certified": 5,
+      "review_required": 42,
       "quarantined_compound": 0,
-      "non_rules": 0,
-      "rejected": 9,
+      "non_rules": 1,
+      "rejected": 43,
       "duplicates": 0
     },
     "technical_documentation": {
       "documents": 6,
-      "raw_candidates": 30,
-      "canonical_certified": 0,
-      "review_required": 30,
+      "raw_candidates": 36,
+      "canonical_certified": 3,
+      "review_required": 27,
       "quarantined_compound": 0,
-      "non_rules": 0,
-      "rejected": 0,
+      "non_rules": 4,
+      "rejected": 2,
       "duplicates": 0
     }
   },
   "gate_failure_breakdown": {
-    "text_integrity": 156,
-    "clause_entails_claim": 156,
-    "predicate_valid": 2272,
-    "subject_valid": 19,
-    "atomicity_valid": 20,
-    "evidence_located": 10,
-    "claim_type_allowed": 17,
-    "counterparty_resolved": 2,
-    "duplicate_valid": 3
+    "subject_valid": 139,
+    "predicate_valid": 2456,
+    "atomicity_valid": 21,
+    "claim_type_allowed": 82,
+    "text_integrity": 432,
+    "evidence_located": 117,
+    "clause_entails_claim": 169,
+    "counterparty_resolved": 4,
+    "duplicate_valid": 12
   },
   "agent_access_breakdown": {
-    "BLOCKED": 179,
-    "HUMAN_CONFIRMATION_REQUIRED": 2114,
-    "FULL_AUTONOMOUS": 104,
-    "CITATION_ONLY": 17
+    "HUMAN_CONFIRMATION_REQUIRED": 2104,
+    "BLOCKED": 522,
+    "FULL_AUTONOMOUS": 359,
+    "CITATION_ONLY": 81
   },
   "documents_detail": {
     "DOC-051": {
       "filename": "Agreement_for_leasing_or_renting_certain_Microsoft_Software_Products.pdf",
       "document_type": "contract",
       "pages": 6,
-      "total_chars": 19001,
+      "total_chars": 20301,
       "counts": {
-        "raw_candidates": 53,
-        "canonical_certified": 2,
-        "review_required": 41,
+        "raw_candidates": 84,
+        "canonical_certified": 4,
+        "review_required": 68,
         "quarantined_compound": 4,
-        "non_rules": 0,
+        "non_rules": 2,
         "rejected": 6,
         "duplicates": 0
       },
-      "certification_rate": 0.0377
+      "certification_rate": 0.0476
     },
     "DOC-052": {
       "filename": "Checklist Microsoft Customer Agreement Billing Migration - Microsoft Cost Management _ Microsoft Learn.pdf",
       "document_type": "invoice",
       "pages": 6,
-      "total_chars": 10118,
+      "total_chars": 10115,
       "counts": {
-        "raw_candidates": 9,
-        "canonical_certified": 0,
+        "raw_candidates": 10,
+        "canonical_certified": 1,
         "review_required": 9,
         "quarantined_compound": 0,
         "non_rules": 0,
         "rejected": 0,
         "duplicates": 0
       },
-      "certification_rate": 0.0
+      "certification_rate": 0.1
     },
     "DOC-053": {
       "filename": "Enterprise Agreement.pdf",
       "document_type": "contract",
       "pages": 5,
-      "total_chars": 19047,
+      "total_chars": 20730,
       "counts": {
         "raw_candidates": 46,
-        "canonical_certified": 2,
-        "review_required": 42,
+        "canonical_certified": 6,
+        "review_required": 28,
         "quarantined_compound": 0,
-        "non_rules": 1,
-        "rejected": 1,
+        "non_rules": 2,
+        "rejected": 10,
         "duplicates": 0
       },
-      "certification_rate": 0.0435
+      "certification_rate": 0.1304
     },
     "DOC-054": {
       "filename": "Enterprise Subscription Enrollment (Indirect).pdf",
       "document_type": "contract",
       "pages": 9,
-      "total_chars": 31067,
+      "total_chars": 33328,
       "counts": {
-        "raw_candidates": 76,
-        "canonical_certified": 3,
-        "review_required": 68,
+        "raw_candidates": 77,
+        "canonical_certified": 10,
+        "review_required": 61,
         "quarantined_compound": 0,
         "non_rules": 2,
-        "rejected": 3,
+        "rejected": 4,
         "duplicates": 0
       },
-      "certification_rate": 0.0395
+      "certification_rate": 0.1299
     },
     "DOC-055": {
       "filename": "mcaps-MSFT-GSA-Commercial-Supplier-Agreement-Terms.pdf",
       "document_type": "contract",
       "pages": 294,
-      "total_chars": 994340,
+      "total_chars": 1378949,
       "counts": {
-        "raw_candidates": 1008,
-        "canonical_certified": 24,
-        "review_required": 922,
-        "quarantined_compound": 8,
-        "non_rules": 6,
-        "rejected": 48,
-        "duplicates": 0
+        "raw_candidates": 1142,
+        "canonical_certified": 128,
+        "review_required": 748,
+        "quarantined_compound": 7,
+        "non_rules": 32,
+        "rejected": 216,
+        "duplicates": 11
       },
-      "certification_rate": 0.0238
+      "certification_rate": 0.1121
     },
     "DOC-056": {
       "filename": "Microsoft Business and Services Agreement.pdf",
       "document_type": "contract",
       "pages": 7,
-      "total_chars": 28305,
+      "total_chars": 30964,
       "counts": {
-        "raw_candidates": 69,
-        "canonical_certified": 4,
-        "review_required": 56,
-        "quarantined_compound": 4,
+        "raw_candidates": 73,
+        "canonical_certified": 12,
+        "review_required": 39,
+        "quarantined_compound": 3,
         "non_rules": 2,
-        "rejected": 3,
+        "rejected": 17,
         "duplicates": 0
       },
-      "certification_rate": 0.058
+      "certification_rate": 0.1644
     },
     "DOC-057": {
       "filename": "Microsoft Customer Agreement.pdf",
       "document_type": "contract",
       "pages": 11,
-      "total_chars": 41039,
+      "total_chars": 41384,
       "counts": {
-        "raw_candidates": 75,
-        "canonical_certified": 11,
-        "review_required": 23,
-        "quarantined_compound": 0,
-        "non_rules": 0,
-        "rejected": 41,
+        "raw_candidates": 101,
+        "canonical_certified": 33,
+        "review_required": 53,
+        "quarantined_compound": 3,
+        "non_rules": 5,
+        "rejected": 7,
         "duplicates": 0
       },
-      "certification_rate": 0.1467
+      "certification_rate": 0.3267
     },
     "DOC-058": {
       "filename": "Microsoft Partner Agreement (Direct).docx",
       "document_type": "contract",
-      "pages": 0,
-      "total_chars": 126894,
+      "pages": 36,
+      "total_chars": 126919,
       "counts": {
-        "raw_candidates": 323,
-        "canonical_certified": 15,
-        "review_required": 295,
+        "raw_candidates": 337,
+        "canonical_certified": 57,
+        "review_required": 260,
         "quarantined_compound": 2,
-        "non_rules": 2,
-        "rejected": 8,
-        "duplicates": 1
+        "non_rules": 12,
+        "rejected": 6,
+        "duplicates": 0
       },
-      "certification_rate": 0.0464
+      "certification_rate": 0.1691
     },
     "DOC-059": {
       "filename": "Microsoft Partner Agreement (Indirect).docx",
       "document_type": "contract",
-      "pages": 0,
-      "total_chars": 101651,
+      "pages": 30,
+      "total_chars": 101676,
       "counts": {
-        "raw_candidates": 264,
-        "canonical_certified": 13,
-        "review_required": 241,
+        "raw_candidates": 274,
+        "canonical_certified": 45,
+        "review_required": 213,
         "quarantined_compound": 2,
-        "non_rules": 0,
+        "non_rules": 7,
         "rejected": 7,
-        "duplicates": 1
+        "duplicates": 0
       },
-      "certification_rate": 0.0492
+      "certification_rate": 0.1642
     },
     "DOC-060": {
       "filename": "Migrate EA to Microsoft Customer Agreement APIs - Azure - Microsoft Cost Management _ Microsoft Learn.pdf",
       "document_type": "contract",
       "pages": 11,
-      "total_chars": 26875,
+      "total_chars": 29334,
       "counts": {
-        "raw_candidates": 10,
-        "canonical_certified": 0,
-        "review_required": 9,
+        "raw_candidates": 143,
+        "canonical_certified": 20,
+        "review_required": 114,
         "quarantined_compound": 0,
         "non_rules": 0,
-        "rejected": 1,
+        "rejected": 9,
         "duplicates": 0
       },
-      "certification_rate": 0.0
+      "certification_rate": 0.1399
     },
     "DOC-061": {
       "filename": "Modern-Work-Plan-Comparison-SMB.pdf",
       "document_type": "contract",
       "pages": 11,
-      "total_chars": 26145,
+      "total_chars": 39962,
       "counts": {
-        "raw_candidates": 12,
+        "raw_candidates": 154,
         "canonical_certified": 0,
-        "review_required": 11,
+        "review_required": 70,
         "quarantined_compound": 0,
         "non_rules": 0,
-        "rejected": 1,
+        "rejected": 84,
         "duplicates": 0
       },
       "certification_rate": 0.0
@@ -285,46 +285,46 @@
       "filename": "Set up billing for Microsoft Customer Agreement - Azure - Microsoft Cost Management _ Microsoft Learn.pdf",
       "document_type": "invoice",
       "pages": 24,
-      "total_chars": 34775,
+      "total_chars": 36082,
       "counts": {
-        "raw_candidates": 42,
-        "canonical_certified": 2,
-        "review_required": 38,
+        "raw_candidates": 40,
+        "canonical_certified": 5,
+        "review_required": 31,
         "quarantined_compound": 0,
-        "non_rules": 0,
-        "rejected": 2,
+        "non_rules": 3,
+        "rejected": 1,
         "duplicates": 0
       },
-      "certification_rate": 0.0476
+      "certification_rate": 0.125
     },
     "DOC-064": {
       "filename": "Software Licensing Terms - English _ Microsoft Learn.pdf",
       "document_type": "contract",
       "pages": 5,
-      "total_chars": 10635,
+      "total_chars": 10623,
       "counts": {
-        "raw_candidates": 22,
-        "canonical_certified": 0,
-        "review_required": 21,
+        "raw_candidates": 10,
+        "canonical_certified": 1,
+        "review_required": 8,
         "quarantined_compound": 0,
         "non_rules": 0,
         "rejected": 1,
         "duplicates": 0
       },
-      "certification_rate": 0.0
+      "certification_rate": 0.1
     },
     "DOC-065": {
       "filename": "Transfer Azure product billing ownership to a Microsoft Customer Agreement - Microsoft Cost Management _ Microsoft Learn.pdf",
       "document_type": "invoice",
       "pages": 17,
-      "total_chars": 16970,
+      "total_chars": 17492,
       "counts": {
-        "raw_candidates": 21,
+        "raw_candidates": 23,
         "canonical_certified": 0,
-        "review_required": 20,
+        "review_required": 19,
         "quarantined_compound": 0,
-        "non_rules": 0,
-        "rejected": 1,
+        "non_rules": 1,
+        "rejected": 3,
         "duplicates": 0
       },
       "certification_rate": 0.0
@@ -332,31 +332,31 @@
     "DOC-066": {
       "filename": "MicrosoftProductandServicesDPA(WW)(English)(May2026)(CR).docx",
       "document_type": "regulatory_compliance",
-      "pages": 0,
-      "total_chars": 81331,
+      "pages": 33,
+      "total_chars": 81618,
       "counts": {
-        "raw_candidates": 127,
-        "canonical_certified": 5,
-        "review_required": 106,
+        "raw_candidates": 129,
+        "canonical_certified": 18,
+        "review_required": 96,
         "quarantined_compound": 0,
-        "non_rules": 3,
-        "rejected": 12,
+        "non_rules": 5,
+        "rejected": 9,
         "duplicates": 1
       },
-      "certification_rate": 0.0394
+      "certification_rate": 0.1395
     },
     "DOC-067": {
       "filename": "Supplier Security and Privacy Assurance Program - Microsoft Service Assurance _ Microsoft Learn.pdf",
       "document_type": "regulatory_compliance",
       "pages": 4,
-      "total_chars": 7363,
+      "total_chars": 7377,
       "counts": {
         "raw_candidates": 13,
         "canonical_certified": 0,
-        "review_required": 12,
+        "review_required": 10,
         "quarantined_compound": 0,
         "non_rules": 0,
-        "rejected": 1,
+        "rejected": 3,
         "duplicates": 0
       },
       "certification_rate": 0.0
@@ -365,14 +365,14 @@
       "filename": "How-Microsoft-is-reinventing-HR-with-Microsoft-Copilot.pdf",
       "document_type": "hr_policy",
       "pages": 2,
-      "total_chars": 7555,
+      "total_chars": 10271,
       "counts": {
-        "raw_candidates": 1,
+        "raw_candidates": 15,
         "canonical_certified": 0,
-        "review_required": 1,
+        "review_required": 14,
         "quarantined_compound": 0,
         "non_rules": 0,
-        "rejected": 0,
+        "rejected": 1,
         "duplicates": 0
       },
       "certification_rate": 0.0
@@ -381,59 +381,59 @@
       "filename": "Human-Rights-Transparency-Report-2025.pdf",
       "document_type": "hr_policy",
       "pages": 40,
-      "total_chars": 111076,
+      "total_chars": 265471,
       "counts": {
-        "raw_candidates": 44,
-        "canonical_certified": 0,
-        "review_required": 42,
+        "raw_candidates": 103,
+        "canonical_certified": 1,
+        "review_required": 86,
         "quarantined_compound": 0,
         "non_rules": 0,
-        "rejected": 2,
+        "rejected": 16,
         "duplicates": 0
       },
-      "certification_rate": 0.0
+      "certification_rate": 0.0097
     },
     "DOC-070": {
       "filename": "Privacy in Microsoft Cloud Services.pdf",
       "document_type": "hr_policy",
       "pages": 41,
-      "total_chars": 120354,
+      "total_chars": 128355,
       "counts": {
-        "raw_candidates": 87,
-        "canonical_certified": 6,
-        "review_required": 74,
+        "raw_candidates": 92,
+        "canonical_certified": 9,
+        "review_required": 67,
         "quarantined_compound": 0,
-        "non_rules": 0,
-        "rejected": 7,
+        "non_rules": 2,
+        "rejected": 14,
         "duplicates": 0
       },
-      "certification_rate": 0.069
+      "certification_rate": 0.0978
     },
     "DOC-071": {
       "filename": "SupplierComm Refresh July 2024 WebVersion.pdf",
       "document_type": "hr_policy",
       "pages": 2,
-      "total_chars": 2648,
+      "total_chars": 2726,
       "counts": {
-        "raw_candidates": 3,
-        "canonical_certified": 1,
-        "review_required": 1,
+        "raw_candidates": 13,
+        "canonical_certified": 0,
+        "review_required": 11,
         "quarantined_compound": 0,
-        "non_rules": 1,
+        "non_rules": 2,
         "rejected": 0,
         "duplicates": 0
       },
-      "certification_rate": 0.3333
+      "certification_rate": 0.0
     },
     "DOC-072": {
       "filename": "Download Azure billing invoice - Microsoft Cost Management _ Microsoft Learn.pdf",
       "document_type": "invoice",
       "pages": 7,
-      "total_chars": 6830,
+      "total_chars": 6901,
       "counts": {
-        "raw_candidates": 16,
+        "raw_candidates": 14,
         "canonical_certified": 0,
-        "review_required": 16,
+        "review_required": 14,
         "quarantined_compound": 0,
         "non_rules": 0,
         "rejected": 0,
@@ -445,14 +445,14 @@
       "filename": "Microsoft volume licensing invoices _ Microsoft Learn.pdf",
       "document_type": "invoice",
       "pages": 9,
-      "total_chars": 12971,
+      "total_chars": 13990,
       "counts": {
-        "raw_candidates": 11,
+        "raw_candidates": 12,
         "canonical_certified": 0,
-        "review_required": 11,
+        "review_required": 10,
         "quarantined_compound": 0,
         "non_rules": 0,
-        "rejected": 0,
+        "rejected": 2,
         "duplicates": 0
       },
       "certification_rate": 0.0
@@ -461,46 +461,46 @@
       "filename": "Understand IRS tax forms issued by Microsoft - Marketplace publisher _ Microsoft Learn.pdf",
       "document_type": "invoice",
       "pages": 4,
-      "total_chars": 6631,
+      "total_chars": 7473,
       "counts": {
-        "raw_candidates": 5,
-        "canonical_certified": 1,
-        "review_required": 4,
+        "raw_candidates": 26,
+        "canonical_certified": 0,
+        "review_required": 17,
         "quarantined_compound": 0,
         "non_rules": 0,
-        "rejected": 0,
+        "rejected": 9,
         "duplicates": 0
       },
-      "certification_rate": 0.2
+      "certification_rate": 0.0
     },
     "DOC-075": {
       "filename": "Understand your invoice for your Microsoft MOSA billing account _ Microsoft Learn.pdf",
       "document_type": "invoice",
       "pages": 8,
-      "total_chars": 10976,
+      "total_chars": 11026,
       "counts": {
         "raw_candidates": 4,
-        "canonical_certified": 0,
+        "canonical_certified": 1,
         "review_required": 3,
         "quarantined_compound": 0,
         "non_rules": 0,
-        "rejected": 1,
+        "rejected": 0,
         "duplicates": 0
       },
-      "certification_rate": 0.0
+      "certification_rate": 0.25
     },
     "DOC-076": {
       "filename": "View or download your invoice in the Microsoft 365 admin center _ Microsoft Learn.pdf",
       "document_type": "invoice",
       "pages": 3,
-      "total_chars": 5037,
+      "total_chars": 5273,
       "counts": {
         "raw_candidates": 4,
         "canonical_certified": 0,
-        "review_required": 3,
+        "review_required": 4,
         "quarantined_compound": 0,
         "non_rules": 0,
-        "rejected": 1,
+        "rejected": 0,
         "duplicates": 0
       },
       "certification_rate": 0.0
@@ -509,7 +509,7 @@
       "filename": "View your Microsoft Store order history _ Microsoft Support.pdf",
       "document_type": "invoice",
       "pages": 3,
-      "total_chars": 4047,
+      "total_chars": 5020,
       "counts": {
         "raw_candidates": 0,
         "canonical_certified": 0,
@@ -525,94 +525,94 @@
       "filename": "Can't get a refund on apps and games from Microsoft Store _ Microsoft Support.pdf",
       "document_type": "refund_policy",
       "pages": 2,
-      "total_chars": 2866,
+      "total_chars": 3593,
       "counts": {
-        "raw_candidates": 3,
-        "canonical_certified": 3,
-        "review_required": 0,
+        "raw_candidates": 13,
+        "canonical_certified": 0,
+        "review_required": 2,
         "quarantined_compound": 0,
         "non_rules": 0,
-        "rejected": 0,
+        "rejected": 11,
         "duplicates": 0
       },
-      "certification_rate": 1.0
+      "certification_rate": 0.0
     },
     "DOC-079": {
       "filename": "Cancel a Microsoft 365 subscription _ Microsoft Support.pdf",
       "document_type": "refund_policy",
       "pages": 4,
-      "total_chars": 5223,
+      "total_chars": 5998,
       "counts": {
-        "raw_candidates": 8,
-        "canonical_certified": 1,
-        "review_required": 5,
+        "raw_candidates": 5,
+        "canonical_certified": 0,
+        "review_required": 2,
         "quarantined_compound": 0,
-        "non_rules": 0,
+        "non_rules": 1,
         "rejected": 2,
         "duplicates": 0
       },
-      "certification_rate": 0.125
+      "certification_rate": 0.0
     },
     "DOC-080": {
       "filename": "Check the status of your Microsoft Store return or refund _ Microsoft Support.pdf",
       "document_type": "refund_policy",
       "pages": 2,
-      "total_chars": 3124,
+      "total_chars": 3921,
       "counts": {
-        "raw_candidates": 1,
+        "raw_candidates": 5,
         "canonical_certified": 1,
-        "review_required": 0,
+        "review_required": 1,
         "quarantined_compound": 0,
         "non_rules": 0,
-        "rejected": 0,
+        "rejected": 3,
         "duplicates": 0
       },
-      "certification_rate": 1.0
+      "certification_rate": 0.2
     },
     "DOC-081": {
       "filename": "Get a refund for apps and games purchased from Microsoft Store _ Microsoft Support.pdf",
       "document_type": "refund_policy",
       "pages": 2,
-      "total_chars": 3028,
+      "total_chars": 3695,
       "counts": {
-        "raw_candidates": 2,
-        "canonical_certified": 2,
-        "review_required": 0,
+        "raw_candidates": 13,
+        "canonical_certified": 0,
+        "review_required": 4,
         "quarantined_compound": 0,
         "non_rules": 0,
-        "rejected": 0,
+        "rejected": 9,
         "duplicates": 0
       },
-      "certification_rate": 1.0
+      "certification_rate": 0.0
     },
     "DOC-082": {
       "filename": "Get an exchange or refund on devices bought from Microsoft _ Microsoft Support.pdf",
       "document_type": "refund_policy",
       "pages": 4,
-      "total_chars": 4782,
+      "total_chars": 5578,
       "counts": {
-        "raw_candidates": 11,
-        "canonical_certified": 6,
-        "review_required": 0,
+        "raw_candidates": 20,
+        "canonical_certified": 1,
+        "review_required": 8,
         "quarantined_compound": 0,
         "non_rules": 0,
-        "rejected": 5,
+        "rejected": 11,
         "duplicates": 0
       },
-      "certification_rate": 0.5455
+      "certification_rate": 0.05
     },
     "DOC-083": {
       "filename": "How to get a refund on a Microsoft subscription _ Microsoft Support.pdf",
       "document_type": "refund_policy",
       "pages": 5,
-      "total_chars": 6025,
+      "total_chars": 7062,
       "counts": {
-        "raw_candidates": 6,
+        "raw_candidates": 11,
         "canonical_certified": 0,
-        "review_required": 6,
+        "review_required": 7,
         "quarantined_compound": 0,
         "non_rules": 0,
-        "rejected": 0,
+        "rejected": 4,
         "duplicates": 0
       },
       "certification_rate": 0.0
@@ -621,30 +621,30 @@
       "filename": "Microsoft subscription refund policy _ Microsoft Support.pdf",
       "document_type": "refund_policy",
       "pages": 4,
-      "total_chars": 5446,
+      "total_chars": 6692,
       "counts": {
-        "raw_candidates": 8,
-        "canonical_certified": 2,
-        "review_required": 4,
+        "raw_candidates": 24,
+        "canonical_certified": 3,
+        "review_required": 18,
         "quarantined_compound": 0,
         "non_rules": 0,
-        "rejected": 2,
+        "rejected": 3,
         "duplicates": 0
       },
-      "certification_rate": 0.25
+      "certification_rate": 0.125
     },
     "DOC-085": {
       "filename": "Microsoft Entra deployment plans - Microsoft Entra _ Microsoft Learn.pdf",
       "document_type": "technical_documentation",
       "pages": 5,
-      "total_chars": 9759,
+      "total_chars": 9877,
       "counts": {
-        "raw_candidates": 2,
+        "raw_candidates": 7,
         "canonical_certified": 0,
-        "review_required": 2,
+        "review_required": 5,
         "quarantined_compound": 0,
-        "non_rules": 0,
-        "rejected": 0,
+        "non_rules": 1,
+        "rejected": 1,
         "duplicates": 0
       },
       "certification_rate": 0.0
@@ -653,7 +653,7 @@
       "filename": "Microsoft Entra operations reference guide - Microsoft Entra _ Microsoft Learn.pdf",
       "document_type": "technical_documentation",
       "pages": 2,
-      "total_chars": 2320,
+      "total_chars": 2420,
       "counts": {
         "raw_candidates": 2,
         "canonical_certified": 0,
@@ -669,39 +669,39 @@
       "filename": "Microsoft Entra security operations guide - Microsoft Entra _ Microsoft Learn.pdf",
       "document_type": "technical_documentation",
       "pages": 8,
-      "total_chars": 17580,
+      "total_chars": 17605,
       "counts": {
-        "raw_candidates": 10,
-        "canonical_certified": 0,
-        "review_required": 10,
+        "raw_candidates": 8,
+        "canonical_certified": 1,
+        "review_required": 4,
         "quarantined_compound": 0,
-        "non_rules": 0,
-        "rejected": 0,
+        "non_rules": 2,
+        "rejected": 1,
         "duplicates": 0
       },
-      "certification_rate": 0.0
+      "certification_rate": 0.125
     },
     "DOC-088": {
       "filename": "Protect APIs by using Azure Application Gateway and Azure API Management - Azure Architecture Center _ Microsoft Learn.pdf",
       "document_type": "technical_documentation",
       "pages": 7,
-      "total_chars": 12247,
+      "total_chars": 12566,
       "counts": {
-        "raw_candidates": 7,
-        "canonical_certified": 0,
-        "review_required": 7,
+        "raw_candidates": 10,
+        "canonical_certified": 1,
+        "review_required": 9,
         "quarantined_compound": 0,
         "non_rules": 0,
         "rejected": 0,
         "duplicates": 0
       },
-      "certification_rate": 0.0
+      "certification_rate": 0.1
     },
     "DOC-089": {
       "filename": "Security Copilot in Microsoft Entra _ Microsoft Learn.pdf",
       "document_type": "technical_documentation",
       "pages": 4,
-      "total_chars": 5555,
+      "total_chars": 5573,
       "counts": {
         "raw_candidates": 2,
         "canonical_certified": 0,
@@ -717,27 +717,27 @@
       "filename": "What is Microsoft Entra_ - Microsoft Entra _ Microsoft Learn.pdf",
       "document_type": "technical_documentation",
       "pages": 5,
-      "total_chars": 8016,
+      "total_chars": 8063,
       "counts": {
         "raw_candidates": 7,
-        "canonical_certified": 0,
-        "review_required": 7,
+        "canonical_certified": 1,
+        "review_required": 5,
         "quarantined_compound": 0,
-        "non_rules": 0,
+        "non_rules": 1,
         "rejected": 0,
         "duplicates": 0
       },
-      "certification_rate": 0.0
+      "certification_rate": 0.1429
     }
   },
-  "end_time": "2026-10-22T12:32:39.451214+00:00",
-  "duration_seconds": 35.97,
+  "end_time": "2026-11-14T05:42:59.447181+00:00",
+  "duration_seconds": 199.71,
   "summary_rates": {
-    "automated_certification_rate": 0.0431,
-    "human_review_rate": 0.8757,
-    "quarantine_rate": 0.0083,
-    "non_rule_rate": 0.007,
-    "rejection_rate": 0.0646,
-    "duplicate_rate": 0.0012
+    "automated_certification_rate": 0.1171,
+    "human_review_rate": 0.6921,
+    "quarantine_rate": 0.0068,
+    "non_rule_rate": 0.0267,
+    "rejection_rate": 0.1533,
+    "duplicate_rate": 0.0039
   }
 }

@@ -2,13 +2,15 @@
   "document_id": "DOC-060",
   "filename": "Migrate EA to Microsoft Customer Agreement APIs - Azure - Microsoft Cost Management _ Microsoft Learn.pdf",
   "page_count": 11,
-  "total_characters": 26875,
-  "block_count": 160,
-  "table_count": 0,
-  "parsing_status": "PASS",
+  "total_characters": 29334,
+  "block_count": 158,
+  "table_count": 31,
+  "parsing_status": "PASS_WITH_MINOR_ISSUES",
   "major_issues": [],
-  "minor_issues": [],
-  "all_issues_count": 0,
+  "minor_issues": [
+    "Header/footer repetition in body text: 5 repeating phrases detected"
+  ],
+  "all_issues_count": 1,
   "reading_order_fidelity": "PASS",
   "table_fidelity": "PASS"
 }

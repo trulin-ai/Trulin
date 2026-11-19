@@ -1,0 +1,812 @@
+[
+  {
+    "sample_num": 1,
+    "doc_type": "contract",
+    "doc_title": "Mcaps Msft Gsa Commercial Supp",
+    "subject": "Customer",
+    "predicate": "remains_liable_for",
+    "object": "updating the virtual machines (VMs) in C",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 2,
+    "doc_type": "contract",
+    "doc_title": "Enterprise Subscription Enroll",
+    "subject": "Affiliate",
+    "predicate": "grants_product_license",
+    "object": "Additional Products and Services",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 3,
+    "doc_type": "contract",
+    "doc_title": "Mcaps Msft Gsa Commercial Supp",
+    "subject": "Customer",
+    "predicate": "remains_liable_for",
+    "object": "all costs and fees related to such audit",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 4,
+    "doc_type": "contract",
+    "doc_title": "Mcaps Msft Gsa Commercial Supp",
+    "subject": "Company",
+    "predicate": "has_permitted_use_scope",
+    "object": "your Windows diagnostic data (Required o",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 5,
+    "doc_type": "contract",
+    "doc_title": "Mcaps Msft Gsa Commercial Supp",
+    "subject": "User",
+    "predicate": "has_permitted_use_scope",
+    "object": "your work or school account to sign in t",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 6,
+    "doc_type": "contract",
+    "doc_title": "Mcaps Msft Gsa Commercial Supp",
+    "subject": "Customer",
+    "predicate": "authorizes_financial_assessment",
+    "object": "Microsoft to share with VMware its statu",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 7,
+    "doc_type": "contract",
+    "doc_title": "Mcaps Msft Gsa Commercial Supp",
+    "subject": "User",
+    "predicate": "has_permitted_use_scope",
+    "object": "a virtual machine provided by Azure DevO",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 8,
+    "doc_type": "contract",
+    "doc_title": "Microsoft Partner Agreement (I",
+    "subject": "Microsoft Partner Agreement (Indirect)",
+    "predicate": "has_liability_cap",
+    "object": "THE TOTAL CUMULATIVE LIABILITY (IF ANY) ",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 9,
+    "doc_type": "contract",
+    "doc_title": "Mcaps Msft Gsa Commercial Supp",
+    "subject": "Customer",
+    "predicate": "has_permitted_use_scope",
+    "object": "Azure Virtual Desktop Windows, and Windo",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 10,
+    "doc_type": "contract",
+    "doc_title": "Migrate Ea To Microsoft Custom",
+    "subject": "Subscription",
+    "predicate": "has_example_value",
+    "object": "/subscriptions/{subscriptionId}",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 11,
+    "doc_type": "contract",
+    "doc_title": "Microsoft Partner Agreement (D",
+    "subject": "Microsoft",
+    "predicate": "has_audit_verification_right",
+    "object": "Relevant Records include, but may not be",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 12,
+    "doc_type": "contract",
+    "doc_title": "Mcaps Msft Gsa Commercial Supp",
+    "subject": "Microsoft",
+    "predicate": "warrants_professional_standards",
+    "object": "Professional Services with professional ",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 13,
+    "doc_type": "contract",
+    "doc_title": "Enterprise Subscription Enroll",
+    "subject": "Subscription",
+    "predicate": "has_audit_verification_right",
+    "object": "Microsoft may, in its discretion and at ",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 14,
+    "doc_type": "contract",
+    "doc_title": "Mcaps Msft Gsa Commercial Supp",
+    "subject": "Customer",
+    "predicate": "has_permitted_use_scope",
+    "object": "Windows Server in any number of Base Ins",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 15,
+    "doc_type": "contract",
+    "doc_title": "Mcaps Msft Gsa Commercial Supp",
+    "subject": "User",
+    "predicate": "has_permitted_use_scope",
+    "object": "and control your personal data that Micr",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 16,
+    "doc_type": "contract",
+    "doc_title": "Mcaps Msft Gsa Commercial Supp",
+    "subject": "User",
+    "predicate": "has_permitted_use_scope",
+    "object": "the privacy controls within your Office ",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 17,
+    "doc_type": "contract",
+    "doc_title": "Microsoft Partner Agreement (I",
+    "subject": "Microsoft",
+    "predicate": "has_permitted_use_scope",
+    "object": "Except as otherwise expressly granted in",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 18,
+    "doc_type": "contract",
+    "doc_title": "Migrate Ea To Microsoft Custom",
+    "subject": "MeterRegion",
+    "predicate": "has_stage_duration",
+    "object": "Exact string values might differ.",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 19,
+    "doc_type": "contract",
+    "doc_title": "Enterprise Subscription Enroll",
+    "subject": "Subscription",
+    "predicate": "can_cancel_before_shipment",
+    "object": "be cancelled",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 20,
+    "doc_type": "contract",
+    "doc_title": "Microsoft Partner Agreement (I",
+    "subject": "Company",
+    "predicate": "has_permitted_use_scope",
+    "object": "all reasonable measures to ensure that C",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 21,
+    "doc_type": "contract",
+    "doc_title": "Mcaps Msft Gsa Commercial Supp",
+    "subject": "Customer",
+    "predicate": "remains_liable_for",
+    "object": "inspecting the Appliance upon receipt fr",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 22,
+    "doc_type": "contract",
+    "doc_title": "Microsoft Partner Agreement (D",
+    "subject": "Company",
+    "predicate": "has_evidence_submission_deadline",
+    "object": "obtain a Customer Purchase Commitment pr",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 23,
+    "doc_type": "contract",
+    "doc_title": "Mcaps Msft Gsa Commercial Supp",
+    "subject": "User",
+    "predicate": "has_permitted_use_scope",
+    "object": "and edit your data by signing in at MSDN",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 24,
+    "doc_type": "contract",
+    "doc_title": "Microsoft Partner Agreement (D",
+    "subject": "Microsoft",
+    "predicate": "promptly_notify",
+    "object": "Company of the termination of any of its",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 25,
+    "doc_type": "contract",
+    "doc_title": "Migrate Ea To Microsoft Custom",
+    "subject": "Billing subscriptions",
+    "predicate": "has_billing_schedule",
+    "object": "{scope}/billingSubscriptions",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 26,
+    "doc_type": "contract",
+    "doc_title": "Mcaps Msft Gsa Commercial Supp",
+    "subject": "Microsoft",
+    "predicate": "remains_liable_for",
+    "object": "its Subprocessors' compliance with Micro",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 27,
+    "doc_type": "contract",
+    "doc_title": "Agreement For Leasing Or Renti",
+    "subject": "Company",
+    "predicate": "has_indemnification_obligation",
+    "object": "defend, indemnify, and hold harmless Mic",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 28,
+    "doc_type": "contract",
+    "doc_title": "Mcaps Msft Gsa Commercial Supp",
+    "subject": "Customer",
+    "predicate": "has_permitted_use_scope",
+    "object": "the permitted lower edition in place of ",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 29,
+    "doc_type": "contract",
+    "doc_title": "Microsoft Customer Agreement",
+    "subject": "Customers",
+    "predicate": "has_liability_cap",
+    "object": "Limitation of liability Subject to the E",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 30,
+    "doc_type": "contract",
+    "doc_title": "Mcaps Msft Gsa Commercial Supp",
+    "subject": "Customer",
+    "predicate": "has_permitted_use_scope",
+    "object": "the publish to web functionality to shar",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 31,
+    "doc_type": "contract",
+    "doc_title": "Mcaps Msft Gsa Commercial Supp",
+    "subject": "User",
+    "predicate": "has_dispute_resolution_preference",
+    "object": "always contact Microsoft at the address ",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 32,
+    "doc_type": "contract",
+    "doc_title": "Microsoft Customer Agreement",
+    "subject": "Customer",
+    "predicate": "has_refund_eligibility",
+    "object": "If Microsoft is unable to resolve a clai",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 33,
+    "doc_type": "contract",
+    "doc_title": "Microsoft Customer Agreement",
+    "subject": "Either party",
+    "predicate": "must_be_in_writing",
+    "object": "writing",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 34,
+    "doc_type": "contract",
+    "doc_title": "Mcaps Msft Gsa Commercial Supp",
+    "subject": "Customer",
+    "predicate": "remains_liable_for",
+    "object": "ensuring that third parties who access, ",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 35,
+    "doc_type": "contract",
+    "doc_title": "Microsoft Customer Agreement",
+    "subject": "Customer",
+    "predicate": "authorizes_recurring_charges",
+    "object": "Microsoft to charge Customer's payment m",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 36,
+    "doc_type": "contract",
+    "doc_title": "Microsoft Customer Agreement",
+    "subject": "Customer",
+    "predicate": "has_liability_cap",
+    "object": "To the extent permitted by applicable la",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 37,
+    "doc_type": "contract",
+    "doc_title": "Migrate Ea To Microsoft Custom",
+    "subject": "MeterSubCategory",
+    "predicate": "has_stage_duration",
+    "object": "Exact string values might differ.",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 38,
+    "doc_type": "contract",
+    "doc_title": "Mcaps Msft Gsa Commercial Supp",
+    "subject": "Microsoft",
+    "predicate": "promptly_notify",
+    "object": "Customer and provide a copy of the deman",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 39,
+    "doc_type": "contract",
+    "doc_title": "Mcaps Msft Gsa Commercial Supp",
+    "subject": "Customer",
+    "predicate": "may_order_for_affiliate",
+    "object": "Products for use by its Affiliates",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 40,
+    "doc_type": "contract",
+    "doc_title": "Microsoft Partner Agreement (D",
+    "subject": "Company",
+    "predicate": "has_permitted_use_scope",
+    "object": "all reasonable measures to ensure that C",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 41,
+    "doc_type": "contract",
+    "doc_title": "Microsoft Partner Agreement (I",
+    "subject": "Microsoft",
+    "predicate": "has_permitted_use_scope",
+    "object": "a third-party auditor, or an audit relat",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 42,
+    "doc_type": "contract",
+    "doc_title": "Mcaps Msft Gsa Commercial Supp",
+    "subject": "Customer",
+    "predicate": "has_permitted_use_scope",
+    "object": "the Azure Stack HCI software as long as ",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 43,
+    "doc_type": "contract",
+    "doc_title": "Microsoft Customer Agreement",
+    "subject": "Customer",
+    "predicate": "must_pay_for_services_before_termination",
+    "object": "for all services provided or used before",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 44,
+    "doc_type": "contract",
+    "doc_title": "Mcaps Msft Gsa Commercial Supp",
+    "subject": "Customer",
+    "predicate": "remains_liable_for",
+    "object": "all of the obligations under its volume ",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 45,
+    "doc_type": "contract",
+    "doc_title": "Microsoft Partner Agreement (I",
+    "subject": "Microsoft",
+    "predicate": "may_terminate_without_cause",
+    "object": "these Channel Terms immediately upon wri",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 46,
+    "doc_type": "contract",
+    "doc_title": "Mcaps Msft Gsa Commercial Supp",
+    "subject": "Microsoft",
+    "predicate": "has_indemnification_obligation",
+    "object": "have no obligation to indemnify the data",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 47,
+    "doc_type": "contract",
+    "doc_title": "Migrate Ea To Microsoft Custom",
+    "subject": "ServiceTier",
+    "predicate": "has_stage_duration",
+    "object": "Exact string values might differ.",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 48,
+    "doc_type": "contract",
+    "doc_title": "Microsoft Customer Agreement",
+    "subject": "Customer",
+    "predicate": "may_receive_store_credit",
+    "object": "If any payment is returned unpaid or if ",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 49,
+    "doc_type": "contract",
+    "doc_title": "Microsoft Partner Agreement (I",
+    "subject": "Either party",
+    "predicate": "may_terminate_without_cause",
+    "object": "this Channel Authorization at any time w",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 50,
+    "doc_type": "contract",
+    "doc_title": "Mcaps Msft Gsa Commercial Supp",
+    "subject": "Customer",
+    "predicate": "remains_liable_for",
+    "object": "obtaining at government Customer's own r",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 51,
+    "doc_type": "contract",
+    "doc_title": "Mcaps Msft Gsa Commercial Supp",
+    "subject": "Customer",
+    "predicate": "has_permitted_use_scope",
+    "object": "the fonts installed by that Online Servi",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 52,
+    "doc_type": "contract",
+    "doc_title": "Mcaps Msft Gsa Commercial Supp",
+    "subject": "Customer",
+    "predicate": "applies_to_contract_orders",
+    "object": "such Affiliates",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 53,
+    "doc_type": "contract",
+    "doc_title": "Mcaps Msft Gsa Commercial Supp",
+    "subject": "Each party",
+    "predicate": "has_permitted_use_scope",
+    "object": "and use the advertising ID (much the sam",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 54,
+    "doc_type": "contract",
+    "doc_title": "Mcaps Msft Gsa Commercial Supp",
+    "subject": "The liability of the subprocessor",
+    "predicate": "has_liability_cap",
+    "object": "be limited to its own processing operati",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 55,
+    "doc_type": "contract",
+    "doc_title": "Mcaps Msft Gsa Commercial Supp",
+    "subject": "Customer",
+    "predicate": "has_permitted_use_scope",
+    "object": "and use Azure DevOps to develop and test",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 56,
+    "doc_type": "contract",
+    "doc_title": "Microsoft Partner Agreement (D",
+    "subject": "Microsoft",
+    "predicate": "cannot_be_cancelled",
+    "object": "be liable to Company, any of its Indirec",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 57,
+    "doc_type": "contract",
+    "doc_title": "Microsoft Customer Agreement",
+    "subject": "Customer",
+    "predicate": "requires_tax_payment",
+    "object": "any applicable value added, goods and se",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 58,
+    "doc_type": "contract",
+    "doc_title": "Mcaps Msft Gsa Commercial Supp",
+    "subject": "User",
+    "predicate": "has_permitted_use_scope",
+    "object": "the software under the same License at t",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 59,
+    "doc_type": "contract",
+    "doc_title": "Microsoft Customer Agreement",
+    "subject": "Customer",
+    "predicate": "must_pay_unpaid_invoices_immediately",
+    "object": "for all unpaid usage as of the terminati",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 60,
+    "doc_type": "contract",
+    "doc_title": "Microsoft Customer Agreement",
+    "subject": "Microsoft",
+    "predicate": "has_late_payment_penalty_rate",
+    "object": "Microsoft may, at its option, assess a l",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 61,
+    "doc_type": "regulatory_compliance",
+    "doc_title": "Microsoftproductandservicesdpa",
+    "subject": "The subject-matter of the processing is",
+    "predicate": "limited_to",
+    "object": "Personal Data within the scope of the se",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 62,
+    "doc_type": "regulatory_compliance",
+    "doc_title": "Microsoftproductandservicesdpa",
+    "subject": "Customer",
+    "predicate": "remains_liable_for",
+    "object": "implementing and maintaining privacy pro",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 63,
+    "doc_type": "regulatory_compliance",
+    "doc_title": "Microsoftproductandservicesdpa",
+    "subject": "Customer",
+    "predicate": "remains_liable_for",
+    "object": "responding to any request from a third p",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 64,
+    "doc_type": "regulatory_compliance",
+    "doc_title": "Microsoftproductandservicesdpa",
+    "subject": "Microsoft",
+    "predicate": "promptly_notify",
+    "object": "Customer unless prohibited by law",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 65,
+    "doc_type": "regulatory_compliance",
+    "doc_title": "Microsoftproductandservicesdpa",
+    "subject": "Customer",
+    "predicate": "remains_liable_for",
+    "object": "making an independent determination as t",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 66,
+    "doc_type": "regulatory_compliance",
+    "doc_title": "Microsoftproductandservicesdpa",
+    "subject": "Microsoft",
+    "predicate": "has_indemnification_obligation",
+    "object": "indemnify a data subject for any materia",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 67,
+    "doc_type": "regulatory_compliance",
+    "doc_title": "Microsoftproductandservicesdpa",
+    "subject": "Customer",
+    "predicate": "remains_liable_for",
+    "object": "obtaining any appropriate consent from e",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 68,
+    "doc_type": "regulatory_compliance",
+    "doc_title": "Microsoftproductandservicesdpa",
+    "subject": "Indemnification under Section 2 is",
+    "predicate": "limited_to",
+    "object": "material and non material damages as pro",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 69,
+    "doc_type": "regulatory_compliance",
+    "doc_title": "Microsoftproductandservicesdpa",
+    "subject": "Microsoft",
+    "predicate": "promptly_notify",
+    "object": "Customer and provide a copy of the deman",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 70,
+    "doc_type": "regulatory_compliance",
+    "doc_title": "Microsoftproductandservicesdpa",
+    "subject": "Customer",
+    "predicate": "remains_liable_for",
+    "object": "complying with its obligations under inc",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 71,
+    "doc_type": "regulatory_compliance",
+    "doc_title": "Microsoftproductandservicesdpa",
+    "subject": "Microsoft",
+    "predicate": "has_indemnification_obligation",
+    "object": "have no obligation to indemnify the data",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 72,
+    "doc_type": "regulatory_compliance",
+    "doc_title": "Microsoftproductandservicesdpa",
+    "subject": "Customer",
+    "predicate": "authorizes_financial_assessment",
+    "object": "Microsoft",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 73,
+    "doc_type": "regulatory_compliance",
+    "doc_title": "Microsoftproductandservicesdpa",
+    "subject": "Customer",
+    "predicate": "remains_liable_for",
+    "object": "(i) providing notice to data subjects, i",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 74,
+    "doc_type": "regulatory_compliance",
+    "doc_title": "Microsoftproductandservicesdpa",
+    "subject": "Customer",
+    "predicate": "has_permitted_use_scope",
+    "object": "export, and delete EDDA at any time, inc",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 75,
+    "doc_type": "regulatory_compliance",
+    "doc_title": "Microsoftproductandservicesdpa",
+    "subject": "Microsoft",
+    "predicate": "may_modify_or_discontinue_product",
+    "object": "or terminate a Product or Professional S",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 76,
+    "doc_type": "hr_policy",
+    "doc_title": "Privacy In Microsoft Cloud Ser",
+    "subject": "Customer",
+    "predicate": "remains_responsible_for",
+    "object": "ensuring its use and disclosure of perso",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 77,
+    "doc_type": "hr_policy",
+    "doc_title": "Human Rights Transparency Repo",
+    "subject": "Employee",
+    "predicate": "has_permitted_use_scope",
+    "object": "We are committed to fostering a culture ",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 78,
+    "doc_type": "hr_policy",
+    "doc_title": "Privacy In Microsoft Cloud Ser",
+    "subject": "Data",
+    "predicate": "has_permitted_use_scope",
+    "object": "subcontractors that provide sufficient g",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 79,
+    "doc_type": "hr_policy",
+    "doc_title": "Privacy In Microsoft Cloud Ser",
+    "subject": "Microsoft",
+    "predicate": "has_notice_period",
+    "object": "IT Outsourcing Policy Where the services",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 80,
+    "doc_type": "hr_policy",
+    "doc_title": "Privacy In Microsoft Cloud Ser",
+    "subject": "The Office of the Australian Information Commissioner",
+    "predicate": "remains_liable_for",
+    "object": "administering the Privacy Act 1988",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 81,
+    "doc_type": "hr_policy",
+    "doc_title": "Privacy In Microsoft Cloud Ser",
+    "subject": "Data",
+    "predicate": "must_delete_data",
+    "object": "or destroy all personal information whic",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 82,
+    "doc_type": "refund_policy",
+    "doc_title": "Get An Exchange Or Refund On D",
+    "subject": "User",
+    "predicate": "has_return_window",
+    "object": "enjoy peace of mind with up to 60-day re",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 83,
+    "doc_type": "refund_policy",
+    "doc_title": "Microsoft Subscription Refund ",
+    "subject": "Subscription",
+    "predicate": "has_return_window",
+    "object": "In addition, you're entitled to a refund",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 84,
+    "doc_type": "refund_policy",
+    "doc_title": "Check The Status Of Your Micro",
+    "subject": "Microsoft",
+    "predicate": "has_refund_eligibility",
+    "object": "pre-order Status of a Subscriptions Hard",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 85,
+    "doc_type": "refund_policy",
+    "doc_title": "Microsoft Subscription Refund ",
+    "subject": "Microsoft",
+    "predicate": "has_resolution_path",
+    "object": "offer a prorated refund when an eligible",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 86,
+    "doc_type": "refund_policy",
+    "doc_title": "Microsoft Subscription Refund ",
+    "subject": "Subscription",
+    "predicate": "has_return_window",
+    "object": "All other To receive a prorated countrie",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 87,
+    "doc_type": "invoice",
+    "doc_title": "Set Up Billing For Microsoft C",
+    "subject": "User",
+    "predicate": "has_permitted_use_scope",
+    "object": "the data by switching scopes",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 88,
+    "doc_type": "invoice",
+    "doc_title": "Set Up Billing For Microsoft C",
+    "subject": "Customer",
+    "predicate": "must_verify_refund_conditions",
+    "object": "verify the placement of RI charges immed",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 89,
+    "doc_type": "invoice",
+    "doc_title": "Understand Your Invoice For Yo",
+    "subject": "Microsoft",
+    "predicate": "may_apply_administration_fee",
+    "object": "The amount billed for your subscription ",
+    "verdict": "VALID"
+  },
+  {
+    "sample_num": 90,
+    "doc_type": "technical_documentation",
+    "doc_title": "Microsoft Entra Security Opera",
+    "subject": "The owner of the group",
+    "predicate": "can_approve_or_deny",
+    "object": "membership requests and can delegate con",
+    "verdict": "VALID"
+  }
+]

@@ -5,31 +5,31 @@
   "evaluation_methodology": "AUTOMATED_GATE_HEURISTIC (Awaiting Human Gold Reference)",
   "claim_counts": {
     "candidate_claims": 2,
-    "valid": 2,
+    "valid": 0,
     "invalid": 0,
     "missed": 0,
     "duplicate": 0,
-    "ambiguous": 0,
+    "ambiguous": 2,
     "malformed": 0
   },
   "metrics": {
-    "claim_precision": 1.0,
+    "claim_precision": 0.0,
     "claim_recall": 1.0,
-    "f1": 1.0,
+    "f1": 0.0,
     "evidence_supported_rate": 1.0,
     "locator_accuracy_rate": 1.0,
     "duplicate_rate": 0.0
   },
-  "human_review_required": false,
+  "human_review_required": true,
   "failure_patterns": [],
   "claims": [
     {
       "subject": "Organizations",
       "predicate": "continuously_evaluate",
       "object": "their identity practices as Microsoft products and services evolve over time",
-      "disposition": "AUTOMATED_CHECKS_PASSED",
-      "trust_score": 0.975,
-      "decision_reason": "APPROVED: All 6 dimensions verified. Trust score: 97.5%.",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Predicate failure: Predicate 'continuously_evaluate' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'continuously_evaluate' is not a canonical registered predicate.",
       "evidence_supported": true,
       "locator_valid": true
     },
@@ -37,9 +37,9 @@
       "subject": "Recommendations",
       "predicate": "change",
       "object": "when organizations subscribe to a different Microsoft Entra ID P1 or P2 license",
-      "disposition": "AUTOMATED_CHECKS_PASSED",
-      "trust_score": 0.99,
-      "decision_reason": "APPROVED: All 6 dimensions verified. Trust score: 99.0%.",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Predicate failure: Predicate 'change' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'change' is not a canonical registered predicate.",
       "evidence_supported": true,
       "locator_valid": true
     }

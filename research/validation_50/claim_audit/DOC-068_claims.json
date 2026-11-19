@@ -4,32 +4,172 @@
   "document_type": "hr_policy",
   "evaluation_methodology": "AUTOMATED_GATE_HEURISTIC (Awaiting Human Gold Reference)",
   "claim_counts": {
-    "candidate_claims": 1,
-    "valid": 1,
-    "invalid": 0,
+    "candidate_claims": 15,
+    "valid": 0,
+    "invalid": 13,
     "missed": 0,
-    "duplicate": 0,
-    "ambiguous": 0,
+    "duplicate": 5,
+    "ambiguous": 2,
     "malformed": 0
   },
   "metrics": {
-    "claim_precision": 1.0,
+    "claim_precision": 0.0,
     "claim_recall": 1.0,
-    "f1": 1.0,
-    "evidence_supported_rate": 1.0,
+    "f1": 0.0,
+    "evidence_supported_rate": 0.9333,
     "locator_accuracy_rate": 1.0,
-    "duplicate_rate": 0.0
+    "duplicate_rate": 0.25
   },
-  "human_review_required": false,
+  "human_review_required": true,
   "failure_patterns": [],
   "claims": [
     {
-      "subject": "Enhanced Candidate Engagement (HR Recruiters)\u2014Copilot",
+      "subject": "Employee",
+      "predicate": "has_enhanced_candidate_engagement",
+      "object": "(HR Recruiters)\u2014Copilot can help",
+      "disposition": "AUTOMATED_CHECKS_FAILED",
+      "trust_score": 0.0,
+      "decision_reason": "[FRAGMENT_ASSERTION_DISCARDED] Text integrity failure: Injected predicate identifier or taxonomy slug in claim text: 'has_enhanced_candidate_engagement'.; Predicate failure: Predicate 'has_enhanced_candidate_engagement' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'has_enhanced_candidate_engagement' is not a canonical registered predicate.",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
+      "subject": "Employee",
+      "predicate": "has_improve_employee_experience",
+      "object": "with greater engagement and trust",
+      "disposition": "AUTOMATED_CHECKS_FAILED",
+      "trust_score": 0.0,
+      "decision_reason": "[FRAGMENT_ASSERTION_DISCARDED] Text integrity failure: Injected predicate identifier or taxonomy slug in claim text: 'has_improve_employee_experience'.; Predicate failure: Predicate 'has_improve_employee_experience' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'has_improve_employee_experience' is not a canonical registered predicate.",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
+      "subject": "a significant portion of HR inquiries using",
+      "predicate": "has_enhanced_candidate_engagement",
+      "object": "draft communications and recruiters",
+      "disposition": "AUTOMATED_CHECKS_FAILED",
+      "trust_score": 0.0,
+      "decision_reason": "[FRAGMENT_ASSERTION_DISCARDED] Text integrity failure: Injected predicate identifier or taxonomy slug in claim text: 'has_enhanced_candidate_engagement'.; Predicate failure: Predicate 'has_enhanced_candidate_engagement' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'has_enhanced_candidate_engagement' is not a canonical registered predicate.; Modality mismatch failure: Rule assertion lacks operative deontic modal verb (must, may, shall, cannot) or normative table indicator (required, free, deducted, not eligible, no, yes).",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
+      "subject": "Page 1",
+      "predicate": "has_unmapped_table_cell",
+      "object": "empty",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.5,
+      "decision_reason": "[REJECT_DESCRIPTIVE_PURPOSE] Evidence location failure: Verbatim quote 'Column: Improve employee experience | Value:...' was not found in source text.; Clause entailment failure: Missing or unlocated evidence precludes logical entailment.; Subject failure: Subject 'Page 1' contains a page header artifact.; Predicate failure: Predicate 'has_unmapped_table_cell' is not present in versioned taxonomy registry.; Claim type failure: Unrecognized claim type 'non_canonical'.; Evidence grounding failure: Asserted span 'Column: Improve employee experience | Value:' not found in source document text.; Predicate normativity failure: Predicate 'has_unmapped_table_cell' is not a canonical registered predicate.",
+      "evidence_supported": false,
+      "locator_valid": true
+    },
+    {
+      "subject": "Copilot Studio",
+      "predicate": "has_enhanced_candidate_engagement",
+      "object": "can accelerate sourcing via LinkedIn AI-assisted InMail.",
+      "disposition": "AUTOMATED_CHECKS_FAILED",
+      "trust_score": 0.0,
+      "decision_reason": "[FRAGMENT_ASSERTION_DISCARDED] Text integrity failure: Injected predicate identifier or taxonomy slug in claim text: 'has_enhanced_candidate_engagement'.; Predicate failure: Predicate 'has_enhanced_candidate_engagement' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'has_enhanced_candidate_engagement' is not a canonical registered predicate.",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
+      "subject": "HR Operational Efficiency",
+      "predicate": "has_improve_employee_experience",
+      "object": "Reduce costs",
+      "disposition": "AUTOMATED_CHECKS_FAILED",
+      "trust_score": 0.0,
+      "decision_reason": "[FRAGMENT_ASSERTION_DISCARDED] Text integrity failure: Injected predicate identifier or taxonomy slug in claim text: 'has_improve_employee_experience'.; Predicate failure: Predicate 'has_improve_employee_experience' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'has_improve_employee_experience' is not a canonical registered predicate.; Modality mismatch failure: Rule assertion lacks operative deontic modal verb (must, may, shall, cannot) or normative table indicator (required, free, deducted, not eligible, no, yes).",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
+      "subject": "\u2014Citizen-developed",
+      "predicate": "has_enhanced_candidate_engagement",
+      "object": "HR Assisted Support (HR Agents)\u2014",
+      "disposition": "AUTOMATED_CHECKS_FAILED",
+      "trust_score": 0.0,
+      "decision_reason": "[FRAGMENT_ASSERTION_DISCARDED] Text integrity failure: Injected predicate identifier or taxonomy slug in claim text: 'has_enhanced_candidate_engagement'.; Predicate failure: Predicate 'has_enhanced_candidate_engagement' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'has_enhanced_candidate_engagement' is not a canonical registered predicate.; Modality mismatch failure: Rule assertion lacks operative deontic modal verb (must, may, shall, cannot) or normative table indicator (required, free, deducted, not eligible, no, yes).",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
+      "subject": "\u2014Citizen-developed",
+      "predicate": "has_improve_employee_experience",
+      "object": "across tech, operations, and infrastructure",
+      "disposition": "AUTOMATED_CHECKS_FAILED",
+      "trust_score": 0.0,
+      "decision_reason": "[FRAGMENT_ASSERTION_DISCARDED] Text integrity failure: Injected predicate identifier or taxonomy slug in claim text: 'has_improve_employee_experience'.; Predicate failure: Predicate 'has_improve_employee_experience' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'has_improve_employee_experience' is not a canonical registered predicate.; Modality mismatch failure: Rule assertion lacks operative deontic modal verb (must, may, shall, cannot) or normative table indicator (required, free, deducted, not eligible, no, yes).",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
+      "subject": "applications that automate routine tasks",
+      "predicate": "has_enhanced_candidate_engagement",
+      "object": "Copilot generates case summaries and enables more efficient",
+      "disposition": "AUTOMATED_CHECKS_FAILED",
+      "trust_score": 0.0,
+      "decision_reason": "[FRAGMENT_ASSERTION_DISCARDED] Text integrity failure: Injected predicate identifier or taxonomy slug in claim text: 'has_enhanced_candidate_engagement'.; Predicate failure: Predicate 'has_enhanced_candidate_engagement' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'has_enhanced_candidate_engagement' is not a canonical registered predicate.; Modality mismatch failure: Rule assertion lacks operative deontic modal verb (must, may, shall, cannot) or normative table indicator (required, free, deducted, not eligible, no, yes).",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
+      "subject": "Data",
+      "predicate": "has_enhanced_candidate_engagement",
+      "object": "knowledge base retrieval to",
+      "disposition": "AUTOMATED_CHECKS_FAILED",
+      "trust_score": 0.0,
+      "decision_reason": "[FRAGMENT_ASSERTION_DISCARDED] Text integrity failure: Injected predicate identifier or taxonomy slug in claim text: 'has_enhanced_candidate_engagement'.; Predicate failure: Predicate 'has_enhanced_candidate_engagement' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'has_enhanced_candidate_engagement' is not a canonical registered predicate.; Modality mismatch failure: Rule assertion lacks operative deontic modal verb (must, may, shall, cannot) or normative table indicator (required, free, deducted, not eligible, no, yes).",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
+      "subject": "Data",
+      "predicate": "has_enhanced_candidate_engagement",
+      "object": "accelerate case triage and resolution.",
+      "disposition": "AUTOMATED_CHECKS_FAILED",
+      "trust_score": 0.0,
+      "decision_reason": "[FRAGMENT_ASSERTION_DISCARDED] Text integrity failure: Injected predicate identifier or taxonomy slug in claim text: 'has_enhanced_candidate_engagement'.; Predicate failure: Predicate 'has_enhanced_candidate_engagement' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'has_enhanced_candidate_engagement' is not a canonical registered predicate.; Modality mismatch failure: Rule assertion lacks operative deontic modal verb (must, may, shall, cannot) or normative table indicator (required, free, deducted, not eligible, no, yes).",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
+      "subject": "A cross-HR team\u2014AI Orchestration, Adoption, and Impact (OAI)\u2014was formed",
+      "predicate": "has_lessons_learned",
+      "object": "Gather early feedback",
+      "disposition": "AUTOMATED_CHECKS_FAILED",
+      "trust_score": 0.0,
+      "decision_reason": "[FRAGMENT_ASSERTION_DISCARDED] Text integrity failure: Injected predicate identifier or taxonomy slug in claim text: 'has_lessons_learned'.; Predicate failure: Predicate 'has_lessons_learned' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'has_lessons_learned' is not a canonical registered predicate.; Modality mismatch failure: Rule assertion lacks operative deontic modal verb (must, may, shall, cannot) or normative table indicator (required, free, deducted, not eligible, no, yes).",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
+      "subject": "User",
+      "predicate": "has_lessons_learned",
+      "object": "Use pilots to gather critical insights from",
+      "disposition": "AUTOMATED_CHECKS_FAILED",
+      "trust_score": 0.0,
+      "decision_reason": "[FRAGMENT_ASSERTION_DISCARDED] Text integrity failure: Injected predicate identifier or taxonomy slug in claim text: 'has_lessons_learned'.; Predicate failure: Predicate 'has_lessons_learned' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'has_lessons_learned' is not a canonical registered predicate.; Modality mismatch failure: Rule assertion lacks operative deontic modal verb (must, may, shall, cannot) or normative table indicator (required, free, deducted, not eligible, no, yes).",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
+      "subject": "benefits, boosts engagement, and works with L&D partners to train HR professionals to",
+      "predicate": "has_lessons_learned",
+      "object": "select HR users, fine-tuning AI tools before",
+      "disposition": "AUTOMATED_CHECKS_FAILED",
+      "trust_score": 0.0,
+      "decision_reason": "[FRAGMENT_ASSERTION_DISCARDED] Text integrity failure: Injected predicate identifier or taxonomy slug in claim text: 'has_lessons_learned'.; Predicate failure: Predicate 'has_lessons_learned' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'has_lessons_learned' is not a canonical registered predicate.; Modality mismatch failure: Rule assertion lacks operative deontic modal verb (must, may, shall, cannot) or normative table indicator (required, free, deducted, not eligible, no, yes).",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
+      "subject": "Activate global Champs AI",
       "predicate": "help",
-      "object": "draft communications and recruiters can accelerate sourcing via LinkedIn AI-assisted InMail",
-      "disposition": "AUTOMATED_CHECKS_PASSED",
-      "trust_score": 0.99,
-      "decision_reason": "APPROVED: All 6 dimensions verified. Trust score: 99.0%.",
+      "object": "empower a workplace that is dynamic, inclusive Responsible AI use, learning to keep HR program so power users in and forward-thinking",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Predicate failure: Predicate 'help' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'help' is not a canonical registered predicate.",
       "evidence_supported": true,
       "locator_valid": true
     }

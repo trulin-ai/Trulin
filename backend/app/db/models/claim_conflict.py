@@ -8,8 +8,10 @@ from sqlalchemy import (
     Enum,
     ForeignKey,
     Index,
+    JSON,
     Numeric,
     String,
+    Text,
     text,
 )
 from sqlalchemy.dialects.postgresql import UUID
@@ -126,6 +128,47 @@ class ClaimConflict(Base):
 
     resolved_at: Mapped[datetime | None] = mapped_column(
         DateTime(timezone=True),
+        nullable=True,
+    )
+
+    # Master Plan Structured Conflict Contract Fields
+    conflicting_fields: Mapped[list[str] | None] = mapped_column(
+        JSON,
+        nullable=True,
+        default=list,
+    )
+
+    supporting_evidence: Mapped[dict | None] = mapped_column(
+        JSON,
+        nullable=True,
+        default=dict,
+    )
+
+    source_authority: Mapped[dict | None] = mapped_column(
+        JSON,
+        nullable=True,
+        default=dict,
+    )
+
+    applicable_scope: Mapped[dict | None] = mapped_column(
+        JSON,
+        nullable=True,
+        default=dict,
+    )
+
+    effective_dates: Mapped[dict | None] = mapped_column(
+        JSON,
+        nullable=True,
+        default=dict,
+    )
+
+    reviewer_decision: Mapped[str | None] = mapped_column(
+        String(50),
+        nullable=True,
+    )
+
+    resolution_rationale: Mapped[str | None] = mapped_column(
+        Text,
         nullable=True,
     )
 

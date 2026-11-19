@@ -45,6 +45,7 @@ class DocumentResponse(BaseModel):
     created_at: datetime
     updated_at: datetime
     versions: list[DocumentVersionResponse] = Field(default_factory=list)
+    claims_count: int = 0
 
     model_config = ConfigDict(from_attributes=True)
 

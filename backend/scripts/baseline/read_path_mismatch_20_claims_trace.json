@@ -1,0 +1,492 @@
+[
+  {
+    "trace_number": 1,
+    "claim_id": "679ef215-0e90-585b-91ab-574350f1d241",
+    "subject": "Custom corporate agreements",
+    "predicate": "may_override_standard_terms",
+    "persisted_db_status": "verified",
+    "claim_gate_evaluator_live_result": {
+      "all_9_gates_passed": true,
+      "certification_tier": "AUTOMATED_CERTIFIED",
+      "rejection_reasons": []
+    },
+    "universal_gate_evaluator_live_result": {
+      "all_gates_passed": false,
+      "certification_tier": "REJECTED",
+      "rejection_reasons": [
+        "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.",
+        "Clause entailment failure: Missing or unlocated evidence precludes logical entailment."
+      ]
+    },
+    "api_response_status": "verified",
+    "api_response_tier": "AUTOMATED_CERTIFIED",
+    "ui_rendered_badge": "canonical"
+  },
+  {
+    "trace_number": 2,
+    "claim_id": "5fbf0095-a74f-575c-a400-8b480e1f2cf5",
+    "subject": "Return window",
+    "predicate": "has_summary",
+    "persisted_db_status": "candidate",
+    "claim_gate_evaluator_live_result": {
+      "all_9_gates_passed": true,
+      "certification_tier": "AUTOMATED_CERTIFIED",
+      "rejection_reasons": []
+    },
+    "universal_gate_evaluator_live_result": {
+      "all_gates_passed": false,
+      "certification_tier": "REJECTED",
+      "rejection_reasons": [
+        "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.",
+        "Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+        "Predicate failure: Predicate 'has_summary' is not present in versioned taxonomy registry."
+      ]
+    },
+    "api_response_status": "candidate",
+    "api_response_tier": "REVIEW_REQUIRED",
+    "ui_rendered_badge": "canonical"
+  },
+  {
+    "trace_number": 3,
+    "claim_id": "befe53b3-2c00-552d-b3e6-db1e6316789c",
+    "subject": "Refund speed",
+    "predicate": "has_summary",
+    "persisted_db_status": "candidate",
+    "claim_gate_evaluator_live_result": {
+      "all_9_gates_passed": true,
+      "certification_tier": "AUTOMATED_CERTIFIED",
+      "rejection_reasons": []
+    },
+    "universal_gate_evaluator_live_result": {
+      "all_gates_passed": false,
+      "certification_tier": "REJECTED",
+      "rejection_reasons": [
+        "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.",
+        "Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+        "Predicate failure: Predicate 'has_summary' is not present in versioned taxonomy registry."
+      ]
+    },
+    "api_response_status": "candidate",
+    "api_response_tier": "REVIEW_REQUIRED",
+    "ui_rendered_badge": "canonical"
+  },
+  {
+    "trace_number": 4,
+    "claim_id": "a1823bf9-dea7-5983-8a5d-c6dd3d7ff965",
+    "subject": "Return shipping",
+    "predicate": "has_summary",
+    "persisted_db_status": "candidate",
+    "claim_gate_evaluator_live_result": {
+      "all_9_gates_passed": true,
+      "certification_tier": "AUTOMATED_CERTIFIED",
+      "rejection_reasons": []
+    },
+    "universal_gate_evaluator_live_result": {
+      "all_gates_passed": false,
+      "certification_tier": "REJECTED",
+      "rejection_reasons": [
+        "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.",
+        "Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+        "Predicate failure: Predicate 'has_summary' is not present in versioned taxonomy registry."
+      ]
+    },
+    "api_response_status": "candidate",
+    "api_response_tier": "REVIEW_REQUIRED",
+    "ui_rendered_badge": "canonical"
+  },
+  {
+    "trace_number": 5,
+    "claim_id": "ee12e47d-30d8-5c1e-b3cb-19e63fac806b",
+    "subject": "Restocking fee",
+    "predicate": "has_summary",
+    "persisted_db_status": "candidate",
+    "claim_gate_evaluator_live_result": {
+      "all_9_gates_passed": true,
+      "certification_tier": "AUTOMATED_CERTIFIED",
+      "rejection_reasons": []
+    },
+    "universal_gate_evaluator_live_result": {
+      "all_gates_passed": false,
+      "certification_tier": "REJECTED",
+      "rejection_reasons": [
+        "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.",
+        "Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+        "Predicate failure: Predicate 'has_summary' is not present in versioned taxonomy registry."
+      ]
+    },
+    "api_response_status": "candidate",
+    "api_response_tier": "REVIEW_REQUIRED",
+    "ui_rendered_badge": "canonical"
+  },
+  {
+    "trace_number": 6,
+    "claim_id": "97361b26-3077-5f81-8ae6-ec7ceaf90305",
+    "subject": "Final sale items",
+    "predicate": "has_summary",
+    "persisted_db_status": "candidate",
+    "claim_gate_evaluator_live_result": {
+      "all_9_gates_passed": true,
+      "certification_tier": "AUTOMATED_CERTIFIED",
+      "rejection_reasons": []
+    },
+    "universal_gate_evaluator_live_result": {
+      "all_gates_passed": false,
+      "certification_tier": "REJECTED",
+      "rejection_reasons": [
+        "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.",
+        "Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+        "Predicate failure: Predicate 'has_summary' is not present in versioned taxonomy registry."
+      ]
+    },
+    "api_response_status": "candidate",
+    "api_response_tier": "REVIEW_REQUIRED",
+    "ui_rendered_badge": "canonical"
+  },
+  {
+    "trace_number": 7,
+    "claim_id": "33d9a22f-4875-5517-bd5a-16c73ee42987",
+    "subject": "Refund",
+    "predicate": "has_definition",
+    "persisted_db_status": "rejected",
+    "claim_gate_evaluator_live_result": {
+      "all_9_gates_passed": false,
+      "certification_tier": "REJECTED",
+      "rejection_reasons": [
+        "Claim type 'definition' is non-operative (definition, reference, or description)."
+      ]
+    },
+    "universal_gate_evaluator_live_result": {
+      "all_gates_passed": false,
+      "certification_tier": "NON_RULE",
+      "rejection_reasons": [
+        "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.",
+        "Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+        "Claim type failure: 'definition' is a non-rule type (definition, reference, description, example, or revision_history)."
+      ]
+    },
+    "api_response_status": "rejected",
+    "api_response_tier": "REJECTED",
+    "ui_rendered_badge": "rejected"
+  },
+  {
+    "trace_number": 8,
+    "claim_id": "12f39677-43f4-5967-824d-a14efe3addbe",
+    "subject": "Return",
+    "predicate": "has_definition",
+    "persisted_db_status": "rejected",
+    "claim_gate_evaluator_live_result": {
+      "all_9_gates_passed": false,
+      "certification_tier": "REJECTED",
+      "rejection_reasons": [
+        "Claim type 'definition' is non-operative (definition, reference, or description)."
+      ]
+    },
+    "universal_gate_evaluator_live_result": {
+      "all_gates_passed": false,
+      "certification_tier": "NON_RULE",
+      "rejection_reasons": [
+        "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.",
+        "Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+        "Claim type failure: 'definition' is a non-rule type (definition, reference, description, example, or revision_history)."
+      ]
+    },
+    "api_response_status": "rejected",
+    "api_response_tier": "REJECTED",
+    "ui_rendered_badge": "rejected"
+  },
+  {
+    "trace_number": 9,
+    "claim_id": "941149de-eaa7-56a5-9297-58570b58cb4e",
+    "subject": "Exchange",
+    "predicate": "has_definition",
+    "persisted_db_status": "rejected",
+    "claim_gate_evaluator_live_result": {
+      "all_9_gates_passed": false,
+      "certification_tier": "REJECTED",
+      "rejection_reasons": [
+        "Claim type 'definition' is non-operative (definition, reference, or description)."
+      ]
+    },
+    "universal_gate_evaluator_live_result": {
+      "all_gates_passed": false,
+      "certification_tier": "NON_RULE",
+      "rejection_reasons": [
+        "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.",
+        "Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+        "Claim type failure: 'definition' is a non-rule type (definition, reference, description, example, or revision_history)."
+      ]
+    },
+    "api_response_status": "rejected",
+    "api_response_tier": "REJECTED",
+    "ui_rendered_badge": "rejected"
+  },
+  {
+    "trace_number": 10,
+    "claim_id": "56625e97-1a95-5060-a0a5-f61959ed770f",
+    "subject": "Store Credit",
+    "predicate": "has_definition",
+    "persisted_db_status": "rejected",
+    "claim_gate_evaluator_live_result": {
+      "all_9_gates_passed": false,
+      "certification_tier": "REJECTED",
+      "rejection_reasons": [
+        "Claim type 'definition' is non-operative (definition, reference, or description)."
+      ]
+    },
+    "universal_gate_evaluator_live_result": {
+      "all_gates_passed": false,
+      "certification_tier": "NON_RULE",
+      "rejection_reasons": [
+        "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.",
+        "Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+        "Claim type failure: 'definition' is a non-rule type (definition, reference, description, example, or revision_history)."
+      ]
+    },
+    "api_response_status": "rejected",
+    "api_response_tier": "REJECTED",
+    "ui_rendered_badge": "rejected"
+  },
+  {
+    "trace_number": 11,
+    "claim_id": "1b16cddb-3907-5af0-93b4-61685783357f",
+    "subject": "RMA",
+    "predicate": "has_definition",
+    "persisted_db_status": "rejected",
+    "claim_gate_evaluator_live_result": {
+      "all_9_gates_passed": false,
+      "certification_tier": "REJECTED",
+      "rejection_reasons": [
+        "Claim type 'definition' is non-operative (definition, reference, or description)."
+      ]
+    },
+    "universal_gate_evaluator_live_result": {
+      "all_gates_passed": false,
+      "certification_tier": "NON_RULE",
+      "rejection_reasons": [
+        "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.",
+        "Clause entailment failure: Missing or unlocated evidence precludes logical entailment.",
+        "Claim type failure: 'definition' is a non-rule type (definition, reference, description, example, or revision_history)."
+      ]
+    },
+    "api_response_status": "rejected",
+    "api_response_tier": "REJECTED",
+    "ui_rendered_badge": "rejected"
+  },
+  {
+    "trace_number": 12,
+    "claim_id": "a1cc1469-3402-5122-8bd9-37aa49d88efe",
+    "subject": "Customer",
+    "predicate": "has_refund_eligibility",
+    "persisted_db_status": "candidate",
+    "claim_gate_evaluator_live_result": {
+      "all_9_gates_passed": false,
+      "certification_tier": "REVIEW_REQUIRED",
+      "rejection_reasons": [
+        "Clause entailment failure: Direct contradiction: evidence explicitly specifies fees or items are non-refundable."
+      ]
+    },
+    "universal_gate_evaluator_live_result": {
+      "all_gates_passed": false,
+      "certification_tier": "REJECTED",
+      "rejection_reasons": [
+        "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.",
+        "Clause entailment failure: Missing or unlocated evidence precludes logical entailment."
+      ]
+    },
+    "api_response_status": "candidate",
+    "api_response_tier": "REVIEW_REQUIRED",
+    "ui_rendered_badge": "review"
+  },
+  {
+    "trace_number": 13,
+    "claim_id": "311e1132-4c26-5e05-909f-bc2fb2947a97",
+    "subject": "Standard merchandise",
+    "predicate": "has_return_window",
+    "persisted_db_status": "verified",
+    "claim_gate_evaluator_live_result": {
+      "all_9_gates_passed": false,
+      "certification_tier": "REVIEW_REQUIRED",
+      "rejection_reasons": [
+        "Clause entailment failure: Predicate lacks product return/refund cues in evidence."
+      ]
+    },
+    "universal_gate_evaluator_live_result": {
+      "all_gates_passed": false,
+      "certification_tier": "REJECTED",
+      "rejection_reasons": [
+        "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.",
+        "Clause entailment failure: Missing or unlocated evidence precludes logical entailment."
+      ]
+    },
+    "api_response_status": "verified",
+    "api_response_tier": "REVIEW_REQUIRED",
+    "ui_rendered_badge": "review"
+  },
+  {
+    "trace_number": 14,
+    "claim_id": "4c0fe437-4d0b-518e-834f-31d078b9686e",
+    "subject": "Northwind Rewards Gold members",
+    "predicate": "has_return_window",
+    "persisted_db_status": "verified",
+    "claim_gate_evaluator_live_result": {
+      "all_9_gates_passed": false,
+      "certification_tier": "REVIEW_REQUIRED",
+      "rejection_reasons": [
+        "Clause entailment failure: Predicate lacks product return/refund cues in evidence."
+      ]
+    },
+    "universal_gate_evaluator_live_result": {
+      "all_gates_passed": false,
+      "certification_tier": "REJECTED",
+      "rejection_reasons": [
+        "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.",
+        "Clause entailment failure: Missing or unlocated evidence precludes logical entailment."
+      ]
+    },
+    "api_response_status": "verified",
+    "api_response_tier": "REVIEW_REQUIRED",
+    "ui_rendered_badge": "review"
+  },
+  {
+    "trace_number": 15,
+    "claim_id": "2f76936d-fb6b-5101-a43f-96e8cf450d1a",
+    "subject": "Holiday purchases (Nov 1 - Dec 24)",
+    "predicate": "has_return_deadline",
+    "persisted_db_status": "verified",
+    "claim_gate_evaluator_live_result": {
+      "all_9_gates_passed": true,
+      "certification_tier": "AUTOMATED_CERTIFIED",
+      "rejection_reasons": []
+    },
+    "universal_gate_evaluator_live_result": {
+      "all_gates_passed": false,
+      "certification_tier": "REJECTED",
+      "rejection_reasons": [
+        "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.",
+        "Clause entailment failure: Missing or unlocated evidence precludes logical entailment."
+      ]
+    },
+    "api_response_status": "verified",
+    "api_response_tier": "AUTOMATED_CERTIFIED",
+    "ui_rendered_badge": "canonical"
+  },
+  {
+    "trace_number": 16,
+    "claim_id": "a1004510-d65b-5303-b259-a3eb067e017e",
+    "subject": "Footwear (worn indoors only)",
+    "predicate": "has_return_window",
+    "persisted_db_status": "verified",
+    "claim_gate_evaluator_live_result": {
+      "all_9_gates_passed": false,
+      "certification_tier": "REVIEW_REQUIRED",
+      "rejection_reasons": [
+        "Clause entailment failure: Predicate lacks product return/refund cues in evidence."
+      ]
+    },
+    "universal_gate_evaluator_live_result": {
+      "all_gates_passed": false,
+      "certification_tier": "REJECTED",
+      "rejection_reasons": [
+        "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.",
+        "Clause entailment failure: Missing or unlocated evidence precludes logical entailment."
+      ]
+    },
+    "api_response_status": "verified",
+    "api_response_tier": "REVIEW_REQUIRED",
+    "ui_rendered_badge": "review"
+  },
+  {
+    "trace_number": 17,
+    "claim_id": "774ad1c0-c51b-563e-990b-1aca2d6d9ca5",
+    "subject": "Camping tents and sleeping bags (unused)",
+    "predicate": "has_return_window",
+    "persisted_db_status": "verified",
+    "claim_gate_evaluator_live_result": {
+      "all_9_gates_passed": false,
+      "certification_tier": "REVIEW_REQUIRED",
+      "rejection_reasons": [
+        "Clause entailment failure: Predicate lacks product return/refund cues in evidence."
+      ]
+    },
+    "universal_gate_evaluator_live_result": {
+      "all_gates_passed": false,
+      "certification_tier": "REJECTED",
+      "rejection_reasons": [
+        "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.",
+        "Clause entailment failure: Missing or unlocated evidence precludes logical entailment."
+      ]
+    },
+    "api_response_status": "verified",
+    "api_response_tier": "REVIEW_REQUIRED",
+    "ui_rendered_badge": "review"
+  },
+  {
+    "trace_number": 18,
+    "claim_id": "a00ecb32-46be-5387-86d3-7e1d83c91731",
+    "subject": "Defective items",
+    "predicate": "has_resolution_path",
+    "persisted_db_status": "verified",
+    "claim_gate_evaluator_live_result": {
+      "all_9_gates_passed": true,
+      "certification_tier": "AUTOMATED_CERTIFIED",
+      "rejection_reasons": []
+    },
+    "universal_gate_evaluator_live_result": {
+      "all_gates_passed": false,
+      "certification_tier": "REJECTED",
+      "rejection_reasons": [
+        "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.",
+        "Clause entailment failure: Missing or unlocated evidence precludes logical entailment."
+      ]
+    },
+    "api_response_status": "verified",
+    "api_response_tier": "AUTOMATED_CERTIFIED",
+    "ui_rendered_badge": "canonical"
+  },
+  {
+    "trace_number": 19,
+    "claim_id": "2827c6fb-1e4b-5deb-862b-296a80853d64",
+    "subject": "Returns without a receipt",
+    "predicate": "has_return_channel_eligibility",
+    "persisted_db_status": "verified",
+    "claim_gate_evaluator_live_result": {
+      "all_9_gates_passed": true,
+      "certification_tier": "AUTOMATED_CERTIFIED",
+      "rejection_reasons": []
+    },
+    "universal_gate_evaluator_live_result": {
+      "all_gates_passed": false,
+      "certification_tier": "REJECTED",
+      "rejection_reasons": [
+        "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.",
+        "Clause entailment failure: Missing or unlocated evidence precludes logical entailment."
+      ]
+    },
+    "api_response_status": "verified",
+    "api_response_tier": "AUTOMATED_CERTIFIED",
+    "ui_rendered_badge": "canonical"
+  },
+  {
+    "trace_number": 20,
+    "claim_id": "1d34fcb8-bc2d-5436-b377-b6fcfa6315bf",
+    "subject": "Returns without a receipt",
+    "predicate": "has_identity_verification_requirement",
+    "persisted_db_status": "verified",
+    "claim_gate_evaluator_live_result": {
+      "all_9_gates_passed": true,
+      "certification_tier": "AUTOMATED_CERTIFIED",
+      "rejection_reasons": []
+    },
+    "universal_gate_evaluator_live_result": {
+      "all_gates_passed": false,
+      "certification_tier": "REJECTED",
+      "rejection_reasons": [
+        "Evidence failure: Missing ImmutableEvidenceSpan; claim has no physical source grounding.",
+        "Clause entailment failure: Missing or unlocated evidence precludes logical entailment."
+      ]
+    },
+    "api_response_status": "verified",
+    "api_response_tier": "AUTOMATED_CERTIFIED",
+    "ui_rendered_badge": "canonical"
+  }
+]

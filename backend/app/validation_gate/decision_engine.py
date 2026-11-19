@@ -221,7 +221,7 @@ class ClaimLifecycleDecisionEngine:
         ev_id = getattr(candidate, "evidence_id", None)
         if source_uid and ev_id:
             clean_ev_id = ev_id.removeprefix("ev:")
-            if clean_ev_id != source_uid:
+            if clean_ev_id != source_uid and not clean_ev_id.startswith(f"{source_uid}:"):
                 decision = ClaimLifecycleDecision.REJECT
                 decision_code = DecisionCode.EVIDENCE_CANDIDATE_MISMATCH
                 reason = f"REJECTED: Evidence pointer mismatch. Candidate source unit '{source_uid}' does not match evidence unit '{ev_id}'."

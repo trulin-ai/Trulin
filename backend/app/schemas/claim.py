@@ -56,6 +56,7 @@ class ClaimTrustScoreResponse(BaseModel):
 class ClaimResponse(BaseModel):
     id: uuid.UUID
     organization_id: uuid.UUID
+    document_id: uuid.UUID | None = None
     document_version_id: uuid.UUID
     claim_text: str
     subject: str | None = None
@@ -110,6 +111,8 @@ class ClaimResponse(BaseModel):
         self.agent_accessible = is_canon
         self.certification_tier = tier
         self.rejection_reasons = res.rejection_reasons
+        if not self.document_id and self.evidence and len(self.evidence) > 0:
+            self.document_id = self.evidence[0].document_id
         return self
 
 

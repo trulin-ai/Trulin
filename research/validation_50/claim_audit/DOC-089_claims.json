@@ -6,10 +6,10 @@
   "claim_counts": {
     "candidate_claims": 2,
     "valid": 0,
-    "invalid": 2,
+    "invalid": 0,
     "missed": 0,
     "duplicate": 0,
-    "ambiguous": 0,
+    "ambiguous": 2,
     "malformed": 0
   },
   "metrics": {
@@ -24,22 +24,22 @@
   "failure_patterns": [],
   "claims": [
     {
-      "subject": "Users",
+      "subject": "User",
       "predicate": "has_validity_rule",
       "object": "start using natural language prompts to help remediate identity-based incidents",
-      "disposition": "AUTOMATED_CHECKS_FAILED",
-      "trust_score": 0.8,
-      "decision_reason": "REJECTED: Semantic grounding failure. Subject-Evidence mismatch: asserted subject 'Users' has no grounding in the underlying evidence span.",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Predicate failure: Generic catch-all predicate 'has_validity_rule' is banned; requires normalized action taxonomy.; Predicate normativity failure: Predicate 'has_validity_rule' is an unconstrained catch-all.",
       "evidence_supported": true,
       "locator_valid": true
     },
     {
-      "subject": "Users",
+      "subject": "User",
       "predicate": "always",
       "object": "check the Promptbook library in the standalone Security Copilot experience for more examples",
-      "disposition": "AUTOMATED_CHECKS_FAILED",
-      "trust_score": 0.8,
-      "decision_reason": "REJECTED: Semantic grounding failure. Subject-Evidence mismatch: asserted subject 'Users' has no grounding in the underlying evidence span.",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Predicate failure: Predicate 'always' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'always' is not a canonical registered predicate.",
       "evidence_supported": true,
       "locator_valid": true
     }

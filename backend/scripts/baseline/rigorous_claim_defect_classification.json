@@ -1,0 +1,2254 @@
+{
+  "summary": {
+    "correct": 178,
+    "wrong_subject": 31,
+    "wrong_predicate": 5,
+    "lost_condition": 2,
+    "lost_scope": 1,
+    "duplicate": 0,
+    "non_rule": 7,
+    "unsupported": 0
+  },
+  "claims": [
+    {
+      "audit_id": 1,
+      "stable_claim_id": "679ef215-0e90-585b-91ab-574350f1d241",
+      "subject": "Custom corporate agreements",
+      "predicate": "may_override_standard_terms",
+      "object": "Standard policy terms",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 2,
+      "stable_claim_id": "5fbf0095-a74f-575c-a400-8b480e1f2cf5",
+      "subject": "Return window",
+      "predicate": "has_summary",
+      "object": "30 days from delivery (60 days for Northwind Rewards Gold me",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "candidate"
+    },
+    {
+      "audit_id": 3,
+      "stable_claim_id": "befe53b3-2c00-552d-b3e6-db1e6316789c",
+      "subject": "Refund speed",
+      "predicate": "has_summary",
+      "object": "3-5 business days after we receive and inspect the return",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "candidate"
+    },
+    {
+      "audit_id": 4,
+      "stable_claim_id": "a1823bf9-dea7-5983-8a5d-c6dd3d7ff965",
+      "subject": "Return shipping",
+      "predicate": "has_summary",
+      "object": "Free for defective or incorrect items; $6.95 deducted otherw",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "candidate"
+    },
+    {
+      "audit_id": 5,
+      "stable_claim_id": "ee12e47d-30d8-5c1e-b3cb-19e63fac806b",
+      "subject": "Restocking fee",
+      "predicate": "has_summary",
+      "object": "None on most items; 15% on special-order and bulk items",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "candidate"
+    },
+    {
+      "audit_id": 6,
+      "stable_claim_id": "97361b26-3077-5f81-8ae6-ec7ceaf90305",
+      "subject": "Final sale items",
+      "predicate": "has_summary",
+      "object": "Not eligible for refund or exchange",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "candidate"
+    },
+    {
+      "audit_id": 7,
+      "stable_claim_id": "33d9a22f-4875-5517-bd5a-16c73ee42987",
+      "subject": "Refund",
+      "predicate": "has_definition",
+      "object": "Return of money to the original payment method or store cred",
+      "defect_label": "non_rule",
+      "diagnostic_explanation": "Non-rule metadata (contact info, definition, or revision history changelog).",
+      "db_status": "rejected"
+    },
+    {
+      "audit_id": 8,
+      "stable_claim_id": "12f39677-43f4-5967-824d-a14efe3addbe",
+      "subject": "Return",
+      "predicate": "has_definition",
+      "object": "Sending a purchased item back to Northwind by mail or in-sto",
+      "defect_label": "non_rule",
+      "diagnostic_explanation": "Non-rule metadata (contact info, definition, or revision history changelog).",
+      "db_status": "rejected"
+    },
+    {
+      "audit_id": 9,
+      "stable_claim_id": "941149de-eaa7-56a5-9297-58570b58cb4e",
+      "subject": "Exchange",
+      "predicate": "has_definition",
+      "object": "Replacing an item with a different size, colour or product o",
+      "defect_label": "non_rule",
+      "diagnostic_explanation": "Non-rule metadata (contact info, definition, or revision history changelog).",
+      "db_status": "rejected"
+    },
+    {
+      "audit_id": 10,
+      "stable_claim_id": "56625e97-1a95-5060-a0a5-f61959ed770f",
+      "subject": "Store Credit",
+      "predicate": "has_definition",
+      "object": "A balance issued to a customer account, redeemable online an",
+      "defect_label": "non_rule",
+      "diagnostic_explanation": "Non-rule metadata (contact info, definition, or revision history changelog).",
+      "db_status": "rejected"
+    },
+    {
+      "audit_id": 11,
+      "stable_claim_id": "1b16cddb-3907-5af0-93b4-61685783357f",
+      "subject": "RMA",
+      "predicate": "has_definition",
+      "object": "Return Merchandise Authorization number, e.g. RMA-2026-00481",
+      "defect_label": "non_rule",
+      "diagnostic_explanation": "Non-rule metadata (contact info, definition, or revision history changelog).",
+      "db_status": "rejected"
+    },
+    {
+      "audit_id": 12,
+      "stable_claim_id": "a1cc1469-3402-5122-8bd9-37aa49d88efe",
+      "subject": "Customer",
+      "predicate": "has_refund_eligibility",
+      "object": "Final Sale Items marked 'Final Sale' at the time of purchase",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "candidate"
+    },
+    {
+      "audit_id": 13,
+      "stable_claim_id": "311e1132-4c26-5e05-909f-bc2fb2947a97",
+      "subject": "Standard merchandise",
+      "predicate": "has_return_window",
+      "object": "30 days",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 14,
+      "stable_claim_id": "4c0fe437-4d0b-518e-834f-31d078b9686e",
+      "subject": "Northwind Rewards Gold members",
+      "predicate": "has_return_window",
+      "object": "60 days",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 15,
+      "stable_claim_id": "2f76936d-fb6b-5101-a43f-96e8cf450d1a",
+      "subject": "Holiday purchases (Nov 1 - Dec 24)",
+      "predicate": "has_return_deadline",
+      "object": "Until January 31 of the following year",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 16,
+      "stable_claim_id": "a1004510-d65b-5303-b259-a3eb067e017e",
+      "subject": "Footwear (worn indoors only)",
+      "predicate": "has_return_window",
+      "object": "45 days",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 17,
+      "stable_claim_id": "774ad1c0-c51b-563e-990b-1aca2d6d9ca5",
+      "subject": "Camping tents and sleeping bags (unused)",
+      "predicate": "has_return_window",
+      "object": "60 days",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 18,
+      "stable_claim_id": "a00ecb32-46be-5387-86d3-7e1d83c91731",
+      "subject": "Defective items",
+      "predicate": "has_resolution_path",
+      "object": "Covered by warranty - see Section 14",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 19,
+      "stable_claim_id": "2827c6fb-1e4b-5deb-862b-296a80853d64",
+      "subject": "Returns without a receipt",
+      "predicate": "has_return_channel_eligibility",
+      "object": "Returns without proof of purchase are accepted in-store only",
+      "defect_label": "lost_condition",
+      "diagnostic_explanation": "Multi-clause sentence shoved into object blob, conflating channel, tender, and valuation conditions.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 20,
+      "stable_claim_id": "1d34fcb8-bc2d-5436-b377-b6fcfa6315bf",
+      "subject": "Returns without a receipt",
+      "predicate": "has_identity_verification_requirement",
+      "object": "A government-issued photo ID is required and scanned",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 21,
+      "stable_claim_id": "d7ebc202-21f7-5b34-87f8-e2cea7bac99a",
+      "subject": "Returns without a receipt",
+      "predicate": "has_refund_eligibility",
+      "object": "A limit of three receipt-less returns per customer per 12-mo",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "candidate"
+    },
+    {
+      "audit_id": 22,
+      "stable_claim_id": "7a378e7f-705c-5664-83dc-452eeb4c68b6",
+      "subject": "Support agents",
+      "predicate": "must_verify_refund_conditions",
+      "object": "verify each condition before approving a refund over $50.00",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 23,
+      "stable_claim_id": "5e70b680-9ae2-5ece-9895-bb086997ac9e",
+      "subject": "Refund request",
+      "predicate": "has_purchase_verification_requirement",
+      "object": "be verified in our systems",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 24,
+      "stable_claim_id": "62d890f3-40ad-58aa-bc0b-ea9c64d6861c",
+      "subject": "Partial refunds A partial refund",
+      "predicate": "has_validity_rule",
+      "object": "be issued when an item shows signs of use beyond inspection,",
+      "defect_label": "wrong_subject",
+      "diagnostic_explanation": "Malformed subject text: 'Partial refunds A partial refund' contains token bleed or orphan pronoun.",
+      "db_status": "candidate"
+    },
+    {
+      "audit_id": 25,
+      "stable_claim_id": "dfdc6719-c0e5-5023-9389-f091e3c52fd7",
+      "subject": "Like new, tags attached",
+      "predicate": "has_refund_percentage",
+      "object": "100%",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 26,
+      "stable_claim_id": "66fbceaa-7b67-51cd-9610-265fa8c7ae77",
+      "subject": "Opened packaging, item unused",
+      "predicate": "has_refund_percentage",
+      "object": "100%",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 27,
+      "stable_claim_id": "213ba61a-d607-5fcd-834b-847ede05f5ba",
+      "subject": "Missing original box (non-fragile)",
+      "predicate": "has_refund_percentage",
+      "object": "90%",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 28,
+      "stable_claim_id": "d7f13f09-1bf2-5ff1-acf9-3b3b99869e6c",
+      "subject": "Missing accessories or free gift",
+      "predicate": "has_refund_rule",
+      "object": "Refund minus gift value",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 29,
+      "stable_claim_id": "13c83548-53fb-5307-99ca-e536c5fb862d",
+      "subject": "Light wear or signs of use",
+      "predicate": "has_refund_percentage",
+      "object": "50% - 75%",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 30,
+      "stable_claim_id": "974a2402-ca6d-51ac-bf6e-fb271e6fd0b3",
+      "subject": "Customer",
+      "predicate": "has_refund_percentage",
+      "object": "0% - 25% (agent discretion, manager approval)",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 31,
+      "stable_claim_id": "616d7f2f-4627-577d-8c3b-6487a974704a",
+      "subject": "Washed, altered or stained",
+      "predicate": "has_refund_eligibility",
+      "object": "Not eligible",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 32,
+      "stable_claim_id": "ffb5e191-e550-5120-8864-6b5eecb231e2",
+      "subject": "Refund approval",
+      "predicate": "requires_approval_role",
+      "object": "Tier 1 Customer Support Agent",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 33,
+      "stable_claim_id": "2b572992-d649-5e11-98cf-9d1314744703",
+      "subject": "Refund approval",
+      "predicate": "requires_approval_role",
+      "object": "Tier 2 Support Lead",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 34,
+      "stable_claim_id": "88950801-834b-5abd-9ba8-49221ab1ee83",
+      "subject": "Refund approval",
+      "predicate": "requires_approval_role",
+      "object": "Customer Experience Manager",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 35,
+      "stable_claim_id": "b1eb290d-a462-54cc-9178-a07d0b7332af",
+      "subject": "Refund approval",
+      "predicate": "requires_approval_role",
+      "object": "Finance Director",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 36,
+      "stable_claim_id": "f56bab01-5207-55ec-a333-8370225a564f",
+      "subject": "Refund approval",
+      "predicate": "requires_fraud_review",
+      "object": "Secondary fraud review required",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 37,
+      "stable_claim_id": "50e18e3c-c8e8-5b63-9fa5-a645bcdd3349",
+      "subject": "Customer",
+      "predicate": "has_validity_rule",
+      "object": "be resold",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "candidate"
+    },
+    {
+      "audit_id": 38,
+      "stable_claim_id": "1167a715-8453-5b0b-a2c7-f9bc5989f280",
+      "subject": "Even for non-refundable items, a full refund or replacement",
+      "predicate": "will_issue_refund",
+      "object": "be provided if the item arrives damaged, is materially diffe",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "candidate"
+    },
+    {
+      "audit_id": 39,
+      "stable_claim_id": "1b10c46a-fdb8-5b5f-9c64-7c804450db8a",
+      "subject": "In-store refunds",
+      "predicate": "has_posting_duration",
+      "object": "processed immediately; bank may take 3-5 days to post the cr",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 40,
+      "stable_claim_id": "3b9fe178-3459-506e-9aa1-c278b96ff7b7",
+      "subject": "Order number",
+      "predicate": "has_example_value",
+      "object": "NW-10482391",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "rejected"
+    },
+    {
+      "audit_id": 41,
+      "stable_claim_id": "2aed1d95-23b3-54cc-add6-a012615595df",
+      "subject": "Order number",
+      "predicate": "is_required_for_refund_request",
+      "object": "Yes",
+      "defect_label": "wrong_predicate",
+      "diagnostic_explanation": "Form example value conflated with mandatory requirement under permissive modality.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 42,
+      "stable_claim_id": "3775628f-1524-586b-9410-073ded4df318",
+      "subject": "Email on order",
+      "predicate": "has_example_value",
+      "object": "jane.doe@example.com",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "rejected"
+    },
+    {
+      "audit_id": 43,
+      "stable_claim_id": "d2824fc1-ae44-518d-a2d4-af323d37d965",
+      "subject": "Email on order",
+      "predicate": "is_required_for_refund_request",
+      "object": "Yes",
+      "defect_label": "wrong_predicate",
+      "diagnostic_explanation": "Form example value conflated with mandatory requirement under permissive modality.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 44,
+      "stable_claim_id": "aa729d6a-1dc9-5da7-84d9-cba3a5588793",
+      "subject": "Item SKU / name",
+      "predicate": "has_example_value",
+      "object": "TNT-4P-GRN / Summit 4-Person Tent",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "rejected"
+    },
+    {
+      "audit_id": 45,
+      "stable_claim_id": "7faa45fc-3f30-5870-ac44-4b286e90a2f8",
+      "subject": "Item SKU / name",
+      "predicate": "is_required_for_refund_request",
+      "object": "Yes",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 46,
+      "stable_claim_id": "995aeec4-de54-59eb-8305-8337b91d706d",
+      "subject": "Reason for return",
+      "predicate": "has_example_value",
+      "object": "Wrong size",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "rejected"
+    },
+    {
+      "audit_id": 47,
+      "stable_claim_id": "5bcafb97-2c5d-52ed-bcb1-4c99c2c01fff",
+      "subject": "Reason for return",
+      "predicate": "is_required_for_refund_request",
+      "object": "Yes",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 48,
+      "stable_claim_id": "fdb8e3ae-22b6-5420-929f-bcdc33715bc2",
+      "subject": "Photos",
+      "predicate": "has_example_value",
+      "object": "Damage close-up",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "rejected"
+    },
+    {
+      "audit_id": 49,
+      "stable_claim_id": "aae9551d-1de2-5db1-88ce-c4de347bffb7",
+      "subject": "Photos",
+      "predicate": "is_required_for_refund_request",
+      "object": "If damaged",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 50,
+      "stable_claim_id": "0ab8ae23-ba17-50b5-9078-f6d9eed800a7",
+      "subject": "Preferred resolution",
+      "predicate": "has_example_value",
+      "object": "Refund to card",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "rejected"
+    },
+    {
+      "audit_id": 51,
+      "stable_claim_id": "b1726a8f-2912-544d-b8ac-c3b179ac6f27",
+      "subject": "Preferred resolution",
+      "predicate": "is_required_for_refund_request",
+      "object": "Yes",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 52,
+      "stable_claim_id": "14cc40da-0816-5f90-9559-03473e7146e4",
+      "subject": "RMA issued after request",
+      "predicate": "has_stage_duration",
+      "object": "Instantly online; up to 1 hour by phone",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 53,
+      "stable_claim_id": "69b329a5-83ea-56aa-9d11-c9da0ed614db",
+      "subject": "Return transit to warehouse",
+      "predicate": "has_stage_duration",
+      "object": "3-7 business days (domestic)",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 54,
+      "stable_claim_id": "9c0e8950-a413-5d17-8169-1cafba97d851",
+      "subject": "Warehouse receipt and inspection",
+      "predicate": "has_stage_duration",
+      "object": "1-2 business days",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 55,
+      "stable_claim_id": "5c754883-1ff5-54e7-a9ce-7dd325b86ee2",
+      "subject": "Refund approved and issued",
+      "predicate": "has_stage_duration",
+      "object": "Within 1 business day of inspection",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 56,
+      "stable_claim_id": "d5a931b1-54e4-5141-8aa9-c0ead35a2fb4",
+      "subject": "Credit card refund posted by bank",
+      "predicate": "has_posting_duration",
+      "object": "3-5 business days",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 57,
+      "stable_claim_id": "9598293d-5667-50f8-94fa-2740787d07ad",
+      "subject": "Debit card / bank transfer",
+      "predicate": "has_posting_duration",
+      "object": "5-10 business days",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 58,
+      "stable_claim_id": "b0787a14-f161-5f4f-ab29-80956ad2b9da",
+      "subject": "PayPal",
+      "predicate": "has_posting_duration",
+      "object": "Within 24 hours of issue",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "candidate"
+    },
+    {
+      "audit_id": 59,
+      "stable_claim_id": "064fc06d-35e7-5fb5-b86d-507d27a2d85d",
+      "subject": "Store credit",
+      "predicate": "has_posting_duration",
+      "object": "Immediate",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 60,
+      "stable_claim_id": "37bc7404-9e07-5d51-9ea7-e44e3555679b",
+      "subject": "Check (by request, over $1,000)",
+      "predicate": "has_posting_duration",
+      "object": "10-15 business days",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "candidate"
+    },
+    {
+      "audit_id": 61,
+      "stable_claim_id": "7cd28d47-1b5c-586c-afce-ffbadae0a0b5",
+      "subject": "Visa / Mastercard / Amex",
+      "predicate": "has_refund_method",
+      "object": "Original card",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 62,
+      "stable_claim_id": "d1cf2561-93da-519d-8c46-a34b9484f712",
+      "subject": "Visa / Mastercard / Amex",
+      "predicate": "has_posting_duration",
+      "object": "3-5 business days to post",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 63,
+      "stable_claim_id": "712563ee-ef8d-59e7-97b2-cf4514b343b0",
+      "subject": "Debit card",
+      "predicate": "has_refund_method",
+      "object": "Original card",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 64,
+      "stable_claim_id": "2a460a39-332f-5ff0-b1d4-faf07cb7f2ab",
+      "subject": "Debit card",
+      "predicate": "has_posting_duration",
+      "object": "Up to 10 business days",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "candidate"
+    },
+    {
+      "audit_id": 65,
+      "stable_claim_id": "d17e6dfb-1000-55fb-805e-0d4c6a9911c8",
+      "subject": "PayPal",
+      "predicate": "has_refund_method",
+      "object": "PayPal balance",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 66,
+      "stable_claim_id": "d6c9c736-04dc-50e8-b1cb-8e9606c4b609",
+      "subject": "PayPal",
+      "predicate": "has_posting_duration",
+      "object": "Usually within 24 hours",
+      "defect_label": "wrong_predicate",
+      "diagnostic_explanation": "SLA estimate treated as deontic posting duration obligation.",
+      "db_status": "candidate"
+    },
+    {
+      "audit_id": 67,
+      "stable_claim_id": "7e6b6689-ec72-5b6e-852c-2764ceda35dc",
+      "subject": "Apple Pay / Google Pay",
+      "predicate": "has_refund_method",
+      "object": "Underlying card",
+      "defect_label": "lost_condition",
+      "diagnostic_explanation": "Freight return deduction lacks explicit change-of-mind condition.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 68,
+      "stable_claim_id": "6e7c96b1-9f0c-5a82-93d4-b11485e00947",
+      "subject": "Apple Pay / Google Pay",
+      "predicate": "has_stage_duration",
+      "object": "Same as card",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 69,
+      "stable_claim_id": "d049cf4e-d9cb-5c41-b424-0bae8b9d27fe",
+      "subject": "Buy Now Pay Later (e.g. Klarna)",
+      "predicate": "has_refund_method",
+      "object": "Provider reduces balance",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 70,
+      "stable_claim_id": "8ea3833f-1887-52fd-84c4-ac337b06e399",
+      "subject": "Buy Now Pay Later (e.g. Klarna)",
+      "predicate": "has_provider_governed_timeline",
+      "object": "Provider timelines apply",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 71,
+      "stable_claim_id": "99609521-df66-51c5-b570-ba1874bd94e9",
+      "subject": "Gift cards",
+      "predicate": "has_refund_method",
+      "object": "New gift card or store credit",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 72,
+      "stable_claim_id": "287cbd68-ad78-5bd7-921a-be098bda00ed",
+      "subject": "Gift cards",
+      "predicate": "has_posting_duration",
+      "object": "Instant",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 73,
+      "stable_claim_id": "f0e0206d-ce07-5507-815a-d3cdd361661d",
+      "subject": "Cash (in-store)",
+      "predicate": "has_refund_method",
+      "object": "Cash up to $50, then store credit/card",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 74,
+      "stable_claim_id": "1f2bc618-01ff-530d-b01d-daa682288c2c",
+      "subject": "Cash (in-store)",
+      "predicate": "has_identity_verification_requirement",
+      "object": "ID required over $50",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 75,
+      "stable_claim_id": "514d4d3e-48b2-5ad6-9508-5e73cf90abdc",
+      "subject": "Split payments",
+      "predicate": "has_refund_method",
+      "object": "Proportionally to each method",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 76,
+      "stable_claim_id": "d0d2f6c6-f893-5f73-ab6b-762f632f8f2f",
+      "subject": "Split payments",
+      "predicate": "has_refund_allocation_rule",
+      "object": "Gift card portion first",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 77,
+      "stable_claim_id": "02d74b39-1fcf-5bc1-9119-92d435c580e0",
+      "subject": "Customer",
+      "predicate": "receives_store_credit_bonus",
+      "object": "5% bonus on credit value, maximum bonus $25.00 per return",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 78,
+      "stable_claim_id": "e2585ded-515d-5cc1-bb66-7ee01acb26ee",
+      "subject": "Bonus credit",
+      "predicate": "has_validity_rule",
+      "object": "be applied retroactively once a refund has been issued to th",
+      "defect_label": "wrong_predicate",
+      "diagnostic_explanation": "Negative particle dropping: 'cannot be applied retroactively' extracted as positive rule.",
+      "db_status": "candidate"
+    },
+    {
+      "audit_id": 79,
+      "stable_claim_id": "03171073-2357-5474-82d1-bbaab393b11a",
+      "subject": "Defective or damaged",
+      "predicate": "has_return_shipping_rule",
+      "object": "Yes, in full",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 80,
+      "stable_claim_id": "1a3cfa24-0d66-5f9e-a3bf-501504532db5",
+      "subject": "Defective or damaged",
+      "predicate": "has_return_label_cost",
+      "object": "Free",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 81,
+      "stable_claim_id": "ec046b2b-bf74-55b3-84a7-f823441471df",
+      "subject": "Wrong item sent",
+      "predicate": "has_return_shipping_rule",
+      "object": "Yes, in full",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 82,
+      "stable_claim_id": "d3848452-8b69-5467-92ae-201b09e28770",
+      "subject": "Wrong item sent",
+      "predicate": "has_return_label_cost",
+      "object": "Free",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 83,
+      "stable_claim_id": "981f7ec2-4a7d-509b-92df-a5b763d97790",
+      "subject": "Not as described",
+      "predicate": "has_return_shipping_rule",
+      "object": "Yes, in full",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 84,
+      "stable_claim_id": "e0792adf-8434-5806-a945-1bf587e61325",
+      "subject": "Not as described",
+      "predicate": "has_return_label_cost",
+      "object": "Free",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 85,
+      "stable_claim_id": "2a48351f-8ca1-591d-bbaa-4ba7e37ccd89",
+      "subject": "Changed mind / wrong size",
+      "predicate": "has_return_shipping_rule",
+      "object": "No",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 86,
+      "stable_claim_id": "76a0fde9-ac2a-5a22-9a40-d953d7865ddd",
+      "subject": "Changed mind / wrong size",
+      "predicate": "has_return_label_cost",
+      "object": "$6.95 deducted from refund",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 87,
+      "stable_claim_id": "2534aaa8-122b-56df-925a-ce9fe22ff9c3",
+      "subject": "Gold member, any reason",
+      "predicate": "has_return_shipping_rule",
+      "object": "No",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 88,
+      "stable_claim_id": "32df8a56-a0da-54d3-ab31-8c90d7bf6ae5",
+      "subject": "Gold member, any reason",
+      "predicate": "has_return_label_cost",
+      "object": "Free",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 89,
+      "stable_claim_id": "3b43e186-2054-5e23-bf7a-79eec43aa8a5",
+      "subject": "Exchange",
+      "predicate": "has_return_shipping_rule",
+      "object": "N/A",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 90,
+      "stable_claim_id": "bf0ccbfa-26a1-56bf-af54-71af2bff7a7c",
+      "subject": "Exchange",
+      "predicate": "has_return_label_cost",
+      "object": "Free both ways",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 91,
+      "stable_claim_id": "5ad75932-6c45-5c30-a146-9692e241ed7a",
+      "subject": "Order",
+      "predicate": "has_return_shipping_rule",
+      "object": "No",
+      "defect_label": "wrong_subject",
+      "diagnostic_explanation": "Order status token 'Order' extracted as subject instead of Order entity.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 92,
+      "stable_claim_id": "19a6b158-14ab-5384-8f91-2c73b6a93e44",
+      "subject": "Order",
+      "predicate": "has_return_label_cost",
+      "object": "Free",
+      "defect_label": "wrong_subject",
+      "diagnostic_explanation": "Order status token 'Order' extracted as subject instead of Order entity.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 93,
+      "stable_claim_id": "c893448c-a9b3-5766-8624-af7b9080c40c",
+      "subject": "Oversize items",
+      "predicate": "has_return_freight_deduction",
+      "object": "$49.00 flat return freight fee deducted from refund",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 94,
+      "stable_claim_id": "0e4cc3b2-701f-5c1b-9fa4-e6498fbf3190",
+      "subject": "Freight pickups",
+      "predicate": "scheduled",
+      "object": "with our logistics team at least 3 business days in advance",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "candidate"
+    },
+    {
+      "audit_id": 95,
+      "stable_claim_id": "06fa91e2-9620-55f1-a3e3-29bb41885bc5",
+      "subject": "Customer",
+      "predicate": "has_return_shipping_rule",
+      "object": "their own carrier",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 96,
+      "stable_claim_id": "2c2b96fa-6717-516b-bf29-b3f15945e7d7",
+      "subject": "Carrier",
+      "predicate": "limited_to",
+      "object": "$12.00 and only for approved defective returns, with a recei",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "candidate"
+    },
+    {
+      "audit_id": 97,
+      "stable_claim_id": "1ae197ee-cc6d-5e33-90df-7a285fddf166",
+      "subject": "Prepaid labels",
+      "predicate": "has_validity_rule",
+      "object": "be dropped at over 15,000 carrier locations and all Northwin",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "candidate"
+    },
+    {
+      "audit_id": 98,
+      "stable_claim_id": "4b5c9490-c88a-52de-a36d-150774991955",
+      "subject": "Customer",
+      "predicate": "requires_receipt_retention",
+      "object": "drop-off receipt until refund has been confirmed",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 99,
+      "stable_claim_id": "5dd2ebdc-30b6-5a18-91c6-193bd9c53016",
+      "subject": "Replacement",
+      "predicate": "has_resolution_option_details",
+      "object": "Same item shipped with free expedited shipping",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 100,
+      "stable_claim_id": "24dc8116-5ef1-52c8-816c-3409c54f42cb",
+      "subject": "Replacement",
+      "predicate": "has_stage_duration",
+      "object": "2-3 business days",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 101,
+      "stable_claim_id": "e24fede9-ebf5-5199-a621-f5e491e4c63c",
+      "subject": "Full refund",
+      "predicate": "has_resolution_option_details",
+      "object": "Item price plus shipping and tax",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 102,
+      "stable_claim_id": "ff981f0d-99d2-5315-8730-c0ed5623c5fd",
+      "subject": "Full refund",
+      "predicate": "has_stage_duration",
+      "object": "3-5 business days",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 103,
+      "stable_claim_id": "48325771-a8f9-5327-b437-4ac8b8176725",
+      "subject": "Partial refund for cosmetic flaws",
+      "predicate": "has_resolution_option_details",
+      "object": "Offered for minor cosmetic flaws",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 104,
+      "stable_claim_id": "6e636c29-4a05-512f-be52-85dc34c782a8",
+      "subject": "Repair",
+      "predicate": "has_resolution_option_details",
+      "object": "For eligible products under warranty",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 105,
+      "stable_claim_id": "3905f471-4c38-5873-8c57-9f79cac80b3c",
+      "subject": "Repair",
+      "predicate": "has_stage_duration",
+      "object": "7-14 business days",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 106,
+      "stable_claim_id": "3f93125f-13d0-5b3d-bb51-d7fb2e114b3c",
+      "subject": "Damaged item under $40",
+      "predicate": "may_issue_refund_without_return",
+      "object": "refund without requiring item return ('Keep It' policy)",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 107,
+      "stable_claim_id": "7eea6475-37c4-56e7-85da-b64c9458bedb",
+      "subject": "This is",
+      "predicate": "limited_to",
+      "object": "two instances per customer per year",
+      "defect_label": "wrong_subject",
+      "diagnostic_explanation": "Malformed subject text: 'This is' contains token bleed or orphan pronoun.",
+      "db_status": "candidate"
+    },
+    {
+      "audit_id": 108,
+      "stable_claim_id": "651154e4-d156-546a-b8b1-531b9734058e",
+      "subject": "Customer",
+      "predicate": "has_refund_eligibility",
+      "object": "Once an order has shipped, it must be handled as a return.",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "candidate"
+    },
+    {
+      "audit_id": 109,
+      "stable_claim_id": "9516ac0d-219d-5a9f-92db-7cf8f2b515e5",
+      "subject": "Order cancellation",
+      "predicate": "has_cancellation_window",
+      "object": "Refund Pending (within 1 hour) self-service full refund and ",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 110,
+      "stable_claim_id": "cb5b46d1-ae31-5280-aef5-00996b2006bc",
+      "subject": "Shipped",
+      "predicate": "has_attempted_not_guaranteed",
+      "object": "No",
+      "defect_label": "wrong_subject",
+      "diagnostic_explanation": "Order status token 'Shipped' extracted as subject instead of Order entity.",
+      "db_status": "candidate"
+    },
+    {
+      "audit_id": 111,
+      "stable_claim_id": "bcd27d08-a9a8-595d-aead-7d90043073d6",
+      "subject": "Shipped",
+      "predicate": "has_full_refund_if_stopped_else_return",
+      "object": "Refuse delivery or return",
+      "defect_label": "wrong_subject",
+      "diagnostic_explanation": "Order status token 'Shipped' extracted as subject instead of Order entity.",
+      "db_status": "candidate"
+    },
+    {
+      "audit_id": 112,
+      "stable_claim_id": "ee4f61ad-9262-5c8c-8a18-16eefc2ed0f0",
+      "subject": "Delivered",
+      "predicate": "has_attempted_not_guaranteed",
+      "object": "No",
+      "defect_label": "wrong_subject",
+      "diagnostic_explanation": "Order status token 'Delivered' extracted as subject instead of Order entity.",
+      "db_status": "candidate"
+    },
+    {
+      "audit_id": 113,
+      "stable_claim_id": "07091d68-404c-5cc1-be1d-4310e270d7f5",
+      "subject": "Delivered",
+      "predicate": "has_full_refund_if_stopped_else_return",
+      "object": "Standard return policy",
+      "defect_label": "wrong_subject",
+      "diagnostic_explanation": "Order status token 'Delivered' extracted as subject instead of Order entity.",
+      "db_status": "candidate"
+    },
+    {
+      "audit_id": 114,
+      "stable_claim_id": "bdab680b-6426-5140-931d-d33cffbccc20",
+      "subject": "Order",
+      "predicate": "has_attempted_not_guaranteed",
+      "object": "Yes, until 7 days before release",
+      "defect_label": "wrong_subject",
+      "diagnostic_explanation": "Order status token 'Order' extracted as subject instead of Order entity.",
+      "db_status": "candidate"
+    },
+    {
+      "audit_id": 115,
+      "stable_claim_id": "d8ecf6aa-ddc8-515d-ba50-c202d68d051e",
+      "subject": "Order",
+      "predicate": "has_full_refund_if_stopped_else_return",
+      "object": "Full refund",
+      "defect_label": "wrong_subject",
+      "diagnostic_explanation": "Order status token 'Order' extracted as subject instead of Order entity.",
+      "db_status": "candidate"
+    },
+    {
+      "audit_id": 116,
+      "stable_claim_id": "c729e396-23ec-5bb1-ab43-6311ab4c1b7d",
+      "subject": "Backordered",
+      "predicate": "has_attempted_not_guaranteed",
+      "object": "Yes, anytime",
+      "defect_label": "wrong_subject",
+      "diagnostic_explanation": "Order status token 'Backordered' extracted as subject instead of Order entity.",
+      "db_status": "candidate"
+    },
+    {
+      "audit_id": 117,
+      "stable_claim_id": "582714dd-087f-563d-98b5-c37d680f6be1",
+      "subject": "Backordered",
+      "predicate": "has_full_refund_if_stopped_else_return",
+      "object": "Full refund",
+      "defect_label": "wrong_subject",
+      "diagnostic_explanation": "Order status token 'Backordered' extracted as subject instead of Order entity.",
+      "db_status": "candidate"
+    },
+    {
+      "audit_id": 118,
+      "stable_claim_id": "7c307e56-15bc-552a-98e0-6ee1dcfc2e8e",
+      "subject": "Northwind We",
+      "predicate": "cancel",
+      "object": "an order for reasons including stock errors, pricing errors,",
+      "defect_label": "wrong_subject",
+      "diagnostic_explanation": "Malformed subject text: 'Northwind We' contains token bleed or orphan pronoun.",
+      "db_status": "candidate"
+    },
+    {
+      "audit_id": 119,
+      "stable_claim_id": "3390bb9e-9dc1-5ffd-92b3-ce81e12e709e",
+      "subject": "Price adjustments",
+      "predicate": "has_price_adjustment_window",
+      "object": "14 days of purchase for one-time refund of difference",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 120,
+      "stable_claim_id": "f3cc569d-d632-550c-b1e9-5069f669c02f",
+      "subject": "Trailhead Box subscription",
+      "predicate": "has_cancellation_rule",
+      "object": "Full refund if cancelled within 48 hours of renewal and box ",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 121,
+      "stable_claim_id": "1ecf2d3e-99c2-5aa8-8ed9-29573607e5c7",
+      "subject": "Rewards Plus subscription",
+      "predicate": "has_refund_rule",
+      "object": "Pro-rated refund within 30 days of renewal; none afterwards",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 122,
+      "stable_claim_id": "d5dc0d44-d16f-5c4f-a3b8-282da62ffe05",
+      "subject": "Gear Care Plan subscription",
+      "predicate": "has_refund_rule",
+      "object": "No refund for current month; cancel effective next cycle",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 123,
+      "stable_claim_id": "0099cba0-7fa2-54b2-b16d-f63b431fbed1",
+      "subject": "Subscriber",
+      "predicate": "can_cancel_before_trial_ends",
+      "object": "without charge",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 124,
+      "stable_claim_id": "a3921956-5357-57db-b499-b5996eb0457f",
+      "subject": "Free trials",
+      "predicate": "may_request_first_charge_refund",
+      "object": "within 7 days for a full refund of the first charge",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 125,
+      "stable_claim_id": "cc9eb019-6741-5fe3-9446-aa1c1c46555f",
+      "subject": "Company",
+      "predicate": "will_issue_refund",
+      "object": "treat the renewal as accidental and refund in full within 30",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "candidate"
+    },
+    {
+      "audit_id": 126,
+      "stable_claim_id": "6992854e-57e7-55e7-8d2c-44f498d3325b",
+      "subject": "Trailhead Box subscription",
+      "predicate": "can_pause_subscription",
+      "object": "for up to 3 months, once per year, from the account page",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 127,
+      "stable_claim_id": "a3987c7c-c29e-5fa3-9dd7-94f00971cab0",
+      "subject": "Video course",
+      "predicate": "has_refund_window",
+      "object": "7 days if less than 20% viewed",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 128,
+      "stable_claim_id": "8c7c33aa-5885-501e-86b1-ab4cd0caa4db",
+      "subject": "Product",
+      "predicate": "has_refund_window",
+      "object": "Full refund within 14 days for corrupt or inaccessible files",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 129,
+      "stable_claim_id": "3f9936ba-30a8-568d-aa69-3535cec52e2a",
+      "subject": "Gift cards",
+      "predicate": "has_refund_eligibility",
+      "object": "13.2 Gift cards \u007f Gift cards are not refundable for cash, ex",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "candidate"
+    },
+    {
+      "audit_id": 130,
+      "stable_claim_id": "346a3d13-2273-56db-bc52-634864daf6c1",
+      "subject": "Gift cards",
+      "predicate": "has_expiration_and_fee_rule",
+      "object": "\u007f Gift cards never expire and carry no fees.",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 131,
+      "stable_claim_id": "67ec9cdc-6524-5dfd-b1a0-bbe7ca1b394a",
+      "subject": "Gift cards",
+      "predicate": "has_replacement_eligibility",
+      "object": "Replaced with original proof of purchase and remaining balan",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 132,
+      "stable_claim_id": "8cb16778-8a6f-5e85-83b5-0ed642fee3a5",
+      "subject": "Gift cards",
+      "predicate": "can_cancel_before_shipment",
+      "object": "be cancelled once the code is delivered by email",
+      "defect_label": "wrong_predicate",
+      "diagnostic_explanation": "Polarity inversion: source says 'cannot be cancelled', predicate is positive 'can_cancel_before_shipment'.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 133,
+      "stable_claim_id": "f686dc62-e653-56a9-88b6-d6546938acfe",
+      "subject": "Gift receipt",
+      "predicate": "has_refund_method",
+      "object": "return items with a gift receipt for store credit equal to t",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 134,
+      "stable_claim_id": "9a3d4e16-7858-5a74-b5a2-3db334b317ea",
+      "subject": "Gift receipt",
+      "predicate": "has_refund_eligibility",
+      "object": "The purchaser is not notified of the return.",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "candidate"
+    },
+    {
+      "audit_id": 135,
+      "stable_claim_id": "fb28667e-bc58-590c-a7fc-8612070563e0",
+      "subject": "Gift receipt",
+      "predicate": "may_receive_store_credit",
+      "object": "Without a gift receipt, credit is issued at the lowest recen",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 136,
+      "stable_claim_id": "cf8ac5a0-e482-5c94-8409-76382aecba18",
+      "subject": "Tents and shelters",
+      "predicate": "has_warranty_period",
+      "object": "2 years",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 137,
+      "stable_claim_id": "a2cd5b2c-9bb0-5e01-b2b4-8814073e9430",
+      "subject": "Tents and shelters",
+      "predicate": "has_warranty_remedy",
+      "object": "Repair, replace or refund",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 138,
+      "stable_claim_id": "f647023f-58e3-581d-95c3-fa4e67cf14a1",
+      "subject": "Sleeping bags",
+      "predicate": "has_warranty_period",
+      "object": "Lifetime (manufacturing defects)",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 139,
+      "stable_claim_id": "d0b5bb05-1e9f-5b86-b3a9-5407c087e853",
+      "subject": "Sleeping bags",
+      "predicate": "has_warranty_remedy",
+      "object": "Repair or replace",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 140,
+      "stable_claim_id": "390e1954-b356-5431-9f4d-8a8c27856b99",
+      "subject": "Backpacks",
+      "predicate": "has_warranty_period",
+      "object": "5 years",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 141,
+      "stable_claim_id": "72a4291e-8432-5fdc-86fe-51bc6377448d",
+      "subject": "Backpacks",
+      "predicate": "has_warranty_remedy",
+      "object": "Repair or replace",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 142,
+      "stable_claim_id": "1793bed7-ebec-5940-a235-21986f30dbfa",
+      "subject": "Footwear",
+      "predicate": "has_warranty_period",
+      "object": "1 year",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 143,
+      "stable_claim_id": "f563990b-a3b3-562f-a2d5-344acf26a393",
+      "subject": "Footwear",
+      "predicate": "has_warranty_remedy",
+      "object": "Replace or refund",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 144,
+      "stable_claim_id": "9dfc2825-4fcc-53ed-9207-383e709a9693",
+      "subject": "Apparel",
+      "predicate": "has_warranty_period",
+      "object": "1 year",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 145,
+      "stable_claim_id": "cb7ce083-86c4-506d-be99-d852593285d5",
+      "subject": "Apparel",
+      "predicate": "has_warranty_remedy",
+      "object": "Replace or refund",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 146,
+      "stable_claim_id": "243ed26a-4d57-5f78-a221-79427cf73f85",
+      "subject": "Electronics (headlamps, GPS)",
+      "predicate": "has_warranty_period",
+      "object": "1 year",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 147,
+      "stable_claim_id": "b9f9cd49-de25-593b-b2c9-fd8110e49629",
+      "subject": "Electronics (headlamps, GPS)",
+      "predicate": "has_warranty_remedy",
+      "object": "Repair or replace",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 148,
+      "stable_claim_id": "486a7665-86f0-5c0e-812a-231c217ca41f",
+      "subject": "Stoves and cookware",
+      "predicate": "has_warranty_period",
+      "object": "2 years",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 149,
+      "stable_claim_id": "46295d19-8753-50eb-aeff-a39a58ab091e",
+      "subject": "Stoves and cookware",
+      "predicate": "has_warranty_remedy",
+      "object": "Repair or replace",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 150,
+      "stable_claim_id": "bf30c50b-4ebf-5895-9f53-07c4f92a0ace",
+      "subject": "Water filters",
+      "predicate": "has_warranty_period",
+      "object": "1 year",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 151,
+      "stable_claim_id": "5b26f47a-1742-5a7b-934b-8ef95ad22f2d",
+      "subject": "Water filters",
+      "predicate": "has_warranty_remedy",
+      "object": "Replace",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 152,
+      "stable_claim_id": "e430fc70-9819-5f56-9ce3-5e282be8fc44",
+      "subject": "Marketplace sellers",
+      "predicate": "has_refund_eligibility",
+      "object": "Items shipped directly by third-party sellers follow the sel",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 153,
+      "stable_claim_id": "8ff37f7d-74b6-592a-b763-711e8796a5f8",
+      "subject": "United States",
+      "predicate": "has_return_window",
+      "object": "30 days",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 154,
+      "stable_claim_id": "e73a5ce7-2164-51f0-b5ab-7221424edd19",
+      "subject": "United States",
+      "predicate": "has_internal_policy_reference",
+      "object": "See Section 9",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 155,
+      "stable_claim_id": "68e43087-d4dc-5e41-b41b-fe37239de67a",
+      "subject": "United States",
+      "predicate": "has_duties_and_taxes_rule",
+      "object": "Included",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 156,
+      "stable_claim_id": "5b2f948a-8daf-5aeb-8685-7f494c1084e7",
+      "subject": "Canada",
+      "predicate": "has_return_window",
+      "object": "30 days",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 157,
+      "stable_claim_id": "9cb2fa84-80a8-5f9b-aed7-fa36a4142930",
+      "subject": "Canada",
+      "predicate": "has_return_shipping_rule",
+      "object": "Customer pays unless defective",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 158,
+      "stable_claim_id": "d962fd62-9eb2-5645-87d4-c31c1fd36d55",
+      "subject": "Canada",
+      "predicate": "has_duties_and_taxes_rule",
+      "object": "Duties refunded on approved returns",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 159,
+      "stable_claim_id": "92612b76-8a50-58f0-baad-c4f104d45122",
+      "subject": "UK",
+      "predicate": "has_return_window",
+      "object": "30 days (14-day statutory minimum)",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 160,
+      "stable_claim_id": "6eead355-b194-5580-a872-62adf0b99249",
+      "subject": "UK",
+      "predicate": "has_return_shipping_rule",
+      "object": "Customer pays unless defective",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 161,
+      "stable_claim_id": "cbfdfaaf-ede2-5885-8fbf-d04b791a72be",
+      "subject": "UK",
+      "predicate": "has_duties_and_taxes_rule",
+      "object": "VAT refunded, duty via customs claim",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 162,
+      "stable_claim_id": "fa9ccb4b-e5cb-56ce-8983-a454ca8a44dc",
+      "subject": "EU",
+      "predicate": "has_return_window",
+      "object": "30 days (14-day statutory minimum)",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 163,
+      "stable_claim_id": "da525d2f-5b0c-5e56-a0f3-71775199bf28",
+      "subject": "EU",
+      "predicate": "has_return_shipping_rule",
+      "object": "Customer pays unless defective",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 164,
+      "stable_claim_id": "e7e25134-666b-5676-b919-949b235ccc11",
+      "subject": "EU",
+      "predicate": "has_duties_and_taxes_rule",
+      "object": "VAT refunded",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 165,
+      "stable_claim_id": "027cc66f-5707-5780-8cb6-58f1c2887ae3",
+      "subject": "Australia",
+      "predicate": "has_return_window",
+      "object": "30 days",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 166,
+      "stable_claim_id": "131f1e94-eb11-55f2-b67c-da01b3ee7f44",
+      "subject": "Australia",
+      "predicate": "has_return_shipping_rule",
+      "object": "Customer pays unless defective",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 167,
+      "stable_claim_id": "7aa81a95-fa9b-57fd-a11e-fce83e70b0db",
+      "subject": "Australia",
+      "predicate": "has_duties_and_taxes_rule",
+      "object": "GST refunded",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 168,
+      "stable_claim_id": "42d166f3-4400-52bf-a04a-c730df0f727a",
+      "subject": "Rest of world",
+      "predicate": "has_return_window",
+      "object": "14 days",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 169,
+      "stable_claim_id": "154c7bcc-975f-598e-b122-dbeffd30da60",
+      "subject": "Rest of world",
+      "predicate": "has_return_shipping_rule",
+      "object": "Customer pays",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 170,
+      "stable_claim_id": "c2199ab3-97f1-583d-b4fd-7c9eb0dbf06f",
+      "subject": "Rest of world",
+      "predicate": "has_duties_and_taxes_rule",
+      "object": "Not refundable",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 171,
+      "stable_claim_id": "4699fa3a-076f-5c09-a909-15629f89de85",
+      "subject": "International refund",
+      "predicate": "uses_original_charge_currency",
+      "object": "currency of the original charge",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 172,
+      "stable_claim_id": "1277fdc3-2fa9-58f9-8252-0da288c01853",
+      "subject": "International refund",
+      "predicate": "has_currency_conversion_rule",
+      "object": "Refund currency follows original charge; exchange difference",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 173,
+      "stable_claim_id": "5f834dfb-8471-5133-bad1-9b59074be3ef",
+      "subject": "Customer",
+      "predicate": "is_responsible_for_duty_drawback",
+      "object": "filing customs duty drawback claims",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 174,
+      "stable_claim_id": "e803e6c8-3c55-5889-95ad-2d4d8c9058db",
+      "subject": "Northwind",
+      "predicate": "provides_documentation_upon_request",
+      "object": "commercial invoice and proof of return",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 175,
+      "stable_claim_id": "69b9dd45-5e3d-5dba-9730-7b50901cdbf2",
+      "subject": "Customs and duties",
+      "predicate": "has_refund_eligibility",
+      "object": "Refused deliveries at customs are refunded minus outbound an",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 176,
+      "stable_claim_id": "51c4e7ae-eade-52ce-899e-ccaa90ce709c",
+      "subject": "Northwind",
+      "predicate": "has_evidence_submission_deadline",
+      "object": "Submits dispute evidence within 7 days",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 177,
+      "stable_claim_id": "8b9958e8-e654-5947-90a4-2cc2468bf090",
+      "subject": "Card issuer",
+      "predicate": "has_dispute_decision_timeline",
+      "object": "Decides dispute outcome within 30\u201390 days",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 178,
+      "stable_claim_id": "810a9be6-96e1-54ed-81ec-280ae9d3d539",
+      "subject": "Dispute loss",
+      "predicate": "has_funds_debit_outcome",
+      "object": "Transaction funds are debited from Northwind account",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 179,
+      "stable_claim_id": "f6bfb94a-188a-5b53-97c2-8b166e3591fd",
+      "subject": "Fraudulent dispute",
+      "predicate": "may_apply_administration_fee",
+      "object": "$15 administration fee may apply for fraudulent claims",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 180,
+      "stable_claim_id": "a2bea058-ced0-5eb0-8eb9-0c34cf836697",
+      "subject": "4853",
+      "predicate": "has_definition",
+      "object": "Cardholder dispute / not as described",
+      "defect_label": "wrong_subject",
+      "diagnostic_explanation": "Bare chargeback numeric code '4853' used as entity subject without typing.",
+      "db_status": "rejected"
+    },
+    {
+      "audit_id": 181,
+      "stable_claim_id": "383f0ae8-9364-5048-90e3-9cdf0f2f1dcb",
+      "subject": "4853",
+      "predicate": "has_typical_resolution",
+      "object": "Refund or evidence submission",
+      "defect_label": "wrong_subject",
+      "diagnostic_explanation": "Bare chargeback numeric code '4853' used as entity subject without typing.",
+      "db_status": "candidate"
+    },
+    {
+      "audit_id": 182,
+      "stable_claim_id": "af3e10cd-b353-5390-ac97-33c8b322bb96",
+      "subject": "4837",
+      "predicate": "has_definition",
+      "object": "No cardholder authorisation (fraud)",
+      "defect_label": "wrong_subject",
+      "diagnostic_explanation": "Bare chargeback numeric code '4837' used as entity subject without typing.",
+      "db_status": "rejected"
+    },
+    {
+      "audit_id": 183,
+      "stable_claim_id": "ed9b9894-ef5d-57aa-b1e5-abdd15de18f1",
+      "subject": "4837",
+      "predicate": "has_typical_resolution",
+      "object": "Fraud investigation",
+      "defect_label": "wrong_subject",
+      "diagnostic_explanation": "Bare chargeback numeric code '4837' used as entity subject without typing.",
+      "db_status": "candidate"
+    },
+    {
+      "audit_id": 184,
+      "stable_claim_id": "8a977758-fbe6-5a7a-99ea-b7220e61ef53",
+      "subject": "4855",
+      "predicate": "has_definition",
+      "object": "Goods or services not provided",
+      "defect_label": "wrong_subject",
+      "diagnostic_explanation": "Bare chargeback numeric code '4855' used as entity subject without typing.",
+      "db_status": "rejected"
+    },
+    {
+      "audit_id": 185,
+      "stable_claim_id": "b31551d7-77a8-5856-97b1-7427c61e993c",
+      "subject": "4855",
+      "predicate": "has_typical_resolution",
+      "object": "Provide tracking proof or refund",
+      "defect_label": "wrong_subject",
+      "diagnostic_explanation": "Bare chargeback numeric code '4855' used as entity subject without typing.",
+      "db_status": "candidate"
+    },
+    {
+      "audit_id": 186,
+      "stable_claim_id": "84472b8f-1e20-5f04-b1c8-8961f5839db7",
+      "subject": "4834",
+      "predicate": "has_definition",
+      "object": "Duplicate processing",
+      "defect_label": "wrong_subject",
+      "diagnostic_explanation": "Bare chargeback numeric code '4834' used as entity subject without typing.",
+      "db_status": "rejected"
+    },
+    {
+      "audit_id": 187,
+      "stable_claim_id": "20390128-a2ea-5f03-89a3-d92e59dc066b",
+      "subject": "4834",
+      "predicate": "has_typical_resolution",
+      "object": "Verify and refund duplicate",
+      "defect_label": "wrong_subject",
+      "diagnostic_explanation": "Bare chargeback numeric code '4834' used as entity subject without typing.",
+      "db_status": "candidate"
+    },
+    {
+      "audit_id": 188,
+      "stable_claim_id": "fe646fd9-0b50-58ed-8b43-1f1888e06046",
+      "subject": "4841",
+      "predicate": "has_definition",
+      "object": "Cancelled recurring transaction",
+      "defect_label": "wrong_subject",
+      "diagnostic_explanation": "Bare chargeback numeric code '4841' used as entity subject without typing.",
+      "db_status": "rejected"
+    },
+    {
+      "audit_id": 189,
+      "stable_claim_id": "90b36b61-02ae-5bcd-99e2-001a04a42ce7",
+      "subject": "4841",
+      "predicate": "has_typical_resolution",
+      "object": "Check cancellation record",
+      "defect_label": "wrong_subject",
+      "diagnostic_explanation": "Bare chargeback numeric code '4841' used as entity subject without typing.",
+      "db_status": "candidate"
+    },
+    {
+      "audit_id": 190,
+      "stable_claim_id": "78bf1215-063d-5a00-9e19-9a27e855122b",
+      "subject": "Notice",
+      "predicate": "has_trigger",
+      "object": "Return rate 30-40%",
+      "defect_label": "wrong_subject",
+      "diagnostic_explanation": "Ladder tier label 'Notice' extracted as subject without customer account scope.",
+      "db_status": "candidate"
+    },
+    {
+      "audit_id": 191,
+      "stable_claim_id": "22864bba-fd53-57b3-af93-74294c0531bf",
+      "subject": "Notice",
+      "predicate": "has_action",
+      "object": "Email reminder of policy",
+      "defect_label": "wrong_subject",
+      "diagnostic_explanation": "Ladder tier label 'Notice' extracted as subject without customer account scope.",
+      "db_status": "candidate"
+    },
+    {
+      "audit_id": 192,
+      "stable_claim_id": "bb7e838b-a4bc-5efe-8be9-5a5a8c43c3b1",
+      "subject": "Restricted",
+      "predicate": "has_trigger",
+      "object": "Return rate over 40% or one confirmed abuse case",
+      "defect_label": "wrong_subject",
+      "diagnostic_explanation": "Ladder tier label 'Restricted' extracted as subject without customer account scope.",
+      "db_status": "candidate"
+    },
+    {
+      "audit_id": 193,
+      "stable_claim_id": "9ed8a28e-f5f6-57b8-a938-be07a15c5582",
+      "subject": "Restricted",
+      "predicate": "has_action",
+      "object": "Store credit only; returns need manager approval",
+      "defect_label": "wrong_subject",
+      "diagnostic_explanation": "Ladder tier label 'Restricted' extracted as subject without customer account scope.",
+      "db_status": "candidate"
+    },
+    {
+      "audit_id": 194,
+      "stable_claim_id": "0384743e-d6e0-5943-bfe3-01ae61daa5dd",
+      "subject": "Suspended",
+      "predicate": "has_trigger",
+      "object": "Multiple confirmed abuse cases",
+      "defect_label": "wrong_subject",
+      "diagnostic_explanation": "Ladder tier label 'Suspended' extracted as subject without customer account scope.",
+      "db_status": "candidate"
+    },
+    {
+      "audit_id": 195,
+      "stable_claim_id": "6bb94bca-bc31-536e-8ee6-30e5978258c8",
+      "subject": "Suspended",
+      "predicate": "has_action",
+      "object": "Account suspended for 12 months",
+      "defect_label": "wrong_subject",
+      "diagnostic_explanation": "Ladder tier label 'Suspended' extracted as subject without customer account scope.",
+      "db_status": "candidate"
+    },
+    {
+      "audit_id": 196,
+      "stable_claim_id": "59f51f1f-dc49-5994-9edf-30e789606d80",
+      "subject": "Permanent",
+      "predicate": "has_trigger",
+      "object": "Fraud or counterfeit return",
+      "defect_label": "wrong_subject",
+      "diagnostic_explanation": "Ladder tier label 'Permanent' extracted as subject without customer account scope.",
+      "db_status": "candidate"
+    },
+    {
+      "audit_id": 197,
+      "stable_claim_id": "07e6916a-b7cf-583e-bbd5-d656f019c05a",
+      "subject": "Permanent",
+      "predicate": "has_action",
+      "object": "Account closed; referral to law enforcement where appropriat",
+      "defect_label": "wrong_subject",
+      "diagnostic_explanation": "Ladder tier label 'Permanent' extracted as subject without customer account scope.",
+      "db_status": "candidate"
+    },
+    {
+      "audit_id": 198,
+      "stable_claim_id": "c8844dc7-e6aa-5468-a972-6cba01ecd58e",
+      "subject": "Customer",
+      "predicate": "appeal",
+      "object": "restrictions in writing to appeals@northwind-demo.example wi",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "candidate"
+    },
+    {
+      "audit_id": 199,
+      "stable_claim_id": "7bac9255-acfb-5133-8974-5caa0fcf2b18",
+      "subject": "Privacy",
+      "predicate": "has_refund_eligibility",
+      "object": "Return history is stored per our Privacy Policy, retained fo",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "candidate"
+    },
+    {
+      "audit_id": 200,
+      "stable_claim_id": "13ddc205-3abd-54ee-8f5f-13e30975c8c6",
+      "subject": "Standard returns",
+      "predicate": "has_return_window",
+      "object": "requested within 30 days",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 201,
+      "stable_claim_id": "5bc77e21-674c-51f9-8a5f-985accade5ce",
+      "subject": "Unused item returned after standard return window",
+      "predicate": "may_receive_store_credit",
+      "object": "offer store credit at a manager's discretion for unused item",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 202,
+      "stable_claim_id": "b24783e6-cabc-50fb-9c7f-1537b64f1e9b",
+      "subject": "Items bought in-store",
+      "predicate": "has_return_channel_eligibility",
+      "object": "be returned in any store or by mail using the RMA process wi",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 203,
+      "stable_claim_id": "bda6335d-7c1c-5ef0-9386-110319bd0daa",
+      "subject": "Stolen package",
+      "predicate": "has_courtesy_replacement_rule",
+      "object": "One courtesy replacement per customer per year for packages ",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "verified"
+    },
+    {
+      "audit_id": 204,
+      "stable_claim_id": "7a8dc9ed-e939-53c2-81ee-e4df802d0d01",
+      "subject": "Phone (US/Canada)",
+      "predicate": "has_contact_phone",
+      "object": "1-800-555-0142",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "rejected"
+    },
+    {
+      "audit_id": 205,
+      "stable_claim_id": "0251f986-23e3-5f8f-a3a8-b9f2a1b03591",
+      "subject": "Phone (US/Canada)",
+      "predicate": "has_contact_hours",
+      "object": "Mon-Fri 8am-8pm; Sat 9am-5pm",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "rejected"
+    },
+    {
+      "audit_id": 206,
+      "stable_claim_id": "7979b56a-19b9-56a4-b760-0b6b248e569b",
+      "subject": "Phone (UK)",
+      "predicate": "has_contact_phone",
+      "object": "+44 20 7946 0142",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "rejected"
+    },
+    {
+      "audit_id": 207,
+      "stable_claim_id": "c30d3212-22ce-5aef-a2c5-2e692666f257",
+      "subject": "Phone (UK)",
+      "predicate": "has_contact_hours",
+      "object": "Mon-Fri 9am-5pm GMT",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "rejected"
+    },
+    {
+      "audit_id": 208,
+      "stable_claim_id": "4b2e4e8a-6d33-5382-a1c8-dfe6fdfd07cb",
+      "subject": "Email",
+      "predicate": "has_contact_email",
+      "object": "support@northwind-demo.example",
+      "defect_label": "non_rule",
+      "diagnostic_explanation": "Non-rule metadata (contact info, definition, or revision history changelog).",
+      "db_status": "rejected"
+    },
+    {
+      "audit_id": 209,
+      "stable_claim_id": "eb8f42a4-dccf-5fa2-bc16-db69c295fd26",
+      "subject": "Email",
+      "predicate": "has_contact_hours",
+      "object": "Response within 24 hours",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "rejected"
+    },
+    {
+      "audit_id": 210,
+      "stable_claim_id": "c04d7fe2-c659-56cf-8019-028c9ddccce0",
+      "subject": "Live chat",
+      "predicate": "has_contact_channel",
+      "object": "northwind-demo.example/chat",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "rejected"
+    },
+    {
+      "audit_id": 211,
+      "stable_claim_id": "38712024-c07e-57b1-8ec3-4a9ddfa0d9fd",
+      "subject": "Live chat",
+      "predicate": "has_contact_hours",
+      "object": "Daily 7am-10pm",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "rejected"
+    },
+    {
+      "audit_id": 212,
+      "stable_claim_id": "b1bb1283-b035-5efe-8e5c-9b760254d273",
+      "subject": "Refund status line",
+      "predicate": "has_contact_phone",
+      "object": "1-800-555-0177",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "rejected"
+    },
+    {
+      "audit_id": 213,
+      "stable_claim_id": "2270d59a-2910-58a4-ac07-5dd6e03c3211",
+      "subject": "Refund status line",
+      "predicate": "has_contact_hours",
+      "object": "24/7 automated",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "rejected"
+    },
+    {
+      "audit_id": 214,
+      "stable_claim_id": "5900ccde-fbcd-56bf-a222-95e230b4944a",
+      "subject": "Mail",
+      "predicate": "has_resolution_option_details",
+      "object": "Returns Dept., 200 Cascade Way, Portland, OR 97201, USA",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "rejected"
+    },
+    {
+      "audit_id": 215,
+      "stable_claim_id": "4ffaa6fd-1c67-5f89-aeef-d3f9efda33a3",
+      "subject": "Mail",
+      "predicate": "has_contact_hours",
+      "object": "N/A",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "rejected"
+    },
+    {
+      "audit_id": 216,
+      "stable_claim_id": "6112c2fb-3bd4-5dcd-af45-f9e44c961ad9",
+      "subject": "Escalations",
+      "predicate": "has_contact_email",
+      "object": "escalations@northwind-demo.example",
+      "defect_label": "non_rule",
+      "diagnostic_explanation": "Non-rule metadata (contact info, definition, or revision history changelog).",
+      "db_status": "rejected"
+    },
+    {
+      "audit_id": 217,
+      "stable_claim_id": "5f0cad9a-96e8-5747-8714-e5fd4a539c10",
+      "subject": "Escalations",
+      "predicate": "has_contact_hours",
+      "object": "Response within 2 business days",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "rejected"
+    },
+    {
+      "audit_id": 218,
+      "stable_claim_id": "33a7a86d-0f7c-5fcb-bdfe-900553221859",
+      "subject": "First response by email",
+      "predicate": "has_target",
+      "object": "24 hours",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "candidate"
+    },
+    {
+      "audit_id": 219,
+      "stable_claim_id": "7ec49b49-8c31-5a0e-9566-66c735d15335",
+      "subject": "First response by chat",
+      "predicate": "has_target",
+      "object": "Under 2 minutes",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "candidate"
+    },
+    {
+      "audit_id": 220,
+      "stable_claim_id": "40633e3d-83c7-53dc-88ba-586db009eb91",
+      "subject": "Resolution of standard refund query",
+      "predicate": "has_target",
+      "object": "Within 3 business days",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "candidate"
+    },
+    {
+      "audit_id": 221,
+      "stable_claim_id": "ca40254f-cf16-5ed0-b90d-e9b4546f968d",
+      "subject": "Escalated complaint resolution",
+      "predicate": "has_target",
+      "object": "10 business days",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "candidate"
+    },
+    {
+      "audit_id": 222,
+      "stable_claim_id": "3a57286f-5797-5468-acc4-01214cbc8522",
+      "subject": "Aug 15, 2025 Added Gear Care",
+      "predicate": "has_resolution_path",
+      "object": "4.0 Mar 1, 2025 Gold member window raised from 45 to 60 days",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "rejected"
+    },
+    {
+      "audit_id": 223,
+      "stable_claim_id": "4f87a460-9b39-5055-ab06-d192073678ca",
+      "subject": "Customer",
+      "predicate": "has_refund_eligibility",
+      "object": "\u007f Perishable goods such as freeze-dried meals past 14 days f",
+      "defect_label": "correct",
+      "diagnostic_explanation": "Accurate semantic representation grounded in source text.",
+      "db_status": "conflicted"
+    },
+    {
+      "audit_id": 224,
+      "stable_claim_id": "eab88ee6-78ec-5bfb-9b31-c0646de5eaad",
+      "subject": "Customer",
+      "predicate": "has_refund_eligibility",
+      "object": "\u007f Items returned more than 90 days after delivery.",
+      "defect_label": "lost_scope",
+      "diagnostic_explanation": "Exception inversion: returns >90 days are strictly non-refundable, extracted as refund eligibility.",
+      "db_status": "conflicted"
+    }
+  ]
+}

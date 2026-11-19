@@ -1,0 +1,52 @@
+{
+  "generated_at": "2026-11-10T15:12:42.827247+00:00",
+  "status": "PASS",
+  "checks": {
+    "cross_family_document_isolation": true,
+    "cross_family_text_span_isolation": true,
+    "split_isolation_ratio": "66.7% Train / 33.3% Held-Out per family",
+    "violations_detected": 0
+  },
+  "family_splits": {
+    "FAM-1": {
+      "family_name": "Commercial Contracts & MSAs",
+      "train_docs": [
+        "Vendor Agreement Template-02.2021_2.pdf",
+        "Microsoft Customer Agreement.pdf"
+      ],
+      "held_out_docs": [
+        "Enterprise Agreement.pdf"
+      ]
+    },
+    "FAM-2": {
+      "family_name": "HR & Employment Policies",
+      "train_docs": [
+        "Employees Notice Period Policy- V 1.5 (1).pdf",
+        "terminationofemploymentpolicy.pdf"
+      ],
+      "held_out_docs": [
+        "Resignation and Voluntary Termination.pdf"
+      ]
+    },
+    "FAM-3": {
+      "family_name": "Invoices & Commercial Billing",
+      "train_docs": [
+        "wordpress-pdf-invoice-plugin-sample.pdf",
+        "Microsoft volume licensing invoices _ Microsoft Learn.pdf"
+      ],
+      "held_out_docs": [
+        "Download Azure billing invoice - Microsoft Cost Management _ Microsoft Learn.pdf"
+      ]
+    },
+    "FAM-4": {
+      "family_name": "Statutory & Compliance Guidelines",
+      "train_docs": [
+        "guidelines-for-engagement-of-employees-on-contract-basis.pdf",
+        "Human-Rights-Transparency-Report-2025.pdf"
+      ],
+      "held_out_docs": [
+        "Supplier Security and Privacy Assurance Program - Microsoft Service Assurance _ Microsoft Learn.pdf"
+      ]
+    }
+  }
+}

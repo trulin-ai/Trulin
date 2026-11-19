@@ -90,7 +90,7 @@ def repair_ocr_text(raw_text: str) -> str:
             elif len(word) >= 7 and wordsegment is not None and not any(c.isdigit() for c in word):
                 try:
                     segs = wordsegment.segment(word.lower())
-                    if len(segs) > 1 and all(len(s) >= 3 for s in segs):
+                    if len(segs) > 1 and all(len(s) >= 2 or s in {"a", "i"} for s in segs):
                         if word[0].isupper():
                             segs[0] = segs[0].capitalize()
                         repaired_tokens.append(prefix + " ".join(segs) + suffix)
@@ -129,6 +129,7 @@ class ContentBlockType(str, Enum):
     HEADER_FOOTER = "header_footer"
     IMAGE_OCR = "image_ocr"
     CODE_OR_CONFIG = "code_or_config"
+    CODE_BLOCK = "code_block"
     UNKNOWN = "unknown"
 
 
@@ -139,6 +140,7 @@ class ContentBlock(BaseModel):
     raw_text: str = ""
     page_number: Optional[int] = None
     section_heading: Optional[str] = None
+    heading_path: List[str] = Field(default_factory=list)
     table_data: Optional[Dict[str, Any]] = None  # {"headers": [...], "rows": [[...]], "row_dicts": [...]}
     start_char_offset: int = 0
     end_char_offset: int = 0
@@ -306,6 +308,8 @@ class UniversalFileParser:
             file_type = "rtf"
         elif lower_name.endswith((".md", ".markdown")):
             file_type = "markdown"
+        elif lower_name.endswith((".png", ".jpg", ".jpeg", ".tiff", ".tif", ".webp", ".bmp")):
+            file_type = "image"
         elif lower_name.endswith((".yaml", ".yml", ".toml", ".ini", ".conf", ".sql", ".log", ".env")):
             file_type = "code_or_config"
 
@@ -330,15 +334,16 @@ class UniversalFileParser:
                 full_text, pages, blocks, tables, warnings = cls._parse_xlsx_structured(
                     raw_bytes, title, filename
                 )
+            elif file_type == "image":
+                full_text, pages, blocks, warnings = cls._parse_image_structured(
+                    raw_bytes, title, filename
+                )
+                is_scanned = True
             elif file_type in ("csv", "tsv"):
-                delimiter = "\t" if file_type == "tsv" else None
-                full_text = cls._parse_csv(raw_bytes, title, delimiter=delimiter)
-                blocks.append(ContentBlock(
-                    id="blk_csv_1",
-                    block_type=ContentBlockType.TABLE,
-                    text=full_text,
-                    raw_text=full_text,
-                ))
+                full_text, pages, blocks, tables, w_csv = cls._parse_csv_structured(
+                    raw_bytes, title, filename
+                )
+                warnings.extend(w_csv)
             elif file_type == "json":
                 full_text = cls._parse_json(raw_bytes, title, is_jsonl=lower_name.endswith(".jsonl"))
                 blocks.append(ContentBlock(
@@ -348,13 +353,10 @@ class UniversalFileParser:
                     raw_text=full_text,
                 ))
             elif file_type in ("html", "xhtml"):
-                full_text = cls._parse_html(raw_bytes, title)
-                blocks.append(ContentBlock(
-                    id="blk_html_1",
-                    block_type=ContentBlockType.PARAGRAPH,
-                    text=full_text,
-                    raw_text=full_text,
-                ))
+                full_text, pages, blocks, tables, w_html = cls._parse_html_structured(
+                    raw_bytes, title, filename
+                )
+                warnings.extend(w_html)
             elif file_type == "xml":
                 full_text = cls._parse_xml(raw_bytes, title)
                 blocks.append(ContentBlock(
@@ -372,7 +374,8 @@ class UniversalFileParser:
                     raw_text=full_text,
                 ))
             elif file_type == "markdown":
-                full_text, pages, blocks = cls._parse_markdown_structured(raw_bytes, title, filename)
+                full_text, pages, blocks, tables, w_md = cls._parse_markdown_structured(raw_bytes, title, filename)
+                warnings.extend(w_md)
             elif file_type == "code_or_config":
                 ext = lower_name.rsplit(".", 1)[-1]
                 full_text = cls._parse_code_or_config(raw_bytes, title, ext)
@@ -488,9 +491,13 @@ class UniversalFileParser:
                                     result, _ = ocr_engine(img.data)
                                     if result:
                                         for line in result:
-                                            if len(line) >= 3 and line[2] > 0.4:
+                                            try:
+                                                conf_val = float(line[2]) if len(line) >= 3 and line[2] is not None else 0.0
+                                            except (ValueError, TypeError):
+                                                conf_val = 0.0
+                                            if conf_val > 0.4:
                                                 page_ocr_lines.append(line[1])
-                                                confidences.append(float(line[2]))
+                                                confidences.append(conf_val)
                                 except Exception as img_err:
                                     logger.warning("OCR image extraction error on page %d: %s", page_num, img_err)
 
@@ -506,7 +513,11 @@ class UniversalFileParser:
                                 # Compare extraction quality before overwriting:
                                 # Overwrite ONLY if digital text was sparse (<40 chars) and OCR confidence is solid,
                                 # to avoid replacing valid digital text with noisy OCR.
-                                if char_count < 40 and len(ocr_repaired) >= 20 and ocr_confidence >= 0.45:
+                                from app.ingestion.parsers.ocr_adapter import OcrAdapter
+                                is_suppressed, dup_reason = OcrAdapter.prevent_duplicate_text(clean_page_text, ocr_repaired)
+                                if is_suppressed and char_count >= 40:
+                                    warnings.append(f"Page {page_num}: {dup_reason}; OCR bypassed to protect fidelity.")
+                                elif (char_count < 40 and len(ocr_repaired) >= 20 and ocr_confidence >= 0.45) or (char_count == 0 and len(ocr_repaired) > 0):
                                     clean_page_text = ocr_repaired
                                     total_chars = total_chars - char_count + len(clean_page_text)
                                     char_count = len(clean_page_text)
@@ -633,163 +644,35 @@ class UniversalFileParser:
     def _parse_docx_structured(
         cls, raw_bytes: bytes, title: str, filename: str
     ) -> Tuple[str, List[DocumentPage], List[ContentBlock], List[Dict[str, Any]], List[str]]:
-        blocks: List[ContentBlock] = []
-        tables: List[Dict[str, Any]] = []
-        warnings: List[str] = []
-        paragraphs_text = []
-
+        """Parses DOCX using specialized DocxAdapter preserving heading hierarchy, tables, and blocks."""
         try:
-            import docx
-            from docx.text.paragraph import Paragraph
-            from docx.table import Table
-
-            doc = docx.Document(io.BytesIO(raw_bytes))
-            p_idx = 0
-            t_idx = 0
-
-            # Traverse body in document order to preserve paragraph and table sequence
-            for child in doc.element.body:
-                if child.tag.endswith('p'):
-                    p = Paragraph(child, doc)
-                    txt = p.text.strip()
-                    if not txt:
-                        continue
-                    p_idx += 1
-                    style_name = (p.style.name if hasattr(p, "style") and p.style else "").lower()
-                    is_heading = "heading" in style_name or bool(
-                        re.match(r"^(Chapter\s+\d+|Page\s+\d+|Section\s+\d+|Control\s+rule|Policy\s+\d+)", txt, re.IGNORECASE)
-                    )
-                    b_type = ContentBlockType.HEADING if is_heading else ContentBlockType.PARAGRAPH
-                    blocks.append(ContentBlock(
-                        id=f"blk_docx_{p_idx}",
-                        block_type=b_type,
-                        text=f"## {txt}" if is_heading else txt,
-                        raw_text=txt,
-                    ))
-                    paragraphs_text.append(f"## {txt}" if is_heading else txt)
-
-                elif child.tag.endswith('tbl'):
-                    table = Table(child, doc)
-                    t_idx += 1
-                    table_rows = []
-                    headers = []
-                    for r_idx, row in enumerate(table.rows):
-                        cells = [cell.text.strip() for cell in row.cells]
-                        if r_idx == 0:
-                            headers = cells
-                        table_rows.append(cells)
-
-                    if table_rows:
-                        formatted_rows = ["| " + " | ".join(r) + " |" for r in table_rows]
-                        col_cnt = len(headers) or len(table_rows[0])
-                        if len(formatted_rows) >= 1:
-                            sep_line = "| " + " | ".join(["---"] * col_cnt) + " |"
-                            formatted_rows.insert(1, sep_line)
-
-                        t_text = "\n" + "\n".join(formatted_rows) + "\n"
-                        paragraphs_text.append(t_text)
-                        t_data = {"headers": headers, "rows": table_rows}
-                        tables.append(t_data)
-                        blocks.append(ContentBlock(
-                            id=f"blk_table_{t_idx}",
-                            block_type=ContentBlockType.TABLE,
-                            text=t_text,
-                            raw_text=t_text,
-                            table_data=t_data,
-                        ))
-
-            full_text = f"# {title}\n\n" + "\n\n".join(paragraphs_text) if paragraphs_text else ""
-            return full_text, [], blocks, tables, warnings
+            from app.ingestion.parsers.docx_parser import DocxAdapter
+            return DocxAdapter.parse_to_structured(raw_bytes, title, filename)
         except Exception as e:
-            warnings.append(f"DOCX parser error: {str(e)}")
-            return "", [], [], [], warnings
+            logger.warning("DocxAdapter parsing error for %s: %s", filename, e)
+            return "", [], [], [], [f"DOCX parser error: {str(e)}"]
 
     @classmethod
     def _parse_xlsx_structured(
         cls, raw_bytes: bytes, title: str, filename: str
     ) -> Tuple[str, List[DocumentPage], List[ContentBlock], List[Dict[str, Any]], List[str]]:
-        blocks: List[ContentBlock] = []
-        tables: List[Dict[str, Any]] = []
-        warnings: List[str] = []
-        sheets_output: List[str] = []
-
+        """Parses XLSX spreadsheets using specialized XlsxAdapter with multi-sheet and merged-cell resolution."""
         try:
-            import openpyxl
-            from datetime import date, datetime
-
-            wb = openpyxl.load_workbook(io.BytesIO(raw_bytes), data_only=True)
-            for sheet_idx, ws in enumerate(wb.worksheets, start=1):
-                sheet_name = ws.title or f"Sheet_{sheet_idx}"
-                sheet_rows: List[List[str]] = []
-                sheet_headers: List[str] = []
-
-                for r_idx, row in enumerate(ws.iter_rows(values_only=False), start=1):
-                    row_vals: List[str] = []
-                    for cell in row:
-                        val = cell.value
-                        if val is None:
-                            row_vals.append("")
-                        elif isinstance(val, (datetime, date)):
-                            row_vals.append(val.isoformat())
-                        else:
-                            row_vals.append(str(val).strip())
-
-                    # Skip completely blank lines
-                    if not any(v for v in row_vals):
-                        continue
-
-                    if not sheet_headers:
-                        sheet_headers = row_vals
-                    else:
-                        # Normalize row width to header width
-                        if len(row_vals) < len(sheet_headers):
-                            row_vals.extend([""] * (len(sheet_headers) - len(row_vals)))
-                        row_vals = row_vals[:len(sheet_headers)]
-
-                    sheet_rows.append(row_vals)
-
-                if sheet_rows:
-                    col_cnt = len(sheet_headers) or len(sheet_rows[0])
-                    formatted_rows = ["| " + " | ".join(r) + " |" for r in sheet_rows]
-                    if len(formatted_rows) >= 1:
-                        sep_line = "| " + " | ".join(["---"] * col_cnt) + " |"
-                        formatted_rows.insert(1, sep_line)
-
-                    sheet_md = f"## Sheet: {sheet_name}\n\n" + "\n".join(formatted_rows)
-                    sheets_output.append(sheet_md)
-
-                    t_data = {
-                        "sheet_name": sheet_name,
-                        "headers": sheet_headers,
-                        "rows": sheet_rows,
-                        "row_count": len(sheet_rows),
-                        "col_count": col_cnt,
-                    }
-                    tables.append(t_data)
-                    blocks.append(ContentBlock(
-                        id=f"blk_xlsx_sheet_{sheet_idx}",
-                        block_type=ContentBlockType.TABLE,
-                        text=sheet_md,
-                        raw_text=sheet_md,
-                        table_data=t_data,
-                    ))
-
-            full_text = f"# {title}\n\n" + "\n\n".join(sheets_output) if sheets_output else ""
-            if full_text:
-                return full_text, [], blocks, tables, warnings
+            from app.ingestion.parsers.xlsx_parser import XlsxAdapter
+            return XlsxAdapter.parse_to_structured(raw_bytes, title, filename)
         except Exception as e:
-            warnings.append(f"openpyxl parser error: {str(e)}; attempting zip fallback")
-
-        # Fallback to XML zipfile extraction if openpyxl encountered an anomaly
-        full_text = cls._parse_xlsx(raw_bytes, title, filename)
-        if full_text:
-            blocks.append(ContentBlock(
-                id="blk_xlsx_fallback",
-                block_type=ContentBlockType.TABLE,
-                text=full_text,
-                raw_text=full_text,
-            ))
-        return full_text, [], blocks, tables, warnings
+            logger.warning("XlsxAdapter parsing error for %s: %s; attempting zip fallback", filename, e)
+            warnings = [f"XlsxAdapter parser error: {str(e)}"]
+            full_text = cls._parse_xlsx(raw_bytes, title, filename)
+            blocks = []
+            if full_text:
+                blocks.append(ContentBlock(
+                    id="blk_xlsx_fallback",
+                    block_type=ContentBlockType.TABLE,
+                    text=full_text,
+                    raw_text=full_text,
+                ))
+            return full_text, [], blocks, [], warnings
 
     @classmethod
     def _parse_pdf(cls, raw_bytes: bytes, title: str, filename: str) -> str:
@@ -803,51 +686,26 @@ class UniversalFileParser:
 
     @classmethod
     def _parse_xlsx(cls, raw_bytes: bytes, title: str, filename: str) -> str:
+        text, _, _, _, _ = cls._parse_xlsx_structured(raw_bytes, title, filename)
+        return text
+
+    @classmethod
+    def _parse_image_structured(
+        cls, raw_bytes: bytes, title: str, filename: str
+    ) -> Tuple[str, List[DocumentPage], List[ContentBlock], List[str]]:
+        """Parses standalone image files using OcrAdapter preserving bounding box coordinates and confidence."""
         try:
-            with zipfile.ZipFile(io.BytesIO(raw_bytes)) as zf:
-                shared_strings = []
-                if "xl/sharedStrings.xml" in zf.namelist():
-                    ss_tree = ET.fromstring(zf.read("xl/sharedStrings.xml"))
-                    ns = {"main": "http://schemas.openxmlformats.org/spreadsheetml/2006/main"}
-                    for si in ss_tree.findall(".//main:si", ns):
-                        t_nodes = [t.text for t in si.findall(".//main:t", ns) if t.text]
-                        shared_strings.append("".join(t_nodes))
+            from app.ingestion.parsers.ocr_adapter import OcrAdapter
+            return OcrAdapter.parse_image_to_structured(raw_bytes, title, filename)
+        except Exception as e:
+            logger.warning("OcrAdapter image parsing error for %s: %s", filename, e)
+            warnings = [f"OCR adapter error: {str(e)}"]
+            return "", [], [], warnings
 
-                sheet_files = sorted([f for f in zf.namelist() if f.startswith("xl/worksheets/sheet") and f.endswith(".xml")])
-                sheets_output = []
-
-                for idx, sheet_file in enumerate(sheet_files, start=1):
-                    sheet_tree = ET.fromstring(zf.read(sheet_file))
-                    ns = {"main": "http://schemas.openxmlformats.org/spreadsheetml/2006/main"}
-                    rows_data = []
-
-                    for row in sheet_tree.findall(".//main:row", ns):
-                        row_vals = []
-                        for cell in row.findall(".//main:c", ns):
-                            cell_type = cell.get("t")
-                            v_node = cell.find("main:v", ns)
-                            if v_node is not None and v_node.text:
-                                val = v_node.text
-                                if cell_type == "s" and val.isdigit():
-                                    idx_val = int(val)
-                                    val = shared_strings[idx_val] if idx_val < len(shared_strings) else val
-                                row_vals.append(val.strip())
-                            else:
-                                t_node = cell.find("main:is/main:t", ns)
-                                if t_node is not None and t_node.text:
-                                    row_vals.append(t_node.text.strip())
-                        if row_vals and any(row_vals):
-                            rows_data.append("| " + " | ".join(row_vals) + " |")
-
-                    if rows_data:
-                        sheets_output.append(f"## Sheet {idx}\n\n" + "\n".join(rows_data))
-
-                if sheets_output:
-                    return f"# {title}\n\n" + "\n\n".join(sheets_output)
-        except Exception:
-            pass
-
-        return cls._parse_plain_text(raw_bytes, title, filename)
+    @classmethod
+    def _parse_image(cls, raw_bytes: bytes, title: str, filename: str) -> str:
+        text, _, _, _ = cls._parse_image_structured(raw_bytes, title, filename)
+        return text
 
     @classmethod
     def _parse_pptx(cls, raw_bytes: bytes, title: str, filename: str) -> str:
@@ -957,92 +815,43 @@ class UniversalFileParser:
     @classmethod
     def _parse_markdown_structured(
         cls, raw_bytes: bytes, title: str, filename: str
-    ) -> Tuple[str, List[DocumentPage], List[ContentBlock]]:
-        for enc in ("utf-8", "utf-8-sig", "latin-1", "cp1252"):
-            try:
-                text = raw_bytes.decode(enc)
-                break
-            except UnicodeDecodeError:
-                continue
-        else:
-            text = raw_bytes.decode("utf-8", errors="replace")
+    ) -> Tuple[str, List[DocumentPage], List[ContentBlock], List[Dict[str, Any]], List[str]]:
+        """Parses Markdown documents using specialized MarkdownAdapter with headings, nested lists, and pipe tables."""
+        try:
+            from app.ingestion.parsers.markdown_adapter import MarkdownAdapter
+            return MarkdownAdapter.parse_to_structured(raw_bytes, title, filename)
+        except Exception as e:
+            logger.warning("MarkdownAdapter parsing error for %s: %s", filename, e)
+            return "", [], [], [], [f"Markdown parser error: {str(e)}"]
 
-        lines = text.splitlines()
-        blocks: List[ContentBlock] = []
-        current_hier: List[str] = [title]
-        current_para: List[str] = []
-        b_idx = 1
+    @classmethod
+    def _parse_html_structured(
+        cls, raw_bytes: bytes, title: str, filename: str
+    ) -> Tuple[str, List[DocumentPage], List[ContentBlock], List[Dict[str, Any]], List[str]]:
+        """Parses HTML documents using specialized HtmlAdapter with semantic DOM element preservation."""
+        try:
+            from app.ingestion.parsers.html_adapter import HtmlAdapter
+            return HtmlAdapter.parse_to_structured(raw_bytes, title, filename)
+        except Exception as e:
+            logger.warning("HtmlAdapter parsing error for %s: %s", filename, e)
+            return "", [], [], [], [f"HTML parser error: {str(e)}"]
 
-        def flush_para():
-            nonlocal b_idx
-            if current_para:
-                para_text = " ".join(current_para).strip()
-                if para_text:
-                    blocks.append(ContentBlock(
-                        id=f"blk_md_{b_idx}",
-                        block_type=ContentBlockType.PARAGRAPH,
-                        text=para_text,
-                        raw_text=para_text,
-                        heading_path=list(current_hier),
-                        page_number=1,
-                    ))
-                    b_idx += 1
-                current_para.clear()
+    @classmethod
+    def _parse_csv_structured(
+        cls, raw_bytes: bytes, title: str, filename: str
+    ) -> Tuple[str, List[DocumentPage], List[ContentBlock], List[Dict[str, Any]], List[str]]:
+        """Parses CSV/TSV spreadsheets using specialized CsvAdapter with delimiter detection and table rows."""
+        try:
+            from app.ingestion.parsers.csv_adapter import CsvAdapter
+            return CsvAdapter.parse_to_structured(raw_bytes, title, filename)
+        except Exception as e:
+            logger.warning("CsvAdapter parsing error for %s: %s", filename, e)
+            return "", [], [], [], [f"CSV parser error: {str(e)}"]
 
-        in_yaml_frontmatter = False
-        if lines and lines[0].strip() == "---":
-            in_yaml_frontmatter = True
-            lines = lines[1:]
-
-        for line in lines:
-            if in_yaml_frontmatter:
-                if line.strip() == "---":
-                    in_yaml_frontmatter = False
-                continue
-
-            stripped = line.strip()
-            if not stripped:
-                flush_para()
-                continue
-
-            # Heading check
-            heading_m = re.match(r"^(#{1,6})\s+(.*)$", stripped)
-            if heading_m:
-                flush_para()
-                level = len(heading_m.group(1))
-                h_text = heading_m.group(2).strip()
-                current_hier = current_hier[:level] + [h_text]
-                blocks.append(ContentBlock(
-                    id=f"blk_md_{b_idx}",
-                    block_type=ContentBlockType.HEADING,
-                    text=h_text,
-                    raw_text=line,
-                    heading_path=list(current_hier),
-                    page_number=1,
-                ))
-                b_idx += 1
-                continue
-
-            # List items or quote notes
-            if re.match(r"^(?:>\s*\[!NOTE\]|>\s*|(?:\d+[\.\)]|[a-z][\.\)]|\*|-)\s+)", stripped):
-                flush_para()
-                clean_item = re.sub(r"^(?:>\s*\[!NOTE\]\s*|>\s*)", "", stripped).strip()
-                blocks.append(ContentBlock(
-                    id=f"blk_md_{b_idx}",
-                    block_type=ContentBlockType.LIST_ITEM if not stripped.startswith(">") else ContentBlockType.PARAGRAPH,
-                    text=clean_item,
-                    raw_text=line,
-                    heading_path=list(current_hier),
-                    page_number=1,
-                ))
-                b_idx += 1
-                continue
-
-            current_para.append(stripped)
-
-        flush_para()
-        pages = [DocumentPage(page_number=1, text=text, width=612.0, height=792.0)]
-        return text, pages, blocks
+    @classmethod
+    def _parse_markdown(cls, raw_bytes: bytes, title: str, filename: str) -> str:
+        text, _, _, _, _ = cls._parse_markdown_structured(raw_bytes, title, filename)
+        return text
 
     @classmethod
     def _parse_code_or_config(cls, raw_bytes: bytes, title: str, lang: str) -> str:

@@ -1,0 +1,1280 @@
+[
+  {
+    "id": "93cbdb41-0ce9-5783-af3d-ff6b9aae8c50",
+    "subject": "User",
+    "raw_predicate": "may_use",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "the API Management Premium tier to support availability zones",
+    "claim_text": "You must use the API Management Premium tier to support availability zones.",
+    "doc_title": "Protect Apis By Using Azure Application Gateway And Azure Api Management   Azure Architecture Center   Microsoft Learn"
+  },
+  {
+    "id": "ca12ba79-dce4-5fa1-a235-ea7a78b89b96",
+    "subject": "Microsoft",
+    "raw_predicate": "may_use",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "the Microsoft Entra admin center and Microsoft Graph API to manage identity and network access resources",
+    "claim_text": "Manage and develop with Microsoft Entra Administrators can use the Microsoft Ent",
+    "doc_title": "What Is Microsoft Entra    Microsoft Entra   Microsoft Learn"
+  },
+  {
+    "id": "1b939835-cdd5-5b16-bb88-c7383403bac1",
+    "subject": "Employee",
+    "raw_predicate": "access",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "We are committed to fostering a culture expert help for childcareof holistic wellbeing for our employees , tools for weightContents HUMAN RIGHTS TRANSPARENCY REPORT 20 management, and resources for major life and their families",
+    "claim_text": "Employees can also access We are committed to fostering a culture expert help fo",
+    "doc_title": "Human Rights Transparency Report 2025"
+  },
+  {
+    "id": "befe8a67-e1a7-5b20-b7ba-c0ca9c94b9a6",
+    "subject": "The Office of the Australian Information Commissioner",
+    "raw_predicate": "are_responsible_for",
+    "normalized_predicate": "remains_liable_for",
+    "object": "administering the Privacy Act 1988",
+    "claim_text": "The Office of the Australian Information Commissioner is responsible for adminis",
+    "doc_title": "Privacy In Microsoft Cloud Services"
+  },
+  {
+    "id": "ed45b9e1-7ca8-5540-8314-01d267fdecd5",
+    "subject": "Data",
+    "raw_predicate": "may_use",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "subcontractors that provide sufficient guarantees regarding technical and organizational security measures related to the processing of data and must ensure compliance with those measures",
+    "claim_text": "Outsourcing Data controllers must only use subcontractors that provide sufficien",
+    "doc_title": "Privacy In Microsoft Cloud Services"
+  },
+  {
+    "id": "9c7acd1e-ede1-5c9c-aef6-4b286e3b2bdf",
+    "subject": "Data",
+    "raw_predicate": "delete",
+    "normalized_predicate": "must_delete_data",
+    "object": "or destroy all personal information which has become obsolete",
+    "claim_text": "The data controller must delete or destroy all personal information which has be",
+    "doc_title": "Privacy In Microsoft Cloud Services"
+  },
+  {
+    "id": "a2aaef7d-c62b-553e-9467-9e474b5e33a6",
+    "subject": "Microsoft",
+    "raw_predicate": "are_responsible_for",
+    "normalized_predicate": "remains_liable_for",
+    "object": "its Subprocessors\u2019 compliance with Microsoft\u2019s obligations in this DPA",
+    "claim_text": "Microsoft is responsible for its Subprocessors\u2019 compliance with Microsoft\u2019s obli",
+    "doc_title": "Microsoftproductandservicesdpa(Ww)(English)(May2026)(Cr)"
+  },
+  {
+    "id": "99be2a4f-ec10-5f2e-bf69-2803fa84b04b",
+    "subject": "Customer",
+    "raw_predicate": "are_responsible_for",
+    "normalized_predicate": "remains_liable_for",
+    "object": "determining whether the Products and Services are appropriate for storage and processing of information subject to any specific law or regulation and for using the Products and Services in a manner consistent with Customer\u2019s legal and regulatory obligations",
+    "claim_text": "Customer is responsible for determining whether the Products and Services are ap",
+    "doc_title": "Microsoftproductandservicesdpa(Ww)(English)(May2026)(Cr)"
+  },
+  {
+    "id": "e1aadcb2-f710-52d9-9184-14b29ec70f2f",
+    "subject": "Customer",
+    "raw_predicate": "are_responsible_for",
+    "normalized_predicate": "remains_liable_for",
+    "object": "responding to any request from a third party regarding Customer\u2019s use of Products and Services, such as a request to take down content under the U.S. Digital Millennium Copyright Act or other applicable laws",
+    "claim_text": "Customer is responsible for responding to any request from a third party regardi",
+    "doc_title": "Microsoftproductandservicesdpa(Ww)(English)(May2026)(Cr)"
+  },
+  {
+    "id": "9aace999-1b00-5958-8270-339806d66943",
+    "subject": "Customer",
+    "raw_predicate": "are_responsible_for",
+    "normalized_predicate": "remains_liable_for",
+    "object": "making an independent determination as to whether the technical and organizational measures for Products and Services meet Customer\u2019s requirements, including any of its security obligations under applicable Data Protection Requirements",
+    "claim_text": "Customer is solely responsible for making an independent determination as to whe",
+    "doc_title": "Microsoftproductandservicesdpa(Ww)(English)(May2026)(Cr)"
+  },
+  {
+    "id": "06896823-294a-5fe6-a1c9-90dc36ef9059",
+    "subject": "Customer",
+    "raw_predicate": "are_responsible_for",
+    "normalized_predicate": "remains_liable_for",
+    "object": "implementing and maintaining privacy protections and security measures for components that Customer provides or controls (such as devices enrolled with Microsoft Intune or within a Microsoft Azure customer\u2019s virtual machine or application)",
+    "claim_text": "Customer is responsible for implementing and maintaining privacy protections and",
+    "doc_title": "Microsoftproductandservicesdpa(Ww)(English)(May2026)(Cr)"
+  },
+  {
+    "id": "09058663-52fb-52e2-bb44-09e314928dcc",
+    "subject": "Customer",
+    "raw_predicate": "are_responsible_for",
+    "normalized_predicate": "remains_liable_for",
+    "object": "all costs and fees related to such audit, including all reasonable costs and fees for any and all time Microsoft expends for any such audit, in addition to the rates for services performed by Microsoft",
+    "claim_text": "Customer is responsible for all costs and fees related to such audit, including ",
+    "doc_title": "Microsoftproductandservicesdpa(Ww)(English)(May2026)(Cr)"
+  },
+  {
+    "id": "42a935c2-d3bb-5c99-9d7c-a1b606dfb54a",
+    "subject": "Customer",
+    "raw_predicate": "access",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "export, and delete EDDA at any time, including accessing and exporting EDDA up to 90 days after subscription termination, as set forth in the Data Retention and Deletion provision",
+    "claim_text": "EU Customer may access, export, and delete EDDA at any time, including accessing",
+    "doc_title": "Microsoftproductandservicesdpa(Ww)(English)(May2026)(Cr)"
+  },
+  {
+    "id": "f84c6ccd-b990-5262-b925-bbe567db51b5",
+    "subject": "Microsoft",
+    "raw_predicate": "delete",
+    "normalized_predicate": "must_delete_data",
+    "object": "Preview Data, even if the Preview is subsequently made generally commercially available",
+    "claim_text": "When a Preview ends or Customer otherwise ceases participation in a Preview, Mic",
+    "doc_title": "Microsoftproductandservicesdpa(Ww)(English)(May2026)(Cr)"
+  },
+  {
+    "id": "e628e097-20fb-5d6c-9a91-c028af426870",
+    "subject": "Customer",
+    "raw_predicate": "are_responsible_for",
+    "normalized_predicate": "remains_liable_for",
+    "object": "obtaining any appropriate consent from end users in connection with use of Products and Services that qualify as telecommunication services",
+    "claim_text": "Customer is responsible for obtaining any appropriate consent from end users in ",
+    "doc_title": "Microsoftproductandservicesdpa(Ww)(English)(May2026)(Cr)"
+  },
+  {
+    "id": "a136c1aa-010a-54ee-9cde-10632d4f9f02",
+    "subject": "Customer",
+    "raw_predicate": "are_responsible_for",
+    "normalized_predicate": "remains_liable_for",
+    "object": "(i) providing notice to data subjects, including with respect to retention periods and destruction; (ii) obtaining consent from data subjects; and (iii) deleting the Biometric Data, all as appropriate and required under applicable Data Protection Requirements",
+    "claim_text": "If Customer uses Products and Services to process Biometric Data, Customer is re",
+    "doc_title": "Microsoftproductandservicesdpa(Ww)(English)(May2026)(Cr)"
+  },
+  {
+    "id": "65a9c808-6aca-517e-a585-852e8d41f53e",
+    "subject": "Company",
+    "raw_predicate": "may_use",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "all commercially reasonable efforts to prevent any unauthorized distribution, use, duplication, or pirating of the Microsoft Software Products",
+    "claim_text": "COMPANY agrees to use all commercially reasonable efforts to prevent any unautho",
+    "doc_title": "Agreement For Leasing Or Renting Certain Microsoft Software Products"
+  },
+  {
+    "id": "a33db6bd-823f-54d5-ad54-1207e3913210",
+    "subject": "Subscription",
+    "raw_predicate": "access",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "historical billing data because they don't have permissions to the MCA billing scope",
+    "claim_text": "Subscription owners without MCA billing roles can't access historical billing da",
+    "doc_title": "Checklist Microsoft Customer Agreement Billing Migration   Microsoft Cost Management   Microsoft Learn"
+  },
+  {
+    "id": "6c32172e-8fd8-55c0-8f9b-e67fab3c904d",
+    "subject": "Affiliate",
+    "raw_predicate": "may_use",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "a third party to make these copies",
+    "claim_text": "Enrolled Affiliate may use a third party to make these copies, but Enrolled Affi",
+    "doc_title": "Enterprise Agreement"
+  },
+  {
+    "id": "37bd2989-3ce4-5fa9-b745-63e9daf3fdaa",
+    "subject": "Customer",
+    "raw_predicate": "must_pay_applicable_taxes",
+    "normalized_predicate": "requires_tax_payment",
+    "object": "any applicable value added, goods and services, sales, gross receipts, or other transaction taxes, fees, charges or surcharges, or any regulatory cost recovery surcharges or similar amounts that are owed under this agreement and which Microsoft is permitted to collect from Customer",
+    "claim_text": "Customer shall pay any applicable value added, goods and services, sales, gross ",
+    "doc_title": "Enterprise Agreement"
+  },
+  {
+    "id": "2d890a9d-4008-5178-8a28-3ac5a6676955",
+    "subject": "Customer",
+    "raw_predicate": "are_responsible_for",
+    "normalized_predicate": "remains_liable_for",
+    "object": "any non-Microsoft software or technology that Customer installs or uses with the Products, Fixes or Services Deliverables",
+    "claim_text": "Customer is solely responsible for any non-Microsoft software or technology that",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "2fda43ac-3a6a-530e-a669-aec62b723403",
+    "subject": "Customer",
+    "raw_predicate": "are_responsible_for",
+    "normalized_predicate": "remains_liable_for",
+    "object": "ensuring all products and services acquired through the Marketplace meet Customer's technical and security requirements",
+    "claim_text": "Customer is responsible for ensuring all products and services acquired through ",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "e0411926-be11-5502-9418-67d95b0a1c4a",
+    "subject": "Customer",
+    "raw_predicate": "may_use",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "the Online Services and related software as expressly permitted in Customer's licensing agreement",
+    "claim_text": "Using the Online Services Customer may use the Online Services and related softw",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "812a727c-0db1-5962-8419-16163ad133a6",
+    "subject": "Customer",
+    "raw_predicate": "are_responsible_for",
+    "normalized_predicate": "remains_liable_for",
+    "object": "displaying and/or obtaining appropriate consents, warnings, disclaimers, and acknowledgements to end users of Customer's implementation of the Online Services",
+    "claim_text": "Customer is solely responsible for displaying and/or obtaining appropriate conse",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "5aa1482b-cf5a-5fb0-aa21-f61af5a54f17",
+    "subject": "Customer",
+    "raw_predicate": "are_responsible_for",
+    "normalized_predicate": "remains_liable_for",
+    "object": "ensuring the storage media and data are provided in compliance with all laws and regulations",
+    "claim_text": "Customer is solely responsible for ensuring the storage media and data are provi",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "90852ea2-e178-53f8-850c-c7759e6562c0",
+    "subject": "Customer",
+    "raw_predicate": "may_use",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "the fonts installed by that Online Service to display and print content",
+    "claim_text": "Font Components While Customer uses an Online Service, Customer may use the font",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "8619be4b-38af-55a1-8ccb-5fcbc07846c7",
+    "subject": "Customer",
+    "raw_predicate": "are_responsible_for",
+    "normalized_predicate": "remains_liable_for",
+    "object": "any Non-Microsoft Product that it installs or uses with an Online Service or acquires or manages through a Microsoft online store",
+    "claim_text": "Customer is solely responsible for any Non-Microsoft Product that it installs or",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "a8c7df42-2bdc-5df5-b04e-c743767f2411",
+    "subject": "Customer",
+    "raw_predicate": "may_use",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "the updates or supplements to the Products, pre- release code, additional functionality and optional add-on services to the Products, subject to specific terms (if any) that accompany them",
+    "claim_text": "Customer may use the updates or supplements to the Products, pre- release code, ",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "f4d3105c-7bd7-5461-8a3d-322409a5632a",
+    "subject": "Customer",
+    "raw_predicate": "are_responsible_for",
+    "normalized_predicate": "remains_liable_for",
+    "object": "all of the obligations under its volume licensing agreement regardless of the physical location of the hardware upon which the software is used",
+    "claim_text": "Customer is responsible for all of the obligations under its volume licensing ag",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "f74e37af-0cf0-50dd-a44f-decde889b33d",
+    "subject": "Customer",
+    "raw_predicate": "may_use",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "the appropriate product key provided by Microsoft for activation and validation of the software Product being installed by the Customer",
+    "claim_text": "Activation and validation Customer shall use the appropriate product key provide",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "dad4505c-c661-5915-9394-6537aa591bfe",
+    "subject": "User",
+    "raw_predicate": "access",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "up to four instances of the software",
+    "claim_text": "Each Licensed User may access up to four instances of the software.",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "e1c3c9c4-58c5-5714-869c-921743e4455d",
+    "subject": "Customer",
+    "raw_predicate": "may_use",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "KMS activation in lieu of Azure AD -based activation",
+    "claim_text": "Azure Government customers may use KMS activation in lieu of Azure AD -based act",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "5ed8ced3-c04f-5e54-ad86-a1c466f33f96",
+    "subject": "Customer",
+    "raw_predicate": "access",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "Azure Virtual Desktop Windows, and Windows Server virtual machines initiated by Authorized Users to perform acceptance tests or provide feedback",
+    "claim_text": "Customer's end users may also access Azure Virtual Desktop Windows, and Windows ",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "33b7a615-9029-5c11-83dd-caa78277423a",
+    "subject": "Customer",
+    "raw_predicate": "may_use",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "Standard or Datacenter software",
+    "claim_text": "Customer may use Standard or Datacenter software.",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "9d88cc44-fffe-5bbb-9b10-b4b50404efea",
+    "subject": "Customer",
+    "raw_predicate": "may_use",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "Windows Server in any number of Base Instances on an Azure Dedicated Host or other dedicated physical host in Azure, provided Customer allocates Windows Server Datacenter Licenses with SA for all of the Physical Cores available to Customer on that Azure server",
+    "claim_text": "Customer may use Windows Server in any number of Base Instances on an Azure Dedi",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "a5e78403-6f25-5f4a-8b5e-d3722f1a1b91",
+    "subject": "Customer",
+    "raw_predicate": "are_responsible_for",
+    "normalized_predicate": "remains_liable_for",
+    "object": "ensuring that third parties who access, use or distribute the Customer Solution comply with these terms, the terms and conditions of Customer's licensing agreement, and all applicable laws",
+    "claim_text": "Customer is responsible for ensuring that third parties who access, use or distr",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "e9113b6d-25fd-5788-acd7-48e66ba3a430",
+    "subject": "Customer",
+    "raw_predicate": "may_use",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "Azure Defender for IoT solely to monitor devices based on its current commitment level",
+    "claim_text": "Azure Defender for IoT Customer may use Azure Defender for IoT solely to monitor",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "b5f1a3ee-f182-53de-811e-8ef53a7ba907",
+    "subject": "Customer",
+    "raw_predicate": "access",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "and use Azure DevOps to develop and test Customer's application(s)",
+    "claim_text": "Azure DevOps Use for Development and Testing Customer may only access and use Az",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "d62d1918-4e67-5a87-b527-d84f9b76190f",
+    "subject": "User",
+    "raw_predicate": "access",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "a virtual machine provided by Azure DevOps at any time",
+    "claim_text": "Only one Licensed User may access a virtual machine provided by Azure DevOps at ",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "715a87e2-1c78-535b-822e-03e2d67c182b",
+    "subject": "Microsoft",
+    "raw_predicate": "are_responsible_for",
+    "normalized_predicate": "remains_liable_for",
+    "object": "complying with the terms for any such software included in Azure DevOps and will keep confidential any confidential information of Apple accessed as part of Azure DevOps",
+    "claim_text": "Microsoft is responsible for complying with the terms for any such software incl",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "3c0a9d1a-b52a-5589-b1c3-f43b6813b237",
+    "subject": "Customer",
+    "raw_predicate": "may_use",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "AKS as long as it is registered with Customer's valid Azure subscription in order to enable additional AKS functionality and to meter and invoice Customer",
+    "claim_text": "Customer may use AKS as long as it is registered with Customer's valid Azure sub",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "58e1f43a-a7bb-53dc-a9e3-9cd9f7f2d8ca",
+    "subject": "Customer",
+    "raw_predicate": "are_responsible_for",
+    "normalized_predicate": "remains_liable_for",
+    "object": "updating the virtual machines (VMs) in Customer's portfolio",
+    "claim_text": "Updates Customer is responsible for updating the virtual machines (VMs) in Custo",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "9d392258-e8e9-59db-962f-1b943558de7c",
+    "subject": "Customer",
+    "raw_predicate": "may_use",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "the \"Get Map Attribution service\" to obtain the copyright attribution text and display it in their applications",
+    "claim_text": "In addition, customers using the Azure Maps Render V2 API must use the \"Get Map ",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "7dbc5e6b-3307-5369-8e1f-91db24de3768",
+    "subject": "Customer",
+    "raw_predicate": "may_use",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "the Azure Stack HCI software only (i) on servers dedicated to Customer's internal use and (ii) as a host operating system to manage and service validly licensed virtual machines running validly licensed applications",
+    "claim_text": "Use Rights and Conditions for Use Customer may use the Azure Stack HCI software ",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "5bd6f317-ebde-5665-8c4f-919112bdc6b6",
+    "subject": "Customer",
+    "raw_predicate": "may_use",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "the Azure Stack HCI software as long as it is (i) registered with Customer's valid Azure subscription in order to enable additional Azure Stack HCI functionality and to meter and invoice Customer and (ii) connected to Customer's Azure subscription over the Internet at least once every thirty (30) consecutive calendar days",
+    "claim_text": "Customer may use the Azure Stack HCI software as long as it is (i) registered wi",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "f5e07667-c7d0-5a0f-9069-936e15cfc799",
+    "subject": "Customer",
+    "raw_predicate": "may_use",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "Azure Stack Hub only on the hardware on which it is preinstalled",
+    "claim_text": "Use of Azure Stack Hub Customer may use Azure Stack Hub only on the hardware on ",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "464e5348-ff7a-544c-9ed6-95b1fc2fb3c3",
+    "subject": "Customer",
+    "raw_predicate": "may_use",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "Microsoft Azure Stack Hub on a Licensed Server , provided it acquires a number of SLs equal to the number of Physical Cores on that Server",
+    "claim_text": "Azure Stack Hub Plan Customer may use Microsoft Azure Stack Hub on a Licensed Se",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "995fc5b6-945d-511e-8c06-ff2dfa9760de",
+    "subject": "Customer",
+    "raw_predicate": "are_responsible_for",
+    "normalized_predicate": "remains_liable_for",
+    "object": "providing technical support to End Users for all aspects and components of the Azure Virtual Desktop Customer Solution, either itself or by obtaining and continuously maintaining support for its End Users through Microsoft or a third party",
+    "claim_text": "Customer alone is responsible for providing technical support to End Users for a",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "8fa457c0-7595-5d36-8c8a-eb40908ea0a9",
+    "subject": "User",
+    "raw_predicate": "may_use",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "the Software Services only in accordance with your agreement with Service Provider and these terms",
+    "claim_text": "You may use the Software Services only in accordance with your agreement with Se",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "08b5be75-f339-53f0-80c8-46f59c1ec95e",
+    "subject": "Microsoft",
+    "raw_predicate": "may_use",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "this to perform speaker verification against Customer's audio training files; however, Microsoft's retention of audio files does not create or imply an obligation that Microsoft will perform speaker verification",
+    "claim_text": "Customer acknowledges and agrees that Microsoft may use this to perform speaker ",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "53fb58b3-8122-5183-8bec-22a5217ec0bf",
+    "subject": "Customer",
+    "raw_predicate": "access",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "and use Visual Studio App Center to develop and test Customer's application(s)",
+    "claim_text": "Use for Development and Testing Customer may only access and use Visual Studio A",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "9396a797-4fcd-503a-bbed-58c7cf2f8a3d",
+    "subject": "User",
+    "raw_predicate": "access",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "a virtual machine provided by Visual Studio App Center at any time",
+    "claim_text": "Only one Licensed User may access a virtual machine provided by Visual Studio Ap",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "b4397d47-1ebd-55f1-a46c-0caa74173de7",
+    "subject": "Microsoft",
+    "raw_predicate": "are_responsible_for",
+    "normalized_predicate": "remains_liable_for",
+    "object": "complying with the terms for any such software included in Visual Studio App Center and will keep confidential any confidential information of Apple accessed as part of Visual Studio App Center",
+    "claim_text": "Microsoft is responsible for complying with the terms for any such software incl",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "bb7c3f70-6faf-52a8-95ef-fb2fa8d4e766",
+    "subject": "Customer",
+    "raw_predicate": "are_responsible_for",
+    "normalized_predicate": "remains_liable_for",
+    "object": "that use and for ensuring that these terms and the terms and conditions of Customer's volume licensing agreement are met by that use",
+    "claim_text": "Customer is responsible for that use and for ensuring that these terms and the t",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "aca2accf-f534-538d-898d-c434637b574f",
+    "subject": "Customer",
+    "raw_predicate": "may_use",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "the publish to web functionality to share content only on a publicly available website",
+    "claim_text": "Publish to Web Customer may use the publish to web functionality to share conten",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "627eb4dd-40db-57b5-a115-057f9976ab95",
+    "subject": "Customer",
+    "raw_predicate": "may_use",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "the \"Wrap\" feature of Power Apps to generate a software package containing a canvas app combined with certain Power Apps mobile platform components",
+    "claim_text": "Distributable Code Customer may use the \"Wrap\" feature of Power Apps to generate",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "85bc68dd-cd34-5eb1-8314-2b7c9dfc5275",
+    "subject": "User",
+    "raw_predicate": "may_use",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "the software under the same License at the same time",
+    "claim_text": "No other user may use the software under the same License at the same time.",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "adf24e66-9043-595d-ae9e-a22329d60082",
+    "subject": "Customer",
+    "raw_predicate": "are_responsible_for",
+    "normalized_predicate": "remains_liable_for",
+    "object": "ensuring that any product or",
+    "claim_text": "Customer is solely responsible for ensuring that any product or",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "a9abc028-bc17-5641-b954-6987d131b693",
+    "subject": "Customer",
+    "raw_predicate": "are_responsible_for",
+    "normalized_predicate": "remains_liable_for",
+    "object": "determining the appropriateness of using the Data Box Device as set forth in these Additional Terms, and (ii) that Microsoft shall have no liability to Customer or any other third party for any loss of data or other damages",
+    "claim_text": "Customer agrees (i) that it is solely responsible for determining the appropriat",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "db61db52-542a-5d7d-8b79-f71e9fb6a884",
+    "subject": "Customer",
+    "raw_predicate": "are_responsible_for",
+    "normalized_predicate": "remains_liable_for",
+    "object": "inspecting the Data Box Device upon receipt from the carrier and for promptly reporting any damages to Microsoft Support at databoxsupport@microsoft.com",
+    "claim_text": "Customer is responsible for inspecting the Data Box Device upon receipt from the",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "591d311c-97be-5a85-9e8e-cc61cb81280a",
+    "subject": "Customer",
+    "raw_predicate": "are_responsible_for",
+    "normalized_predicate": "remains_liable_for",
+    "object": "the entire risk of loss of, or any damage to, the Data Box Device once it has been delivered by the carrier to Customer's designated address until the Microsoft -designated carrier accepts the Data Box Device for delivery back to the Designated Azure Data Center",
+    "claim_text": "Customer is responsible for the entire risk of loss of, or any damage to, the Da",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "b2062d95-1852-5c01-9e5e-21663b80ee9a",
+    "subject": "Customer",
+    "raw_predicate": "are_responsible_for",
+    "normalized_predicate": "remains_liable_for",
+    "object": "obtaining, at its own risk and expense, any export license, import license and other official authorization for the exportation and importation of the Data Box Device and associated Software and Customer's data to any such different Customer location",
+    "claim_text": "Customer is responsible for obtaining, at its own risk and expense, any export l",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "8e18fd9d-65c1-5136-a4f2-97d56f84c77a",
+    "subject": "Customer",
+    "raw_predicate": "are_responsible_for",
+    "normalized_predicate": "remains_liable_for",
+    "object": "inspecting the Azure Stack Edge Device upon receipt from the carrier and for promptly reporting any damages to Microsoft Support at adbeops@microsoft.com",
+    "claim_text": "Customer is responsible for inspecting the Azure Stack Edge Device upon receipt ",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "844fdf9d-96b6-52fe-898d-a467f1b4d55d",
+    "subject": "Customer",
+    "raw_predicate": "are_responsible_for",
+    "normalized_predicate": "remains_liable_for",
+    "object": "the entire risk of loss of, or any damage to (other than expected wear and tear), the Azure Stack Edge Device once it has been delivered by the carrier to Customer's designated address until the Microsoft-designated carrier accepts the Azure Stack Edge Device for return delivery",
+    "claim_text": "Customer is responsible for the entire risk of loss of, or any damage to (other ",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "b61be98a-705d-560f-8645-4e2b01bf4ff6",
+    "subject": "Customer",
+    "raw_predicate": "are_responsible_for",
+    "normalized_predicate": "remains_liable_for",
+    "object": "the costs of shipping the Azure Stack Edge Device, including adequate protections against any loss or damage of the Azure Stack Edge Device (e.g., insurance coverage) while in transit",
+    "claim_text": "If Customer prefers to arrange Customer's own pick-up and/or return of the same,",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "4d87bc73-17ff-50c2-8f48-713493a48d4a",
+    "subject": "Customer",
+    "raw_predicate": "are_responsible_for",
+    "normalized_predicate": "remains_liable_for",
+    "object": "obtaining at government Customer's own risk and expense any export license, import license and other official authorization for the exportation and importation of the Azure Stack Edge Device and associated Software and government Customer's data to any such different government Customer location",
+    "claim_text": "Government Customer is responsible for obtaining at government Customer's own ri",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "8ad5b577-cc1d-505c-aa53-a70c814c3ea7",
+    "subject": "Customer",
+    "raw_predicate": "may_use",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "other Azure services in connection with Customer's use of the Service, and Microsoft deems such services as separate services that may be subject to separate metered fees and costs",
+    "claim_text": "For clarity, Customer may use other Azure services in connection with Customer's",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "e2883652-261f-5fb6-bede-7f3a91f2880e",
+    "subject": "Customer",
+    "raw_predicate": "may_use",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "and subscribe to additional, optional services in connection with the Service and Appliance that will be subject to a separate fee or subscription",
+    "claim_text": "Customer may use and subscribe to additional, optional services in connection wi",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "f3a00b69-c89e-5323-9f58-729a22f24cf2",
+    "subject": "Customer",
+    "raw_predicate": "are_responsible_for",
+    "normalized_predicate": "remains_liable_for",
+    "object": "inspecting the Appliance upon receipt from the carrier and for promptly reporting any damages to Microsoft Support at madbeops@microsoft.com",
+    "claim_text": "Customer is responsible for inspecting the Appliance upon receipt from the carri",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "5139c45e-a2c1-57a8-8aa4-7ae5e6ec9ee0",
+    "subject": "Customer",
+    "raw_predicate": "are_responsible_for",
+    "normalized_predicate": "remains_liable_for",
+    "object": "the entire risk of loss of, or any damage (other than expected wear and tear) to, the Appliance once it has been delivered by the carrier to Customer's designated address until the Microsoft-designated carrier accepts the Appliance for return delivery",
+    "claim_text": "Customer is responsible for the entire risk of loss of, or any damage (other tha",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "55f378cb-ab28-57d8-8c5f-b14fe4ebc134",
+    "subject": "Customer",
+    "raw_predicate": "are_responsible_for",
+    "normalized_predicate": "remains_liable_for",
+    "object": "obtaining at government Customer's own risk and expense any export license, import license and other official authorization for the exportation and importation of the Appliance and associated Software and government Customer's data to any such different location of government Customers",
+    "claim_text": "Subject to Section \"Export Control Laws\", government Customer is responsible for",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "891ee012-a472-533b-b158-f7025e799b49",
+    "subject": "Customer",
+    "raw_predicate": "may_use",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "other Azure services in connection with Customer's use of the Service, and Microsoft deems such services as separate and additional services subject to separate subscription or metered fees and costs, as those additional services are installed on the Appliance",
+    "claim_text": "For clarity, Customer may use other Azure services in connection with Customer's",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "de3f52ce-8683-51bb-827b-dd2e374424d1",
+    "subject": "Affiliate",
+    "raw_predicate": "are_responsible_for",
+    "normalized_predicate": "remains_liable_for",
+    "object": "reviewing and establishing security practices consistent with the CJIS Management Agreement, including the CJIS Security Addendum contained therein",
+    "claim_text": "Affiliate is responsible for reviewing and establishing security practices consi",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "adf4aa4d-7b6d-5d67-aea0-74ea33fca645",
+    "subject": "Affiliate",
+    "raw_predicate": "are_responsible_for",
+    "normalized_predicate": "remains_liable_for",
+    "object": "obtaining all CJIS related documentation from the CSA including but not limited to the CJIS Management Agreement and the CJIS Security Addendum",
+    "claim_text": "Affiliate is responsible for obtaining all CJIS related documentation from the C",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "5b7cbeaa-f04e-57d7-a1f8-0ccde0b383ed",
+    "subject": "Auditor",
+    "raw_predicate": "access",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "data belonging to Enrolled Affiliate or other entities in the State that have purchased the Covered Services and rely on the CSA for purposes of audit",
+    "claim_text": "The CSA or its auditor may only access data belonging to Enrolled Affiliate or o",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "293bf083-9d23-5ef2-9133-27314d605dca",
+    "subject": "Company",
+    "raw_predicate": "may_use",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "automated processes to help make advertising more relevant to you",
+    "claim_text": "We may use automated processes to help make advertising more relevant to you.",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "df29991c-5c5e-52be-8285-7a587418997f",
+    "subject": "Company",
+    "raw_predicate": "may_use",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "automated processes to detect and prevent activities that violate our rights and the rights of others, such as fraud",
+    "claim_text": "We may use automated processes to detect and prevent activities that violate our",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "4e25e824-ce85-5c69-8d4c-92c6a213f82e",
+    "subject": "User",
+    "raw_predicate": "access",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "and control your personal data that Microsoft has obtained with tools Microsoft provides to you, which are described below, or by contacting Microsoft",
+    "claim_text": "You can access and control your personal data that Microsoft has obtained with t",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "5dc24749-f60c-5127-bcd4-90ea4e5d0596",
+    "subject": "User",
+    "raw_predicate": "access",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "and control your personal data that Microsoft has obtained, and exercise your data protection rights, using various tools we provide",
+    "claim_text": "You can access and control your personal data that Microsoft has obtained, and e",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "015813aa-fbf8-5472-9017-4272bd01d384",
+    "subject": "User",
+    "raw_predicate": "access",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "and edit your data by signing in at MSDN forum",
+    "claim_text": "If you have a Microsoft Developer Network (MSDN) public profile, you can access ",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "1bd9d58c-2893-550f-88c6-0ca593b296ab",
+    "subject": "User",
+    "raw_predicate": "access",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "your Microsoft Store profile and account information by visiting Microsoft Store and selecting View account or Order history",
+    "claim_text": "You can access your Microsoft Store profile and account information by visiting ",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "a6e79d22-4608-5aeb-98e2-75b698b10bf7",
+    "subject": "User",
+    "raw_predicate": "may_use",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "the opt-out linked to your personal Microsoft account, or opt out of interest-based advertising by turning off the advertising ID in Windows settings",
+    "claim_text": "For Microsoft-controlled advertising that appears in apps on Windows, you may us",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "4e1706cd-82cf-587f-b171-8d6d7a62993d",
+    "subject": "User",
+    "raw_predicate": "may_use",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "your work or school account to sign in to Microsoft or third-party products that you acquire for yourself",
+    "claim_text": "And, if allowed by your organization, you may also use your work or school accou",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "f992b3d6-891e-50cf-b970-c6714672ff28",
+    "subject": "The child",
+    "raw_predicate": "access",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "communication services, like Outlook and Skype, and can freely communicate and share data with other users of all ages",
+    "claim_text": "The child can access communication services, like Outlook and Skype, and can fre",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "ea19b815-a06a-5e5d-8565-3c735343fbc1",
+    "subject": "Microsoft",
+    "raw_predicate": "may_use",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "data we collect to select and deliver some of the ads you see on Microsoft web properties, such as Microsoft.com , MSN, and Bing",
+    "claim_text": "Microsoft may use data we collect to select and deliver some of the ads you see ",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "d5bf1319-f6be-5c8f-989f-e984e49805b7",
+    "subject": "Each party",
+    "raw_predicate": "access",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "and use the advertising ID (much the same way that websites can access and use a unique identifier stored in a cookie) to select and deliver ads in such apps",
+    "claim_text": "When the advertising ID is enabled in Windows as part of your privacy settings, ",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "22614d6b-dd14-5a27-9ab1-7b91d1f42f6d",
+    "subject": "Company",
+    "raw_predicate": "may_use",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "information about you to serve you with personalized advertising when you use Microsoft services",
+    "claim_text": "We may use information about you to serve you with personalized advertising when",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "6a3a0837-101e-5f70-970b-d899c94fc3ae",
+    "subject": "User",
+    "raw_predicate": "access",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "the privacy controls within your Office apps by selecting File > Account > Account Privacy",
+    "claim_text": "You can access the privacy controls within your Office apps by selecting File > ",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "a15efaeb-ca9e-574e-814e-210f74b84669",
+    "subject": "Company",
+    "raw_predicate": "may_use",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "this information in accordance with their own terms and privacy policy",
+    "claim_text": "The company providing the notification service on your device will use this info",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "eed4e7db-2d62-5abd-85de-fb387adc688e",
+    "subject": "User",
+    "raw_predicate": "delete",
+    "normalized_predicate": "must_delete_data",
+    "object": "a bot that you no longer wish to engage with",
+    "claim_text": "You can delete a bot that you no longer wish to engage with.",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "019a6300-1eb6-514f-a5dc-8de081a0ba6a",
+    "subject": "User",
+    "raw_predicate": "delete",
+    "normalized_predicate": "must_delete_data",
+    "object": "it",
+    "claim_text": "If you are signed-in to a work or school Microsoft account using Microsoft Searc",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "3b830d32-0d12-572e-b20b-b9c603e0b242",
+    "subject": "User",
+    "raw_predicate": "access",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "Bing-powered experiences when using third-party services, such as those from Yahoo!",
+    "claim_text": "You may access Bing-powered experiences when using third-party services, such as",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "c25e4297-120c-5064-b20f-ddb725017860",
+    "subject": "Microsoft",
+    "raw_predicate": "may_use",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "this data as described in this statement or as further limited by our contractual obligations with our partners",
+    "claim_text": "Microsoft will use this data as described in this statement or as further limite",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "6eae2147-6184-52be-bbf8-1b14f3400e5c",
+    "subject": "User",
+    "raw_predicate": "delete",
+    "normalized_predicate": "must_delete_data",
+    "object": "this data from your device using Clear Browsing History",
+    "claim_text": "You can delete this data from your device using Clear Browsing History.",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "086566ec-f520-5d5a-8ffc-1c7471a96e28",
+    "subject": "Microsoft",
+    "raw_predicate": "access",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "and use the advertising ID in much the same way that websites can access and use a unique identifier stored in a cookie",
+    "claim_text": "When the advertising ID is enabled, both Microsoft apps and third-party apps can",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "72e05b75-013e-5387-9dae-83744fa8b8fc",
+    "subject": "Company",
+    "raw_predicate": "may_use",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "your Windows diagnostic data (Required or Optional as you have selected) to offer you personalized tips, ads, and recommendations to enhance Microsoft experiences",
+    "claim_text": "If you choose to turn on Tailored experiences , we will use your Windows diagnos",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "f78f1852-311f-524c-83e5-8f197fce4bc6",
+    "subject": "Company",
+    "raw_predicate": "may_use",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "automated",
+    "claim_text": "We may use automated",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "eb07640a-e8cb-5f43-85b0-dea89fde719a",
+    "subject": "User",
+    "raw_predicate": "delete",
+    "normalized_predicate": "must_delete_data",
+    "object": "the sync and backup data Windows has stored in the settings app",
+    "claim_text": "You can also delete the sync and backup data Windows has stored in the settings ",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "c1d89956-96ed-5070-aec4-15f0790a8c1d",
+    "subject": "User",
+    "raw_predicate": "delete",
+    "normalized_predicate": "must_delete_data",
+    "object": "this data from your device using Delete Browsing History",
+    "claim_text": "You can delete this data from your device using Delete Browsing History.",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "0be58a89-2cec-5c3d-9567-3bf263fa11da",
+    "subject": "User",
+    "raw_predicate": "are_responsible_for",
+    "normalized_predicate": "remains_liable_for",
+    "object": "ensuring you have appropriate permissions from the people in your photos and videos to use facial grouping technology to group your photos and videos in your personal albums",
+    "claim_text": "You, and not Microsoft, are responsible for ensuring you have appropriate permis",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "bcfb4400-dc45-5b8f-8bed-377b066defc8",
+    "subject": "Turning off your SMS/MMS backup",
+    "raw_predicate": "delete",
+    "normalized_predicate": "must_delete_data",
+    "object": "messages that have been previously backed up to your Microsoft account",
+    "claim_text": "Turning off your SMS/MMS backup will not delete messages that have been previous",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "a7b4176b-6452-5e86-a448-ba8d50afef92",
+    "subject": "User",
+    "raw_predicate": "delete",
+    "normalized_predicate": "must_delete_data",
+    "object": "them from your device prior to turning off backup",
+    "claim_text": "To delete such messages, you must first delete them from your device prior to tu",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "975a1ede-3289-565a-8450-76de18c8ccdc",
+    "subject": "User",
+    "raw_predicate": "delete",
+    "normalized_predicate": "must_delete_data",
+    "object": "your biometric verification data from within Settings",
+    "claim_text": "You can delete your biometric verification data from within Settings.",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "d26475ff-77ba-5777-85e9-a181f26eff0b",
+    "subject": "User",
+    "raw_predicate": "access",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "the tool by searching for \"Microsoft Silverlight.\" Silverlight application storage",
+    "claim_text": "In Windows, for example, you can access the tool by searching for \"Microsoft Sil",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "8f208474-62ec-5d4d-bfaf-3ba94c0d47e9",
+    "subject": "User",
+    "raw_predicate": "may_use",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "the opt -out linked to your personal Microsoft account, or opt out of interest-based advertising by turning off the advertising ID in Windows settings",
+    "claim_text": "For Microsoft-controlled advertising that appears in apps on Windows, you may us",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "121bb95a-d649-5413-8904-c89736a9c77a",
+    "subject": "Company",
+    "raw_predicate": "may_use",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "this informatio n",
+    "claim_text": "The company providing the notification service on your device will use this info",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "50e2880b-6aff-5fa6-8e39-694e8021a01b",
+    "subject": "User",
+    "raw_predicate": "access",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "Bing-powered experiences when using third-party services, such as th ose from Yahoo!",
+    "claim_text": "You may access Bing-powered experiences when using third-party services, such as",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "deef754d-427d-5335-8e5b-d134d71dd99b",
+    "subject": "User",
+    "raw_predicate": "delete",
+    "normalized_predicate": "must_delete_data",
+    "object": "this data from",
+    "claim_text": "You can delete this data from",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "0c329196-5ed0-5b1a-87bf-3990ca8790e8",
+    "subject": "User",
+    "raw_predicate": "delete",
+    "normalized_predicate": "must_delete_data",
+    "object": "them",
+    "claim_text": "To delete such messages, you must first delete them",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "411fc600-8f32-57b6-8ad5-a46ddbd5cdb9",
+    "subject": "Company",
+    "raw_predicate": "may_use",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "commercially reasonable efforts to process claims during the subsequent month and within forty -five (45) days of receipt",
+    "claim_text": "We will use commercially reasonable efforts to process claims during the subsequ",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "6dffceec-a265-5af5-811d-7e77dabb5482",
+    "subject": "Customer",
+    "raw_predicate": "are_responsible_for",
+    "normalized_predicate": "remains_liable_for",
+    "object": "determining whether the Online Services are appropriate for storage and processing of information subject to any specific law or regulation and for using the Online Services in a manner consistent with Customer's legal and regulatory obligations",
+    "claim_text": "Customer is responsible for determining whether the Online Services are appropri",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "db77e35a-9368-51f8-be1b-9c74a36531c2",
+    "subject": "Customer",
+    "raw_predicate": "are_responsible_for",
+    "normalized_predicate": "remains_liable_for",
+    "object": "responding to any request from a third party regarding Customer's use of an Online Service, such as a request to take down content under the U.S",
+    "claim_text": "Customer is responsible for responding to any request from a third party regardi",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "ca517702-ef6e-56e8-ad9f-f1dcc9df73e1",
+    "subject": "Customer",
+    "raw_predicate": "are_responsible_for",
+    "normalized_predicate": "remains_liable_for",
+    "object": "making an independent determination as to whether the technical and organizational measures for an Online Service meet Customer's requirements, including any of its security obligations under applicable Data Protection Requirements",
+    "claim_text": "Customer Responsibilities Customer is solely responsible for making an independe",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "d2afe9c4-8661-5d96-a91c-6d69bb05f05f",
+    "subject": "Customer",
+    "raw_predicate": "are_responsible_for",
+    "normalized_predicate": "remains_liable_for",
+    "object": "implementing and maintaining privacy protections and security measures for components that Customer provides or controls (such as devices enrolled with Microsoft Intune or within a Microsoft Azure customer's virtual machine or application)",
+    "claim_text": "Customer is responsible for implementing and maintaining privacy protections and",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "6994af1b-4b8c-566d-acfb-57f5a83e39aa",
+    "subject": "Customer",
+    "raw_predicate": "are_responsible_for",
+    "normalized_predicate": "remains_liable_for",
+    "object": "all costs and fees related to such audit, including all reasonable costs and fees for any and all time Microsoft expends for any such audit, in addition to the rates for services performed by Microsoft",
+    "claim_text": "Customer is responsible for all costs and fees related to such audit, including ",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "3d2a6118-126f-575e-a07a-11496f95854d",
+    "subject": "Microsoft",
+    "raw_predicate": "are_responsible_for",
+    "normalized_predicate": "remains_liable_for",
+    "object": "its Subprocessors' compliance with Microsoft's obligations in this DPA",
+    "claim_text": "Microsoft is responsible for its Subprocessors' compliance with Microsoft's obli",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "093d5489-749e-5407-9b51-f09735a5ae64",
+    "subject": "Microsoft",
+    "raw_predicate": "delete",
+    "normalized_predicate": "must_delete_data",
+    "object": "or return all copies of Professional Services Data after the business purposes for which the Professional Services Data was collected or transferred have been fulfilled or earlier upon Customer's request, unless Microsoft is permitted or required by applicable law, or authorized under this DPA, to retain such data",
+    "claim_text": "Data Deletion or Return Microsoft will delete or return all copies of Profession",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "315d9a94-abe1-5da6-a741-4bcc4e89955a",
+    "subject": "Microsoft",
+    "raw_predicate": "are_responsible_for",
+    "normalized_predicate": "remains_liable_for",
+    "object": "its Subprocessors of Professional Services Data compliance with Microsoft's obligations in Attachment 1 of the DPA",
+    "claim_text": "Microsoft is responsible for its Subprocessors of Professional Services Data com",
+    "doc_title": "Mcaps Msft Gsa Commercial Supplier Agreement Terms"
+  },
+  {
+    "id": "cb948275-07dc-579c-b583-4103c802fb3c",
+    "subject": "Company",
+    "raw_predicate": "may_use",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "Microsoft\u2019s corporate name, Microsoft\u2019s Product names, and trademarks (\u201cMicrosoft Marks\u201d) in plain text (but not logos, trade dress, designs, or word marks in stylized form) to accurately identify and refer to Microsoft and its technology and services",
+    "claim_text": "Company may use Microsoft\u2019s corporate name, Microsoft\u2019s Product names, and trade",
+    "doc_title": "Microsoft Partner Agreement (Direct)"
+  },
+  {
+    "id": "3c2bee8f-da4f-5847-8dec-8699d7c7546d",
+    "subject": "Each party",
+    "raw_predicate": "may_use",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "reproduce and modify the other party's Pre- existing Work only as needed to perform obligations related to Professional Services",
+    "claim_text": "Each party may use, reproduce and modify the other party's Pre- existing Work on",
+    "doc_title": "Microsoft Business And Services Agreement"
+  },
+  {
+    "id": "e805a2ff-6879-5c50-9583-43d70f72c96e",
+    "subject": "Customer",
+    "raw_predicate": "are_responsible_for",
+    "normalized_predicate": "remains_liable_for",
+    "object": "any non- Microsoft software or technology that it installs or uses with the Products, Fixes, or Services Deliverables",
+    "claim_text": "Customer is solely responsible for any non- Microsoft software or technology tha",
+    "doc_title": "Microsoft Business And Services Agreement"
+  },
+  {
+    "id": "cab48542-7c85-582d-9871-87eb3996fa6b",
+    "subject": "Microsoft",
+    "raw_predicate": "may_use",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "contractors to perform services",
+    "claim_text": "Microsoft may use contractors to perform services, but will be responsible for t",
+    "doc_title": "Microsoft Business And Services Agreement"
+  },
+  {
+    "id": "b0fb3fe5-4181-5e8c-a1f9-edb3e0c25b1c",
+    "subject": "Customer",
+    "raw_predicate": "must_pay_applicable_taxes",
+    "normalized_predicate": "requires_tax_payment",
+    "object": "all value added, goods and services, sales, gross receipts, or other transaction taxes, fees, charges, or surcharges, or any regulatory cost recovery surcharges or similar amounts that are owed under this agreement and that Microsoft is permitted to collect from Customer under applicable law",
+    "claim_text": "Customer shall pay all value added, goods and services, sales, gross receipts, o",
+    "doc_title": "Microsoft Business And Services Agreement"
+  },
+  {
+    "id": "25731286-fbc8-511d-867b-40e48aa42b5b",
+    "subject": "Each party",
+    "raw_predicate": "may_use_preexisting_work",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "reproduce, and modify the other party's Pre-existing Work only as needed to perform obligations related to Professional Services",
+    "claim_text": "Each party may use, reproduce, and modify the other party's Pre-existing Work on",
+    "doc_title": "Microsoft Customer Agreement"
+  },
+  {
+    "id": "d2781818-7909-5538-a494-201d56d7be59",
+    "subject": "Customer",
+    "raw_predicate": "must_pay_applicable_taxes",
+    "normalized_predicate": "requires_tax_payment",
+    "object": "any applicable value added, goods and services, sales, gross receipts, or other transaction taxes, fees, charg es, or surcharges, or any regulatory cost recovery surcharges or similar amounts that are owed under this Agreement and that Microsoft is permitted to collect from Customer",
+    "claim_text": "If any amounts are to be paid to Microsoft, Customer will also pay any applicabl",
+    "doc_title": "Microsoft Customer Agreement"
+  },
+  {
+    "id": "c071adbf-a0de-540b-925b-ca4c779d51c4",
+    "subject": "Company",
+    "raw_predicate": "are_responsible_for",
+    "normalized_predicate": "remains_liable_for",
+    "object": "managing which of its Representatives are authorized to access and act on the Partner Portal on Company\u2019s behalf",
+    "claim_text": "Company is solely responsible for managing which of its Representatives are auth",
+    "doc_title": "Microsoft Partner Agreement (Direct)"
+  },
+  {
+    "id": "5b1d0a06-80c4-5264-8bc9-94cae019cfa5",
+    "subject": "Company",
+    "raw_predicate": "may_use",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "commercially reasonable efforts and professional care and skill in providing any required service and support to its Resellers and Customers, as applicable",
+    "claim_text": "Company agrees to use commercially reasonable efforts and professional care and ",
+    "doc_title": "Microsoft Partner Agreement (Direct)"
+  },
+  {
+    "id": "19b32615-accc-5e13-9709-0b65d416e0b5",
+    "subject": "Microsoft",
+    "raw_predicate": "may_use",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "a third-party auditor, or an audit related agent, (\u201cAuditor\u201d) to review Relevant Records and audit Company\u2019s premises, operations, processes, and Relevant Records during the Audit Period, to verify performance under the Agreement",
+    "claim_text": "Microsoft may use a third-party auditor, or an audit related agent, (\u201cAuditor\u201d) ",
+    "doc_title": "Microsoft Partner Agreement (Direct)"
+  },
+  {
+    "id": "01a436fa-867e-52db-856e-8b8f9cd96be9",
+    "subject": "Company",
+    "raw_predicate": "are_responsible_for",
+    "normalized_predicate": "remains_liable_for",
+    "object": "any independent or extended warranties or other offers or services it makes to Customers (specifically excluding any extended warranty products or similar services that Microsoft may make available on a Price List)",
+    "claim_text": "Company is solely responsible for any independent or extended warranties or othe",
+    "doc_title": "Microsoft Partner Agreement (Direct)"
+  },
+  {
+    "id": "f43fe17c-1da6-5de2-97a1-f82a27b789da",
+    "subject": "Company",
+    "raw_predicate": "may_use",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "commercially reasonable efforts to ensure that the readiness level will be maintained, even in the event of employee change or turnover",
+    "claim_text": "Company will use commercially reasonable efforts to ensure that the readiness le",
+    "doc_title": "Microsoft Partner Agreement (Direct)"
+  },
+  {
+    "id": "25bd9926-806f-50ee-aa02-ed82fa99a2da",
+    "subject": "Company",
+    "raw_predicate": "may_use",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "all reasonable measures to ensure that Customers use only original Software",
+    "claim_text": "Company must use all reasonable measures to ensure that Customers use only origi",
+    "doc_title": "Microsoft Partner Agreement (Direct)"
+  },
+  {
+    "id": "51db61ee-8f0f-5ba2-9aa4-fe30e8a12b95",
+    "subject": "Company",
+    "raw_predicate": "may_use",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "commercially reasonable efforts to ensure that any information that is submitted through the Partner Portal is accurate and current as of the date submitted",
+    "claim_text": "Company will use commercially reasonable efforts to ensure that any information ",
+    "doc_title": "Microsoft Partner Agreement (Direct)"
+  },
+  {
+    "id": "a915c4fc-c09b-557a-8470-4e1219fea9af",
+    "subject": "Company",
+    "raw_predicate": "are_responsible_for",
+    "normalized_predicate": "remains_liable_for",
+    "object": "informing Customers of Company\u2019s technical support processes",
+    "claim_text": "Company is responsible for informing Customers of Company\u2019s technical support pr",
+    "doc_title": "Microsoft Partner Agreement (Direct)"
+  },
+  {
+    "id": "0d0ed8f6-98ab-5e54-a623-710e823a8998",
+    "subject": "Company",
+    "raw_predicate": "may_use",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "Microsoft\u2019s corporate name, Microsoft\u2019s Product names, and trademarks (\u201cMicrosoft Marks\u201d) in plain text (but not logos, trade dress, designs, or word marks in stylized form) to accurately identify and refer to Microsoft and its technology and services",
+    "claim_text": "Company may use Microsoft\u2019s corporate name, Microsoft\u2019s Product names, and trade",
+    "doc_title": "Microsoft Partner Agreement (Indirect)"
+  },
+  {
+    "id": "4badf58f-fa41-5523-ac78-49718e394e79",
+    "subject": "Company",
+    "raw_predicate": "are_responsible_for",
+    "normalized_predicate": "remains_liable_for",
+    "object": "managing which of its Representatives are authorized to access and act on the Partner Portal on Company\u2019s behalf",
+    "claim_text": "Company is solely responsible for managing which of its Representatives are auth",
+    "doc_title": "Microsoft Partner Agreement (Indirect)"
+  },
+  {
+    "id": "7c86e7a8-3c31-58c8-b50d-3141994792e0",
+    "subject": "Company",
+    "raw_predicate": "may_use",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "commercially reasonable efforts and professional care and skill in providing any required service and support to its Resellers and Customers, as applicable",
+    "claim_text": "Company agrees to use commercially reasonable efforts and professional care and ",
+    "doc_title": "Microsoft Partner Agreement (Indirect)"
+  },
+  {
+    "id": "ec0ea7e7-35b5-55cc-9893-55745f525105",
+    "subject": "Microsoft",
+    "raw_predicate": "may_use",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "a third-party auditor, or an audit related agent, (\u201cAuditor\u201d) to review Relevant Records and audit Company\u2019s premises, operations, processes, and Relevant Records during the Audit Period, to verify performance under the Agreement",
+    "claim_text": "Microsoft may use a third-party auditor, or an audit related agent, (\u201cAuditor\u201d) ",
+    "doc_title": "Microsoft Partner Agreement (Indirect)"
+  },
+  {
+    "id": "79a5b7ee-8cb2-5317-a533-90a4d4d4b2c3",
+    "subject": "Company",
+    "raw_predicate": "are_responsible_for",
+    "normalized_predicate": "remains_liable_for",
+    "object": "any independent or extended warranties or other offers or services it makes to Customers (specifically excluding any extended warranty products or similar services that Microsoft may make available on a Price List)",
+    "claim_text": "Company is solely responsible for any independent or extended warranties or othe",
+    "doc_title": "Microsoft Partner Agreement (Indirect)"
+  },
+  {
+    "id": "a421c728-c147-551f-b24b-9fbf87218818",
+    "subject": "Company",
+    "raw_predicate": "may_use",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "all reasonable measures to ensure that Customers use only original Software",
+    "claim_text": "Company must use all reasonable measures to ensure that Customers use only origi",
+    "doc_title": "Microsoft Partner Agreement (Indirect)"
+  },
+  {
+    "id": "1d990fe7-dc37-58fd-b71f-ed18425ccd11",
+    "subject": "Company",
+    "raw_predicate": "are_responsible_for",
+    "normalized_predicate": "remains_liable_for",
+    "object": "informing Customers of Company\u2019s technical support processes",
+    "claim_text": "Company is responsible for informing Customers of Company\u2019s technical support pr",
+    "doc_title": "Microsoft Partner Agreement (Indirect)"
+  },
+  {
+    "id": "de183f7f-b819-5800-b778-f7d503733815",
+    "subject": "Vendor",
+    "raw_predicate": "access",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "the new billing account unless you invite them",
+    "claim_text": "If they're not part of the tenant, they can't access the new billing account unl",
+    "doc_title": "Set Up Billing For Microsoft Customer Agreement   Azure   Microsoft Cost Management   Microsoft Learn"
+  },
+  {
+    "id": "939c5a46-fa87-5758-a084-c81d653acde0",
+    "subject": "User",
+    "raw_predicate": "access",
+    "normalized_predicate": "has_permitted_use_scope",
+    "object": "the data by switching scopes",
+    "claim_text": "You can access the data by switching scopes.",
+    "doc_title": "Set Up Billing For Microsoft Customer Agreement   Azure   Microsoft Cost Management   Microsoft Learn"
+  }
+]

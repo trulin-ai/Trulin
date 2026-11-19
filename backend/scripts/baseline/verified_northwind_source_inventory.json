@@ -1,0 +1,1147 @@
+{
+  "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+  "sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd",
+  "total_units": 126,
+  "distribution": {
+    "non_rule": 11,
+    "operative_rule": 112,
+    "ambiguous": 2,
+    "duplicate_restatement": 1
+  },
+  "units": [
+    {
+      "unit_id": "SRC-P03-01",
+      "type": "prose",
+      "section": "1. Introduction and Scope",
+      "page": 3,
+      "verbatim_text": "Northwind Outfitters Inc. (\"Northwind\", \"we\", \"us\") is a fictional online and retail seller of outdoor gear, clothing and equipment.",
+      "role": "non_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P03-02",
+      "type": "prose",
+      "section": "1. Introduction and Scope",
+      "page": 3,
+      "verbatim_text": "This handbook sets out our complete refund, return and cancellation policies for customers, customer care agents and retail store staff.",
+      "role": "non_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P03-03",
+      "type": "prose",
+      "section": "1. Introduction and Scope",
+      "page": 3,
+      "verbatim_text": "Business customers on standard accounts (custom contracts take precedence).",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P04-01",
+      "type": "definition",
+      "section": "2. Definitions",
+      "page": 4,
+      "verbatim_text": "Refund: Return of money to the original payment method or store credit following an approved return or cancellation.",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P04-02",
+      "type": "definition",
+      "section": "2. Definitions",
+      "page": 4,
+      "verbatim_text": "Return: Sending a purchased item back to Northwind by mail or in-store drop-off.",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P04-03",
+      "type": "definition",
+      "section": "2. Definitions",
+      "page": 4,
+      "verbatim_text": "Exchange: Replacing an item with a different size, colour or product of equal or greater value.",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P04-04",
+      "type": "definition",
+      "section": "2. Definitions",
+      "page": 4,
+      "verbatim_text": "Store Credit: A balance issued to a customer account, redeemable online and in stores, valid for 5 years.",
+      "role": "operative_rule",
+      "notes": "Note: Valid for 5 years, expires."
+    },
+    {
+      "unit_id": "SRC-P04-05",
+      "type": "definition",
+      "section": "2. Definitions",
+      "page": 4,
+      "verbatim_text": "RMA: Return Merchandise Authorization number, e.g. RMA-2026-004815, required for mailed returns.",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P04-06",
+      "type": "definition",
+      "section": "2. Definitions",
+      "page": 4,
+      "verbatim_text": "Delivery Date: The date the carrier marks the package as delivered, as shown in the tracking record.",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P04-07",
+      "type": "definition",
+      "section": "2. Definitions",
+      "page": 4,
+      "verbatim_text": "Final Sale: Items marked 'Final Sale' at the time of purchase, which cannot be returned.",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P04-08",
+      "type": "definition",
+      "section": "2. Definitions",
+      "page": 4,
+      "verbatim_text": "Original Condition: Unused, unwashed, with all tags, packaging and accessories included.",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P04-09",
+      "type": "definition",
+      "section": "2. Definitions",
+      "page": 4,
+      "verbatim_text": "Business Day: Monday to Friday, excluding US federal holidays.",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P05-01",
+      "type": "prose",
+      "section": "3. Standard Return Policy",
+      "page": 5,
+      "verbatim_text": "Most items purchased from Northwind may be returned within 30 calendar days of the delivery date (or purchase date for in-store sales) for a full refund of the item price, provided the item is in original condition.",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P05-02",
+      "type": "table_row",
+      "section": "3.1 Extended windows",
+      "page": 5,
+      "verbatim_text": "Standard merchandise | 30 days",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P05-03",
+      "type": "table_row",
+      "section": "3.1 Extended windows",
+      "page": 5,
+      "verbatim_text": "Northwind Rewards Gold members | 60 days",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P05-04",
+      "type": "table_row",
+      "section": "3.1 Extended windows",
+      "page": 5,
+      "verbatim_text": "Holiday purchases (Nov 1 - Dec 24) | Until January 31 of the following year",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P05-05",
+      "type": "table_row",
+      "section": "3.1 Extended windows",
+      "page": 5,
+      "verbatim_text": "Footwear (worn indoors only) | 45 days",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P05-06",
+      "type": "table_row",
+      "section": "3.1 Extended windows",
+      "page": 5,
+      "verbatim_text": "Camping tents and sleeping bags (unused) | 60 days",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P05-07",
+      "type": "table_row",
+      "section": "3.1 Extended windows",
+      "page": 5,
+      "verbatim_text": "Defective items | Covered by warranty - see Section 14",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P05-08",
+      "type": "prose",
+      "section": "3.2 Returns without a receipt",
+      "page": 5,
+      "verbatim_text": "Returns without proof of purchase are accepted in-store only, for store credit at the lowest price the item was sold in the last 90 days. A government-issued photo ID is required and scanned. A limit of three receipt-less returns per customer per 12-month period applies.",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P05-09",
+      "type": "prose",
+      "section": "3.3 Exchanges",
+      "page": 5,
+      "verbatim_text": "Exchanges for a different size or colour are free of charge, including shipping both ways, when requested within the return window and when the replacement item is in stock.",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P06-01",
+      "type": "prose",
+      "section": "4. Refund Eligibility Criteria",
+      "page": 6,
+      "verbatim_text": "To be eligible for a refund, all of the following conditions must be met. Support agents must verify each condition before approving a refund over $50.00.",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P06-02",
+      "type": "bullet",
+      "section": "4. Refund Eligibility Criteria",
+      "page": 6,
+      "verbatim_text": "The request is made within the applicable return window.",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P06-03",
+      "type": "bullet",
+      "section": "4. Refund Eligibility Criteria",
+      "page": 6,
+      "verbatim_text": "The item is in original condition: unused, unwashed, undamaged, with original tags attached.",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P06-04",
+      "type": "bullet",
+      "section": "4. Refund Eligibility Criteria",
+      "page": 6,
+      "verbatim_text": "The item is returned with all accessories, manuals, free gifts and original packaging where practical.",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P06-05",
+      "type": "bullet",
+      "section": "4. Refund Eligibility Criteria",
+      "page": 6,
+      "verbatim_text": "The order number or proof of purchase can be verified in our systems.",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P06-06",
+      "type": "bullet",
+      "section": "4. Refund Eligibility Criteria",
+      "page": 6,
+      "verbatim_text": "The item is not on the non-refundable list in Section 5.",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P06-07",
+      "type": "table_row",
+      "section": "4.1 Partial refunds",
+      "page": 6,
+      "verbatim_text": "Like new, tags attached | 100%",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P06-08",
+      "type": "table_row",
+      "section": "4.1 Partial refunds",
+      "page": 6,
+      "verbatim_text": "Opened packaging, item unused | 100%",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P06-09",
+      "type": "table_row",
+      "section": "4.1 Partial refunds",
+      "page": 6,
+      "verbatim_text": "Missing original box (non-fragile) | 90%",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P06-10",
+      "type": "table_row",
+      "section": "4.1 Partial refunds",
+      "page": 6,
+      "verbatim_text": "Missing accessories or free gift | Refund minus gift value",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P06-11",
+      "type": "table_row",
+      "section": "4.1 Partial refunds",
+      "page": 6,
+      "verbatim_text": "Light wear or signs of use | 50% - 75%",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P06-12",
+      "type": "table_row",
+      "section": "4.1 Partial refunds",
+      "page": 6,
+      "verbatim_text": "Damaged by customer / heavy use | 0% - 25% (agent discretion, manager approval)",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P06-13",
+      "type": "table_row",
+      "section": "4.1 Partial refunds",
+      "page": 6,
+      "verbatim_text": "Washed, altered or stained | Not eligible",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P06-14",
+      "type": "bullet",
+      "section": "4.2 Manager approval thresholds",
+      "page": 6,
+      "verbatim_text": "Up to $100: Tier 1 agent may approve.",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P06-15",
+      "type": "bullet",
+      "section": "4.2 Manager approval thresholds",
+      "page": 6,
+      "verbatim_text": "$100.01 - $500: Tier 2 agent or team lead approval required.",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P06-16",
+      "type": "bullet",
+      "section": "4.2 Manager approval thresholds",
+      "page": 6,
+      "verbatim_text": "Over $500: Customer Experience Manager approval required.",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P06-17",
+      "type": "bullet",
+      "section": "4.2 Manager approval thresholds",
+      "page": 6,
+      "verbatim_text": "Over $2,000: Finance Director approval and fraud review required.",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P07-01",
+      "type": "prose",
+      "section": "5. Non-Refundable Items",
+      "page": 7,
+      "verbatim_text": "The following items cannot be returned or refunded, except where the item is defective or we sent the wrong item.",
+      "role": "operative_rule",
+      "notes": "Parent exception clause"
+    },
+    {
+      "unit_id": "SRC-P07-02",
+      "type": "bullet",
+      "section": "5. Non-Refundable Items",
+      "page": 7,
+      "verbatim_text": "Items marked Final Sale or Clearance - All Sales Final at checkout.",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P07-03",
+      "type": "bullet",
+      "section": "5. Non-Refundable Items",
+      "page": 7,
+      "verbatim_text": "Gift cards and e-gift cards (see Section 13).",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P07-04",
+      "type": "bullet",
+      "section": "5. Non-Refundable Items",
+      "page": 7,
+      "verbatim_text": "Downloadable software, digital guides and trail-map files once downloaded.",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P07-05",
+      "type": "bullet",
+      "section": "5. Non-Refundable Items",
+      "page": 7,
+      "verbatim_text": "Personalised or custom-engraved items, including monogrammed jackets and embroidered packs.",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P07-06",
+      "type": "bullet",
+      "section": "5. Non-Refundable Items",
+      "page": 7,
+      "verbatim_text": "Opened hygiene items: water bottles' mouthpieces, thermal underwear, socks, and swimwear without liner tags.",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P07-07",
+      "type": "bullet",
+      "section": "5. Non-Refundable Items",
+      "page": 7,
+      "verbatim_text": "Fuel canisters, bear spray, and other hazardous materials once opened or shipped.",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P07-08",
+      "type": "bullet",
+      "section": "5. Non-Refundable Items",
+      "page": 7,
+      "verbatim_text": "Perishable goods such as freeze-dried meals past 14 days from delivery.",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P07-09",
+      "type": "bullet",
+      "section": "5. Non-Refundable Items",
+      "page": 7,
+      "verbatim_text": "Installation, repair, and gear-fitting services already performed.",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P07-10",
+      "type": "bullet",
+      "section": "5. Non-Refundable Items",
+      "page": 7,
+      "verbatim_text": "Items returned more than 90 days after delivery.",
+      "role": "operative_rule",
+      "notes": "Note: 90 days threshold, not 60 days."
+    },
+    {
+      "unit_id": "SRC-P07-11",
+      "type": "prose",
+      "section": "5.2 Exceptions",
+      "page": 7,
+      "verbatim_text": "Even for non-refundable items, a full refund or replacement will be provided if the item arrives damaged, is materially different from its description, or was shipped in error. Report these issues within 7 days of delivery with photos.",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P08-01",
+      "type": "prose",
+      "section": "6.1 Online portal",
+      "page": 8,
+      "verbatim_text": "Navigate to returns.northwind-demo.example. Enter your order number and billing postcode.",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P08-02",
+      "type": "contact",
+      "section": "6.2 By phone or chat",
+      "page": 8,
+      "verbatim_text": "Call 1-800-555-0142 (Mon-Fri 8am-8pm PT, Sat 9am-5pm PT) or use live chat.",
+      "role": "non_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P08-03",
+      "type": "prose",
+      "section": "6.3 In-store returns",
+      "page": 8,
+      "verbatim_text": "Bring item, original packaging, and receipt/order confirmation email to any store.",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P08-04",
+      "type": "table_row",
+      "section": "6.4 Required information",
+      "page": 8,
+      "verbatim_text": "Order number | NW-10482391 | Yes",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P08-05",
+      "type": "table_row",
+      "section": "6.4 Required information",
+      "page": 8,
+      "verbatim_text": "Email on order | jane.doe@example.com | Yes",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P08-06",
+      "type": "table_row",
+      "section": "6.4 Required information",
+      "page": 8,
+      "verbatim_text": "Phone number | 555-0199 | Optional",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P08-07",
+      "type": "table_row",
+      "section": "6.4 Required information",
+      "page": 8,
+      "verbatim_text": "Item SKU or product name | NW-FLC-002 | Yes",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P08-08",
+      "type": "table_row",
+      "section": "6.4 Required information",
+      "page": 8,
+      "verbatim_text": "Reason for return | Defective zip | Yes",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P08-09",
+      "type": "table_row",
+      "section": "6.4 Required information",
+      "page": 8,
+      "verbatim_text": "Photos of defect | Clear JPEG/PNG | Required if claiming damaged/defective",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P09-01",
+      "type": "table_row",
+      "section": "7. Refund Processing Timelines",
+      "page": 9,
+      "verbatim_text": "Return transit to warehouse | 3-7 business days",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P09-02",
+      "type": "table_row",
+      "section": "7. Refund Processing Timelines",
+      "page": 9,
+      "verbatim_text": "Warehouse receipt and inspection | 1-2 business days",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P09-03",
+      "type": "table_row",
+      "section": "7. Refund Processing Timelines",
+      "page": 9,
+      "verbatim_text": "Credit card refund posted by bank | 3-5 business days",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P09-04",
+      "type": "table_row",
+      "section": "7. Refund Processing Timelines",
+      "page": 9,
+      "verbatim_text": "Debit card refund posted by bank | Up to 10 business days",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P09-05",
+      "type": "table_row",
+      "section": "7. Refund Processing Timelines",
+      "page": 9,
+      "verbatim_text": "Store credit applied to account | Immediate upon inspection",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P09-06",
+      "type": "table_row",
+      "section": "7. Refund Processing Timelines",
+      "page": 9,
+      "verbatim_text": "PayPal refund posted | Usually within 24 hours",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P10-01",
+      "type": "table_row",
+      "section": "8. Refund Methods and Payment Types",
+      "page": 10,
+      "verbatim_text": "Credit card | Original card | 3-5 business days to post",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P10-02",
+      "type": "table_row",
+      "section": "8. Refund Methods and Payment Types",
+      "page": 10,
+      "verbatim_text": "Debit card | Original card | Up to 10 business days",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P10-03",
+      "type": "table_row",
+      "section": "8. Refund Methods and Payment Types",
+      "page": 10,
+      "verbatim_text": "Apple Pay / Google Pay | Underlying card | Same as card",
+      "role": "operative_rule",
+      "notes": "Explicit pointer token to card"
+    },
+    {
+      "unit_id": "SRC-P10-04",
+      "type": "table_row",
+      "section": "8. Refund Methods and Payment Types",
+      "page": 10,
+      "verbatim_text": "PayPal | PayPal balance | Usually within 24 hours",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P10-05",
+      "type": "table_row",
+      "section": "8. Refund Methods and Payment Types",
+      "page": 10,
+      "verbatim_text": "In-store cash | Cash up to $50, store credit/card above $50 | Immediate in-store",
+      "role": "ambiguous",
+      "notes": "Boundary conflict with FAQ under $50"
+    },
+    {
+      "unit_id": "SRC-P10-06",
+      "type": "table_row",
+      "section": "8. Refund Methods and Payment Types",
+      "page": 10,
+      "verbatim_text": "Split payments | Proportionally to each method | Gift card portion first",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P10-07",
+      "type": "prose",
+      "section": "8.3 Store credit bonus",
+      "page": 10,
+      "verbatim_text": "Customers who choose store credit instead of a refund to their card receive a 5% bonus on the credit value (up to a maximum bonus of $25.00 per return). Bonus credit cannot be applied retroactively once a refund has been issued to the card.",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P11-01",
+      "type": "table_row",
+      "section": "9. Shipping Costs and Return Labels",
+      "page": 11,
+      "verbatim_text": "Standard merchandise, change of mind | $5.99 deducted from refund",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P11-02",
+      "type": "table_row",
+      "section": "9. Shipping Costs and Return Labels",
+      "page": 11,
+      "verbatim_text": "Defective or damaged | Free | Full refund including original shipping",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P11-03",
+      "type": "table_row",
+      "section": "9. Shipping Costs and Return Labels",
+      "page": 11,
+      "verbatim_text": "Wrong item sent | Free | Full refund including original shipping",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P11-04",
+      "type": "table_row",
+      "section": "9. Shipping Costs and Return Labels",
+      "page": 11,
+      "verbatim_text": "Exchange (size/colour) | Free both ways | Replacement shipped free",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P11-05",
+      "type": "table_row",
+      "section": "9. Shipping Costs and Return Labels",
+      "page": 11,
+      "verbatim_text": "Gold member, any reason | Free | Full refund of item price",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P11-06",
+      "type": "prose",
+      "section": "9.2 Oversized and freight items",
+      "page": 11,
+      "verbatim_text": "Return freight for change-of-mind returns is a flat $49.00, deducted from the refund. Freight pickups must be scheduled with our logistics team at least 3 business days in advance.",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P12-01",
+      "type": "prose",
+      "section": "10. Damaged, Defective or Incorrect Items",
+      "page": 12,
+      "verbatim_text": "Report issues within 7 calendar days of delivery via the online returns portal or customer care. Please include clear photos of the damage, defect or incorrect item.",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P12-02",
+      "type": "prose",
+      "section": "10.3 Resolution options",
+      "page": 12,
+      "verbatim_text": "Customer support agents may, at their discretion, allow customers to keep items under $40 rather than returning them. This is limited to two instances per customer per year.",
+      "role": "operative_rule",
+      "notes": "Keep It policy linked to agent discretion"
+    },
+    {
+      "unit_id": "SRC-P12-03",
+      "type": "table_row",
+      "section": "10.3 Resolution options",
+      "page": 12,
+      "verbatim_text": "Partial refund (keep item) | Offered for minor cosmetic flaws where item remains fully functional | 20% refund; item retained",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P13-01",
+      "type": "table_row",
+      "section": "11. Order Cancellations",
+      "page": 13,
+      "verbatim_text": "Order placed (within 30 mins) | Yes - self-service | Full refund, immediate auth release",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P13-02",
+      "type": "table_row",
+      "section": "11. Order Cancellations",
+      "page": 13,
+      "verbatim_text": "Processing / allocated | Call support - attempted, not guaranteed | Full refund if stopped; else return process",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P13-03",
+      "type": "table_row",
+      "section": "11. Order Cancellations",
+      "page": 13,
+      "verbatim_text": "Shipped | No | Must receive and start return",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P13-04",
+      "type": "table_row",
+      "section": "11. Order Cancellations",
+      "page": 13,
+      "verbatim_text": "Backordered items | Yes - anytime before allocation | Full refund immediately",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P13-05",
+      "type": "table_row",
+      "section": "11. Order Cancellations",
+      "page": 13,
+      "verbatim_text": "Custom or engraved items | Within 2 hours of order only | 100% refund; no cancellation after production starts",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P14-01",
+      "type": "table_row",
+      "section": "12. Subscription Refunds",
+      "page": 14,
+      "verbatim_text": "Trailhead Box | Monthly, 1st of month | Anytime before 25th | No refund for current month; next box cancelled. May pause up to 3 months.",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P14-02",
+      "type": "table_row",
+      "section": "12. Subscription Refunds",
+      "page": 14,
+      "verbatim_text": "Rewards Plus | Annual | Anytime | Pro-rated refund within first 60 days; no refund after 60 days.",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P14-03",
+      "type": "table_row",
+      "section": "12. Subscription Refunds",
+      "page": 14,
+      "verbatim_text": "Gear Care Plan | Monthly | Anytime | No refund for current month; plan ends at end of billing cycle.",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P14-04",
+      "type": "prose",
+      "section": "12.1 Free trials",
+      "page": 14,
+      "verbatim_text": "If you forget to cancel and are charged, contact us within 7 days for a full refund of the first charge.",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P15-01",
+      "type": "prose",
+      "section": "13.1 Digital products",
+      "page": 15,
+      "verbatim_text": "Digital goods such as trail guides (PDF), camping-skills video series, and GPS waypoint files are non-refundable once downloaded. If you have not downloaded the file, contact us within 14 days of purchase for a full refund.",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P15-02",
+      "type": "prose",
+      "section": "13.2 Gift cards",
+      "page": 15,
+      "verbatim_text": "Gift card purchases cannot be cancelled once the code is delivered by email. Northwind gift cards do not expire and carry no maintenance fees.",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P16-01",
+      "type": "table_row",
+      "section": "14. Warranty Claims",
+      "page": 16,
+      "verbatim_text": "Tents and shelters | 2 years | Repair, replacement parts, or replacement",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P16-02",
+      "type": "table_row",
+      "section": "14. Warranty Claims",
+      "page": 16,
+      "verbatim_text": "Sleeping bags | Lifetime (manufacturing defects) | Repair or replace",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P16-03",
+      "type": "table_row",
+      "section": "14. Warranty Claims",
+      "page": 16,
+      "verbatim_text": "Backpacks | 5 years | Repair or replace",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P16-04",
+      "type": "table_row",
+      "section": "14. Warranty Claims",
+      "page": 16,
+      "verbatim_text": "Footwear | 1 year | Replace or refund (prorated by age)",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P16-05",
+      "type": "table_row",
+      "section": "14. Warranty Claims",
+      "page": 16,
+      "verbatim_text": "Apparel | 1 year | Replace or repair",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P16-06",
+      "type": "table_row",
+      "section": "14. Warranty Claims",
+      "page": 16,
+      "verbatim_text": "Electronics (headlamps, GPS) | 1 year | Repair or replace (manufacturer warranty applies)",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P16-07",
+      "type": "table_row",
+      "section": "14. Warranty Claims",
+      "page": 16,
+      "verbatim_text": "Stoves and cookware | 2 years | Repair or replacement parts",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P16-08",
+      "type": "table_row",
+      "section": "14. Warranty Claims",
+      "page": 16,
+      "verbatim_text": "Water filters | 1 year | Replace cartridge or unit",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P16-09",
+      "type": "prose",
+      "section": "14.2 Marketplace sellers",
+      "page": 16,
+      "verbatim_text": "Items shipped directly by third-party sellers follow the seller's policy, but Northwind's A-to-Z Guarantee ensures a refund if the seller fails to respond within 5 business days.",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P17-01",
+      "type": "table_row",
+      "section": "15. International Orders",
+      "page": 17,
+      "verbatim_text": "United States | 30 days | See Section 9 | Included",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P17-02",
+      "type": "table_row",
+      "section": "15. International Orders",
+      "page": 17,
+      "verbatim_text": "Canada | 30 days | Customer pays unless defective | Duties refunded, customer files GST/HST",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P17-03",
+      "type": "table_row",
+      "section": "15. International Orders",
+      "page": 17,
+      "verbatim_text": "UK | 30 days (14-day statutory minimum) | Customer pays unless defective | VAT refunded, duty via customs claim",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P17-04",
+      "type": "table_row",
+      "section": "15. International Orders",
+      "page": 17,
+      "verbatim_text": "EU | 30 days (14-day statutory minimum) | Customer pays unless defective | VAT refunded",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P17-05",
+      "type": "table_row",
+      "section": "15. International Orders",
+      "page": 17,
+      "verbatim_text": "Rest of world | 14 days | Customer pays | Not refundable",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P17-06",
+      "type": "prose",
+      "section": "15.2 Currency rules",
+      "page": 17,
+      "verbatim_text": "Refunds are issued in the currency of the original charge. Exchange rate differences between purchase and refund dates are not compensated.",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P18-01",
+      "type": "table_row",
+      "section": "16. Chargeback reason codes",
+      "page": 18,
+      "verbatim_text": "4837 / 10.4 | Fraud - card not present | Provide delivery proof, IP log, signature",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P18-02",
+      "type": "table_row",
+      "section": "16. Chargeback reason codes",
+      "page": 18,
+      "verbatim_text": "4853 / 13.1 | Defective merchandise | Provide return label, inspection report",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P18-03",
+      "type": "table_row",
+      "section": "16. Chargeback reason codes",
+      "page": 18,
+      "verbatim_text": "4855 / 13.3 | Goods not received | Provide carrier tracking, delivery photo",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P18-04",
+      "type": "table_row",
+      "section": "16. Chargeback reason codes",
+      "page": 18,
+      "verbatim_text": "4834 / 12.6 | Duplicate processing | Verify and refund duplicate",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P18-05",
+      "type": "table_row",
+      "section": "16. Chargeback reason codes",
+      "page": 18,
+      "verbatim_text": "4841 / 13.2 | Cancelled recurring | Provide cancellation terms, billing notice",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P18-06",
+      "type": "prose",
+      "section": "16.3 Dispute penalties",
+      "page": 18,
+      "verbatim_text": "If a chargeback dispute is lost, transaction funds are debited; a $15 administration fee may apply for fraudulent claims.",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P19-01",
+      "type": "table_row",
+      "section": "17. Fraud Prevention",
+      "page": 19,
+      "verbatim_text": "Notice | 5 returns in 90 days, or >$1,500 total | Warning email sent to customer",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P19-02",
+      "type": "table_row",
+      "section": "17. Fraud Prevention",
+      "page": 19,
+      "verbatim_text": "Restricted | 8 returns in 90 days, or wardrobing pattern | Free returns removed; $5.99 label always charged",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P19-03",
+      "type": "table_row",
+      "section": "17. Fraud Prevention",
+      "page": 19,
+      "verbatim_text": "Suspended | 12 returns in 90 days, or fraud detected | Online returns blocked; in-store with receipt only",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P19-04",
+      "type": "table_row",
+      "section": "17. Fraud Prevention",
+      "page": 19,
+      "verbatim_text": "Permanent ban | Verified fraud, stolen card, chargeback abuse | Account closed; all return rights terminated",
+      "role": "operative_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P20-01",
+      "type": "faq",
+      "section": "18. Frequently Asked Questions",
+      "page": 20,
+      "verbatim_text": "Q1. Can I return an item after 30 days? Discretionary store credit for returns between 31 and 60 days, subject to a 15% restocking fee.",
+      "role": "duplicate_restatement",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P20-02",
+      "type": "faq",
+      "section": "18. Frequently Asked Questions",
+      "page": 20,
+      "verbatim_text": "Q2. Can I get a cash refund in-store? Cash refunds are only issued for amounts under $50.00 where cash was the original tender.",
+      "role": "ambiguous",
+      "notes": "Boundary conflict with Section 8 Table up to $50"
+    },
+    {
+      "unit_id": "SRC-P21-01",
+      "type": "contact",
+      "section": "19. Contact Information",
+      "page": 21,
+      "verbatim_text": "General Support | support@northwind-demo.example | Response within 24 hours",
+      "role": "non_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P21-02",
+      "type": "contact",
+      "section": "19. Contact Information",
+      "page": 21,
+      "verbatim_text": "Escalations | escalations@northwind-demo.example | Response within 2 business days",
+      "role": "non_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P21-03",
+      "type": "table_row",
+      "section": "19.2 Service level agreements",
+      "page": 21,
+      "verbatim_text": "First response by email | 24 hours | 98.5%",
+      "role": "non_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P21-04",
+      "type": "table_row",
+      "section": "19.2 Service level agreements",
+      "page": 21,
+      "verbatim_text": "First response by chat | Under 2 minutes | 94.0%",
+      "role": "non_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P22-01",
+      "type": "table_row",
+      "section": "20.1 Revision history",
+      "page": 22,
+      "verbatim_text": "4.2 | Jan 1, 2026 | Extended holiday window; added Keep It policy | Legal & CX",
+      "role": "non_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P22-02",
+      "type": "table_row",
+      "section": "20.1 Revision history",
+      "page": 22,
+      "verbatim_text": "4.1 | Aug 15, 2025 | Clarified BNPL refund timelines and gift card exclusions | CX Lead",
+      "role": "non_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P22-03",
+      "type": "table_row",
+      "section": "20.1 Revision history",
+      "page": 22,
+      "verbatim_text": "4.0 | Mar 1, 2025 | Major overhaul; added Gold Club tier perks and self-service portal | VP Operations",
+      "role": "non_rule",
+      "notes": null
+    },
+    {
+      "unit_id": "SRC-P22-04",
+      "type": "example",
+      "section": "20.2 Sample Case Studies",
+      "page": 22,
+      "verbatim_text": "Case A - Standard online return within window: Customer returns unworn jacket on day 18.",
+      "role": "non_rule",
+      "notes": null
+    }
+  ]
+}

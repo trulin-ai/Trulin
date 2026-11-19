@@ -122,6 +122,7 @@ class LineageService:
                 "status": doc.status.value if hasattr(doc.status, "value") else str(doc.status),
                 "data": {
                     "doc_id": str(doc.id),
+                    "document_id": str(doc.id),
                     "external_id": doc.external_id,
                     "domain": getattr(doc, "domain", "General"),
                     "content_uri": getattr(doc, "content_uri", None) or (sorted_versions[0].content_uri if sorted_versions else None),
@@ -200,6 +201,7 @@ class LineageService:
                 "rejection_reasons": gate_res.rejection_reasons,
                 "data": {
                     "claim_id": str(cl.id),
+                    "doc_id": str(cl.document_version.document_id) if cl.document_version else None,
                     "document_id": str(cl.document_version.document_id) if cl.document_version else None,
                     "document_version_id": str(cl.document_version_id),
                     "scope": getattr(cl, "scope", "Enterprise"),

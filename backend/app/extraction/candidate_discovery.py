@@ -10,7 +10,7 @@ import re
 from typing import List, Tuple
 
 from app.extraction.models import ExtractionStrategyType
-from app.ingestion.parsers.evidence_model import ParsedEvidenceUnit
+from app.ingestion.parsers.evidence_model import ContentRole, ParsedEvidenceUnit
 
 
 class CandidateDiscoveryEngine:
@@ -70,7 +70,7 @@ class CandidateDiscoveryEngine:
         # 4. Structured Table Rows -> Table-Aware Extraction
         if b_type == "table_row":
             table_type = s_data.get("table_type")
-            cols = s_data.get("columns", {})
+            cols = s_data.get("columns") or getattr(unit, "cells", None) or {}
             col_keys_lower = [str(k).lower().strip() for k in cols.keys()]
 
             # Filter 4A: Revision History metadata (routed to document provenance)
@@ -103,6 +103,69 @@ class CandidateDiscoveryEngine:
             ):
                 return False, ExtractionStrategyType.TABLE_AWARE, "Table row is website sitemap navigation footer; filtered from normative policy claims."
 
+            ctx_lower = " > ".join(str(c) for c in (unit.hierarchical_context or [])).lower()
+
+            # Filter 4E: Transaction Logs / Claims Registers / Ledger Records (e.g. Table 23)
+            if any(k in ("claim id", "transaction id", "order id", "invoice no", "employee id", "amount claimed (inr)", "amount approved (inr)", "paid on") for k in col_keys_lower) and any(k in ("claim id", "transaction id", "order id", "invoice no") for k in col_keys_lower):
+                return False, ExtractionStrategyType.TABLE_AWARE, "Table row is historical transaction/claims register."
+
+            # Filter 4F: Financial Budgets & Accounting Ledgers (e.g. Table 21)
+            if (any("cost head" in k or "budget" in k or "variance" in k for k in col_keys_lower) and any("actual" in k or "variance" in k or "fy20" in k for k in col_keys_lower)) or "budget" in ctx_lower:
+                return False, ExtractionStrategyType.TABLE_AWARE, "Table row is financial accounting/budget statement."
+
+            # Filter 4G: Worked Examples / Calculation Illustrations (e.g. Table 27)
+            if any(term in ctx_lower for term in ("worked example", "sample calculation", "calculation illustration")) or any(k in ("calculation note", "billed by hospital") for k in col_keys_lower) or any("line item" in k and "calculation" in str(col_keys_lower) for k in col_keys_lower):
+                return False, ExtractionStrategyType.TABLE_AWARE, "Table row is illustrative calculation example."
+
+            # Filter 4H: Contact Directories (e.g. Table 26)
+            if (
+                any(k in ("email", "phone", "hours (ist)", "hours") for k in col_keys_lower)
+                or (getattr(unit, "content_role", None) == ContentRole.CONTACT_INFO and not any(k in ("severity", "trigger", "action", "recovery", "level") for k in col_keys_lower))
+            ):
+                return False, ExtractionStrategyType.TABLE_AWARE, "Table row is support contact directory."
+
+            # Filter 4I: Regulatory / Statute Citations (e.g. Table 28)
+            if any(k in ("regulation", "act", "reference no.", "jurisdiction") for k in col_keys_lower) and any(k in ("regulation", "act", "reference no.") for k in col_keys_lower):
+                return False, ExtractionStrategyType.TABLE_AWARE, "Table row is external regulatory citation reference."
+
+            # Filter 4J: Lexical Definitions & Acronym Glossaries (e.g. Table 5 & Table 29)
+            if (any(k in ("acronym", "meaning") for k in col_keys_lower) and len(col_keys_lower) >= 2) or (any(k in ("term", "definition") for k in col_keys_lower) and any(k in ("clause ref.", "clause ref", "definition") for k in col_keys_lower)) or any(term in ctx_lower for term in ("definitions", "glossary", "acronyms")) or getattr(unit, "content_role", None) == ContentRole.DEFINITION:
+                return False, ExtractionStrategyType.TABLE_AWARE, "Table row is lexical definition or acronym; routed to terminology glossary."
+
+            # Filter 4K: Document Control & Governance Metadata (e.g. Table 1)
+            if (any(k in ("policy title", "document number", "classification", "policy owner", "approving body") for k in col_keys_lower) or "document control" in ctx_lower) and not any(k in ("statutory", "company", "co-pay", "per diem", "allowance", "mileage") for k in col_keys_lower):
+                return False, ExtractionStrategyType.TABLE_AWARE, "Table row is document control metadata."
+
+            # Filter 4L: Claimant / Employee Declaration Form (e.g. Table 30)
+            if (
+                any("declaration" in str(ctx).lower() for ctx in (unit.hierarchical_context or []))
+                or any(k in ("i confirm the information is true and complete", "i have attached all original bills", "signature and date", "employee name", "claim reference") for k in col_keys_lower)
+            ):
+                return False, ExtractionStrategyType.TABLE_AWARE, "Table row is employee declaration form; filtered from normative policy claims."
+
+            # Filter 4M: Table Section Header Rows (e.g. repeated 'Inpatient benefits' across all plan columns)
+            non_empty_cells = [str(v).strip() for v in cols.values() if str(v).strip()]
+            if non_empty_cells and len(cols) >= 3:
+                if len(non_empty_cells) >= 2 and len(set(v.lower() for v in non_empty_cells)) == 1:
+                    return False, ExtractionStrategyType.TABLE_AWARE, "Table row is section header pseudo-row; filtered from normative policy claims."
+                if len(non_empty_cells) == 1 and len(cols) >= 3:
+                    return False, ExtractionStrategyType.TABLE_AWARE, "Table row is section header span pseudo-row; filtered from normative policy claims."
+
+            # Filter 4N: Navigation Grid / Category Directory Tables (e.g. DOC-061 Category Index)
+            if (
+                any("apps" in k.lower() for k in col_keys_lower)
+                and any("analytics" in k.lower() for k in col_keys_lower)
+                and any("threat protection" in k.lower() for k in col_keys_lower)
+            ) or (
+                len(col_keys_lower) >= 4
+                and all(any(c in k for c in ("storage", "security", "auditing", "analytics", "broker", "management")) for k in col_keys_lower)
+            ):
+                return False, ExtractionStrategyType.TABLE_AWARE, "Table row is category navigation directory grid; filtered from normative policy claims."
+
+            # Filter 4O: Orphan Column Index Tables (e.g. col0, col1, col2 or bullet-only headers)
+            if cols and all(re.match(r"^(?:col\d+|●+|[\s•●❖\-_|*✓✔✗✘\.]+)$", str(k).strip()) or len(str(k).strip()) <= 2 for k in cols.keys()):
+                return False, ExtractionStrategyType.TABLE_AWARE, "Table row lacks semantic column headers; filtered from normative policy claims."
+
             # Eligible: Policy Matrix (e.g. Grade Notice Duration Matrix)
             if s_data.get("is_ambiguous"):
                 return True, ExtractionStrategyType.TABLE_AWARE, "Table row policy matrix with ambiguous/merged cell layout requiring review."
@@ -122,15 +185,25 @@ class CandidateDiscoveryEngine:
             if any("\u4e00" <= ch <= "\u9fff" for ch in text) and any(m in text for m in ("\u4e0d\u5f97", "\u5e94\u5f53", "\u5fc5\u987b", "\u5e94", "\u6709\u6743", "\u53ef\u4ee5")):
                 return True, ExtractionStrategyType.DOMAIN_RULES, "Chinese contract deontic policy assertion."
 
-        # 6. Document Clauses & Paragraphs
-        if b_type in ("clause", "paragraph"):
+        # 6. Document Clauses, Paragraphs, List Items, Definitions, and Image OCR Units
+        if b_type in ("clause", "paragraph", "list_item", "bullet", "definition", "image_ocr") or unit.structure_type in ("list_item", "definition", "image_ocr"):
             from app.extraction.deontic_classifier import DeonticClassifier
-            from app.ingestion.parsers.evidence_model import ContentRole
+
+            # Operational Definition (e.g. Business Day, operational calendar, timeline basis)
+            if b_type == "definition" or unit.structure_type == "definition":
+                if ":" in text:
+                    term_part, def_part = text.split(":", 1)
+                    if term_part.strip() and any(w in text.lower() for w in ("day", "calendar", "holiday", "hour", "business", "timeline", "timeframe", "cutoff", "window", "period")):
+                        return True, ExtractionStrategyType.DOMAIN_RULES, "Operational policy definition / calendar specification."
 
             # Filter out FAQ questions, introductory context, and document metadata upfront
             unit_role = getattr(unit, "content_role", None)
             if unit_role in (ContentRole.FAQ_QUESTION, ContentRole.INTRODUCTORY_CONTEXT, ContentRole.DOCUMENT_METADATA) or text.strip().endswith("?"):
                 return False, ExtractionStrategyType.DOMAIN_RULES, "Inquiry question, introductory context, or document metadata; non-canonical context."
+
+            # Inherit parent context for list items / bullets
+            parent_ctx = getattr(unit, "parent_context", None) or ""
+            eval_text = f"{parent_ctx} {text}".strip() if parent_ctx else text
 
             # Filter out sample case studies, narrative customer anecdotes, and revision history
             h_path_str = " > ".join(getattr(unit, "heading_path", []) or []).lower()
@@ -144,8 +217,24 @@ class CandidateDiscoveryEngine:
             # Filter out running page headers / footers and pagination artifacts
             if re.search(r"\bPage\s+\d+\s+of\s+\d+\b", text, re.IGNORECASE) and len(text.split()) < 20:
                 return False, ExtractionStrategyType.DOMAIN_RULES, "Running header/footer pagination artifact."
+            if re.search(r"\b(?:[A-Za-z0-9_\-\.]{3,30}\s+Page\s+\d+\s+of\s+\d+|Document\s+[A-Za-z0-9_\-]+)\b", text, re.IGNORECASE) and len(text.split()) < 25:
+                return False, ExtractionStrategyType.DOMAIN_RULES, "Document code / pagination footer artifact."
             if re.match(r"^(?:Vendor Agreement|Agreement Template)\b", text.strip(), re.IGNORECASE) and len(text.split()) < 10:
                 return False, ExtractionStrategyType.DOMAIN_RULES, "Running document header template artifact."
+            if re.match(r"^(?:[A-Za-z]+\s+\d{4}\s+\d+\s+IMPORTANT[—\-–]READ CAREFULLY|IMPORTANT[—\-–]READ CAREFULLY)\b", text.strip(), re.IGNORECASE):
+                return False, ExtractionStrategyType.DOMAIN_RULES, "Document notice banner / title slug."
+            if re.search(r"##\s*Page\s+\d+\b|^#\s+[A-Za-z\s]+Agreement\s*$", text.strip(), re.IGNORECASE) and len(text.split()) < 15:
+                return False, ExtractionStrategyType.DOMAIN_RULES, "Markdown document/page title heading marker."
+
+            # Filter out raw markdown table separators and empty cell fragments
+            if text.strip().startswith("|") and ("---" in text or len(text.strip().replace("|", "").strip()) < 3):
+                return False, ExtractionStrategyType.DOMAIN_RULES, "Markdown table syntax or empty cell fragment."
+
+            # Filter out web portal navigation breadcrumbs and icon font glyphs
+            if any(glyph in text for glyph in ("\ue70d", "\ue70e", "\ue700", "\ue710")):
+                return False, ExtractionStrategyType.DOMAIN_RULES, "Web portal UI icon glyph / navigation fragment."
+            if re.search(r"\b(?:Purchases and downloads\s+Manage your billing|Help with purchases\s+Gift cards|Support\s+Microsoft 365\s+Office Products|Devices\s+Account & billing Resources)\b", text, re.IGNORECASE):
+                return False, ExtractionStrategyType.DOMAIN_RULES, "Web support portal navigation breadcrumb menu."
 
             # Filter out contact directory hours, phone numbers, and call-center preparatory steps
             if re.search(r"\b(?:1-800-\d{3}-\d{4}|Mon-Fri\s+\d|Pacific Time|call center hours|Please have your order number)\b", text, re.IGNORECASE):
@@ -167,10 +256,16 @@ class CandidateDiscoveryEngine:
                 return False, ExtractionStrategyType.DOMAIN_RULES, "Standard contractual cross-reference / forum election clause."
             if re.search(r"\bClauses \d+ to\s*$", text) or re.match(r"^\d+\s+for any data to which it\b", text):
                 return False, ExtractionStrategyType.DOMAIN_RULES, "Broken sentence fragment or wrapped clause citation."
-            if re.search(r"\b(?:best efforts to|from time to time by\s*[a-z]?)$", text.strip(), re.IGNORECASE):
+            if re.search(r"\b(?:best efforts to|from time to time by\s*[a-z]?|by exercising its rights under this|in accordance with section \d+\.?)$", text.strip(), re.IGNORECASE):
                 return False, ExtractionStrategyType.DOMAIN_RULES, "Dangling broken clause fragment."
+            if re.match(r"^(?:Section \d+\.?|Clauses? \d+ to \d+\.?|Article \d+\.?)$", text.strip(), re.IGNORECASE):
+                return False, ExtractionStrategyType.DOMAIN_RULES, "Standalone section title fragment without operative rule text."
 
-            has_obligations = any(ob.search(text) for ob in DeonticClassifier.OBLIGATION_PATTERNS) or bool(cls.MODAL_PATTERN.search(text))
+            has_obligations = (
+                any(ob.search(eval_text) for ob in DeonticClassifier.OBLIGATION_PATTERNS)
+                or bool(cls.MODAL_PATTERN.search(eval_text))
+                or any(w in eval_text.lower() for w in ("not on the non-refundable list", "not in the exclusion list", "cannot be returned", "cannot be refunded", "non-refundable"))
+            )
 
             if unit_role == ContentRole.REFERENCE_CITATION and not has_obligations:
                 return False, ExtractionStrategyType.DOMAIN_RULES, "Reference citation or external pointer; non-normative context."
@@ -183,7 +278,13 @@ class CandidateDiscoveryEngine:
             if DomainRuleExtractor.is_procedural_ui_instruction(text):
                 return False, ExtractionStrategyType.DOMAIN_RULES, "Procedural UI instruction or click in how-to guide; non-normative action."
 
-            modality, _, is_decision_eligible = DeonticClassifier.classify_text(text)
+            modality, _, is_decision_eligible = DeonticClassifier.classify_text(eval_text)
+
+            # Apply ProseNormativeClassifier for prose units: filter out non-rule corporate PR, hedging, and capability prose
+            from app.extraction.prose_normative_classifier import ProseNormativeClassifier
+            prose_role = ProseNormativeClassifier.classify_unit(eval_text, default_role=ContentRole.POLICY_RULE)
+            if prose_role == ContentRole.NON_RULE_CONTEXT and not has_obligations:
+                return False, ExtractionStrategyType.LLM_SEMANTIC, "Prose unit classified as non-rule context (hedging, capability, promotional)."
 
             # Filter out purpose/goal statements and preamble outlines
             if re.search(r"\b(?:primary goal is|aims to|outlines the expected|purpose of this policy|is designed to|is intended to|serves as|provides guidance)\b", text, re.IGNORECASE):
@@ -191,7 +292,7 @@ class CandidateDiscoveryEngine:
 
             # Filter out purely descriptive statements unless unit contains explicit obligation modals
             if (not is_decision_eligible or modality == "DESCRIPTIVE") and not has_obligations:
-                return False, ExtractionStrategyType.LLM_SEMANTIC, "Informational guidance or purpose statement; filtered from decision gate."
+                return False, ExtractionStrategyType.LLM_SEMANTIC, "Informational prose without normative constraints."
 
             # Allow macro summary statements for non-canonical derived summary extraction
             if DeonticClassifier.is_macro_summary(text):

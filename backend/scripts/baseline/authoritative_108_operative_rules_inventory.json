@@ -1,0 +1,1958 @@
+{
+  "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+  "sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd",
+  "total_operative_rules": 108,
+  "baseline_extracted_count": 103,
+  "phase2_1_recovered_count": 5,
+  "coverage_percentage": 100.0,
+  "units": [
+    {
+      "inventory_index": 1,
+      "unit_id": "SRC-P03-03",
+      "page": 3,
+      "section": "1. Introduction and Scope",
+      "structure_type": "prose",
+      "content_role": "operative_rule",
+      "char_start": 2156,
+      "char_end": 2231,
+      "verbatim_text": "Business customers on standard accounts (custom contracts take precedence).",
+      "evidence_hash_sha256": "869cf892db1b4ee3c0c212b73c56de441083ff2ce98520de34b6f15568622cdb",
+      "mapped_claim_ids": [
+        1
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": "B2B precedence rule"
+    },
+    {
+      "inventory_index": 2,
+      "unit_id": "SRC-P04-03",
+      "page": 4,
+      "section": "2. Definitions",
+      "structure_type": "definition",
+      "content_role": "operative_rule",
+      "char_start": 2643,
+      "char_end": 2738,
+      "verbatim_text": "Exchange: Replacing an item with a different size, colour or product of equal or greater value.",
+      "evidence_hash_sha256": "9df03242105b6a091d82c276015c974379f6d919210a6f3b417e6111d07500ff",
+      "mapped_claim_ids": [
+        6
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": "Exchange definition with rule semantics"
+    },
+    {
+      "inventory_index": 3,
+      "unit_id": "SRC-P04-04",
+      "page": 4,
+      "section": "2. Definitions",
+      "structure_type": "definition",
+      "content_role": "operative_rule",
+      "char_start": 2643,
+      "char_end": 2748,
+      "verbatim_text": "Store Credit: A balance issued to a customer account, redeemable online and in stores, valid for 5 years.",
+      "evidence_hash_sha256": "044ba984ef2b8251fb946d0f45034efd1989bf6d7faf7cea735df89c327c945e",
+      "mapped_claim_ids": [
+        7
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": "Store credit definition with 5-year validity"
+    },
+    {
+      "inventory_index": 4,
+      "unit_id": "SRC-P04-05",
+      "page": 4,
+      "section": "2. Definitions",
+      "structure_type": "definition",
+      "content_role": "operative_rule",
+      "char_start": 2643,
+      "char_end": 2739,
+      "verbatim_text": "RMA: Return Merchandise Authorization number, e.g. RMA-2026-004815, required for mailed returns.",
+      "evidence_hash_sha256": "775560a36752ceb9c09285d318e8a273e91ed0ecc7722835393e16d81a05c04c",
+      "mapped_claim_ids": [
+        8
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": "RMA requirement rule"
+    },
+    {
+      "inventory_index": 5,
+      "unit_id": "SRC-P04-07",
+      "page": 4,
+      "section": "2. Definitions",
+      "structure_type": "definition",
+      "content_role": "operative_rule",
+      "char_start": 2643,
+      "char_end": 2731,
+      "verbatim_text": "Final Sale: Items marked 'Final Sale' at the time of purchase, which cannot be returned.",
+      "evidence_hash_sha256": "e518cb2620075e437ccf9b3bee78a539de1e439d75bb41b740e201ed35d98f8b",
+      "mapped_claim_ids": [
+        9
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": "Final sale exclusion rule"
+    },
+    {
+      "inventory_index": 6,
+      "unit_id": "SRC-P04-08",
+      "page": 4,
+      "section": "2. Definitions",
+      "structure_type": "definition",
+      "content_role": "operative_rule",
+      "char_start": 2643,
+      "char_end": 2731,
+      "verbatim_text": "Original Condition: Unused, unwashed, with all tags, packaging and accessories included.",
+      "evidence_hash_sha256": "687f143788bee9c17aa504f5ea774913b2952ae845ae57850d63e0b16e69e6fc",
+      "mapped_claim_ids": [
+        10
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": "Original condition standard"
+    },
+    {
+      "inventory_index": 7,
+      "unit_id": "SRC-P05-07",
+      "page": 5,
+      "section": "3.1 Extended windows",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 3881,
+      "char_end": 3935,
+      "verbatim_text": "Defective items | Covered by warranty - see Section 14",
+      "evidence_hash_sha256": "87907ae8a4645160718ada8400fd4838ff0c1e797073324e59101ce60b4816f7",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P05-07"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 8,
+      "unit_id": "SRC-P05-01",
+      "page": 5,
+      "section": "3. Standard Return Policy",
+      "structure_type": "prose",
+      "content_role": "operative_rule",
+      "char_start": 3989,
+      "char_end": 4204,
+      "verbatim_text": "Most items purchased from Northwind may be returned within 30 calendar days of the delivery date (or purchase date for in-store sales) for a full refund of the item price, provided the item is in original condition.",
+      "evidence_hash_sha256": "18b0b4a888e9bc1c03a343629ad1d023ec4d6868d83110c59b79f360a5a25c92",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P05-01"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 9,
+      "unit_id": "SRC-P05-02",
+      "page": 5,
+      "section": "3.1 Extended windows",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 4262,
+      "char_end": 4292,
+      "verbatim_text": "Standard merchandise | 30 days",
+      "evidence_hash_sha256": "968bdabc8788d25b4fed9b5048d6c1e73a3366f06fa77e583d5c57f79877d682",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P05-02"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 10,
+      "unit_id": "SRC-P05-03",
+      "page": 5,
+      "section": "3.1 Extended windows",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 4291,
+      "char_end": 4331,
+      "verbatim_text": "Northwind Rewards Gold members | 60 days",
+      "evidence_hash_sha256": "d7e7e64a2c9b347eb67d715223d8435fd6b8ad55385fedceaff9ec0905e86a1f",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P05-03"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 11,
+      "unit_id": "SRC-P05-04",
+      "page": 5,
+      "section": "3.1 Extended windows",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 4330,
+      "char_end": 4405,
+      "verbatim_text": "Holiday purchases (Nov 1 - Dec 24) | Until January 31 of the following year",
+      "evidence_hash_sha256": "1158e4068405eb662d3b82c3eb8d1117ab00735904fac875044a3a3be1e5a698",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P05-04"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 12,
+      "unit_id": "SRC-P05-05",
+      "page": 5,
+      "section": "3.1 Extended windows",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 4404,
+      "char_end": 4442,
+      "verbatim_text": "Footwear (worn indoors only) | 45 days",
+      "evidence_hash_sha256": "c77b8a514b2aa9ada1f456657ea2d6d137eaf6fabfbd9e25e3f6d3a75151400c",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P05-05"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 13,
+      "unit_id": "SRC-P05-06",
+      "page": 5,
+      "section": "3.1 Extended windows",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 4441,
+      "char_end": 4491,
+      "verbatim_text": "Camping tents and sleeping bags (unused) | 60 days",
+      "evidence_hash_sha256": "0b10b2a55d5d5fa9b838322c34ca16c89956adf58b39068a5a053b3e5ed1b6d9",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P05-06"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 14,
+      "unit_id": "SRC-P05-08",
+      "page": 5,
+      "section": "3.2 Returns without a receipt",
+      "structure_type": "prose",
+      "content_role": "operative_rule",
+      "char_start": 4573,
+      "char_end": 4844,
+      "verbatim_text": "Returns without proof of purchase are accepted in-store only, for store credit at the lowest price the item was sold in the last 90 days. A government-issued photo ID is required and scanned. A limit of three receipt-less returns per customer per 12-month period applies.",
+      "evidence_hash_sha256": "d59510496e3e49e55ecaf97656dfeae5560e64def04f74727da1cbb652d3bee2",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P05-08"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 15,
+      "unit_id": "SRC-P05-09",
+      "page": 5,
+      "section": "3.3 Exchanges",
+      "structure_type": "prose",
+      "content_role": "operative_rule",
+      "char_start": 4859,
+      "char_end": 5032,
+      "verbatim_text": "Exchanges for a different size or colour are free of charge, including shipping both ways, when requested within the return window and when the replacement item is in stock.",
+      "evidence_hash_sha256": "cebecd146399a2a809f1e9ec9ee426d97e60d18199398d96f9ba62991827d4c7",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P05-09"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 16,
+      "unit_id": "SRC-P06-02",
+      "page": 6,
+      "section": "4. Refund Eligibility Criteria",
+      "structure_type": "bullet",
+      "content_role": "operative_rule",
+      "char_start": 5409,
+      "char_end": 5465,
+      "verbatim_text": "The request is made within the applicable return window.",
+      "evidence_hash_sha256": "42d1dfc97fd80bf0efa06242377de93314460decc91c652be3f23f8337851656",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P06-02"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 17,
+      "unit_id": "SRC-P06-03",
+      "page": 6,
+      "section": "4. Refund Eligibility Criteria",
+      "structure_type": "bullet",
+      "content_role": "operative_rule",
+      "char_start": 5468,
+      "char_end": 5560,
+      "verbatim_text": "The item is in original condition: unused, unwashed, undamaged, with original tags attached.",
+      "evidence_hash_sha256": "5bda5c41d4a51c43583078d8b979facd088dbc21ac858b57e460caa87c85bf9f",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P06-03"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 18,
+      "unit_id": "SRC-P06-04",
+      "page": 6,
+      "section": "4. Refund Eligibility Criteria",
+      "structure_type": "bullet",
+      "content_role": "operative_rule",
+      "char_start": 5563,
+      "char_end": 5665,
+      "verbatim_text": "The item is returned with all accessories, manuals, free gifts and original packaging where practical.",
+      "evidence_hash_sha256": "1ff4bf8f7e76e7ab9425f3dd7f7ed8a414463eaf7c5f3fdf94b008a36d3a16c0",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P06-04"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 19,
+      "unit_id": "SRC-P06-05",
+      "page": 6,
+      "section": "4. Refund Eligibility Criteria",
+      "structure_type": "bullet",
+      "content_role": "operative_rule",
+      "char_start": 5668,
+      "char_end": 5737,
+      "verbatim_text": "The order number or proof of purchase can be verified in our systems.",
+      "evidence_hash_sha256": "b3d5dc7f232a8a7e108dd3f80c895d96c6052ef3d1d4e2c85653d90239d263c4",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P06-05"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 20,
+      "unit_id": "SRC-P06-06",
+      "page": 6,
+      "section": "4. Refund Eligibility Criteria",
+      "structure_type": "bullet",
+      "content_role": "operative_rule",
+      "char_start": 5740,
+      "char_end": 5796,
+      "verbatim_text": "The item is not on the non-refundable list in Section 5.",
+      "evidence_hash_sha256": "621dd1882b61099406e0f78ea849722078b5aaa41f9ac261c1305dd73bbed971",
+      "mapped_claim_ids": [
+        "recovered_SRC-P06-06"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "phase2_1_recovered",
+      "notes": null
+    },
+    {
+      "inventory_index": 21,
+      "unit_id": "SRC-P06-07",
+      "page": 6,
+      "section": "4.1 Partial refunds",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 6031,
+      "char_end": 6061,
+      "verbatim_text": "Like new, tags attached | 100%",
+      "evidence_hash_sha256": "ed2eb3f1a8a4423e6becb74f9b7f0d743b9ea3baac00f6fc829c1f947b234c71",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P06-07"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 22,
+      "unit_id": "SRC-P06-08",
+      "page": 6,
+      "section": "4.1 Partial refunds",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 6060,
+      "char_end": 6096,
+      "verbatim_text": "Opened packaging, item unused | 100%",
+      "evidence_hash_sha256": "850d44bccba231fd1c613776402ebc361efee2bc66a6a7e68a9cde7cfa570966",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P06-08"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 23,
+      "unit_id": "SRC-P06-09",
+      "page": 6,
+      "section": "4.1 Partial refunds",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 6095,
+      "char_end": 6135,
+      "verbatim_text": "Missing original box (non-fragile) | 90%",
+      "evidence_hash_sha256": "93c51b7548cb6a722ea6deec5c34fd1b37e53f9bf580c8593f219bb3a49ff4b9",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P06-09"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 24,
+      "unit_id": "SRC-P06-10",
+      "page": 6,
+      "section": "4.1 Partial refunds",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 6134,
+      "char_end": 6192,
+      "verbatim_text": "Missing accessories or free gift | Refund minus gift value",
+      "evidence_hash_sha256": "d48177614bc806f4274b28a99242f6223ad652dd122acdacd86e5c5fa077c489",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P06-10"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 25,
+      "unit_id": "SRC-P06-11",
+      "page": 6,
+      "section": "4.1 Partial refunds",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 6191,
+      "char_end": 6229,
+      "verbatim_text": "Light wear or signs of use | 50% - 75%",
+      "evidence_hash_sha256": "8291fa5fef6c5e52c2d087f99983f037e1b5f9028104ea134cdb1e5e72a0c687",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P06-11"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 26,
+      "unit_id": "SRC-P06-12",
+      "page": 6,
+      "section": "4.1 Partial refunds",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 6228,
+      "char_end": 6307,
+      "verbatim_text": "Damaged by customer / heavy use | 0% - 25% (agent discretion, manager approval)",
+      "evidence_hash_sha256": "c1bf8f30acac817992a18eea88a2b09b43029ddbb37a81c29207892566b91320",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P06-12"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 27,
+      "unit_id": "SRC-P06-13",
+      "page": 6,
+      "section": "4.1 Partial refunds",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 6306,
+      "char_end": 6347,
+      "verbatim_text": "Washed, altered or stained | Not eligible",
+      "evidence_hash_sha256": "917eb13c2d2470681cb64258598a2ea1eb104b2e29224596dec8660a6c5c9458",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P06-13"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 28,
+      "unit_id": "SRC-P06-14",
+      "page": 6,
+      "section": "4.2 Manager approval thresholds",
+      "structure_type": "bullet",
+      "content_role": "operative_rule",
+      "char_start": 6381,
+      "char_end": 6418,
+      "verbatim_text": "Up to $100: Tier 1 agent may approve.",
+      "evidence_hash_sha256": "87ebe7d0e4fb02970451ed170e65d5ee4892dc31e4df26b4c4e0211d778268c5",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P06-14"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 29,
+      "unit_id": "SRC-P06-15",
+      "page": 6,
+      "section": "4.2 Manager approval thresholds",
+      "structure_type": "bullet",
+      "content_role": "operative_rule",
+      "char_start": 6421,
+      "char_end": 6481,
+      "verbatim_text": "$100.01 - $500: Tier 2 agent or team lead approval required.",
+      "evidence_hash_sha256": "134176938f5518ca65a6fe27491d81d38d5907e6f03bd902c554762b97c8bda9",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P06-15"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 30,
+      "unit_id": "SRC-P06-16",
+      "page": 6,
+      "section": "4.2 Manager approval thresholds",
+      "structure_type": "bullet",
+      "content_role": "operative_rule",
+      "char_start": 6484,
+      "char_end": 6541,
+      "verbatim_text": "Over $500: Customer Experience Manager approval required.",
+      "evidence_hash_sha256": "ae92352453a1e312664010b0b73f81276603251f19a9093ba91010b5b001e76f",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P06-16"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 31,
+      "unit_id": "SRC-P06-17",
+      "page": 6,
+      "section": "4.2 Manager approval thresholds",
+      "structure_type": "bullet",
+      "content_role": "operative_rule",
+      "char_start": 6544,
+      "char_end": 6609,
+      "verbatim_text": "Over $2,000: Finance Director approval and fraud review required.",
+      "evidence_hash_sha256": "b246c3fea2d3b3fdcd6b3c1e71ca57dca62018ad1c481d64372a2edf5c313daf",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P06-17"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 32,
+      "unit_id": "SRC-P07-02",
+      "page": 7,
+      "section": "5. Non-Refundable Items",
+      "structure_type": "bullet",
+      "content_role": "operative_rule",
+      "char_start": 6833,
+      "char_end": 6900,
+      "verbatim_text": "Items marked Final Sale or Clearance - All Sales Final at checkout.",
+      "evidence_hash_sha256": "c7a0acb5ebceb6b3664b26309d10a1325818909497c476b9ca703b93bc2c86a0",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P07-02"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 33,
+      "unit_id": "SRC-P07-03",
+      "page": 7,
+      "section": "5. Non-Refundable Items",
+      "structure_type": "bullet",
+      "content_role": "operative_rule",
+      "char_start": 6903,
+      "char_end": 6948,
+      "verbatim_text": "Gift cards and e-gift cards (see Section 13).",
+      "evidence_hash_sha256": "f9f6de767d128760aa8104e32bb22fe6946c41dcb9d215306ea96e71781cec37",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P07-03"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 34,
+      "unit_id": "SRC-P07-04",
+      "page": 7,
+      "section": "5. Non-Refundable Items",
+      "structure_type": "bullet",
+      "content_role": "operative_rule",
+      "char_start": 6951,
+      "char_end": 7025,
+      "verbatim_text": "Downloadable software, digital guides and trail-map files once downloaded.",
+      "evidence_hash_sha256": "4cfe403b31eb91e321a4bd55aa5a8d80f2726a1e67b9d1f64ef3018abed27dce",
+      "mapped_claim_ids": [
+        "recovered_SRC-P07-04"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "phase2_1_recovered",
+      "notes": null
+    },
+    {
+      "inventory_index": 35,
+      "unit_id": "SRC-P07-05",
+      "page": 7,
+      "section": "5. Non-Refundable Items",
+      "structure_type": "bullet",
+      "content_role": "operative_rule",
+      "char_start": 7028,
+      "char_end": 7119,
+      "verbatim_text": "Personalised or custom-engraved items, including monogrammed jackets and embroidered packs.",
+      "evidence_hash_sha256": "ddacd3c04184138a5f56d4219a5cc85290ebd147a70835d3f43fbb2d9aff95d0",
+      "mapped_claim_ids": [
+        "recovered_SRC-P07-05"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "phase2_1_recovered",
+      "notes": null
+    },
+    {
+      "inventory_index": 36,
+      "unit_id": "SRC-P07-06",
+      "page": 7,
+      "section": "5. Non-Refundable Items",
+      "structure_type": "bullet",
+      "content_role": "operative_rule",
+      "char_start": 7122,
+      "char_end": 7230,
+      "verbatim_text": "Opened hygiene items: water bottles' mouthpieces, thermal underwear, socks, and swimwear without liner tags.",
+      "evidence_hash_sha256": "59d5a49a76c217ed92a2e4141742ce5fb91a7277dafc82acc518553858d7fccd",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P07-06"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 37,
+      "unit_id": "SRC-P07-07",
+      "page": 7,
+      "section": "5. Non-Refundable Items",
+      "structure_type": "bullet",
+      "content_role": "operative_rule",
+      "char_start": 7233,
+      "char_end": 7314,
+      "verbatim_text": "Fuel canisters, bear spray, and other hazardous materials once opened or shipped.",
+      "evidence_hash_sha256": "dc2a79a4062f5e71a575a9d603a434f35e3d2a833b66b2f57faf655bee294eb6",
+      "mapped_claim_ids": [
+        "recovered_SRC-P07-07"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "phase2_1_recovered",
+      "notes": null
+    },
+    {
+      "inventory_index": 38,
+      "unit_id": "SRC-P07-08",
+      "page": 7,
+      "section": "5. Non-Refundable Items",
+      "structure_type": "bullet",
+      "content_role": "operative_rule",
+      "char_start": 7317,
+      "char_end": 7388,
+      "verbatim_text": "Perishable goods such as freeze-dried meals past 14 days from delivery.",
+      "evidence_hash_sha256": "9fa32c9940f523637e775409e8916834ef1596d3ca21953c910d3954e2c8a961",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P07-08"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 39,
+      "unit_id": "SRC-P07-09",
+      "page": 7,
+      "section": "5. Non-Refundable Items",
+      "structure_type": "bullet",
+      "content_role": "operative_rule",
+      "char_start": 7391,
+      "char_end": 7457,
+      "verbatim_text": "Installation, repair, and gear-fitting services already performed.",
+      "evidence_hash_sha256": "c18a96da0a818fce2465b01789701d2a44c71d63ca2c0f757701d8ba077a2605",
+      "mapped_claim_ids": [
+        "recovered_SRC-P07-09"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "phase2_1_recovered",
+      "notes": null
+    },
+    {
+      "inventory_index": 40,
+      "unit_id": "SRC-P07-10",
+      "page": 7,
+      "section": "5. Non-Refundable Items",
+      "structure_type": "bullet",
+      "content_role": "operative_rule",
+      "char_start": 7460,
+      "char_end": 7508,
+      "verbatim_text": "Items returned more than 90 days after delivery.",
+      "evidence_hash_sha256": "17907aef837fd9be0b327b07c6b92dd9e04ddbe19ee9d85b3841d48e3d06119f",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P07-10"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": "Note: 90 days threshold, not 60 days."
+    },
+    {
+      "inventory_index": 41,
+      "unit_id": "SRC-P07-11",
+      "page": 7,
+      "section": "5.2 Exceptions",
+      "structure_type": "prose",
+      "content_role": "operative_rule",
+      "char_start": 7778,
+      "char_end": 8013,
+      "verbatim_text": "Even for non-refundable items, a full refund or replacement will be provided if the item arrives damaged, is materially different from its description, or was shipped in error. Report these issues within 7 days of delivery with photos.",
+      "evidence_hash_sha256": "e2ab81c66fbc09086b1bacc276fcc56b15c30a73f16f2ceb75b36072d8aa7f42",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P07-11"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 42,
+      "unit_id": "SRC-P08-04",
+      "page": 8,
+      "section": "6.4 Required information",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 8014,
+      "char_end": 8046,
+      "verbatim_text": "Order number | NW-10482391 | Yes",
+      "evidence_hash_sha256": "e38563a8007416d9e08146862d1857a0dd0e40a29547a9b252b7dbfed88f11db",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P08-04"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 43,
+      "unit_id": "SRC-P08-08",
+      "page": 8,
+      "section": "6.4 Required information",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 8014,
+      "char_end": 8051,
+      "verbatim_text": "Photos | Damage close-up | If damaged",
+      "evidence_hash_sha256": "25470e9839050f3ec6251407a772c3d344682d70eb8d426390ce73f99df4d2bd",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P08-08"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": "Section 6.4 authentic row from handbook PDF"
+    },
+    {
+      "inventory_index": 44,
+      "unit_id": "SRC-P08-05",
+      "page": 8,
+      "section": "6.4 Required information",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 9127,
+      "char_end": 9170,
+      "verbatim_text": "Email on order | jane.doe@example.com | Yes",
+      "evidence_hash_sha256": "1f6540c0a1a9c3ae63fee4c62fb612374a819d280ad0a8bf2b22d3c1d00b108d",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P08-05"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 45,
+      "unit_id": "SRC-P08-06",
+      "page": 8,
+      "section": "6.4 Required information",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 9167,
+      "char_end": 9224,
+      "verbatim_text": "Item SKU / name | TNT-4P-GRN / Summit 4-Person Tent | Yes",
+      "evidence_hash_sha256": "d86ac90c2c59a8a59b5001c2f2ab6b7ede506ebc5ef9efaaad33ac4205fb8668",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P08-06"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": "Section 6.4 authentic row from handbook PDF"
+    },
+    {
+      "inventory_index": 46,
+      "unit_id": "SRC-P08-07",
+      "page": 8,
+      "section": "6.4 Required information",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 9221,
+      "char_end": 9257,
+      "verbatim_text": "Reason for return | Wrong size | Yes",
+      "evidence_hash_sha256": "112624041664430df9c181a6b5d781346007b4005d0399ee1715b649b1d94eb8",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P08-07"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": "Section 6.4 authentic row from handbook PDF"
+    },
+    {
+      "inventory_index": 47,
+      "unit_id": "SRC-P08-09",
+      "page": 8,
+      "section": "6.4 Required information",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 9288,
+      "char_end": 9331,
+      "verbatim_text": "Preferred resolution | Refund to card | Yes",
+      "evidence_hash_sha256": "5e2acfe2da9100de636811db9c90fde2c480aef4a92ee721ad9eaa1ae70045aa",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P08-09"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": "Section 6.4 authentic row from handbook PDF"
+    },
+    {
+      "inventory_index": 48,
+      "unit_id": "SRC-P09-04",
+      "page": 9,
+      "section": "7. Refund Processing Timelines",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 9328,
+      "char_end": 9385,
+      "verbatim_text": "Debit card refund posted by bank | Up to 10 business days",
+      "evidence_hash_sha256": "c3ae1b3363276dd7f370298b7529d75ea13714cf5c09450d6589da2849d181d8",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P09-04"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 49,
+      "unit_id": "SRC-P09-05",
+      "page": 9,
+      "section": "7. Refund Processing Timelines",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 9328,
+      "char_end": 9387,
+      "verbatim_text": "Store credit applied to account | Immediate upon inspection",
+      "evidence_hash_sha256": "22390f6506bd10572d691bb7eb7771da1464337620b9784d936fed231d95f9eb",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P09-05"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 50,
+      "unit_id": "SRC-P09-06",
+      "page": 9,
+      "section": "7. Refund Processing Timelines",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 9328,
+      "char_end": 9374,
+      "verbatim_text": "PayPal refund posted | Usually within 24 hours",
+      "evidence_hash_sha256": "208e463e625ff08b8c61ec0b63ae0d0d319c0259106c8af144a8de6dc04fe236",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P09-06"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 51,
+      "unit_id": "SRC-P09-01",
+      "page": 9,
+      "section": "7. Refund Processing Timelines",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 9677,
+      "char_end": 9724,
+      "verbatim_text": "Return transit to warehouse | 3-7 business days",
+      "evidence_hash_sha256": "b029854f71d69ceead2b79a0d8d66e288c343447a3f37f92a0ffde8582943282",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P09-01"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 52,
+      "unit_id": "SRC-P09-02",
+      "page": 9,
+      "section": "7. Refund Processing Timelines",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 9734,
+      "char_end": 9786,
+      "verbatim_text": "Warehouse receipt and inspection | 1-2 business days",
+      "evidence_hash_sha256": "fd2e16b5aa1ba47ee04ac46f96403134852e75b2cc35a8ba06a9b41fdde91bb2",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P09-02"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 53,
+      "unit_id": "SRC-P09-03",
+      "page": 9,
+      "section": "7. Refund Processing Timelines",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 9848,
+      "char_end": 9901,
+      "verbatim_text": "Credit card refund posted by bank | 3-5 business days",
+      "evidence_hash_sha256": "dc0fb2a15f97a4e2c41fd20bc296577e437d747cf25ad94fa02be7b3df683977",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P09-03"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 54,
+      "unit_id": "SRC-P10-01",
+      "page": 10,
+      "section": "8. Refund Methods and Payment Types",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 10605,
+      "char_end": 10660,
+      "verbatim_text": "Credit card | Original card | 3-5 business days to post",
+      "evidence_hash_sha256": "a8dc216458d41b48c866c09cd161d75cadcbb68ba261e882852a3ca31ce2c461",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P10-01"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 55,
+      "unit_id": "SRC-P10-02",
+      "page": 10,
+      "section": "8. Refund Methods and Payment Types",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 10605,
+      "char_end": 10656,
+      "verbatim_text": "Debit card | Original card | Up to 10 business days",
+      "evidence_hash_sha256": "bbd781b4d7003bf09a8a91bfa3e126b160567e818bbe8be5d478596df549188c",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P10-02"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 56,
+      "unit_id": "SRC-P10-04",
+      "page": 10,
+      "section": "8. Refund Methods and Payment Types",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 10605,
+      "char_end": 10654,
+      "verbatim_text": "PayPal | PayPal balance | Usually within 24 hours",
+      "evidence_hash_sha256": "27834c653d29580e2defbf94a396796a61d4ff627a6703e5fb951e43f6d358ed",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P10-04"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 57,
+      "unit_id": "SRC-P10-06",
+      "page": 10,
+      "section": "8. Refund Methods and Payment Types",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 10605,
+      "char_end": 10677,
+      "verbatim_text": "Split payments | Proportionally to each method | Gift card portion first",
+      "evidence_hash_sha256": "74b823b6a6863b7ac74e359002d10cf7199d746618d9faf8b85ef1a3a5ccff52",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P10-06"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 58,
+      "unit_id": "SRC-P10-03",
+      "page": 10,
+      "section": "8. Refund Methods and Payment Types",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 11055,
+      "char_end": 11110,
+      "verbatim_text": "Apple Pay / Google Pay | Underlying card | Same as card",
+      "evidence_hash_sha256": "ee62ac51e2b608088d4de4e545d7e7633258594da3a73714504d19e7739a4a51",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P10-03"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": "Explicit pointer token to card"
+    },
+    {
+      "inventory_index": 59,
+      "unit_id": "SRC-P10-07",
+      "page": 10,
+      "section": "8.3 Store credit bonus",
+      "structure_type": "prose",
+      "content_role": "operative_rule",
+      "char_start": 11405,
+      "char_end": 11645,
+      "verbatim_text": "Customers who choose store credit instead of a refund to their card receive a 5% bonus on the credit value (up to a maximum bonus of $25.00 per return). Bonus credit cannot be applied retroactively once a refund has been issued to the card.",
+      "evidence_hash_sha256": "516d8433a8b44bb630ade4861ec763eea216a42e46932bdd40b79d87ddbf1371",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P10-07"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 60,
+      "unit_id": "SRC-P11-01",
+      "page": 11,
+      "section": "9. Shipping Costs and Return Labels",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 11945,
+      "char_end": 12010,
+      "verbatim_text": "Standard merchandise, change of mind | $5.99 deducted from refund",
+      "evidence_hash_sha256": "887f6e7cc4d85fa771160d4011f45940eb565d9f695f318250587b4c71d5e1de",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P11-01"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 61,
+      "unit_id": "SRC-P11-04",
+      "page": 11,
+      "section": "9. Shipping Costs and Return Labels",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 11945,
+      "char_end": 12011,
+      "verbatim_text": "Exchange (size/colour) | Free both ways | Replacement shipped free",
+      "evidence_hash_sha256": "fe37c2f21ed6eba8de93286f7d7e6b330d7544408e2d06634033d1c353e13926",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P11-04"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 62,
+      "unit_id": "SRC-P11-02",
+      "page": 11,
+      "section": "9. Shipping Costs and Return Labels",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 12192,
+      "char_end": 12261,
+      "verbatim_text": "Defective or damaged | Free | Full refund including original shipping",
+      "evidence_hash_sha256": "7de5ad27da91fe5b7cedd4fd9d49f9802ddca555f7500eb6575b0199f0cce56e",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P11-02"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 63,
+      "unit_id": "SRC-P11-03",
+      "page": 11,
+      "section": "9. Shipping Costs and Return Labels",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 12231,
+      "char_end": 12295,
+      "verbatim_text": "Wrong item sent | Free | Full refund including original shipping",
+      "evidence_hash_sha256": "33a3fdd7900465da15e7c818f29cdc6fa84d58582cb15a866e615384619f470b",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P11-03"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 64,
+      "unit_id": "SRC-P11-05",
+      "page": 11,
+      "section": "9. Shipping Costs and Return Labels",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 12356,
+      "char_end": 12414,
+      "verbatim_text": "Gold member, any reason | Free | Full refund of item price",
+      "evidence_hash_sha256": "cbe155f66772d650fd1ee0d34b76fed8873212abd2e9a2334e1403aa0f087fb2",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P11-05"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 65,
+      "unit_id": "SRC-P11-06",
+      "page": 11,
+      "section": "9.2 Oversized and freight items",
+      "structure_type": "prose",
+      "content_role": "operative_rule",
+      "char_start": 12540,
+      "char_end": 12720,
+      "verbatim_text": "Return freight for change-of-mind returns is a flat $49.00, deducted from the refund. Freight pickups must be scheduled with our logistics team at least 3 business days in advance.",
+      "evidence_hash_sha256": "13f1123846110ca6197f01a8fb40604196c41347907d04fbdd316144497938b5",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P11-06"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 66,
+      "unit_id": "SRC-P12-01",
+      "page": 12,
+      "section": "10. Damaged, Defective or Incorrect Items",
+      "structure_type": "prose",
+      "content_role": "operative_rule",
+      "char_start": 13179,
+      "char_end": 13344,
+      "verbatim_text": "Report issues within 7 calendar days of delivery via the online returns portal or customer care. Please include clear photos of the damage, defect or incorrect item.",
+      "evidence_hash_sha256": "c3518e836d89fd591f000379d97b4b02a912a21169f79ec18cb9252ddb8b00d9",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P12-01"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 67,
+      "unit_id": "SRC-P12-03",
+      "page": 12,
+      "section": "10.3 Resolution options",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 14120,
+      "char_end": 14245,
+      "verbatim_text": "Partial refund (keep item) | Offered for minor cosmetic flaws where item remains fully functional | 20% refund; item retained",
+      "evidence_hash_sha256": "8b9a6de10f650f02bc487b9ea709ceecf71b6daa216ea78c8fe13f5d93be1cbe",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P12-03"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 68,
+      "unit_id": "SRC-P12-02",
+      "page": 12,
+      "section": "10.3 Resolution options",
+      "structure_type": "prose",
+      "content_role": "operative_rule",
+      "char_start": 14253,
+      "char_end": 14458,
+      "verbatim_text": "For damaged items valued under $40.00, we may issue a refund without requiring the item to be returned (\"Keep It\" policy), at the agent's discretion. This is limited to two instances per customer per year.",
+      "evidence_hash_sha256": "cc6b142a9c41704d4ebddfea7f27fdc8398474144eb3d353029e23996d9a9651",
+      "mapped_claim_ids": [
+        72
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": "Keep It discretionary policy"
+    },
+    {
+      "inventory_index": 69,
+      "unit_id": "SRC-P13-01",
+      "page": 13,
+      "section": "11. Order Cancellations",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 14459,
+      "char_end": 14547,
+      "verbatim_text": "Order placed (within 30 mins) | Yes - self-service | Full refund, immediate auth release",
+      "evidence_hash_sha256": "5b7b2929cf4987b321112aa20d68d3b7cc44963a139e0af73a67d6d66e94c65b",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P13-01"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 70,
+      "unit_id": "SRC-P13-02",
+      "page": 13,
+      "section": "11. Order Cancellations",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 14459,
+      "char_end": 14570,
+      "verbatim_text": "Processing / allocated | Call support - attempted, not guaranteed | Full refund if stopped; else return process",
+      "evidence_hash_sha256": "2121990163de7ad2788ed6266fbc23a6696b05b0594223bc56a4f44b358e1534",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P13-02"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 71,
+      "unit_id": "SRC-P13-03",
+      "page": 13,
+      "section": "11. Order Cancellations",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 14459,
+      "char_end": 14503,
+      "verbatim_text": "Shipped | No | Must receive and start return",
+      "evidence_hash_sha256": "a40bb4f07f7f873eaadec871e1b8a45f207dd399a37830f678da560091902dd6",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P13-03"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 72,
+      "unit_id": "SRC-P13-04",
+      "page": 13,
+      "section": "11. Order Cancellations",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 14459,
+      "char_end": 14536,
+      "verbatim_text": "Backordered items | Yes - anytime before allocation | Full refund immediately",
+      "evidence_hash_sha256": "85d1873d648e72d9ad815198429978c381387823e467f513c72352e7d9b955ff",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P13-04"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 73,
+      "unit_id": "SRC-P13-05",
+      "page": 13,
+      "section": "11. Order Cancellations",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 14459,
+      "char_end": 14569,
+      "verbatim_text": "Custom or engraved items | Within 2 hours of order only | 100% refund; no cancellation after production starts",
+      "evidence_hash_sha256": "93bbe947389a588aa62f47ced79c520f38ac8c97fe35ba2ba6f4f016dd0baddb",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P13-05"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 74,
+      "unit_id": "SRC-P14-01",
+      "page": 14,
+      "section": "12. Subscription Refunds",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 15693,
+      "char_end": 15829,
+      "verbatim_text": "Trailhead Box | Monthly, 1st of month | Anytime before 25th | No refund for current month; next box cancelled. May pause up to 3 months.",
+      "evidence_hash_sha256": "c9091ea23e111142c077878157b78ba16aee2aee29b5d6c5b4a919d6d89dbfc1",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P14-01"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 75,
+      "unit_id": "SRC-P14-02",
+      "page": 14,
+      "section": "12. Subscription Refunds",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 15693,
+      "char_end": 15790,
+      "verbatim_text": "Rewards Plus | Annual | Anytime | Pro-rated refund within first 60 days; no refund after 60 days.",
+      "evidence_hash_sha256": "fb7a0a3b66f170267bb1734233de6c8736472749b8ba50e58038e682586f8550",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P14-02"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 76,
+      "unit_id": "SRC-P14-04",
+      "page": 14,
+      "section": "12.1 Free trials",
+      "structure_type": "prose",
+      "content_role": "operative_rule",
+      "char_start": 15693,
+      "char_end": 15797,
+      "verbatim_text": "If you forget to cancel and are charged, contact us within 7 days for a full refund of the first charge.",
+      "evidence_hash_sha256": "ae03f34661e901b84296f85b5b8af58874434cd470b74f35147c7f087bdc845a",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P14-04"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 77,
+      "unit_id": "SRC-P14-03",
+      "page": 14,
+      "section": "12. Subscription Refunds",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 15934,
+      "char_end": 16034,
+      "verbatim_text": "Gear Care Plan | Monthly | Anytime | No refund for current month; plan ends at end of billing cycle.",
+      "evidence_hash_sha256": "971f92a87bcbae2f11eae37f5e654d9c53de31ee32a6f73f0d68820c4bfbef7a",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P14-03"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 78,
+      "unit_id": "SRC-P15-01",
+      "page": 15,
+      "section": "13.1 Digital products",
+      "structure_type": "prose",
+      "content_role": "operative_rule",
+      "char_start": 17074,
+      "char_end": 17297,
+      "verbatim_text": "Digital goods such as trail guides (PDF), camping-skills video series, and GPS waypoint files are non-refundable once downloaded. If you have not downloaded the file, contact us within 14 days of purchase for a full refund.",
+      "evidence_hash_sha256": "8492c5d26e7e72a592c77578f0f39020573ebc5e2738cbcb42fed28dac335ecc",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P15-01"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 79,
+      "unit_id": "SRC-P15-02",
+      "page": 15,
+      "section": "13.2 Gift cards",
+      "structure_type": "prose",
+      "content_role": "operative_rule",
+      "char_start": 17696,
+      "char_end": 17838,
+      "verbatim_text": "Gift card purchases cannot be cancelled once the code is delivered by email. Northwind gift cards do not expire and carry no maintenance fees.",
+      "evidence_hash_sha256": "a852c7938d2529d7c36ba663dcabe39e563e375f738b4f692a8a0fb7e12f3a83",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P15-02"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 80,
+      "unit_id": "SRC-P16-02",
+      "page": 16,
+      "section": "14. Warranty Claims",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 18354,
+      "char_end": 18422,
+      "verbatim_text": "Sleeping bags | Lifetime (manufacturing defects) | Repair or replace",
+      "evidence_hash_sha256": "b01ed077082b9c3d74e2dda2aff0fe61ddcaa831cbf5869ceef0fa4fc8c06858",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P16-02"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 81,
+      "unit_id": "SRC-P16-03",
+      "page": 16,
+      "section": "14. Warranty Claims",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 18354,
+      "char_end": 18393,
+      "verbatim_text": "Backpacks | 5 years | Repair or replace",
+      "evidence_hash_sha256": "21b9876ecaca9d3789689b5dfd566a68eb5c6e6e303fa183d3da8997918326a1",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P16-03"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 82,
+      "unit_id": "SRC-P16-04",
+      "page": 16,
+      "section": "14. Warranty Claims",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 18354,
+      "char_end": 18409,
+      "verbatim_text": "Footwear | 1 year | Replace or refund (prorated by age)",
+      "evidence_hash_sha256": "38e5446e6dfa6a8aab385111fb51bb9e70620c223746ec4b213acda0e62d2de1",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P16-04"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 83,
+      "unit_id": "SRC-P16-05",
+      "page": 16,
+      "section": "14. Warranty Claims",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 18354,
+      "char_end": 18390,
+      "verbatim_text": "Apparel | 1 year | Replace or repair",
+      "evidence_hash_sha256": "42bbd47ef59f856ff29b0871a937afcd0971eee058f673a9ecd69267a3b198fe",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P16-05"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 84,
+      "unit_id": "SRC-P16-08",
+      "page": 16,
+      "section": "14. Warranty Claims",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 18354,
+      "char_end": 18404,
+      "verbatim_text": "Water filters | 1 year | Replace cartridge or unit",
+      "evidence_hash_sha256": "7adfcc9d95c0a21a3cc62c7bb6c21cae532559b781a40fba3e4b940b254f4ed2",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P16-08"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 85,
+      "unit_id": "SRC-P16-01",
+      "page": 16,
+      "section": "14. Warranty Claims",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 18653,
+      "char_end": 18725,
+      "verbatim_text": "Tents and shelters | 2 years | Repair, replacement parts, or replacement",
+      "evidence_hash_sha256": "f74bdcb69f711d5cc1daed2e161a312a30edc3984760b9b8a689051359d25c6f",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P16-01"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 86,
+      "unit_id": "SRC-P16-06",
+      "page": 16,
+      "section": "14. Warranty Claims",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 18874,
+      "char_end": 18963,
+      "verbatim_text": "Electronics (headlamps, GPS) | 1 year | Repair or replace (manufacturer warranty applies)",
+      "evidence_hash_sha256": "4d0d68b32e987c0adaa79f5b02a974d1747fa9dd05e5e0d14db02cc7e9d1f9f8",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P16-06"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 87,
+      "unit_id": "SRC-P16-07",
+      "page": 16,
+      "section": "14. Warranty Claims",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 18928,
+      "char_end": 18987,
+      "verbatim_text": "Stoves and cookware | 2 years | Repair or replacement parts",
+      "evidence_hash_sha256": "1fadad1a8bc712c6bdc6314ce23208fae5c127796d3b5ae88f999262ba599851",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P16-07"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 88,
+      "unit_id": "SRC-P16-09",
+      "page": 16,
+      "section": "14.2 Marketplace sellers",
+      "structure_type": "prose",
+      "content_role": "operative_rule",
+      "char_start": 19388,
+      "char_end": 19566,
+      "verbatim_text": "Items shipped directly by third-party sellers follow the seller's policy, but Northwind's A-to-Z Guarantee ensures a refund if the seller fails to respond within 5 business days.",
+      "evidence_hash_sha256": "9228cca9f6b550d9911fa319c4c9bbd5802de306cd11f6817a79f7fe3c4458fd",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P16-09"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 89,
+      "unit_id": "SRC-P17-01",
+      "page": 17,
+      "section": "15. International Orders",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 19567,
+      "char_end": 19617,
+      "verbatim_text": "United States | 30 days | See Section 9 | Included",
+      "evidence_hash_sha256": "1c497936d338ec28f71aa4e1b040ee8578cd8f11bb56561e74d0e525f4a05c6b",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P17-01"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 90,
+      "unit_id": "SRC-P17-02",
+      "page": 17,
+      "section": "15. International Orders",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 19567,
+      "char_end": 19658,
+      "verbatim_text": "Canada | 30 days | Customer pays unless defective | Duties refunded, customer files GST/HST",
+      "evidence_hash_sha256": "e6691b6bf22601cd1ec770690364c17d519a2cbcae3181c238d08eee13747da2",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P17-02"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 91,
+      "unit_id": "SRC-P17-03",
+      "page": 17,
+      "section": "15. International Orders",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 19567,
+      "char_end": 19678,
+      "verbatim_text": "UK | 30 days (14-day statutory minimum) | Customer pays unless defective | VAT refunded, duty via customs claim",
+      "evidence_hash_sha256": "c1d5428dfdf88a3b9855c9192055bc52ea0ba9d133449b8f3e4340fd5738fcde",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P17-03"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 92,
+      "unit_id": "SRC-P17-04",
+      "page": 17,
+      "section": "15. International Orders",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 19567,
+      "char_end": 19654,
+      "verbatim_text": "EU | 30 days (14-day statutory minimum) | Customer pays unless defective | VAT refunded",
+      "evidence_hash_sha256": "2bb872db30343c8aab64eeb15ab4583b0463e666897c2c6ccb565172b667d15e",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P17-04"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 93,
+      "unit_id": "SRC-P17-05",
+      "page": 17,
+      "section": "15. International Orders",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 20244,
+      "char_end": 20300,
+      "verbatim_text": "Rest of world | 14 days | Customer pays | Not refundable",
+      "evidence_hash_sha256": "0aacfc974a8e1d9b1caabea1165e654949e9006761ebc1ed7d1f48b9339aef79",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P17-05"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 94,
+      "unit_id": "SRC-P17-06",
+      "page": 17,
+      "section": "15.2 Currency rules",
+      "structure_type": "prose",
+      "content_role": "operative_rule",
+      "char_start": 20320,
+      "char_end": 20459,
+      "verbatim_text": "Refunds are issued in the currency of the original charge. Exchange rate differences between purchase and refund dates are not compensated.",
+      "evidence_hash_sha256": "c974ec8c9936e65ef3d3b1269de4d1bd1da789672b736c7788510d34cefcb636",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P17-06"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 95,
+      "unit_id": "SRC-P18-01",
+      "page": 18,
+      "section": "16. Chargeback reason codes",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 20888,
+      "char_end": 20970,
+      "verbatim_text": "4837 / 10.4 | Fraud - card not present | Provide delivery proof, IP log, signature",
+      "evidence_hash_sha256": "fec857d3879cc0a7f89cf6503046b2718c4c0242561ee3fdeee8e0701c464d25",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P18-01"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 96,
+      "unit_id": "SRC-P18-02",
+      "page": 18,
+      "section": "16. Chargeback reason codes",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 20888,
+      "char_end": 20965,
+      "verbatim_text": "4853 / 13.1 | Defective merchandise | Provide return label, inspection report",
+      "evidence_hash_sha256": "f6c3149371cf158f9b4b113c5b576cb0b11f5777505cf50ab090223458b2ddf7",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P18-02"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 97,
+      "unit_id": "SRC-P18-03",
+      "page": 18,
+      "section": "16. Chargeback reason codes",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 20888,
+      "char_end": 20963,
+      "verbatim_text": "4855 / 13.3 | Goods not received | Provide carrier tracking, delivery photo",
+      "evidence_hash_sha256": "60baa04c1bc9fbb7325049972484d95bfbc3613805becf760c9c6c66bd84f6f7",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P18-03"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 98,
+      "unit_id": "SRC-P18-04",
+      "page": 18,
+      "section": "16. Chargeback reason codes",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 20888,
+      "char_end": 20952,
+      "verbatim_text": "4834 / 12.6 | Duplicate processing | Verify and refund duplicate",
+      "evidence_hash_sha256": "44fedf0363927fd5292f708f08e8cdecc0b918eaa09bc82c3475f97dc582ff6d",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P18-04"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 99,
+      "unit_id": "SRC-P18-05",
+      "page": 18,
+      "section": "16. Chargeback reason codes",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 20888,
+      "char_end": 20966,
+      "verbatim_text": "4841 / 13.2 | Cancelled recurring | Provide cancellation terms, billing notice",
+      "evidence_hash_sha256": "715245bde92f7fe4ddb5cfbf473f3a851a65d03a0f2e73bbdbf927fe56ec6fcd",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P18-05"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 100,
+      "unit_id": "SRC-P18-06",
+      "page": 18,
+      "section": "16.3 Dispute penalties",
+      "structure_type": "prose",
+      "content_role": "operative_rule",
+      "char_start": 20888,
+      "char_end": 21009,
+      "verbatim_text": "If a chargeback dispute is lost, transaction funds are debited; a $15 administration fee may apply for fraudulent claims.",
+      "evidence_hash_sha256": "becc8ba754557ee90d9b3805ef191f25ce01ae34195894b4602769bbb166fbcc",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P18-06"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 101,
+      "unit_id": "SRC-P19-01",
+      "page": 19,
+      "section": "17. Fraud Prevention",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 22141,
+      "char_end": 22221,
+      "verbatim_text": "Notice | 5 returns in 90 days, or >$1,500 total | Warning email sent to customer",
+      "evidence_hash_sha256": "71fe981efe2756b6b2145a9cb604623c073d5a7d031b544403e72602e6d094cd",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P19-01"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 102,
+      "unit_id": "SRC-P19-02",
+      "page": 19,
+      "section": "17. Fraud Prevention",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 22141,
+      "char_end": 22248,
+      "verbatim_text": "Restricted | 8 returns in 90 days, or wardrobing pattern | Free returns removed; $5.99 label always charged",
+      "evidence_hash_sha256": "df9a1cd15736b42cdb355ea0f9a125bb8a865edc0fd27654e582318ae9e66bb7",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P19-02"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 103,
+      "unit_id": "SRC-P19-03",
+      "page": 19,
+      "section": "17. Fraud Prevention",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 22141,
+      "char_end": 22246,
+      "verbatim_text": "Suspended | 12 returns in 90 days, or fraud detected | Online returns blocked; in-store with receipt only",
+      "evidence_hash_sha256": "ee8c8a8d502b1869b63ea6be8e8173af2a68c32a361a629ae9b837184fa54583",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P19-03"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 104,
+      "unit_id": "SRC-P19-04",
+      "page": 19,
+      "section": "17. Fraud Prevention",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 22141,
+      "char_end": 22249,
+      "verbatim_text": "Permanent ban | Verified fraud, stolen card, chargeback abuse | Account closed; all return rights terminated",
+      "evidence_hash_sha256": "d34b99db7d3f3407b5cd281c11d62c2276a4049fc95c3c3948060192d9319696",
+      "mapped_claim_ids": [
+        "baseline_claim_for_SRC-P19-04"
+      ],
+      "baseline_claim_status": "verified",
+      "coverage_status": "baseline_extracted",
+      "notes": null
+    },
+    {
+      "inventory_index": 105,
+      "unit_id": "SRC-P21-03",
+      "page": 21,
+      "section": "19.2 Service-level commitments",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 26340,
+      "char_end": 26374,
+      "verbatim_text": "First response by email | 24 hours",
+      "evidence_hash_sha256": "a13c30e484a7dbe1a2597ad93a59f4b13fdffa4d89f568fcad381ea982becfc2",
+      "mapped_claim_ids": [
+        226,
+        "db_218"
+      ],
+      "baseline_claim_status": "candidate",
+      "coverage_status": "baseline_extracted",
+      "notes": "Binding email SLA operational commitment"
+    },
+    {
+      "inventory_index": 106,
+      "unit_id": "SRC-P21-04",
+      "page": 21,
+      "section": "19.2 Service-level commitments",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 26373,
+      "char_end": 26413,
+      "verbatim_text": "First response by chat | Under 2 minutes",
+      "evidence_hash_sha256": "01fe4646d1cda2025a7687af5000e231a63c2796d1068bacaaba7af83997a55a",
+      "mapped_claim_ids": [
+        227,
+        "db_219"
+      ],
+      "baseline_claim_status": "candidate",
+      "coverage_status": "baseline_extracted",
+      "notes": "Binding chat SLA operational commitment"
+    },
+    {
+      "inventory_index": 107,
+      "unit_id": "SRC-P21-07",
+      "page": 21,
+      "section": "19.2 Service-level commitments",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 26412,
+      "char_end": 26472,
+      "verbatim_text": "Resolution of standard refund query | Within 3 business days",
+      "evidence_hash_sha256": "7c5905b7351375450c95bd66dba71d44c43922704e717855943ecc1113b23e7e",
+      "mapped_claim_ids": [
+        228,
+        "db_220"
+      ],
+      "baseline_claim_status": "candidate",
+      "coverage_status": "baseline_extracted",
+      "notes": "Binding query resolution SLA commitment"
+    },
+    {
+      "inventory_index": 108,
+      "unit_id": "SRC-P21-08",
+      "page": 21,
+      "section": "19.2 Service-level commitments",
+      "structure_type": "table_row",
+      "content_role": "operative_rule",
+      "char_start": 26471,
+      "char_end": 26520,
+      "verbatim_text": "Escalated complaint resolution | 10 business days",
+      "evidence_hash_sha256": "ef7283ce6ed63803a371898b47607366ee723284e38f3a3fd71df037d18bef4d",
+      "mapped_claim_ids": [
+        229,
+        "db_221"
+      ],
+      "baseline_claim_status": "candidate",
+      "coverage_status": "baseline_extracted",
+      "notes": "Binding escalated complaint SLA commitment"
+    }
+  ]
+}

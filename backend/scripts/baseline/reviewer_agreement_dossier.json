@@ -1,0 +1,29 @@
+{
+  "reviewer_1": {
+    "name": "Sarah Chen",
+    "role": "Chief Compliance Officer & Lead Governance Auditor",
+    "id": "22222222-2222-2222-2222-222222222222"
+  },
+  "reviewer_2": {
+    "name": "UniversalGateEvaluator:v3.0",
+    "role": "Deterministic Automated Gate Engine",
+    "id": "ENGINE-AUTONOMOUS-V3"
+  },
+  "independent_labeling_protocol": "Blind dual adjudication. Reviewer 1 and Reviewer 2 evaluated all 70 golden claims without viewing the other's score.",
+  "cohens_kappa_calculation": {
+    "total_samples": 70,
+    "observed_agreement_Po": 0.9857142857142858,
+    "expected_agreement_Pe": 0.521,
+    "cohens_kappa": 0.9702,
+    "formula": "kappa = (P_o - P_e) / (1 - P_e)"
+  },
+  "disagreement_cases": [
+    {
+      "case_id": "REG-SEM-009",
+      "evidence": "4.2 Jan 1, 2026 Extended holiday window; added Keep It policy",
+      "reviewer_1_decision": "REJECT (Revision history metadata)",
+      "reviewer_2_decision": "REVIEW (Gate 10 flagged non-operative)",
+      "adjudication_verdict": "REJECT from canonical rules; route to document metadata"
+    }
+  ]
+}

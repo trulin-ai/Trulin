@@ -4,18 +4,18 @@
   "document_type": "refund_policy",
   "evaluation_methodology": "AUTOMATED_GATE_HEURISTIC (Awaiting Human Gold Reference)",
   "claim_counts": {
-    "candidate_claims": 1,
-    "valid": 0,
-    "invalid": 0,
+    "candidate_claims": 5,
+    "valid": 3,
+    "invalid": 1,
     "missed": 0,
     "duplicate": 0,
     "ambiguous": 1,
     "malformed": 0
   },
   "metrics": {
-    "claim_precision": 0.0,
+    "claim_precision": 0.6,
     "claim_recall": 1.0,
-    "f1": 0.0,
+    "f1": 0.6,
     "evidence_supported_rate": 1.0,
     "locator_accuracy_rate": 1.0,
     "duplicate_rate": 0.0
@@ -24,12 +24,52 @@
   "failure_patterns": [],
   "claims": [
     {
-      "subject": "Check the status of your Microsoft",
+      "subject": "Microsoft",
       "predicate": "has_refund_eligibility",
-      "object": "Purchases and downloads Manage your billing Help with purchases Gift cards and account balance Refunds and exchanges Games and apps Hardware Refund or cancel a subscription Cancel an order or pre-order Status of a return and refund Can't get a refund on apps and games Errors & troubleshooting Consumer and Regulatory Information Check the status of your Microsoft Store return or refund Applies To When you request a refund for something you purchased from Microsoft Store, you can track its status online.",
+      "object": "cancel a subscription Cancel an When you request a refund for something you purchased from Microsoft order or Store, you can track its status online.",
+      "disposition": "AUTOMATED_CHECKS_PASSED",
+      "trust_score": 0.99,
+      "decision_reason": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED.",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
+      "subject": "Microsoft",
+      "predicate": "has_refund_eligibility",
+      "object": "pre-order Status of a Subscriptions Hardware Games & apps return and refund Can't get a Refund status for Microsoft subscriptions refund on Not all subscriptions are eligible for a refund.",
+      "disposition": "AUTOMATED_CHECKS_PASSED",
+      "trust_score": 0.99,
+      "decision_reason": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED.",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
+      "subject": "User",
+      "predicate": "must_verify_refund_conditions",
+      "object": "check the status of your refund on your Microsoft account Order history page",
+      "disposition": "AUTOMATED_CHECKS_FAILED",
+      "trust_score": 0.0,
+      "decision_reason": "[FRAGMENT_ASSERTION_DISCARDED] Modality consistency failure: Obligation predicate 'must_verify_refund_conditions' contradicts permissive modal ('may/can') in text.",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
+      "subject": "Microsoft",
+      "predicate": "has_refund_eligibility",
+      "object": "If you see we've issued the refund, but the money hasn't been Microsoft account credited back to your payment provider, wait a few days.",
+      "disposition": "AUTOMATED_CHECKS_PASSED",
+      "trust_score": 0.99,
+      "decision_reason": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED.",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
+      "subject": "Depending on the bank, it",
+      "predicate": "take",
+      "object": "a few days to process the refund",
       "disposition": "AMBIGUOUS_NEEDS_REVIEW",
-      "trust_score": 0.8562,
-      "decision_reason": "REVIEW: Human review recommended. Sub-threshold semantic confidence (85% < 88%).; Trust score 0.86 is below 0.88 auto-approval threshold",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Predicate failure: Predicate 'take' is invalid or a generic stopword.; Predicate normativity failure: Predicate 'take' is not a canonical registered predicate.",
       "evidence_supported": true,
       "locator_valid": true
     }

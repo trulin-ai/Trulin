@@ -1,0 +1,97 @@
+{
+  "certified_at": "2026-11-10T15:56:53.140480+00:00",
+  "phase": "Phase 5",
+  "step": "Step 5.4",
+  "verdict": "CERTIFIED_PRODUCTION_READY",
+  "checks": {
+    "inventory_integrity": {
+      "status": "PASS",
+      "total_documents": 12,
+      "total_units": 250,
+      "operative_units": 46,
+      "non_operative_units": 197,
+      "ambiguous_units": 7,
+      "balance_equation": "46 + 197 + 7 = 250"
+    },
+    "contamination_control": {
+      "status": "PASS",
+      "document_violations": 0,
+      "span_violations": 0,
+      "split_ratio": "8 Train / 4 Held-Out (2:1)"
+    },
+    "family_scorecards": {
+      "status": "PASS",
+      "scorecards": {
+        "FAM-1": {
+          "family_name": "Commercial Contracts & MSAs",
+          "recall": 1.0,
+          "target_recall": 0.9,
+          "lifecycle": 1.0,
+          "target_lifecycle": 0.95,
+          "status": "PASS"
+        },
+        "FAM-2": {
+          "family_name": "HR & Employment Policies",
+          "recall": 1.0,
+          "target_recall": 0.95,
+          "lifecycle": 1.0,
+          "target_lifecycle": 0.98,
+          "status": "PASS"
+        },
+        "FAM-3": {
+          "family_name": "Invoices & Commercial Billing",
+          "recall": 1.0,
+          "target_recall": 0.95,
+          "lifecycle": 1.0,
+          "target_lifecycle": 0.98,
+          "status": "PASS"
+        },
+        "FAM-4": {
+          "family_name": "Statutory & Compliance Guidelines",
+          "recall": 1.0,
+          "target_recall": 0.9,
+          "lifecycle": 1.0,
+          "target_lifecycle": 0.95,
+          "status": "PASS"
+        }
+      }
+    },
+    "boundary_calibration": {
+      "status": "PASS",
+      "total_cases": 11,
+      "passed_cases": 11,
+      "documents_covered": [
+        "DOC-FAM1-03 (Enterprise Agreement)",
+        "DOC-FAM2-03 (Resignation Policy)",
+        "DOC-FAM3-03 (Azure Billing Docs)",
+        "DOC-FAM4-03 (SSPA Program)"
+      ]
+    },
+    "negative_controls": {
+      "status": "PASS",
+      "cases_evaluated": 8,
+      "failed_closed_count": 8,
+      "gate_families_tested": [
+        "Gate 1: Evidence Grounding (ERR_EVIDENCE_MISSING)",
+        "Gate 2: Predicate Normativity (ERR_PREDICATE_CATCH_ALL)",
+        "Gate 3: Table Column Binding (ERR_TABLE_BINDING_MISMATCH)",
+        "Gate 4: SPO Compatibility (ERR_ACTOR_ROLE_INVERSION)",
+        "Gate 5: Polarity Consistency (ERR_POLARITY_INVERSION)",
+        "Gate 6: Condition Preservation (ERR_CONDITION_LOST)",
+        "Gate 7: Value Fidelity (ERR_VALUE_FIDELITY_MISMATCH)",
+        "Gate 8: Silent Upgrade Invariant (ERR_NO_SILENT_UPGRADE_VIOLATION)"
+      ]
+    },
+    "northwind_non_regression": {
+      "status": "PASS",
+      "golden_operative_recall": "66/66 (100.0%)",
+      "golden_lifecycle_pass": "70/70 (100.0%)",
+      "merkle_root_sealed": true
+    },
+    "regression_suite": {
+      "status": "PASS",
+      "test_count": "169/169 passing",
+      "suites_passed": 22
+    }
+  }
+}

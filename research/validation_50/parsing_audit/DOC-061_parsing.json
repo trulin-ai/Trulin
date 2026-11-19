@@ -2,13 +2,13 @@
   "document_id": "DOC-061",
   "filename": "Modern-Work-Plan-Comparison-SMB.pdf",
   "page_count": 11,
-  "total_characters": 26145,
-  "block_count": 65,
-  "table_count": 0,
+  "total_characters": 39962,
+  "block_count": 128,
+  "table_count": 33,
   "parsing_status": "PASS_WITH_MINOR_ISSUES",
   "major_issues": [],
   "minor_issues": [
-    "Header/footer repetition in body text: 2 repeating phrases detected"
+    "Header/footer repetition in body text: 4 repeating phrases detected"
   ],
   "all_issues_count": 1,
   "reading_order_fidelity": "PASS",

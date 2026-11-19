@@ -26,7 +26,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.conflict_engine.compatibility_gate import CompatibilityGate
 from app.db.enums import SourceFamily, SourceIntent
 from app.extraction.candidate_discovery import CandidateDiscoveryEngine
-from app.extraction.models import CandidateClaim, Layer5ExtractionResult
+from app.extraction.models import CandidateClaim, ExtractionStrategyType, Layer5ExtractionResult
 from app.extraction.pipeline import global_extraction_pipeline
 from app.ingestion.envelope import CanonicalSourceEnvelope, EnvelopeFactory
 from app.ingestion.parsers.document_parser import DocumentParser
@@ -136,11 +136,12 @@ class UnifiedExtractionPipeline:
                 raw_bytes = content_text.encode("utf-8")
         else:
             effective_bytes = raw_bytes or b""
-            content_text = UniversalFileParser.parse_file(
+            parsed_doc = UniversalFileParser.parse_file(
                 filename=filename,
                 raw_bytes=effective_bytes,
                 doc_title=doc_title,
             )
+            content_text = parsed_doc.full_text if hasattr(parsed_doc, "full_text") else str(parsed_doc)
             if raw_bytes is None:
                 raw_bytes = effective_bytes
 
@@ -158,10 +159,37 @@ class UnifiedExtractionPipeline:
 
         # Step 3: Structured Parsing (Layer 4)
         fmt_lower = (filename.rsplit(".", 1)[-1] if "." in filename else "txt").lower()
-        if fmt_lower in ("csv", "json", "xlsx", "sql"):
+        if fmt_lower in ("docx", "doc"):
+            from app.ingestion.parsers.docx_parser import DocxAdapter
+            evidence_result = await DocxAdapter.parse_to_evidence(canonical_env)
+        elif fmt_lower in ("xlsx", "xls"):
+            from app.ingestion.parsers.xlsx_parser import XlsxAdapter
+            evidence_result = await XlsxAdapter.parse_to_evidence(canonical_env)
+        elif fmt_lower in ("png", "jpg", "jpeg", "tiff", "tif", "webp", "bmp"):
+            from app.ingestion.parsers.ocr_adapter import OcrAdapter
+            evidence_result = await OcrAdapter.parse_to_evidence(canonical_env)
+        elif fmt_lower in ("md", "markdown"):
+            from app.ingestion.parsers.markdown_adapter import MarkdownAdapter
+            evidence_result = await MarkdownAdapter.parse_to_evidence(canonical_env)
+        elif fmt_lower in ("html", "htm", "xhtml"):
+            from app.ingestion.parsers.html_adapter import HtmlAdapter
+            evidence_result = await HtmlAdapter.parse_to_evidence(canonical_env)
+        elif fmt_lower in ("csv", "tsv"):
+            from app.ingestion.parsers.csv_adapter import CsvAdapter
+            evidence_result = await CsvAdapter.parse_to_evidence(canonical_env)
+        elif fmt_lower in ("json", "sql"):
             evidence_result = await StructuredDataParser.parse(canonical_env)
         else:
             evidence_result = await DocumentParser.parse(canonical_env)
+
+        # Step 3.5: Prose Normative Classification (strictly gated behind block_type != "table_row")
+        from app.extraction.prose_normative_classifier import ProseNormativeClassifier
+        for evidence_unit in evidence_result.units:
+            if evidence_unit.block_type != "table_row":
+                evidence_unit.content_role = ProseNormativeClassifier.classify_unit(
+                    evidence_unit.content_text,
+                    default_role=evidence_unit.content_role,
+                )
 
         # Step 4: Candidate Discovery & Extraction (Layer 5)
         l5_result: Layer5ExtractionResult = await global_extraction_pipeline.process_envelope(
@@ -178,8 +206,9 @@ class UnifiedExtractionPipeline:
             norm_c = ClaimQualityNormalizer.normalize_candidate_claim(c)
             normalized_candidates.append(norm_c if norm_c is not None else c)
 
-        # Step 5: Deduplication (preserve highest confidence & merge conditions)
+        # Step 5: Deduplication (preserve highest confidence, merge conditions, eliminate sentence-level duplicate branches)
         seen_keys: Dict[Tuple[str, str, str, str], CandidateClaim] = {}
+        seen_span_keys: Dict[Tuple[str, str, str], Tuple[Tuple[str, str, str, str], CandidateClaim]] = {}
         for c in normalized_candidates:
             key = (
                 (c.subject or "").strip().lower(),
@@ -187,17 +216,42 @@ class UnifiedExtractionPipeline:
                 str(c.object or "").strip().lower(),
                 str(c.modality or "").strip().upper(),
             )
-            if key not in seen_keys:
-                seen_keys[key] = c
-            else:
+            span_text = (c.evidence_text_span or c.claim_text or "").strip().lower()
+            span_key = (
+                (c.subject or "").strip().lower(),
+                (c.predicate or "").strip().lower(),
+                span_text,
+            )
+
+            if key in seen_keys:
                 existing = seen_keys[key]
                 # Merge conditions if any
                 if c.conditions and not existing.conditions:
                     existing.conditions = c.conditions
+                continue
+
+            if span_text and span_key in seen_span_keys:
+                old_key, existing = seen_span_keys[span_key]
+                # Same sentence, same subject, same predicate: keep the more informative/descriptive object
+                obj_new = str(c.object or "").strip().lower()
+                obj_old = str(existing.object or "").strip().lower()
+                is_new_pronoun = any(obj_new.startswith(p) for p in ("these ", "those ", "this ", "it ", "them "))
+                is_old_pronoun = any(obj_old.startswith(p) for p in ("these ", "those ", "this ", "it ", "them "))
+                if is_old_pronoun and not is_new_pronoun:
+                    seen_keys.pop(old_key, None)
+                    seen_keys[key] = c
+                    seen_span_keys[span_key] = (key, c)
+                elif c.conditions and not existing.conditions:
+                    existing.conditions = c.conditions
+                continue
+
+            seen_keys[key] = c
+            if span_text:
+                seen_span_keys[span_key] = (key, c)
 
         deduped_candidates = list(seen_keys.values())
 
-        # Step 6: Universal 10-Gate Governance & Certification Gate (Layer 6)
+        # Step 6: 8 Universal Gate Contract Families & Certification Gate (Layer 6)
         evaluations: List[CandidateGateEvaluation] = []
         candidates_map: Dict[str, CandidateClaim] = {}
         seen_signatures: Set[str] = set()
@@ -214,19 +268,47 @@ class UnifiedExtractionPipeline:
             raw_page = loc.get("page_number") or loc.get("page") or 1
             sec_heading = loc.get("section_heading") or loc.get("section")
 
-            # Clean enumeration prefixes (e.g. (i), (ii), 1., etc.)
-            clean_sentence = UniversalGateEvaluator.strip_enumeration_prefix(raw_span or raw_text)
-            clean_subj = UniversalGateEvaluator.strip_enumeration_prefix(raw_subj)
+            # Phase 1: Preserve cell-bound atomic claim statements for table claims
+            is_table_claim = (
+                cand.table_binding is not None
+                or cand.extraction_strategy in (ExtractionStrategyType.TABLE_AWARE, ExtractionStrategyType.DETERMINISTIC_SCHEMA)
+                or loc.get("block_type") == "table_row"
+                or bool(loc.get("table_grid"))
+            )
+
             clean_pred = raw_pred
             clean_obj = raw_obj
 
-            if clean_sentence:
-                cand.claim_text = clean_sentence
-            cand.subject = clean_subj
-            cand.predicate = clean_pred
+            # Runtime predicate normalization against canonical registry
+            from app.extraction.predicate_registry import PredicateRegistry
+            norm_pred, is_canonical_pred = PredicateRegistry.normalize_predicate(clean_pred)
+            if is_canonical_pred and norm_pred:
+                clean_pred = norm_pred
+                cand.predicate = norm_pred
+
+            if is_table_claim:
+                # Do NOT overwrite cand.claim_text with raw_span (the full markdown table row string)
+                clean_subj = UniversalGateEvaluator.strip_enumeration_prefix(raw_subj)
+                from app.extraction.subject_normalizer import SubjectNormalizer
+                norm_subj, subj_valid = SubjectNormalizer.normalize(clean_subj, context=raw_span or raw_text)
+                if subj_valid and norm_subj:
+                    clean_subj = norm_subj
+                cand.subject = clean_subj
+                quote = raw_span or raw_text
+            else:
+                # Clean enumeration prefixes (e.g. (i), (ii), 1., etc.) from prose claim text
+                clean_sentence = UniversalGateEvaluator.strip_enumeration_prefix(raw_text)
+                clean_subj = UniversalGateEvaluator.strip_enumeration_prefix(raw_subj)
+                from app.extraction.subject_normalizer import SubjectNormalizer
+                norm_subj, subj_valid = SubjectNormalizer.normalize(clean_subj, context=clean_sentence or raw_text)
+                if subj_valid and norm_subj:
+                    clean_subj = norm_subj
+                if clean_sentence:
+                    cand.claim_text = clean_sentence
+                cand.subject = clean_subj
+                quote = clean_sentence or raw_text
 
             # Build ImmutableEvidenceSpan
-            quote = clean_sentence or raw_text
             span = ImmutableEvidenceSpan.from_content(
                 verbatim_quote=quote,
                 clause_text=raw_span or quote,
@@ -241,7 +323,10 @@ class UnifiedExtractionPipeline:
                 cand.locator["char_start"] = span.char_start
             if span.char_end is not None:
                 cand.locator["char_end"] = span.char_end
-            cand.evidence_text_span = span.verbatim_quote
+            if is_table_claim:
+                cand.evidence_text_span = raw_span or span.verbatim_quote
+            else:
+                cand.evidence_text_span = span.verbatim_quote
 
             # Check for non-atomic compound rule with multi-branch disjunctions
             is_compound = bool(
@@ -308,6 +393,31 @@ class UnifiedExtractionPipeline:
             if gate_res.is_canonical:
                 sig = UniversalGateEvaluator.compute_semantic_signature(clean_subj, clean_pred, clean_obj)
                 seen_signatures.add(sig)
+
+            # Deliverable 3, 5, 6: OCR Safety, Feature-Flagged Auto-Certification & Persisted Review Enforcement
+            is_ocr_claim = (
+                getattr(cand, "block_type", None) == "image_ocr"
+                or cand.locator.get("source_type") == "image_ocr"
+                or cand.locator.get("bbox") is not None
+                or cand.locator.get("is_low_confidence")
+                or (cand.structured_values and cand.structured_values.get("is_low_confidence"))
+            )
+            from app.ingestion.parsers.ocr_adapter import OcrAdapter
+            auto_cert_enabled = OcrAdapter.is_auto_certify_enabled()
+
+            if is_ocr_claim:
+                is_low_conf = (
+                    cand.locator.get("is_low_confidence")
+                    or (cand.structured_values and cand.structured_values.get("is_low_confidence"))
+                )
+                if not auto_cert_enabled or is_low_conf:
+                    if gate_res.certification_tier == "AUTOMATED_CERTIFIED":
+                        gate_res.certification_tier = "REVIEW_REQUIRED"
+                        gate_res.all_gates_passed = False
+                        if is_low_conf:
+                            gate_res.rejection_reasons.append("OCR low-confidence threshold violation: Requires human verification.")
+                        else:
+                            gate_res.rejection_reasons.append("OCR Safety Guard: OCR-derived claim requires human review prior to certification.")
 
             tier = gate_res.certification_tier
             if tier == "AUTOMATED_CERTIFIED":

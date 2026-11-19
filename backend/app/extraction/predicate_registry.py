@@ -23,6 +23,12 @@ class CanonicalPredicate(str, Enum):
     HAS_REFUND_METHOD = "has_refund_method"
     HAS_POSTING_DURATION = "has_posting_duration"
     HAS_STAGE_DURATION = "has_stage_duration"
+    HAS_CANCELLATION_WINDOW = "has_cancellation_window"
+    HAS_PRICE_ADJUSTMENT_WINDOW = "has_price_adjustment_window"
+    HAS_REPORTING_WINDOW = "has_reporting_window"
+    HAS_TRIAL_REFUND_WINDOW = "has_trial_refund_window"
+    HAS_CONTENT_VIEW_REFUND_WINDOW = "has_content_view_refund_window"
+    HAS_REFUND_PROCESSING_DURATION = "has_refund_processing_duration"
 
     # Cancellation States & Post-Shipment Outcomes
     HAS_CANCELLATION_ELIGIBILITY = "has_cancellation_eligibility"
@@ -62,6 +68,7 @@ class CanonicalPredicate(str, Enum):
     HAS_DISPUTE_RESOLUTION_RULE = "has_dispute_resolution_rule"
     HAS_IDENTITY_VERIFICATION_REQUIREMENT = "has_identity_verification_requirement"
     HAS_PROVIDER_GOVERNED_TIMELINE = "has_provider_governed_timeline"
+    REFERENCES_UNDERLYING_PAYMENT_TIMELINE = "references_underlying_payment_timeline"
     HAS_EXAMPLE_VALUE = "has_example_value"
 
     # Normalized Domain Behaviors & Atomic Criteria
@@ -71,6 +78,11 @@ class CanonicalPredicate(str, Enum):
     CAN_INITIATE_RETURN = "can_initiate_return"
     CAN_CANCEL_BEFORE_SHIPMENT = "can_cancel_before_shipment"
     CAN_CANCEL_BEFORE_TRIAL_ENDS = "can_cancel_before_trial_ends"
+    CANNOT_BE_CANCELLED = "cannot_be_cancelled"
+    CANNOT_BE_APPLIED_RETROACTIVELY = "cannot_be_applied_retroactively"
+    CANNOT_BE_RETURNED_OR_REFUNDED = "cannot_be_returned_or_refunded"
+    MUST_PROVIDE_INFORMATION = "must_provide_information"
+    HAS_POSTING_SLA_ESTIMATE = "has_posting_sla_estimate"
     PROVIDES_DOCUMENTATION_UPON_REQUEST = "provides_documentation_upon_request"
     MUST_BE_HANDLED_AS_RETURN = "must_be_handled_as_return"
     MAY_RECEIVE_GOODWILL_DISCOUNT = "may_receive_goodwill_discount"
@@ -111,6 +123,8 @@ class CanonicalPredicate(str, Enum):
     REFERENCES_GOVERNING_POLICIES = "references_governing_policies"
     HAS_DOCUMENT_METADATA = "has_document_metadata"
     HAS_INTELLECTUAL_PROPERTY_OWNERSHIP = "has_intellectual_property_ownership"
+    HAS_LATE_PAYMENT_PENALTY_RATE = "has_late_payment_penalty_rate"
+    HAS_WARRANTY_REMEDY_WINDOW = "has_warranty_remedy_window"
 
     # Commercial & Policy Operations (Slice 3 Refinements)
     OFFERS_STORE_CREDIT_BONUS = "offers_store_credit_bonus"
@@ -121,6 +135,68 @@ class CanonicalPredicate(str, Enum):
     IS_REQUIRED_FOR_REFUND_REQUEST = "is_required_for_refund_request"
     HAS_REFUND_RULE = "has_refund_rule"
     HAS_REVISION_HISTORY = "has_revision_history"
+    CANNOT_BE_REFUNDED_FOR_CASH = "cannot_be_refunded_for_cash"
+    HAS_FEE_RULE = "has_fee_rule"
+    HAS_PARTIAL_REFUND_RULE = "has_partial_refund_rule"
+    HAS_SCHEDULING_REQUIREMENT = "has_scheduling_requirement"
+    HAS_DROP_OFF_OPTIONS = "has_drop_off_options"
+    MAY_CANCEL_ORDER = "may_cancel_order"
+    HAS_PURCHASER_NOTIFICATION_POLICY = "has_purchaser_notification_policy"
+    HAS_THIRD_PARTY_POLICY_RULE = "has_third_party_policy_rule"
+    HAS_REFUSAL_REFUND_RULE = "has_refusal_refund_rule"
+    MAY_APPEAL_RESTRICTIONS = "may_appeal_restrictions"
+    HAS_RETENTION_POLICY = "has_retention_policy"
+    WILL_ISSUE_REFUND = "will_issue_refund"
+    RECEIVES_STORE_CREDIT_BONUS = "receives_store_credit_bonus"
+    CAN_PAUSE_SUBSCRIPTION = "can_pause_subscription"
+    MAY_REQUEST_FIRST_CHARGE_REFUND = "may_request_first_charge_refund"
+    LIMITED_TO = "limited_to"
+    HAS_ATTEMPTED_NOT_GUARANTEED = "has_attempted_not_guaranteed"
+    HAS_FULL_REFUND_IF_STOPPED_ELSE_RETURN = "has_full_refund_if_stopped_else_return"
+    HAS_TRIGGER = "has_trigger"
+    HAS_ACTION = "has_action"
+    HAS_TYPICAL_RESOLUTION = "has_typical_resolution"
+
+    # Enterprise Policy Matrix & Governance Predicates
+    REQUIRES_ACTION = "requires_action"
+    HAS_PROCESS_OWNER = "has_process_owner"
+    HAS_TARGET_DURATION = "has_target_duration"
+    HAS_MAXIMUM_DURATION = "has_maximum_duration"
+    HAS_ESCALATION_TRIGGER = "has_escalation_trigger"
+    HAS_RECOVERY_ACTION = "has_recovery_action"
+    IS_RESPONSIBLE_FOR = "is_responsible_for"
+    IS_ACCOUNTABLE_FOR = "is_accountable_for"
+    IS_CONSULTED_FOR = "is_consulted_for"
+    IS_INFORMED_OF = "is_informed_of"
+    IS_REQUIRED_FOR_CLAIM_TYPES = "is_required_for_claim_types"
+    HAS_MILEAGE_RATE = "has_mileage_rate"
+    HAS_LIMIT_PERIOD = "has_limit_period"
+    CAN_APPROVE_OR_DENY = "can_approve_or_deny"
+    IS_RESTRICTED_TO = "is_restricted_to"
+
+    # Commercial Agreement & Service Policy Predicates
+    HAS_EFFECTIVE_DATE = "has_effective_date"
+    HAS_NOTICE_PERIOD = "has_notice_period"
+    REQUIRES_PRIOR_WRITTEN_NOTICE = "requires_prior_written_notice"
+    HAS_PERMITTED_USE_SCOPE = "has_permitted_use_scope"
+    REQUIRES_REASONABLE_EFFORTS = "requires_reasonable_efforts"
+    PROVIDES_CUSTOMER_OPTION = "provides_customer_option"
+    REQUIRES_COMPLIANCE_VERIFICATION = "requires_compliance_verification"
+    HAS_WARRANTY_OBLIGATION = "has_warranty_obligation"
+    DISCLAIMS_IMPLIED_WARRANTIES = "disclaims_implied_warranties"
+    REMAINS_LIABLE_FOR = "remains_liable_for"
+    REQUIRES_RECORD_RETENTION = "requires_record_retention"
+    HAS_AUDIT_VERIFICATION_RIGHT = "has_audit_verification_right"
+    MAY_SUSPEND_FOR_BREACH = "may_suspend_for_breach"
+    PROMPTLY_NOTIFIES_OF_BREACH = "promptly_notifies_of_breach"
+    MAY_ASSIGN_AGREEMENT = "may_assign_agreement"
+    RESTRICTS_ASSIGNMENT = "restricts_assignment"
+    REQUIRES_TAX_PAYMENT = "requires_tax_payment"
+    HAS_CONFIDENTIALITY_SURVIVAL = "has_confidentiality_survival"
+    HAS_SEVERABILITY_TERMS = "has_severability_terms"
+    REQUIRES_MUTUAL_INDEMNIFICATION = "requires_mutual_indemnification"
+    MAY_CHOOSE_ALTERNATIVE_OFFERING = "may_choose_alternative_offering"
+    HAS_GOVERNING_LAW = "has_governing_law"
 
 
 class PredicateRegistry:
@@ -151,6 +227,11 @@ class PredicateRegistry:
         "director approval required": CanonicalPredicate.REQUIRES_APPROVAL_ROLE.value,
         "fraud review required": CanonicalPredicate.REQUIRES_FRAUD_REVIEW.value,
         "secondary fraud review": CanonicalPredicate.REQUIRES_FRAUD_REVIEW.value,
+        "must provide information": CanonicalPredicate.MUST_PROVIDE_INFORMATION.value,
+        "has posting sla estimate": CanonicalPredicate.HAS_POSTING_SLA_ESTIMATE.value,
+        "cannot be cancelled": CanonicalPredicate.CANNOT_BE_CANCELLED.value,
+        "cannot be applied retroactively": CanonicalPredicate.CANNOT_BE_APPLIED_RETROACTIVELY.value,
+        "cannot be returned or refunded": CanonicalPredicate.CANNOT_BE_RETURNED_OR_REFUNDED.value,
         "can be cancelled": CanonicalPredicate.HAS_CANCELLATION_ELIGIBILITY.value,
         "can it be cancelled": CanonicalPredicate.HAS_CANCELLATION_ELIGIBILITY.value,
         "cancel before shipment": CanonicalPredicate.CAN_CANCEL_BEFORE_SHIPMENT.value,
@@ -193,6 +274,9 @@ class PredicateRegistry:
         "online requests generate rma": CanonicalPredicate.HAS_RMA_GENERATION_BEHAVIOR.value,
         "rma generation behavior": CanonicalPredicate.HAS_RMA_GENERATION_BEHAVIOR.value,
         "original payment method": CanonicalPredicate.HAS_DEFAULT_REFUND_DESTINATION.value,
+        "can approve or deny": CanonicalPredicate.CAN_APPROVE_OR_DENY.value,
+        "approve or deny": CanonicalPredicate.CAN_APPROVE_OR_DENY.value,
+        "only possible with": CanonicalPredicate.IS_RESTRICTED_TO.value,
         "refunded to original payment method": CanonicalPredicate.HAS_DEFAULT_REFUND_DESTINATION.value,
         "default refund destination": CanonicalPredicate.HAS_DEFAULT_REFUND_DESTINATION.value,
         "never expire": CanonicalPredicate.HAS_EXPIRATION_RULE.value,
@@ -203,6 +287,8 @@ class PredicateRegistry:
         "gift cards never expire and carry no fees": CanonicalPredicate.HAS_EXPIRATION_AND_FEE_RULE.value,
         "never expire and carry no fees": CanonicalPredicate.HAS_EXPIRATION_AND_FEE_RULE.value,
         "has expiration and fee rule": CanonicalPredicate.HAS_EXPIRATION_AND_FEE_RULE.value,
+        "references underlying payment timeline": CanonicalPredicate.REFERENCES_UNDERLYING_PAYMENT_TIMELINE.value,
+        "same as card": CanonicalPredicate.REFERENCES_UNDERLYING_PAYMENT_TIMELINE.value,
         "items bought in-store": CanonicalPredicate.HAS_RETURN_CHANNEL_ELIGIBILITY.value,
         "bought in-store": CanonicalPredicate.HAS_RETURN_CHANNEL_ELIGIBILITY.value,
         "return channel eligibility": CanonicalPredicate.HAS_RETURN_CHANNEL_ELIGIBILITY.value,
@@ -212,7 +298,11 @@ class PredicateRegistry:
         "purchase verification requirement": CanonicalPredicate.HAS_PURCHASE_VERIFICATION_REQUIREMENT.value,
         "has purchase verification requirement": CanonicalPredicate.HAS_PURCHASE_VERIFICATION_REQUIREMENT.value,
         "encourage customers to contact us": CanonicalPredicate.HAS_DISPUTE_RESOLUTION_PREFERENCE.value,
-        "video course refund": CanonicalPredicate.HAS_REFUND_WINDOW.value,
+        "video course refund": CanonicalPredicate.HAS_CONTENT_VIEW_REFUND_WINDOW.value,
+        "video courses may be refunded": CanonicalPredicate.HAS_CONTENT_VIEW_REFUND_WINDOW.value,
+        "content view refund window": CanonicalPredicate.HAS_CONTENT_VIEW_REFUND_WINDOW.value,
+        "refund speed": CanonicalPredicate.HAS_REFUND_PROCESSING_DURATION.value,
+        "refund processing duration": CanonicalPredicate.HAS_REFUND_PROCESSING_DURATION.value,
         "currency conversion": CanonicalPredicate.HAS_CURRENCY_CONVERSION_RULE.value,
         "has currency conversion rule": CanonicalPredicate.HAS_CURRENCY_CONVERSION_RULE.value,
         "exchange differences are not compensated": CanonicalPredicate.HAS_CURRENCY_CONVERSION_RULE.value,
@@ -236,6 +326,81 @@ class PredicateRegistry:
         "damaged item valued under $40": CanonicalPredicate.MAY_ISSUE_REFUND_WITHOUT_RETURN.value,
         "funds are debited": CanonicalPredicate.HAS_FUNDS_DEBIT_OUTCOME.value,
         "has funds debit outcome": CanonicalPredicate.HAS_FUNDS_DEBIT_OUTCOME.value,
+
+        # Commercial Agreement & Governance Phrase Normalizations
+        "take effect on": CanonicalPredicate.HAS_EFFECTIVE_DATE.value,
+        "takes effect on": CanonicalPredicate.HAS_EFFECTIVE_DATE.value,
+        "shall take effect on": CanonicalPredicate.HAS_EFFECTIVE_DATE.value,
+        "takes effect": CanonicalPredicate.HAS_EFFECTIVE_DATE.value,
+        "take place upon": CanonicalPredicate.HAS_NOTICE_PERIOD.value,
+        "takes place upon": CanonicalPredicate.HAS_NOTICE_PERIOD.value,
+        "not fewer than 30-days' notice": CanonicalPredicate.REQUIRES_PRIOR_WRITTEN_NOTICE.value,
+        "not fewer than 30 days notice": CanonicalPredicate.REQUIRES_PRIOR_WRITTEN_NOTICE.value,
+        "use commercially reasonable efforts": CanonicalPredicate.REQUIRES_REASONABLE_EFFORTS.value,
+        "commercially reasonable efforts": CanonicalPredicate.REQUIRES_REASONABLE_EFFORTS.value,
+        "use the information obtained in compliance": CanonicalPredicate.HAS_PERMITTED_USE_SCOPE.value,
+        "compliance verification": CanonicalPredicate.REQUIRES_COMPLIANCE_VERIFICATION.value,
+        "provide customer a choice": CanonicalPredicate.PROVIDES_CUSTOMER_OPTION.value,
+        "provide customer choice": CanonicalPredicate.PROVIDES_CUSTOMER_OPTION.value,
+        "customer choice": CanonicalPredicate.MAY_CHOOSE_ALTERNATIVE_OFFERING.value,
+        "warrants that": CanonicalPredicate.HAS_WARRANTY_OBLIGATION.value,
+        "warrant that": CanonicalPredicate.HAS_WARRANTY_OBLIGATION.value,
+        "represents and warrants": CanonicalPredicate.HAS_WARRANTY_OBLIGATION.value,
+        "represent and warrant": CanonicalPredicate.HAS_WARRANTY_OBLIGATION.value,
+        "disclaims all implied warranties": CanonicalPredicate.DISCLAIMS_IMPLIED_WARRANTIES.value,
+        "disclaim all implied warranties": CanonicalPredicate.DISCLAIMS_IMPLIED_WARRANTIES.value,
+        "without warranty of any kind": CanonicalPredicate.DISCLAIMS_IMPLIED_WARRANTIES.value,
+        "as is without warranty": CanonicalPredicate.DISCLAIMS_IMPLIED_WARRANTIES.value,
+        "remains liable for": CanonicalPredicate.REMAINS_LIABLE_FOR.value,
+        "remain liable for": CanonicalPredicate.REMAINS_LIABLE_FOR.value,
+        "are responsible for": CanonicalPredicate.REMAINS_LIABLE_FOR.value,
+        "is responsible for": CanonicalPredicate.IS_RESPONSIBLE_FOR.value,
+        "retain all books and records": CanonicalPredicate.REQUIRES_RECORD_RETENTION.value,
+        "retain all records": CanonicalPredicate.REQUIRES_RECORD_RETENTION.value,
+        "retain records for": CanonicalPredicate.REQUIRES_RECORD_RETENTION.value,
+        "audit rights": CanonicalPredicate.HAS_AUDIT_VERIFICATION_RIGHT.value,
+        "right to audit": CanonicalPredicate.HAS_AUDIT_VERIFICATION_RIGHT.value,
+        "audit and verify compliance": CanonicalPredicate.HAS_AUDIT_VERIFICATION_RIGHT.value,
+        "may suspend for breach": CanonicalPredicate.MAY_SUSPEND_FOR_BREACH.value,
+        "suspend for breach": CanonicalPredicate.MAY_SUSPEND_FOR_BREACH.value,
+        "may suspend or terminate the agreement": CanonicalPredicate.MAY_SUSPEND_FOR_BREACH.value,
+        "may suspend or terminate": CanonicalPredicate.MAY_SUSPEND_FOR_BREACH.value,
+        "prompt written notice": CanonicalPredicate.PROMPTLY_NOTIFIES_OF_BREACH.value,
+        "promptly notify": CanonicalPredicate.PROMPTLY_NOTIFIES_OF_BREACH.value,
+        "promptly notifies": CanonicalPredicate.PROMPTLY_NOTIFIES_OF_BREACH.value,
+        "may assign": CanonicalPredicate.MAY_ASSIGN_AGREEMENT.value,
+        "may not assign": CanonicalPredicate.RESTRICTS_ASSIGNMENT.value,
+        "cannot assign": CanonicalPredicate.RESTRICTS_ASSIGNMENT.value,
+        "assignment is restricted": CanonicalPredicate.RESTRICTS_ASSIGNMENT.value,
+        "without prior written consent": CanonicalPredicate.RESTRICTS_ASSIGNMENT.value,
+        "responsible for all taxes": CanonicalPredicate.REQUIRES_TAX_PAYMENT.value,
+        "pay all applicable taxes": CanonicalPredicate.REQUIRES_TAX_PAYMENT.value,
+        "confidentiality obligations survive": CanonicalPredicate.HAS_CONFIDENTIALITY_SURVIVAL.value,
+        "survives termination": CanonicalPredicate.HAS_CONFIDENTIALITY_SURVIVAL.value,
+        "governed by the laws": CanonicalPredicate.HAS_GOVERNING_LAW.value,
+        "governed by the laws of": CanonicalPredicate.HAS_GOVERNING_LAW.value,
+        "distinct and severable": CanonicalPredicate.HAS_SEVERABILITY_TERMS.value,
+        "severability": CanonicalPredicate.HAS_SEVERABILITY_TERMS.value,
+        "mutual indemnification": CanonicalPredicate.REQUIRES_MUTUAL_INDEMNIFICATION.value,
+        "may use": CanonicalPredicate.HAS_PERMITTED_USE_SCOPE.value,
+        "can use": CanonicalPredicate.HAS_PERMITTED_USE_SCOPE.value,
+        "access": CanonicalPredicate.HAS_PERMITTED_USE_SCOPE.value,
+        "has access": CanonicalPredicate.HAS_PERMITTED_USE_SCOPE.value,
+        "provide technical support": "provides_technical_support",
+        "support services": "provides_technical_support",
+        "technical support": "provides_technical_support",
+        "must provide information": CanonicalPredicate.MUST_PROVIDE_INFORMATION.value,
+        "requested assistance and information": CanonicalPredicate.MUST_PROVIDE_INFORMATION.value,
+        "delete": "must_delete_data",
+        "must delete": "must_delete_data",
+        "material breach": "may_terminate_for_material_breach_on_30_days_notice",
+        "terminate for breach": "may_terminate_for_material_breach_on_30_days_notice",
+        "terminate without cause": "may_terminate_without_cause",
+        "taxes": CanonicalPredicate.REQUIRES_TAX_PAYMENT.value,
+        "pay all applicable taxes": CanonicalPredicate.REQUIRES_TAX_PAYMENT.value,
+        "responsible for all taxes": CanonicalPredicate.REQUIRES_TAX_PAYMENT.value,
+        "remains liable": CanonicalPredicate.REMAINS_LIABLE_FOR.value,
+        "remain liable": CanonicalPredicate.REMAINS_LIABLE_FOR.value,
     }
 
     @classmethod
@@ -243,7 +408,14 @@ class PredicateRegistry:
         """Checks if a predicate is a valid approved canonical predicate."""
         if not predicate:
             return False
-        return predicate.strip().lower() in cls.CANONICAL_PREDICATES
+        p_clean = predicate.strip().lower()
+        if p_clean in cls.CANONICAL_PREDICATES:
+            return True
+        try:
+            from app.taxonomy.registry import PredicateRegistryService
+            return p_clean in PredicateRegistryService.get_instance()._predicates
+        except Exception:
+            return False
 
     @classmethod
     def is_disallowed_generic(cls, predicate: str) -> bool:
@@ -269,16 +441,20 @@ class PredicateRegistry:
 
         cleaned = raw_pred.strip().lower()
 
-        # 1. Direct registry hit
-        if cleaned in cls.CANONICAL_PREDICATES:
+        # 1. Direct registry hit (checks both CanonicalPredicate and versioned taxonomy registry)
+        if cls.is_canonical(cleaned):
             return cleaned, True
 
-        # 2. Known raw phrase mapping
+        # 2. Known raw phrase mapping (check both raw token and space-separated phrase)
         if cleaned in cls.RAW_PHRASE_MAPPINGS:
             return cls.RAW_PHRASE_MAPPINGS[cleaned], True
 
+        cleaned_spaced = cleaned.replace("_", " ").strip()
+        if cleaned_spaced in cls.RAW_PHRASE_MAPPINGS:
+            return cls.RAW_PHRASE_MAPPINGS[cleaned_spaced], True
+
         for phrase, mapped in cls.RAW_PHRASE_MAPPINGS.items():
-            if phrase in cleaned:
+            if phrase in cleaned or phrase in cleaned_spaced:
                 return mapped, True
 
         # 3. Disallowed generic token
@@ -287,3 +463,111 @@ class PredicateRegistry:
 
         # 4. Unknown but syntactically valid predicate
         return cleaned, False
+
+    CATCH_ALL_PREDICATES: Set[str] = {
+        "has_validity_rule",
+        "has_summary",
+        "governs_contract_validity",
+        "complies_with",
+        "specifies_governing_rule",
+    }
+
+    DEPRECATED_PREDICATES: Set[str] = {
+        "cancel",
+        "scheduled",
+        "appeal",
+        "defines",
+        "specifies",
+        "cover",
+        "covers",
+        "return",
+        "returns",
+        "issue",
+        "start",
+        "verify",
+        "override",
+        "has_refund",
+        "have",
+        "has",
+    }
+
+    TABLE_HEADER_BINDINGS = {
+        "return window": "has_return_window",
+        "typical duration": "has_posting_duration",
+        "refund speed": "has_refund_processing_duration",
+        "return label cost": "has_return_label_cost",
+        "original shipping refunded?": "has_return_shipping_rule",
+        "original shipping refunded": "has_return_shipping_rule",
+        "can it be cancelled?": "has_cancellation_eligibility",
+        "can it be cancelled": "has_cancellation_eligibility",
+        "warranty period": "has_warranty_period",
+        "remedy": "has_warranty_remedy",
+        "required?": "must_provide_information",
+        "required": "must_provide_information",
+        "example": "has_example_value",
+        "trigger": "has_escalation_trigger",
+        "action": "requires_action",
+        "owner": "has_process_owner",
+        "target": "has_target_duration",
+        "maximum": "has_maximum_duration",
+        "recovery": "has_recovery_action",
+        "rate": "has_mileage_rate",
+        "per": "has_limit_period",
+        "meaning": "has_definition",
+        "typical resolution": "has_typical_resolution",
+        "code (example)": "has_definition",
+        "level": "has_trigger",
+    }
+
+    @classmethod
+    def get_predicate_class(cls, predicate: str) -> str:
+        """
+        Classifies a predicate into:
+        - 'canonical'
+        - 'alias'
+        - 'catch_all'
+        - 'deprecated'
+        - 'invalid'
+        """
+        p_clean = (predicate or "").strip().lower()
+        if p_clean in cls.CATCH_ALL_PREDICATES:
+            return "catch_all"
+        if p_clean in cls.DEPRECATED_PREDICATES or p_clean in cls.DISALLOWED_GENERIC_VERBS:
+            return "deprecated"
+        if p_clean in cls.CANONICAL_PREDICATES:
+            return "canonical"
+        try:
+            from app.taxonomy.registry import PredicateRegistryService
+            if p_clean in PredicateRegistryService.get_instance()._predicates:
+                return "canonical"
+        except Exception:
+            pass
+        if p_clean in cls.RAW_PHRASE_MAPPINGS:
+            return "alias"
+        return "invalid"
+
+    @classmethod
+    def bind_table_header_to_predicate(cls, header: str) -> Optional[str]:
+        """
+        Derives an approved canonical typed predicate directly from a table column header.
+        """
+        h_clean = (header or "").strip().lower()
+        return cls.TABLE_HEADER_BINDINGS.get(h_clean)
+
+    @classmethod
+    def validate_table_header_predicate_match(cls, header: str, predicate: str) -> bool:
+        """
+        Validates that a predicate extracted from a table matches the governing column header.
+        """
+        expected = cls.bind_table_header_to_predicate(header)
+        if not expected:
+            return True
+        p_clean = (predicate or "").strip().lower()
+        if expected == p_clean:
+            return True
+        # Allow related temporal specializations
+        if expected in ("has_posting_duration", "has_posting_sla_estimate", "has_refund_processing_duration"):
+            return p_clean in ("has_posting_duration", "has_posting_sla_estimate", "has_stage_duration", "has_refund_processing_duration")
+        if expected in ("must_provide_information", "is_required_for_refund_request"):
+            return p_clean in ("must_provide_information", "is_required_for_refund_request", "must_provide_evidence")
+        return False

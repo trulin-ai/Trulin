@@ -1,0 +1,213 @@
+{
+  "generated_at": "2026-11-10T15:12:42.827247+00:00",
+  "total_families": 4,
+  "total_documents": 12,
+  "train_documents": 8,
+  "held_out_documents": 4,
+  "families": [
+    {
+      "family_id": "FAM-1",
+      "family_name": "Commercial Contracts & MSAs",
+      "target_recall": 0.9,
+      "target_lifecycle": 0.95,
+      "document_count": 3,
+      "unit_counts": {
+        "operative": 12,
+        "non_operative": 57,
+        "ambiguous": 2,
+        "total": 71
+      },
+      "documents": [
+        {
+          "doc_id": "DOC-FAM1-01",
+          "family_id": "FAM-1",
+          "title": "Vendor Agreement Template",
+          "filename": "Vendor Agreement Template-02.2021_2.pdf",
+          "relative_path": "docs/Vendor Agreement Template-02.2021_2.pdf",
+          "file_size_bytes": 402747,
+          "page_count": 20,
+          "file_sha256": "53c8cc27edc8682320f6d49f9849452f57f0b089535191526f5536d4e0ad0ebe",
+          "split": "train",
+          "description": "Standard commercial vendor agreement covering deliverables, fees, confidentiality, warranties, and liability caps."
+        },
+        {
+          "doc_id": "DOC-FAM1-02",
+          "family_id": "FAM-1",
+          "title": "Microsoft Customer Agreement",
+          "filename": "Microsoft Customer Agreement.pdf",
+          "relative_path": "research/validation_50/raw_documents/Microsoft/Contracts/Microsoft Customer Agreement.pdf",
+          "file_size_bytes": 208300,
+          "page_count": 11,
+          "file_sha256": "6e8bb0dc3d50d164d6ad1551e96c95d8b16044f14e5274fbe9db1e45f6e96a41",
+          "split": "train",
+          "description": "Direct customer agreement governing cloud service terms, software licenses, warranties, and limitation of liability."
+        },
+        {
+          "doc_id": "DOC-FAM1-03",
+          "family_id": "FAM-1",
+          "title": "Microsoft Enterprise Agreement",
+          "filename": "Enterprise Agreement.pdf",
+          "relative_path": "research/validation_50/raw_documents/Microsoft/Contracts/Enterprise Agreement.pdf",
+          "file_size_bytes": 206208,
+          "page_count": 5,
+          "file_sha256": "c6f591b236a2df8f3fc2965202144521bea7a42264e3ad7fde6e87abba1cd8d0",
+          "split": "held_out",
+          "description": "Enterprise volume licensing contract governing true-ups, affiliate usage, and renewal terms."
+        }
+      ]
+    },
+    {
+      "family_id": "FAM-2",
+      "family_name": "HR & Employment Policies",
+      "target_recall": 0.95,
+      "target_lifecycle": 0.98,
+      "document_count": 3,
+      "unit_counts": {
+        "operative": 16,
+        "non_operative": 45,
+        "ambiguous": 2,
+        "total": 63
+      },
+      "documents": [
+        {
+          "doc_id": "DOC-FAM2-01",
+          "family_id": "FAM-2",
+          "title": "Employees Notice Period Policy V1.5",
+          "filename": "Employees Notice Period Policy- V 1.5 (1).pdf",
+          "relative_path": "docs/Employees Notice Period Policy- V 1.5 (1).pdf",
+          "file_size_bytes": 344740,
+          "page_count": 6,
+          "file_sha256": "45dfae85a80a6985e7e48153526a83fcfef2ed96fb416917467a0ff48d6851f8",
+          "split": "train",
+          "description": "Corporate notice period guidelines structured by grade tiers (CXO, VP, Staff) with buyout rules."
+        },
+        {
+          "doc_id": "DOC-FAM2-02",
+          "family_id": "FAM-2",
+          "title": "Staff Termination of Employment Policy",
+          "filename": "terminationofemploymentpolicy.pdf",
+          "relative_path": "docs/terminationofemploymentpolicy.pdf",
+          "file_size_bytes": 102670,
+          "page_count": 4,
+          "file_sha256": "2a2ccbbdcf0597d6693845e44fe912626c57f90cae1529b0f29ab54724ecbc4a",
+          "split": "train",
+          "description": "Employment termination procedures, cause vs without-cause severance eligibility, and notice requirements."
+        },
+        {
+          "doc_id": "DOC-FAM2-03",
+          "family_id": "FAM-2",
+          "title": "Resignation and Voluntary Termination Policy",
+          "filename": "Resignation and Voluntary Termination.pdf",
+          "relative_path": "docs/Resignation and Voluntary Termination.pdf",
+          "file_size_bytes": 135289,
+          "page_count": 2,
+          "file_sha256": "b804fa0fef939113f210a7d6b351c8ec71f5c7cae4292fd0027462faf33b04f2",
+          "split": "held_out",
+          "description": "Voluntary separation protocol, required written notice intervals, and final accrued compensation payouts."
+        }
+      ]
+    },
+    {
+      "family_id": "FAM-3",
+      "family_name": "Invoices & Commercial Billing",
+      "target_recall": 0.95,
+      "target_lifecycle": 0.98,
+      "document_count": 3,
+      "unit_counts": {
+        "operative": 8,
+        "non_operative": 39,
+        "ambiguous": 2,
+        "total": 49
+      },
+      "documents": [
+        {
+          "doc_id": "DOC-FAM3-01",
+          "family_id": "FAM-3",
+          "title": "WooCommerce Sample Commercial Invoice",
+          "filename": "wordpress-pdf-invoice-plugin-sample.pdf",
+          "relative_path": "docs/wordpress-pdf-invoice-plugin-sample.pdf",
+          "file_size_bytes": 43627,
+          "page_count": 1,
+          "file_sha256": "c2de358a0974f9b047aed8e457def7d4b1b39170f44819ec3152b42db787d72e",
+          "split": "train",
+          "description": "Dense tabular commercial invoice including unit prices, line totals, VAT/tax breakdowns, and payment terms."
+        },
+        {
+          "doc_id": "DOC-FAM3-02",
+          "family_id": "FAM-3",
+          "title": "Microsoft Volume Licensing Invoices Guide",
+          "filename": "Microsoft volume licensing invoices _ Microsoft Learn.pdf",
+          "relative_path": "research/validation_50/raw_documents/Microsoft/Invoices or forms/Microsoft volume licensing invoices _ Microsoft Learn.pdf",
+          "file_size_bytes": 369454,
+          "page_count": 9,
+          "file_sha256": "57f799b0d72eea2b9e898da20622e02bcb8e1528f74a5afea4fb3cfe8bd8308c",
+          "split": "train",
+          "description": "Billing schedule specification for volume licensing, PO requirements, remittance rules, and grace periods."
+        },
+        {
+          "doc_id": "DOC-FAM3-03",
+          "family_id": "FAM-3",
+          "title": "Azure Billing Invoice Documentation",
+          "filename": "Download Azure billing invoice - Microsoft Cost Management _ Microsoft Learn.pdf",
+          "relative_path": "research/validation_50/raw_documents/Microsoft/Invoices or forms/Download Azure billing invoice - Microsoft Cost Management _ Microsoft Learn.pdf",
+          "file_size_bytes": 243055,
+          "page_count": 7,
+          "file_sha256": "7e244ae21c24e1bf979ef1a327e0f5d1b420ace594613bbf60089bf20783c005",
+          "split": "held_out",
+          "description": "Detailed Azure cloud billing statement structure, tax breakdown, and dispute window policies."
+        }
+      ]
+    },
+    {
+      "family_id": "FAM-4",
+      "family_name": "Statutory & Compliance Guidelines",
+      "target_recall": 0.9,
+      "target_lifecycle": 0.95,
+      "document_count": 3,
+      "unit_counts": {
+        "operative": 10,
+        "non_operative": 56,
+        "ambiguous": 1,
+        "total": 67
+      },
+      "documents": [
+        {
+          "doc_id": "DOC-FAM4-01",
+          "family_id": "FAM-4",
+          "title": "Guidelines for Engagement of Contract Appointees",
+          "filename": "guidelines-for-engagement-of-employees-on-contract-basis.pdf",
+          "relative_path": "docs/guidelines-for-engagement-of-employees-on-contract-basis.pdf",
+          "file_size_bytes": 92573,
+          "page_count": 5,
+          "file_sha256": "abf5f0de01415f5f2b47c93fe4f81fe54b02b9dee8647dd11a41992fa9c3cdd1",
+          "split": "train",
+          "description": "Government statutory guidelines restricting contract tenure, remuneration limits, and statutory bar on regularisation."
+        },
+        {
+          "doc_id": "DOC-FAM4-02",
+          "family_id": "FAM-4",
+          "title": "Human Rights Transparency Report",
+          "filename": "Human-Rights-Transparency-Report-2025.pdf",
+          "relative_path": "research/validation_50/raw_documents/Microsoft/Hr Policies/Human-Rights-Transparency-Report-2025.pdf",
+          "file_size_bytes": 33436727,
+          "page_count": 40,
+          "file_sha256": "5e795619b6d78ea476d7aad13e28f1b440d42d6f9097edc5d77881eebd6ff87f",
+          "split": "train",
+          "description": "Statutory corporate transparency disclosures, labor audit standards, and mandatory reporting covenants."
+        },
+        {
+          "doc_id": "DOC-FAM4-03",
+          "family_id": "FAM-4",
+          "title": "Supplier Security & Privacy Assurance (SSPA) Requirements",
+          "filename": "Supplier Security and Privacy Assurance Program - Microsoft Service Assurance _ Microsoft Learn.pdf",
+          "relative_path": "research/validation_50/raw_documents/Microsoft/Difficult PDFs/Supplier Security and Privacy Assurance Program - Microsoft Service Assurance _ Microsoft Learn.pdf",
+          "file_size_bytes": 76590,
+          "page_count": 4,
+          "file_sha256": "49e1d609fe514226dad1653a823b98a82e887211456dbe45c20145e87ed6ca8c",
+          "split": "held_out",
+          "description": "Mandatory compliance directives for suppliers handling sensitive customer data, breach reporting, and annual audits."
+        }
+      ]
+    }
+  ]
+}

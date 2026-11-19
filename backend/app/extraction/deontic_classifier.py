@@ -281,6 +281,18 @@ class DeonticClassifier:
                 subject = clean_only_val if "subscription" in v_lower else f"{clean_only_val} subscription"
             elif any(sub_w in v_lower for sub_w in ("subscription plan", "subscription tier", "membership tier")):
                 subject = clean_only_val
+            elif re.match(r"^\d{4}$", clean_only_val) and any(ck in k_lower for ck in ("code", "reason", "chargeback")):
+                subject = f"Chargeback Reason Code {clean_only_val}"
+            elif clean_only_val.lower() in ("notice", "warning", "account review", "suspension", "suspended", "restricted", "permanent", "account closed") and any(tk in k_lower for tk in ("tier", "level", "stage")):
+                subject = "Customer Account"
+                tier_cond = f"Tier: {clean_only_val}"
+                if tier_cond not in conditions:
+                    conditions.append(tier_cond)
+            elif any(st in v_lower for st in ("shipped", "delivered", "pre-order", "preorder", "backordered", "backorder")) and any(sk in k_lower for sk in ("status", "order")):
+                subject = "Order"
+                order_cond = f"Order Status: {clean_only_val}"
+                if order_cond not in conditions:
+                    conditions.append(order_cond)
             else:
                 subject = clean_only_val
         else:
@@ -442,9 +454,16 @@ class DeonticClassifier:
             elif re.search(r"\bprovider\s+timelines\b", val_lower):
                 predicate = "has_provider_governed_timeline"
                 claim_text = f"{subject} specifies provider-governed timeline: {clean_val}."
+            elif re.search(r"\bsame\s+as\s+(?:card|original|underlying)\b", val_lower):
+                predicate = "references_underlying_payment_timeline"
+                claim_text = f"{subject} specifies timeline reference: {clean_val}."
             elif is_payment:
-                predicate = "has_posting_duration"
-                claim_text = f"{subject} posting duration is {clean_val}."
+                if any(q in active_qualifiers for q in ("usually", "typical", "approximate")) or re.search(r"\b(?:usually|typically|estimate|estimated|approx|approximate)\b", val_lower):
+                    predicate = "has_posting_sla_estimate"
+                    claim_text = f"{subject} posting SLA estimate is {clean_val}."
+                else:
+                    predicate = "has_posting_duration"
+                    claim_text = f"{subject} posting duration is {clean_val}."
             elif is_stage:
                 predicate = "has_stage_duration"
                 claim_text = f"{subject} stage duration is {clean_val}."
@@ -565,6 +584,39 @@ class DeonticClassifier:
             modality = "POLICY_FACT"
             modal_op = "requires"
             claim_text = f"{subject} requires approval role: {clean_val}."
+        elif key_lower in ("summary", "overview", "quick_reference", "policy_summary"):
+            cond_list = [f"Table Column: {clean_rule_key}"] + list(conditions or [])
+            modality = "POLICY_FACT"
+            modal_op = "specifies"
+            if "return window" in subj_lower:
+                predicate = "has_return_window"
+                claim_text = f"{subject} has a return window of {clean_val}."
+            elif "refund speed" in subj_lower or "speed" in subj_lower:
+                predicate = "has_refund_processing_duration"
+                claim_text = f"{subject} processing duration: {clean_val}."
+            elif "return shipping" in subj_lower or "shipping" in subj_lower:
+                predicate = "has_return_shipping_rule"
+                claim_text = f"{subject} rule: {clean_val}."
+            elif "restocking fee" in subj_lower or "fee" in subj_lower:
+                predicate = "has_fee_rule"
+                claim_text = f"{subject} specifies fee rule: {clean_val}."
+            elif "final sale" in subj_lower:
+                predicate = "cannot_be_returned_or_refunded"
+                claim_text = f"{subject} cannot be returned or refunded: {clean_val}."
+            else:
+                slug = re.sub(r"[^a-zA-Z0-9]+", "_", subj_lower).strip("_")
+                predicate = f"specifies_{slug}_rule" if slug else "has_policy_specification"
+                claim_text = f"{subject} specifies {clean_val}."
+            return {
+                "claim_text": claim_text,
+                "subject": subject,
+                "predicate": predicate,
+                "object": clean_val,
+                "modality": modality,
+                "modal_operator": modal_op,
+                "conditions": cond_list,
+                "qualifiers": active_qualifiers,
+            }
         else:
             slug = re.sub(r"[^a-zA-Z0-9]+", "_", key_lower).strip("_")
             predicate = f"has_{slug}" if slug else "has_table_attribute"

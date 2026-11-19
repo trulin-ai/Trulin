@@ -1,35 +1,35 @@
 {
   "validation_milestone": "Sprint AD-3: 21-Document English Corpus Precision Repair and Full Audit",
   "corpus_version": "validation_50_v2",
-  "active_document_count": 1,
+  "active_document_count": 40,
   "excluded_document_count": 0,
   "excluded_documents": [],
-  "executed_at": "2026-10-20T16:47:46.080123+00:00",
+  "executed_at": "2026-11-14T04:25:37.368567+00:00",
   "corpus_summary": {
-    "total_documents_evaluated": 1,
+    "total_documents_evaluated": 40,
     "parsing_distribution": {
-      "PASS": 1,
-      "PASS_WITH_MINOR_ISSUES": 0,
+      "PASS": 34,
+      "PASS_WITH_MINOR_ISSUES": 6,
       "PASS_WITH_MAJOR_ISSUES": 0,
       "FAIL": 0
     },
     "parsing_pass_rate": 1.0
   },
   "claims_summary": {
-    "total_claims_extracted": 97,
-    "valid_claims": 79,
-    "invalid_claims": 3,
+    "total_claims_extracted": 3066,
+    "valid_claims": 276,
+    "invalid_claims": 497,
     "missed_claims": 0,
-    "duplicate_claims": 0,
-    "ambiguous_claims": 15
+    "duplicate_claims": 759,
+    "ambiguous_claims": 2293
   },
   "metrics": {
-    "macro_claim_precision": 0.8144,
+    "macro_claim_precision": 0.1054,
     "macro_claim_recall": 1.0,
-    "macro_f1": 0.8977,
-    "evidence_supported_rate": 1.0,
+    "macro_f1": 0.1907,
+    "evidence_supported_rate": 0.9845,
     "locator_accuracy_rate": 1.0,
-    "duplicate_rate": 0.0
+    "duplicate_rate": 0.1984
   },
   "gates_evaluated": {
     "parsing_threshold_met": true,

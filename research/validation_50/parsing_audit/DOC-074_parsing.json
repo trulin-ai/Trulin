@@ -2,13 +2,13 @@
   "document_id": "DOC-074",
   "filename": "Understand IRS tax forms issued by Microsoft - Marketplace publisher _ Microsoft Learn.pdf",
   "page_count": 4,
-  "total_characters": 6631,
-  "block_count": 51,
-  "table_count": 0,
+  "total_characters": 7473,
+  "block_count": 42,
+  "table_count": 5,
   "parsing_status": "PASS_WITH_MINOR_ISSUES",
   "major_issues": [],
   "minor_issues": [
-    "Header/footer repetition in body text: 1 repeating phrases detected"
+    "Header/footer repetition in body text: 2 repeating phrases detected"
   ],
   "all_issues_count": 1,
   "reading_order_fidelity": "PASS",

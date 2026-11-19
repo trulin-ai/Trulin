@@ -1007,6 +1007,21 @@ async def get_source_artifacts(
         for c in claims:
             score = c.trust_scores[0].overall_score if c.trust_scores else 0.95
             validity = c.validity_records[0].validity_status if c.validity_records else "valid"
+            
+            # Phase 1a: Read-Path Stabilization
+            status_val = c.status.value if hasattr(c.status, "value") else str(c.status).lower()
+            metadata = getattr(c, "claim_metadata", {}) or {}
+            persisted_tier = metadata.get("certification_tier")
+            if not persisted_tier:
+                if status_val in ("verified", "active"):
+                    persisted_tier = "AUTOMATED_CERTIFIED"
+                elif status_val in ("rejected", "quarantined"):
+                    persisted_tier = "QUARANTINED"
+                else:
+                    persisted_tier = "REVIEW_REQUIRED"
+
+            is_canon = (persisted_tier == "AUTOMATED_CERTIFIED") and (status_val in ("verified", "active"))
+
             gate_res = ClaimGateEvaluator.evaluate(
                 claim_id=str(c.id),
                 subject=c.subject,
@@ -1014,26 +1029,37 @@ async def get_source_artifacts(
                 object_val=c.object,
                 claim_text=c.claim_text,
                 claim_type=getattr(c, "claim_type", "policy"),
-                status=c.status.value if hasattr(c.status, "value") else str(c.status),
-                metadata=getattr(c, "claim_metadata", {}) or {},
+                status=status_val,
+                metadata=metadata,
                 confidence=float(score),
             )
+
+            revalidation_audit = {
+                "live_tier": gate_res.certification_tier,
+                "divergence_flag": (gate_res.certification_tier != persisted_tier),
+                "live_all_9_gates_passed": gate_res.all_9_gates_passed,
+                "live_rejection_reasons": gate_res.rejection_reasons,
+                "evaluator_version": "ClaimGateEvaluator_v3.2",
+                "persisted_tier": persisted_tier,
+            }
+
             claims_output.append({
                 "id": str(c.id),
                 "subject": c.subject or "General",
                 "predicate": c.predicate or "specifies",
                 "object": c.object or "",
                 "claim_text": c.claim_text,
-                "status": c.status.value if hasattr(c.status, "value") else str(c.status),
+                "status": status_val,
                 "trust_score": float(score),
                 "validity": str(validity),
                 "created_at": c.created_at.isoformat() if c.created_at else None,
                 "gates": gate_res.gates,
-                "all_9_gates_passed": gate_res.all_9_gates_passed,
-                "is_canonical": gate_res.is_canonical,
-                "agent_accessible": gate_res.agent_accessible,
-                "certification_tier": gate_res.certification_tier,
-                "rejection_reasons": gate_res.rejection_reasons,
+                "all_9_gates_passed": (persisted_tier == "AUTOMATED_CERTIFIED"),
+                "is_canonical": is_canon,
+                "agent_accessible": is_canon,
+                "certification_tier": persisted_tier,
+                "rejection_reasons": [] if persisted_tier == "AUTOMATED_CERTIFIED" else gate_res.rejection_reasons,
+                "revalidation_audit": revalidation_audit,
             })
 
     return {

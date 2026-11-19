@@ -1,0 +1,41 @@
+{
+  "started_at": "2026-11-10T14:57:23.702495+00:00",
+  "steps": [
+    {
+      "step": "pre_flight_counts",
+      "data": {
+        "staging_claims": 224,
+        "public_claims": 224,
+        "staging_evidence": 230,
+        "public_evidence": 230,
+        "staging_conflicts": 2
+      }
+    },
+    {
+      "step": "snapshot",
+      "rows_captured": 224,
+      "file": "phase3_step5_production_snapshot.json",
+      "sha256": "050896fa4b9521a4a188f785866bb3a26a9c0ca3e1d978b9bdbe2dc563f0092c"
+    },
+    {
+      "step": "diff_computed",
+      "changed_claims_count": 55
+    },
+    {
+      "step": "commit",
+      "updated_claims": 55,
+      "evidence_records": 230,
+      "conflict_records": 2,
+      "status_parity": {
+        "candidate": 51,
+        "conflicted": 2,
+        "rejected": 31,
+        "verified": 140
+      }
+    }
+  ],
+  "document_id": "e3cdd194-1a9b-4f01-9031-13e6b027d3d2",
+  "version_id": "bcf72c99-7909-4898-af98-56f261b7d24b",
+  "result": "SUCCESS",
+  "completed_at": "2026-11-10T14:57:24.194437+00:00"
+}

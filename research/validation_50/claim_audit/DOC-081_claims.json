@@ -4,18 +4,18 @@
   "document_type": "refund_policy",
   "evaluation_methodology": "AUTOMATED_GATE_HEURISTIC (Awaiting Human Gold Reference)",
   "claim_counts": {
-    "candidate_claims": 2,
-    "valid": 0,
+    "candidate_claims": 13,
+    "valid": 2,
     "invalid": 0,
     "missed": 0,
     "duplicate": 0,
-    "ambiguous": 2,
+    "ambiguous": 11,
     "malformed": 0
   },
   "metrics": {
-    "claim_precision": 0.0,
+    "claim_precision": 0.1538,
     "claim_recall": 1.0,
-    "f1": 0.0,
+    "f1": 0.1538,
     "evidence_supported_rate": 1.0,
     "locator_accuracy_rate": 1.0,
     "duplicate_rate": 0.0
@@ -24,22 +24,132 @@
   "failure_patterns": [],
   "claims": [
     {
-      "subject": "Get a refund for apps and",
-      "predicate": "has_refund_eligibility",
-      "object": "Purchases and downloads Manage your billing Help with purchases Gift cards and account balance Refunds and exchanges Games and apps Hardware Refund or cancel a subscription Cancel an order or pre-order Status of a return and refund Can't get a refund on apps and games Errors & troubleshooting Consumer and Regulatory Information Get a refund for apps and games purchased from Microsoft Store Applies To If you purchased a game or app from Microsoft, you may be able to request a refund.",
+      "subject": "downloads",
+      "predicate": "has_search",
+      "object": "Get a refund for apps and Devices\ue70d",
       "disposition": "AMBIGUOUS_NEEDS_REVIEW",
-      "trust_score": 0.8562,
-      "decision_reason": "REVIEW: Human review recommended. Sub-threshold semantic confidence (85% < 88%).; Trust score 0.86 is below 0.88 auto-approval threshold",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Predicate failure: Predicate 'has_search' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'has_search' is not a canonical registered predicate.",
       "evidence_supported": true,
       "locator_valid": true
     },
     {
-      "subject": "Get a refund for apps and",
+      "subject": "Manage your billing",
+      "predicate": "has_search",
+      "object": "Account & billinggames purchased from Resources\ue70d",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[REVIEW_SCORE_BELOW_THRESHOLD] Predicate failure: Predicate 'has_search' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'has_search' is not a canonical registered predicate.; Modality mismatch failure: Rule assertion lacks operative deontic modal verb (must, may, shall, cannot) or normative table indicator (required, free, deducted, not eligible, no, yes).",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
+      "subject": "Help with",
+      "predicate": "has_search",
+      "object": "Microsoft Store",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[REVIEW_SCORE_BELOW_THRESHOLD] Predicate failure: Predicate 'has_search' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'has_search' is not a canonical registered predicate.; Modality mismatch failure: Rule assertion lacks operative deontic modal verb (must, may, shall, cannot) or normative table indicator (required, free, deducted, not eligible, no, yes).",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
+      "subject": "purchases",
+      "predicate": "has_search",
+      "object": "Buy Microsoft 365 Applies To",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Predicate failure: Predicate 'has_search' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'has_search' is not a canonical registered predicate.",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
+      "subject": "Gift cards",
+      "predicate": "has_search",
+      "object": "d",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[REVIEW_SCORE_BELOW_THRESHOLD] Predicate failure: Predicate 'has_search' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'has_search' is not a canonical registered predicate.; Modality mismatch failure: Rule assertion lacks operative deontic modal verb (must, may, shall, cannot) or normative table indicator (required, free, deducted, not eligible, no, yes).",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
+      "subject": "Account",
+      "predicate": "has_search",
+      "object": "ce",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[REVIEW_SCORE_BELOW_THRESHOLD] Predicate failure: Predicate 'has_search' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'has_search' is not a canonical registered predicate.; Modality mismatch failure: Rule assertion lacks operative deontic modal verb (must, may, shall, cannot) or normative table indicator (required, free, deducted, not eligible, no, yes).",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
+      "subject": "Refunds and exchanges",
+      "predicate": "has_search",
+      "object": "Get help with Copilot \ue711",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Predicate failure: Predicate 'has_search' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'has_search' is not a canonical registered predicate.",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
+      "subject": "Games and apps",
+      "predicate": "has_search",
+      "object": "How do I get a refund for apps and games purchased?",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Predicate failure: Predicate 'has_search' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'has_search' is not a canonical registered predicate.",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
+      "subject": "Customer",
+      "predicate": "has_refund_eligibility",
+      "object": "cancel a subscription Cancel an If you purchased a game or app from Microsoft, you may be able to order or request a refund.",
+      "disposition": "AUTOMATED_CHECKS_PASSED",
+      "trust_score": 0.99,
+      "decision_reason": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED.",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
+      "subject": "refund",
+      "predicate": "get",
+      "object": "a refund on Apps on a PC Games on a PC apps and games How to request a refund for Microsoft Errors & troubleshooting Store apps on a Windows PC Consumer and Digital goods like apps, games, add-on content, subscriptions, movies, Regulatory TV shows, and books aren't refundable unless the offer or applicable law Information states that you're eligible for a refund",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Predicate failure: Predicate 'get' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'get' is not a canonical registered predicate.",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
+      "subject": "Help with",
+      "predicate": "has_col2",
+      "object": "If you don't recognize a charge on your account, you can",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[WEAK_PREDICATE] Predicate failure: Predicate 'has_col2' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'has_col2' is not a canonical registered predicate.",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
+      "subject": "subscriptions",
+      "predicate": "has_col2",
+      "object": "now investigate it on the Manage your payments page of",
+      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
+      "trust_score": 0.85,
+      "decision_reason": "[REVIEW_SCORE_BELOW_THRESHOLD] Predicate failure: Predicate 'has_col2' is not present in versioned taxonomy registry.; Predicate normativity failure: Predicate 'has_col2' is not a canonical registered predicate.; Modality mismatch failure: Rule assertion lacks operative deontic modal verb (must, may, shall, cannot) or normative table indicator (required, free, deducted, not eligible, no, yes).",
+      "evidence_supported": true,
+      "locator_valid": true
+    },
+    {
+      "subject": "Customer",
       "predicate": "has_refund_eligibility",
       "object": "In Australia, this return information does not affect any remedy you may have under the Australian Consumer Law.",
-      "disposition": "AMBIGUOUS_NEEDS_REVIEW",
-      "trust_score": 0.8562,
-      "decision_reason": "REVIEW: Human review recommended. Sub-threshold semantic confidence (85% < 88%).; Trust score 0.86 is below 0.88 auto-approval threshold",
+      "disposition": "AUTOMATED_CHECKS_PASSED",
+      "trust_score": 0.99,
+      "decision_reason": "[APPROVE_ALL_PASSED] UNIVERSAL 10-GATE CERTIFIED: All gates passed. Tier: AUTOMATED_CERTIFIED.",
       "evidence_supported": true,
       "locator_valid": true
     }

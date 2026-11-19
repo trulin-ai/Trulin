@@ -1,0 +1,569 @@
+[
+  {
+    "case_id": "case_01_numeric_conflict",
+    "category": "numeric_conflict",
+    "description": "True numeric conflict on identical decision key",
+    "claim_a": {
+      "text": "Refund requests must be submitted within 30 calendar days of delivery.",
+      "subject": "Refund Policy",
+      "predicate": "refund.window_duration",
+      "scalar": 30.0,
+      "unit": "calendar_days",
+      "authority": 80,
+      "modality": "MUST",
+      "status": "verified"
+    },
+    "claim_b": {
+      "text": "Refund requests must be submitted within 60 calendar days of delivery.",
+      "subject": "Refund Policy",
+      "predicate": "refund.window_duration",
+      "scalar": 60.0,
+      "unit": "calendar_days",
+      "authority": 80,
+      "modality": "MUST",
+      "status": "verified"
+    },
+    "expected_is_conflict": true,
+    "expected_conflict_type": "numeric_conflict",
+    "expected_conflicting_fields": ["value_scalar"],
+    "expected_coexists": false,
+    "expected_auto_resolved": false
+  },
+  {
+    "case_id": "case_02_different_scope_audience",
+    "category": "disjoint_scope",
+    "description": "Different audience scopes (full-time vs contractor) do not conflict",
+    "claim_a": {
+      "text": "Full-time employees receive 25 days of paid annual vacation leave.",
+      "subject": "Annual Leave",
+      "predicate": "leave.vacation_allowance",
+      "audience": "full-time",
+      "scalar": 25.0,
+      "unit": "days",
+      "authority": 85,
+      "status": "verified"
+    },
+    "claim_b": {
+      "text": "Contract employees receive 10 days of unpaid personal leave.",
+      "subject": "Annual Leave",
+      "predicate": "leave.vacation_allowance",
+      "audience": "contractor",
+      "scalar": 10.0,
+      "unit": "days",
+      "authority": 85,
+      "status": "verified"
+    },
+    "expected_is_conflict": false,
+    "expected_conflict_type": "no_conflict",
+    "expected_conflicting_fields": [],
+    "expected_coexists": true,
+    "expected_auto_resolved": false
+  },
+  {
+    "case_id": "case_03_exception_lex_specialis",
+    "category": "exception_conflict",
+    "description": "General non-refundable rule vs specific annual plan exception co-exist under Lex Specialis",
+    "claim_a": {
+      "text": "All subscription fees are strictly non-refundable once billed.",
+      "subject": "Refund Policy",
+      "predicate": "refund.eligibility",
+      "authority": 85,
+      "has_exception": false,
+      "status": "verified"
+    },
+    "claim_b": {
+      "text": "Annual plans are refundable pro-rated upon written VP approval.",
+      "subject": "Refund Policy",
+      "predicate": "refund.eligibility",
+      "authority": 75,
+      "has_exception": true,
+      "exception_text": "Annual plans upon VP approval",
+      "status": "verified"
+    },
+    "expected_is_conflict": true,
+    "expected_conflict_type": "exception_conflict",
+    "expected_conflicting_fields": ["claim_text"],
+    "expected_coexists": true,
+    "expected_auto_resolved": true,
+    "expected_precedence_rule": "LEX_SPECIALIS_EXCEPTION"
+  },
+  {
+    "case_id": "case_04_temporal_overlap",
+    "category": "temporal_conflict",
+    "description": "Overlapping valid periods (Jan-Jun vs Mar-Dec) with conflicting per-diem rates",
+    "claim_a": {
+      "text": "Standard travel per-diem rate is $75 per day.",
+      "subject": "Travel Reimbursement",
+      "predicate": "expense.per_diem",
+      "scalar": 75.0,
+      "unit": "USD",
+      "valid_from": "2026-01-01T00:00:00Z",
+      "valid_until": "2026-06-30T23:59:59Z",
+      "authority": 80,
+      "status": "verified"
+    },
+    "claim_b": {
+      "text": "Standard travel per-diem rate is $110 per day.",
+      "subject": "Travel Reimbursement",
+      "predicate": "expense.per_diem",
+      "scalar": 110.0,
+      "unit": "USD",
+      "valid_from": "2026-03-01T00:00:00Z",
+      "valid_until": "2026-12-31T23:59:59Z",
+      "authority": 80,
+      "status": "verified"
+    },
+    "expected_is_conflict": true,
+    "expected_conflict_type": "temporal_conflict",
+    "expected_conflicting_fields": ["value_scalar"],
+    "expected_coexists": false,
+    "expected_auto_resolved": false
+  },
+  {
+    "case_id": "case_05_disjoint_temporal_windows",
+    "category": "disjoint_temporal",
+    "description": "Historical 2020-2022 vs active 2025-2026 periods do not conflict",
+    "claim_a": {
+      "text": "Legacy per-diem rate was $50 per day.",
+      "subject": "Travel Reimbursement",
+      "predicate": "expense.per_diem",
+      "scalar": 50.0,
+      "unit": "USD",
+      "valid_from": "2020-01-01T00:00:00Z",
+      "valid_until": "2022-12-31T23:59:59Z",
+      "authority": 80,
+      "status": "outdated"
+    },
+    "claim_b": {
+      "text": "Current active per-diem rate is $120 per day.",
+      "subject": "Travel Reimbursement",
+      "predicate": "expense.per_diem",
+      "scalar": 120.0,
+      "unit": "USD",
+      "valid_from": "2025-01-01T00:00:00Z",
+      "valid_until": "2026-12-31T23:59:59Z",
+      "authority": 80,
+      "status": "verified"
+    },
+    "expected_is_conflict": false,
+    "expected_conflict_type": "no_conflict",
+    "expected_conflicting_fields": [],
+    "expected_coexists": true,
+    "expected_auto_resolved": false
+  },
+  {
+    "case_id": "case_06_authority_hierarchy",
+    "category": "authority_conflict",
+    "description": "Corporate policy (95%) overrides departmental guideline (65%) with delta >= 15%",
+    "claim_a": {
+      "text": "All vendor contracts over $10,000 require Legal and CFO signoff.",
+      "subject": "Vendor Approval",
+      "predicate": "vendor.approval_threshold",
+      "authority": 95,
+      "status": "verified"
+    },
+    "claim_b": {
+      "text": "Vendor agreements up to $50,000 only require Department Head approval.",
+      "subject": "Vendor Approval",
+      "predicate": "vendor.approval_threshold",
+      "authority": 65,
+      "status": "verified"
+    },
+    "expected_is_conflict": true,
+    "expected_conflict_type": "authority_conflict",
+    "expected_conflicting_fields": ["claim_text"],
+    "expected_coexists": false,
+    "expected_auto_resolved": true,
+    "expected_winner": "claim_a",
+    "expected_precedence_rule": "AUTHORITY_HIERARCHY_PRECEDENCE"
+  },
+  {
+    "case_id": "case_07_authority_tie_ambiguity",
+    "category": "authority_tie",
+    "description": "Close authority levels (78% vs 75%, delta < 15%) cannot auto-resolve and require human review",
+    "claim_a": {
+      "text": "Security incident reports must be logged within 2 hours.",
+      "subject": "Security Incident Reporting",
+      "predicate": "incident.reporting_window",
+      "scalar": 2.0,
+      "unit": "hours",
+      "authority": 78,
+      "status": "conflicted"
+    },
+    "claim_b": {
+      "text": "Security incident reports must be logged within 4 hours.",
+      "subject": "Security Incident Reporting",
+      "predicate": "incident.reporting_window",
+      "scalar": 4.0,
+      "unit": "hours",
+      "authority": 75,
+      "status": "conflicted"
+    },
+    "expected_is_conflict": true,
+    "expected_conflict_type": "numeric_conflict",
+    "expected_conflicting_fields": ["value_scalar"],
+    "expected_coexists": false,
+    "expected_auto_resolved": false
+  },
+  {
+    "case_id": "case_08_version_explicit_supersession",
+    "category": "version_conflict",
+    "description": "Handbook v2 explicitly supersedes legacy v1",
+    "claim_a": {
+      "text": "Remote work equipment allowance is $500 per calendar year.",
+      "subject": "Remote Equipment Allowance",
+      "predicate": "allowance.remote_equipment",
+      "version_number": 1,
+      "scalar": 500.0,
+      "unit": "USD",
+      "authority": 80,
+      "status": "verified"
+    },
+    "claim_b": {
+      "text": "Remote work equipment allowance is $1,200 per calendar year under policy v2.0, explicitly superseding v1.0.",
+      "subject": "Remote Equipment Allowance",
+      "predicate": "allowance.remote_equipment",
+      "version_number": 2,
+      "scalar": 1200.0,
+      "unit": "USD",
+      "authority": 80,
+      "status": "verified"
+    },
+    "expected_is_conflict": true,
+    "expected_conflict_type": "version_conflict",
+    "expected_conflicting_fields": ["value_scalar"],
+    "expected_coexists": false,
+    "expected_auto_resolved": true,
+    "expected_winner": "claim_b",
+    "expected_precedence_rule": "EXPLICIT_SUPERSESSION"
+  },
+  {
+    "case_id": "case_09_version_without_supersession_ambiguity",
+    "category": "version_ambiguity",
+    "description": "Different document versions without explicit supersession linkage remain in conflict review",
+    "claim_a": {
+      "text": "Employee referral bonus is $1,000 for standard engineering roles.",
+      "subject": "Referral Bonus",
+      "predicate": "bonus.referral_amount",
+      "version_number": 1,
+      "authority": 75,
+      "status": "conflicted"
+    },
+    "claim_b": {
+      "text": "Employee referral bonus is $2,500 for standard engineering roles.",
+      "subject": "Referral Bonus",
+      "predicate": "bonus.referral_amount",
+      "version_number": 1,
+      "authority": 75,
+      "status": "conflicted"
+    },
+    "expected_is_conflict": true,
+    "expected_conflict_type": "numeric_conflict",
+    "expected_conflicting_fields": ["claim_text"],
+    "expected_coexists": false,
+    "expected_auto_resolved": false
+  },
+  {
+    "case_id": "case_10_modality_difference",
+    "category": "modality_conflict",
+    "description": "Collision between discretionary MAY and mandatory MUST modalities",
+    "claim_a": {
+      "text": "Employees may submit travel receipts via email or mobile portal.",
+      "subject": "Expense Submission",
+      "predicate": "expense.receipt_submission",
+      "modality": "MAY",
+      "authority": 80,
+      "status": "verified"
+    },
+    "claim_b": {
+      "text": "Employees must submit travel receipts through the centralized ERP portal.",
+      "subject": "Expense Submission",
+      "predicate": "expense.receipt_submission",
+      "modality": "MUST",
+      "authority": 80,
+      "status": "verified"
+    },
+    "expected_is_conflict": true,
+    "expected_conflict_type": "modality_conflict",
+    "expected_conflicting_fields": ["modality"],
+    "expected_coexists": false,
+    "expected_auto_resolved": false
+  },
+  {
+    "case_id": "case_11_different_predicates",
+    "category": "distinct_predicates",
+    "description": "Return window duration vs payment settlement time have different predicates and do not conflict",
+    "claim_a": {
+      "text": "Return window for defective hardware is 30 calendar days.",
+      "subject": "Hardware RMA",
+      "predicate": "asset.return_window",
+      "scalar": 30.0,
+      "unit": "calendar_days",
+      "authority": 85,
+      "status": "verified"
+    },
+    "claim_b": {
+      "text": "Payment settlement posting is 30 calendar days from invoice approval.",
+      "subject": "Hardware RMA",
+      "predicate": "settlement.posting_window",
+      "scalar": 30.0,
+      "unit": "calendar_days",
+      "authority": 85,
+      "status": "verified"
+    },
+    "expected_is_conflict": false,
+    "expected_conflict_type": "no_conflict",
+    "expected_conflicting_fields": [],
+    "expected_coexists": true,
+    "expected_auto_resolved": false
+  },
+  {
+    "case_id": "case_12_different_process_stages",
+    "category": "sequential_process_stages",
+    "description": "Inspection stage (1 day) vs bank card processing stage (5 days) do not conflict",
+    "claim_a": {
+      "text": "Warehouse inspection and approval of returned goods takes 1 business day.",
+      "subject": "Customer Returns",
+      "predicate": "process.stage_duration",
+      "process_stage": "inspection_approval_issuance",
+      "scalar": 1.0,
+      "unit": "business_days",
+      "authority": 85,
+      "status": "verified"
+    },
+    "claim_b": {
+      "text": "Bank card refund processing takes 5 business days after inspection approval.",
+      "subject": "Customer Returns",
+      "predicate": "process.stage_duration",
+      "process_stage": "bank_transfer_processing",
+      "scalar": 5.0,
+      "unit": "business_days",
+      "authority": 85,
+      "status": "verified"
+    },
+    "expected_is_conflict": false,
+    "expected_conflict_type": "no_conflict",
+    "expected_conflicting_fields": [],
+    "expected_coexists": true,
+    "expected_auto_resolved": false
+  },
+  {
+    "case_id": "case_13_different_payment_rails",
+    "category": "distinct_payment_methods",
+    "description": "Credit card fee vs wire transfer fee govern independent payment methods",
+    "claim_a": {
+      "text": "Credit card transactions are subject to a 2% processing surcharge.",
+      "subject": "Transaction Fees",
+      "predicate": "fee.surcharge_rate",
+      "payment_method": "credit_card",
+      "scalar": 2.0,
+      "unit": "%",
+      "authority": 85,
+      "status": "verified"
+    },
+    "claim_b": {
+      "text": "ACH direct debit transfers incur a flat $5 administrative wire fee.",
+      "subject": "Transaction Fees",
+      "predicate": "fee.surcharge_rate",
+      "payment_method": "ach_wire",
+      "scalar": 5.0,
+      "unit": "USD",
+      "authority": 85,
+      "status": "verified"
+    },
+    "expected_is_conflict": false,
+    "expected_conflict_type": "no_conflict",
+    "expected_conflicting_fields": [],
+    "expected_coexists": true,
+    "expected_auto_resolved": false
+  },
+  {
+    "case_id": "case_14_different_item_conditions",
+    "category": "distinct_item_conditions",
+    "description": "Unopened merchandise vs opened damaged items govern distinct conditions",
+    "claim_a": {
+      "text": "Unopened factory sealed goods receive 100% money back refund.",
+      "subject": "Return Restocking",
+      "predicate": "refund.restocking_rate",
+      "item_condition": "unopened",
+      "scalar": 100.0,
+      "unit": "%",
+      "authority": 80,
+      "status": "verified"
+    },
+    "claim_b": {
+      "text": "Opened damaged items incur a 25% restocking depreciation fee.",
+      "subject": "Return Restocking",
+      "predicate": "refund.restocking_rate",
+      "item_condition": "customer_damaged",
+      "scalar": 25.0,
+      "unit": "%",
+      "authority": 80,
+      "status": "verified"
+    },
+    "expected_is_conflict": false,
+    "expected_conflict_type": "no_conflict",
+    "expected_conflicting_fields": [],
+    "expected_coexists": true,
+    "expected_auto_resolved": false
+  },
+  {
+    "case_id": "case_15_deontic_direct_contradiction",
+    "category": "direct_contradiction",
+    "description": "Explicit deontic contradiction (Must return vs Must not return)",
+    "claim_a": {
+      "text": "Employees must return all company laptops to IT upon separation.",
+      "subject": "Hardware Offboarding",
+      "predicate": "asset.return_property",
+      "modality": "MUST",
+      "authority": 90,
+      "status": "verified"
+    },
+    "claim_b": {
+      "text": "Departing employees must not return laptops and may keep them permanently.",
+      "subject": "Hardware Offboarding",
+      "predicate": "asset.return_property",
+      "modality": "MUST_NOT",
+      "authority": 90,
+      "status": "verified"
+    },
+    "expected_is_conflict": true,
+    "expected_conflict_type": "direct_contradiction",
+    "expected_conflicting_fields": ["modality", "claim_text"],
+    "expected_coexists": false,
+    "expected_auto_resolved": false
+  },
+  {
+    "case_id": "case_16_conditional_conflict",
+    "category": "conditional_conflict",
+    "description": "Conflicting performance conditions on identical bonus structure",
+    "claim_a": {
+      "text": "Annual performance bonus pays 100% if individual sales quota is achieved.",
+      "subject": "Performance Bonus",
+      "predicate": "bonus.payout_condition",
+      "condition": "individual_quota_achieved",
+      "authority": 80,
+      "status": "verified"
+    },
+    "claim_b": {
+      "text": "Annual performance bonus pays 100% only if corporate EBIT margin exceeds 15%.",
+      "subject": "Performance Bonus",
+      "predicate": "bonus.payout_condition",
+      "condition": "corporate_ebit_exceeds_15",
+      "authority": 80,
+      "status": "verified"
+    },
+    "expected_is_conflict": true,
+    "expected_conflict_type": "conditional_conflict",
+    "expected_conflicting_fields": ["claim_text"],
+    "expected_coexists": false,
+    "expected_auto_resolved": false
+  },
+  {
+    "case_id": "case_17_different_employee_tiers",
+    "category": "distinct_employee_grades",
+    "description": "Grade A executives vs Grade C staff travel classes are non-competing",
+    "claim_a": {
+      "text": "Grade A executives are authorized for business class flights on international routes.",
+      "subject": "Travel Policy",
+      "predicate": "travel.flight_class",
+      "grade": "A",
+      "authority": 85,
+      "status": "verified"
+    },
+    "claim_b": {
+      "text": "Grade C staff are restricted to economy class flights on international routes.",
+      "subject": "Travel Policy",
+      "predicate": "travel.flight_class",
+      "grade": "C",
+      "authority": 85,
+      "status": "verified"
+    },
+    "expected_is_conflict": false,
+    "expected_conflict_type": "no_conflict",
+    "expected_conflicting_fields": [],
+    "expected_coexists": true,
+    "expected_auto_resolved": false
+  },
+  {
+    "case_id": "case_18_illustrative_example_exclusion",
+    "category": "illustrative_exclusion",
+    "description": "Sample illustrative scenario is excluded and does not contradict operative policy",
+    "claim_a": {
+      "text": "Financial records must be retained for 7 years under statutory compliance.",
+      "subject": "Record Retention",
+      "predicate": "compliance.retention_period",
+      "claim_type": "policy",
+      "authority": 90,
+      "status": "verified"
+    },
+    "claim_b": {
+      "text": "For example: in hypothetical Scenario RF-42, invoices were kept for 3 years.",
+      "subject": "Record Retention",
+      "predicate": "compliance.retention_period",
+      "claim_type": "illustrative_example",
+      "authority": 50,
+      "status": "candidate"
+    },
+    "expected_is_conflict": false,
+    "expected_conflict_type": "no_conflict",
+    "expected_conflicting_fields": [],
+    "expected_coexists": true,
+    "expected_auto_resolved": false
+  },
+  {
+    "case_id": "case_19_ocr_candidate_protection",
+    "category": "ocr_candidate_protection",
+    "description": "OCR-derived candidate winning precedence must NOT be promoted to VERIFIED",
+    "claim_a": {
+      "text": "Standard parental leave duration is 12 weeks of paid leave.",
+      "subject": "Parental Leave",
+      "predicate": "leave.parental_duration",
+      "version_number": 1,
+      "authority": 80,
+      "status": "verified"
+    },
+    "claim_b": {
+      "text": "Standard parental leave duration is 16 weeks of paid leave under v2.0.",
+      "subject": "Parental Leave",
+      "predicate": "leave.parental_duration",
+      "version_number": 2,
+      "authority": 85,
+      "claim_type": "ocr",
+      "status": "candidate"
+    },
+    "expected_is_conflict": true,
+    "expected_conflict_type": "version_conflict",
+    "expected_conflicting_fields": ["value_scalar"],
+    "expected_coexists": false,
+    "expected_auto_resolved": false,
+    "expected_winner": "claim_b",
+    "expected_winner_final_status": "candidate"
+  },
+  {
+    "case_id": "case_20_organizational_subsidiary_scope",
+    "category": "organizational_scope",
+    "description": "Different regional subsidiaries (UK vs US) have independent holiday policies",
+    "claim_a": {
+      "text": "UK branch employees receive 28 statutory public holidays per year.",
+      "subject": "Statutory Holidays",
+      "predicate": "leave.public_holidays",
+      "department": "UK_Branch",
+      "authority": 80,
+      "status": "verified"
+    },
+    "claim_b": {
+      "text": "US branch employees receive 10 federal public holidays per year.",
+      "subject": "Statutory Holidays",
+      "predicate": "leave.public_holidays",
+      "department": "US_Branch",
+      "authority": 80,
+      "status": "verified"
+    },
+    "expected_is_conflict": false,
+    "expected_conflict_type": "no_conflict",
+    "expected_conflicting_fields": [],
+    "expected_coexists": true,
+    "expected_auto_resolved": false
+  }
+]

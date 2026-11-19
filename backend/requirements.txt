@@ -27,3 +27,8 @@ bcrypt
 pyjwt
 passlib
 cryptography
+openpyxl
+pillow
+rapidocr-onnxruntime
+wordsegment
+

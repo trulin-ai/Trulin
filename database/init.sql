@@ -153,13 +153,23 @@ CREATE TABLE IF NOT EXISTS claim_conflicts (
     claim_b_id UUID NOT NULL REFERENCES claims(id) ON DELETE CASCADE,
     conflict_type VARCHAR(50) NOT NULL DEFAULT 'value_mismatch',
     severity VARCHAR(20) NOT NULL DEFAULT 'high',
-    confidence NUMERIC(3,2) DEFAULT 0.95,
-    resolution_status VARCHAR(50) NOT NULL DEFAULT 'open',
+    confidence NUMERIC(5,4) DEFAULT 0.9500,
+    resolution_status VARCHAR(50) NOT NULL DEFAULT 'detected',
     resolved_claim_id UUID REFERENCES claims(id) ON DELETE SET NULL,
     resolved_by UUID REFERENCES users(id) ON DELETE SET NULL,
     resolved_at TIMESTAMPTZ,
+    conflicting_fields JSONB DEFAULT '[]'::jsonb,
+    supporting_evidence JSONB DEFAULT '{}'::jsonb,
+    source_authority JSONB DEFAULT '{}'::jsonb,
+    applicable_scope JSONB DEFAULT '{}'::jsonb,
+    effective_dates JSONB DEFAULT '{}'::jsonb,
+    reviewer_decision VARCHAR(50),
+    resolution_rationale TEXT,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
+CREATE INDEX IF NOT EXISTS idx_conflicts_claim_a ON claim_conflicts(claim_a_id);
+CREATE INDEX IF NOT EXISTS idx_conflicts_claim_b ON claim_conflicts(claim_b_id);
+CREATE INDEX IF NOT EXISTS idx_conflicts_status ON claim_conflicts(resolution_status);
 
 -- 11. agents
 CREATE TABLE IF NOT EXISTS agents (

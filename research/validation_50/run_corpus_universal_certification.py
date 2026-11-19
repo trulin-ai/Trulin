@@ -96,6 +96,10 @@ def extract_verbatim_sentence(full_text: str, subject: str, obj: str, raw_text: 
         end = end + 1 if end != -1 else len(full_text)
 
         sent = full_text[start:end].strip()
+        # Strip leading markdown headings if operative sentence text follows
+        stripped_sent = re.sub(r"^\s*#{1,6}\s+[^\n]*\n+", "", sent).strip()
+        if len(stripped_sent) > 10:
+            sent = stripped_sent
         if len(sent) > 10:
             return sent
 
@@ -113,6 +117,10 @@ def extract_verbatim_sentence(full_text: str, subject: str, obj: str, raw_text: 
         end = end + 1 if end != -1 else len(full_text)
 
         sent = full_text[start:end].strip()
+        # Strip leading markdown headings if operative sentence text follows
+        stripped_sent = re.sub(r"^\s*#{1,6}\s+[^\n]*\n+", "", sent).strip()
+        if len(stripped_sent) > 10:
+            sent = stripped_sent
         if len(sent) > 10:
             return sent
 
@@ -146,8 +154,8 @@ async def ensure_baseline_records(session):
         logger.info("Creating default data source: %s", DEFAULT_DATA_SOURCE_ID)
         await session.execute(
             text("""
-                INSERT INTO data_sources (id, organization_id, name, source_type, authority_level, status, created_at, updated_at)
-                VALUES (:ds_id, :org_id, 'Microsoft Enterprise Knowledge Base', 'file', 90, 'active', NOW(), NOW())
+                INSERT INTO data_sources (id, organization_id, name, source_type, authority_level, status, external_id, created_at, updated_at)
+                VALUES (:ds_id, :org_id, 'Microsoft Enterprise Knowledge Base', 'file', 90, 'active', 'ds-msft-ent-kb', NOW(), NOW())
             """),
             {"ds_id": DEFAULT_DATA_SOURCE_ID, "org_id": DEFAULT_ORG_ID},
         )
@@ -315,6 +323,18 @@ async def run_corpus_certification():
                 clean_pred = (raw_pred or "").strip()
                 clean_obj = (raw_obj or "").strip()
 
+                # Normalize subject against SubjectNormalizer
+                from app.extraction.subject_normalizer import SubjectNormalizer
+                norm_subj, subj_valid = SubjectNormalizer.normalize(clean_subj, context=clean_sentence)
+                if subj_valid and norm_subj:
+                    clean_subj = norm_subj
+
+                # Normalize predicate against canonical registry
+                from app.extraction.predicate_registry import PredicateRegistry
+                norm_pred, is_canonical = PredicateRegistry.normalize_predicate(clean_pred)
+                if is_canonical and norm_pred:
+                    clean_pred = norm_pred
+
                 # Build ImmutableEvidenceSpan
                 span = ImmutableEvidenceSpan.from_content(
                     verbatim_quote=clean_sentence or verbatim_sentence,
@@ -355,12 +375,20 @@ async def run_corpus_certification():
                         repaired_claim_text=clean_sentence,
                     )
                 else:
+                    raw_ct = str(raw_c.get("claim_type") or "rule").upper()
+                    if clean_pred == "has_definition" or raw_ct in ("DEFINITION", "LEXICAL_DEFINITION"):
+                        target_claim_type = "DEFINITION"
+                    elif raw_ct in ("NON_RULE_CONTEXT", "REFERENCE", "DESCRIPTION", "CONTACT_INFO", "EXAMPLE", "REVISION_HISTORY"):
+                        target_claim_type = raw_ct
+                    else:
+                        target_claim_type = "RULE"
+
                     eval_res = UniversalGateEvaluator.evaluate(
                         claim_text=clean_sentence,
                         subject=clean_subj,
                         predicate=clean_pred,
                         object_text=clean_obj,
-                        claim_type="RULE",
+                        claim_type=target_claim_type,
                         evidence=span,
                         source_content=full_text,
                         clause_text=verbatim_sentence,

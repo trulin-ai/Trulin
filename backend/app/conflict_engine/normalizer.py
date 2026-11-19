@@ -31,6 +31,10 @@ class NormalizedClaimKey:
     risk_band: Optional[str] = None
     channel: Optional[str] = None
     policy_domain: Optional[str] = None
+    has_exception: bool = False
+    exception_text: Optional[str] = None
+    audience: Optional[str] = None
+    department: Optional[str] = None
 
 
 class ClaimNormalizer:
@@ -68,6 +72,8 @@ class ClaimNormalizer:
     @classmethod
     def normalize_entity_tokens(cls, text: str) -> str:
         """Strips punctuation and noise words to create a stable entity key."""
+        if not text or not isinstance(text, str):
+            return ""
         clean = re.sub(r"[^a-zA-Z0-9\s]", " ", text.lower())
         tokens = [t for t in clean.split() if t not in cls.STOPWORDS and len(t) >= 2]
         return "_".join(tokens)
@@ -324,15 +330,24 @@ class ClaimNormalizer:
 
         # Conditions and Scope
         cond_dict = cls.normalize_conditions(raw_conds, raw_text)
+        if getattr(claim, "condition", None):
+            cond_dict["condition"] = str(getattr(claim, "condition"))
+
         scope_dict = cls.normalize_scope(raw_subj, raw_text)
+        if getattr(claim, "grade", None):
+            scope_dict["grade"] = str(getattr(claim, "grade")).upper()
+        if getattr(claim, "tier", None):
+            scope_dict["tier"] = str(getattr(claim, "tier")).lower()
 
         # Scalar and Unit
         scalar_val, unit_val = cls.extract_scalar_and_unit(raw_obj, raw_text)
-        if scalar_val is None and getattr(claim, "value", None) is not None:
-            try:
-                scalar_val = float(getattr(claim, "value"))
-            except (ValueError, TypeError):
-                pass
+        if scalar_val is None:
+            raw_s = getattr(claim, "value", None) or getattr(claim, "scalar", None)
+            if raw_s is not None:
+                try:
+                    scalar_val = float(raw_s)
+                except (ValueError, TypeError):
+                    pass
         if unit_val is None and getattr(claim, "unit", None):
             unit_val = str(getattr(claim, "unit"))
 
@@ -343,13 +358,46 @@ class ClaimNormalizer:
         raw_span = getattr(claim, "evidence_text_span", "") or ""
         cond_strings = [str(c.get("field", "") if isinstance(c, dict) else c) + " " + str(c.get("value", "") if isinstance(c, dict) else "") for c in raw_conds]
         search_corpus = f"{raw_subj} {raw_pred} {raw_obj} {raw_text} {raw_span} {' '.join(cond_strings)}"
-        p_stage = cls.normalize_process_stage(search_corpus)
-        p_method = cls.normalize_payment_method(search_corpus)
-        i_cond = cls.normalize_item_condition(search_corpus)
-        a_band = cls.normalize_approval_band(search_corpus)
-        r_band = cls.normalize_risk_band(search_corpus)
-        chan = cls.normalize_channel(search_corpus)
-        p_domain = cls.normalize_policy_domain(search_corpus)
+        p_stage = getattr(claim, "process_stage", None) or cls.normalize_process_stage(search_corpus)
+        p_method = getattr(claim, "payment_method", None) or cls.normalize_payment_method(search_corpus)
+        i_cond = getattr(claim, "item_condition", None) or cls.normalize_item_condition(search_corpus)
+        a_band = getattr(claim, "approval_band", None) or cls.normalize_approval_band(search_corpus)
+        r_band = getattr(claim, "risk_band", None) or cls.normalize_risk_band(search_corpus)
+        chan = getattr(claim, "channel", None) or cls.normalize_channel(search_corpus)
+        p_domain = getattr(claim, "policy_domain", None) or cls.normalize_policy_domain(search_corpus)
+
+        # Explicit Exceptions & Scope/Audience extraction
+        corpus_lower = search_corpus.lower()
+        exception_indicators = (
+            "except", "unless", "excluding", "annual plan", "annual subscription",
+            "enterprise tier", "upon approval", "with prior approval", "vp approval",
+            "special exception", "carveout", "custom contract", "vip", "rewards gold",
+            "cooling-off", "statutory", "receipt-less"
+        )
+        has_exc = any(indicator in corpus_lower for indicator in exception_indicators) or bool(getattr(claim, "exceptions", None))
+        exc_match = None
+        for ind in exception_indicators:
+            if ind in corpus_lower:
+                exc_match = ind
+                break
+
+        # Audience
+        audience = getattr(claim, "audience", None)
+        if not audience:
+            if "contractor" in corpus_lower or "contract" in corpus_lower or "intern" in corpus_lower:
+                audience = "contractors_interns"
+            elif "full-time" in corpus_lower or "full time" in corpus_lower or "regular employee" in corpus_lower:
+                audience = "full_time"
+            elif "all employee" in corpus_lower:
+                audience = "all_employees"
+
+        # Department / Organizational Scope
+        dept = getattr(claim, "department", None)
+        if not dept:
+            for d in ("finance", "engineering", "legal", "hr", "sales", "operations", "security", "procurement"):
+                if d in corpus_lower:
+                    dept = d
+                    break
 
         return NormalizedClaimKey(
             subject_key=subj_key,
@@ -366,4 +414,8 @@ class ClaimNormalizer:
             risk_band=r_band,
             channel=chan,
             policy_domain=p_domain,
+            has_exception=has_exc,
+            exception_text=exc_match,
+            audience=audience,
+            department=dept,
         )

@@ -1,0 +1,211 @@
+{
+  "metadata": {
+    "phase": "2.5d",
+    "title": "Conflict Rationale Source-Fidelity Before/After Diff",
+    "timestamp": "2026-11-10T12:52:57.890361+00:00",
+    "corpus": "Northwind_Refund_Policy_Handbook.pdf",
+    "total_conflict_pairs_audited": 452,
+    "material_conflict_pairs": 422,
+    "non_material_conflict_pairs": 30,
+    "audit_pass_rate": "100.0%"
+  },
+  "itemized_rationale_corrections": [
+    {
+      "category": "claim_223_and_224_characterization",
+      "affected_pairs_count": 422,
+      "before_description": "Claim #223 described as 'Universal 365-day return window applicable to all categories'; Claim #224 described as 'Complete prohibition on returns/exchanges across all items'; both framed as 'diagnostic stress test'.",
+      "after_description": "Claim #223 accurately described as Section 5 (p. 7) non-refundable item: 'Perishable goods such as freeze-dried meals past 14 days from delivery cannot be returned or refunded'. Claim #224 accurately described as Section 5 (p. 7) non-refundable item: 'Items returned more than 90 days after delivery cannot be returned or refunded'.",
+      "source_grounding": "Northwind Refund Policy Handbook v4.2, Section 5 Non-Refundable Items, page 7.",
+      "fabricated_elements_removed": [
+        "universal 365-day return window",
+        "complete prohibition on all returns/exchanges",
+        "diagnostic stress test framing"
+      ]
+    },
+    {
+      "category": "section_4_2_manager_approval_thresholds",
+      "affected_pairs_count": 6,
+      "pairs": [
+        [
+          32,
+          33
+        ],
+        [
+          32,
+          34
+        ],
+        [
+          32,
+          35
+        ],
+        [
+          33,
+          34
+        ],
+        [
+          33,
+          35
+        ],
+        [
+          34,
+          35
+        ]
+      ],
+      "before_description": "Graduated dollar approval thresholds ($50 vs $200 vs $500 vs $1000).",
+      "after_description": "Section 4.2 (p. 6) Manager approval thresholds: Up to $100: Tier 1 agent may approve; $100.01 - $500: Tier 2 agent or team lead approval required; Over $500: Customer Experience Manager approval required; Over $2,000: Finance Director approval and fraud review required.",
+      "source_grounding": "Northwind Refund Policy Handbook v4.2, Section 4.2 Manager approval thresholds, page 6.",
+      "fabricated_elements_removed": [
+        "$50 threshold",
+        "$200 threshold",
+        "$1000 threshold",
+        "unsupported role mappings"
+      ]
+    },
+    {
+      "category": "section_7_and_8_debit_posting_bounds",
+      "affected_pairs_count": 1,
+      "pairs": [
+        [
+          57,
+          64
+        ]
+      ],
+      "before_description": "Attributed as an intra-section synonymy within Section 8.1 & 8.2 (pp. 7-8).",
+      "after_description": "Cross-table comparison between Section 7 (p. 9, stage duration table: 'Debit card / bank transfer | 5-10 business days') and Section 8 (p. 10, payment method table notes: 'Debit card | Original card | Up to 10 business days'). Reconciled as typical duration range versus upper bound.",
+      "source_grounding": "Northwind Refund Policy Handbook v4.2, Section 7 (p. 9) and Section 8 (p. 10).",
+      "fabricated_elements_removed": [
+        "claim that Section 7 contains a separate 'up to 10 business days' row",
+        "incorrect page references pp. 7-8"
+      ]
+    },
+    {
+      "category": "section_19_support_channel_hours",
+      "affected_pairs_count": 1,
+      "pairs": [
+        [
+          209,
+          215
+        ]
+      ],
+      "before_description": "Described as 'Real-time chat (24/7) vs telephone hotline hours (8am\u20138pm EST)'.",
+      "after_description": "Section 19 (p. 21) table header 'Hours (Pacific Time)' defines channel-specific commitments: Email SLA is 'Response within 24 hours' and Mail is 'N/A'. (Handbook contact hours: Live chat Daily 7am-10pm PT; Phone US/Canada Mon-Fri 8am-8pm PT, Sat 9am-5pm PT; Refund status line 24/7 automated).",
+      "source_grounding": "Northwind Refund Policy Handbook v4.2, Section 19 Contact Information and Escalation, page 21.",
+      "fabricated_elements_removed": [
+        "24/7 chat claim (chat is Daily 7am-10pm PT)",
+        "EST timezone claim (all handbook hours are Pacific Time PT)"
+      ]
+    },
+    {
+      "category": "section_11_order_cancellation_states",
+      "affected_pairs_count": 10,
+      "pairs": [
+        [
+          110,
+          114
+        ],
+        [
+          110,
+          116
+        ],
+        [
+          111,
+          113
+        ],
+        [
+          111,
+          115
+        ],
+        [
+          111,
+          117
+        ],
+        [
+          112,
+          114
+        ],
+        [
+          112,
+          116
+        ],
+        [
+          113,
+          115
+        ],
+        [
+          113,
+          117
+        ],
+        [
+          114,
+          116
+        ]
+      ],
+      "before_description": "Generic list '(placed vs processing vs shipped vs delivered vs pre-order vs backorder)'.",
+      "after_description": "Section 11 (p. 13) Order Cancellations table rows for Shipped, Delivered, Pre-order, and Backordered order stages governing cancellation eligibility ('No' vs 'Yes, until 7 days before release' vs 'Yes, anytime') and refund routing ('Refuse delivery or return' vs 'Standard return policy' vs 'Full refund').",
+      "source_grounding": "Northwind Refund Policy Handbook v4.2, Section 11 Order Cancellations, page 13.",
+      "fabricated_elements_removed": [
+        "unverified state combinations"
+      ]
+    },
+    {
+      "category": "section_17_fraud_prevention_escalating_tiers",
+      "affected_pairs_count": 12,
+      "pairs": [
+        [
+          190,
+          192
+        ],
+        [
+          190,
+          194
+        ],
+        [
+          190,
+          196
+        ],
+        [
+          191,
+          193
+        ],
+        [
+          191,
+          195
+        ],
+        [
+          191,
+          197
+        ],
+        [
+          192,
+          194
+        ],
+        [
+          192,
+          196
+        ],
+        [
+          193,
+          195
+        ],
+        [
+          193,
+          197
+        ],
+        [
+          194,
+          196
+        ],
+        [
+          195,
+          197
+        ]
+      ],
+      "before_description": "Generic ladder summary '(Notice -> Restricted -> Suspended -> Permanent account closure)'.",
+      "after_description": "Section 17.1 (p. 19) Consequences table rows for Notice (30-40% return rate; email reminder), Restricted (>40% return rate or 1 abuse case; store credit only, manager approval), Suspended (multiple abuse cases; 12-month account suspension), and Permanent (fraud or counterfeit return; account closure, law enforcement referral).",
+      "source_grounding": "Northwind Refund Policy Handbook v4.2, Section 17.1 Consequences, page 19.",
+      "fabricated_elements_removed": [
+        "imprecise trigger/action associations"
+      ]
+    }
+  ]
+}

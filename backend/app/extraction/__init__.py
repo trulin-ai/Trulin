@@ -10,6 +10,7 @@ from app.extraction.models import (
     Layer5ExtractionResult,
 )
 from app.extraction.candidate_discovery import CandidateDiscoveryEngine
+from app.extraction.prose_normative_classifier import ProseNormativeClassifier
 from app.extraction.strategy_router import StrategyRouter
 from app.extraction.completeness_ledger import CompletenessLedger
 from app.extraction.pipeline import Layer5ExtractionPipeline, global_extraction_pipeline
@@ -21,6 +22,7 @@ __all__ = [
     "ExtractionStrategyType",
     "Layer5ExtractionResult",
     "CandidateDiscoveryEngine",
+    "ProseNormativeClassifier",
     "StrategyRouter",
     "CompletenessLedger",
     "Layer5ExtractionPipeline",

@@ -1,0 +1,13 @@
+{
+  "metadata": {
+    "phase": "2.6",
+    "title": "Production Deployment Guardrails",
+    "timestamp": "2026-11-10T13:45:03.379452+00:00"
+  },
+  "automatic_production_writes_blocked": true,
+  "readonly_transaction_enforced": true,
+  "audit_logging_enabled": true,
+  "explicit_promotion_token_required": true,
+  "database_target": "PostgreSQL (Northwind Staging)",
+  "isolation_level": "SERIALIZABLE READ ONLY"
+}

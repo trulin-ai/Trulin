@@ -1,0 +1,1638 @@
+{
+  "metadata": {
+    "benchmark_id": "PHASE0-BENCHMARK-FROZEN-V1",
+    "timestamp": "2026-11-10T08:45:00Z",
+    "fitted_cases_count": 35,
+    "held_out_cases_count": 35,
+    "total_benchmark_cases": 70
+  },
+  "fitted_regression_set": [
+    {
+      "case_id": "REG-SEM-001",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "source_sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd",
+      "section": "7. Refund Processing Timelines",
+      "section_path": [
+        "7",
+        "Refund Processing Timelines"
+      ],
+      "source_verbatim_quote": "| Credit card refund posted by bank | 3-5 business days |",
+      "locator": {
+        "page": 9,
+        "section": "7. Refund Processing Timelines",
+        "section_path": [
+          "7",
+          "Refund Processing Timelines"
+        ],
+        "char_start": 10850,
+        "char_end": 10915
+      },
+      "expected_subject": "Credit card refund",
+      "expected_predicate": "has_posting_duration",
+      "expected_object": "3-5 business days",
+      "expected_modality": "typical",
+      "expected_conditions": [
+        "after refund is approved and issued by Northwind"
+      ],
+      "expected_exceptions": [],
+      "expected_lifecycle_decision": "APPROVE",
+      "notes": "Posting duration conflated with return window"
+    },
+    {
+      "case_id": "REG-SEM-002",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "source_sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd",
+      "section": "11.2 Price adjustments",
+      "section_path": [
+        "11",
+        "Order Cancellations",
+        "11.2",
+        "Price adjustments"
+      ],
+      "source_verbatim_quote": "If an item you purchased drops in price within 14 days of purchase, contact us for a one-time price adjustment refund of the difference. Limited to one adjustment per order. Doorbuster, flash-sale and marketplace items are excluded.",
+      "locator": {
+        "page": 13,
+        "section": "11.2 Price adjustments",
+        "section_path": [
+          "11",
+          "Order Cancellations",
+          "11.2",
+          "Price adjustments"
+        ],
+        "char_start": 17192,
+        "char_end": 17424
+      },
+      "expected_subject": "Customer",
+      "expected_predicate": "may_request_price_adjustment",
+      "expected_object": "one-time refund of price difference",
+      "expected_modality": "may",
+      "expected_conditions": [
+        "item drops in price within 14 days of purchase"
+      ],
+      "expected_exceptions": [
+        "Doorbuster items",
+        "flash-sale items",
+        "marketplace items"
+      ],
+      "expected_lifecycle_decision": "APPROVE",
+      "notes": "Price adjustment window conflated with return window"
+    },
+    {
+      "case_id": "REG-SEM-003",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "source_sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd",
+      "section": "12.3 Pausing instead of cancelling",
+      "section_path": [
+        "12",
+        "Subscription Refunds",
+        "12.3",
+        "Pausing instead of cancelling"
+      ],
+      "source_verbatim_quote": "Trailhead Box subscribers can pause for up to 3 months, once per year, from the account page. Paused subscriptions are not billed.",
+      "locator": {
+        "page": 14,
+        "section": "12.3 Pausing instead of cancelling",
+        "section_path": [
+          "12",
+          "Subscription Refunds",
+          "12.3",
+          "Pausing instead of cancelling"
+        ],
+        "char_start": 18728,
+        "char_end": 18870
+      },
+      "expected_subject": "Trailhead Box subscriber",
+      "expected_predicate": "can_pause_subscription",
+      "expected_object": "subscription pause for up to 3 months",
+      "expected_modality": "can",
+      "expected_conditions": [
+        "initiated from the account page"
+      ],
+      "expected_exceptions": [],
+      "expected_lifecycle_decision": "APPROVE",
+      "notes": "Subscription pause permission conflated with refund rule"
+    },
+    {
+      "case_id": "REG-SEM-004",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "source_sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd",
+      "section": "8.1 Store credit bonus",
+      "section_path": [
+        "8",
+        "Refund Methods and Payment Types",
+        "8.1",
+        "Store credit bonus"
+      ],
+      "source_verbatim_quote": "Customers who choose store credit instead of a refund to the original payment method receive a 5% bonus on the credit value, up to $25.",
+      "locator": {
+        "page": 10,
+        "section": "8.1 Store credit bonus",
+        "section_path": [
+          "8",
+          "Refund Methods and Payment Types",
+          "8.1",
+          "Store credit bonus"
+        ],
+        "char_start": 12430,
+        "char_end": 12585
+      },
+      "expected_subject": "Customer",
+      "expected_predicate": "receives_store_credit_bonus",
+      "expected_object": "5% bonus on the credit value",
+      "expected_modality": "entitled",
+      "expected_conditions": [
+        "chooses store credit instead of a refund to the original payment method"
+      ],
+      "expected_exceptions": [],
+      "expected_lifecycle_decision": "APPROVE",
+      "notes": "Store credit bonus actor direction inverted"
+    },
+    {
+      "case_id": "REG-SEM-005",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "source_sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd",
+      "section": "10.3 Resolution options",
+      "section_path": [
+        "10",
+        "Damaged, Defective or Incorrect Items",
+        "10.3",
+        "Resolution options"
+      ],
+      "source_verbatim_quote": "Table row: | Partial refund (keep item) | Offered for minor cosmetic flaws | Immediate |\nProse below table: For damaged items valued under $40.00, we may issue a refund without requiring the item to be returned (\"Keep It\" policy), at the agent's discretion. This is limited to two instances per customer per year.",
+      "locator": {
+        "page": 12,
+        "section": "10.3 Resolution options",
+        "section_path": [
+          "10",
+          "Damaged, Defective or Incorrect Items",
+          "10.3",
+          "Resolution options"
+        ],
+        "char_start": 15590,
+        "char_end": 15920
+      },
+      "expected_subject": "Northwind",
+      "expected_predicate": "specifies",
+      "expected_object": "policy_terms",
+      "expected_modality": "MUST",
+      "expected_conditions": [],
+      "expected_exceptions": [],
+      "expected_lifecycle_decision": "APPROVE",
+      "notes": "Keep It under-$40 threshold cross-contaminated into cosmetic flaw table row"
+    },
+    {
+      "case_id": "REG-SEM-006",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "source_sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd",
+      "section": "5. Non-Refundable Items",
+      "section_path": [
+        "5",
+        "Non-Refundable Items"
+      ],
+      "source_verbatim_quote": "5. Non-Refundable Items The following items cannot be returned or refunded, except where the item is defective or we sent the wrong item.",
+      "locator": {
+        "page": 7,
+        "section": "5. Non-Refundable Items",
+        "section_path": [
+          "5",
+          "Non-Refundable Items"
+        ],
+        "char_start": 7384,
+        "char_end": 7520
+      },
+      "expected_subject": "Non-refundable items listed in Section 5",
+      "expected_predicate": "cannot_be_returned_or_refunded",
+      "expected_object": "return or refund",
+      "expected_modality": "cannot",
+      "expected_conditions": [],
+      "expected_exceptions": [
+        "where the item is defective",
+        "where Northwind sent the wrong item"
+      ],
+      "expected_lifecycle_decision": "APPROVE",
+      "notes": "Non-refundable parent exception dropped"
+    },
+    {
+      "case_id": "REG-SEM-007",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "source_sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd",
+      "section": "8. Refund Methods and Payment Types",
+      "section_path": [
+        "8",
+        "Refund Methods and Payment Types"
+      ],
+      "source_verbatim_quote": "| Apple Pay / Google Pay | Underlying card | Same as card |",
+      "locator": {
+        "page": 10,
+        "section": "8. Refund Methods and Payment Types",
+        "section_path": [
+          "8",
+          "Refund Methods and Payment Types"
+        ],
+        "char_start": 12187,
+        "char_end": 12250
+      },
+      "expected_subject": "Apple Pay / Google Pay purchases",
+      "expected_predicate": "references_underlying_payment_timeline",
+      "expected_object": null,
+      "expected_modality": "specifies",
+      "expected_conditions": [],
+      "expected_exceptions": [],
+      "expected_lifecycle_decision": "APPROVE",
+      "notes": "Table cell 'Same as card' misclassified as standalone duration instead of reference"
+    },
+    {
+      "case_id": "REG-SEM-008",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "source_sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd",
+      "section": "6.4 Information required",
+      "section_path": [
+        "6",
+        "How to Request a Refund",
+        "6.4",
+        "Information required"
+      ],
+      "source_verbatim_quote": "| Order number | NW-10482391 | Yes |\n| Email on order | jane.doe@example.com | Yes |",
+      "locator": {
+        "page": 8,
+        "section": "6.4 Information required",
+        "section_path": [
+          "6",
+          "How to Request a Refund",
+          "6.4",
+          "Information required"
+        ],
+        "char_start": 10250,
+        "char_end": 10380
+      },
+      "expected_subject": "Customer submitting refund request",
+      "expected_predicate": "must_provide_information",
+      "expected_object": "Order number",
+      "expected_modality": "must",
+      "expected_conditions": [],
+      "expected_exceptions": [],
+      "expected_lifecycle_decision": "APPROVE",
+      "notes": "Table example values in Section 6.4 extracted as operative rules"
+    },
+    {
+      "case_id": "REG-SEM-009",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "source_sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd",
+      "section": "20.1 Revision history",
+      "section_path": [
+        "20",
+        "Revision History and Sample Case Studies",
+        "20.1",
+        "Revision history"
+      ],
+      "source_verbatim_quote": "4.2 Jan 1, 2026 Extended holiday window; added Keep It policy",
+      "locator": {
+        "page": 22,
+        "section": "20.1 Revision history",
+        "section_path": [
+          "20",
+          "Revision History and Sample Case Studies",
+          "20.1",
+          "Revision history"
+        ],
+        "char_start": 29620,
+        "char_end": 29710
+      },
+      "expected_subject": "Document Version 4.2",
+      "expected_predicate": "has_revision_entry",
+      "expected_object": "Extended holiday window; added Keep It policy",
+      "expected_modality": "MUST",
+      "expected_conditions": [],
+      "expected_exceptions": [],
+      "expected_lifecycle_decision": "REJECT",
+      "notes": "Revision history row extracted as operative customer rule"
+    },
+    {
+      "case_id": "REG-SEM-010",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "source_sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd",
+      "section": "15.1 Currency conversion",
+      "section_path": [
+        "15",
+        "International Orders, Duties and Currency",
+        "15.1",
+        "Currency conversion"
+      ],
+      "source_verbatim_quote": "Exchange rate differences between the purchase and refund date are not compensated; the bank's rate on the refund date applies.",
+      "locator": {
+        "page": 17,
+        "section": "15.1 Currency conversion",
+        "section_path": [
+          "15",
+          "International Orders, Duties and Currency",
+          "15.1",
+          "Currency conversion"
+        ],
+        "char_start": 22610,
+        "char_end": 22750
+      },
+      "expected_subject": "Northwind",
+      "expected_predicate": "does_not_compensate_exchange_fluctuations",
+      "expected_object": "exchange rate differences between purchase date and refund date",
+      "expected_modality": "will_not",
+      "expected_conditions": [],
+      "expected_exceptions": [],
+      "expected_lifecycle_decision": "APPROVE",
+      "notes": "International currency settlement loss of exchange rate not compensated"
+    },
+    {
+      "case_id": "REG-SEM-011",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "source_sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd",
+      "section": "7 & 8 Refund Timelines and Payment Types",
+      "section_path": [
+        "7 & 8"
+      ],
+      "source_verbatim_quote": "Section 7: | Credit card refund posted by bank | 3-5 business days |\nSection 8: | Visa / Mastercard / Amex | Original card | 3-5 business days to post |",
+      "locator": {
+        "page": 9,
+        "section": "7 & 8 Refund Timelines and Payment Types",
+        "section_path": [
+          "7 & 8"
+        ],
+        "char_start": 10850,
+        "char_end": 12150
+      },
+      "expected_subject": "Northwind",
+      "expected_predicate": "specifies",
+      "expected_object": "policy_terms",
+      "expected_modality": "MUST",
+      "expected_conditions": [],
+      "expected_exceptions": [],
+      "expected_lifecycle_decision": "APPROVE",
+      "notes": "Duplicate unlinked posting duration extraction across sections"
+    },
+    {
+      "case_id": "REG-SEM-012",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "source_sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd",
+      "section": "5.2 Exceptions",
+      "section_path": [
+        "5",
+        "Non-Refundable Items",
+        "5.2",
+        "Exceptions"
+      ],
+      "source_verbatim_quote": "Even for non-refundable items, a full refund or replacement will be provided if the item arrives damaged, is materially different from its description, or was shipped in error.",
+      "locator": {
+        "page": 7,
+        "section": "5.2 Exceptions",
+        "section_path": [
+          "5",
+          "Non-Refundable Items",
+          "5.2",
+          "Exceptions"
+        ],
+        "char_start": 8450,
+        "char_end": 8620
+      },
+      "expected_subject": "Northwind",
+      "expected_predicate": "will_provide_refund_or_replacement",
+      "expected_object": "full refund or replacement",
+      "expected_modality": "will",
+      "expected_conditions": [
+        "item arrives damaged",
+        "item is materially different from its description",
+        "item was shipped in error"
+      ],
+      "expected_exceptions": [],
+      "expected_lifecycle_decision": "APPROVE",
+      "notes": "Malformed clause/grammar fragment extracted as actor/subject"
+    },
+    {
+      "case_id": "CASE-NW-013",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "source_sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd",
+      "section": "Section 3",
+      "section_path": [
+        "Section 3"
+      ],
+      "source_verbatim_quote": "3. Standard Return Policy Most items purchased from Northwind can be returned within 30 days of delivery for a full refund to the original payment method.",
+      "locator": {
+        "page": 1,
+        "section": "Section 3",
+        "char_start": 0,
+        "char_end": 154
+      },
+      "expected_subject": "Most items purchased from Northwind",
+      "expected_predicate": "can_be_returned",
+      "expected_object": "full refund to original payment method",
+      "expected_modality": "CAN",
+      "expected_conditions": [
+        "within 30 days of delivery"
+      ],
+      "expected_exceptions": [],
+      "expected_lifecycle_decision": "APPROVE",
+      "notes": "Verified Northwind section ground truth"
+    },
+    {
+      "case_id": "CASE-NW-014",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "source_sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd",
+      "section": "Section 3.1",
+      "section_path": [
+        "Section 3.1"
+      ],
+      "source_verbatim_quote": "Items purchased between November 1 and December 31 may be returned through January 31 of the following year.",
+      "locator": {
+        "page": 1,
+        "section": "Section 3.1",
+        "char_start": 0,
+        "char_end": 108
+      },
+      "expected_subject": "Holiday purchases",
+      "expected_predicate": "may_be_returned",
+      "expected_object": "extended return window through January 31",
+      "expected_modality": "MAY",
+      "expected_conditions": [
+        "purchased between November 1 and December 31"
+      ],
+      "expected_exceptions": [],
+      "expected_lifecycle_decision": "APPROVE",
+      "notes": "Verified Northwind section ground truth"
+    },
+    {
+      "case_id": "CASE-NW-015",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "source_sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd",
+      "section": "Section 4",
+      "section_path": [
+        "Section 4"
+      ],
+      "source_verbatim_quote": "To qualify for a refund, items must be in original, unused condition with all tags and original packaging intact.",
+      "locator": {
+        "page": 1,
+        "section": "Section 4",
+        "char_start": 0,
+        "char_end": 113
+      },
+      "expected_subject": "Items",
+      "expected_predicate": "must_be_in_condition",
+      "expected_object": "original, unused condition with tags and packaging",
+      "expected_modality": "MUST",
+      "expected_conditions": [],
+      "expected_exceptions": [],
+      "expected_lifecycle_decision": "APPROVE",
+      "notes": "Verified Northwind section ground truth"
+    },
+    {
+      "case_id": "CASE-NW-016",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "source_sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd",
+      "section": "Section 4.1",
+      "section_path": [
+        "Section 4.1"
+      ],
+      "source_verbatim_quote": "A partial refund of 50% to 80% may be issued when an item shows signs of use beyond inspection.",
+      "locator": {
+        "page": 1,
+        "section": "Section 4.1",
+        "char_start": 0,
+        "char_end": 95
+      },
+      "expected_subject": "Northwind",
+      "expected_predicate": "may_issue_partial_refund",
+      "expected_object": "50% to 80% refund",
+      "expected_modality": "MAY",
+      "expected_conditions": [
+        "item shows signs of use beyond inspection"
+      ],
+      "expected_exceptions": [],
+      "expected_lifecycle_decision": "APPROVE",
+      "notes": "Verified Northwind section ground truth"
+    },
+    {
+      "case_id": "CASE-NW-017",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "source_sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd",
+      "section": "Section 5",
+      "section_path": [
+        "Section 5"
+      ],
+      "source_verbatim_quote": "Items marked Final Sale or Clearance - All Sales Final at checkout cannot be returned or refunded.",
+      "locator": {
+        "page": 1,
+        "section": "Section 5",
+        "char_start": 0,
+        "char_end": 98
+      },
+      "expected_subject": "Items marked Final Sale or Clearance",
+      "expected_predicate": "cannot_be_refunded",
+      "expected_object": "return or refund",
+      "expected_modality": "CANNOT",
+      "expected_conditions": [],
+      "expected_exceptions": [],
+      "expected_lifecycle_decision": "APPROVE",
+      "notes": "Verified Northwind section ground truth"
+    },
+    {
+      "case_id": "CASE-NW-018",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "source_sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd",
+      "section": "Section 5",
+      "section_path": [
+        "Section 5"
+      ],
+      "source_verbatim_quote": "Gift cards and e-gift cards cannot be returned or redeemed for cash.",
+      "locator": {
+        "page": 1,
+        "section": "Section 5",
+        "char_start": 0,
+        "char_end": 68
+      },
+      "expected_subject": "Gift cards and e-gift cards",
+      "expected_predicate": "cannot_be_redeemed_for_cash",
+      "expected_object": "cash redemption",
+      "expected_modality": "CANNOT",
+      "expected_conditions": [],
+      "expected_exceptions": [],
+      "expected_lifecycle_decision": "APPROVE",
+      "notes": "Verified Northwind section ground truth"
+    },
+    {
+      "case_id": "CASE-NW-019",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "source_sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd",
+      "section": "Section 5",
+      "section_path": [
+        "Section 5"
+      ],
+      "source_verbatim_quote": "Downloadable software, digital guides and trail-map files once downloaded cannot be refunded.",
+      "locator": {
+        "page": 1,
+        "section": "Section 5",
+        "char_start": 0,
+        "char_end": 93
+      },
+      "expected_subject": "Downloadable software and digital guides",
+      "expected_predicate": "cannot_be_refunded",
+      "expected_object": "refund",
+      "expected_modality": "CANNOT",
+      "expected_conditions": [
+        "once downloaded"
+      ],
+      "expected_exceptions": [],
+      "expected_lifecycle_decision": "APPROVE",
+      "notes": "Verified Northwind section ground truth"
+    },
+    {
+      "case_id": "CASE-NW-020",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "source_sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd",
+      "section": "Section 5",
+      "section_path": [
+        "Section 5"
+      ],
+      "source_verbatim_quote": "Personalised or custom-engraved items cannot be returned.",
+      "locator": {
+        "page": 1,
+        "section": "Section 5",
+        "char_start": 0,
+        "char_end": 57
+      },
+      "expected_subject": "Personalised or custom-engraved items",
+      "expected_predicate": "cannot_be_returned",
+      "expected_object": "return",
+      "expected_modality": "CANNOT",
+      "expected_conditions": [],
+      "expected_exceptions": [],
+      "expected_lifecycle_decision": "APPROVE",
+      "notes": "Verified Northwind section ground truth"
+    },
+    {
+      "case_id": "CASE-NW-021",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "source_sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd",
+      "section": "Section 5",
+      "section_path": [
+        "Section 5"
+      ],
+      "source_verbatim_quote": "Perishable goods such as freeze-dried meals past 14 days from delivery cannot be refunded.",
+      "locator": {
+        "page": 1,
+        "section": "Section 5",
+        "char_start": 0,
+        "char_end": 90
+      },
+      "expected_subject": "Perishable goods",
+      "expected_predicate": "cannot_be_refunded",
+      "expected_object": "refund",
+      "expected_modality": "CANNOT",
+      "expected_conditions": [
+        "past 14 days from delivery"
+      ],
+      "expected_exceptions": [],
+      "expected_lifecycle_decision": "APPROVE",
+      "notes": "Verified Northwind section ground truth"
+    },
+    {
+      "case_id": "CASE-NW-022",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "source_sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd",
+      "section": "Section 6.1",
+      "section_path": [
+        "Section 6.1"
+      ],
+      "source_verbatim_quote": "Online requests are fastest and generate an RMA automatically.",
+      "locator": {
+        "page": 1,
+        "section": "Section 6.1",
+        "char_start": 8967,
+        "char_end": 9029
+      },
+      "expected_subject": "Online refund requests",
+      "expected_predicate": "generate_automatically",
+      "expected_object": "RMA number",
+      "expected_modality": "WILL",
+      "expected_conditions": [],
+      "expected_exceptions": [],
+      "expected_lifecycle_decision": "APPROVE",
+      "notes": "Verified Northwind section ground truth"
+    },
+    {
+      "case_id": "CASE-NW-023",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "source_sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd",
+      "section": "Section 6.2",
+      "section_path": [
+        "Section 6.2"
+      ],
+      "source_verbatim_quote": "Call 1-800-555-0142 (Mon-Fri 8am-8pm PT, Sat 9am-5pm PT) or use live chat.",
+      "locator": {
+        "page": 1,
+        "section": "Section 6.2",
+        "char_start": 9446,
+        "char_end": 9520
+      },
+      "expected_subject": "Support phone and chat",
+      "expected_predicate": "has_contact_hours",
+      "expected_object": "Mon-Fri 8am-8pm PT, Sat 9am-5pm PT",
+      "expected_modality": "FACT",
+      "expected_conditions": [],
+      "expected_exceptions": [],
+      "expected_lifecycle_decision": "REVIEW",
+      "notes": "Verified Northwind section ground truth"
+    },
+    {
+      "case_id": "CASE-NW-024",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "source_sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd",
+      "section": "Section 6.3",
+      "section_path": [
+        "Section 6.3"
+      ],
+      "source_verbatim_quote": "In-store refunds to the original card are processed immediately.",
+      "locator": {
+        "page": 1,
+        "section": "Section 6.3",
+        "char_start": 0,
+        "char_end": 64
+      },
+      "expected_subject": "In-store refunds to original card",
+      "expected_predicate": "are_processed",
+      "expected_object": "immediately",
+      "expected_modality": "WILL",
+      "expected_conditions": [],
+      "expected_exceptions": [],
+      "expected_lifecycle_decision": "APPROVE",
+      "notes": "Verified Northwind section ground truth"
+    },
+    {
+      "case_id": "CASE-NW-025",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "source_sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd",
+      "section": "Section 7",
+      "section_path": [
+        "Section 7"
+      ],
+      "source_verbatim_quote": "Return transit to warehouse typically takes 3-7 business days (domestic).",
+      "locator": {
+        "page": 1,
+        "section": "Section 7",
+        "char_start": 0,
+        "char_end": 73
+      },
+      "expected_subject": "Return transit to warehouse",
+      "expected_predicate": "has_stage_duration",
+      "expected_object": "3-7 business days",
+      "expected_modality": "TYPICAL",
+      "expected_conditions": [],
+      "expected_exceptions": [],
+      "expected_lifecycle_decision": "APPROVE",
+      "notes": "Verified Northwind section ground truth"
+    },
+    {
+      "case_id": "CASE-NW-026",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "source_sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd",
+      "section": "Section 7",
+      "section_path": [
+        "Section 7"
+      ],
+      "source_verbatim_quote": "Warehouse receipt and inspection takes 1-2 business days.",
+      "locator": {
+        "page": 1,
+        "section": "Section 7",
+        "char_start": 0,
+        "char_end": 57
+      },
+      "expected_subject": "Warehouse receipt and inspection",
+      "expected_predicate": "has_stage_duration",
+      "expected_object": "1-2 business days",
+      "expected_modality": "TYPICAL",
+      "expected_conditions": [],
+      "expected_exceptions": [],
+      "expected_lifecycle_decision": "APPROVE",
+      "notes": "Verified Northwind section ground truth"
+    },
+    {
+      "case_id": "CASE-NW-027",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "source_sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd",
+      "section": "Section 8",
+      "section_path": [
+        "Section 8"
+      ],
+      "source_verbatim_quote": "Refunds are issued to the original form of payment whenever possible.",
+      "locator": {
+        "page": 1,
+        "section": "Section 8",
+        "char_start": 11801,
+        "char_end": 11870
+      },
+      "expected_subject": "Northwind",
+      "expected_predicate": "issues_refund_to",
+      "expected_object": "original form of payment",
+      "expected_modality": "MUST",
+      "expected_conditions": [
+        "whenever possible"
+      ],
+      "expected_exceptions": [],
+      "expected_lifecycle_decision": "APPROVE",
+      "notes": "Verified Northwind section ground truth"
+    },
+    {
+      "case_id": "CASE-NW-028",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "source_sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd",
+      "section": "Section 8",
+      "section_path": [
+        "Section 8"
+      ],
+      "source_verbatim_quote": "Debit card refunds take up to 10 business days to post to the original card.",
+      "locator": {
+        "page": 1,
+        "section": "Section 8",
+        "char_start": 0,
+        "char_end": 76
+      },
+      "expected_subject": "Debit card refund",
+      "expected_predicate": "has_posting_duration",
+      "expected_object": "up to 10 business days",
+      "expected_modality": "TYPICAL",
+      "expected_conditions": [],
+      "expected_exceptions": [],
+      "expected_lifecycle_decision": "APPROVE",
+      "notes": "Verified Northwind section ground truth"
+    },
+    {
+      "case_id": "CASE-NW-029",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "source_sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd",
+      "section": "Section 8",
+      "section_path": [
+        "Section 8"
+      ],
+      "source_verbatim_quote": "PayPal refunds are issued to PayPal balance, usually within 24 hours.",
+      "locator": {
+        "page": 1,
+        "section": "Section 8",
+        "char_start": 0,
+        "char_end": 69
+      },
+      "expected_subject": "PayPal refund",
+      "expected_predicate": "has_posting_duration",
+      "expected_object": "usually within 24 hours",
+      "expected_modality": "TYPICAL",
+      "expected_conditions": [],
+      "expected_exceptions": [],
+      "expected_lifecycle_decision": "APPROVE",
+      "notes": "Verified Northwind section ground truth"
+    },
+    {
+      "case_id": "CASE-NW-030",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "source_sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd",
+      "section": "Section 8",
+      "section_path": [
+        "Section 8"
+      ],
+      "source_verbatim_quote": "Cash in-store refunds are issued in cash up to $50, then store credit/card.",
+      "locator": {
+        "page": 1,
+        "section": "Section 8",
+        "char_start": 0,
+        "char_end": 75
+      },
+      "expected_subject": "In-store cash refunds",
+      "expected_predicate": "has_cash_threshold",
+      "expected_object": "cash up to $50, then store credit/card",
+      "expected_modality": "REQUIRED",
+      "expected_conditions": [],
+      "expected_exceptions": [],
+      "expected_lifecycle_decision": "APPROVE",
+      "notes": "Verified Northwind section ground truth"
+    },
+    {
+      "case_id": "CASE-NW-031",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "source_sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd",
+      "section": "Section 9",
+      "section_path": [
+        "Section 9"
+      ],
+      "source_verbatim_quote": "A return shipping fee of $5.99 is deducted from the refund when using our prepaid label.",
+      "locator": {
+        "page": 1,
+        "section": "Section 9",
+        "char_start": 0,
+        "char_end": 88
+      },
+      "expected_subject": "Northwind",
+      "expected_predicate": "deducts_return_shipping_fee",
+      "expected_object": "$5.99 return shipping fee",
+      "expected_modality": "WILL",
+      "expected_conditions": [
+        "when using prepaid label"
+      ],
+      "expected_exceptions": [
+        "defective items",
+        "Northwind error"
+      ],
+      "expected_lifecycle_decision": "APPROVE",
+      "notes": "Verified Northwind section ground truth"
+    },
+    {
+      "case_id": "CASE-NW-032",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "source_sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd",
+      "section": "Section 10.1",
+      "section_path": [
+        "Section 10.1"
+      ],
+      "source_verbatim_quote": "Please report issues within 7 days of delivery for the fastest resolution.",
+      "locator": {
+        "page": 1,
+        "section": "Section 10.1",
+        "char_start": 14893,
+        "char_end": 14967
+      },
+      "expected_subject": "Customer",
+      "expected_predicate": "should_report_damaged_items",
+      "expected_object": "within 7 days of delivery",
+      "expected_modality": "SHOULD",
+      "expected_conditions": [],
+      "expected_exceptions": [],
+      "expected_lifecycle_decision": "APPROVE",
+      "notes": "Verified Northwind section ground truth"
+    },
+    {
+      "case_id": "CASE-NW-033",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "source_sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd",
+      "section": "Section 11",
+      "section_path": [
+        "Section 11"
+      ],
+      "source_verbatim_quote": "Orders can be cancelled at no cost before they ship.",
+      "locator": {
+        "page": 1,
+        "section": "Section 11",
+        "char_start": 16109,
+        "char_end": 16161
+      },
+      "expected_subject": "Customer",
+      "expected_predicate": "can_cancel_order",
+      "expected_object": "cancellation at no cost",
+      "expected_modality": "CAN",
+      "expected_conditions": [
+        "before order ships"
+      ],
+      "expected_exceptions": [],
+      "expected_lifecycle_decision": "APPROVE",
+      "notes": "Verified Northwind section ground truth"
+    },
+    {
+      "case_id": "CASE-NW-034",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "source_sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd",
+      "section": "Section 12.1",
+      "section_path": [
+        "Section 12.1"
+      ],
+      "source_verbatim_quote": "Rewards Plus offers a 14-day free trial. If you cancel before the trial ends, you will not be charged.",
+      "locator": {
+        "page": 1,
+        "section": "Section 12.1",
+        "char_start": 18223,
+        "char_end": 18325
+      },
+      "expected_subject": "Rewards Plus subscriber",
+      "expected_predicate": "has_free_trial",
+      "expected_object": "14-day free trial without charge",
+      "expected_modality": "ENTITLED",
+      "expected_conditions": [
+        "cancel before trial ends"
+      ],
+      "expected_exceptions": [],
+      "expected_lifecycle_decision": "APPROVE",
+      "notes": "Verified Northwind section ground truth"
+    },
+    {
+      "case_id": "CASE-NW-035",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "source_sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd",
+      "section": "Section 15",
+      "section_path": [
+        "Section 15"
+      ],
+      "source_verbatim_quote": "Canada returns follow the same 30-day window; duties are refunded on approved returns.",
+      "locator": {
+        "page": 1,
+        "section": "Section 15",
+        "char_start": 0,
+        "char_end": 86
+      },
+      "expected_subject": "Canada returns",
+      "expected_predicate": "has_return_window",
+      "expected_object": "30 days; duties refunded on approved returns",
+      "expected_modality": "REQUIRED",
+      "expected_conditions": [],
+      "expected_exceptions": [],
+      "expected_lifecycle_decision": "APPROVE",
+      "notes": "Verified Northwind section ground truth"
+    }
+  ],
+  "held_out_evaluation_set": [
+    {
+      "case_id": "HELD-NOTICE-001",
+      "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+      "source_sha256": "45dfae85a80a6985e7e48153526a83fcfef2ed96fb416917467a0ff48d6851f8",
+      "document_family": "hr_policy",
+      "source_verbatim_quote": "Level & Grade A (A1 & A2) CXO notice period is 90 Days.",
+      "locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 55
+      },
+      "expected_subject": "CXO (Grade A1 & A2)",
+      "expected_predicate": "has_notice_period",
+      "expected_object": "90 Days",
+      "expected_modality": "REQUIRED",
+      "expected_conditions": [
+        "confirmed employees"
+      ],
+      "expected_lifecycle_decision": "APPROVE"
+    },
+    {
+      "case_id": "HELD-NOTICE-002",
+      "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+      "source_sha256": "45dfae85a80a6985e7e48153526a83fcfef2ed96fb416917467a0ff48d6851f8",
+      "document_family": "hr_policy",
+      "source_verbatim_quote": "Level & Grade B (B1 & B2) SeniorManagement notice period is 90 Days.",
+      "locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 68
+      },
+      "expected_subject": "Senior Management (Grade B1 & B2)",
+      "expected_predicate": "has_notice_period",
+      "expected_object": "90 Days",
+      "expected_modality": "REQUIRED",
+      "expected_conditions": [
+        "confirmed employees"
+      ],
+      "expected_lifecycle_decision": "APPROVE"
+    },
+    {
+      "case_id": "HELD-NOTICE-003",
+      "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+      "source_sha256": "45dfae85a80a6985e7e48153526a83fcfef2ed96fb416917467a0ff48d6851f8",
+      "document_family": "hr_policy",
+      "source_verbatim_quote": "Level & Grade C (C1, C2 & C3) Middle Management notice period is 60 Days.",
+      "locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 73
+      },
+      "expected_subject": "Middle Management (Grade C)",
+      "expected_predicate": "has_notice_period",
+      "expected_object": "60 Days",
+      "expected_modality": "REQUIRED",
+      "expected_conditions": [
+        "confirmed employees"
+      ],
+      "expected_lifecycle_decision": "APPROVE"
+    },
+    {
+      "case_id": "HELD-NOTICE-004",
+      "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+      "source_sha256": "45dfae85a80a6985e7e48153526a83fcfef2ed96fb416917467a0ff48d6851f8",
+      "document_family": "hr_policy",
+      "source_verbatim_quote": "Level & Grade D (D1, D2 & D3) Junior Management notice period is 30 Days.",
+      "locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 73
+      },
+      "expected_subject": "Junior Management (Grade D)",
+      "expected_predicate": "has_notice_period",
+      "expected_object": "30 Days",
+      "expected_modality": "REQUIRED",
+      "expected_conditions": [
+        "confirmed employees"
+      ],
+      "expected_lifecycle_decision": "APPROVE"
+    },
+    {
+      "case_id": "HELD-NOTICE-005",
+      "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+      "source_sha256": "45dfae85a80a6985e7e48153526a83fcfef2ed96fb416917467a0ff48d6851f8",
+      "document_family": "hr_policy",
+      "source_verbatim_quote": "Level & Grade E (E1, E2 & E3) Fellow notice period is 30 Days.",
+      "locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 62
+      },
+      "expected_subject": "Fellow (Grade E)",
+      "expected_predicate": "has_notice_period",
+      "expected_object": "30 Days",
+      "expected_modality": "REQUIRED",
+      "expected_conditions": [
+        "confirmed employees"
+      ],
+      "expected_lifecycle_decision": "APPROVE"
+    },
+    {
+      "case_id": "HELD-NOTICE-006",
+      "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+      "source_sha256": "45dfae85a80a6985e7e48153526a83fcfef2ed96fb416917467a0ff48d6851f8",
+      "document_family": "hr_policy",
+      "source_verbatim_quote": "Probationers across all grades have a notice period of 15 days.",
+      "locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 63
+      },
+      "expected_subject": "Probationers across all grades",
+      "expected_predicate": "has_notice_period",
+      "expected_object": "15 days",
+      "expected_modality": "REQUIRED",
+      "expected_conditions": [
+        "during probation period"
+      ],
+      "expected_lifecycle_decision": "APPROVE"
+    },
+    {
+      "case_id": "HELD-NOTICE-007",
+      "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+      "source_sha256": "45dfae85a80a6985e7e48153526a83fcfef2ed96fb416917467a0ff48d6851f8",
+      "document_family": "hr_policy",
+      "source_verbatim_quote": "Employees may request leave during the notice period as an exception with prior approval from their reporting manager.",
+      "locator": {
+        "page": 1,
+        "char_start": 5766,
+        "char_end": 5884
+      },
+      "expected_subject": "Employees",
+      "expected_predicate": "may_request_leave",
+      "expected_object": "leave during notice period",
+      "expected_modality": "MAY",
+      "expected_conditions": [
+        "prior approval from reporting manager"
+      ],
+      "expected_lifecycle_decision": "APPROVE"
+    },
+    {
+      "case_id": "HELD-NOTICE-008",
+      "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+      "source_sha256": "45dfae85a80a6985e7e48153526a83fcfef2ed96fb416917467a0ff48d6851f8",
+      "document_family": "hr_policy",
+      "source_verbatim_quote": "Notice periods vary based on Wingify levels and grades framework.",
+      "locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 65
+      },
+      "expected_subject": "Wingify notice period policy",
+      "expected_predicate": "varies_by",
+      "expected_object": "levels and grades framework",
+      "expected_modality": "FACT",
+      "expected_conditions": [],
+      "expected_lifecycle_decision": "APPROVE"
+    },
+    {
+      "case_id": "HELD-NOTICE-009",
+      "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+      "source_sha256": "45dfae85a80a6985e7e48153526a83fcfef2ed96fb416917467a0ff48d6851f8",
+      "document_family": "hr_policy",
+      "source_verbatim_quote": "Final settlement includes recovery for short notice periods and joining bonus recovery.",
+      "locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 87
+      },
+      "expected_subject": "Company",
+      "expected_predicate": "deducts_recovery",
+      "expected_object": "short notice periods and joining bonus recovery",
+      "expected_modality": "WILL",
+      "expected_conditions": [
+        "early resignation"
+      ],
+      "expected_lifecycle_decision": "APPROVE"
+    },
+    {
+      "case_id": "HELD-NOTICE-010",
+      "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+      "source_sha256": "45dfae85a80a6985e7e48153526a83fcfef2ed96fb416917467a0ff48d6851f8",
+      "document_family": "hr_policy",
+      "source_verbatim_quote": "Document Approvers: Director, People Success.",
+      "locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 45
+      },
+      "expected_subject": "Director, People Success",
+      "expected_predicate": "approves_policy",
+      "expected_object": "Employee Notice Period Policy",
+      "expected_modality": "FACT",
+      "expected_conditions": [],
+      "expected_lifecycle_decision": "REVIEW"
+    },
+    {
+      "case_id": "HELD-NOTICE-011",
+      "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+      "source_sha256": "45dfae85a80a6985e7e48153526a83fcfef2ed96fb416917467a0ff48d6851f8",
+      "document_family": "hr_policy",
+      "source_verbatim_quote": "Employees must submit resignation through formal written communication.",
+      "locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 71
+      },
+      "expected_subject": "Employees",
+      "expected_predicate": "must_submit_resignation",
+      "expected_object": "formal written communication",
+      "expected_modality": "MUST",
+      "expected_conditions": [],
+      "expected_lifecycle_decision": "APPROVE"
+    },
+    {
+      "case_id": "HELD-NOTICE-012",
+      "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+      "source_sha256": "45dfae85a80a6985e7e48153526a83fcfef2ed96fb416917467a0ff48d6851f8",
+      "document_family": "hr_policy",
+      "source_verbatim_quote": "This document contains confidential and proprietary information of Wingify.",
+      "locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 75
+      },
+      "expected_subject": "Document",
+      "expected_predicate": "contains_confidential_info",
+      "expected_object": "Wingify proprietary information",
+      "expected_modality": "FACT",
+      "expected_conditions": [],
+      "expected_lifecycle_decision": "REVIEW"
+    },
+    {
+      "case_id": "HELD-VENDOR-001",
+      "source_document": "Vendor Agreement Template-02.2021_2.pdf",
+      "source_sha256": "53c8cc27edc8682320f6d49f9849452f57f0b089535191526f5536d4e0ad0ebe",
+      "document_family": "commercial_contract",
+      "source_verbatim_quote": "This Agreement shall be in full force and effect from the Effective Date until all Vendor Obligations have been duly discharged.",
+      "locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 128
+      },
+      "expected_subject": "Agreement",
+      "expected_predicate": "remains_in_effect_until",
+      "expected_object": "all Vendor Obligations have been duly discharged",
+      "expected_modality": "SHALL",
+      "expected_conditions": [],
+      "expected_lifecycle_decision": "APPROVE"
+    },
+    {
+      "case_id": "HELD-VENDOR-002",
+      "source_document": "Vendor Agreement Template-02.2021_2.pdf",
+      "source_sha256": "53c8cc27edc8682320f6d49f9849452f57f0b089535191526f5536d4e0ad0ebe",
+      "document_family": "commercial_contract",
+      "source_verbatim_quote": "This Agreement shall be governed by and construed in accordance with the laws of the Province of Ontario and the laws of Canada.",
+      "locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 128
+      },
+      "expected_subject": "Agreement",
+      "expected_predicate": "is_governed_by",
+      "expected_object": "laws of Province of Ontario and laws of Canada",
+      "expected_modality": "SHALL",
+      "expected_conditions": [],
+      "expected_lifecycle_decision": "APPROVE"
+    },
+    {
+      "case_id": "HELD-VENDOR-003",
+      "source_document": "Vendor Agreement Template-02.2021_2.pdf",
+      "source_sha256": "53c8cc27edc8682320f6d49f9849452f57f0b089535191526f5536d4e0ad0ebe",
+      "document_family": "commercial_contract",
+      "source_verbatim_quote": "The Vendor hereby irrevocably attorns to the non-exclusive jurisdiction of the courts of Ontario.",
+      "locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 97
+      },
+      "expected_subject": "Vendor",
+      "expected_predicate": "attorns_to_jurisdiction",
+      "expected_object": "non-exclusive jurisdiction of the courts of Ontario",
+      "expected_modality": "REQUIRED",
+      "expected_conditions": [],
+      "expected_lifecycle_decision": "APPROVE"
+    },
+    {
+      "case_id": "HELD-VENDOR-004",
+      "source_document": "Vendor Agreement Template-02.2021_2.pdf",
+      "source_sha256": "53c8cc27edc8682320f6d49f9849452f57f0b089535191526f5536d4e0ad0ebe",
+      "document_family": "commercial_contract",
+      "source_verbatim_quote": "The Vendor must be licensed under the New Home Construction Licensing Act, 2017.",
+      "locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 80
+      },
+      "expected_subject": "Vendor",
+      "expected_predicate": "must_be_licensed_under",
+      "expected_object": "New Home Construction Licensing Act, 2017",
+      "expected_modality": "MUST",
+      "expected_conditions": [
+        "in order to offer to sell new homes"
+      ],
+      "expected_lifecycle_decision": "APPROVE"
+    },
+    {
+      "case_id": "HELD-VENDOR-005",
+      "source_document": "Vendor Agreement Template-02.2021_2.pdf",
+      "source_sha256": "53c8cc27edc8682320f6d49f9849452f57f0b089535191526f5536d4e0ad0ebe",
+      "document_family": "commercial_contract",
+      "source_verbatim_quote": "The Vendor agrees to indemnify and hold harmless Tarion against all losses, damages and liabilities.",
+      "locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 100
+      },
+      "expected_subject": "Vendor",
+      "expected_predicate": "indemnifies_and_holds_harmless",
+      "expected_object": "Tarion against losses, damages and liabilities",
+      "expected_modality": "AGREES",
+      "expected_conditions": [],
+      "expected_lifecycle_decision": "APPROVE"
+    },
+    {
+      "case_id": "HELD-VENDOR-006",
+      "source_document": "Vendor Agreement Template-02.2021_2.pdf",
+      "source_sha256": "53c8cc27edc8682320f6d49f9849452f57f0b089535191526f5536d4e0ad0ebe",
+      "document_family": "commercial_contract",
+      "source_verbatim_quote": "Either party may terminate this Agreement upon written notice if the other party breaches any material term.",
+      "locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 108
+      },
+      "expected_subject": "Either party",
+      "expected_predicate": "may_terminate_agreement",
+      "expected_object": "termination upon material breach",
+      "expected_modality": "MAY",
+      "expected_conditions": [
+        "written notice",
+        "30-day cure period"
+      ],
+      "expected_lifecycle_decision": "APPROVE"
+    },
+    {
+      "case_id": "HELD-VENDOR-007",
+      "source_document": "Vendor Agreement Template-02.2021_2.pdf",
+      "source_sha256": "53c8cc27edc8682320f6d49f9849452f57f0b089535191526f5536d4e0ad0ebe",
+      "document_family": "commercial_contract",
+      "source_verbatim_quote": "The Vendor shall maintain books and records relating to this Agreement for a period of seven (7) years.",
+      "locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 103
+      },
+      "expected_subject": "Vendor",
+      "expected_predicate": "shall_maintain_records",
+      "expected_object": "books and records for seven (7) years",
+      "expected_modality": "SHALL",
+      "expected_conditions": [],
+      "expected_lifecycle_decision": "APPROVE"
+    },
+    {
+      "case_id": "HELD-VENDOR-008",
+      "source_document": "Vendor Agreement Template-02.2021_2.pdf",
+      "source_sha256": "53c8cc27edc8682320f6d49f9849452f57f0b089535191526f5536d4e0ad0ebe",
+      "document_family": "commercial_contract",
+      "source_verbatim_quote": "No amendment or modification of this Agreement shall be valid unless in writing and signed by both parties.",
+      "locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 107
+      },
+      "expected_subject": "Agreement amendment",
+      "expected_predicate": "requires_written_agreement",
+      "expected_object": "writing signed by both parties",
+      "expected_modality": "SHALL",
+      "expected_conditions": [],
+      "expected_lifecycle_decision": "APPROVE"
+    },
+    {
+      "case_id": "HELD-VENDOR-009",
+      "source_document": "Vendor Agreement Template-02.2021_2.pdf",
+      "source_sha256": "53c8cc27edc8682320f6d49f9849452f57f0b089535191526f5536d4e0ad0ebe",
+      "document_family": "commercial_contract",
+      "source_verbatim_quote": "Confidential information of the disclosing party must not be disclosed to any third party without prior written consent.",
+      "locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 120
+      },
+      "expected_subject": "Recipient",
+      "expected_predicate": "must_not_disclose",
+      "expected_object": "confidential information to third parties",
+      "expected_modality": "MUST_NOT",
+      "expected_conditions": [
+        "prior written consent"
+      ],
+      "expected_lifecycle_decision": "APPROVE"
+    },
+    {
+      "case_id": "HELD-VENDOR-010",
+      "source_document": "Vendor Agreement Template-02.2021_2.pdf",
+      "source_sha256": "53c8cc27edc8682320f6d49f9849452f57f0b089535191526f5536d4e0ad0ebe",
+      "document_family": "commercial_contract",
+      "source_verbatim_quote": "All notices shall be in writing and deemed given when delivered by registered mail or courier.",
+      "locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 94
+      },
+      "expected_subject": "Notices",
+      "expected_predicate": "must_be_in_writing",
+      "expected_object": "registered mail or courier delivery",
+      "expected_modality": "SHALL",
+      "expected_conditions": [],
+      "expected_lifecycle_decision": "APPROVE"
+    },
+    {
+      "case_id": "HELD-VENDOR-011",
+      "source_document": "Vendor Agreement Template-02.2021_2.pdf",
+      "source_sha256": "53c8cc27edc8682320f6d49f9849452f57f0b089535191526f5536d4e0ad0ebe",
+      "document_family": "commercial_contract",
+      "source_verbatim_quote": "The Vendor warrants that all services will be performed in a professional and workmanlike manner.",
+      "locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 97
+      },
+      "expected_subject": "Vendor",
+      "expected_predicate": "warrants_services",
+      "expected_object": "professional and workmanlike performance",
+      "expected_modality": "WARRANTS",
+      "expected_conditions": [],
+      "expected_lifecycle_decision": "APPROVE"
+    },
+    {
+      "case_id": "HELD-VENDOR-012",
+      "source_document": "Vendor Agreement Template-02.2021_2.pdf",
+      "source_sha256": "53c8cc27edc8682320f6d49f9849452f57f0b089535191526f5536d4e0ad0ebe",
+      "document_family": "commercial_contract",
+      "source_verbatim_quote": "Survival of representations and indemnities following termination of this Agreement.",
+      "locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 84
+      },
+      "expected_subject": "Representations and indemnities",
+      "expected_predicate": "survive_termination",
+      "expected_object": "post-termination survival",
+      "expected_modality": "FACT",
+      "expected_conditions": [],
+      "expected_lifecycle_decision": "APPROVE"
+    },
+    {
+      "case_id": "HELD-INV-001",
+      "source_document": "wordpress-pdf-invoice-plugin-sample.pdf",
+      "source_sha256": "c2de358a0974f9b047aed8e457def7d4b1b39170f44819ec3152b42db787d72e",
+      "document_family": "commercial_invoice",
+      "source_verbatim_quote": "Payment is due within 30 days from date of invoice.",
+      "locator": {
+        "page": 1,
+        "char_start": 1048,
+        "char_end": 1099
+      },
+      "expected_subject": "Buyer",
+      "expected_predicate": "must_pay_invoice",
+      "expected_object": "within 30 days from date of invoice",
+      "expected_modality": "REQUIRED",
+      "expected_conditions": [],
+      "expected_lifecycle_decision": "APPROVE"
+    },
+    {
+      "case_id": "HELD-INV-002",
+      "source_document": "wordpress-pdf-invoice-plugin-sample.pdf",
+      "source_sha256": "c2de358a0974f9b047aed8e457def7d4b1b39170f44819ec3152b42db787d72e",
+      "document_family": "commercial_invoice",
+      "source_verbatim_quote": "Late payment is subject to fees of 5% per month.",
+      "locator": {
+        "page": 1,
+        "char_start": 1100,
+        "char_end": 1148
+      },
+      "expected_subject": "Late payment",
+      "expected_predicate": "incurs_penalty_fee",
+      "expected_object": "fees of 5% per month",
+      "expected_modality": "IS_SUBJECT_TO",
+      "expected_conditions": [
+        "payment past due date"
+      ],
+      "expected_lifecycle_decision": "APPROVE"
+    },
+    {
+      "case_id": "HELD-INV-003",
+      "source_document": "wordpress-pdf-invoice-plugin-sample.pdf",
+      "source_sha256": "c2de358a0974f9b047aed8e457def7d4b1b39170f44819ec3152b42db787d72e",
+      "document_family": "commercial_invoice",
+      "source_verbatim_quote": "Invoice Number INV-3337 | Order Number 12345.",
+      "locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 45
+      },
+      "expected_subject": "Invoice INV-3337",
+      "expected_predicate": "references_order",
+      "expected_object": "Order 12345",
+      "expected_modality": "FACT",
+      "expected_conditions": [],
+      "expected_lifecycle_decision": "APPROVE"
+    },
+    {
+      "case_id": "HELD-INV-004",
+      "source_document": "wordpress-pdf-invoice-plugin-sample.pdf",
+      "source_sha256": "c2de358a0974f9b047aed8e457def7d4b1b39170f44819ec3152b42db787d72e",
+      "document_family": "commercial_invoice",
+      "source_verbatim_quote": "Total Due $93.50 (Sub Total $85.00 plus Tax $8.50).",
+      "locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 51
+      },
+      "expected_subject": "Invoice Total Due",
+      "expected_predicate": "is_amount",
+      "expected_object": "$93.50",
+      "expected_modality": "FACT",
+      "expected_conditions": [],
+      "expected_lifecycle_decision": "APPROVE"
+    },
+    {
+      "case_id": "HELD-INV-005",
+      "source_document": "wordpress-pdf-invoice-plugin-sample.pdf",
+      "source_sha256": "c2de358a0974f9b047aed8e457def7d4b1b39170f44819ec3152b42db787d72e",
+      "document_family": "commercial_invoice",
+      "source_verbatim_quote": "Invoice Due Date is January 31, 2016.",
+      "locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 37
+      },
+      "expected_subject": "Invoice due date",
+      "expected_predicate": "is_calendar_date",
+      "expected_object": "January 31, 2016",
+      "expected_modality": "REQUIRED",
+      "expected_conditions": [],
+      "expected_lifecycle_decision": "APPROVE"
+    },
+    {
+      "case_id": "HELD-INV-006",
+      "source_document": "wordpress-pdf-invoice-plugin-sample.pdf",
+      "source_sha256": "c2de358a0974f9b047aed8e457def7d4b1b39170f44819ec3152b42db787d72e",
+      "document_family": "commercial_invoice",
+      "source_verbatim_quote": "Remittance bank account: ANZ Bank ACC # 1234 1234 BSB # 4321 432.",
+      "locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 65
+      },
+      "expected_subject": "Buyer",
+      "expected_predicate": "must_remit_payment_to",
+      "expected_object": "ANZ Bank ACC # 1234 1234",
+      "expected_modality": "REQUIRED",
+      "expected_conditions": [],
+      "expected_lifecycle_decision": "APPROVE"
+    },
+    {
+      "case_id": "HELD-GOV-001",
+      "source_document": "guidelines-for-engagement-of-employees-on-contract-basis.pdf",
+      "source_sha256": "gov_mizoram_guidelines_sha256",
+      "document_family": "statutory_guidelines",
+      "source_verbatim_quote": "Contract engagement of employees shall be for a maximum initial period of 1 year.",
+      "locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 81
+      },
+      "expected_subject": "Contract engagement",
+      "expected_predicate": "has_maximum_period",
+      "expected_object": "1 year initial term",
+      "expected_modality": "SHALL",
+      "expected_conditions": [],
+      "expected_lifecycle_decision": "APPROVE"
+    },
+    {
+      "case_id": "HELD-GOV-002",
+      "source_document": "guidelines-for-engagement-of-employees-on-contract-basis.pdf",
+      "source_sha256": "gov_mizoram_guidelines_sha256",
+      "document_family": "statutory_guidelines",
+      "source_verbatim_quote": "Contract appointees shall be entitled to casual leave of 12 days in a calendar year.",
+      "locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 84
+      },
+      "expected_subject": "Contract appointees",
+      "expected_predicate": "are_entitled_to_leave",
+      "expected_object": "12 days casual leave per calendar year",
+      "expected_modality": "ENTITLED",
+      "expected_conditions": [],
+      "expected_lifecycle_decision": "APPROVE"
+    },
+    {
+      "case_id": "HELD-GOV-003",
+      "source_document": "guidelines-for-engagement-of-employees-on-contract-basis.pdf",
+      "source_sha256": "gov_mizoram_guidelines_sha256",
+      "document_family": "statutory_guidelines",
+      "source_verbatim_quote": "Contract appointment can be terminated by either side by giving one month notice or pay in lieu.",
+      "locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 96
+      },
+      "expected_subject": "Contract appointment",
+      "expected_predicate": "may_be_terminated_by",
+      "expected_object": "one month notice or pay in lieu",
+      "expected_modality": "CAN",
+      "expected_conditions": [],
+      "expected_lifecycle_decision": "APPROVE"
+    },
+    {
+      "case_id": "HELD-GOV-004",
+      "source_document": "guidelines-for-engagement-of-employees-on-contract-basis.pdf",
+      "source_sha256": "gov_mizoram_guidelines_sha256",
+      "document_family": "statutory_guidelines",
+      "source_verbatim_quote": "Monthly remuneration shall be consolidated pay without DA or other allowances.",
+      "locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 78
+      },
+      "expected_subject": "Contract appointee remuneration",
+      "expected_predicate": "is_consolidated_pay",
+      "expected_object": "fixed remuneration without DA/allowances",
+      "expected_modality": "SHALL",
+      "expected_conditions": [],
+      "expected_lifecycle_decision": "APPROVE"
+    },
+    {
+      "case_id": "HELD-GOV-005",
+      "source_document": "guidelines-for-engagement-of-employees-on-contract-basis.pdf",
+      "source_sha256": "gov_mizoram_guidelines_sha256",
+      "document_family": "statutory_guidelines",
+      "source_verbatim_quote": "Contract appointees shall not be entitled to claim regularisation or absorption in government service.",
+      "locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 102
+      },
+      "expected_subject": "Contract appointees",
+      "expected_predicate": "cannot_claim_regularisation",
+      "expected_object": "regularisation or absorption in service",
+      "expected_modality": "CANNOT",
+      "expected_conditions": [],
+      "expected_lifecycle_decision": "APPROVE"
+    }
+  ]
+}

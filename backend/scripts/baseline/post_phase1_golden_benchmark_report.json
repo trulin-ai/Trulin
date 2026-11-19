@@ -1,0 +1,86 @@
+{
+  "benchmark_run_timestamp": "2026-11-10T10:10:00Z",
+  "evaluation_phase": "Phase 1c: Post-Fix Verification",
+  "baseline_frozen_snapshot": "db_224_claims_frozen.json",
+  "metrics_comparison": {
+    "certified_precision": {
+      "phase0_6_baseline": 0.95,
+      "phase1_post_fix": 0.9571,
+      "delta": "+0.0071 (+0.71%)",
+      "calculation": "134 correct claims / 140 persisted verified claims",
+      "status": "IMPROVED"
+    },
+    "operative_rule_coverage": {
+      "phase0_6_baseline": 0.7232,
+      "phase1_post_fix": 0.9196,
+      "delta": "+0.1964 (+19.64%)",
+      "calculation": "103 processed operative rules / 112 authoritative operative rule units",
+      "status": "IMPROVED"
+    },
+    "overall_inventory_coverage": {
+      "phase0_6_baseline": 0.754,
+      "phase1_post_fix": 0.9286,
+      "delta": "+0.1746 (+17.46%)",
+      "calculation": "(103 processed + 14 validly skipped) / 126 total units",
+      "status": "IMPROVED"
+    },
+    "overall_recall": {
+      "phase0_6_baseline": 0.9429,
+      "phase1_post_fix": 0.9196,
+      "delta": "-0.0233 (corrected for coarse 70-case vs proposition-level 112-rule inventory)",
+      "calculation": "103 rule units covered / 112 operative rules",
+      "status": "CALIBRATED"
+    },
+    "read_time_elevations": {
+      "phase0_6_baseline": 37,
+      "phase1_post_fix": 0,
+      "delta": "-37 (100% eliminated)",
+      "status": "RESOLVED"
+    },
+    "read_time_downgrades": {
+      "phase0_6_baseline": 13,
+      "phase1_post_fix": 0,
+      "delta": "-13 (100% eliminated)",
+      "status": "RESOLVED"
+    },
+    "regression_suite_size": {
+      "phase0_6_baseline": 12,
+      "phase1_post_fix": 20,
+      "delta": "+8 tests (REG-SEM-013 through REG-SEM-020)",
+      "status": "EXPANDED"
+    },
+    "regression_pass_rate": {
+      "phase0_6_baseline": "12/12 (100%)",
+      "phase1_post_fix": "20/20 (100%)",
+      "delta": "0 escapes across 20 defect classes",
+      "status": "PERFECT"
+    }
+  },
+  "defect_class_breakdown_224_claims": {
+    "correct": 179,
+    "wrong_subject": 31,
+    "wrong_predicate": 4,
+    "lost_condition": 2,
+    "lost_scope": 1,
+    "non_rule": 7,
+    "total_claims": 224,
+    "total_defects_to_repair_in_phase2": 45
+  },
+  "verified_claims_audit_140": {
+    "correct_in_verified": 134,
+    "defects_in_verified": 6,
+    "defects_breakdown": {
+      "lost_condition": 2,
+      "wrong_predicate": 2,
+      "wrong_subject": 2
+    },
+    "certified_precision": 0.9571
+  },
+  "ui_reconciliation_post_fix": {
+    "postgresql_verified": 140,
+    "api_artifacts_certified": 140,
+    "explorer_verified_count": 140,
+    "studio_canonical_count": 140,
+    "status_discrepancy": 0
+  }
+}

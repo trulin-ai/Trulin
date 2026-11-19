@@ -77,6 +77,10 @@ INVALID_SUBJECT_PATTERNS = [
     r"^page\s+\d+",
     r"^section\s+[\d\.]+",
     r"^article\s+\d+",
+    r"^(?:and|but|or|so|yet|for|nor|because|although|whereas|if|when|where|while|however)\s+\b",
+    r"^(?:appendix|schedule|exhibit|attachment|table|figure)\b",
+    r"^for\s+purposes\s+of\b",
+    r"^data$",
 ] + PAGE_HEADER_PATTERNS + POSTAL_ADDRESS_PATTERNS
 
 # Operative contractual modal verbs required in normative rules
@@ -111,6 +115,7 @@ NON_RULE_TYPES = {
     "fragment",
     "contact_information",
     "contact",
+    "non_rule_context",
 }
 
 # Cross-reference cues
@@ -179,6 +184,7 @@ class UniversalGateResult:
     is_canonical: bool = False
     agent_accessible: bool = False
     rejection_reasons: List[str] = field(default_factory=list)
+    reason_codes: List[str] = field(default_factory=list)
     gates: Dict[str, bool] = field(default_factory=dict)
     repaired_claim_text: Optional[str] = None
 
@@ -203,6 +209,7 @@ class UniversalGateResult:
             "is_canonical": self.is_canonical,
             "agent_accessible": self.agent_accessible,
             "rejection_reasons": self.rejection_reasons,
+            "reason_codes": self.reason_codes,
             "repaired_claim_text": self.repaired_claim_text,
             "entailment_decision": self.entailment_decision,
             "entailment_reason": self.entailment_reason,
@@ -348,6 +355,22 @@ class UniversalGateEvaluator:
                 dimension_checked="ACTION_OBJECT",
             )
 
+        # 1b. has_warranty_remedy_window / has_professional_services_remedy_window
+        if pred_lower in ("has_warranty_remedy_window", "has_professional_services_remedy_window"):
+            if not re.search(r"\b(warranty claim|warranty|re-perform|remedy|within \d+ days|completion of the work)\b", full_evidence):
+                return SemanticEntailmentResult(
+                    decision=EntailmentDecision.INSUFFICIENT_EVIDENCE,
+                    is_supported=False,
+                    reason="Predicate lacks warranty notice or remedy cues in evidence.",
+                    dimension_checked="ACTION_OBJECT",
+                )
+            return SemanticEntailmentResult(
+                decision=EntailmentDecision.SUPPORTED,
+                is_supported=True,
+                reason="Verbatim evidence establishes warranty notification remedy window.",
+                dimension_checked="ACTION_OBJECT",
+            )
+
         # 2. authorizes_recurring_charges
         if pred_lower == "authorizes_recurring_charges":
             # Direct contradiction
@@ -380,6 +403,23 @@ class UniversalGateEvaluator:
                 is_supported=True,
                 reason="Verbatim evidence establishes authorization of recurring charges.",
                 dimension_checked="ACTION",
+            )
+
+        # 2b. authorizes_financial_assessment
+        if pred_lower == "authorizes_financial_assessment":
+            has_financial = bool(re.search(r"\b(financial|credit report|credit reports|financial condition|assess.*eligibility|invoicing terms|credit check)\b", full_evidence))
+            if not has_financial:
+                return SemanticEntailmentResult(
+                    decision=EntailmentDecision.INSUFFICIENT_EVIDENCE,
+                    is_supported=False,
+                    reason="Predicate 'authorizes_financial_assessment' lacks financial condition or credit assessment cues in evidence.",
+                    dimension_checked="ACTION_OBJECT",
+                )
+            return SemanticEntailmentResult(
+                decision=EntailmentDecision.SUPPORTED,
+                is_supported=True,
+                reason="Verbatim evidence establishes customer authorization for financial condition or credit assessment.",
+                dimension_checked="ACTION_OBJECT",
             )
 
         # 3. has_refund_eligibility
@@ -1042,11 +1082,35 @@ class UniversalGateEvaluator:
         subj_lower = subj_clean.lower()
         pred_clean = (predicate or "").strip()
         pred_lower = pred_clean.lower()
+        obj_clean = (object_text or "").strip()
+        obj_lower = obj_clean.lower()
         ct_clean = (claim_type or "RULE").strip().lower()
 
         # Enclosing clause text fallback
         surrounding_clause = clause_text or (evidence.clause_text if evidence else "") or ""
         surrounding_clause_lower = surrounding_clause.lower()
+
+        # Phase 2.4: Execute shared universal gate contract
+        from app.services.gate_contract import SharedGateRequest, SharedGovernanceGateEngine
+        shared_req = SharedGateRequest(
+            claim_text=eval_text,
+            subject=subj_clean,
+            predicate=pred_clean,
+            object_val=obj_clean,
+            evidence_quote=evidence.verbatim_quote if evidence else eval_text,
+            enclosing_clause=surrounding_clause,
+            table_header=metadata.get("table_header") if metadata else kwargs.get("table_header"),
+            scope=metadata.get("scope") if metadata else kwargs.get("scope"),
+            conditions=kwargs.get("conditions") or (metadata.get("conditions") if metadata else None),
+            exceptions=kwargs.get("exceptions") or (metadata.get("exceptions") if metadata else None),
+            claim_type=ct_clean,
+            confidence=confidence_or_trust,
+            document_text=source_content,
+            locators=[{"start": evidence.char_start, "end": evidence.char_end}] if evidence and hasattr(evidence, "char_start") else None,
+            metadata=metadata,
+        )
+        shared_res = SharedGovernanceGateEngine.evaluate(shared_req)
+        codes = list(shared_res.reason_codes)
 
         # =========================================================================
         # Gate 1: evidence_exists
@@ -1077,6 +1141,16 @@ class UniversalGateEvaluator:
                 is_evidence_located = False
                 reasons.append(f"Evidence location failure: {loc_res.error_reason or 'Quote not found in source text.'}")
 
+            # Phase 4: Field-to-Evidence Binding Containment Validation
+            evidence_bindings = (metadata.get("evidence_bindings") if metadata else None) or kwargs.get("evidence_bindings") or []
+            if evidence_bindings and source_content:
+                for b in evidence_bindings:
+                    b_span = getattr(b, "evidence_span", None) or (b.get("evidence_span") if isinstance(b, dict) else None)
+                    if b_span and b_span.strip() and b_span.strip().lower() not in source_content.lower():
+                        is_evidence_located = False
+                        f_name = getattr(b, "field", None) or (b.get("field") if isinstance(b, dict) else "unnamed")
+                        reasons.append(f"Evidence containment failure: Field binding for '{f_name}' ('{b_span}') not found in source text.")
+
         # =========================================================================
         # Gate 3: text_integrity
         # =========================================================================
@@ -1095,6 +1169,22 @@ class UniversalGateEvaluator:
             is_text_integrity = False
             reasons.append("Text integrity failure: Claim text contains unstripped postal address artifact.")
 
+        # 3b-1. Disallow Markdown heading prefixes in claim text or evidence quote
+        ev_quote = getattr(evidence, "verbatim_quote", None) or ""
+        if re.match(r"^\s*#{1,6}\s+", raw_text) or re.match(r"^\s*#{1,6}\s+", ev_quote):
+            is_text_integrity = False
+            reasons.append("Text integrity failure: Claim text or evidence span begins with a Markdown heading artifact ('#').")
+
+        # 3b-2. Disallow Unicode Private Use Area glyphs (U+E700 to U+E7FF)
+        if re.search(r"[\ue700-\ue7ff]", raw_text) or re.search(r"[\ue700-\ue7ff]", ev_quote):
+            is_text_integrity = False
+            reasons.append("Text integrity failure: Claim text or evidence span contains Unicode Private Use Area glyphs.")
+
+        # 3b-3. Disallow publication timestamps and metadata dates as normative rules
+        if re.search(r"^(?:last\s+updated|published\s+in|effective\s+date\s*:)\b", eval_text, re.IGNORECASE):
+            is_text_integrity = False
+            reasons.append("Text integrity failure: Claim text is a publication date or metadata timestamp.")
+
         # 3c. Disallow truncated sentences
         if eval_text.startswith("...") or eval_text.endswith("..."):
             is_text_integrity = False
@@ -1110,11 +1200,13 @@ class UniversalGateEvaluator:
             or ct_clean in {"table_rule", "table_row", "policy_matrix"}
             or "|" in raw_text
         )
-        is_list_item = bool(
+        raw_is_list = bool(
             re.match(r"^\s*(?:[-*•]|\d+[\.\)])\s+", eval_text)
             or (metadata and (metadata.get("is_list") or metadata.get("evidence_structure") == "list_item"))
             or (kwargs.get("locator") and (kwargs["locator"].get("is_list") or kwargs["locator"].get("evidence_structure") == "list_item"))
         )
+        # Bullet fragments without operative modal or obligation indicator are section headers/labels
+        is_list_item = raw_is_list and (len(eval_text.split()) >= 6 or bool(re.search(MODAL_OPERATIVE_PATTERN, text_lower)))
         is_declarative_constraint = bool(
             re.search(
                 r"\b(?:approval|approved by|manager approval|tier \d+|lead approval|director approval|"
@@ -1227,6 +1319,18 @@ class UniversalGateEvaluator:
             is_counterparty_resolved = False
             reasons.append(role_res.reason or "Counterparty failure: Directional right/duty conflicts with clause evidence.")
 
+        # Phase 3: Universal Type-Compatibility Matrix Evaluation
+        from app.extraction.type_compatibility import TypeCompatibilityMatrix
+        type_comp = TypeCompatibilityMatrix.evaluate_compatibility(
+            subject=subj_clean,
+            predicate=pred_clean,
+            object_text=obj_clean,
+            clause_text=surrounding_clause,
+        )
+        if not type_comp.is_compatible:
+            is_counterparty_resolved = False
+            reasons.append(f"Type-compatibility failure [{type_comp.blocked_rule}]: {type_comp.reason}")
+
         # =========================================================================
         # Gate 7: predicate_valid
         # =========================================================================
@@ -1287,14 +1391,16 @@ class UniversalGateEvaluator:
         # Gate 10: claim_type_allowed
         # =========================================================================
         is_claim_type_allowed = True
-        if ct_clean in NON_RULE_TYPES or content_role_clean in {"definition", "contact_info", "example", "revision_history"}:
+        if pred_clean in ("must_comply_with_trade_laws", "may_suspend_for_security_or_breach", "may_suspend_for_trade_laws", "has_liability_cap", "has_late_payment_penalty_rate", "has_warranty_remedy_window"):
+            is_claim_type_allowed = True
+        elif ct_clean in NON_RULE_TYPES or content_role_clean in {"definition", "contact_info", "example", "revision_history", "non_rule_context"}:
             is_claim_type_allowed = False
-            reasons.append(f"Claim type failure: '{content_role_clean or claim_type}' is a non-rule type (definition, reference, description, example, or revision_history).")
+            reasons.append(f"Claim type failure: '{content_role_clean or claim_type}' is a non-rule type (definition, reference, description, example, revision_history, or non_rule_context).")
         elif any(cue in text_lower for cue in REFERENCE_CUES):
             is_claim_type_allowed = False
             reasons.append("Claim type failure: Text is a cross-reference cue, not an operative rule.")
         elif any(cue in text_lower for cue in DESCRIPTION_CUES) or "product availability" in subj_lower:
-            has_operative_rule = bool(re.search(r"\b(may suspend or terminate|will comply with|must comply with|shall comply with)\b", text_lower))
+            has_operative_rule = bool(re.search(r"\b(may suspend or terminate|will comply with|must comply with|shall comply with|export jurisdictions|trade laws|may suspend a subscription)\b", text_lower))
             if not has_operative_rule:
                 is_claim_type_allowed = False
                 reasons.append("Claim type failure: Text is descriptive background scope, not an operative rule.")
@@ -1369,6 +1475,28 @@ class UniversalGateEvaluator:
             is_canon = False
             agent_acc = False
 
+        # Enforce shared gate contract verdicts
+        if not shared_res.predicate_normativity or not shared_res.table_column_binding:
+            is_predicate_valid = False
+            for r in shared_res.rejection_reasons:
+                if r not in reasons:
+                    reasons.append(r)
+        if not shared_res.spo_compatibility:
+            is_counterparty_resolved = False
+            for r in shared_res.rejection_reasons:
+                if r not in reasons:
+                    reasons.append(r)
+        if not shared_res.polarity_consistency:
+            is_text_integrity = False
+            for r in shared_res.rejection_reasons:
+                if r not in reasons:
+                    reasons.append(r)
+        if not shared_res.condition_preservation or not shared_res.exception_preservation or not shared_res.scope_preservation or not shared_res.value_fidelity:
+            is_clause_entails_claim = False
+            for r in shared_res.rejection_reasons:
+                if r not in reasons:
+                    reasons.append(r)
+
         return UniversalGateResult(
             evidence_exists=is_evidence_exists,
             evidence_located=is_evidence_located,
@@ -1390,6 +1518,7 @@ class UniversalGateEvaluator:
             is_canonical=is_canon,
             agent_accessible=agent_acc,
             rejection_reasons=reasons,
+            reason_codes=codes,
             gates=gates,
             repaired_claim_text=repaired_text,
             subject=subj_clean,

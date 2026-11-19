@@ -56,9 +56,9 @@ const renderFormattedMarkdown = (text) => {
   const flushList = () => {
     if (currentList.length > 0) {
       elements.push(
-        <ul key={`list-${elements.length}`} style={{ margin: '8px 0 14px 0', paddingLeft: '22px', display: 'flex', flexDirection: 'column', gap: '5px' }}>
+        <ul key={`list-${elements.length}`} style={{ margin: '4px 0 6px 0', paddingLeft: '18px', display: 'flex', flexDirection: 'column', gap: '3px' }}>
           {currentList.map((item, idx) => (
-            <li key={idx} style={{ fontSize: '0.84rem', color: '#334155', lineHeight: 1.6 }}>
+            <li key={idx} style={{ fontSize: '0.82rem', color: '#334155', lineHeight: 1.45 }}>
               {item}
             </li>
           ))}
@@ -74,13 +74,13 @@ const renderFormattedMarkdown = (text) => {
         <pre key={`code-${elements.length}`} style={{
           background: '#0F172A',
           color: '#F8FAFC',
-          padding: '12px 16px',
-          borderRadius: '6px',
-          fontSize: '0.76rem',
+          padding: '10px 14px',
+          borderRadius: 0,
+          fontSize: '0.74rem',
           fontFamily: 'Consolas, Monaco, monospace',
           overflowX: 'auto',
-          margin: '8px 0 14px 0',
-          lineHeight: 1.5
+          margin: '6px 0 10px 0',
+          lineHeight: 1.45
         }}>
           <code>{codeBuffer.join('\n')}</code>
         </pre>
@@ -120,14 +120,14 @@ const renderFormattedMarkdown = (text) => {
       const title = trimmed.substring(2).replace(/^#+\s*/, '');
       elements.push(
         <div key={`h1-${i}`} style={{
-          fontSize: '1.25rem',
+          fontSize: '1.10rem',
           fontWeight: 800,
           color: '#0F172A',
-          margin: '12px 0 14px 0',
-          lineHeight: 1.35,
-          letterSpacing: '-0.02em',
-          borderBottom: '1.5px solid #F1F5F9',
-          paddingBottom: '8px'
+          margin: '6px 0 8px 0',
+          lineHeight: 1.3,
+          letterSpacing: '-0.01em',
+          borderBottom: '1px solid #F1F5F9',
+          paddingBottom: '4px'
         }}>
           {title}
         </div>
@@ -139,15 +139,15 @@ const renderFormattedMarkdown = (text) => {
       const sub = trimmed.substring(3).trim();
       elements.push(
         <div key={`h2-${i}`} style={{
-          fontSize: '0.98rem',
+          fontSize: '0.92rem',
           fontWeight: 700,
           color: '#1E293B',
-          margin: '16px 0 8px 0',
+          margin: '8px 0 4px 0',
           display: 'flex',
           alignItems: 'center',
-          gap: '8px'
+          gap: '6px'
         }}>
-          <span style={{ width: '4px', height: '14px', background: '#3B82F6', borderRadius: '2px', display: 'inline-block' }} />
+          <span style={{ width: '3px', height: '12px', background: '#3B82F6', display: 'inline-block' }} />
           <span>{sub}</span>
         </div>
       );
@@ -158,10 +158,10 @@ const renderFormattedMarkdown = (text) => {
       const sub = trimmed.substring(4).trim();
       elements.push(
         <div key={`h3-${i}`} style={{
-          fontSize: '0.88rem',
+          fontSize: '0.84rem',
           fontWeight: 700,
           color: '#334155',
-          margin: '12px 0 6px 0'
+          margin: '6px 0 3px 0'
         }}>
           {sub}
         </div>
@@ -180,10 +180,10 @@ const renderFormattedMarkdown = (text) => {
       flushList();
       elements.push(
         <p key={`p-${i}`} style={{
-          fontSize: '0.84rem',
+          fontSize: '0.82rem',
           color: '#334155',
-          lineHeight: 1.65,
-          margin: '0 0 12px 0',
+          lineHeight: 1.5,
+          margin: '0 0 6px 0',
           wordBreak: 'break-word'
         }}>
           {trimmed}
@@ -205,6 +205,9 @@ export default function DocumentWorkspaceExplorer({
   showToast,
   onInspectDocument,
   onViewClaims,
+  onNavigateToCuratorApprovals,
+  onClaimExtracted,
+  onDocumentUploaded,
   readOnly = false,
 }) {
   // Folder tree & all documents state
@@ -224,15 +227,22 @@ export default function DocumentWorkspaceExplorer({
   const [selectedDocArtifacts, setSelectedDocArtifacts] = useState(null);
   const [loadingPreview, setLoadingPreview] = useState(false);
   const [copiedHash, setCopiedHash] = useState(false);
-  const [activeFacilityTab, setActiveFacilityTab] = useState('preview'); // 'preview' | 'description' | 'claims' | 'lineage'
+  const [activeFacilityTab, setActiveFacilityTab] = useState('preview'); // 'preview' | 'claims'
   const [selectedClaimId, setSelectedClaimId] = useState(null);
   const [claimSearchQuery, setClaimSearchQuery] = useState('');
+  const [claimTriageFilter, setClaimTriageFilter] = useState('candidate'); // 'candidate' | 'verified' | 'all'
+  const [isReviewingClaim, setIsReviewingClaim] = useState(false);
+  const [editingClaimId, setEditingClaimId] = useState(null);
+  const [editClaimForm, setEditClaimForm] = useState({
+    claim_text: '',
+    subject: '',
+    predicate: '',
+    object: ''
+  });
   const [isFullFileReaderOpen, setIsFullFileReaderOpen] = useState(false);
   const [fullReaderSearch, setFullReaderSearch] = useState('');
   const [readerViewMode, setReaderViewMode] = useState('text'); // 'text' | 'pdf'
   const [copiedReaderText, setCopiedReaderText] = useState(false);
-  const [selectedDagNodeId, setSelectedDagNodeId] = useState('doc_canonical');
-  const [dagViewFilter, setDagViewFilter] = useState('all'); // 'all' | 'claims' | 'gateways'
 
   // Close reader modal on Escape key
   useEffect(() => {
@@ -367,7 +377,7 @@ export default function DocumentWorkspaceExplorer({
       const [flatRes, treeRes, docsRes] = await Promise.all([
         fetch(`/v1/folders?organization_id=${orgId}&tree=false`, { headers }),
         fetch(`/v1/folders?organization_id=${orgId}&tree=true`, { headers }),
-        fetch(`/v1/documents?organization_id=${orgId}`, { headers })
+        fetch(`/v1/documents?organization_id=${orgId}&limit=1000`, { headers })
       ]);
 
       if (flatRes.ok) {
@@ -629,6 +639,74 @@ export default function DocumentWorkspaceExplorer({
       isMounted = false;
     };
   }, [selectedDocId, orgId, token]);
+
+  // Handle candidate claim review triage action (approve, reject, edit)
+  const handleClaimReviewAction = useCallback(async (claimId, action, customData = null) => {
+    if (!claimId) return;
+    setIsReviewingClaim(true);
+    try {
+      const payload = {
+        action,
+        reviewer_id: user?.id || undefined,
+        reviewer_notes: customData?.notes || `Triage action '${action}' from Document Workspace`
+      };
+      if (action === 'edit' && customData) {
+        payload.edited_claim_text = customData.claim_text;
+        payload.edited_subject = customData.subject;
+        payload.edited_predicate = customData.predicate;
+        payload.edited_object = customData.object;
+      }
+
+      const headers = { 'Content-Type': 'application/json' };
+      if (token) headers['Authorization'] = `Bearer ${token}`;
+      if (orgId) headers['X-Organization-Id'] = orgId;
+
+      const res = await fetch(`/v1/review/${claimId}/action`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(payload)
+      });
+
+      if (!res.ok) {
+        const errJson = await res.json().catch(() => ({}));
+        throw new Error(errJson.detail || `Action failed with status ${res.status}`);
+      }
+
+      // Optimistically update selectedDocArtifacts
+      setSelectedDocArtifacts(prev => {
+        if (!prev || !prev.claims) return prev;
+        const nextClaims = prev.claims.map(c => {
+          if (c.id === claimId) {
+            return {
+              ...c,
+              status: action === 'reject' ? 'rejected' : 'verified',
+              trust_score: action === 'reject' ? c.trust_score : 1.0,
+              confidence: action === 'reject' ? c.confidence : 1.0,
+              ...(action === 'edit' && customData ? customData : {})
+            };
+          }
+          return c;
+        });
+        return { ...prev, claims: nextClaims };
+      });
+
+      setEditingClaimId(null);
+      showToast?.(
+        action === 'approve'
+          ? '✓ Claim certified & verified for autonomous agents!'
+          : action === 'edit'
+          ? '✓ Claim edited & certified successfully!'
+          : 'Claim rejected & removed from active context.',
+        'success'
+      );
+      onClaimExtracted?.();
+    } catch (err) {
+      console.error('Review action failed:', err);
+      showToast?.(err.message || 'Failed to complete review action.', 'error');
+    } finally {
+      setIsReviewingClaim(false);
+    }
+  }, [token, orgId, user, showToast, onClaimExtracted]);
 
   // 3. Fetch folder metrics for Insights modal
   const fetchFolderMetrics = useCallback(async (folderId) => {
@@ -1026,6 +1104,11 @@ export default function DocumentWorkspaceExplorer({
         setShowUploadModal(false);
         setUploadFile(null);
         await fetchData();
+        if (result.document?.id) {
+          setSelectedDocId(result.document.id);
+        }
+        onClaimExtracted?.();
+        onDocumentUploaded?.(result);
       } else {
         const err = await res.json();
         showToast?.(err.detail || 'Upload failed', 'error');
@@ -1183,7 +1266,7 @@ export default function DocumentWorkspaceExplorer({
             >
               {isFolderLoading ? (
                 <RefreshCw size={12} className="spin" style={{ color: '#2563EB' }} />
-              ) : hasContent ? (
+              ) : (
                 <button
                   type="button"
                   onClick={(e) => {
@@ -1197,14 +1280,13 @@ export default function DocumentWorkspaceExplorer({
                     cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'center',
-                    color: '#64748B',
+                    color: isExpanded ? '#2563EB' : '#64748B',
                     width: 14
                   }}
+                  title={isExpanded ? 'Collapse folder' : 'Expand folder to view files'}
                 >
                   {isExpanded ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
                 </button>
-              ) : (
-                <span style={{ width: 14 }} />
               )}
             </span>
 
@@ -1359,6 +1441,21 @@ export default function DocumentWorkspaceExplorer({
                   </div>
                 );
               })}
+
+              {/* 3. Empty folder notice if expanded and no contents */}
+              {childFolders.length === 0 && uniqueFiles.length === 0 && !isFolderLoading && creatingInParentId !== node.id && (
+                <div
+                  style={{
+                    padding: '3px 8px',
+                    paddingLeft: `${(depth + 1) * 16 + 8}px`,
+                    fontSize: '0.74rem',
+                    color: '#94A3B8',
+                    fontStyle: 'italic'
+                  }}
+                >
+                  Empty folder
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -1367,7 +1464,27 @@ export default function DocumentWorkspaceExplorer({
   };
 
   return (
-    <div style={{ display: 'flex', gap: '14px', width: '100%', maxWidth: '100%', overflowX: 'hidden', alignItems: 'stretch' }}>
+    <div
+      style={{
+        display: 'flex',
+        gap: 0,
+        width: '100%',
+        maxWidth: '100%',
+        minHeight: 0,
+        height: '100%',
+        flex: 1,
+        background: '#FFFFFF',
+        borderRadius: 0,
+        border: '1px solid var(--border-subtle, #E2E8F0)',
+        borderLeft: 'none',
+        borderRight: 'none',
+        borderBottom: 'none',
+        overflow: 'hidden',
+        boxShadow: 'none',
+        alignItems: 'stretch',
+        boxSizing: 'border-box'
+      }}
+    >
       
       {/* ── LEFT PANE: DIRECTORY TREE (FOLDERS & FILES) ── */}
       <div
@@ -1378,35 +1495,46 @@ export default function DocumentWorkspaceExplorer({
           }
         }}
         style={{
-          width: '280px',
-          minWidth: '250px',
-          maxWidth: '310px',
+          width: '260px',
+          minWidth: '220px',
+          maxWidth: '280px',
           flexShrink: 0,
-          background: '#FAF8F5',
-          borderRadius: '10px',
-          border: '1px solid var(--border-subtle)',
+          background: '#FFFFFF',
+          borderRadius: 0,
+          borderRight: '1px solid var(--border-subtle, #E2E8F0)',
           display: 'flex',
           flexDirection: 'column',
-          boxShadow: 'none',
-          overflow: 'hidden'
+          height: '100%',
+          overflow: 'hidden',
+          boxSizing: 'border-box'
         }}
       >
         {/* Directory Top Bar */}
         <div
           style={{
-            padding: '10px 12px',
-            borderBottom: '1px solid var(--border-subtle)',
-            background: '#FAF8F5',
+            padding: '8px 12px',
+            borderBottom: '1px solid var(--border-subtle, #E2E8F0)',
+            background: '#faf8f5',
+            borderRadius: 0,
             display: 'flex',
             flexDirection: 'column',
-            gap: '8px'
+            gap: '6px',
+            flexShrink: 0
           }}
         >
           {/* Header Title + Actions */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <span style={{ fontSize: '0.78rem', fontWeight: 800, color: 'var(--text-main)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-              Directory Explorer
-            </span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span style={{ fontSize: '0.78rem', fontWeight: 800, color: 'var(--text-main)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                Directory
+              </span>
+              <span
+                title="Tip: Right-click any folder or file for options (rename, move, delete, upload)"
+                style={{ display: 'inline-flex', alignItems: 'center', cursor: 'help' }}
+              >
+                <Info size={13} style={{ color: '#94A3B8' }} />
+              </span>
+            </div>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
               {readOnly && (
@@ -1414,7 +1542,7 @@ export default function DocumentWorkspaceExplorer({
                   style={{
                     fontSize: '0.68rem',
                     padding: '2px 8px',
-                    borderRadius: '12px',
+                    borderRadius: 0,
                     background: '#F1F5F9',
                     color: '#64748B',
                     fontWeight: 600,
@@ -1429,6 +1557,34 @@ export default function DocumentWorkspaceExplorer({
                   <ShieldCheck size={11} style={{ color: '#10B981' }} />
                   Read-Only
                 </span>
+              )}
+
+              {/* + New Root Folder Action */}
+              {!readOnly && (
+                <button
+                  type="button"
+                  onClick={() => startInlineCreate(null)}
+                  style={{
+                    background: '#F8FAFC',
+                    border: '1px solid #CBD5E1',
+                    borderRadius: 0,
+                    cursor: 'pointer',
+                    color: '#2563EB',
+                    padding: '2px 6px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '3px',
+                    fontSize: '0.70rem',
+                    fontWeight: 600,
+                    transition: 'all 0.15s ease'
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.background = '#EFF6FF'; e.currentTarget.style.borderColor = '#93C5FD'; }}
+                  onMouseLeave={e => { e.currentTarget.style.background = '#F8FAFC'; e.currentTarget.style.borderColor = '#CBD5E1'; }}
+                  title="Create New Root Folder (or right-click canvas)"
+                >
+                  <FolderPlus size={13} />
+                  <span>+ Root</span>
+                </button>
               )}
 
               {/* Refresh */}
@@ -1448,15 +1604,15 @@ export default function DocumentWorkspaceExplorer({
             <Search size={13} style={{ position: 'absolute', left: '8px', color: '#94A3B8' }} />
             <input
               type="text"
-              placeholder="Filter folders and files..."
+              placeholder="Filter files... (right-click for options)"
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
               style={{
                 width: '100%',
-                padding: '5px 8px 5px 26px',
+                padding: '4px 8px 4px 26px',
                 fontSize: '0.76rem',
-                borderRadius: '5px',
-                border: '1px solid #CBD5E1',
+                borderRadius: 0,
+                
                 background: '#FFFFFF'
               }}
             />
@@ -1476,10 +1632,13 @@ export default function DocumentWorkspaceExplorer({
         <div
           className="tree-blank-area"
           style={{
-            minHeight: '380px',
-            maxHeight: '520px',
+            flex: 1,
+            minHeight: 0,
             overflowY: 'auto',
-            padding: '8px 4px'
+            overflowX: 'hidden',
+            padding: '6px 2px 24px 2px',
+            background: '#faf8f5',
+            boxSizing: 'border-box'
           }}
         >
           {initialLoading && folderTree.length === 0 ? (
@@ -1500,31 +1659,6 @@ export default function DocumentWorkspaceExplorer({
             </>
           )}
         </div>
-
-        {/* Directory Bottom Bar */}
-        <div
-          style={{
-            padding: '6px 12px',
-            background: '#F8FAFC',
-            borderTop: '1px solid var(--border-subtle, #E2E8F0)',
-            fontSize: '0.70rem',
-            color: 'var(--text-muted)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between'
-          }}
-        >
-          <span>{readOnly ? 'Vault Directory • Read-Only Inspection' : 'Right-click any folder or file for options'}</span>
-          {!readOnly && (
-            <button
-              type="button"
-              onClick={() => startInlineCreate(null)}
-              style={{ background: 'none', border: 'none', color: '#2563EB', cursor: 'pointer', fontSize: '0.70rem', fontWeight: 600 }}
-            >
-              + New Root
-            </button>
-          )}
-        </div>
       </div>
 
       {/* ── RIGHT PANE: LIVE DOCUMENT PREVIEW & WORKSPACE ── */}
@@ -1534,23 +1668,27 @@ export default function DocumentWorkspaceExplorer({
           minWidth: 0,
           maxWidth: '100%',
           overflowX: 'hidden',
-          background: '#FAF8F5',
-          borderRadius: '10px',
-          border: '1px solid var(--border-subtle)',
+          background: '#FFFFFF',
           display: 'flex',
           flexDirection: 'column',
-          boxShadow: '0 1px 3px rgba(0,0,0,0.03)',
+          height: '100%',
           overflow: 'hidden',
-          minHeight: '560px',
-          maxHeight: 'calc(100vh - 190px)'
+          boxSizing: 'border-box'
         }}
       >
         {selectedDocDetails ? (() => {
           const claimsList = selectedDocArtifacts?.claims || [];
           const conflictsList = selectedDocArtifacts?.conflicts || [];
-          const verifiedCount = claimsList.filter(c => c.status === 'verified' || c.status === 'ACTIVE').length;
+          const verifiedCount = claimsList.filter(c => (c.status || '').toLowerCase() === 'verified' || (c.status || '').toLowerCase() === 'active').length;
+          const candidateCount = claimsList.filter(c => {
+            const st = (c.status || '').toLowerCase();
+            return st === 'candidate' || st === 'review' || st === 'pending' || !st;
+          }).length;
           const trustPercent = conflictsList.length === 0 ? 98 : Math.max(72, 98 - (conflictsList.length * 4));
           const filteredDocClaims = claimsList.filter(c => {
+            const st = (c.status || 'candidate').toLowerCase();
+            if (claimTriageFilter === 'candidate' && st !== 'candidate' && st !== 'review' && st !== 'pending' && st !== '') return false;
+            if (claimTriageFilter === 'verified' && st !== 'verified' && st !== 'active') return false;
             if (!claimSearchQuery.trim()) return true;
             const q = claimSearchQuery.toLowerCase();
             return (
@@ -1560,7 +1698,7 @@ export default function DocumentWorkspaceExplorer({
               (c.object || '').toLowerCase().includes(q)
             );
           });
-          const activeClaimObj = claimsList.find(c => c.id === selectedClaimId) || (claimsList.length > 0 ? claimsList[0] : null);
+          const activeClaimObj = claimsList.find(c => c.id === selectedClaimId) || (filteredDocClaims.length > 0 ? filteredDocClaims[0] : (claimsList.length > 0 ? claimsList[0] : null));
 
           const rawReaderContent = (() => {
             if (!selectedDocDetails) return '';
@@ -1584,1307 +1722,147 @@ export default function DocumentWorkspaceExplorer({
 
           return (
             <>
-              {/* 1. Header Bar: Document Identity & Quick Actions */}
+              {/* Full Document Content & Ingestion Preview (Seamless white surface, edge-to-edge) */}
               <div
                 style={{
-                  padding: '10px 16px',
-                  borderBottom: '1px solid #E2E8F0',
+                  flex: 1,
+                  minHeight: 0,
+                  overflowY: 'auto',
+                  overflowX: 'hidden',
                   background: '#FFFFFF',
+                  padding: '14px 24px 20px 24px',
                   display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  gap: '12px',
-                  minWidth: 0,
-                  flexShrink: 0
-                }}
-              >
-                {/* Left: Back button + Doc Title & Type */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0, flex: 1 }}>
-                  <button
-                    type="button"
-                    onClick={() => setSelectedDocId(null)}
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '5px',
-                      padding: '5px 10px',
-                      fontSize: '0.74rem',
-                      fontWeight: 600,
-                      background: '#F8FAFC',
-                      border: '1px solid #CBD5E1',
-                      borderRadius: '6px',
-                      cursor: 'pointer',
-                      color: '#334155',
-                      flexShrink: 0,
-                      transition: 'all 0.15s ease'
-                    }}
-                    onMouseEnter={e => { e.currentTarget.style.background = '#F1F5F9'; e.currentTarget.style.color = '#0F172A'; }}
-                    onMouseLeave={e => { e.currentTarget.style.background = '#F8FAFC'; e.currentTarget.style.color = '#334155'; }}
-                    title="Return to documents list"
-                  >
-                    <ArrowLeft size={13} />
-                    <span>Back</span>
-                  </button>
-
-                  <div style={{ height: '16px', width: '1px', background: '#E2E8F0', flexShrink: 0 }} />
-
-                  {/* Doc Type Badge & Title */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0, overflow: 'hidden' }}>
-                    <span
-                      style={{
-                        fontSize: '0.64rem',
-                        fontWeight: 800,
-                        padding: '2px 7px',
-                        borderRadius: '4px',
-                        background: '#EFF6FF',
-                        color: '#2563EB',
-                        border: '1px solid #DBEAFE',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.04em',
-                        flexShrink: 0
-                      }}
-                    >
-                      {selectedDocDetails.document_type || 'Policy'}
-                    </span>
-                    <span
-                      style={{
-                        fontSize: '0.84rem',
-                        fontWeight: 700,
-                        color: '#0F172A',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                        whiteSpace: 'nowrap'
-                      }}
-                      title={selectedDocDetails.title}
-                    >
-                      {selectedDocDetails.title}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Right: Actions (Open File, Reader, 360 Studio, Close) */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const url = `/v1/documents/${selectedDocDetails.id}/file`;
-                      window.open(url, '_blank');
-                    }}
-                    style={{
-                      padding: '4px 9px',
-                      fontSize: '0.72rem',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '4px',
-                      background: '#FFFFFF',
-                      color: '#0284C7',
-                      border: '1px solid #CBD5E1',
-                      borderRadius: '6px',
-                      cursor: 'pointer',
-                      fontWeight: 600,
-                      transition: 'all 0.15s ease'
-                    }}
-                    onMouseEnter={e => { e.currentTarget.style.background = '#F0F9FF'; e.currentTarget.style.borderColor = '#7DD3FC'; }}
-                    onMouseLeave={e => { e.currentTarget.style.background = '#FFFFFF'; e.currentTarget.style.borderColor = '#CBD5E1'; }}
-                    title="Open document file in a new browser tab"
-                  >
-                    <ExternalLink size={12} />
-                    <span>Open File</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => setIsFullFileReaderOpen(true)}
-                    style={{
-                      padding: '4px 9px',
-                      fontSize: '0.72rem',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '4px',
-                      background: '#FFFFFF',
-                      color: '#1E293B',
-                      border: '1px solid #CBD5E1',
-                      borderRadius: '6px',
-                      cursor: 'pointer',
-                      fontWeight: 600,
-                      transition: 'all 0.15s ease'
-                    }}
-                    onMouseEnter={e => { e.currentTarget.style.background = '#F8FAFC'; e.currentTarget.style.borderColor = '#94A3B8'; }}
-                    onMouseLeave={e => { e.currentTarget.style.background = '#FFFFFF'; e.currentTarget.style.borderColor = '#CBD5E1'; }}
-                    title="Open distraction-free full-screen reader modal"
-                  >
-                    <BookOpen size={12} style={{ color: '#2563EB' }} />
-                    <span>Reader</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => onViewClaims?.(selectedDocDetails, 'summary')}
-                    style={{
-                      padding: '4px 10px',
-                      fontSize: '0.72rem',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '4px',
-                      background: 'linear-gradient(135deg, #EA580C 0%, #F97316 100%)',
-                      border: 'none',
-                      color: '#FFFFFF',
-                      fontWeight: 700,
-                      borderRadius: '6px',
-                      cursor: 'pointer',
-                      boxShadow: '0 2px 5px rgba(234, 88, 12, 0.22)',
-                      transition: 'all 0.15s ease'
-                    }}
-                    onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 3px 7px rgba(234, 88, 12, 0.3)'; }}
-                    onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 2px 5px rgba(234, 88, 12, 0.22)'; }}
-                    title="Open document in full 360° Lineage Studio"
-                  >
-                    <Sparkles size={12} />
-                    <span>360° Studio</span>
-                  </button>
-
-                  {!readOnly && (
-                    <button
-                      type="button"
-                      onClick={() => handleDeleteDocument(selectedDocDetails)}
-                      style={{
-                        padding: '4px 10px',
-                        fontSize: '0.72rem',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '4px',
-                        background: '#FEF2F2',
-                        color: '#DC2626',
-                        border: '1px solid #FECACA',
-                        borderRadius: '6px',
-                        cursor: 'pointer',
-                        fontWeight: 600,
-                        transition: 'all 0.15s ease'
-                      }}
-                      onMouseEnter={e => { e.currentTarget.style.background = '#FEE2E2'; e.currentTarget.style.borderColor = '#FCA5A5'; }}
-                      onMouseLeave={e => { e.currentTarget.style.background = '#FEF2F2'; e.currentTarget.style.borderColor = '#FECACA'; }}
-                      title="Permanently delete document"
-                    >
-                      <Trash2 size={12} style={{ color: '#DC2626' }} />
-                      <span>Delete</span>
-                    </button>
-                  )}
-
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setSelectedDocId(null);
-                      setSelectedDocDetails(null);
-                      setSelectedDocArtifacts(null);
-                    }}
-                    style={{
-                      width: '26px',
-                      height: '26px',
-                      borderRadius: '6px',
-                      border: '1px solid #E2E8F0',
-                      background: '#FFFFFF',
-                      color: '#64748B',
-                      cursor: 'pointer',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      marginLeft: '2px',
-                      transition: 'all 0.15s ease'
-                    }}
-                    onMouseEnter={e => { e.currentTarget.style.background = '#FEE2E2'; e.currentTarget.style.color = '#DC2626'; e.currentTarget.style.borderColor = '#FCA5A5'; }}
-                    onMouseLeave={e => { e.currentTarget.style.background = '#FFFFFF'; e.currentTarget.style.color = '#64748B'; e.currentTarget.style.borderColor = '#E2E8F0'; }}
-                    title="Close preview"
-                  >
-                    <X size={13} />
-                  </button>
-                </div>
-              </div>
-
-              {/* 2. Facility Tabs: Modern Segmented Control Bar (Zero Horizontal Overflow) */}
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  padding: '7px 14px',
-                  borderBottom: '1px solid #E2E8F0',
-                  background: '#FAF8F5',
+                  flexDirection: 'column',
                   gap: '8px',
-                  minWidth: 0,
-                  flexShrink: 0
+                  boxSizing: 'border-box'
                 }}
               >
-                {/* Segmented Control Pills */}
-                <div
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    background: '#E2E8F0',
-                    padding: '3px',
-                    borderRadius: '8px',
-                    gap: '2px',
-                    minWidth: 0,
-                    maxWidth: '100%'
-                  }}
-                >
-                  {[
-                    { id: 'preview', label: 'Preview', icon: FileText, iconColor: '#0284C7' },
-                    { id: 'description', label: 'Specs', icon: Info, iconColor: '#7C3AED' },
-                    { id: 'claims', label: 'Claims', count: claimsList.length, icon: ShieldCheck, iconColor: '#16A34A' },
-                    { id: 'lineage', label: 'Lineage', icon: Network, iconColor: '#EA580C' }
-                  ].map(tab => {
-                    const isActive = activeFacilityTab === tab.id;
-                    const IconComp = tab.icon;
-                    return (
-                      <button
-                        key={tab.id}
-                        type="button"
-                        onClick={() => setActiveFacilityTab(tab.id)}
-                        style={{
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: '5px',
-                          padding: '4px 11px',
-                          fontSize: '0.74rem',
-                          fontWeight: isActive ? 700 : 500,
-                          borderRadius: '6px',
-                          border: isActive ? '1px solid rgba(0,0,0,0.06)' : '1px solid transparent',
-                          background: isActive ? '#FFFFFF' : 'transparent',
-                          color: isActive ? '#0F172A' : '#64748B',
-                          cursor: 'pointer',
-                          whiteSpace: 'nowrap',
-                          boxShadow: isActive ? '0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04)' : 'none',
-                          transition: 'all 0.15s ease'
-                        }}
-                        onMouseEnter={e => {
-                          if (!isActive) {
-                            e.currentTarget.style.color = '#0F172A';
-                            e.currentTarget.style.background = 'rgba(255,255,255,0.6)';
-                          }
-                        }}
-                        onMouseLeave={e => {
-                          if (!isActive) {
-                            e.currentTarget.style.color = '#64748B';
-                            e.currentTarget.style.background = 'transparent';
-                          }
-                        }}
-                      >
-                        <IconComp size={13} style={{ color: isActive ? tab.iconColor : '#94A3B8' }} />
-                        <span>{tab.label}</span>
-                        {typeof tab.count === 'number' && (
-                          <span
-                            style={{
-                              fontSize: '0.64rem',
-                              fontWeight: 800,
-                              padding: '1px 5px',
-                              borderRadius: '10px',
-                              background: isActive ? '#DCFCE7' : '#CBD5E1',
-                              color: isActive ? '#15803D' : '#475569',
-                              marginLeft: '1px'
-                            }}
-                          >
-                            {tab.count}
-                          </span>
-                        )}
-                      </button>
-                    );
-                  })}
-                </div>
-
-                {/* Right Trust/Integrity Micro Badge */}
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '6px',
-                    fontSize: '0.68rem',
-                    color: '#64748B',
-                    fontWeight: 600,
-                    flexShrink: 0
-                  }}
-                >
-                  <span
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '4px',
-                      background: '#F0FDF4',
-                      color: '#166534',
-                      padding: '2px 7px',
-                      borderRadius: '12px',
-                      border: '1px solid #BBF7D0'
-                    }}
-                  >
-                    <ShieldCheck size={11} style={{ color: '#16A34A' }} />
-                    <span>9-Gate Verified</span>
-                  </span>
-                  <span style={{ color: '#CBD5E1' }}>•</span>
-                  <span>{trustPercent}% Trust</span>
-                </div>
-              </div>
-
-              {/* 3. Facility Tab Contents */}
-              <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', overflowX: 'hidden', display: 'flex', flexDirection: 'column' }}>
-
-                {/* TAB 1: PREVIEW & OPEN FILE */}
-                {activeFacilityTab === 'preview' && (
-                  <div style={{ display: 'flex', flexDirection: 'column', height: '100%', minHeight: 0 }}>
-                    <div
-                      style={{
-                        flex: 1,
-                        overflowY: 'auto',
-                        overflowX: 'hidden',
-                        background: '#FAF8F5',
-                        padding: '16px 20px'
-                      }}
-                    >
-                      {loadingPreview ? (
-                        <div style={{ textAlign: 'center', padding: '50px 20px', color: 'var(--text-muted)', fontSize: '0.80rem' }}>
-                          <RefreshCw size={18} className="spin" style={{ margin: '0 auto 8px auto', display: 'block', color: '#2563EB' }} />
-                          <span>Loading policy document preview...</span>
-                        </div>
-                      ) : (
-                        <div
-                          style={{
-                            background: '#FFFFFF',
-                            borderRadius: '8px',
-                            border: '1px solid #E2E8F0',
-                            boxShadow: '0 4px 20px -2px rgba(15, 23, 42, 0.05), 0 1px 3px rgba(0,0,0,0.03)',
-                            padding: '22px 26px',
-                            minHeight: '260px',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            gap: '12px'
-                          }}
-                        >
-                          {/* Dossier Sheet Header */}
-                          <div
-                            style={{
-                              display: 'flex',
-                              justifyContent: 'space-between',
-                              alignItems: 'center',
-                              borderBottom: '1px solid #E2E8F0',
-                              paddingBottom: '10px',
-                              fontSize: '0.68rem',
-                              color: '#64748B'
-                            }}
-                          >
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                              <span style={{ fontWeight: 800, color: '#0F172A', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                                {selectedDocDetails.document_type || 'Policy'} Document Sheet
-                              </span>
-                              <span style={{ width: '4px', height: '4px', borderRadius: '50%', background: '#94A3B8' }} />
-                              <span style={{ color: '#16A34A', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
-                                <CheckCircle2 size={11} /> Verified Ingestion
-                              </span>
-                            </div>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.66rem' }}>
-                              <span>Page 1 of 1</span>
-                              <span style={{ color: '#CBD5E1' }}>|</span>
-                              <span style={{ fontFamily: 'monospace', color: '#475569' }}>
-                                SHA: {selectedDocDetails.content_hash?.substring(0, 8)}...
-                              </span>
-                            </div>
-                          </div>
-
-                          {/* Markdown Parsed Document Body */}
-                          <div style={{ minHeight: '120px' }}>
-                            {rawReaderContent ? (
-                              renderFormattedMarkdown(rawReaderContent)
-                            ) : (
-                              <div style={{ padding: '30px 10px', textAlign: 'center', color: '#94A3B8', fontSize: '0.80rem' }}>
-                                No text content available for this document.
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Bottom Metadata & Facility Switch Bar */}
-                    <div
-                      style={{
-                        padding: '8px 16px',
-                        borderTop: '1px solid #E2E8F0',
-                        background: '#FFFFFF',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        fontSize: '0.72rem',
-                        gap: '8px',
-                        flexWrap: 'wrap',
-                        flexShrink: 0
-                      }}
-                    >
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <span
-                          style={{
-                            fontSize: '0.66rem',
-                            padding: '2px 8px',
-                            borderRadius: '12px',
-                            background: '#F0FDF4',
-                            color: '#15803D',
-                            border: '1px solid #BBF7D0',
-                            fontWeight: 700
-                          }}
-                        >
-                          {claimsList.length} Extracted Claim{claimsList.length === 1 ? '' : 's'}
-                        </span>
-                        <span style={{ color: '#64748B' }}>
-                          Hash: <code style={{ fontSize: '0.70rem', background: '#F1F5F9', padding: '1px 4px', borderRadius: '3px' }}>{selectedDocDetails.content_hash?.substring(0, 10)}...</code>
-                        </span>
-                        <button
-                          type="button"
-                          onClick={() => handleCopy(selectedDocDetails.content_hash)}
-                          style={{ background: 'none', border: 'none', color: '#2563EB', cursor: 'pointer', padding: 0, display: 'inline-flex', alignItems: 'center' }}
-                          title="Copy SHA-256 hash"
-                        >
-                          {copiedHash ? <Check size={13} style={{ color: '#16A34A' }} /> : <Copy size={13} />}
-                        </button>
-                      </div>
-
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                        <button
-                          type="button"
-                          onClick={() => setActiveFacilityTab('description')}
-                          style={{
-                            padding: '4px 9px',
-                            fontSize: '0.72rem',
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '4px',
-                            background: '#F8FAFC',
-                            border: '1px solid #E2E8F0',
-                            borderRadius: '6px',
-                            cursor: 'pointer',
-                            color: '#334155',
-                            fontWeight: 600
-                          }}
-                        >
-                          <Info size={12} style={{ color: '#7C3AED' }} />
-                          <span>Specs</span>
-                        </button>
-
-                        <button
-                          type="button"
-                          onClick={() => setActiveFacilityTab('claims')}
-                          style={{
-                            padding: '4px 10px',
-                            fontSize: '0.72rem',
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '4px',
-                            background: '#EFF6FF',
-                            border: '1px solid #BFDBFE',
-                            borderRadius: '6px',
-                            cursor: 'pointer',
-                            color: '#1D4ED8',
-                            fontWeight: 700
-                          }}
-                        >
-                          <Search size={12} />
-                          <span>View Claims ({claimsList.length})</span>
-                        </button>
-
-                        <button
-                          type="button"
-                          onClick={() => setActiveFacilityTab('lineage')}
-                          style={{
-                            padding: '4px 9px',
-                            fontSize: '0.72rem',
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '4px',
-                            background: '#F8FAFC',
-                            border: '1px solid #E2E8F0',
-                            borderRadius: '6px',
-                            cursor: 'pointer',
-                            color: '#334155',
-                            fontWeight: 600
-                          }}
-                        >
-                          <Layers size={12} style={{ color: '#EA580C' }} />
-                          <span>Lineage</span>
-                        </button>
-                      </div>
-                    </div>
+                {loadingPreview ? (
+                  <div style={{ textAlign: 'center', padding: '40px 20px', color: 'var(--text-muted)', fontSize: '0.80rem' }}>
+                    <RefreshCw size={18} className="spin" style={{ margin: '0 auto 8px auto', display: 'block', color: '#2563EB' }} />
+                    <span>Loading policy document preview...</span>
                   </div>
-                )}
-
-                {/* TAB 2: DESCRIPTION & TECHNICAL SPECIFICATIONS */}
-                {activeFacilityTab === 'description' && (
-                  <div style={{ padding: '16px 18px', display: 'flex', flexDirection: 'column', gap: '14px', background: '#FFFFFF' }}>
-                    {/* Governance Description Abstract */}
-                    <div style={{ padding: '12px 14px', background: '#F8FAFC', borderRadius: '8px', border: '1px solid #E2E8F0' }}>
-                      <div style={{ fontSize: '0.70rem', fontWeight: 800, color: '#64748B', textTransform: 'uppercase', marginBottom: '4px', letterSpacing: '0.04em' }}>
-                        Governance Abstract & Description
-                      </div>
-                      <p style={{ margin: 0, fontSize: '0.80rem', color: '#334155', lineHeight: 1.55 }}>
-                        {selectedDocDetails.description || `Enterprise normalized governance asset. Deconstructed into atomic policy facts, signed with SHA-256 cryptographic provenance, and continuously verified against temporal drift and cross-document contradictions.`}
-                      </p>
-                    </div>
-
-                    {/* 4 Governance Metrics */}
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px' }}>
-                      <div style={{ padding: '8px 10px', background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '6px' }}>
-                        <div style={{ fontSize: '0.66rem', color: '#64748B', fontWeight: 600 }}>Atomic Claims</div>
-                        <div style={{ fontSize: '1.05rem', fontWeight: 800, color: '#0F172A', marginTop: '2px' }}>{claimsList.length}</div>
-                        <span style={{ fontSize: '0.62rem', color: '#16A34A', fontWeight: 700 }}>{verifiedCount || claimsList.length} verified</span>
-                      </div>
-                      <div style={{ padding: '8px 10px', background: conflictsList.length > 0 ? '#FEF2F2' : '#F0FDF4', border: `1px solid ${conflictsList.length > 0 ? '#FEE2E2' : '#DCFCE7'}`, borderRadius: '6px' }}>
-                        <div style={{ fontSize: '0.66rem', color: conflictsList.length > 0 ? '#991B1B' : '#166534', fontWeight: 600 }}>Contradictions</div>
-                        <div style={{ fontSize: '1.05rem', fontWeight: 800, color: conflictsList.length > 0 ? '#DC2626' : '#15803D', marginTop: '2px' }}>{conflictsList.length}</div>
-                        <span style={{ fontSize: '0.62rem', color: conflictsList.length > 0 ? '#DC2626' : '#16A34A', fontWeight: 700 }}>{conflictsList.length > 0 ? 'Action required' : '0 detected'}</span>
-                      </div>
-                      <div style={{ padding: '8px 10px', background: '#ECFDF5', border: '1px solid #A7F3D0', borderRadius: '6px' }}>
-                        <div style={{ fontSize: '0.66rem', color: '#065F46', fontWeight: 600 }}>Trust Integrity</div>
-                        <div style={{ fontSize: '1.05rem', fontWeight: 800, color: '#059669', marginTop: '2px' }}>{trustPercent}%</div>
-                        <span style={{ fontSize: '0.62rem', color: '#059669', fontWeight: 700 }}>High Trust Tier</span>
-                      </div>
-                      <div style={{ padding: '8px 10px', background: '#EFF6FF', border: '1px solid #BFDBFE', borderRadius: '6px' }}>
-                        <div style={{ fontSize: '0.66rem', color: '#1E40AF', fontWeight: 600 }}>Downstream Impact</div>
-                        <div style={{ fontSize: '1.05rem', fontWeight: 800, color: '#2563EB', marginTop: '2px' }}>Active</div>
-                        <span style={{ fontSize: '0.62rem', color: '#2563EB', fontWeight: 700 }}>Decision Gateway</span>
-                      </div>
-                    </div>
-
-                    {/* Technical Specifications Table */}
-                    <div style={{ border: '1px solid #E2E8F0', borderRadius: '8px', overflow: 'hidden' }}>
-                      <div style={{ padding: '7px 12px', background: '#F8FAFC', borderBottom: '1px solid #E2E8F0', fontSize: '0.70rem', fontWeight: 800, color: '#475569', textTransform: 'uppercase' }}>
-                        Technical Specifications & Metadata
-                      </div>
-                      <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.74rem' }}>
-                        <tbody>
-                          {[
-                            { label: 'Artifact GUID', value: selectedDocDetails.id, isMono: true },
-                            { label: 'Parent Source Connector', value: selectedDocArtifacts?.source?.name || 'Direct File Upload' },
-                            { label: 'Classification', value: selectedDocDetails.document_type || 'Restricted Policy Standard' },
-                            { label: 'Active Version', value: selectedDocDetails.versions?.length ? `v${selectedDocDetails.versions.length}.0` : 'v1.0' },
-                            { label: 'Cryptographic SHA-256', value: selectedDocDetails.content_hash || 'SHA256-OK', isMono: true },
-                            { label: 'Deconstruction Pipeline', value: 'Trulin Semantic Deconstruction Engine v1.0' },
-                            { label: 'Created Timestamp', value: selectedDocDetails.created_at ? new Date(selectedDocDetails.created_at).toLocaleString() : 'Recent' }
-                          ].map((row, idx, arr) => (
-                            <tr key={row.label} style={{ borderBottom: idx < arr.length - 1 ? '1px solid #F1F5F9' : 'none' }}>
-                              <td style={{ padding: '7px 12px', color: '#64748B', fontWeight: 600, width: '38%' }}>{row.label}</td>
-                              <td style={{ padding: '7px 12px', color: '#0F172A', fontWeight: row.isMono ? 700 : 500, fontFamily: row.isMono ? 'monospace' : 'inherit', fontSize: row.isMono ? '0.70rem' : '0.74rem' }}>
-                                {row.value}
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '8px', paddingTop: '6px' }}>
-                      <button
-                        type="button"
-                        onClick={() => setActiveFacilityTab('claims')}
-                        className="btn btn-secondary"
-                        style={{ padding: '5px 12px', fontSize: '0.74rem', display: 'flex', alignItems: 'center', gap: '5px' }}
-                      >
-                        <ShieldCheck size={13} style={{ color: '#2563EB' }} />
-                        <span>Select Claims ({claimsList.length}) ➔</span>
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={() => onViewClaims?.(selectedDocDetails, 'summary')}
-                        className="btn btn-primary"
-                        style={{ padding: '5px 14px', fontSize: '0.74rem', display: 'flex', alignItems: 'center', gap: '5px', background: '#EA580C', borderColor: '#EA580C', color: '#FFFFFF', fontWeight: 700 }}
-                      >
-                        <Sparkles size={13} />
-                        <span>Deep-Dive in 360° Studio ↗</span>
-                      </button>
-                    </div>
-                  </div>
-                )}
-
-                {/* TAB 3: ATOMIC CLAIMS SELECTOR (SELECT ACROSS THIS PARTICULAR DOCUMENT) */}
-                {activeFacilityTab === 'claims' && (
-                  <div style={{ padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: '12px', background: '#FFFFFF', flex: 1 }}>
-                    {/* Claims Search Bar */}
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '10px' }}>
-                      <div style={{ position: 'relative', flex: 1 }}>
-                        <Search size={13} style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: '#94A3B8' }} />
-                        <input
-                          type="text"
-                          placeholder={`Filter ${claimsList.length} claims in this document...`}
-                          value={claimSearchQuery}
-                          onChange={e => setClaimSearchQuery(e.target.value)}
-                          style={{
-                            width: '100%',
-                            padding: '6px 10px 6px 30px',
-                            borderRadius: '6px',
-                            border: '1px solid #CBD5E1',
-                            fontSize: '0.76rem',
-                            outline: 'none'
-                          }}
-                        />
-                      </div>
-                      <span style={{ fontSize: '0.72rem', color: '#64748B', fontWeight: 600, whiteSpace: 'nowrap' }}>
-                        {filteredDocClaims.length} of {claimsList.length} claims
-                      </span>
-                    </div>
-
-                    {/* Claims Split Selector */}
-                    {filteredDocClaims.length === 0 ? (
-                      <div style={{ padding: '30px', textAlign: 'center', color: '#94A3B8', fontSize: '0.78rem' }}>
-                        {claimSearchQuery ? 'No claims match your search filter.' : 'No atomic claims extracted for this document yet.'}
-                      </div>
+                ) : (
+                  <div style={{ minHeight: '80px' }}>
+                    {rawReaderContent ? (
+                      renderFormattedMarkdown(rawReaderContent)
                     ) : (
-                      <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '12px', flex: 1, minHeight: '260px' }}>
-                        {/* Left List of Claims */}
-                        <div style={{ overflowY: 'auto', maxHeight: '340px', display: 'flex', flexDirection: 'column', gap: '6px', paddingRight: '4px' }}>
-                          {filteredDocClaims.map((claim, idx) => {
-                            const isSelected = activeClaimObj?.id === claim.id;
-                            const isConflicted = conflictsList.some(c => c.claim_a_id === claim.id || c.claim_b_id === claim.id);
-                            return (
-                              <div
-                                key={claim.id || idx}
-                                onClick={() => setSelectedClaimId(claim.id)}
-                                style={{
-                                  padding: '8px 10px',
-                                  borderRadius: '6px',
-                                  border: isSelected ? '1.5px solid #2563EB' : '1px solid #E2E8F0',
-                                  background: isSelected ? '#EFF6FF' : '#FFFFFF',
-                                  cursor: 'pointer',
-                                  transition: 'all 0.15s ease'
-                                }}
-                              >
-                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '3px' }}>
-                                  <span style={{ fontSize: '0.66rem', fontWeight: 700, color: isSelected ? '#1D4ED8' : '#475569', textTransform: 'uppercase' }}>
-                                    {claim.subject || 'Rule'}
-                                  </span>
-                                  <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                                    {isConflicted && (
-                                      <span style={{ fontSize: '0.60rem', background: '#FEE2E2', color: '#991B1B', padding: '1px 5px', borderRadius: '4px', fontWeight: 700 }}>
-                                        ⚠️ Conflict
-                                      </span>
-                                    )}
-                                    <span style={{ fontSize: '0.62rem', background: isSelected ? '#DBEAFE' : '#F1F5F9', color: isSelected ? '#1D4ED8' : '#16A34A', padding: '1px 5px', borderRadius: '4px', fontWeight: 700 }}>
-                                      {Math.round((claim.trust_score || 0.95) * 100)}%
-                                    </span>
-                                  </div>
-                                </div>
-                                <div style={{ fontSize: '0.76rem', color: isSelected ? '#1E293B' : '#334155', fontWeight: isSelected ? 600 : 400, lineHeight: 1.35, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
-                                  {claim.claim_text}
-                                </div>
-                              </div>
-                            );
-                          })}
-                        </div>
-
-                        {/* Right Detail Pane for Selected Claim */}
-                        <div style={{ padding: '12px', background: '#F8FAFC', borderRadius: '8px', border: '1px solid #E2E8F0', overflowY: 'auto', maxHeight: '340px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                          {activeClaimObj ? (
-                            <>
-                              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #E2E8F0', paddingBottom: '6px' }}>
-                                <span style={{ fontSize: '0.68rem', fontWeight: 800, color: '#334155', textTransform: 'uppercase' }}>
-                                  Claim Deep-Dive
-                                </span>
-                                <span className="badge badge-verified" style={{ fontSize: '0.62rem' }}>
-                                  {activeClaimObj.status || 'Verified Active'}
-                                </span>
-                              </div>
-
-                              <div>
-                                <div style={{ fontSize: '0.66rem', color: '#64748B', fontWeight: 700, marginBottom: '2px' }}>ATOMIC STATEMENT</div>
-                                <div style={{ fontSize: '0.80rem', fontWeight: 600, color: '#0F172A', lineHeight: 1.4 }}>
-                                  "{activeClaimObj.claim_text}"
-                                </div>
-                              </div>
-
-                              {activeClaimObj.quote && (
-                                <div>
-                                  <div style={{ fontSize: '0.66rem', color: '#64748B', fontWeight: 700, marginBottom: '2px' }}>EXACT SOURCE QUOTE</div>
-                                  <div style={{ fontSize: '0.74rem', fontStyle: 'italic', color: '#475569', background: '#FFFFFF', padding: '6px 8px', borderRadius: '4px', border: '1px solid #E2E8F0' }}>
-                                    "{activeClaimObj.quote}"
-                                  </div>
-                                </div>
-                              )}
-
-                              <div>
-                                <div style={{ fontSize: '0.66rem', color: '#64748B', fontWeight: 700, marginBottom: '2px' }}>SEMANTIC TRIPLET</div>
-                                <div style={{ fontSize: '0.72rem', display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
-                                  <span style={{ background: '#EFF6FF', color: '#1D4ED8', padding: '2px 6px', borderRadius: '4px', fontWeight: 600 }}>{activeClaimObj.subject || 'Subject'}</span>
-                                  <span style={{ color: '#94A3B8' }}>➔</span>
-                                  <span style={{ background: '#FEF3C7', color: '#B45309', padding: '2px 6px', borderRadius: '4px', fontWeight: 600 }}>{activeClaimObj.predicate || 'specifies'}</span>
-                                  <span style={{ color: '#94A3B8' }}>➔</span>
-                                  <span style={{ background: '#F0FDF4', color: '#15803D', padding: '2px 6px', borderRadius: '4px', fontWeight: 600 }}>{activeClaimObj.object || 'Policy Requirement'}</span>
-                                </div>
-                              </div>
-
-                              <div style={{ marginTop: 'auto', paddingTop: '8px', borderTop: '1px solid #E2E8F0', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '6px' }}>
-                                <span style={{ fontSize: '0.68rem', color: '#64748B' }}>
-                                  Confidence: <strong style={{ color: '#16A34A' }}>{Math.round((activeClaimObj.trust_score || 0.95) * 100)}%</strong>
-                                </span>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                                  <button
-                                    type="button"
-                                    onClick={() => setActiveFacilityTab('preview')}
-                                    className="btn btn-secondary"
-                                    style={{ padding: '2px 8px', fontSize: '0.70rem' }}
-                                    title="Locate claim in document preview"
-                                  >
-                                    Locate in Doc
-                                  </button>
-                                  <button
-                                    type="button"
-                                    onClick={() => onViewClaims?.(selectedDocDetails, 'dag')}
-                                    className="btn btn-secondary"
-                                    style={{ padding: '2px 8px', fontSize: '0.70rem', color: '#EA580C', borderColor: '#FED7AA' }}
-                                    title="Inspect claim in Interactive DAG Lineage"
-                                  >
-                                    Inspect in DAG ➔
-                                  </button>
-                                  <button
-                                    type="button"
-                                    onClick={() => onViewClaims?.(selectedDocDetails, 'claims')}
-                                    className="btn btn-primary"
-                                    style={{ padding: '2px 8px', fontSize: '0.70rem' }}
-                                    title="Open Claim Studio"
-                                  >
-                                    Claims Studio ↗
-                                  </button>
-                                </div>
-                              </div>
-                            </>
-                          ) : (
-                            <div style={{ textAlign: 'center', color: '#94A3B8', fontSize: '0.76rem', padding: '30px 10px' }}>
-                              Select a claim on the left to inspect its extracted details.
-                            </div>
-                          )}
-                        </div>
+                      <div style={{ padding: '20px 10px', textAlign: 'center', color: '#94A3B8', fontSize: '0.80rem' }}>
+                        No text content available for this document.
                       </div>
                     )}
                   </div>
                 )}
-
-                {/* TAB 4: FULL-FIDELITY EVIDENCE LINEAGE DAG CANVAS */}
-                {activeFacilityTab === 'lineage' && (() => {
-                  const displayClaims = claimsList.slice(0, 4);
-                  const remainingClaimsCount = Math.max(0, claimsList.length - 4);
-                  const activeNodeDetails = (() => {
-                    if (selectedDagNodeId === 'src_node') {
-                      return {
-                        title: selectedDocArtifacts?.source?.name || 'Direct File Upload',
-                        type: 'Source Ingestion Connector',
-                        badge: 'Authoritative Tier 1',
-                        badgeColor: '#2563EB',
-                        details: 'Authoritative tenant ingestion conduit. Ingests raw document binaries and issues cryptographic provenance signatures.',
-                        sha: selectedDocDetails.content_hash || 'SHA-INGESTION-VALID',
-                        status: 'Connected & Authoritative'
-                      };
-                    }
-                    if (selectedDagNodeId === 'gate_decision') {
-                      return {
-                        title: 'Universal Decision Gate',
-                        type: 'Policy Enforcement Gateway',
-                        badge: 'Autonomous Enforcement',
-                        badgeColor: '#7C3AED',
-                        details: 'Continuous verification gateway. Evaluates cross-policy contradictions, scores trust decay, and applies authority overrides.',
-                        sha: 'GATEWAY-DETERMINISTIC-OK',
-                        status: '0 Active Contradictions'
-                      };
-                    }
-                    if (selectedDagNodeId === 'gate_agent') {
-                      return {
-                        title: 'LLM Grounding & AI Assistant Gateway',
-                        type: 'Model Context Provider',
-                        badge: 'Runtime RAG Conduit',
-                        badgeColor: '#059669',
-                        details: 'Grounds downstream AI chatbots and enterprise agents with mathematically verified policy facts, preventing hallucinations.',
-                        sha: 'RUNTIME-GROUNDING-VERIFIED',
-                        status: 'Active Fact Provider'
-                      };
-                    }
-                    if (selectedDagNodeId === 'gate_merkle') {
-                      return {
-                        title: 'Immutable Merkle Proof Ledger',
-                        type: 'Cryptographic Compliance Proof',
-                        badge: 'Zero-Knowledge Proof',
-                        badgeColor: '#D97706',
-                        details: 'Permanent audit ledger storing SHA-256 digest roots for compliance audits and sovereign regulatory validation.',
-                        sha: selectedDocDetails.content_hash || 'MERKLE-ROOT-OK',
-                        status: 'Cryptographically Sealed'
-                      };
-                    }
-                    if (selectedDagNodeId.startsWith('claim_')) {
-                      const claimIdx = parseInt(selectedDagNodeId.replace('claim_', ''), 10);
-                      const targetClaim = displayClaims[claimIdx];
-                      if (targetClaim) {
-                        return {
-                          title: targetClaim.subject || 'Policy Rule',
-                          type: 'Atomic Extracted Claim',
-                          badge: `${Math.round((targetClaim.trust_score || 0.95) * 100)}% Trust`,
-                          badgeColor: '#16A34A',
-                          details: targetClaim.claim_text,
-                          quote: targetClaim.quote,
-                          sha: targetClaim.id || 'CLAIM-SHA-VALID',
-                          status: targetClaim.status || '9-Gate Verified'
-                        };
-                      }
-                    }
-                    // Default to canonical document
-                    return {
-                      title: selectedDocDetails.title,
-                      type: `${selectedDocDetails.document_type || 'Policy'} Document`,
-                      badge: `v${selectedDocDetails.versions?.length || 1}.0 Canonical`,
-                      badgeColor: '#EA580C',
-                      details: 'Canonical governance asset. Parsed, normalized, and decomposed into verifiable atomic assertions.',
-                      sha: selectedDocDetails.content_hash || 'SHA256-SEALED-OK',
-                      status: '9-Gate Verification Passed'
-                    };
-                  })();
-
-                  return (
-                    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', minHeight: 0, background: '#FAF8F5' }}>
-                      {/* DAG Toolbar & Lens Controls */}
-                      <div
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'space-between',
-                          padding: '10px 16px',
-                          borderBottom: '1px solid #E2E8F0',
-                          background: '#FFFFFF',
-                          gap: '10px',
-                          flexWrap: 'wrap',
-                          flexShrink: 0
-                        }}
-                      >
-                        <div>
-                          <div style={{ fontSize: '0.84rem', fontWeight: 800, color: '#0F172A', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                            <Network size={14} style={{ color: '#EA580C' }} />
-                            <span>Evidence Lineage & Provenance Graph</span>
-                          </div>
-                          <div style={{ fontSize: '0.68rem', color: '#64748B', marginTop: '2px' }}>
-                            Full-fidelity trace: Source Connector ➔ Canonical Policy ➔ Atomic Claims ➔ Decision Gates
-                          </div>
-                        </div>
-
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                          {/* Lens Filter Pills */}
-                          <div style={{ display: 'inline-flex', alignItems: 'center', background: '#F1F5F9', padding: '2px', borderRadius: '6px', gap: '2px' }}>
-                            {[
-                              { id: 'all', label: 'All Stages (4)' },
-                              { id: 'claims', label: 'Claims Focus' },
-                              { id: 'gateways', label: 'Gateways Only' }
-                            ].map(l => (
-                              <button
-                                key={l.id}
-                                type="button"
-                                onClick={() => setDagViewFilter(l.id)}
-                                style={{
-                                  padding: '3px 8px',
-                                  fontSize: '0.68rem',
-                                  fontWeight: dagViewFilter === l.id ? 700 : 500,
-                                  borderRadius: '4px',
-                                  border: 'none',
-                                  background: dagViewFilter === l.id ? '#FFFFFF' : 'transparent',
-                                  color: dagViewFilter === l.id ? '#0F172A' : '#64748B',
-                                  cursor: 'pointer',
-                                  boxShadow: dagViewFilter === l.id ? '0 1px 2px rgba(0,0,0,0.06)' : 'none'
-                                }}
-                              >
-                                {l.label}
-                              </button>
-                            ))}
-                          </div>
-
-                          <button
-                            type="button"
-                            onClick={() => onViewClaims?.(selectedDocDetails, 'dag')}
-                            style={{
-                              padding: '5px 12px',
-                              fontSize: '0.72rem',
-                              fontWeight: 700,
-                              background: 'linear-gradient(135deg, #EA580C 0%, #F97316 100%)',
-                              border: 'none',
-                              color: '#FFFFFF',
-                              borderRadius: '6px',
-                              cursor: 'pointer',
-                              display: 'flex',
-                              alignItems: 'center',
-                              gap: '5px',
-                              boxShadow: '0 2px 4px rgba(234, 88, 12, 0.2)'
-                            }}
-                            title="Open full interactive DAG in 360° Studio"
-                          >
-                            <Sparkles size={12} />
-                            <span>Launch 360° Canvas DAG ↗</span>
-                          </button>
-                        </div>
-                      </div>
-
-                      {/* DAG Interactive Canvas */}
-                      <div
-                        style={{
-                          flex: 1,
-                          overflow: 'auto',
-                          position: 'relative',
-                          background: '#F8FAFC',
-                          backgroundImage: 'radial-gradient(#CBD5E1 1.2px, transparent 1.2px)',
-                          backgroundSize: '20px 20px',
-                          padding: '24px 20px',
-                          minHeight: '380px',
-                          display: 'flex',
-                          alignItems: 'flex-start',
-                          gap: '36px'
-                        }}
-                      >
-                        {/* SVG Connecting Bezier Lines */}
-                        <svg
-                          style={{
-                            position: 'absolute',
-                            top: 0,
-                            left: 0,
-                            width: '100%',
-                            height: '100%',
-                            minWidth: '850px',
-                            minHeight: '400px',
-                            pointerEvents: 'none',
-                            zIndex: 1
-                          }}
-                        >
-                          <defs>
-                            <marker id="atlan-arrow-default" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
-                              <polygon points="0 1, 8 4, 0 7" fill="#94A3B8" />
-                            </marker>
-                            <marker id="atlan-arrow-active" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
-                              <polygon points="0 1, 8 4, 0 7" fill="#2563EB" />
-                            </marker>
-                            <marker id="atlan-arrow-decision" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
-                              <polygon points="0 1, 8 4, 0 7" fill="#7C3AED" />
-                            </marker>
-                          </defs>
-
-                          {/* Connection 1: Source to Document */}
-                          <path
-                            d="M 215 110 C 240 110, 240 110, 265 110"
-                            fill="none"
-                            stroke={selectedDagNodeId === 'src_node' || selectedDagNodeId === 'doc_canonical' ? '#2563EB' : '#94A3B8'}
-                            strokeWidth={selectedDagNodeId === 'src_node' || selectedDagNodeId === 'doc_canonical' ? 2.4 : 1.6}
-                            markerEnd={selectedDagNodeId === 'src_node' || selectedDagNodeId === 'doc_canonical' ? 'url(#atlan-arrow-active)' : 'url(#atlan-arrow-default)'}
-                          />
-
-                          {/* Connections 2: Document to Claims */}
-                          {displayClaims.map((_, idx) => {
-                            const claimY = 75 + (idx * 90);
-                            return (
-                              <path
-                                key={`edge_claim_${idx}`}
-                                d={`M 465 110 C 500 110, 480 ${claimY}, 515 ${claimY}`}
-                                fill="none"
-                                stroke={selectedDagNodeId === `claim_${idx}` ? '#2563EB' : '#CBD5E1'}
-                                strokeWidth={selectedDagNodeId === `claim_${idx}` ? 2.2 : 1.4}
-                                strokeDasharray={selectedDagNodeId === `claim_${idx}` ? 'none' : '4 3'}
-                                markerEnd={selectedDagNodeId === `claim_${idx}` ? 'url(#atlan-arrow-active)' : 'url(#atlan-arrow-default)'}
-                              />
-                            );
-                          })}
-
-                          {/* Connections 3: Claims to Gateways */}
-                          {displayClaims.map((_, idx) => {
-                            const claimY = 75 + (idx * 90);
-                            return (
-                              <g key={`gate_paths_${idx}`}>
-                                <path
-                                  d={`M 715 ${claimY} C 740 ${claimY}, 730 85, 755 85`}
-                                  fill="none"
-                                  stroke="#E2E8F0"
-                                  strokeWidth={1.2}
-                                  markerEnd="url(#atlan-arrow-default)"
-                                />
-                                <path
-                                  d={`M 715 ${claimY} C 740 ${claimY}, 730 185, 755 185`}
-                                  fill="none"
-                                  stroke="#E2E8F0"
-                                  strokeWidth={1.2}
-                                  markerEnd="url(#atlan-arrow-default)"
-                                />
-                              </g>
-                            );
-                          })}
-                        </svg>
-
-                        {/* ── STAGE 1: SOURCE INGESTION LAYER ── */}
-                        <div style={{ width: '190px', flexShrink: 0, zIndex: 2, display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                          <div style={{ fontSize: '0.64rem', fontWeight: 800, color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                            Stage 1: Source
-                          </div>
-
-                          <div
-                            onClick={() => setSelectedDagNodeId('src_node')}
-                            style={{
-                              background: '#FFFFFF',
-                              borderRadius: '8px',
-                              border: selectedDagNodeId === 'src_node' ? '2px solid #2563EB' : '1px solid #CBD5E1',
-                              boxShadow: selectedDagNodeId === 'src_node' ? '0 0 0 3px rgba(37,99,235,0.15), 0 4px 12px rgba(0,0,0,0.06)' : '0 2px 6px rgba(0,0,0,0.04)',
-                              padding: '12px 14px',
-                              cursor: 'pointer',
-                              transition: 'all 0.15s ease'
-                            }}
-                          >
-                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' }}>
-                              <span style={{ fontSize: '0.62rem', fontWeight: 800, padding: '1px 6px', borderRadius: '4px', background: '#EFF6FF', color: '#2563EB' }}>
-                                Authoritative Tier 1
-                              </span>
-                              <span style={{ fontSize: '0.62rem', color: '#16A34A', fontWeight: 700 }}>● Live</span>
-                            </div>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
-                              <div style={{ width: '22px', height: '22px', borderRadius: '4px', background: '#F1F5F9', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.85rem' }}>
-                                🔌
-                              </div>
-                              <span style={{ fontSize: '0.78rem', fontWeight: 800, color: '#0F172A', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                                {selectedDocArtifacts?.source?.name || 'Direct File Upload'}
-                              </span>
-                            </div>
-                            <div style={{ fontSize: '0.66rem', color: '#64748B', marginTop: '6px', borderTop: '1px solid #F1F5F9', paddingTop: '4px' }}>
-                              Sovereign Compliance Conduit
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* ── STAGE 2: CANONICAL DOCUMENT LAYER ── */}
-                        <div style={{ width: '200px', flexShrink: 0, zIndex: 2, display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                          <div style={{ fontSize: '0.64rem', fontWeight: 800, color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                            Stage 2: Policy Asset
-                          </div>
-
-                          <div
-                            onClick={() => setSelectedDagNodeId('doc_canonical')}
-                            style={{
-                              background: '#FFFFFF',
-                              borderRadius: '8px',
-                              border: selectedDagNodeId === 'doc_canonical' ? '2px solid #EA580C' : '1px solid #CBD5E1',
-                              boxShadow: selectedDagNodeId === 'doc_canonical' ? '0 0 0 3px rgba(234,88,12,0.15), 0 4px 12px rgba(0,0,0,0.06)' : '0 2px 6px rgba(0,0,0,0.04)',
-                              padding: '12px 14px',
-                              cursor: 'pointer',
-                              transition: 'all 0.15s ease'
-                            }}
-                          >
-                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' }}>
-                              <span style={{ fontSize: '0.62rem', fontWeight: 800, padding: '1px 6px', borderRadius: '4px', background: '#FFF7ED', color: '#EA580C', border: '1px solid #FFEDD5', textTransform: 'uppercase' }}>
-                                {selectedDocDetails.document_type || 'Policy'}
-                              </span>
-                              <span style={{ fontSize: '0.62rem', color: '#64748B', fontWeight: 600 }}>v{selectedDocDetails.versions?.length || 1}.0</span>
-                            </div>
-                            <div style={{ fontSize: '0.78rem', fontWeight: 800, color: '#0F172A', lineHeight: 1.35, marginBottom: '6px', maxHeight: '36px', overflow: 'hidden' }}>
-                              {selectedDocDetails.title}
-                            </div>
-                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.64rem', color: '#64748B', borderTop: '1px solid #F1F5F9', paddingTop: '4px' }}>
-                              <span style={{ color: '#16A34A', fontWeight: 700 }}>✓ 9-Gate Sealed</span>
-                              <span>{claimsList.length} Claims</span>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* ── STAGE 3: ATOMIC CLAIMS & ASSERTIONS ── */}
-                        <div style={{ width: '200px', flexShrink: 0, zIndex: 2, display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                          <div style={{ fontSize: '0.64rem', fontWeight: 800, color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                            Stage 3: Atomic Claims ({claimsList.length})
-                          </div>
-
-                          {displayClaims.length === 0 ? (
-                            <div style={{ padding: '20px 10px', textAlign: 'center', background: '#FFFFFF', borderRadius: '8px', border: '1px dashed #CBD5E1', fontSize: '0.72rem', color: '#94A3B8' }}>
-                              No claims extracted yet
-                            </div>
-                          ) : (
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                              {displayClaims.map((c, idx) => {
-                                const isSelected = selectedDagNodeId === `claim_${idx}`;
-                                return (
-                                  <div
-                                    key={c.id || idx}
-                                    onClick={() => setSelectedDagNodeId(`claim_${idx}`)}
-                                    style={{
-                                      background: '#FFFFFF',
-                                      borderRadius: '8px',
-                                      border: isSelected ? '2px solid #2563EB' : '1px solid #E2E8F0',
-                                      boxShadow: isSelected ? '0 0 0 3px rgba(37,99,235,0.15), 0 3px 8px rgba(0,0,0,0.05)' : '0 1px 3px rgba(0,0,0,0.03)',
-                                      padding: '10px 12px',
-                                      cursor: 'pointer',
-                                      transition: 'all 0.15s ease'
-                                    }}
-                                  >
-                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
-                                      <span style={{ fontSize: '0.60rem', fontWeight: 800, padding: '1px 5px', borderRadius: '3px', background: '#F1F5F9', color: '#475569', textTransform: 'uppercase' }}>
-                                        {c.subject || 'Rule'}
-                                      </span>
-                                      <span style={{ fontSize: '0.62rem', fontWeight: 800, color: '#16A34A', background: '#DCFCE7', padding: '1px 5px', borderRadius: '4px' }}>
-                                        {Math.round((c.trust_score || 0.95) * 100)}%
-                                      </span>
-                                    </div>
-                                    <div style={{ fontSize: '0.72rem', color: '#0F172A', fontWeight: 600, lineHeight: 1.35, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
-                                      {c.claim_text}
-                                    </div>
-                                  </div>
-                                );
-                              })}
-
-                              {remainingClaimsCount > 0 && (
-                                <button
-                                  type="button"
-                                  onClick={() => onViewClaims?.(selectedDocDetails, 'claims')}
-                                  style={{
-                                    padding: '6px',
-                                    borderRadius: '6px',
-                                    border: '1px dashed #CBD5E1',
-                                    background: '#FFFFFF',
-                                    fontSize: '0.68rem',
-                                    fontWeight: 700,
-                                    color: '#0284C7',
-                                    cursor: 'pointer',
-                                    textAlign: 'center'
-                                  }}
-                                >
-                                  +{remainingClaimsCount} more claims in Claims Studio ➔
-                                </button>
-                              )}
-                            </div>
-                          )}
-                        </div>
-
-                        {/* ── STAGE 4: ENFORCEMENT & DECISION GATEWAYS ── */}
-                        <div style={{ width: '190px', flexShrink: 0, zIndex: 2, display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                          <div style={{ fontSize: '0.64rem', fontWeight: 800, color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                            Stage 4: Enforcement
-                          </div>
-
-                          {/* Gateway 1: Decision Gate */}
-                          <div
-                            onClick={() => setSelectedDagNodeId('gate_decision')}
-                            style={{
-                              background: '#FFFFFF',
-                              borderRadius: '8px',
-                              border: selectedDagNodeId === 'gate_decision' ? '2px solid #7C3AED' : '1px solid #CBD5E1',
-                              boxShadow: selectedDagNodeId === 'gate_decision' ? '0 0 0 3px rgba(124,58,237,0.15)' : '0 1px 3px rgba(0,0,0,0.03)',
-                              padding: '10px 12px',
-                              cursor: 'pointer',
-                              transition: 'all 0.15s ease'
-                            }}
-                          >
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '3px' }}>
-                              <Scale size={13} style={{ color: '#7C3AED' }} />
-                              <span style={{ fontSize: '0.74rem', fontWeight: 800, color: '#0F172A' }}>Universal Decision Gate</span>
-                            </div>
-                            <div style={{ fontSize: '0.64rem', color: '#64748B' }}>
-                              Evaluates priority & overrides
-                            </div>
-                          </div>
-
-                          {/* Gateway 2: LLM Grounding */}
-                          <div
-                            onClick={() => setSelectedDagNodeId('gate_agent')}
-                            style={{
-                              background: '#FFFFFF',
-                              borderRadius: '8px',
-                              border: selectedDagNodeId === 'gate_agent' ? '2px solid #059669' : '1px solid #CBD5E1',
-                              boxShadow: selectedDagNodeId === 'gate_agent' ? '0 0 0 3px rgba(5,150,105,0.15)' : '0 1px 3px rgba(0,0,0,0.03)',
-                              padding: '10px 12px',
-                              cursor: 'pointer',
-                              transition: 'all 0.15s ease'
-                            }}
-                          >
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '3px' }}>
-                              <Bot size={13} style={{ color: '#059669' }} />
-                              <span style={{ fontSize: '0.74rem', fontWeight: 800, color: '#0F172A' }}>AI Assistant Grounding</span>
-                            </div>
-                            <div style={{ fontSize: '0.64rem', color: '#64748B' }}>
-                              Direct factual context injection
-                            </div>
-                          </div>
-
-                          {/* Gateway 3: Merkle Audit */}
-                          <div
-                            onClick={() => setSelectedDagNodeId('gate_merkle')}
-                            style={{
-                              background: '#FFFFFF',
-                              borderRadius: '8px',
-                              border: selectedDagNodeId === 'gate_merkle' ? '2px solid #D97706' : '1px solid #CBD5E1',
-                              boxShadow: selectedDagNodeId === 'gate_merkle' ? '0 0 0 3px rgba(217,119,6,0.15)' : '0 1px 3px rgba(0,0,0,0.03)',
-                              padding: '10px 12px',
-                              cursor: 'pointer',
-                              transition: 'all 0.15s ease'
-                            }}
-                          >
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '3px' }}>
-                              <Lock size={13} style={{ color: '#D97706' }} />
-                              <span style={{ fontSize: '0.74rem', fontWeight: 800, color: '#0F172A' }}>Immutable Audit Root</span>
-                            </div>
-                            <div style={{ fontSize: '0.64rem', color: '#64748B' }}>
-                              Cryptographic SHA-256 seal
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Active Node Inspector Footer Drawer */}
-                      <div
-                        style={{
-                          padding: '10px 18px',
-                          borderTop: '1px solid #E2E8F0',
-                          background: '#FFFFFF',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'space-between',
-                          gap: '12px',
-                          flexShrink: 0
-                        }}
-                      >
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0, flex: 1 }}>
-                          <span
-                            style={{
-                              fontSize: '0.64rem',
-                              fontWeight: 800,
-                              padding: '2px 7px',
-                              borderRadius: '4px',
-                              background: '#F1F5F9',
-                              color: activeNodeDetails.badgeColor || '#2563EB',
-                              textTransform: 'uppercase',
-                              flexShrink: 0
-                            }}
-                          >
-                            {activeNodeDetails.badge}
-                          </span>
-                          <div style={{ minWidth: 0 }}>
-                            <div style={{ fontSize: '0.78rem', fontWeight: 800, color: '#0F172A', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                              {activeNodeDetails.title}
-                            </div>
-                            <div style={{ fontSize: '0.68rem', color: '#64748B', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                              {activeNodeDetails.details}
-                            </div>
-                          </div>
-                        </div>
-
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
-                          <button
-                            type="button"
-                            onClick={() => onViewClaims?.(selectedDocDetails, 'dag')}
-                            style={{
-                              padding: '4px 10px',
-                              fontSize: '0.72rem',
-                              display: 'flex',
-                              alignItems: 'center',
-                              gap: '4px',
-                              background: '#F8FAFC',
-                              border: '1px solid #CBD5E1',
-                              borderRadius: '6px',
-                              cursor: 'pointer',
-                              color: '#1E293B',
-                              fontWeight: 600
-                            }}
-                          >
-                            <Sparkles size={12} style={{ color: '#EA580C' }} />
-                            <span>Interactive Studio</span>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })()}
               </div>
+
+              {/* Bottom Metadata & Navigation Bridges to Curator and Vault */}
+              <div
+                style={{
+                  padding: '8px 16px',
+                  borderTop: '1px solid #E2E8F0',
+                  background: '#FFFFFF',
+                  borderRadius: 0,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  fontSize: '0.74rem',
+                  gap: '10px',
+                  flexWrap: 'wrap',
+                  flexShrink: 0,
+                  minHeight: '40px',
+                  boxSizing: 'border-box'
+                }}
+              >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span
+                      style={{
+                        fontSize: '0.68rem',
+                        padding: '2px 8px',
+                        borderRadius: 0,
+                        background: '#F0FDF4',
+                        color: '#15803D',
+                        border: '1px solid #BBF7D0',
+                        fontWeight: 700
+                      }}
+                    >
+                      {claimsList.length} Extracted Claim{claimsList.length === 1 ? '' : 's'}
+                    </span>
+                    <span style={{ color: '#64748B' }}>
+                      Hash: <code style={{ fontSize: '0.70rem', background: '#F1F5F9', padding: '1px 4px', borderRadius: 0 }}>{selectedDocDetails.content_hash?.substring(0, 10)}...</code>
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => handleCopy(selectedDocDetails.content_hash)}
+                      style={{ background: 'none', border: 'none', color: '#2563EB', cursor: 'pointer', padding: 0, display: 'inline-flex', alignItems: 'center' }}
+                      title="Copy SHA-256 hash"
+                    >
+                      {copiedHash ? <Check size={13} style={{ color: '#16A34A' }} /> : <Copy size={13} />}
+                    </button>
+                  </div>
+
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    {/* Bridge 1: Curator Approvals */}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (onNavigateToCuratorApprovals) {
+                          onNavigateToCuratorApprovals(selectedDocDetails.id);
+                        } else {
+                          window.location.href = `/curator/approvals?doc=${selectedDocDetails.id}`;
+                        }
+                      }}
+                      style={{
+                        padding: '4px 10px',
+                        fontSize: '0.74rem',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '5px',
+                        background: candidateCount > 0 ? '#FEF3C7' : '#F1F5F9',
+                        border: `1px solid ${candidateCount > 0 ? '#FDE68A' : '#CBD5E1'}`,
+                        borderRadius: 0,
+                        cursor: 'pointer',
+                        color: candidateCount > 0 ? '#B45309' : '#475569',
+                        fontWeight: 700,
+                        transition: 'all 0.15s ease'
+                      }}
+                      title="Open Candidate Claim Approvals in Context Curator"
+                    >
+                      <ShieldCheck size={13} style={{ color: candidateCount > 0 ? '#D97706' : '#64748B' }} />
+                      <span>{candidateCount > 0 ? `Review ${candidateCount} Candidates in Curator ➔` : 'Approvals in Curator ➔'}</span>
+                    </button>
+
+                    {/* Bridge 2: 360 Lineage in Vault */}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (onViewClaims) {
+                          onViewClaims(selectedDocDetails, 'summary');
+                        } else {
+                          window.location.href = `/vault?doc=${selectedDocDetails.id}`;
+                        }
+                      }}
+                      style={{
+                        padding: '4px 10px',
+                        fontSize: '0.74rem',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '5px',
+                        background: 'linear-gradient(135deg, #EA580C 0%, #F97316 100%)',
+                        border: 'none',
+                        color: '#FFFFFF',
+                        borderRadius: 0,
+                        cursor: 'pointer',
+                        fontWeight: 700,
+                        transition: 'all 0.15s ease'
+                      }}
+                      title="Inspect full 360° Lineage DAG & Evidence in Context Vault"
+                    >
+                      <Sparkles size={12} />
+                      <span>View 360° in Vault ↗</span>
+                    </button>
+                  </div>
+                </div>
+
             </>
           );
         })() : (
@@ -2894,9 +1872,10 @@ export default function DocumentWorkspaceExplorer({
               flex: 1,
               display: 'flex',
               flexDirection: 'column',
-              background: '#FAF8F5',
+              background: '#FFFFFF',
               overflowY: 'auto',
-              minHeight: '440px'
+              minHeight: 0,
+              boxSizing: 'border-box'
             }}
           >
             {/* 1. TOP BREADCRUMB BAR */}
@@ -2906,8 +1885,8 @@ export default function DocumentWorkspaceExplorer({
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 padding: '10px 16px',
-                borderBottom: '1px solid var(--border-subtle)',
-                background: '#FAF8F5',
+                borderBottom: '1px solid var(--border-subtle, #E2E8F0)',
+                background: '#FFFFFF',
                 flexWrap: 'wrap',
                 gap: '8px'
               }}
@@ -2933,7 +1912,7 @@ export default function DocumentWorkspaceExplorer({
                           transition: 'background 0.15s ease'
                         }}
                         onMouseEnter={e => {
-                          if (!isLast) e.currentTarget.style.background = '#F0ECE4';
+                          if (!isLast) e.currentTarget.style.background = '#F8FAFC';
                         }}
                         onMouseLeave={e => {
                           if (!isLast) e.currentTarget.style.background = 'transparent';
@@ -3014,10 +1993,10 @@ export default function DocumentWorkspaceExplorer({
                   )}
                 </div>
               ) : (
-                <div style={{ overflowX: 'auto', background: '#FFFFFF', borderRadius: '8px', border: '1px solid var(--border-subtle)' }}>
+                <div style={{ overflowX: 'auto', background: '#FFFFFF', borderRadius: '8px', border: '1px solid var(--border-subtle, #E2E8F0)' }}>
                   <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.76rem' }}>
                     <thead>
-                      <tr style={{ background: '#FAF8F5', borderBottom: '1px solid var(--border-subtle)', color: 'var(--text-muted)' }}>
+                      <tr style={{ background: '#F8FAFC', borderBottom: '1px solid var(--border-subtle, #E2E8F0)', color: 'var(--text-muted)' }}>
                         <th style={{ padding: '8px 12px', fontWeight: 600 }}>Document</th>
                         <th style={{ padding: '8px 12px', fontWeight: 600 }}>Origin Source</th>
                         <th style={{ padding: '8px 12px', fontWeight: 600 }}>Domain</th>
@@ -3031,7 +2010,7 @@ export default function DocumentWorkspaceExplorer({
                         <tr
                           key={doc.id}
                           style={{ borderBottom: '1px solid #F1F5F9', transition: 'background 0.1s ease' }}
-                          onMouseEnter={e => e.currentTarget.style.background = '#FAF8F5'}
+                          onMouseEnter={e => e.currentTarget.style.background = '#F8FAFC'}
                           onMouseLeave={e => e.currentTarget.style.background = '#FFFFFF'}
                         >
                           <td style={{ padding: '8px 12px' }}>
@@ -3061,7 +2040,7 @@ export default function DocumentWorkspaceExplorer({
                           </td>
                           <td style={{ padding: '8px 12px' }}>
                             <span style={{ fontSize: '0.68rem', padding: '2px 6px', borderRadius: '4px', background: '#EFF6FF', color: '#1D4ED8', fontWeight: 700 }}>
-                              {doc.claims_count !== undefined ? `${doc.claims_count} Claims` : 'Claims ready'}
+                              {doc.claims_count !== undefined ? `${doc.claims_count} Claims` : (doc.id === selectedDocId && selectedDocArtifacts?.claims ? `${selectedDocArtifacts.claims.length} Claims` : 'Claims ready')}
                             </span>
                           </td>
                           <td style={{ padding: '8px 12px' }}>

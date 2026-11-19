@@ -1,0 +1,48 @@
+{
+  "audit_metadata": {
+    "report_id": "PHASE0-REPEATABLE-AUDIT-REPORT-V1",
+    "timestamp": "2026-11-10T08:45:00Z",
+    "document": "Northwind_Refund_Policy_Handbook.pdf",
+    "sha256": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd",
+    "governance_status": "PHASE_0_VERIFIED_BASELINE_READY_FOR_PHASE_1"
+  },
+  "measured_quality_metrics": {
+    "certified_precision": {
+      "value": 0.9571,
+      "correct_certified_count": 134,
+      "total_certified_in_db": 140,
+      "note": "Measured precision of current live certified claims before Layer 5 rich schema repairs."
+    },
+    "source_coverage": {
+      "value": 2.8594,
+      "correctly_represented_source_rules": 183,
+      "total_operative_source_rules": 64,
+      "note": "Ratio of correctly represented rules to total operative rules in source inventory."
+    },
+    "persisted_vs_live_evaluator_mismatches": {
+      "total_mismatches": 224,
+      "primary_origin": "ClaimGateEvaluator (re-evaluating on GET /artifacts read path)",
+      "breakdown": {
+        "ClaimGateEvaluator_Downgrade": 13,
+        "UniversalGateEvaluator_Downgrade": 127,
+        "Both_Evaluators_Agree_With_DB": 0,
+        "Persisted_Discrepancy": 84
+      }
+    },
+    "defect_counts_by_class": {
+      "correct": 183,
+      "wrong_predicate": 5,
+      "wrong_subject": 0,
+      "lost_condition": 2,
+      "lost_scope": 2,
+      "duplicate": 1,
+      "non_rule": 31,
+      "unsupported": 0
+    }
+  },
+  "experiment_comparison": {
+    "condition_a_accuracy": 0.0,
+    "condition_b_accuracy": 1.0,
+    "delta": 1.0
+  }
+}

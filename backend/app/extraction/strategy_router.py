@@ -32,6 +32,13 @@ class StrategyRouter:
         strategy: ExtractionStrategyType,
     ) -> List[CandidateClaim]:
         """Invokes the selected extractor for a candidate evidence unit."""
+        if unit.block_type != "table_row":
+            from app.extraction.prose_normative_classifier import ProseNormativeClassifier
+            unit.content_role = ProseNormativeClassifier.classify_unit(
+                unit.content_text,
+                default_role=unit.content_role,
+            )
+
         if strategy in (ExtractionStrategyType.DETERMINISTIC_SCHEMA, ExtractionStrategyType.TABLE_AWARE):
             return DeterministicSchemaExtractor.extract_from_unit(unit)
 

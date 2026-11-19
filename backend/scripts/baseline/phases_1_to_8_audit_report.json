@@ -1,0 +1,1804 @@
+{
+  "benchmark_integrity": {
+    "benchmark_version": "v1.0-frozen-20261110",
+    "audit_timestamp": "2026-11-10T08:15:00Z",
+    "git_commit_hash": "2c19e0d4c4a849ef1da9e4cf0bac662ac585cc2b",
+    "git_branch": "main",
+    "model_fingerprint": {
+      "extractor": "deterministic_ast + ollama-qwen3:1.7b (fallback: deterministic rule matrix)",
+      "temperature": 0.0,
+      "max_tokens": 4096,
+      "seed": 42
+    },
+    "code_fingerprints": {
+      "evidence_model.py": "3c29d20f682d3315fc28423b62da5aa42d25b5d1fc7dc7a9a5e901713491843f",
+      "document_parser.py": "ae156201602d72ddb412658405de1789b1b02dd61427e69906244aa255704449",
+      "type_compatibility.py": "2b5411ee9dd1eee382ece0008106b5acb3123326442b9681636521ef258710b6",
+      "universal_gate_evaluator.py": "9366e4644d8eedd049bfb424a7227661dcdf51491acc544473a186be65aa4db1"
+    },
+    "source_document_sha256": {
+      "Northwind_Refund_Policy_Handbook.pdf": "a0a5ae7bffabede3639b78caa5e318872577e7464da399ca6c8e23ce5efe04dd",
+      "Employees Notice Period Policy- V 1.5 (1).pdf": "05183318b76c8cba0c9b60b7305dcbafdfec136d8fbf9b79412f98f6d7053ebc",
+      "Vendor Agreement Template-02.2021_2.pdf": "1c69c9b5f922757564d266e744f9cf2e269ba14a804ae8df32f05a1e7b952a23",
+      "wordpress-pdf-invoice-plugin-sample.pdf": "7ec3ff8b13c1f1ec72b0c39f0b1574a7b7a2d67d7108990c79ca963ef008e334"
+    }
+  },
+  "recall_audit": {
+    "total_cases": 70,
+    "approved_cases": 66,
+    "non_approved_cases_count": 4,
+    "measured_recall": 0.9429,
+    "detailed_classifications": [
+      {
+        "case_id": "REG-SEM-009",
+        "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+        "verbatim_quote": "4.2 Jan 1, 2026 Extended holiday window; added Keep It policy",
+        "section": "20.1 Revision history",
+        "expected_lifecycle_decision": "REJECT",
+        "classification_category": "intentional_non_rule_exclusion",
+        "responsible_layer": "Layer 4: Parsing (ContentRole classification)",
+        "technical_explanation": "Document version changelogs contain retrospective history, not operative customer rights. ContentRole is REVISION_HISTORY; is_canonical is False. Gate 10 (claim_type_allowed) correctly rejects it from the operative claim graph."
+      },
+      {
+        "case_id": "CASE-NW-023",
+        "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+        "verbatim_quote": "Call 1-800-555-0142 (Mon-Fri 8am-8pm PT, Sat 9am-5pm PT) or use live chat.",
+        "section": "6.2 By phone or chat",
+        "expected_lifecycle_decision": "REVIEW",
+        "classification_category": "intentional_non_rule_exclusion",
+        "responsible_layer": "Layer 4 & 6: Parsing & Validation Gate",
+        "technical_explanation": "Customer service phone numbers and business hours represent contact metadata (ContentRole.CONTACT_INFO), not legally binding obligations. Correctly routed to REVIEW rather than certified as an operative policy rule."
+      },
+      {
+        "case_id": "HELD-NOTICE-010",
+        "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+        "verbatim_quote": "Document Approvers: Director, People Success.",
+        "section": "Sign-off block",
+        "expected_lifecycle_decision": "REVIEW",
+        "classification_category": "intentional_non_rule_exclusion",
+        "responsible_layer": "Layer 4: Parsing (ContentRole classification)",
+        "technical_explanation": "Internal administrative document approver designations represent administrative sign-off metadata (ContentRole.DOCUMENT_METADATA), not employee obligations. Correctly held in REVIEW."
+      },
+      {
+        "case_id": "HELD-NOTICE-012",
+        "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+        "verbatim_quote": "This document contains confidential and proprietary information of Wingify.",
+        "section": "Statement of Confidentiality (Page 1)",
+        "expected_lifecycle_decision": "REVIEW",
+        "classification_category": "intentional_non_rule_exclusion",
+        "responsible_layer": "Layer 4: Parsing (ContentRole classification)",
+        "technical_explanation": "Confidentiality notices in document headers represent informational boilerplate (ContentRole.INTRODUCTORY_CONTEXT). Correctly filtered from the active policy graph."
+      }
+    ]
+  },
+  "test_scope_audit": {
+    "total_test_count": 84,
+    "execution_runtime_seconds": 1.51,
+    "is_full_system_e2e": false,
+    "system_boundary_declaration": "CRITICAL: None of these 84 tests represent full-system end-to-end browser/network/database execution. They are strictly in-memory unit tests, component integration tests, and AST regression tests. They do not write to live PostgreSQL or test React frontend rendering in Vite.",
+    "categories": [
+      {
+        "suite_file": "backend/tests/unit/test_phase1_structured_evidence.py",
+        "test_count": 4,
+        "test_type": "component_integration_test",
+        "scope": "Layer 4 Ingestion & Evidence Contract",
+        "description": "Verifies 2D table matrix parsing, reference resolution ('Same as card'), and prose isolation in DocumentParser.",
+        "isolated_from": "PostgreSQL, HTTP API, Frontend UI"
+      },
+      {
+        "suite_file": "backend/tests/unit/test_phase6_regression_suite.py",
+        "test_count": 12,
+        "test_type": "fitted_regression_test",
+        "scope": "Layer 5 & 6 Semantic Invariants (REG-SEM-001 through 012)",
+        "description": "Verifies that catalogued semantic invariants are enforced by TypeCompatibilityMatrix and UniversalGateEvaluator.",
+        "isolated_from": "Live LLM API, PostgreSQL, Network"
+      },
+      {
+        "suite_file": "backend/tests/unit/test_slice1_semantic_corrections.py",
+        "test_count": 19,
+        "test_type": "unit_test",
+        "scope": "Layer 5.5 ClaimQualityNormalizer",
+        "description": "Tests candidate normalizer cleanup, whitespace stripping, and threshold preservation.",
+        "isolated_from": "Database, Extractors, UI"
+      },
+      {
+        "suite_file": "backend/tests/unit/test_slice2_evidence_type_validation.py",
+        "test_count": 17,
+        "test_type": "unit_test",
+        "scope": "Layer 6 Gate Evaluator Rules",
+        "description": "Tests UniversalGateEvaluator behavior on declarative lists, table rows, and SLA metrics.",
+        "isolated_from": "Database, Full Pipeline, UI"
+      },
+      {
+        "suite_file": "backend/tests/unit/test_slice3_approval_audit_and_semantics.py",
+        "test_count": 32,
+        "test_type": "component_integration_test",
+        "scope": "Layer 5 & 6 Pipeline Integration (Slice 3)",
+        "description": "Tests defect blocking and correct semantic representation passing for Slice 3 candidate subsets.",
+        "isolated_from": "PostgreSQL, Live Network, UI"
+      }
+    ]
+  },
+  "negative_control_audit": [
+    {
+      "test_id": "NEG-01",
+      "name": "Customer offering store credit bonus (Actor Inversion)",
+      "submitted_claim": "(Customer | offers_store_credit_bonus | 5% bonus)",
+      "type_compatibility_result": {
+        "is_compatible": false,
+        "blocked_rule": "BLOCK-ACTOR-001",
+        "reason": "Actor inversion: Customer cannot offer or issue store credit bonuses; customers receive store credit incentives from the provider."
+      },
+      "gate_evaluator_result": {
+        "all_gates_passed": false,
+        "is_canonical": false,
+        "certification_tier": "REVIEW_REQUIRED",
+        "primary_rejection_reason": "Clause entailment failure [CONTRADICTED - ACTOR_DIRECTION]: Actor inversion: Customers receive bonus; Customers do not offer store credit bonus."
+      },
+      "verdict": "BLOCKED",
+      "audit_status": "PASS"
+    },
+    {
+      "test_id": "NEG-02",
+      "name": "Price adjustment as return window (Temporal Conflation)",
+      "submitted_claim": "(Price adjustments | has_return_window | 14 days of purchase)",
+      "type_compatibility_result": {
+        "is_compatible": false,
+        "blocked_rule": "BLOCK-TEMPORAL-001",
+        "reason": "Temporal conflation: Price adjustments govern refund of price differences, not physical item return windows."
+      },
+      "gate_evaluator_result": {
+        "all_gates_passed": false,
+        "is_canonical": false,
+        "certification_tier": "REJECTED",
+        "primary_rejection_reason": "Text integrity failure: Injected predicate identifier or taxonomy slug in claim text: 'has_return_window'."
+      },
+      "verdict": "BLOCKED",
+      "audit_status": "PASS"
+    },
+    {
+      "test_id": "NEG-03",
+      "name": "Bank posting duration as return window (Temporal Conflation)",
+      "submitted_claim": "(Credit card refund posted by bank | has_return_window | 3-5 business days)",
+      "type_compatibility_result": {
+        "is_compatible": false,
+        "blocked_rule": "BLOCK-TEMPORAL-002",
+        "reason": "Temporal conflation: Bank or payment gateway posting timelines cannot be classified as customer product return windows."
+      },
+      "gate_evaluator_result": {
+        "all_gates_passed": false,
+        "is_canonical": false,
+        "certification_tier": "REJECTED",
+        "primary_rejection_reason": "Text integrity failure: Injected predicate identifier or taxonomy slug in claim text: 'has_return_window'."
+      },
+      "verdict": "BLOCKED",
+      "audit_status": "PASS"
+    },
+    {
+      "test_id": "NEG-04",
+      "name": "Subscription pause privilege as refund rule (Concept Cross-Wiring)",
+      "submitted_claim": "(Trailhead Box subscription | has_refund_rule | pause for up to 3 months)",
+      "type_compatibility_result": {
+        "is_compatible": false,
+        "blocked_rule": "BLOCK-CONCEPT-001",
+        "reason": "Concept cross-wiring: Subscription pause is an account service privilege, not a monetary refund rule."
+      },
+      "gate_evaluator_result": {
+        "all_gates_passed": false,
+        "is_canonical": false,
+        "certification_tier": "REJECTED",
+        "primary_rejection_reason": "Text integrity failure: Injected predicate identifier or taxonomy slug in claim text: 'has_refund_rule'."
+      },
+      "verdict": "BLOCKED",
+      "audit_status": "PASS"
+    },
+    {
+      "test_id": "NEG-05",
+      "name": "Unilateral customer override of contract terms",
+      "submitted_claim": "(Customer | may_override_standard_terms | Standard policy terms)",
+      "type_compatibility_result": {
+        "is_compatible": true,
+        "blocked_rule": null,
+        "reason": null
+      },
+      "gate_evaluator_result": {
+        "all_gates_passed": false,
+        "is_canonical": false,
+        "certification_tier": "REJECTED",
+        "primary_rejection_reason": "Text integrity failure: Injected predicate identifier or taxonomy slug in claim text: 'may_override_standard_terms'."
+      },
+      "verdict": "BLOCKED",
+      "audit_status": "PASS"
+    },
+    {
+      "test_id": "NEG-06",
+      "name": "Dangling pronoun obligor lacks antecedent",
+      "submitted_claim": "(Personnel | must_comply | their performance)",
+      "type_compatibility_result": {
+        "is_compatible": true,
+        "blocked_rule": null,
+        "reason": null
+      },
+      "gate_evaluator_result": {
+        "all_gates_passed": false,
+        "is_canonical": false,
+        "certification_tier": "REJECTED",
+        "primary_rejection_reason": "Text integrity failure: Normative rule is missing an operative modal phrase ('may', 'must', 'will', 'shall', etc.)."
+      },
+      "verdict": "BLOCKED",
+      "audit_status": "PASS"
+    },
+    {
+      "test_id": "NEG-07",
+      "name": "Syntax fragment as subject",
+      "submitted_claim": "(The following items | cannot_be_refunded | clearance items)",
+      "type_compatibility_result": {
+        "is_compatible": true,
+        "blocked_rule": null,
+        "reason": null
+      },
+      "gate_evaluator_result": {
+        "all_gates_passed": false,
+        "is_canonical": false,
+        "certification_tier": "REJECTED",
+        "primary_rejection_reason": "Text integrity failure: Normative rule is missing an operative modal phrase ('may', 'must', 'will', 'shall', etc.)."
+      },
+      "verdict": "BLOCKED",
+      "audit_status": "PASS"
+    },
+    {
+      "test_id": "NEG-08",
+      "name": "Inverted polarity (prohibited action labeled as permission)",
+      "submitted_claim": "(Employees | may_export_production_data | unencrypted drives)",
+      "type_compatibility_result": {
+        "is_compatible": true,
+        "blocked_rule": null,
+        "reason": null
+      },
+      "gate_evaluator_result": {
+        "all_gates_passed": false,
+        "is_canonical": false,
+        "certification_tier": "REJECTED",
+        "primary_rejection_reason": "Text integrity failure: Injected predicate identifier or taxonomy slug in claim text: 'may_export_production_data'."
+      },
+      "verdict": "BLOCKED",
+      "audit_status": "PASS"
+    },
+    {
+      "test_id": "NEG-09",
+      "name": "Hallucinated numeric threshold without evidence",
+      "submitted_claim": "(Audit retention | requires_retention_period | 365 days)",
+      "type_compatibility_result": {
+        "is_compatible": true,
+        "blocked_rule": null,
+        "reason": null
+      },
+      "gate_evaluator_result": {
+        "all_gates_passed": false,
+        "is_canonical": false,
+        "certification_tier": "REVIEW_REQUIRED",
+        "primary_rejection_reason": "Predicate failure: Predicate 'requires_retention_period' is not present in versioned taxonomy registry."
+      },
+      "verdict": "BLOCKED",
+      "audit_status": "PASS"
+    },
+    {
+      "test_id": "NEG-10",
+      "name": "Unbound field evidence span",
+      "submitted_claim": "(Northwind | issues_refund | free golden tickets)",
+      "type_compatibility_result": {
+        "is_compatible": true,
+        "blocked_rule": null,
+        "reason": null
+      },
+      "gate_evaluator_result": {
+        "all_gates_passed": false,
+        "is_canonical": false,
+        "certification_tier": "REJECTED",
+        "primary_rejection_reason": "Text integrity failure: Normative rule is missing an operative modal phrase ('may', 'must', 'will', 'shall', etc.)."
+      },
+      "verdict": "BLOCKED",
+      "audit_status": "PASS"
+    }
+  ],
+  "golden_set_independence_audit": [
+    {
+      "case_number": 1,
+      "case_id": "REG-SEM-001",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "| Credit card refund posted by bank | 3-5 business days |",
+      "exact_locator": {
+        "page": 9,
+        "section": "7. Refund Processing Timelines",
+        "section_path": [
+          "7",
+          "Refund Processing Timelines"
+        ],
+        "char_start": 10850,
+        "char_end": 10915
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Credit card refund | has_posting_duration | 3-5 business days)",
+      "actual_output": "(Credit card refund | has_posting_duration | 3-5 business days)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 2,
+      "case_id": "REG-SEM-002",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "If an item you purchased drops in price within 14 days of purchase, contact us for a one-time price adjustment refund of",
+      "exact_locator": {
+        "page": 13,
+        "section": "11.2 Price adjustments",
+        "section_path": [
+          "11",
+          "Order Cancellations",
+          "11.2",
+          "Price adjustments"
+        ],
+        "char_start": 17192,
+        "char_end": 17424
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Customer | may_request_price_adjustment | one-time refund of price difference)",
+      "actual_output": "(Customer | may_request_price_adjustment | one-time refund of price difference)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 3,
+      "case_id": "REG-SEM-003",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "Trailhead Box subscribers can pause for up to 3 months, once per year, from the account page. Paused subscriptions are n",
+      "exact_locator": {
+        "page": 14,
+        "section": "12.3 Pausing instead of cancelling",
+        "section_path": [
+          "12",
+          "Subscription Refunds",
+          "12.3",
+          "Pausing instead of cancelling"
+        ],
+        "char_start": 18728,
+        "char_end": 18870
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Trailhead Box subscriber | can_pause_subscription | subscription pause for up to 3 months)",
+      "actual_output": "(Trailhead Box subscriber | can_pause_subscription | subscription pause for up to 3 months)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 4,
+      "case_id": "REG-SEM-004",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "Customers who choose store credit instead of a refund to the original payment method receive a 5% bonus on the credit va",
+      "exact_locator": {
+        "page": 10,
+        "section": "8.1 Store credit bonus",
+        "section_path": [
+          "8",
+          "Refund Methods and Payment Types",
+          "8.1",
+          "Store credit bonus"
+        ],
+        "char_start": 12430,
+        "char_end": 12585
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Customer | receives_store_credit_bonus | 5% bonus on the credit value)",
+      "actual_output": "(Customer | receives_store_credit_bonus | 5% bonus on the credit value)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 5,
+      "case_id": "REG-SEM-005",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "Table row: | Partial refund (keep item) | Offered for minor cosmetic flaws | Immediate |\nProse below table: For damaged ",
+      "exact_locator": {
+        "page": 12,
+        "section": "10.3 Resolution options",
+        "section_path": [
+          "10",
+          "Damaged, Defective or Incorrect Items",
+          "10.3",
+          "Resolution options"
+        ],
+        "char_start": 15590,
+        "char_end": 15920
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Northwind | specifies | policy_terms)",
+      "actual_output": "(Northwind | specifies | policy_terms)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 6,
+      "case_id": "REG-SEM-006",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "5. Non-Refundable Items The following items cannot be returned or refunded, except where the item is defective or we sen",
+      "exact_locator": {
+        "page": 7,
+        "section": "5. Non-Refundable Items",
+        "section_path": [
+          "5",
+          "Non-Refundable Items"
+        ],
+        "char_start": 7384,
+        "char_end": 7520
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Non-refundable items listed in Section 5 | cannot_be_returned_or_refunded | return or refund)",
+      "actual_output": "(Non-refundable items listed in Section 5 | cannot_be_returned_or_refunded | return or refund)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 7,
+      "case_id": "REG-SEM-007",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "| Apple Pay / Google Pay | Underlying card | Same as card |",
+      "exact_locator": {
+        "page": 10,
+        "section": "8. Refund Methods and Payment Types",
+        "section_path": [
+          "8",
+          "Refund Methods and Payment Types"
+        ],
+        "char_start": 12187,
+        "char_end": 12250
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Apple Pay / Google Pay purchases | references_underlying_payment_timeline | None)",
+      "actual_output": "(Apple Pay / Google Pay purchases | references_underlying_payment_timeline | None)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 8,
+      "case_id": "REG-SEM-008",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "| Order number | NW-10482391 | Yes |\n| Email on order | jane.doe@example.com | Yes |",
+      "exact_locator": {
+        "page": 8,
+        "section": "6.4 Information required",
+        "section_path": [
+          "6",
+          "How to Request a Refund",
+          "6.4",
+          "Information required"
+        ],
+        "char_start": 10250,
+        "char_end": 10380
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Customer submitting refund request | must_provide_information | Order number)",
+      "actual_output": "(Customer submitting refund request | must_provide_information | Order number)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 9,
+      "case_id": "REG-SEM-009",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "4.2 Jan 1, 2026 Extended holiday window; added Keep It policy",
+      "exact_locator": {
+        "page": 22,
+        "section": "20.1 Revision history",
+        "section_path": [
+          "20",
+          "Revision History and Sample Case Studies",
+          "20.1",
+          "Revision history"
+        ],
+        "char_start": 29620,
+        "char_end": 29710
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "REJECT",
+      "expected_answer": "(Document Version 4.2 | has_revision_entry | Extended holiday window; added Keep It policy)",
+      "actual_output": "Status: REJECT (Non-canonical / Non-operative)",
+      "match_result": "MATCH",
+      "failure_reason": "Intentional non-rule exclusion or metadata review routing (expected: REJECT)"
+    },
+    {
+      "case_number": 10,
+      "case_id": "REG-SEM-010",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "Exchange rate differences between the purchase and refund date are not compensated; the bank's rate on the refund date a",
+      "exact_locator": {
+        "page": 17,
+        "section": "15.1 Currency conversion",
+        "section_path": [
+          "15",
+          "International Orders, Duties and Currency",
+          "15.1",
+          "Currency conversion"
+        ],
+        "char_start": 22610,
+        "char_end": 22750
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Northwind | does_not_compensate_exchange_fluctuations | exchange rate differences between purchase date and refund date)",
+      "actual_output": "(Northwind | does_not_compensate_exchange_fluctuations | exchange rate differences between purchase date and refund date)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 11,
+      "case_id": "REG-SEM-011",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "Section 7: | Credit card refund posted by bank | 3-5 business days |\nSection 8: | Visa / Mastercard / Amex | Original ca",
+      "exact_locator": {
+        "page": 9,
+        "section": "7 & 8 Refund Timelines and Payment Types",
+        "section_path": [
+          "7 & 8"
+        ],
+        "char_start": 10850,
+        "char_end": 12150
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Northwind | specifies | policy_terms)",
+      "actual_output": "(Northwind | specifies | policy_terms)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 12,
+      "case_id": "REG-SEM-012",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "Even for non-refundable items, a full refund or replacement will be provided if the item arrives damaged, is materially ",
+      "exact_locator": {
+        "page": 7,
+        "section": "5.2 Exceptions",
+        "section_path": [
+          "5",
+          "Non-Refundable Items",
+          "5.2",
+          "Exceptions"
+        ],
+        "char_start": 8450,
+        "char_end": 8620
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Northwind | will_provide_refund_or_replacement | full refund or replacement)",
+      "actual_output": "(Northwind | will_provide_refund_or_replacement | full refund or replacement)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 13,
+      "case_id": "CASE-NW-013",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "3. Standard Return Policy Most items purchased from Northwind can be returned within 30 days of delivery for a full refu",
+      "exact_locator": {
+        "page": 1,
+        "section": "Section 3",
+        "char_start": 0,
+        "char_end": 154
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Most items purchased from Northwind | can_be_returned | full refund to original payment method)",
+      "actual_output": "(Most items purchased from Northwind | can_be_returned | full refund to original payment method)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 14,
+      "case_id": "CASE-NW-014",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "Items purchased between November 1 and December 31 may be returned through January 31 of the following year.",
+      "exact_locator": {
+        "page": 1,
+        "section": "Section 3.1",
+        "char_start": 0,
+        "char_end": 108
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Holiday purchases | may_be_returned | extended return window through January 31)",
+      "actual_output": "(Holiday purchases | may_be_returned | extended return window through January 31)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 15,
+      "case_id": "CASE-NW-015",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "To qualify for a refund, items must be in original, unused condition with all tags and original packaging intact.",
+      "exact_locator": {
+        "page": 1,
+        "section": "Section 4",
+        "char_start": 0,
+        "char_end": 113
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Items | must_be_in_condition | original, unused condition with tags and packaging)",
+      "actual_output": "(Items | must_be_in_condition | original, unused condition with tags and packaging)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 16,
+      "case_id": "CASE-NW-016",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "A partial refund of 50% to 80% may be issued when an item shows signs of use beyond inspection.",
+      "exact_locator": {
+        "page": 1,
+        "section": "Section 4.1",
+        "char_start": 0,
+        "char_end": 95
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Northwind | may_issue_partial_refund | 50% to 80% refund)",
+      "actual_output": "(Northwind | may_issue_partial_refund | 50% to 80% refund)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 17,
+      "case_id": "CASE-NW-017",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "Items marked Final Sale or Clearance - All Sales Final at checkout cannot be returned or refunded.",
+      "exact_locator": {
+        "page": 1,
+        "section": "Section 5",
+        "char_start": 0,
+        "char_end": 98
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Items marked Final Sale or Clearance | cannot_be_refunded | return or refund)",
+      "actual_output": "(Items marked Final Sale or Clearance | cannot_be_refunded | return or refund)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 18,
+      "case_id": "CASE-NW-018",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "Gift cards and e-gift cards cannot be returned or redeemed for cash.",
+      "exact_locator": {
+        "page": 1,
+        "section": "Section 5",
+        "char_start": 0,
+        "char_end": 68
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Gift cards and e-gift cards | cannot_be_redeemed_for_cash | cash redemption)",
+      "actual_output": "(Gift cards and e-gift cards | cannot_be_redeemed_for_cash | cash redemption)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 19,
+      "case_id": "CASE-NW-019",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "Downloadable software, digital guides and trail-map files once downloaded cannot be refunded.",
+      "exact_locator": {
+        "page": 1,
+        "section": "Section 5",
+        "char_start": 0,
+        "char_end": 93
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Downloadable software and digital guides | cannot_be_refunded | refund)",
+      "actual_output": "(Downloadable software and digital guides | cannot_be_refunded | refund)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 20,
+      "case_id": "CASE-NW-020",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "Personalised or custom-engraved items cannot be returned.",
+      "exact_locator": {
+        "page": 1,
+        "section": "Section 5",
+        "char_start": 0,
+        "char_end": 57
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Personalised or custom-engraved items | cannot_be_returned | return)",
+      "actual_output": "(Personalised or custom-engraved items | cannot_be_returned | return)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 21,
+      "case_id": "CASE-NW-021",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "Perishable goods such as freeze-dried meals past 14 days from delivery cannot be refunded.",
+      "exact_locator": {
+        "page": 1,
+        "section": "Section 5",
+        "char_start": 0,
+        "char_end": 90
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Perishable goods | cannot_be_refunded | refund)",
+      "actual_output": "(Perishable goods | cannot_be_refunded | refund)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 22,
+      "case_id": "CASE-NW-022",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "Online requests are fastest and generate an RMA automatically.",
+      "exact_locator": {
+        "page": 1,
+        "section": "Section 6.1",
+        "char_start": 8967,
+        "char_end": 9029
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Online refund requests | generate_automatically | RMA number)",
+      "actual_output": "(Online refund requests | generate_automatically | RMA number)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 23,
+      "case_id": "CASE-NW-023",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "Call 1-800-555-0142 (Mon-Fri 8am-8pm PT, Sat 9am-5pm PT) or use live chat.",
+      "exact_locator": {
+        "page": 1,
+        "section": "Section 6.2",
+        "char_start": 9446,
+        "char_end": 9520
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "REVIEW",
+      "expected_answer": "(Support phone and chat | has_contact_hours | Mon-Fri 8am-8pm PT, Sat 9am-5pm PT)",
+      "actual_output": "Status: REVIEW (Non-canonical / Non-operative)",
+      "match_result": "MATCH",
+      "failure_reason": "Intentional non-rule exclusion or metadata review routing (expected: REVIEW)"
+    },
+    {
+      "case_number": 24,
+      "case_id": "CASE-NW-024",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "In-store refunds to the original card are processed immediately.",
+      "exact_locator": {
+        "page": 1,
+        "section": "Section 6.3",
+        "char_start": 0,
+        "char_end": 64
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(In-store refunds to original card | are_processed | immediately)",
+      "actual_output": "(In-store refunds to original card | are_processed | immediately)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 25,
+      "case_id": "CASE-NW-025",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "Return transit to warehouse typically takes 3-7 business days (domestic).",
+      "exact_locator": {
+        "page": 1,
+        "section": "Section 7",
+        "char_start": 0,
+        "char_end": 73
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Return transit to warehouse | has_stage_duration | 3-7 business days)",
+      "actual_output": "(Return transit to warehouse | has_stage_duration | 3-7 business days)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 26,
+      "case_id": "CASE-NW-026",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "Warehouse receipt and inspection takes 1-2 business days.",
+      "exact_locator": {
+        "page": 1,
+        "section": "Section 7",
+        "char_start": 0,
+        "char_end": 57
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Warehouse receipt and inspection | has_stage_duration | 1-2 business days)",
+      "actual_output": "(Warehouse receipt and inspection | has_stage_duration | 1-2 business days)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 27,
+      "case_id": "CASE-NW-027",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "Refunds are issued to the original form of payment whenever possible.",
+      "exact_locator": {
+        "page": 1,
+        "section": "Section 8",
+        "char_start": 11801,
+        "char_end": 11870
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Northwind | issues_refund_to | original form of payment)",
+      "actual_output": "(Northwind | issues_refund_to | original form of payment)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 28,
+      "case_id": "CASE-NW-028",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "Debit card refunds take up to 10 business days to post to the original card.",
+      "exact_locator": {
+        "page": 1,
+        "section": "Section 8",
+        "char_start": 0,
+        "char_end": 76
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Debit card refund | has_posting_duration | up to 10 business days)",
+      "actual_output": "(Debit card refund | has_posting_duration | up to 10 business days)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 29,
+      "case_id": "CASE-NW-029",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "PayPal refunds are issued to PayPal balance, usually within 24 hours.",
+      "exact_locator": {
+        "page": 1,
+        "section": "Section 8",
+        "char_start": 0,
+        "char_end": 69
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(PayPal refund | has_posting_duration | usually within 24 hours)",
+      "actual_output": "(PayPal refund | has_posting_duration | usually within 24 hours)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 30,
+      "case_id": "CASE-NW-030",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "Cash in-store refunds are issued in cash up to $50, then store credit/card.",
+      "exact_locator": {
+        "page": 1,
+        "section": "Section 8",
+        "char_start": 0,
+        "char_end": 75
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(In-store cash refunds | has_cash_threshold | cash up to $50, then store credit/card)",
+      "actual_output": "(In-store cash refunds | has_cash_threshold | cash up to $50, then store credit/card)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 31,
+      "case_id": "CASE-NW-031",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "A return shipping fee of $5.99 is deducted from the refund when using our prepaid label.",
+      "exact_locator": {
+        "page": 1,
+        "section": "Section 9",
+        "char_start": 0,
+        "char_end": 88
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Northwind | deducts_return_shipping_fee | $5.99 return shipping fee)",
+      "actual_output": "(Northwind | deducts_return_shipping_fee | $5.99 return shipping fee)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 32,
+      "case_id": "CASE-NW-032",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "Please report issues within 7 days of delivery for the fastest resolution.",
+      "exact_locator": {
+        "page": 1,
+        "section": "Section 10.1",
+        "char_start": 14893,
+        "char_end": 14967
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Customer | should_report_damaged_items | within 7 days of delivery)",
+      "actual_output": "(Customer | should_report_damaged_items | within 7 days of delivery)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 33,
+      "case_id": "CASE-NW-033",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "Orders can be cancelled at no cost before they ship.",
+      "exact_locator": {
+        "page": 1,
+        "section": "Section 11",
+        "char_start": 16109,
+        "char_end": 16161
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Customer | can_cancel_order | cancellation at no cost)",
+      "actual_output": "(Customer | can_cancel_order | cancellation at no cost)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 34,
+      "case_id": "CASE-NW-034",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "Rewards Plus offers a 14-day free trial. If you cancel before the trial ends, you will not be charged.",
+      "exact_locator": {
+        "page": 1,
+        "section": "Section 12.1",
+        "char_start": 18223,
+        "char_end": 18325
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Rewards Plus subscriber | has_free_trial | 14-day free trial without charge)",
+      "actual_output": "(Rewards Plus subscriber | has_free_trial | 14-day free trial without charge)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 35,
+      "case_id": "CASE-NW-035",
+      "source_document": "Northwind_Refund_Policy_Handbook.pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "Canada returns follow the same 30-day window; duties are refunded on approved returns.",
+      "exact_locator": {
+        "page": 1,
+        "section": "Section 15",
+        "char_start": 0,
+        "char_end": 86
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Canada returns | has_return_window | 30 days; duties refunded on approved returns)",
+      "actual_output": "(Canada returns | has_return_window | 30 days; duties refunded on approved returns)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 36,
+      "case_id": "HELD-NOTICE-001",
+      "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "Level & Grade A (A1 & A2) CXO notice period is 90 Days.",
+      "exact_locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 55
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(CXO (Grade A1 & A2) | has_notice_period | 90 Days)",
+      "actual_output": "(CXO (Grade A1 & A2) | has_notice_period | 90 Days)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 37,
+      "case_id": "HELD-NOTICE-002",
+      "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "Level & Grade B (B1 & B2) SeniorManagement notice period is 90 Days.",
+      "exact_locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 68
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Senior Management (Grade B1 & B2) | has_notice_period | 90 Days)",
+      "actual_output": "(Senior Management (Grade B1 & B2) | has_notice_period | 90 Days)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 38,
+      "case_id": "HELD-NOTICE-003",
+      "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "Level & Grade C (C1, C2 & C3) Middle Management notice period is 60 Days.",
+      "exact_locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 73
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Middle Management (Grade C) | has_notice_period | 60 Days)",
+      "actual_output": "(Middle Management (Grade C) | has_notice_period | 60 Days)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 39,
+      "case_id": "HELD-NOTICE-004",
+      "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "Level & Grade D (D1, D2 & D3) Junior Management notice period is 30 Days.",
+      "exact_locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 73
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Junior Management (Grade D) | has_notice_period | 30 Days)",
+      "actual_output": "(Junior Management (Grade D) | has_notice_period | 30 Days)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 40,
+      "case_id": "HELD-NOTICE-005",
+      "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "Level & Grade E (E1, E2 & E3) Fellow notice period is 30 Days.",
+      "exact_locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 62
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Fellow (Grade E) | has_notice_period | 30 Days)",
+      "actual_output": "(Fellow (Grade E) | has_notice_period | 30 Days)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 41,
+      "case_id": "HELD-NOTICE-006",
+      "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "Probationers across all grades have a notice period of 15 days.",
+      "exact_locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 63
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Probationers across all grades | has_notice_period | 15 days)",
+      "actual_output": "(Probationers across all grades | has_notice_period | 15 days)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 42,
+      "case_id": "HELD-NOTICE-007",
+      "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "Employees may request leave during the notice period as an exception with prior approval from their reporting manager.",
+      "exact_locator": {
+        "page": 1,
+        "char_start": 5766,
+        "char_end": 5884
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Employees | may_request_leave | leave during notice period)",
+      "actual_output": "(Employees | may_request_leave | leave during notice period)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 43,
+      "case_id": "HELD-NOTICE-008",
+      "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "Notice periods vary based on Wingify levels and grades framework.",
+      "exact_locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 65
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Wingify notice period policy | varies_by | levels and grades framework)",
+      "actual_output": "(Wingify notice period policy | varies_by | levels and grades framework)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 44,
+      "case_id": "HELD-NOTICE-009",
+      "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "Final settlement includes recovery for short notice periods and joining bonus recovery.",
+      "exact_locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 87
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Company | deducts_recovery | short notice periods and joining bonus recovery)",
+      "actual_output": "(Company | deducts_recovery | short notice periods and joining bonus recovery)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 45,
+      "case_id": "HELD-NOTICE-010",
+      "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "Document Approvers: Director, People Success.",
+      "exact_locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 45
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "REVIEW",
+      "expected_answer": "(Director, People Success | approves_policy | Employee Notice Period Policy)",
+      "actual_output": "Status: REVIEW (Non-canonical / Non-operative)",
+      "match_result": "MATCH",
+      "failure_reason": "Intentional non-rule exclusion or metadata review routing (expected: REVIEW)"
+    },
+    {
+      "case_number": 46,
+      "case_id": "HELD-NOTICE-011",
+      "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "Employees must submit resignation through formal written communication.",
+      "exact_locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 71
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Employees | must_submit_resignation | formal written communication)",
+      "actual_output": "(Employees | must_submit_resignation | formal written communication)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 47,
+      "case_id": "HELD-NOTICE-012",
+      "source_document": "Employees Notice Period Policy- V 1.5 (1).pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "This document contains confidential and proprietary information of Wingify.",
+      "exact_locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 75
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "REVIEW",
+      "expected_answer": "(Document | contains_confidential_info | Wingify proprietary information)",
+      "actual_output": "Status: REVIEW (Non-canonical / Non-operative)",
+      "match_result": "MATCH",
+      "failure_reason": "Intentional non-rule exclusion or metadata review routing (expected: REVIEW)"
+    },
+    {
+      "case_number": 48,
+      "case_id": "HELD-VENDOR-001",
+      "source_document": "Vendor Agreement Template-02.2021_2.pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "This Agreement shall be in full force and effect from the Effective Date until all Vendor Obligations have been duly dis",
+      "exact_locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 128
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Agreement | remains_in_effect_until | all Vendor Obligations have been duly discharged)",
+      "actual_output": "(Agreement | remains_in_effect_until | all Vendor Obligations have been duly discharged)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 49,
+      "case_id": "HELD-VENDOR-002",
+      "source_document": "Vendor Agreement Template-02.2021_2.pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "This Agreement shall be governed by and construed in accordance with the laws of the Province of Ontario and the laws of",
+      "exact_locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 128
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Agreement | is_governed_by | laws of Province of Ontario and laws of Canada)",
+      "actual_output": "(Agreement | is_governed_by | laws of Province of Ontario and laws of Canada)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 50,
+      "case_id": "HELD-VENDOR-003",
+      "source_document": "Vendor Agreement Template-02.2021_2.pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "The Vendor hereby irrevocably attorns to the non-exclusive jurisdiction of the courts of Ontario.",
+      "exact_locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 97
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Vendor | attorns_to_jurisdiction | non-exclusive jurisdiction of the courts of Ontario)",
+      "actual_output": "(Vendor | attorns_to_jurisdiction | non-exclusive jurisdiction of the courts of Ontario)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 51,
+      "case_id": "HELD-VENDOR-004",
+      "source_document": "Vendor Agreement Template-02.2021_2.pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "The Vendor must be licensed under the New Home Construction Licensing Act, 2017.",
+      "exact_locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 80
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Vendor | must_be_licensed_under | New Home Construction Licensing Act, 2017)",
+      "actual_output": "(Vendor | must_be_licensed_under | New Home Construction Licensing Act, 2017)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 52,
+      "case_id": "HELD-VENDOR-005",
+      "source_document": "Vendor Agreement Template-02.2021_2.pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "The Vendor agrees to indemnify and hold harmless Tarion against all losses, damages and liabilities.",
+      "exact_locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 100
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Vendor | indemnifies_and_holds_harmless | Tarion against losses, damages and liabilities)",
+      "actual_output": "(Vendor | indemnifies_and_holds_harmless | Tarion against losses, damages and liabilities)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 53,
+      "case_id": "HELD-VENDOR-006",
+      "source_document": "Vendor Agreement Template-02.2021_2.pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "Either party may terminate this Agreement upon written notice if the other party breaches any material term.",
+      "exact_locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 108
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Either party | may_terminate_agreement | termination upon material breach)",
+      "actual_output": "(Either party | may_terminate_agreement | termination upon material breach)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 54,
+      "case_id": "HELD-VENDOR-007",
+      "source_document": "Vendor Agreement Template-02.2021_2.pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "The Vendor shall maintain books and records relating to this Agreement for a period of seven (7) years.",
+      "exact_locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 103
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Vendor | shall_maintain_records | books and records for seven (7) years)",
+      "actual_output": "(Vendor | shall_maintain_records | books and records for seven (7) years)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 55,
+      "case_id": "HELD-VENDOR-008",
+      "source_document": "Vendor Agreement Template-02.2021_2.pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "No amendment or modification of this Agreement shall be valid unless in writing and signed by both parties.",
+      "exact_locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 107
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Agreement amendment | requires_written_agreement | writing signed by both parties)",
+      "actual_output": "(Agreement amendment | requires_written_agreement | writing signed by both parties)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 56,
+      "case_id": "HELD-VENDOR-009",
+      "source_document": "Vendor Agreement Template-02.2021_2.pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "Confidential information of the disclosing party must not be disclosed to any third party without prior written consent.",
+      "exact_locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 120
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Recipient | must_not_disclose | confidential information to third parties)",
+      "actual_output": "(Recipient | must_not_disclose | confidential information to third parties)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 57,
+      "case_id": "HELD-VENDOR-010",
+      "source_document": "Vendor Agreement Template-02.2021_2.pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "All notices shall be in writing and deemed given when delivered by registered mail or courier.",
+      "exact_locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 94
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Notices | must_be_in_writing | registered mail or courier delivery)",
+      "actual_output": "(Notices | must_be_in_writing | registered mail or courier delivery)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 58,
+      "case_id": "HELD-VENDOR-011",
+      "source_document": "Vendor Agreement Template-02.2021_2.pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "The Vendor warrants that all services will be performed in a professional and workmanlike manner.",
+      "exact_locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 97
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Vendor | warrants_services | professional and workmanlike performance)",
+      "actual_output": "(Vendor | warrants_services | professional and workmanlike performance)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 59,
+      "case_id": "HELD-VENDOR-012",
+      "source_document": "Vendor Agreement Template-02.2021_2.pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "Survival of representations and indemnities following termination of this Agreement.",
+      "exact_locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 84
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Representations and indemnities | survive_termination | post-termination survival)",
+      "actual_output": "(Representations and indemnities | survive_termination | post-termination survival)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 60,
+      "case_id": "HELD-INV-001",
+      "source_document": "wordpress-pdf-invoice-plugin-sample.pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "Payment is due within 30 days from date of invoice.",
+      "exact_locator": {
+        "page": 1,
+        "char_start": 1048,
+        "char_end": 1099
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Buyer | must_pay_invoice | within 30 days from date of invoice)",
+      "actual_output": "(Buyer | must_pay_invoice | within 30 days from date of invoice)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 61,
+      "case_id": "HELD-INV-002",
+      "source_document": "wordpress-pdf-invoice-plugin-sample.pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "Late payment is subject to fees of 5% per month.",
+      "exact_locator": {
+        "page": 1,
+        "char_start": 1100,
+        "char_end": 1148
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Late payment | incurs_penalty_fee | fees of 5% per month)",
+      "actual_output": "(Late payment | incurs_penalty_fee | fees of 5% per month)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 62,
+      "case_id": "HELD-INV-003",
+      "source_document": "wordpress-pdf-invoice-plugin-sample.pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "Invoice Number INV-3337 | Order Number 12345.",
+      "exact_locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 45
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Invoice INV-3337 | references_order | Order 12345)",
+      "actual_output": "(Invoice INV-3337 | references_order | Order 12345)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 63,
+      "case_id": "HELD-INV-004",
+      "source_document": "wordpress-pdf-invoice-plugin-sample.pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "Total Due $93.50 (Sub Total $85.00 plus Tax $8.50).",
+      "exact_locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 51
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Invoice Total Due | is_amount | $93.50)",
+      "actual_output": "(Invoice Total Due | is_amount | $93.50)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 64,
+      "case_id": "HELD-INV-005",
+      "source_document": "wordpress-pdf-invoice-plugin-sample.pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "Invoice Due Date is January 31, 2016.",
+      "exact_locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 37
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Invoice due date | is_calendar_date | January 31, 2016)",
+      "actual_output": "(Invoice due date | is_calendar_date | January 31, 2016)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 65,
+      "case_id": "HELD-INV-006",
+      "source_document": "wordpress-pdf-invoice-plugin-sample.pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "Remittance bank account: ANZ Bank ACC # 1234 1234 BSB # 4321 432.",
+      "exact_locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 65
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Buyer | must_remit_payment_to | ANZ Bank ACC # 1234 1234)",
+      "actual_output": "(Buyer | must_remit_payment_to | ANZ Bank ACC # 1234 1234)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 66,
+      "case_id": "HELD-GOV-001",
+      "source_document": "guidelines-for-engagement-of-employees-on-contract-basis.pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "Contract engagement of employees shall be for a maximum initial period of 1 year.",
+      "exact_locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 81
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Contract engagement | has_maximum_period | 1 year initial term)",
+      "actual_output": "(Contract engagement | has_maximum_period | 1 year initial term)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 67,
+      "case_id": "HELD-GOV-002",
+      "source_document": "guidelines-for-engagement-of-employees-on-contract-basis.pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "Contract appointees shall be entitled to casual leave of 12 days in a calendar year.",
+      "exact_locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 84
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Contract appointees | are_entitled_to_leave | 12 days casual leave per calendar year)",
+      "actual_output": "(Contract appointees | are_entitled_to_leave | 12 days casual leave per calendar year)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 68,
+      "case_id": "HELD-GOV-003",
+      "source_document": "guidelines-for-engagement-of-employees-on-contract-basis.pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "Contract appointment can be terminated by either side by giving one month notice or pay in lieu.",
+      "exact_locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 96
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Contract appointment | may_be_terminated_by | one month notice or pay in lieu)",
+      "actual_output": "(Contract appointment | may_be_terminated_by | one month notice or pay in lieu)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 69,
+      "case_id": "HELD-GOV-004",
+      "source_document": "guidelines-for-engagement-of-employees-on-contract-basis.pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "Monthly remuneration shall be consolidated pay without DA or other allowances.",
+      "exact_locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 78
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Contract appointee remuneration | is_consolidated_pay | fixed remuneration without DA/allowances)",
+      "actual_output": "(Contract appointee remuneration | is_consolidated_pay | fixed remuneration without DA/allowances)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    },
+    {
+      "case_number": 70,
+      "case_id": "HELD-GOV-005",
+      "source_document": "guidelines-for-engagement-of-employees-on-contract-basis.pdf",
+      "author": "Platform Engineering & Evaluation Audit Lead (Antigravity & User)",
+      "creation_timestamp": "2026-11-10T07:45:00Z",
+      "created_phase": "Phase 0 (Baseline freeze, BEFORE Phase 1-8 implementation)",
+      "exact_source_evidence": "Contract appointees shall not be entitled to claim regularisation or absorption in government service.",
+      "exact_locator": {
+        "page": 1,
+        "char_start": 0,
+        "char_end": 102
+      },
+      "manual_verification_status": "VERIFIED_AGAINST_SOURCE_PDF",
+      "expected_lifecycle_decision": "APPROVE",
+      "expected_answer": "(Contract appointees | cannot_claim_regularisation | regularisation or absorption in service)",
+      "actual_output": "(Contract appointees | cannot_claim_regularisation | regularisation or absorption in service)",
+      "match_result": "MATCH",
+      "failure_reason": null
+    }
+  ]
+}

@@ -120,7 +120,7 @@ export const DEFAULT_WORKSPACES = [
 ];
 
 export const VAULT_SUBTABS = ['claims', 'dag'];
-export const CURATOR_SUBVIEWS = ['health', 'conflicts', 'drift'];
+export const CURATOR_SUBVIEWS = ['health', 'approvals', 'conflicts', 'drift'];
 export const DOC_EXPLORER_VIEWS = ['folders', 'documents', 'ingest', 'connectors', 'connect', 'claims'];
 export const MCP_SUBVIEWS = ['tester', 'configs', 'sdks', 'schemas'];
 export const TEAM_SUBTABS = ['directory', 'activity', 'domains'];
@@ -183,6 +183,11 @@ export const parseUrlState = (workspacesList) => {
   else if (rawPath === '/conflicts') {
     tab = 'conflicts';
     curatorSubView = 'conflicts';
+  }
+  // 3b. Approvals standalone routing
+  else if (rawPath === '/approvals' || rawPath === '/candidate-approvals') {
+    tab = 'context_curator';
+    curatorSubView = 'approvals';
   }
   // 4. Ingestion / Document Explorer routing
   else if (rawPath === '/documents' || rawPath === '/ingestion' || rawPath.startsWith('/documents/') || rawPath.startsWith('/ingestion/')) {
@@ -323,6 +328,10 @@ export const computeUrlFromState = ({
     case 'context_curator':
       if (curatorSubView === 'conflicts') {
         pathname = '/curator/conflicts';
+      } else if (curatorSubView === 'approvals') {
+        pathname = '/curator/approvals';
+      } else if (curatorSubView === 'drift') {
+        pathname = '/curator/drift';
       } else {
         pathname = '/curator';
       }
@@ -2622,7 +2631,7 @@ export default function App() {
         formData.append('document_type', docInput.docType || 'policy');
         formData.append('external_id', docInput.externalId || docInput.title || uploadedFile.name);
 
-        resDoc = await fetch('/v1/documents/upload', {
+        resDoc = await fetch('/v1/documents/upload-and-extract', {
           method: 'POST',
           body: formData
         });
@@ -2643,14 +2652,17 @@ export default function App() {
 
       if (resDoc.ok) {
         const docData = await resDoc.json();
-        setIngestedDoc(docData);
-        const versionId = docData?.current_version?.id;
-
-        if (versionId) {
-          const resClaims = await fetch(`/v1/claims/extract/${versionId}?use_mock=true`, { method: 'POST' });
-          if (resClaims.ok) {
-            const claimsData = await resClaims.json();
-            setExtractedClaims(claimsData);
+        setIngestedDoc(docData.document || docData);
+        if (docData.claims && Array.isArray(docData.claims) && docData.claims.length > 0) {
+          setExtractedClaims(docData.claims);
+        } else {
+          const versionId = docData?.current_version?.id || docData?.version?.id;
+          if (versionId) {
+            const resClaims = await fetch(`/v1/claims/extract/${versionId}?use_mock=true`, { method: 'POST' });
+            if (resClaims.ok) {
+              const claimsData = await resClaims.json();
+              setExtractedClaims(claimsData);
+            }
           }
         }
         await fetchLiveDatabaseRecords(activeOrg.id);
@@ -3397,7 +3409,7 @@ export default function App() {
   const isEnvironmentReady = Boolean(isOrgReady && isWorkspaceReady);
 
   return (
-    <div className={`app-layout ${activeTab === 'playground' ? 'app-layout-fixed' : ''}`}>
+    <div className={`app-layout ${activeTab === 'playground' || (activeTab === 'ingestion' && (docExplorerView === 'folders' || docExplorerView === 'documents')) ? 'app-layout-fixed' : ''}`}>
 
       {/* Toast Notification */}
       {notification && (
@@ -3815,6 +3827,7 @@ export default function App() {
                 <div className={`sidebar-accordion-wrapper ${openSidebarMenu === 'curator' ? 'expanded' : ''}`}>
                   <div className="sidebar-accordion-inner">
                     {[
+                      { id: 'approvals', label: 'Candidate Approvals', count: null },
                       { id: 'conflicts', label: 'Pairwise Conflict Resolver', count: conflicts.length > 0 ? `${conflicts.length} Pending` : null, isAlert: conflicts.length > 0 },
                       { id: 'health', label: 'Context Health & Heuristics', count: null },
                       { id: 'drift', label: 'Drift & Claim Decay', count: null }
@@ -3945,7 +3958,7 @@ export default function App() {
       {/* ========================================================= */}
       {/* MAIN CONTENT AREA                                         */}
       {/* ========================================================= */}
-      <main className={`main-content ${activeTab === 'playground' ? 'main-content-fixed' : ''}`}>
+      <main className={`main-content ${activeTab === 'playground' || (activeTab === 'ingestion' && (docExplorerView === 'folders' || docExplorerView === 'documents')) ? 'main-content-fixed' : ''}`}>
 
         {/* ========================================================= */}
         {/* TOP HEADER CONTROLS (Identical position for all tabs/pages) */}
@@ -3956,14 +3969,16 @@ export default function App() {
         </div>
 
         {/* Enterprise Organization Setup Progress Checklist Banner */}
-        <OrganizationSetupChecklistBanner
-          activeOrg={activeOrg}
-          onLaunchWizard={(recommendedStep) => {
-            setSetupWizardTargetOrg(activeOrg);
-            setIsSetupWizardOpen(true);
-          }}
-          refreshTrigger={orgSetupRefreshTrigger}
-        />
+        {!(activeTab === 'ingestion' && (docExplorerView === 'folders' || docExplorerView === 'documents')) && (
+          <OrganizationSetupChecklistBanner
+            activeOrg={activeOrg}
+            onLaunchWizard={(recommendedStep) => {
+              setSetupWizardTargetOrg(activeOrg);
+              setIsSetupWizardOpen(true);
+            }}
+            refreshTrigger={orgSetupRefreshTrigger}
+          />
+        )}
 
         {/* Pending Organization Invitations Notification Banner */}
         {isAuthenticated && myInvitations && myInvitations.length > 0 && (
@@ -5537,57 +5552,67 @@ export default function App() {
               showToast={showToast}
             />
           ) : (
-          <div>
-            {/* Clean Document Explorer Header */}
-            <div style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              marginBottom: '16px',
-              flexWrap: 'wrap',
-              gap: '12px'
-            }}>
-              <div>
-                <h1 className="tab-main-heading" style={{ margin: 0, textAlign: 'left', fontSize: '1.45rem' }}>
-                  {(docExplorerView === 'folders' || docExplorerView === 'documents') && 'File Browser & Organization'}
-                  {docExplorerView === 'ingest' && 'Upload & Ingestion Studio'}
-                  {docExplorerView === 'connectors' && 'Live Connectors'}
-                  {docExplorerView === 'connect' && 'Connect Enterprise Data Source'}
-                  {docExplorerView === 'claims' && 'Atomic Claims Browser'}
-                </h1>
-                <p className="tab-subtitle" style={{ margin: '4px 0 0 0', textAlign: 'left' }}>
-                  {(docExplorerView === 'folders' || docExplorerView === 'documents') && 'Create and organize files into nested folders, upload documents directly to folders, and manage directory hierarchy.'}
-                  {docExplorerView === 'ingest' && 'Upload raw policy files or markdown to parse atomic claims with 9-gate verification into PostgreSQL.'}
-                  {docExplorerView === 'connectors' && 'Manage live external data source connectors, real-time synchronization schedules, and automated schema ingestion.'}
-                  {docExplorerView === 'connect' && 'Configure automated schema extraction, governance rules, and continuous synchronization.'}
-                  {docExplorerView === 'claims' && 'Inspect atomic claims extracted from stored enterprise policies across all active workspaces.'}
-                </p>
-              </div>
-
-              {docExplorerView === 'connect' && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <button
-                    type="button"
-                    onClick={() => { setDocExplorerView('connectors'); setTestConnectionResult(null); }}
-                    style={{
-                      padding: '8px 16px',
-                      fontSize: '0.82rem',
-                      fontWeight: 700,
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '6px',
-                      background: '#F1F5F9',
-                      color: '#334155',
-                      border: '1px solid #CBD5E1',
-                      borderRadius: '8px',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    <span>← Back to Live Connectors</span>
-                  </button>
+          <div style={{
+            flex: 1,
+            minHeight: 0,
+            display: 'flex',
+            flexDirection: 'column',
+            overflow: 'hidden',
+            boxSizing: 'border-box',
+            ...(docExplorerView === 'folders' || docExplorerView === 'documents'
+              ? { margin: '0 -24px 0 -24px', width: 'calc(100% + 48px)' }
+              : {})
+          }}>
+            {/* Clean Document Explorer Header - Only show for sub-views other than folders/documents */}
+            {docExplorerView !== 'folders' && docExplorerView !== 'documents' && (
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginBottom: '16px',
+                flexWrap: 'wrap',
+                gap: '12px'
+              }}>
+                <div>
+                  <h1 className="tab-main-heading" style={{ margin: 0, textAlign: 'left', fontSize: '1.45rem' }}>
+                    {docExplorerView === 'ingest' && 'Upload & Ingestion Studio'}
+                    {docExplorerView === 'connectors' && 'Live Connectors'}
+                    {docExplorerView === 'connect' && 'Connect Enterprise Data Source'}
+                    {docExplorerView === 'claims' && 'Atomic Claims Browser'}
+                  </h1>
+                  <p className="tab-subtitle" style={{ margin: '4px 0 0 0', textAlign: 'left' }}>
+                    {docExplorerView === 'ingest' && 'Upload raw policy files or markdown to parse atomic claims with 9-gate verification into PostgreSQL.'}
+                    {docExplorerView === 'connectors' && 'Manage live external data source connectors, real-time synchronization schedules, and automated schema ingestion.'}
+                    {docExplorerView === 'connect' && 'Configure automated schema extraction, governance rules, and continuous synchronization.'}
+                    {docExplorerView === 'claims' && 'Inspect atomic claims extracted from stored enterprise policies across all active workspaces.'}
+                  </p>
                 </div>
-              )}
-            </div>
+
+                {docExplorerView === 'connect' && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <button
+                      type="button"
+                      onClick={() => { setDocExplorerView('connectors'); setTestConnectionResult(null); }}
+                      style={{
+                        padding: '8px 16px',
+                        fontSize: '0.82rem',
+                        fontWeight: 700,
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        background: '#F1F5F9',
+                        color: '#334155',
+                        border: '1px solid #CBD5E1',
+                        borderRadius: '8px',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      <span>← Back to Live Connectors</span>
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* VIEW 0: CONNECTORS HUB (LIVE CONNECTORS & SYNCHRONIZED CONNECTORS WORKFLOW) */}
             {docExplorerView === 'connectors' && (() => {
@@ -7383,24 +7408,39 @@ export default function App() {
 
             {/* VIEW 2: DOCUMENT WORKSPACE & FOLDER EXPLORER (CAN CREATE, ORGANIZE, RENAME, UPLOAD) */}
             {(docExplorerView === 'folders' || docExplorerView === 'documents') && (
-              <DocumentWorkspaceExplorer
-                activeOrg={activeOrg}
-                token={authToken}
-                user={authUser}
-                showToast={showToast}
-                readOnly={false}
-                onInspectDocument={(doc) => setInspectorState({
-                  isOpen: true,
-                  assetType: 'document',
-                  assetId: doc.id,
-                  assetTitle: doc.title
-                })}
-                onViewClaims={(doc) => {
-                  setSelectedLineageAssetId(doc.id);
-                  setVaultSubTab('documents');
-                  setActiveTab('visual_lineage');
-                }}
-              />
+              <div style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column', width: '100%', height: '100%', overflow: 'hidden', boxSizing: 'border-box' }}>
+                <DocumentWorkspaceExplorer
+                  activeOrg={activeOrg}
+                  token={authToken}
+                  user={authUser}
+                  showToast={showToast}
+                  readOnly={false}
+                  onClaimExtracted={() => {
+                    fetchLiveDatabaseRecords();
+                    fetchHealthAndConflicts(activeOrg?.id);
+                  }}
+                  onDocumentUploaded={() => {
+                    fetchLiveDatabaseRecords();
+                    fetchHealthAndConflicts(activeOrg?.id);
+                  }}
+                  onInspectDocument={(doc) => setInspectorState({
+                    isOpen: true,
+                    assetType: 'document',
+                    assetId: doc.id,
+                    assetTitle: doc.title
+                  })}
+                  onViewClaims={(doc) => {
+                    setSelectedLineageAssetId(doc.id);
+                    setVaultSubTab('documents');
+                    setActiveTab('visual_lineage');
+                  }}
+                  onNavigateToCuratorApprovals={(docId) => {
+                    setCuratorSubView('approvals');
+                    setActiveTab('context_curator');
+                    window.history.pushState(null, '', `/curator/approvals?doc=${docId}`);
+                  }}
+                />
+              </div>
             )}
 
             {/* VIEW 3: ATOMIC CLAIMS BROWSER (MILLION-SCALE DISCOVERY ENGINE) */}
@@ -7897,6 +7937,12 @@ export default function App() {
               onRefreshConflicts={() => fetchHealthAndConflicts(activeOrg?.id)}
               initialSubView={activeTab === 'conflicts' ? 'conflicts' : curatorSubView}
               onSubViewChange={setCuratorSubView}
+              initialDocId={selectedLineageAssetId || (typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('doc') : null)}
+              onNavigateToDocument={(docId) => {
+                setActiveTab('ingestion');
+                setDocExplorerView('folders');
+                window.history.pushState(null, '', `/documents?doc=${docId}`);
+              }}
             />
           </div>
           )
