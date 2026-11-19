@@ -1478,9 +1478,11 @@ export default function DocumentWorkspaceExplorer({
         border: '1px solid var(--border-subtle, #E2E8F0)',
         borderLeft: 'none',
         borderRight: 'none',
+        borderBottom: 'none',
         overflow: 'hidden',
         boxShadow: 'none',
-        alignItems: 'stretch'
+        alignItems: 'stretch',
+        boxSizing: 'border-box'
       }}
     >
       
@@ -1503,7 +1505,8 @@ export default function DocumentWorkspaceExplorer({
           display: 'flex',
           flexDirection: 'column',
           height: '100%',
-          overflow: 'hidden'
+          overflow: 'hidden',
+          boxSizing: 'border-box'
         }}
       >
         {/* Directory Top Bar */}
@@ -1632,8 +1635,10 @@ export default function DocumentWorkspaceExplorer({
             flex: 1,
             minHeight: 0,
             overflowY: 'auto',
-            padding: '6px 2px',
-            background: '#faf8f5'
+            overflowX: 'hidden',
+            padding: '6px 2px 24px 2px',
+            background: '#faf8f5',
+            boxSizing: 'border-box'
           }}
         >
           {initialLoading && folderTree.length === 0 ? (
@@ -1663,11 +1668,12 @@ export default function DocumentWorkspaceExplorer({
           minWidth: 0,
           maxWidth: '100%',
           overflowX: 'hidden',
-          background: '#faf8f5',
+          background: '#FFFFFF',
           display: 'flex',
           flexDirection: 'column',
           height: '100%',
-          overflow: 'hidden'
+          overflow: 'hidden',
+          boxSizing: 'border-box'
         }}
       >
         {selectedDocDetails ? (() => {
@@ -1716,20 +1722,19 @@ export default function DocumentWorkspaceExplorer({
 
           return (
             <>
-           
-
-              {/* 2. Full Document Content & Ingestion Preview (Seamless white surface, no outer padding gap) */}
+              {/* Full Document Content & Ingestion Preview (Seamless white surface, edge-to-edge) */}
               <div
                 style={{
                   flex: 1,
                   minHeight: 0,
                   overflowY: 'auto',
                   overflowX: 'hidden',
-                  background: '#f6efe3a4',
-                  padding: '1px 18px',
+                  background: '#FFFFFF',
+                  padding: '14px 24px 20px 24px',
                   display: 'flex',
                   flexDirection: 'column',
-                  gap: '8px'
+                  gap: '8px',
+                  boxSizing: 'border-box'
                 }}
               >
                 {loadingPreview ? (
@@ -1738,35 +1743,15 @@ export default function DocumentWorkspaceExplorer({
                     <span>Loading policy document preview...</span>
                   </div>
                 ) : (
-                  <>
-                    {/* Dossier Sheet Header */}
-                    <div
-                      style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        borderBottom: '1px solid #E2E8F0',
-                        paddingBottom: '6px',
-                        fontSize: '0.68rem',
-                        color: '#64748B',
-                        flexShrink: 0
-                      }}
-                    >
-                    
-                    
-                    </div>
-
-                    {/* Markdown Parsed Document Body */}
-                    <div style={{ minHeight: '80px' }}>
-                      {rawReaderContent ? (
-                        renderFormattedMarkdown(rawReaderContent)
-                      ) : (
-                        <div style={{ padding: '20px 10px', textAlign: 'center', color: '#94A3B8', fontSize: '0.80rem' }}>
-                          No text content available for this document.
-                        </div>
-                      )}
-                    </div>
-                  </>
+                  <div style={{ minHeight: '80px' }}>
+                    {rawReaderContent ? (
+                      renderFormattedMarkdown(rawReaderContent)
+                    ) : (
+                      <div style={{ padding: '20px 10px', textAlign: 'center', color: '#94A3B8', fontSize: '0.80rem' }}>
+                        No text content available for this document.
+                      </div>
+                    )}
+                  </div>
                 )}
               </div>
 
@@ -1783,7 +1768,9 @@ export default function DocumentWorkspaceExplorer({
                   fontSize: '0.74rem',
                   gap: '10px',
                   flexWrap: 'wrap',
-                  flexShrink: 0
+                  flexShrink: 0,
+                  minHeight: '40px',
+                  boxSizing: 'border-box'
                 }}
               >
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -1887,7 +1874,8 @@ export default function DocumentWorkspaceExplorer({
               flexDirection: 'column',
               background: '#FFFFFF',
               overflowY: 'auto',
-              minHeight: '440px'
+              minHeight: 0,
+              boxSizing: 'border-box'
             }}
           >
             {/* 1. TOP BREADCRUMB BAR */}

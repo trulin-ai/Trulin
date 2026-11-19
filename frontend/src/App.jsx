@@ -5557,8 +5557,10 @@ export default function App() {
             minHeight: 0,
             display: 'flex',
             flexDirection: 'column',
+            overflow: 'hidden',
+            boxSizing: 'border-box',
             ...(docExplorerView === 'folders' || docExplorerView === 'documents'
-              ? { margin: '0 -24px -16px -24px', width: 'calc(100% + 48px)', height: '100%' }
+              ? { margin: '0 -24px 0 -24px', width: 'calc(100% + 48px)' }
               : {})
           }}>
             {/* Clean Document Explorer Header - Only show for sub-views other than folders/documents */}
@@ -7406,7 +7408,7 @@ export default function App() {
 
             {/* VIEW 2: DOCUMENT WORKSPACE & FOLDER EXPLORER (CAN CREATE, ORGANIZE, RENAME, UPLOAD) */}
             {(docExplorerView === 'folders' || docExplorerView === 'documents') && (
-              <div style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column', height: '100%', width: '100%' }}>
+              <div style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column', width: '100%', height: '100%', overflow: 'hidden', boxSizing: 'border-box' }}>
                 <DocumentWorkspaceExplorer
                   activeOrg={activeOrg}
                   token={authToken}
