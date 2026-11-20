@@ -299,9 +299,39 @@ const STANDARD_GATES = [
   { key: 'text_integrity', altKey: 'text_integrity', label: 'Text integrity' }
 ];
 
+export function getDocSlug(rawLabel) {
+  const cleanTitle = String(rawLabel || 'DOC').replace(/[^a-zA-Z0-9\s]/g, ' ').trim();
+  const words = cleanTitle.split(/\s+/).filter(w => w.length > 0);
+  const stopWords = new Set(['POLICY', 'AGREEMENT', 'HANDBOOK', 'DOCUMENT', 'STANDARDS', 'STANDARD', 'GUIDELINES', 'CLAIMS', 'FOR', 'OF', 'AND', 'THE', 'IN', 'ON', 'TO']);
+  const meaningfulWords = words.filter(w => !stopWords.has(w.toUpperCase()));
+  const targetWords = meaningfulWords.length > 0 ? meaningfulWords : words;
+
+  if (targetWords.length === 0) return 'DOC';
+  if (targetWords.length === 1) {
+    return targetWords[0].slice(0, 7).toUpperCase();
+  }
+  if (targetWords.length === 2) {
+    const firstInitial = targetWords[0].charAt(0).toUpperCase();
+    const secondWord = targetWords[1].toUpperCase();
+    return (firstInitial + secondWord).slice(0, 8);
+  }
+  // 3 or more words: e.g. ["Northbridge", "Benefits", "Leave"] -> leading initials + last word (N + B + LEAVE = NBLEAVE)
+  const leadingInitials = targetWords.slice(0, -1).map(w => w.charAt(0).toUpperCase()).join('');
+  const lastWord = targetWords[targetWords.length - 1].toUpperCase();
+  return (leadingInitials + lastWord).slice(0, 8);
+}
+
+export function getDocHash(rawDocId) {
+  const clean = String(rawDocId || '').replace(/^doc_/, '').replace(/[^a-zA-Z0-9]/g, '');
+  return clean.slice(0, 4).toUpperCase() || 'DOC1';
+}
+
 export default function AssetClaimsStudioPane({
   asset,
   claims = [],
+  documentsList = [],
+  selectedDocFilter = 'all',
+  onDocFilterChange,
   allConflictedClaimIds = new Set(),
   graphData,
   onLocateInDoc,
@@ -310,12 +340,20 @@ export default function AssetClaimsStudioPane({
   showToast
 }) {
   const [searchQuery, setSearchQuery] = useState('');
+  const [docFilter, setDocFilter] = useState(selectedDocFilter || 'all');
   const [statusFilter, setStatusFilter] = useState('all'); // 'all' | 'canonical' | 'review' | 'quarantined' | 'non_rule' | 'rejected' | 'conflicted'
   const [trustTierFilter, setTrustTierFilter] = useState('all'); // 'all' | 'high' | 'med' | 'low'
   const [sortBy, setSortBy] = useState('subject_asc'); // 'subject_asc' | 'trust_desc' | 'trust_asc'
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(20); // 20, 50, 80, 100
   const [copiedClaimId, setCopiedClaimId] = useState(null);
+
+  // Sync with prop if parent controls it
+  useEffect(() => {
+    if (selectedDocFilter !== undefined) {
+      setDocFilter(selectedDocFilter);
+    }
+  }, [selectedDocFilter]);
 
   // Selection states
   const [selectedClaimId, setSelectedClaimId] = useState(null);
@@ -415,10 +453,75 @@ export default function AssetClaimsStudioPane({
     return clean.slice(0, 4).toUpperCase() || 'DOC1';
   }, [asset]);
 
+  // Map of document clean IDs and full IDs to { slug, hash, label }
+  const docMetadataMap = useMemo(() => {
+    const map = new Map();
+
+    // 1. If asset is provided (single document view)
+    if (asset?.node) {
+      const rawDocId = asset.node.data?.doc_id || asset.node.data?.document_id || asset.node.id || asset.id || '';
+      const cleanDocId = String(rawDocId).replace(/^doc_/, '').toLowerCase();
+      const rawLabel = asset.node.label || asset.node.data?.title || 'DOC';
+      const slug = getDocSlug(rawLabel);
+      const hash = getDocHash(cleanDocId || rawDocId);
+      const item = { slug, hash, label: rawLabel };
+      if (cleanDocId) map.set(cleanDocId, item);
+      if (asset.node.id) map.set(String(asset.node.id).toLowerCase(), item);
+    }
+
+    // 2. Multi-document list if provided
+    const docs = documentsList && documentsList.length > 0
+      ? documentsList
+      : (graphData?.nodes?.filter(n => n.type === 'document') || []);
+
+    docs.forEach(doc => {
+      const rawDocId = doc.data?.doc_id || doc.data?.document_id || doc.id || '';
+      const cleanDocId = String(rawDocId).replace(/^doc_/, '').toLowerCase();
+      const rawLabel = doc.label || doc.data?.title || 'DOC';
+      const slug = getDocSlug(rawLabel);
+      const hash = getDocHash(cleanDocId || rawDocId);
+      const item = { slug, hash, label: rawLabel };
+      if (cleanDocId) map.set(cleanDocId, item);
+      if (doc.id) map.set(String(doc.id).toLowerCase(), item);
+    });
+
+    return map;
+  }, [asset, documentsList, graphData]);
+
+  const resolveClaimDocMeta = (cl) => {
+    if (!cl) return { slug: shortTitleSlug, hash: docHash };
+    const clDocId = cl.document_id || cl.data?.document_id || cl.data?.doc_id || cl.doc_id || cl.asset_id;
+    let targetDocId = clDocId ? String(clDocId).toLowerCase() : null;
+    let targetCleanDocId = clDocId ? String(clDocId).replace(/^doc_/, '').toLowerCase() : null;
+
+    if (!targetDocId && graphData?.edges) {
+      const edge = graphData.edges.find(e =>
+        (e.target === cl.id || e.target === String(cl.id).replace(/^cl_/, '') || e.target === `cl_${cl.id}`) &&
+        e.source.startsWith('doc_')
+      );
+      if (edge) {
+        targetDocId = edge.source.toLowerCase();
+        targetCleanDocId = edge.source.replace(/^doc_/, '').toLowerCase();
+      }
+    }
+
+    if (targetCleanDocId && docMetadataMap.has(targetCleanDocId)) {
+      return docMetadataMap.get(targetCleanDocId);
+    }
+    if (targetDocId && docMetadataMap.has(targetDocId)) {
+      return docMetadataMap.get(targetDocId);
+    }
+    return { slug: shortTitleSlug, hash: docHash };
+  };
+
   // Helper to format clean Claim Title: Claim_[Short-Title-Slug]_[Doc-Unique-Hash]_[claim-id]
   // where claim-id is the short UUID of 8 characters (fixed, collision-free, independent of filter indexes)
   const getClaimDisplayTitle = (cl) => {
-    if (!cl) return `Claim_${shortTitleSlug}_${docHash}_UNKNOWN`;
+    const meta = resolveClaimDocMeta(cl);
+    const slug = meta.slug || shortTitleSlug || 'DOC';
+    const hash = meta.hash || docHash || 'DOC1';
+
+    if (!cl) return `Claim_${slug}_${hash}_UNKNOWN`;
     const rawClaimId = cl.data?.claim_id || cl.id || cl._tempId || '';
     const cleanClaimId = String(rawClaimId)
       .replace(/^cl_/, '')
@@ -427,7 +530,7 @@ export default function AssetClaimsStudioPane({
       .toUpperCase();
 
     const paddedClaimId = (cleanClaimId || '00000000').padEnd(8, '0').slice(0, 8);
-    return `Claim_${shortTitleSlug}_${docHash}_${paddedClaimId}`;
+    return `Claim_${slug}_${hash}_${paddedClaimId}`;
   };
 
   // Filter and sort pipeline
@@ -449,6 +552,27 @@ export default function AssetClaimsStudioPane({
     );
 
     return claims.filter(cl => {
+      // Document filter
+      if (docFilter !== 'all') {
+        const targetDocClean = String(docFilter).replace(/^doc_/, '').toLowerCase();
+        const clDocId = cl.document_id || cl.data?.document_id || cl.data?.doc_id || cl.doc_id || cl.asset_id;
+        let matchesDoc = false;
+        if (clDocId) {
+          const cleanClDocId = String(clDocId).replace(/^doc_/, '').toLowerCase();
+          if (cleanClDocId === targetDocClean || String(clDocId).toLowerCase() === String(docFilter).toLowerCase()) {
+            matchesDoc = true;
+          }
+        }
+        if (!matchesDoc && graphData?.edges) {
+          const docEdge = graphData.edges.find(e =>
+            (e.target === cl.id || e.target === String(cl.id).replace(/^cl_/, '') || e.target === `cl_${cl.id}`) &&
+            (e.source.toLowerCase() === String(docFilter).toLowerCase() || e.source.replace(/^doc_/, '').toLowerCase() === targetDocClean)
+          );
+          if (docEdge) matchesDoc = true;
+        }
+        if (!matchesDoc) return false;
+      }
+
       const cat = getClaimDisplayCategory(cl, allConflictedClaimIds);
 
       // Status filter dropdown (applied unless the user explicitly searched for a status in the search box)
@@ -539,7 +663,7 @@ export default function AssetClaimsStudioPane({
       }
       return 0;
     });
-  }, [claims, allConflictedClaimIds, statusFilter, trustTierFilter, searchQuery, sortBy, rawClaimIndexMap, shortTitleSlug, docHash]);
+  }, [claims, allConflictedClaimIds, statusFilter, trustTierFilter, searchQuery, sortBy, rawClaimIndexMap, shortTitleSlug, docHash, docFilter, docMetadataMap, graphData]);
 
   // Pagination calculation
   const totalPages = Math.max(1, Math.ceil(filteredClaims.length / pageSize));
@@ -670,7 +794,7 @@ export default function AssetClaimsStudioPane({
 
   // Locate Source Action: Opens the document where this claim is located in Document Explorer
   const handleLocateSource = () => {
-    const targetDocId = selectedClaim?.document_id 
+    let targetDocId = selectedClaim?.document_id 
       || selectedClaim?.data?.document_id 
       || selectedClaim?.data?.doc_id 
       || selectedClaim?.doc_id
@@ -678,6 +802,15 @@ export default function AssetClaimsStudioPane({
       || asset?.node?.data?.document_id
       || asset?.node?.id 
       || '';
+
+    if (!targetDocId && selectedClaim && graphData?.edges) {
+      const edge = graphData.edges.find(e =>
+        (e.target === selectedClaim.id || e.target === String(selectedClaim.id).replace(/^cl_/, '') || e.target === `cl_${selectedClaim.id}`) &&
+        e.source.startsWith('doc_')
+      );
+      if (edge) targetDocId = edge.source;
+    }
+
     const cleanDocId = String(targetDocId).replace(/^doc_/, '');
 
     showToast?.('Opening source document in Document Explorer...');
@@ -725,54 +858,95 @@ export default function AssetClaimsStudioPane({
         gap: '10px',
         boxShadow: 'none'
       }}>
-        {/* Left: Search input */}
-        <div style={{
-          position: 'relative',
-          flex: '1 1 240px',
-          maxWidth: '320px'
-        }}>
-          <Search size={14} style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: '#94A3B8' }} />
-          <input
-            type="text"
-            placeholder="Search claims by title, status, SPO, keyword..."
-            value={searchQuery}
-            onChange={e => {
-              setSearchQuery(e.target.value);
-              setCurrentPage(1);
-            }}
-            style={{
-              width: '100%',
-              padding: '6px 28px 6px 32px',
-              fontSize: '0.78rem',
-              border: '1px solid #CBD5E1',
-              borderRadius: '6px',
-              outline: 'none',
-              background: '#FAF8F5',
-              color: '#0F172A',
-              boxSizing: 'border-box'
-            }}
-          />
-          {searchQuery && (
-            <button
-              type="button"
-              onClick={() => {
-                setSearchQuery('');
+        {/* Left: Search input & Document Selector */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', flex: '1 1 auto' }}>
+          <div style={{
+            position: 'relative',
+            flex: '1 1 240px',
+            maxWidth: '320px'
+          }}>
+            <Search size={14} style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: '#94A3B8' }} />
+            <input
+              type="text"
+              placeholder="Search claims by title, status, SPO, keyword..."
+              value={searchQuery}
+              onChange={e => {
+                setSearchQuery(e.target.value);
                 setCurrentPage(1);
               }}
               style={{
-                position: 'absolute',
-                right: '8px',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                background: 'transparent',
-                border: 'none',
-                cursor: 'pointer',
-                color: '#94A3B8',
-                padding: '2px'
+                width: '100%',
+                padding: '6px 28px 6px 32px',
+                fontSize: '0.78rem',
+                border: '1px solid #CBD5E1',
+                borderRadius: '6px',
+                outline: 'none',
+                background: '#FAF8F5',
+                color: '#0F172A',
+                boxSizing: 'border-box'
               }}
-            >
-              <X size={12} />
-            </button>
+            />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => {
+                  setSearchQuery('');
+                  setCurrentPage(1);
+                }}
+                style={{
+                  position: 'absolute',
+                  right: '8px',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  background: 'transparent',
+                  border: 'none',
+                  cursor: 'pointer',
+                  color: '#94A3B8',
+                  padding: '2px'
+                }}
+              >
+                <X size={12} />
+              </button>
+            )}
+          </div>
+
+          {/* Document Dropdown: Displayed when documentsList has entries */}
+          {documentsList && documentsList.length > 0 && (
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+              <FileText size={13} color="#0284C7" />
+              <span style={{ fontSize: '0.72rem', fontWeight: 600, color: '#475569' }}>Document:</span>
+              <select
+                value={docFilter}
+                onChange={e => {
+                  const val = e.target.value;
+                  setDocFilter(val);
+                  if (onDocFilterChange) onDocFilterChange(val);
+                  setCurrentPage(1);
+                }}
+                style={{
+                  padding: '5px 8px',
+                  fontSize: '0.72rem',
+                  fontWeight: 500,
+                  border: '1px solid #CBD5E1',
+                  borderRadius: '6px',
+                  background: '#FAF8F5',
+                  color: '#334155',
+                  cursor: 'pointer',
+                  outline: 'none',
+                  maxWidth: '260px'
+                }}
+              >
+                <option value="all">All Documents ({documentsList.length})</option>
+                {documentsList.map(doc => {
+                  const docCleanId = String(doc.id || '').replace(/^doc_/, '');
+                  return (
+                    <option key={doc.id || docCleanId} value={doc.id || docCleanId}>
+                      {doc.label || doc.data?.title || `Document ${docCleanId.slice(0, 8)}`}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
           )}
         </div>
 
