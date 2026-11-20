@@ -3181,6 +3181,7 @@ input.copilot-history-search-input[type="text"] {
 }
 
 .copilot-history-item:hover .copilot-history-item-actions,
+.copilot-history-item-active .copilot-history-item-actions,
 .copilot-history-item-actions-visible {
   opacity: 1 !important;
 }

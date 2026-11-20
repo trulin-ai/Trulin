@@ -5,7 +5,7 @@ import {
   Copy, Check, ChevronDown, ChevronRight, BookOpen, Layers, Shield,
   ExternalLink, ShieldAlert, ArrowUpRight, Mic, ArrowUp, FileText, X,
   PanelLeftClose, PanelLeftOpen, Pencil, Share2, Scale, Info, Hash,
-  UploadCloud, GitCompare, HelpCircle
+  UploadCloud, GitCompare, HelpCircle, Pin, PinOff
 } from 'lucide-react';
 
 const PROCESS_STEPS = [
@@ -1213,6 +1213,14 @@ export default function AgentChatPlayground({
   const [openMenuSessionId, setOpenMenuSessionId] = useState(null);
   const [editingSessionId, setEditingSessionId] = useState(null);
   const [editingTitle, setEditingTitle] = useState('');
+  const [pinnedSessionIds, setPinnedSessionIds] = useState(() => {
+    try {
+      const saved = localStorage.getItem('trulin_pinned_chat_sessions');
+      return saved ? new Set(JSON.parse(saved)) : new Set();
+    } catch {
+      return new Set();
+    }
+  });
   const renameInputRef = useRef(null);
 
   const toggleHistoryOpen = () => {
@@ -1461,6 +1469,17 @@ export default function AgentChatPlayground({
       const res = await fetch(`/v1/chat/sessions/${sessionId}`, { method: 'DELETE' });
       if (res.ok) {
         setSessions(prev => prev.filter(s => s.id !== sessionId));
+        setPinnedSessionIds(prev => {
+          if (prev.has(sessionId)) {
+            const next = new Set(prev);
+            next.delete(sessionId);
+            try {
+              localStorage.setItem('trulin_pinned_chat_sessions', JSON.stringify(Array.from(next)));
+            } catch (err) {}
+            return next;
+          }
+          return prev;
+        });
         if (activeSessionId === sessionId) {
           const remaining = sessions.filter(s => s.id !== sessionId);
           if (remaining.length > 0) {
@@ -1476,6 +1495,26 @@ export default function AgentChatPlayground({
     } catch (err) {
       console.error("Failed to delete session", err);
     }
+  };
+
+  // Toggle Pin chat session
+  const handleTogglePin = (sessionId, e) => {
+    if (e) e.stopPropagation();
+    setPinnedSessionIds(prev => {
+      const next = new Set(prev);
+      const isNowPinned = !next.has(sessionId);
+      if (next.has(sessionId)) {
+        next.delete(sessionId);
+      } else {
+        next.add(sessionId);
+      }
+      try {
+        localStorage.setItem('trulin_pinned_chat_sessions', JSON.stringify(Array.from(next)));
+      } catch (err) {}
+      if (showToast) showToast(isNowPinned ? "Chat pinned to top" : "Chat unpinned");
+      return next;
+    });
+    setOpenMenuSessionId(null);
   };
 
   // Start inline rename
@@ -1525,8 +1564,19 @@ export default function AgentChatPlayground({
     setOpenMenuSessionId(null);
   };
 
-  // Group chat sessions chronologically like ChatGPT
+  // Group chat sessions chronologically like ChatGPT, with Pinned at top
   const groupSessionsByDate = (sessionList) => {
+    const pinned = [];
+    const unpinned = [];
+
+    sessionList.forEach(session => {
+      if (pinnedSessionIds.has(session.id)) {
+        pinned.push(session);
+      } else {
+        unpinned.push(session);
+      }
+    });
+
     const now = new Date();
     const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
     const startOfYesterday = startOfToday - 86400000;
@@ -1541,7 +1591,7 @@ export default function AgentChatPlayground({
       older: []
     };
 
-    sessionList.forEach(session => {
+    unpinned.forEach(session => {
       const date = session.created_at ? new Date(session.created_at).getTime() : 0;
       if (date >= startOfToday) {
         groups.today.push(session);
@@ -1556,13 +1606,19 @@ export default function AgentChatPlayground({
       }
     });
 
-    return [
+    const result = [];
+    if (pinned.length > 0) {
+      result.push({ label: 'Pinned', items: pinned });
+    }
+    const standardGroups = [
       { label: 'Today', items: groups.today },
       { label: 'Yesterday', items: groups.yesterday },
       { label: 'Previous 7 Days', items: groups.previous7Days },
       { label: 'Previous 30 Days', items: groups.previous30Days },
       { label: 'Older', items: groups.older },
     ].filter(g => g.items.length > 0);
+
+    return [...result, ...standardGroups];
   };
 
   // Send message
@@ -1789,6 +1845,7 @@ export default function AgentChatPlayground({
                   const isCurrent = activeSessionId === session.id;
                   const isEditing = editingSessionId === session.id;
                   const isMenuOpen = openMenuSessionId === session.id;
+                  const isPinned = pinnedSessionIds.has(session.id);
 
                   return (
                     <div
@@ -1838,13 +1895,18 @@ export default function AgentChatPlayground({
                         </div>
                       ) : (
                         <>
-                          <span className="copilot-history-item-title">
-                            {(session.title || 'Untitled Conversation').replace(/^\[.*?\]\s*/, '')}
+                          <span className="copilot-history-item-title" style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                            {isPinned && (
+                              <Pin size={11} color="#D97706" style={{ flexShrink: 0, transform: 'rotate(45deg)' }} />
+                            )}
+                            <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                              {(session.title || 'Untitled Conversation').replace(/^\[.*?\]\s*/, '')}
+                            </span>
                           </span>
 
                           {/* 3-Dots Action Button & Dropdown Menu */}
                           <div
-                            className={`copilot-history-item-actions ${isMenuOpen ? 'copilot-history-item-actions-visible' : ''}`}
+                            className={`copilot-history-item-actions ${(isMenuOpen || isCurrent) ? 'copilot-history-item-actions-visible' : ''}`}
                             onClick={e => e.stopPropagation()}
                           >
                             <button
@@ -1855,6 +1917,10 @@ export default function AgentChatPlayground({
                                 e.stopPropagation();
                                 setOpenMenuSessionId(prev => prev === session.id ? null : session.id);
                               }}
+                              style={{
+                                opacity: (isCurrent || isMenuOpen) ? 1 : undefined,
+                                color: isCurrent ? '#44403C' : undefined
+                              }}
                             >
                               <MoreHorizontal size={14} />
                             </button>
@@ -1862,6 +1928,14 @@ export default function AgentChatPlayground({
                             {/* Floating Dropdown Menu */}
                             {isMenuOpen && (
                               <div className="copilot-history-dropdown-menu">
+                                <button
+                                  type="button"
+                                  className="copilot-history-dropdown-item"
+                                  onClick={e => handleTogglePin(session.id, e)}
+                                >
+                                  {isPinned ? <PinOff size={13} color="#D97706" /> : <Pin size={13} color="#57534E" />}
+                                  <span>{isPinned ? "Unpin Chat" : "Pin Chat"}</span>
+                                </button>
                                 <button
                                   type="button"
                                   className="copilot-history-dropdown-item"
