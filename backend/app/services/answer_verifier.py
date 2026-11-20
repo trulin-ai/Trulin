@@ -129,19 +129,27 @@ class AnswerVerifier:
         for idx in valid_indices:
             c = citations[idx - 1]
             cited_evidence_corpus.append(str(c.get("claim_text", "")))
+            cited_evidence_corpus.append(str(c.get("verbatim_evidence", "")))
+            cited_evidence_corpus.append(str(c.get("evidence_span", "")))
             evidence = c.get("evidence")
             if isinstance(evidence, dict):
                 cited_evidence_corpus.append(str(evidence.get("verbatim_quote", "")))
                 cited_evidence_corpus.append(str(evidence.get("clause_text", "")))
+            elif isinstance(evidence, str):
+                cited_evidence_corpus.append(evidence)
 
         # Also compile all available citations as fallback
         all_evidence_corpus = []
         for c in citations:
             all_evidence_corpus.append(str(c.get("claim_text", "")))
+            all_evidence_corpus.append(str(c.get("verbatim_evidence", "")))
+            all_evidence_corpus.append(str(c.get("evidence_span", "")))
             evidence = c.get("evidence")
             if isinstance(evidence, dict):
                 all_evidence_corpus.append(str(evidence.get("verbatim_quote", "")))
                 all_evidence_corpus.append(str(evidence.get("clause_text", "")))
+            elif isinstance(evidence, str):
+                all_evidence_corpus.append(evidence)
 
         cited_text_block = " ".join(cited_evidence_corpus).lower()
         all_text_block = " ".join(all_evidence_corpus).lower()

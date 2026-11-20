@@ -378,21 +378,22 @@ class OllamaProvider(BaseLLMProvider):
         messages.append({"role": "user", "content": prompt})
 
         try:
-            async with httpx.AsyncClient(timeout=15.0) as client:
+            timeout_val = float(getattr(self, "timeout", 120.0))
+            async with httpx.AsyncClient(timeout=timeout_val) as client:
                 res = await client.post(
                     f"{self.base_url}/api/chat",
                     json={
                         "model": self.model,
                         "messages": messages,
                         "stream": False,
-                        "options": {"temperature": temperature, "num_predict": max_tokens},
+                        "options": {"temperature": temperature, "num_predict": max_tokens, "num_ctx": self.num_ctx},
                     },
                 )
                 res.raise_for_status()
                 data = res.json()
                 return data.get("message", {}).get("content", "")
         except Exception as e:
-            logger.warning("Ollama generate_completion failed (%s); marking unavailable", e)
+            logger.warning("Ollama generate_completion failed (%s: %s); marking unavailable", type(e).__name__, e)
             self._model_unavailable = True
             raise
 
