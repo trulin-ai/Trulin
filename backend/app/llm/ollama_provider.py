@@ -361,3 +361,38 @@ class OllamaProvider(BaseLLMProvider):
             history=history,
         )
 
+    async def generate_completion(
+        self,
+        prompt: str,
+        system_prompt: str | None = None,
+        max_tokens: int = 300,
+        temperature: float = 0.0,
+    ) -> str:
+        """Generate text completion via local Ollama instance."""
+        if getattr(self, "_model_unavailable", False):
+            raise RuntimeError("Ollama model is currently unavailable")
+
+        messages = []
+        if system_prompt:
+            messages.append({"role": "system", "content": system_prompt})
+        messages.append({"role": "user", "content": prompt})
+
+        try:
+            async with httpx.AsyncClient(timeout=15.0) as client:
+                res = await client.post(
+                    f"{self.base_url}/api/chat",
+                    json={
+                        "model": self.model,
+                        "messages": messages,
+                        "stream": False,
+                        "options": {"temperature": temperature, "num_predict": max_tokens},
+                    },
+                )
+                res.raise_for_status()
+                data = res.json()
+                return data.get("message", {}).get("content", "")
+        except Exception as e:
+            logger.warning("Ollama generate_completion failed (%s); marking unavailable", e)
+            self._model_unavailable = True
+            raise
+

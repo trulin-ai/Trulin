@@ -326,6 +326,7 @@ class ChatService:
         else:
             # Mode A: Document Q&A Synthesis with typed PolicyAnswerContract
             from app.services.policy_answer_synthesizer import PolicyAnswerSynthesizer
+            from app.services.policy_wording_refiner import PolicyWordingRefiner
 
             structured_contract = PolicyAnswerSynthesizer.synthesize_structured(
                 query=content,
@@ -336,7 +337,12 @@ class ChatService:
                 history=recent_history,
                 workspace=effective_workspace,
             )
-            synthesized_answer = PolicyAnswerSynthesizer.render_markdown(structured_contract)
+            structured_contract, synthesized_answer = await PolicyWordingRefiner.refine_contract(
+                contract=structured_contract,
+                citations=citations,
+                has_conflicts=has_conflicts,
+                llm_provider=self.llm,
+            )
             answer_status = structured_contract.verification_status
 
             if answer_status == "NO_VERIFIED_RULE":
