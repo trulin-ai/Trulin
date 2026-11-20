@@ -279,7 +279,7 @@
       "category": "Cross-Document Conflicts",
       "query": "How long is OneDrive data kept before deletion after cancellation?",
       "expected_answer": "Contradictory retention timelines (e.g. 6 months vs 12 months, or 30 days vs 90 days) require pathway audit.",
-      "actual_bottom_line": "The policy rules for cancellation or refund depend on the specific pathway chosen. These rules are classified as **CONTEXT_DEPENDENT** and do not represent an unresolvable contradiction [Source 1]. Specifically, data retention is permitted or required by applicable law, or authorized under this Data Processing Agreement (DPA), but Microsoft may retain data upon customer request unless such retention is prohibited by law or the DPA [Source 1].",
+      "actual_bottom_line": "The policy rules for cancellation or refund depend on the specific pathway chosen. These rules are classified as **CONTEXT_DEPENDENT** and do not represent an unresolvable contradiction [Source 1]. Specifically, data retention is permitted or required by applicable law, or authorized under this Data Processing Agreement (DPA), but Microsoft is not obligated to retain such data upon the Customer's request unless otherwise specified [Source 1].",
       "claims_used_count": 8,
       "citations_valid": true,
       "conditions_preserved": true,

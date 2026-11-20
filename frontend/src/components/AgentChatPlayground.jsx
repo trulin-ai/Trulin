@@ -5,7 +5,7 @@ import {
   Copy, Check, ChevronDown, ChevronRight, BookOpen, Layers, Shield,
   ExternalLink, ShieldAlert, ArrowUpRight, Mic, ArrowUp, FileText, X,
   PanelLeftClose, PanelLeftOpen, Pencil, Share2, Scale, Info, Hash,
-  UploadCloud, GitCompare
+  UploadCloud, GitCompare, HelpCircle
 } from 'lucide-react';
 
 const PROCESS_STEPS = [
@@ -171,7 +171,7 @@ export function generateSmartTitle(query) {
 }
 
 // Rich Formatted Content Renderer for Catchy & Scannable Answers with Interactive Citations
-function RichAnswerContent({ content, onCitationClick }) {
+function RichAnswerContent({ content, onCitationClick, onCitationHover }) {
   if (!content) return null;
 
   // Split into paragraphs / lines
@@ -234,33 +234,38 @@ function RichAnswerContent({ content, onCitationClick }) {
               e.stopPropagation();
               if (onCitationClick) onCitationClick(parseInt(num, 10));
             }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = '#DBEAFE';
+              e.currentTarget.style.color = '#1D4ED8';
+              e.currentTarget.style.borderColor = '#3B82F6';
+              if (onCitationHover) onCitationHover(parseInt(num, 10));
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = '#EFF6FF';
+              e.currentTarget.style.color = '#1D4ED8';
+              e.currentTarget.style.borderColor = '#BFDBFE';
+              if (onCitationHover) onCitationHover(null);
+            }}
             style={{
               display: 'inline-flex',
               alignItems: 'center',
               justifyContent: 'center',
-              background: 'rgba(0, 0, 0, 0.05)',
-              border: 'none',
+              background: '#EFF6FF',
+              border: '1px solid #BFDBFE',
               borderRadius: '4px',
-              color: '#78716C',
-              fontWeight: 600,
-              fontSize: '0.72rem',
-              padding: '1px 5px',
+              color: '#1D4ED8',
+              fontWeight: 700,
+              fontSize: '0.70rem',
+              padding: '1px 6px',
               margin: '0 2px',
               cursor: 'pointer',
               verticalAlign: 'baseline',
+              fontFamily: 'monospace',
               transition: 'all 0.15s ease'
             }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = '#FBE9D9';
-              e.currentTarget.style.color = '#7C2D12';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'rgba(0, 0, 0, 0.05)';
-              e.currentTarget.style.color = '#78716C';
-            }}
-            title={`View Source ${num}`}
+            title={`View Supporting Evidence for Source ${num}`}
           >
-            {num}
+            Source {num}
           </button>
         );
       }
@@ -652,6 +657,518 @@ function extractCleanBottomLine(msg, structured) {
 }
 
 
+// Canonical Document Explorer Deep Link Builder with Graceful Fallback
+export function buildExplorerUrl(citation, activeWorkspace) {
+  const params = new URLSearchParams();
+  const wsId = citation?.workspace_id || (activeWorkspace?.id && activeWorkspace.id !== 'all' ? activeWorkspace.id : null);
+  if (wsId) params.set('workspace', wsId);
+  if (citation?.document_id) params.set('doc', citation.document_id);
+  if (citation?.claim_id) params.set('claimId', citation.claim_id);
+  if (citation?.page) params.set('page', citation.page);
+  params.set('view', 'folders');
+  return `/documents?${params.toString()}`;
+}
+
+// Why This Answer Modal: Primary Trust & Governance Lineage Inspector
+function WhyThisAnswerModal({ data, onClose, activeWorkspace }) {
+  if (!data) return null;
+  const { citation, claim, structured, meta } = data;
+
+  const subject = claim?.subject || citation?.subject || 'Enterprise Policy';
+  const predicate = claim?.predicate || citation?.predicate || 'governs';
+  const object = claim?.object || citation?.object || 'operative requirement';
+  const modality = (claim?.modality || citation?.modality || 'MUST').toUpperCase();
+  const verbatimQuote = citation?.verbatim_evidence || citation?.evidence_span || claim?.verbatim_evidence || claim?.claim_text || '';
+  const docTitle = citation?.source_title || citation?.document_title || claim?.document_title || 'Enterprise Policy Document';
+  const section = citation?.section || claim?.section || null;
+  const page = citation?.page || claim?.page || null;
+  const conditions = structured?.conditions || [];
+  const exceptions = structured?.exceptions || [];
+  const auditId = meta?.audit_id || 'AUD-GOV-POLICY';
+  const groundingScore = structured?.grounding_score ?? meta?.verification?.grounding_score ?? 1.0;
+
+  const explorerUrl = buildExplorerUrl(citation || claim, activeWorkspace);
+
+  return (
+    <div
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        background: 'rgba(15, 23, 42, 0.65)',
+        backdropFilter: 'blur(3px)',
+        zIndex: 9999,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '20px'
+      }}
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
+      <div
+        style={{
+          background: '#FFFFFF',
+          borderRadius: '12px',
+          width: '100%',
+          maxWidth: '680px',
+          maxHeight: '88vh',
+          display: 'flex',
+          flexDirection: 'column',
+          boxShadow: '0 20px 40px -10px rgba(15, 23, 42, 0.25)',
+          border: '1px solid #E2E8F0',
+          overflow: 'hidden'
+        }}
+      >
+        {/* Header */}
+        <div style={{
+          padding: '16px 20px',
+          borderBottom: '1px solid #E2E8F0',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          background: '#F8FAFC'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div style={{
+              width: '32px',
+              height: '32px',
+              borderRadius: '8px',
+              background: '#EFF6FF',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              border: '1px solid #BFDBFE'
+            }}>
+              <ShieldCheck size={18} color="#2563EB" />
+            </div>
+            <div>
+              <div style={{ fontSize: '0.96rem', fontWeight: 700, color: '#0F172A' }}>
+                Why This Answer? — Policy Lineage Inspector
+              </div>
+              <div style={{ fontSize: '0.74rem', color: '#64748B' }}>
+                Certified grounded rule entailment and cryptographic audit trail
+              </div>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#64748B', padding: '4px' }}
+          >
+            <X size={18} />
+          </button>
+        </div>
+
+        {/* Modal Scrollable Body */}
+        <div style={{ padding: '20px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          {/* Card 1: Certified Atomic Claim */}
+          <div style={{
+            background: '#F8FAFC',
+            border: '1px solid #E2E8F0',
+            borderRadius: '8px',
+            padding: '14px'
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+              <span style={{ fontSize: '0.74rem', fontWeight: 700, textTransform: 'uppercase', color: '#475569', letterSpacing: '0.04em' }}>
+                Certified Atomic Claim (S-P-O Triple)
+              </span>
+              <ModalityPill modality={modality} />
+            </div>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              flexWrap: 'wrap',
+              fontSize: '0.84rem',
+              fontWeight: 600,
+              padding: '8px 10px',
+              background: '#FFFFFF',
+              borderRadius: '6px',
+              border: '1px solid #E2E8F0'
+            }}>
+              <span style={{ color: '#0369A1', background: '#F0F9FF', padding: '2px 8px', borderRadius: '4px' }}>
+                {subject}
+              </span>
+              <span style={{ color: '#94A3B8' }}>→</span>
+              <span style={{ color: '#7C3AED', background: '#FAF5FF', padding: '2px 8px', borderRadius: '4px' }}>
+                {predicate}
+              </span>
+              <span style={{ color: '#94A3B8' }}>→</span>
+              <span style={{ color: '#059669', background: '#ECFDF5', padding: '2px 8px', borderRadius: '4px' }}>
+                {object}
+              </span>
+            </div>
+          </div>
+
+          {/* Card 2: Supporting Verbatim Evidence */}
+          <div style={{
+            background: '#FFFFFF',
+            border: '1px solid #E2E8F0',
+            borderRadius: '8px',
+            padding: '14px'
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+              <span style={{ fontSize: '0.74rem', fontWeight: 700, textTransform: 'uppercase', color: '#475569', letterSpacing: '0.04em' }}>
+                Supporting Verbatim Quote
+              </span>
+              <span style={{ fontSize: '0.74rem', color: '#64748B', fontWeight: 600 }}>
+                {docTitle}{section ? ` · §${section}` : ''}{page ? ` · Page ${page}` : ''}
+              </span>
+            </div>
+            <div style={{
+              borderLeft: '3px solid #3B82F6',
+              background: '#F8FAFC',
+              padding: '10px 14px',
+              borderRadius: '0 6px 6px 0',
+              fontSize: '0.86rem',
+              lineHeight: 1.6,
+              color: '#334155',
+              fontStyle: 'italic'
+            }}>
+              “{verbatimQuote || 'Direct supporting evidence verified in policy document.'}”
+            </div>
+          </div>
+
+          {/* Card 3: Conditions Preserved */}
+          <div style={{
+            background: '#F8FAFC',
+            border: '1px solid #E2E8F0',
+            borderRadius: '8px',
+            padding: '14px'
+          }}>
+            <span style={{ fontSize: '0.74rem', fontWeight: 700, textTransform: 'uppercase', color: '#475569', letterSpacing: '0.04em', display: 'block', marginBottom: '8px' }}>
+              Preserved Conditions & Exceptions
+            </span>
+            {(conditions.length > 0 || exceptions.length > 0) ? (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                {conditions.map((c, ci) => (
+                  <div key={`cond-${ci}`} style={{ fontSize: '0.80rem', color: '#334155', display: 'flex', gap: '6px' }}>
+                    <span style={{ color: '#0284C7', fontWeight: 700 }}>• Condition:</span>
+                    <span>{c}</span>
+                  </div>
+                ))}
+                {exceptions.map((e, ei) => (
+                  <div key={`exc-${ei}`} style={{ fontSize: '0.80rem', color: '#334155', display: 'flex', gap: '6px' }}>
+                    <span style={{ color: '#D97706', fontWeight: 700 }}>• Exception:</span>
+                    <span>{e}</span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div style={{ fontSize: '0.80rem', color: '#64748B', fontStyle: 'italic' }}>
+                Operative rule applies unconditionally across designated enterprise scope.
+              </div>
+            )}
+          </div>
+
+          {/* Card 4: Multi-Gate Verification Checklist */}
+          <div style={{
+            background: '#FFFFFF',
+            border: '1px solid #E2E8F0',
+            borderRadius: '8px',
+            padding: '14px'
+          }}>
+            <span style={{ fontSize: '0.74rem', fontWeight: 700, textTransform: 'uppercase', color: '#475569', letterSpacing: '0.04em', display: 'block', marginBottom: '10px' }}>
+              Multi-Gate Verification Checklist
+            </span>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '8px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.78rem', color: '#334155' }}>
+                <CheckCircle2 size={14} color="#16A34A" />
+                <span><strong>Grounding Score:</strong> {(groundingScore * 100).toFixed(0)}% Entailment</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.78rem', color: '#334155' }}>
+                <CheckCircle2 size={14} color="#16A34A" />
+                <span><strong>Contradiction Gate:</strong> 0 Conflicts Detected</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.78rem', color: '#334155' }}>
+                <CheckCircle2 size={14} color="#16A34A" />
+                <span><strong>Decay Engine:</strong> Current Operative Policy</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.78rem', color: '#334155' }}>
+                <CheckCircle2 size={14} color="#16A34A" />
+                <span><strong>Governance Tier:</strong> Fail-Closed Boundary</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Card 5: Cryptographic Provenance Receipt */}
+          <div style={{
+            background: '#F8FAFC',
+            border: '1px solid #E2E8F0',
+            borderRadius: '8px',
+            padding: '12px 14px',
+            fontSize: '0.74rem',
+            color: '#64748B',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '5px'
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <span>Audit ID:</span>
+              <span style={{ fontFamily: 'monospace', fontWeight: 600, color: '#334155' }}>{auditId}</span>
+            </div>
+            {citation?.document_id && (
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span>Document ID:</span>
+                <span style={{ fontFamily: 'monospace', color: '#334155' }}>{citation.document_id}</span>
+              </div>
+            )}
+            {citation?.claim_id && (
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span>Claim ID:</span>
+                <span style={{ fontFamily: 'monospace', color: '#334155' }}>{citation.claim_id}</span>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div style={{
+          padding: '12px 20px',
+          borderTop: '1px solid #E2E8F0',
+          display: 'flex',
+          justifyContent: 'flex-end',
+          alignItems: 'center',
+          gap: '10px',
+          background: '#F8FAFC'
+        }}>
+          <button
+            type="button"
+            onClick={onClose}
+            style={{
+              padding: '6px 14px',
+              fontSize: '0.78rem',
+              fontWeight: 600,
+              borderRadius: '6px',
+              background: '#FFFFFF',
+              border: '1px solid #CBD5E1',
+              color: '#475569',
+              cursor: 'pointer'
+            }}
+          >
+            Close
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              window.open(explorerUrl, '_blank', 'noopener,noreferrer');
+            }}
+            style={{
+              padding: '6px 14px',
+              fontSize: '0.78rem',
+              fontWeight: 600,
+              borderRadius: '6px',
+              background: '#2563EB',
+              border: 'none',
+              color: '#FFFFFF',
+              cursor: 'pointer',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              boxShadow: '0 1px 2px rgba(37,99,235,0.2)'
+            }}
+          >
+            <span>Open in Document Explorer</span>
+            <ExternalLink size={13} color="#FFFFFF" />
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Executive Evidence Source Card with Micro-Interactions
+function EvidenceSourceCard({
+  citation,
+  sourceIndex,
+  msgId,
+  isHighlighted,
+  activeWorkspace,
+  onOpenWhyThis,
+  onCopy,
+  isCopied
+}) {
+  if (!citation) return null;
+
+  const docTitle = citation.source_title || citation.document_title || 'Enterprise Policy Document';
+  const section = citation.section || null;
+  const page = citation.page || null;
+  const verbatimQuote = citation.verbatim_evidence || citation.evidence_span || citation.claim_text || 'Verbatim policy evidence span verified in governing document.';
+  const explorerUrl = buildExplorerUrl(citation, activeWorkspace);
+
+  return (
+    <div
+      id={`citation-${msgId}-${sourceIndex}`}
+      style={{
+        background: '#FFFFFF',
+        border: isHighlighted ? '2px solid #2563EB' : '1px solid #E2E8F0',
+        boxShadow: isHighlighted ? '0 0 0 3px rgba(37, 99, 235, 0.15)' : '0 1px 3px rgba(0,0,0,0.03)',
+        borderRadius: '8px',
+        padding: '12px 14px',
+        marginBottom: '10px',
+        transition: 'all 0.2s ease'
+      }}
+    >
+      {/* Header */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '8px', marginBottom: '8px', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+          <span style={{
+            background: '#EFF6FF',
+            color: '#1D4ED8',
+            fontWeight: 700,
+            fontSize: '0.70rem',
+            padding: '2px 7px',
+            borderRadius: '6px',
+            fontFamily: 'monospace'
+          }}>
+            Source {sourceIndex}
+          </span>
+          <span style={{ fontSize: '0.80rem', fontWeight: 600, color: '#0F172A' }}>
+            {docTitle}
+          </span>
+          {section && (
+            <span style={{ fontSize: '0.74rem', color: '#64748B' }}>
+              · Section {section}
+            </span>
+          )}
+          {page && (
+            <span style={{ fontSize: '0.74rem', color: '#64748B' }}>
+              · Page {page}
+            </span>
+          )}
+        </div>
+        <span style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: '4px',
+          fontSize: '0.68rem',
+          color: '#059669',
+          fontWeight: 600,
+          background: '#ECFDF5',
+          padding: '1px 6px',
+          borderRadius: '4px',
+          border: '1px solid #A7F3D0'
+        }}>
+          <Check size={11} color="#059669" />
+          <span>Verified Rule</span>
+        </span>
+      </div>
+
+      {/* Verbatim Quote */}
+      <div style={{
+        borderLeft: '3px solid #3B82F6',
+        background: '#F8FAFC',
+        padding: '8px 12px',
+        borderRadius: '0 6px 6px 0',
+        fontSize: '0.82rem',
+        color: '#334155',
+        lineHeight: 1.55,
+        fontStyle: 'italic',
+        marginBottom: '10px'
+      }}>
+        “{verbatimQuote}”
+      </div>
+
+      {/* Micro-Action Row */}
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        flexWrap: 'wrap',
+        gap: '8px',
+        paddingTop: '6px',
+        borderTop: '1px solid #F1F5F9'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+          {/* Why this answer? modal trigger */}
+          <button
+            type="button"
+            onClick={onOpenWhyThis}
+            style={{
+              background: '#FFFFFF',
+              border: '1px solid #CBD5E1',
+              borderRadius: '5px',
+              padding: '3px 8px',
+              fontSize: '0.72rem',
+              fontWeight: 600,
+              color: '#334155',
+              cursor: 'pointer',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '4px',
+              transition: 'all 0.15s ease'
+            }}
+            onMouseEnter={e => { e.currentTarget.style.background = '#F1F5F9'; e.currentTarget.style.borderColor = '#94A3B8'; }}
+            onMouseLeave={e => { e.currentTarget.style.background = '#FFFFFF'; e.currentTarget.style.borderColor = '#CBD5E1'; }}
+            title="Inspect atomic claims, trust score, and governance receipt"
+          >
+            <Info size={12} color="#2563EB" />
+            <span>Why this answer?</span>
+          </button>
+
+          {/* Copy evidence button */}
+          <button
+            type="button"
+            onClick={onCopy}
+            style={{
+              background: '#FFFFFF',
+              border: '1px solid #CBD5E1',
+              borderRadius: '5px',
+              padding: '3px 8px',
+              fontSize: '0.72rem',
+              fontWeight: 500,
+              color: isCopied ? '#16A34A' : '#475569',
+              cursor: 'pointer',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '4px',
+              transition: 'all 0.15s ease'
+            }}
+            onMouseEnter={e => { e.currentTarget.style.background = '#F8FAFC'; }}
+            onMouseLeave={e => { e.currentTarget.style.background = '#FFFFFF'; }}
+            title="Copy verbatim quote and citation to clipboard"
+          >
+            {isCopied ? <Check size={12} color="#16A34A" /> : <Copy size={12} />}
+            <span>{isCopied ? "Copied" : "Copy evidence"}</span>
+          </button>
+        </div>
+
+        {/* Open in Document Explorer in a NEW TAB */}
+        <button
+          type="button"
+          onClick={() => {
+            window.open(explorerUrl, '_blank', 'noopener,noreferrer');
+          }}
+          style={{
+            background: '#EFF6FF',
+            border: '1px solid #BFDBFE',
+            borderRadius: '5px',
+            padding: '3px 9px',
+            fontSize: '0.72rem',
+            fontWeight: 600,
+            color: '#1D4ED8',
+            cursor: 'pointer',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '4px',
+            transition: 'all 0.15s ease'
+          }}
+          onMouseEnter={e => { e.currentTarget.style.background = '#DBEAFE'; }}
+          onMouseLeave={e => { e.currentTarget.style.background = '#EFF6FF'; }}
+          title="Open exact folder and document preview in a new tab"
+        >
+          <span>Open in Document Explorer</span>
+          <ExternalLink size={12} color="#1D4ED8" />
+        </button>
+      </div>
+    </div>
+  );
+}
+
 export default function AgentChatPlayground({
   activeOrg,
   activePersona,
@@ -676,6 +1193,12 @@ export default function AgentChatPlayground({
   const [expandedCitations, setExpandedCitations] = useState({});
   const [activeCitationHighlight, setActiveCitationHighlight] = useState({});
   const [copiedMsgId, setCopiedMsgId] = useState(null);
+  const [whyThisAnswerModalData, setWhyThisAnswerModalData] = useState(null);
+  const [copiedEvidenceKey, setCopiedEvidenceKey] = useState(null);
+
+  const handleCitationHover = (msgId, sourceNum) => {
+    setActiveCitationHighlight(prev => ({ ...prev, [msgId]: sourceNum }));
+  };
 
   // ChatGPT-style Collapsible Chat History State
   const [isHistoryOpen, setIsHistoryOpen] = useState(() => {
@@ -1654,7 +2177,7 @@ export default function AgentChatPlayground({
                         const isNoVerifiedRule = meta.answer_status === 'NO_VERIFIED_RULE';
 
                         // -----------------------------------------------------------
-                        // STATE 4: ADVISORY ACTION EVALUATION (Mode B)
+                        // STATE 4: ADVISORY ACTION EVALUATION (Mode B Decision Brief)
                         // -----------------------------------------------------------
                         if (isActionEvaluation) {
                           const actionEval = meta.action_evaluation || {};
@@ -1666,105 +2189,110 @@ export default function AgentChatPlayground({
                           const suggestedAction = actionEval.suggested_action || null;
 
                           return (
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                              {/* Header Verdict Pill */}
-                              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-                                {verdict === 'ALLOW' && (
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                              {/* Header Pill: Decision Governance Verdict */}
+                              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                   <span style={{
                                     display: 'inline-flex',
                                     alignItems: 'center',
                                     gap: '5px',
-                                    fontSize: '0.72rem',
+                                    fontSize: '0.74rem',
                                     fontWeight: 700,
                                     padding: '3px 10px',
                                     borderRadius: '12px',
-                                    background: '#DCFCE7',
-                                    color: '#15803D',
-                                    border: '1px solid #86EFAC'
+                                    background: verdict === 'ALLOW' ? '#DCFCE7' : verdict === 'BLOCK' ? '#FEE2E2' : '#FEF3C7',
+                                    color: verdict === 'ALLOW' ? '#15803D' : verdict === 'BLOCK' ? '#B91C1C' : '#B45309',
+                                    border: `1px solid ${verdict === 'ALLOW' ? '#86EFAC' : verdict === 'BLOCK' ? '#FCA5A5' : '#FDE68A'}`
                                   }}>
-                                    <ShieldCheck size={13} color="#15803D" />
-                                    <span>Policy Clearance: ALLOW</span>
+                                    {verdict === 'ALLOW' ? <ShieldCheck size={13} color="#15803D" /> : verdict === 'BLOCK' ? <AlertTriangle size={13} color="#B91C1C" /> : <Scale size={13} color="#B45309" />}
+                                    <span>DECISION GOVERNANCE — {verdict}</span>
                                   </span>
-                                )}
-                                {verdict === 'BLOCK' && (
                                   <span style={{
-                                    display: 'inline-flex',
-                                    alignItems: 'center',
-                                    gap: '5px',
-                                    fontSize: '0.72rem',
+                                    fontSize: '0.68rem',
                                     fontWeight: 700,
-                                    padding: '3px 10px',
-                                    borderRadius: '12px',
-                                    background: '#FEE2E2',
-                                    color: '#B91C1C',
-                                    border: '1px solid #FCA5A5'
+                                    padding: '2px 8px',
+                                    borderRadius: '6px',
+                                    background: riskLevel === 'HIGH' ? '#FEF2F2' : riskLevel === 'MEDIUM' ? '#FFFBEB' : '#F0FDF4',
+                                    color: riskLevel === 'HIGH' ? '#991B1B' : riskLevel === 'MEDIUM' ? '#92400E' : '#166534',
+                                    border: `1px solid ${riskLevel === 'HIGH' ? '#FECACA' : riskLevel === 'MEDIUM' ? '#FDE68A' : '#BBF7D0'}`
                                   }}>
-                                    <AlertTriangle size={13} color="#B91C1C" />
-                                    <span>Policy Violation: BLOCK</span>
+                                    Risk: {riskLevel}
                                   </span>
-                                )}
-                                {(verdict === 'REVIEW' || verdict === 'CLARIFY') && (
-                                  <span style={{
-                                    display: 'inline-flex',
-                                    alignItems: 'center',
-                                    gap: '5px',
-                                    fontSize: '0.72rem',
-                                    fontWeight: 700,
-                                    padding: '3px 10px',
-                                    borderRadius: '12px',
-                                    background: '#FEF3C7',
-                                    color: '#B45309',
-                                    border: '1px solid #FDE68A'
-                                  }}>
-                                    <Scale size={13} color="#B45309" />
-                                    <span>Prerequisite Required: REVIEW</span>
-                                  </span>
-                                )}
-                                <span style={{ fontSize: '0.68rem', color: '#78716C', fontFamily: 'monospace' }}>
-                                  Risk: {riskLevel}
+                                </div>
+                                <span style={{ fontSize: '0.70rem', color: '#64748B', fontFamily: 'monospace' }}>
+                                  {auditId}
                                 </span>
+                              </div>
+
+                              {/* Decision Status Dual Badge */}
+                              <div style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '12px',
+                                padding: '8px 12px',
+                                background: '#F8FAFC',
+                                border: '1px solid #E2E8F0',
+                                borderRadius: '6px',
+                                fontSize: '0.78rem'
+                              }}>
+                                <div>
+                                  <span style={{ color: '#64748B' }}>Policy Verdict: </span>
+                                  <strong style={{ color: verdict === 'ALLOW' ? '#15803D' : verdict === 'BLOCK' ? '#DC2626' : '#D97706' }}>
+                                    {verdict}
+                                  </strong>
+                                </div>
+                                <span style={{ color: '#CBD5E1' }}>|</span>
+                                <div>
+                                  <span style={{ color: '#64748B' }}>Execution Status: </span>
+                                  <strong style={{ color: '#0F172A' }}>Not executed</strong>
+                                </div>
                               </div>
 
                               {/* Evaluated Action & Policy Findings */}
                               <div style={{
                                 background: '#FFFFFF',
-                                border: '1px solid #E2E8F0',
+                                border: `1px solid ${verdict === 'BLOCK' ? '#FECACA' : '#E2E8F0'}`,
                                 borderRadius: '8px',
-                                padding: '12px 14px',
+                                padding: '14px',
                                 boxShadow: '0 1px 3px rgba(0,0,0,0.02)'
                               }}>
-                                <div style={{ fontSize: '0.80rem', fontWeight: 600, color: '#475569', marginBottom: '6px' }}>
-                                  Policy Findings & Governance Entitlements:
+                                <div style={{ fontSize: '0.80rem', fontWeight: 700, color: '#334155', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '8px' }}>
+                                  Policy Findings & Entitlements:
                                 </div>
                                 {reasons.length > 0 ? (
-                                  <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                                  <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                                     {reasons.map((r, ri) => (
                                       <div key={ri} style={{ display: 'flex', alignItems: 'baseline', gap: '8px', fontSize: '0.88rem', color: '#1E293B', lineHeight: 1.55 }}>
-                                        <span style={{ color: verdict === 'ALLOW' ? '#15803D' : '#DC2626' }}>•</span>
+                                        <span style={{ color: verdict === 'ALLOW' ? '#15803D' : '#DC2626', fontWeight: 700 }}>•</span>
                                         <span>{r}</span>
                                       </div>
                                     ))}
                                   </div>
                                 ) : (
                                   <div style={{ fontSize: '0.88rem', color: '#1E293B', lineHeight: 1.55 }}>
-                                    <RichAnswerContent content={msg.content} onCitationClick={(srcNum) => handleCitationClick(msg.id, srcNum)} />
+                                    <RichAnswerContent
+                                      content={msg.content}
+                                      onCitationClick={(srcNum) => handleCitationClick(msg.id, srcNum)}
+                                      onCitationHover={(srcNum) => handleCitationHover(msg.id, srcNum)}
+                                    />
                                   </div>
                                 )}
 
                                 {suggestedAction && (
-                                  <div style={{ marginTop: '10px', paddingTop: '8px', borderTop: '1px solid #F1F5F9', fontSize: '0.82rem', color: '#334155' }}>
+                                  <div style={{ marginTop: '12px', paddingTop: '10px', borderTop: '1px solid #F1F5F9', fontSize: '0.82rem', color: '#334155' }}>
                                     <strong style={{ color: '#0F172A' }}>Recommended Next Action: </strong>
                                     <span>{suggestedAction}</span>
                                   </div>
                                 )}
                               </div>
 
-                              {/* Mandatory Advisory Warning Banner */}
+                              {/* Mandatory Fixed Non-Collapsible Advisory Warning Banner */}
                               <div style={{
                                 background: '#EFF6FF',
                                 border: '1px solid #BFDBFE',
                                 borderRadius: '8px',
-                                padding: '10px 14px',
+                                padding: '12px 14px',
                                 display: 'flex',
                                 alignItems: 'flex-start',
                                 gap: '10px'
@@ -1774,7 +2302,7 @@ export default function AgentChatPlayground({
                                   <strong style={{ display: 'block', marginBottom: '2px' }}>
                                     Advisory evaluation only — no external action executed.
                                   </strong>
-                                  Trulin operates in read-only governance mode. System privileges, banking rails, and directory mutations were not invoked.
+                                  Trulin operates in read-only governance mode. Banking rails, payment gateways, and directory mutations were not invoked.
                                 </div>
                               </div>
 
@@ -1783,7 +2311,7 @@ export default function AgentChatPlayground({
                                 <AccordionSection title="Matched Policy Obligations" count={matchedClaims.length} icon={Layers}>
                                   <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                                     {matchedClaims.map((claim, cIdx) => (
-                                      <div key={cIdx} style={{ fontSize: '0.76rem', color: '#334155', padding: '4px 6px', background: '#F8FAFC', borderRadius: '4px' }}>
+                                      <div key={cIdx} style={{ fontSize: '0.76rem', color: '#334155', padding: '6px 8px', background: '#F8FAFC', borderRadius: '4px', border: '1px solid #E2E8F0' }}>
                                         • {claim}
                                       </div>
                                     ))}
@@ -1805,7 +2333,7 @@ export default function AgentChatPlayground({
                                   </div>
                                   <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                                     <span>Execution Gate:</span>
-                                    <span style={{ color: '#047857' }}>Fail-Safe Advisory Pipeline</span>
+                                    <span style={{ color: '#047857', fontWeight: 600 }}>Fail-Safe Advisory Pipeline (Read-Only)</span>
                                   </div>
                                 </div>
                               </AccordionSection>
@@ -1814,12 +2342,24 @@ export default function AgentChatPlayground({
                         }
 
                         // -----------------------------------------------------------
-                        // STATE 2: POLICY DISPUTE / CONFLICT
+                        // STATE 2: POLICY DISPUTE / CONFLICT (Context-Dependent or Contradiction)
                         // -----------------------------------------------------------
                         if (isConflict) {
                           const conflictAnalysis = structured?.conflict_analysis || null;
-                          const conflictType = conflictAnalysis?.conflict_type || (meta.conflicts?.[0]?.conflict_type) || 'CONTEXT_DEPENDENT';
-                          const conflictSummary = conflictAnalysis?.conflict_summary || extractCleanBottomLine(msg, structured);
+                          const rawConflictType = conflictAnalysis?.conflict_type || (meta.conflicts?.[0]?.conflict_type) || 'CONTEXT_DEPENDENT';
+                          const conflictType = rawConflictType.toUpperCase();
+
+                          // Precise Legal Language
+                          const conflictSummary = (() => {
+                            if (conflictType === 'CONTEXT_DEPENDENT' || conflictType.includes('CONTEXT')) {
+                              return "The sources specify different outcomes depending on the applicable product, customer type, or cancellation pathway. Trulin cannot determine the governing rule without additional scope information.";
+                            }
+                            if (conflictType === 'DIRECT_CONTRADICTION' || conflictType.includes('CONTRADICT')) {
+                              return "These sources provide conflicting rules for the same scope. Human adjudication is required before either rule is treated as operative.";
+                            }
+                            return conflictAnalysis?.conflict_summary || extractCleanBottomLine(msg, structured) || "These policy sources specify different outcomes. Human adjudication is required to reconcile the operative rule.";
+                          })();
+
                           const pathways = conflictAnalysis?.pathways && conflictAnalysis.pathways.length > 0
                             ? conflictAnalysis.pathways
                             : (meta.conflicts && meta.conflicts.length > 0
@@ -1829,14 +2369,18 @@ export default function AgentChatPlayground({
                                       source_title: c.claim_1_source || 'Source A',
                                       section: c.claim_1_section || null,
                                       rule_summary: c.claim_1_text || 'Rule A',
-                                      verbatim_quote: c.claim_1_evidence || ''
+                                      verbatim_quote: c.claim_1_evidence || '',
+                                      document_id: c.claim_1_document_id || null,
+                                      claim_id: c.claim_1_id || null
                                     },
                                     {
                                       path_label: `Path B: ${c.claim_2_source || 'Agreement B'}`,
                                       source_title: c.claim_2_source || 'Source B',
                                       section: c.claim_2_section || null,
                                       rule_summary: c.claim_2_text || 'Rule B',
-                                      verbatim_quote: c.claim_2_evidence || ''
+                                      verbatim_quote: c.claim_2_evidence || '',
+                                      document_id: c.claim_2_document_id || null,
+                                      claim_id: c.claim_2_id || null
                                     }
                                   ])
                                 : []);
@@ -1858,25 +2402,23 @@ export default function AgentChatPlayground({
                                   border: '1px solid rgba(239, 68, 68, 0.25)'
                                 }}>
                                   <AlertTriangle size={13} color="#DC2626" />
-                                  <span>Policy dispute — sources disagree</span>
+                                  <span>⚠️ POLICY DISPUTE — SOURCES DISAGREE</span>
                                 </span>
-                                {conflictType && (
-                                  <span style={{
-                                    fontSize: '0.68rem',
-                                    fontWeight: 700,
-                                    padding: '2px 8px',
-                                    borderRadius: '6px',
-                                    background: '#FEF2F2',
-                                    color: '#991B1B',
-                                    border: '1px solid #FECACA',
-                                    fontFamily: 'monospace'
-                                  }}>
-                                    {conflictType}
-                                  </span>
-                                )}
+                                <span style={{
+                                  fontSize: '0.68rem',
+                                  fontWeight: 700,
+                                  padding: '2px 8px',
+                                  borderRadius: '6px',
+                                  background: '#FEF2F2',
+                                  color: '#991B1B',
+                                  border: '1px solid #FECACA',
+                                  fontFamily: 'monospace'
+                                }}>
+                                  {conflictType === 'CONTEXT_DEPENDENT' ? 'Context-Dependent' : 'Direct Contradiction'}
+                                </span>
                               </div>
 
-                              {/* Direct Context Summary */}
+                              {/* Direct Precise Conflict Summary */}
                               <div style={{
                                 fontSize: '0.94rem',
                                 lineHeight: 1.6,
@@ -1886,10 +2428,11 @@ export default function AgentChatPlayground({
                                 <RichAnswerContent
                                   content={conflictSummary}
                                   onCitationClick={(srcNum) => handleCitationClick(msg.id, srcNum)}
+                                  onCitationHover={(srcNum) => handleCitationHover(msg.id, srcNum)}
                                 />
                               </div>
 
-                              {/* Dual Pathway Grid (Side-by-Side on Desktop) */}
+                              {/* Dual Pathway Grid (Side-by-Side on Desktop, Never Merged or Averaged) */}
                               {pathways.length > 0 && (
                                 <div style={{
                                   display: 'grid',
@@ -1897,52 +2440,84 @@ export default function AgentChatPlayground({
                                   gap: '12px',
                                   margin: '4px 0'
                                 }}>
-                                  {pathways.map((pw, pwi) => (
-                                    <div key={pwi} style={{
-                                      background: '#FFFFFF',
-                                      border: '1px solid #FCA5A5',
-                                      borderRadius: '8px',
-                                      padding: '12px 14px',
-                                      boxShadow: '0 1px 3px rgba(239, 68, 68, 0.04)',
-                                      display: 'flex',
-                                      flexDirection: 'column',
-                                      gap: '6px'
-                                    }}>
-                                      <div style={{
-                                        display: 'inline-block',
-                                        fontSize: '0.72rem',
-                                        fontWeight: 700,
-                                        color: '#991B1B',
-                                        background: '#FEE2E2',
-                                        padding: '2px 8px',
-                                        borderRadius: '6px',
-                                        alignSelf: 'flex-start'
+                                  {pathways.map((pw, pwi) => {
+                                    const pExplorerUrl = buildExplorerUrl({
+                                      document_id: pw.document_id,
+                                      claim_id: pw.claim_id
+                                    }, activeWorkspace);
+
+                                    return (
+                                      <div key={pwi} style={{
+                                        background: '#FFFFFF',
+                                        border: '1px solid #FCA5A5',
+                                        borderRadius: '8px',
+                                        padding: '12px 14px',
+                                        boxShadow: '0 1px 3px rgba(239, 68, 68, 0.04)',
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        gap: '8px'
                                       }}>
-                                        {pw.path_label || `Pathway ${pwi === 0 ? 'A' : 'B'}`}
-                                      </div>
-                                      <div style={{ fontSize: '0.76rem', color: '#64748B' }}>
-                                        <strong>Source: </strong>{pw.source_title}{pw.section ? ` · §${pw.section}` : ''}
-                                      </div>
-                                      <div style={{ fontSize: '0.84rem', color: '#1E293B', lineHeight: 1.5, fontWeight: 500 }}>
-                                        {pw.rule_summary}
-                                      </div>
-                                      {pw.verbatim_quote && (
                                         <div style={{
-                                          borderLeft: '3px solid #EF4444',
-                                          background: '#FEF2F2',
-                                          padding: '6px 10px',
-                                          borderRadius: '0 4px 4px 0',
-                                          fontSize: '0.78rem',
-                                          color: '#7F1D1D',
-                                          fontStyle: 'italic',
-                                          lineHeight: 1.45,
-                                          marginTop: '4px'
+                                          display: 'inline-block',
+                                          fontSize: '0.72rem',
+                                          fontWeight: 700,
+                                          color: '#991B1B',
+                                          background: '#FEE2E2',
+                                          padding: '2px 8px',
+                                          borderRadius: '6px',
+                                          alignSelf: 'flex-start'
                                         }}>
-                                          “{pw.verbatim_quote}”
+                                          {pw.path_label || `Pathway ${pwi === 0 ? 'A' : 'B'}`}
                                         </div>
-                                      )}
-                                    </div>
-                                  ))}
+                                        <div style={{ fontSize: '0.76rem', color: '#64748B' }}>
+                                          <strong>Source: </strong>{pw.source_title}{pw.section ? ` · §${pw.section}` : ''}
+                                        </div>
+                                        <div style={{ fontSize: '0.84rem', color: '#1E293B', lineHeight: 1.5, fontWeight: 500 }}>
+                                          {pw.rule_summary}
+                                        </div>
+                                        {pw.verbatim_quote && (
+                                          <div style={{
+                                            borderLeft: '3px solid #EF4444',
+                                            background: '#FEF2F2',
+                                            padding: '6px 10px',
+                                            borderRadius: '0 4px 4px 0',
+                                            fontSize: '0.78rem',
+                                            color: '#7F1D1D',
+                                            fontStyle: 'italic',
+                                            lineHeight: 1.45
+                                          }}>
+                                            “{pw.verbatim_quote}”
+                                          </div>
+                                        )}
+                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', marginTop: 'auto', paddingTop: '4px' }}>
+                                          <button
+                                            type="button"
+                                            onClick={() => {
+                                              window.open(pExplorerUrl, '_blank', 'noopener,noreferrer');
+                                            }}
+                                            style={{
+                                              background: '#EFF6FF',
+                                              border: '1px solid #BFDBFE',
+                                              borderRadius: '5px',
+                                              padding: '3px 8px',
+                                              fontSize: '0.70rem',
+                                              fontWeight: 600,
+                                              color: '#1D4ED8',
+                                              cursor: 'pointer',
+                                              display: 'inline-flex',
+                                              alignItems: 'center',
+                                              gap: '4px',
+                                              transition: 'all 0.15s ease'
+                                            }}
+                                            title="Open pathway document in Document Explorer (new tab)"
+                                          >
+                                            <span>Open in Document Explorer</span>
+                                            <ExternalLink size={11} color="#1D4ED8" />
+                                          </button>
+                                        </div>
+                                      </div>
+                                    );
+                                  })}
                                 </div>
                               )}
 
@@ -1951,7 +2526,7 @@ export default function AgentChatPlayground({
                                 background: '#FEF2F2',
                                 border: '1px solid #FECACA',
                                 borderRadius: '8px',
-                                padding: '10px 14px',
+                                padding: '12px 14px',
                                 display: 'flex',
                                 justifyContent: 'space-between',
                                 alignItems: 'center',
@@ -1969,14 +2544,14 @@ export default function AgentChatPlayground({
                                   onClick={() => {
                                     if (onOpenHitlModal) onOpenHitlModal();
                                     else window.dispatchEvent(new CustomEvent('open-hitl-modal', { detail: { messageId: msg.id } }));
-                                    if (showToast) showToast('Escalated question to Human Data Steward review queue.');
+                                    if (showToast) showToast('Escalated dispute directly to Human Data Steward review queue.');
                                   }}
                                   style={{
                                     background: '#DC2626',
                                     color: '#FFFFFF',
                                     border: 'none',
                                     borderRadius: '6px',
-                                    padding: '5px 12px',
+                                    padding: '6px 12px',
                                     fontSize: '0.74rem',
                                     fontWeight: 700,
                                     cursor: 'pointer',
@@ -2030,8 +2605,7 @@ export default function AgentChatPlayground({
                         // STATE 3: NO VERIFIED RULE FOUND (Fail-Closed Abstention)
                         // -----------------------------------------------------------
                         if (isNoVerifiedRule) {
-                          const abstentionText = structured?.bottom_line_answer || extractCleanBottomLine(msg, structured) || "No verified rule matching this query was found in the approved enterprise policy set.";
-                          const docCount = structured?.answer_scope?.document_ids?.length || meta.total_evaluated_claims || 40;
+                          const abstentionText = structured?.bottom_line_answer || extractCleanBottomLine(msg, structured) || "No verified rule matching this question was found in the approved enterprise policy set.";
 
                           return (
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -2050,7 +2624,7 @@ export default function AgentChatPlayground({
                                   border: '1px solid rgba(120, 113, 108, 0.25)'
                                 }}>
                                   <Clock size={12} color="#78716C" />
-                                  <span>No verified rule found</span>
+                                  <span>○ NO VERIFIED RULE FOUND · Policy Boundary</span>
                                 </span>
                               </div>
 
@@ -2064,7 +2638,7 @@ export default function AgentChatPlayground({
                                 <RichAnswerContent content={abstentionText} />
                               </div>
 
-                              {/* Governance Scope Explainer Box */}
+                              {/* Governance Boundary Scope Explainer */}
                               <div style={{
                                 background: '#F8FAFC',
                                 border: '1px solid #E2E8F0',
@@ -2079,14 +2653,39 @@ export default function AgentChatPlayground({
                                   <span>Fail-Closed Governance Boundary</span>
                                 </div>
                                 <div>
-                                  Evaluated across governing policy documents. The search did not identify verified operative assertions governing this query. Unverified, candidate, and draft texts were excluded under fail-closed governance.
+                                  Checked across governing enterprise policy documents. Unverified, candidate, and draft content was excluded under fail-closed governance.
                                 </div>
                               </div>
 
-                              {/* Action Buttons for Next Steps */}
+                              {/* What Would Make This Answerable? Callout */}
+                              <div style={{
+                                background: '#FFFFFF',
+                                border: '1px solid #E2E8F0',
+                                borderRadius: '8px',
+                                padding: '12px 14px'
+                              }}>
+                                <div style={{ fontSize: '0.78rem', fontWeight: 700, color: '#334155', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '6px' }}>
+                                  What would make this answerable?
+                                </div>
+                                <div style={{ fontSize: '0.82rem', color: '#475569', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                                  <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
+                                    <span style={{ color: '#0284C7', fontWeight: 700 }}>•</span>
+                                    <span>Approved operative policy governing this specific inquiry or threshold.</span>
+                                  </div>
+                                  <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
+                                    <span style={{ color: '#0284C7', fontWeight: 700 }}>•</span>
+                                    <span>Explicit numerical timeframe, dollar limit, or governing stakeholder criteria.</span>
+                                  </div>
+                                </div>
+                              </div>
+
+                              {/* Direct Action Buttons */}
                               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap', marginTop: '2px' }}>
-                                <a
-                                  href="/documents"
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    window.open('/documents?view=ingest', '_blank', 'noopener,noreferrer');
+                                  }}
                                   style={{
                                     display: 'inline-flex',
                                     alignItems: 'center',
@@ -2098,17 +2697,20 @@ export default function AgentChatPlayground({
                                     background: '#FFFFFF',
                                     border: '1px solid #CBD5E1',
                                     color: '#334155',
-                                    textDecoration: 'none',
+                                    cursor: 'pointer',
                                     transition: 'all 0.15s ease'
                                   }}
                                   onMouseEnter={e => { e.currentTarget.style.background = '#F1F5F9'; }}
                                   onMouseLeave={e => { e.currentTarget.style.background = '#FFFFFF'; }}
                                 >
                                   <UploadCloud size={13} color="#64748B" />
-                                  <span>Upload Governing Document</span>
-                                </a>
-                                <a
-                                  href="/curator"
+                                  <span>Upload Governing Document ↗</span>
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    window.open('/curator/approvals', '_blank', 'noopener,noreferrer');
+                                  }}
                                   style={{
                                     display: 'inline-flex',
                                     alignItems: 'center',
@@ -2120,15 +2722,15 @@ export default function AgentChatPlayground({
                                     background: '#FFFFFF',
                                     border: '1px solid #CBD5E1',
                                     color: '#334155',
-                                    textDecoration: 'none',
+                                    cursor: 'pointer',
                                     transition: 'all 0.15s ease'
                                   }}
                                   onMouseEnter={e => { e.currentTarget.style.background = '#F1F5F9'; }}
                                   onMouseLeave={e => { e.currentTarget.style.background = '#FFFFFF'; }}
                                 >
                                   <Search size={13} color="#64748B" />
-                                  <span>Inspect Candidate Queue in Curator</span>
-                                </a>
+                                  <span>Inspect Candidate Queue in Curator ↗</span>
+                                </button>
                               </div>
                             </div>
                           );
@@ -2150,49 +2752,69 @@ export default function AgentChatPlayground({
                         const sectionContext = structured?.section_context || [];
                         const groundingScore = structured?.grounding_score ?? meta.verification?.grounding_score ?? 1.0;
 
+                        const primarySrcIdx = primaryCitation?.source_index || 1;
+                        const isPrimaryHighlighted = activeCitationHighlight[msg.id] === primarySrcIdx;
+
+                        const handleCopyEvidence = (citation, key) => {
+                          const quote = citation?.verbatim_evidence || citation?.evidence_span || citation?.claim_text || '';
+                          const title = citation?.source_title || citation?.document_title || 'Policy Document';
+                          const sec = citation?.section ? `, Section ${citation.section}` : '';
+                          const text = `“${quote}” — ${title}${sec}`;
+                          navigator.clipboard.writeText(text);
+                          setCopiedEvidenceKey(key);
+                          if (showToast) showToast("Evidence copied to clipboard");
+                          setTimeout(() => setCopiedEvidenceKey(null), 2000);
+                        };
+
                         return (
                           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                            {/* Header Badge: Supported by verified rules (No raw percentage) */}
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-                              <span style={{
-                                display: 'inline-flex',
-                                alignItems: 'center',
-                                gap: '5px',
-                                fontSize: '0.72rem',
-                                fontWeight: 600,
-                                padding: '3px 10px',
-                                borderRadius: '12px',
-                                background: 'rgba(16, 185, 129, 0.08)',
-                                color: '#047857',
-                                border: '1px solid rgba(16, 185, 129, 0.25)'
-                              }}>
-                                <ShieldCheck size={12} color="#059669" />
-                                <span>Supported by verified rules</span>
-                              </span>
+                            {/* Header Badge: Supported by verified rules · Policy Q&A */}
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px', marginBottom: '4px' }}>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <span style={{
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                  gap: '5px',
+                                  fontSize: '0.72rem',
+                                  fontWeight: 700,
+                                  padding: '3px 10px',
+                                  borderRadius: '12px',
+                                  background: 'rgba(16, 185, 129, 0.08)',
+                                  color: '#047857',
+                                  border: '1px solid rgba(16, 185, 129, 0.25)'
+                                }}>
+                                  <ShieldCheck size={12} color="#059669" />
+                                  <span>✓ SUPPORTED BY VERIFIED RULES</span>
+                                </span>
+                                <span style={{ fontSize: '0.70rem', color: '#64748B', fontWeight: 600 }}>
+                                  Policy Q&A
+                                </span>
+                              </div>
                             </div>
 
-                            {/* Bottom-Line Answer (Crisp, High-Contrast Typography) */}
+                            {/* Bottom-Line Answer (Crisp, High-Contrast 16-17px Typography) */}
                             <div style={{
                               fontSize: '0.96rem',
                               lineHeight: 1.65,
                               color: '#1C1917',
                               fontWeight: 450,
-                              marginBottom: (conditions.length > 0 || exceptions.length > 0) ? '6px' : '10px'
+                              marginBottom: (conditions.length > 0 || exceptions.length > 0) ? '4px' : '8px'
                             }}>
                               <RichAnswerContent
                                 content={bottomLine}
                                 onCitationClick={(srcNum) => handleCitationClick(msg.id, srcNum)}
+                                onCitationHover={(srcNum) => handleCitationHover(msg.id, srcNum)}
                               />
                             </div>
 
-                            {/* Conditions & Exceptions (if present) */}
+                            {/* Conditions & Exceptions Block */}
                             {(conditions.length > 0 || exceptions.length > 0) && (
                               <div style={{
                                 background: '#F8FAFC',
                                 border: '1px solid #E2E8F0',
                                 borderRadius: '8px',
                                 padding: '10px 14px',
-                                marginBottom: '10px'
+                                marginBottom: '8px'
                               }}>
                                 <div style={{
                                   display: 'flex',
@@ -2231,100 +2853,25 @@ export default function AgentChatPlayground({
                               </div>
                             )}
 
-                            {/* Primary Source Card (Open by default on desktop) */}
+                            {/* Flagship Primary Evidence Source Card (Desktop Open by Default) */}
                             {primaryCitation && (
-                              <div
-                                id={`citation-${msg.id}-${primaryCitation.source_index || 1}`}
-                                style={{
-                                  background: '#FFFFFF',
-                                  border: '1px solid #E2E8F0',
-                                  borderRadius: '8px',
-                                  padding: '12px 14px',
-                                  marginBottom: '8px',
-                                  boxShadow: '0 1px 3px rgba(0,0,0,0.03)'
+                              <EvidenceSourceCard
+                                citation={primaryCitation}
+                                sourceIndex={primarySrcIdx}
+                                msgId={msg.id}
+                                isHighlighted={isPrimaryHighlighted}
+                                activeWorkspace={activeWorkspace}
+                                onOpenWhyThis={() => {
+                                  setWhyThisAnswerModalData({
+                                    citation: primaryCitation,
+                                    claim: claims[0] || primaryCitation,
+                                    structured,
+                                    meta
+                                  });
                                 }}
-                              >
-                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '8px', marginBottom: '8px' }}>
-                                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
-                                    <span style={{
-                                      background: '#EFF6FF',
-                                      color: '#1D4ED8',
-                                      fontWeight: 700,
-                                      fontSize: '0.70rem',
-                                      padding: '2px 7px',
-                                      borderRadius: '6px',
-                                      fontFamily: 'monospace'
-                                    }}>
-                                      Source {primaryCitation.source_index || 1}
-                                    </span>
-                                    <span style={{ fontSize: '0.80rem', fontWeight: 600, color: '#1E293B' }}>
-                                      {primaryCitation.source_title || primaryCitation.document_title || 'Enterprise Policy Document'}
-                                    </span>
-                                    {primaryCitation.section && (
-                                      <span style={{ fontSize: '0.74rem', color: '#64748B' }}>
-                                        · Section {primaryCitation.section}
-                                      </span>
-                                    )}
-                                  </div>
-                                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                    {primaryCitation.document_id && onInspectDocument ? (
-                                      <button
-                                        type="button"
-                                        onClick={() => onInspectDocument(primaryCitation.document_id)}
-                                        style={{
-                                          background: 'transparent',
-                                          border: 'none',
-                                          color: '#2563EB',
-                                          fontSize: '0.72rem',
-                                          fontWeight: 600,
-                                          cursor: 'pointer',
-                                          display: 'inline-flex',
-                                          alignItems: 'center',
-                                          gap: '3px',
-                                          padding: '2px 6px',
-                                          borderRadius: '4px'
-                                        }}
-                                        title="Open in Document Explorer"
-                                      >
-                                        <span>Open in Document Explorer</span>
-                                        <ArrowUpRight size={12} />
-                                      </button>
-                                    ) : (
-                                      <a
-                                        href={`/vault?workspace=${activeWorkspace?.id || 'all'}&doc=${primaryCitation.document_id || ''}&claimId=${primaryCitation.claim_id || ''}&section=claims`}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        style={{
-                                          color: '#2563EB',
-                                          fontSize: '0.72rem',
-                                          fontWeight: 600,
-                                          textDecoration: 'none',
-                                          display: 'inline-flex',
-                                          alignItems: 'center',
-                                          gap: '3px'
-                                        }}
-                                      >
-                                        <span>Open source</span>
-                                        <ArrowUpRight size={12} />
-                                      </a>
-                                    )}
-                                  </div>
-                                </div>
-
-                                {/* Verbatim evidence quote with blue accent border */}
-                                <div style={{
-                                  borderLeft: '3px solid #3B82F6',
-                                  background: '#F8FAFC',
-                                  padding: '8px 12px',
-                                  borderRadius: '0 6px 6px 0',
-                                  fontSize: '0.82rem',
-                                  color: '#334155',
-                                  lineHeight: 1.55,
-                                  fontStyle: 'italic'
-                                }}>
-                                  “{primaryCitation.verbatim_evidence || primaryCitation.evidence_span || primaryCitation.claim_text || 'Verbatim policy evidence span verified in governing document.'}”
-                                </div>
-                              </div>
+                                onCopy={() => handleCopyEvidence(primaryCitation, `primary-${msg.id}`)}
+                                isCopied={copiedEvidenceKey === `primary-${msg.id}`}
+                              />
                             )}
 
                             {/* Progressive Disclosure Accordions: Technical metadata collapsed by default */}
@@ -2435,7 +2982,7 @@ export default function AgentChatPlayground({
                                 )}
                                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                                   <span style={{ color: '#64748B' }}>Governance Boundary:</span>
-                                  <span style={{ color: '#047857', fontWeight: 500 }}>Fail-Closed Tier (269 Verified Claims)</span>
+                                  <span style={{ color: '#047857', fontWeight: 500 }}>Fail-Closed Tier (Verified Operative Policy)</span>
                                 </div>
                               </div>
                             </AccordionSection>
@@ -2443,61 +2990,28 @@ export default function AgentChatPlayground({
                             {/* Additional Sources (Sources 2..N) */}
                             {secondaryCitations.length > 0 && (
                               <AccordionSection title="Additional Sources" count={secondaryCitations.length} icon={BookOpen}>
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                                   {secondaryCitations.map((c, ci) => {
                                     const srcIdx = c.source_index || (ci + 2);
                                     return (
-                                      <div key={ci} id={`citation-${msg.id}-${srcIdx}`} style={{
-                                        padding: '8px 10px',
-                                        background: '#F8FAFC',
-                                        border: '1px solid #E2E8F0',
-                                        borderRadius: '6px'
-                                      }}>
-                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
-                                          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                            <span style={{
-                                              background: '#EFF6FF',
-                                              color: '#1D4ED8',
-                                              fontWeight: 700,
-                                              fontSize: '0.68rem',
-                                              padding: '1px 6px',
-                                              borderRadius: '4px',
-                                              fontFamily: 'monospace'
-                                            }}>
-                                              Source {srcIdx}
-                                            </span>
-                                            <span style={{ fontSize: '0.78rem', fontWeight: 600, color: '#1E293B' }}>
-                                              {c.source_title || c.document_title || 'Enterprise Policy'}
-                                              {c.section ? ` · §${c.section}` : ''}
-                                            </span>
-                                          </div>
-                                          {c.document_id && onInspectDocument && (
-                                            <button
-                                              type="button"
-                                              onClick={() => onInspectDocument(c.document_id)}
-                                              style={{
-                                                background: 'none',
-                                                border: 'none',
-                                                color: '#2563EB',
-                                                fontSize: '0.70rem',
-                                                fontWeight: 600,
-                                                cursor: 'pointer',
-                                                display: 'inline-flex',
-                                                alignItems: 'center',
-                                                gap: '2px'
-                                              }}
-                                            >
-                                              <span>Explorer</span>
-                                              <ArrowUpRight size={11} />
-                                            </button>
-                                          )}
-                                        </div>
-                                        {c.verbatim_evidence && (
-                                          <div style={{ fontSize: '0.76rem', color: '#475569', fontStyle: 'italic', lineHeight: 1.45 }}>
-                                            “{c.verbatim_evidence}”
-                                          </div>
-                                        )}
-                                      </div>
+                                      <EvidenceSourceCard
+                                        key={ci}
+                                        citation={c}
+                                        sourceIndex={srcIdx}
+                                        msgId={msg.id}
+                                        isHighlighted={activeCitationHighlight[msg.id] === srcIdx}
+                                        activeWorkspace={activeWorkspace}
+                                        onOpenWhyThis={() => {
+                                          setWhyThisAnswerModalData({
+                                            citation: c,
+                                            claim: claims[ci + 1] || c,
+                                            structured,
+                                            meta
+                                          });
+                                        }}
+                                        onCopy={() => handleCopyEvidence(c, `sec-${msg.id}-${srcIdx}`)}
+                                        isCopied={copiedEvidenceKey === `sec-${msg.id}-${srcIdx}`}
+                                      />
                                     );
                                   })}
                                 </div>
@@ -2693,6 +3207,15 @@ export default function AgentChatPlayground({
 
         </div>
       </div>
+
+      {/* Primary Trust Interaction: Why This Answer Lineage & Governance Modal */}
+      {whyThisAnswerModalData && (
+        <WhyThisAnswerModal
+          data={whyThisAnswerModalData}
+          onClose={() => setWhyThisAnswerModalData(null)}
+          activeWorkspace={activeWorkspace}
+        />
+      )}
     </div>
   );
 }

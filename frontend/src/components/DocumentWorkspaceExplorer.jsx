@@ -209,7 +209,17 @@ export default function DocumentWorkspaceExplorer({
   onClaimExtracted,
   onDocumentUploaded,
   readOnly = false,
+  initialDocId = null,
+  initialClaimId = null,
 }) {
+  // Graceful URL query param fallback for direct tab deep-linking
+  const urlParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
+  const effectiveDocId = initialDocId || urlParams?.get('doc') || urlParams?.get('asset') || urlParams?.get('assetId') || null;
+  const effectiveClaimId = initialClaimId || urlParams?.get('claim') || urlParams?.get('claimId') || null;
+
+  const [missingDocNotice, setMissingDocNotice] = useState(null);
+  const processedDeepLinkRef = useRef(false);
+
   // Folder tree & all documents state
   const [folders, setFolders] = useState([]);
   const [folderTree, setFolderTree] = useState([]);
@@ -380,18 +390,10 @@ export default function DocumentWorkspaceExplorer({
         fetch(`/v1/documents?organization_id=${orgId}&limit=1000`, { headers })
       ]);
 
+      let flatData = [];
       if (flatRes.ok) {
-        const flatData = await flatRes.json();
+        flatData = await flatRes.json();
         setFolders(flatData);
-        setActiveFolderId(prev => {
-          if (prev && flatData.some(f => f.id === prev)) return prev;
-          const inbox = flatData.find(f => f.is_system) || flatData[0];
-          if (inbox) {
-            setExpandedFolders(exp => new Set([...exp, inbox.id]));
-            return inbox.id;
-          }
-          return null;
-        });
       }
 
       if (treeRes.ok) {
@@ -406,10 +408,66 @@ export default function DocumentWorkspaceExplorer({
           return st !== 'inactive' && st !== 'deleted' && st !== 'archived';
         });
         setAllDocuments(activeDocs);
-        setSelectedDocId(prev => {
-          if (prev && activeDocs.some(d => d.id === prev)) return prev;
-          return null;
-        });
+
+        // Process Deep-Link if target document was specified
+        if (effectiveDocId && !processedDeepLinkRef.current) {
+          processedDeepLinkRef.current = true;
+          const targetDoc = activeDocs.find(d => 
+            d.id === effectiveDocId || 
+            (d.title && d.title.toLowerCase() === effectiveDocId.toLowerCase())
+          );
+
+          if (targetDoc) {
+            // Find parent folder and all ancestor folders up to root
+            const parentFolderId = targetDoc.folder_id;
+            const ancestors = [];
+            let curFId = parentFolderId;
+            const visited = new Set();
+            while (curFId && !visited.has(curFId)) {
+              visited.add(curFId);
+              const pf = flatData.find(f => f.id === curFId);
+              if (pf && pf.parent_id) {
+                ancestors.push(pf.parent_id);
+                curFId = pf.parent_id;
+              } else {
+                break;
+              }
+            }
+            if (parentFolderId) {
+              setExpandedFolders(prev => new Set([...prev, ...ancestors, parentFolderId]));
+              setActiveFolderId(parentFolderId);
+            }
+            setSelectedDocId(targetDoc.id);
+          } else {
+            // Document not found in this workspace
+            setMissingDocNotice("Source document is no longer available in this workspace.");
+            showToast?.("Source document is no longer available in this workspace.", "info");
+            setActiveFolderId(prev => {
+              if (prev && flatData.some(f => f.id === prev)) return prev;
+              const inbox = flatData.find(f => f.is_system) || flatData[0];
+              if (inbox) {
+                setExpandedFolders(exp => new Set([...exp, inbox.id]));
+                return inbox.id;
+              }
+              return null;
+            });
+            setSelectedDocId(null);
+          }
+        } else {
+          setActiveFolderId(prev => {
+            if (prev && flatData.some(f => f.id === prev)) return prev;
+            const inbox = flatData.find(f => f.is_system) || flatData[0];
+            if (inbox) {
+              setExpandedFolders(exp => new Set([...exp, inbox.id]));
+              return inbox.id;
+            }
+            return null;
+          });
+          setSelectedDocId(prev => {
+            if (prev && activeDocs.some(d => d.id === prev)) return prev;
+            return null;
+          });
+        }
       }
     } catch (err) {
       console.error('Failed to load workspace directory:', err);
@@ -622,7 +680,16 @@ export default function DocumentWorkspaceExplorer({
           if (artRes.ok) {
             const artData = await artRes.json();
             setSelectedDocArtifacts(artData);
-            if (artData.claims && artData.claims.length > 0) {
+            if (effectiveClaimId && artData.claims && artData.claims.length > 0) {
+              const matchedClaim = artData.claims.find(c => c.id === effectiveClaimId);
+              if (matchedClaim) {
+                setSelectedClaimId(matchedClaim.id);
+                setActiveFacilityTab('claims');
+              } else {
+                setSelectedClaimId(artData.claims[0].id);
+                showToast?.("Claim preview unavailable; document opened.", "info");
+              }
+            } else if (artData.claims && artData.claims.length > 0) {
               setSelectedClaimId(artData.claims[0].id);
             }
           }
@@ -1464,28 +1531,56 @@ export default function DocumentWorkspaceExplorer({
   };
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        gap: 0,
-        width: '100%',
-        maxWidth: '100%',
-        minHeight: 0,
-        height: '100%',
-        maxHeight: '100%',
-        flex: 1,
-        background: '#FFFFFF',
-        borderRadius: 0,
-        border: '1px solid var(--border-subtle, #E2E8F0)',
-        borderLeft: 'none',
-        borderRight: 'none',
-        borderBottom: 'none',
-        overflow: 'hidden',
-        boxShadow: 'none',
-        alignItems: 'stretch',
-        boxSizing: 'border-box'
-      }}
-    >
+    <div style={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', maxHeight: '100%', overflow: 'hidden' }}>
+      {missingDocNotice && (
+        <div style={{
+          background: '#FEF2F2',
+          borderBottom: '1px solid #FECACA',
+          padding: '8px 16px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          color: '#991B1B',
+          fontSize: '0.78rem',
+          fontWeight: 500,
+          flexShrink: 0
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <AlertTriangle size={14} color="#DC2626" />
+            <span>{missingDocNotice}</span>
+          </div>
+          <button
+            type="button"
+            onClick={() => setMissingDocNotice(null)}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#991B1B', padding: 0 }}
+            title="Dismiss notice"
+          >
+            <X size={14} />
+          </button>
+        </div>
+      )}
+      <div
+        style={{
+          display: 'flex',
+          gap: 0,
+          width: '100%',
+          maxWidth: '100%',
+          minHeight: 0,
+          height: '100%',
+          maxHeight: '100%',
+          flex: 1,
+          background: '#FFFFFF',
+          borderRadius: 0,
+          border: '1px solid var(--border-subtle, #E2E8F0)',
+          borderLeft: 'none',
+          borderRight: 'none',
+          borderBottom: 'none',
+          overflow: 'hidden',
+          boxShadow: 'none',
+          alignItems: 'stretch',
+          boxSizing: 'border-box'
+        }}
+      >
       
       {/* ── LEFT PANE: DIRECTORY TREE (FOLDERS & FILES) ── */}
       <div
@@ -3111,6 +3206,7 @@ export default function DocumentWorkspaceExplorer({
           </div>
         );
       })()}
+      </div>
     </div>
   );
 }

@@ -7415,6 +7415,8 @@ export default function App() {
                   user={authUser}
                   showToast={showToast}
                   readOnly={false}
+                  initialDocId={initialUrlState?.docId}
+                  initialClaimId={initialUrlState?.claimId}
                   onClaimExtracted={() => {
                     fetchLiveDatabaseRecords();
                     fetchHealthAndConflicts(activeOrg?.id);
