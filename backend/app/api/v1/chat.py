@@ -28,6 +28,7 @@ class SendMessageRequest(BaseModel):
     user_role: str = "developer"
     workspace_id: str | None = None
     domain: str | None = None
+    requested_depth: str | None = None
 
 
 @router.get("/sessions")
@@ -132,6 +133,7 @@ async def send_chat_message(
         user_role=req.user_role,
         workspace_id=req.workspace_id,
         domain=req.domain,
+        requested_depth=req.requested_depth,
     )
     return result
 

@@ -11,22 +11,30 @@ provenance metadata, and policy bounds into authoritative, executive-grade answe
    - CONTEXT_DEPENDENT
    - DIRECT_CONTRADICTION
    - NEEDS_SOURCE_CLARIFICATION
-6. Produces both a typed PolicyAnswerContract and clean, readable Markdown.
+6. Produces both a typed PolicyAnswerContract (Schema Version 2) and clean, synchronized Markdown.
+7. Generates statement-level claim linkages (ExplanationStatement) to enable fine-grained mutation checks.
 """
 
 import logging
 import re
-from typing import Any, List, Optional, Sequence, Tuple
+from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 from app.schemas.chat import (
     AnswerScope,
     ConflictClassificationType,
     ConflictPathway,
     ConflictPathwayAnalysis,
+    DisplayDepth,
+    ExplanationBlock,
+    ExplanationStatement,
     GroundedClaimItem,
     PolicyAnswerContract,
+    QuestionType,
+    ResponsePlan,
+    ScopeSummary,
 )
 from app.schemas.context import SectionContextItem
+from app.services.response_planner import ResponsePlanner
 
 logger = logging.getLogger(__name__)
 
@@ -76,9 +84,11 @@ class PolicyAnswerSynthesizer:
 
     @classmethod
     def extract_conditions_and_exceptions(cls, text: str) -> Tuple[List[str], List[str]]:
-        """Extracts explicit conditions, prerequisites, and exceptions from evidence text."""
+        """Extracts and deduplicates explicit conditions, prerequisites, and exceptions from evidence text."""
         conditions: List[str] = []
         exceptions: List[str] = []
+        seen_cond_keys = set()
+        seen_exc_keys = set()
 
         if not text:
             return conditions, exceptions
@@ -91,7 +101,9 @@ class PolicyAnswerSynthesizer:
         for pat in exception_patterns:
             for m in re.finditer(pat, text, re.IGNORECASE):
                 exc = m.group(1).strip()
-                if len(exc) > 5 and exc not in exceptions:
+                k = re.sub(r"[^\w\s]", "", exc.lower()).strip()
+                if len(exc) > 5 and k not in seen_exc_keys:
+                    seen_exc_keys.add(k)
                     exceptions.append(exc)
 
         # Condition / prerequisite patterns
@@ -106,7 +118,9 @@ class PolicyAnswerSynthesizer:
         for pat in condition_patterns:
             for m in re.finditer(pat, text, re.IGNORECASE):
                 cond = m.group(0).strip()
-                if len(cond) > 5 and cond not in conditions:
+                k = re.sub(r"[^\w\s]", "", cond.lower()).strip()
+                if len(cond) > 5 and k not in seen_cond_keys:
+                    seen_cond_keys.add(k)
                     conditions.append(cond)
 
         return conditions, exceptions
@@ -222,6 +236,205 @@ class PolicyAnswerSynthesizer:
         return categories
 
     @classmethod
+    def build_scope_summary(cls, citations: List[dict[str, Any]], workspace: str = "policy") -> ScopeSummary:
+        """Formulates an explicit, verifiable scope summary from citations."""
+        doc_ids = list(dict.fromkeys(str(c["document_id"]) for c in citations if c.get("document_id")))
+        doc_titles = list(dict.fromkeys(str(c.get("source_title", "")).strip() for c in citations if c.get("source_title")))
+
+        if not citations:
+            return ScopeSummary(
+                label=f"Workspace: {workspace} · (No matching records)",
+                document_ids=[],
+                document_titles=[],
+                resolution_status="unsupported",
+                governance_boundary="Evaluated active policies; zero operative matches found.",
+            )
+
+        if len(doc_titles) == 1:
+            label = f"Selected Policy: {doc_titles[0]} · Current Approved Version"
+        elif len(doc_titles) > 1:
+            prefix = ", ".join(doc_titles[:2])
+            suffix = f" (+{len(doc_titles) - 2} more)" if len(doc_titles) > 2 else ""
+            label = f"Governing Scope: {len(doc_titles)} Policies ({prefix}{suffix}) · Current Approved Versions"
+        else:
+            label = f"Enterprise Baseline Scope · Workspace: {workspace}"
+
+        return ScopeSummary(
+            label=label,
+            document_ids=doc_ids,
+            document_titles=doc_titles,
+            resolution_status="resolved",
+            governance_boundary="Authorized Enterprise Workspace Scope",
+        )
+
+    @classmethod
+    def build_explanation_blocks(
+        cls,
+        plan: ResponsePlan,
+        bottom_line_answer: str,
+        verified_claims: List[GroundedClaimItem],
+        citations: List[dict[str, Any]],
+        conditions: List[str],
+        exceptions: List[str],
+        conflict_analysis: Optional[ConflictPathwayAnalysis] = None,
+    ) -> List[ExplanationBlock]:
+        """
+        Builds structured ExplanationBlock items with statement-level claim mapping.
+        """
+        blocks: List[ExplanationBlock] = []
+        stmt_counter = 1
+
+        # Block 1: Lead operative explanation
+        lead_claim_ids = [c.claim_id for c in verified_claims[:2]]
+        lead_source_indices = [c.source_index for c in verified_claims[:2]]
+        lead_stmt = ExplanationStatement(
+            id=f"stmt-{stmt_counter}",
+            text=bottom_line_answer,
+            claim_ids=lead_claim_ids,
+            source_indices=lead_source_indices,
+            is_normative=True,
+            modality=verified_claims[0].modality if verified_claims else "MUST",
+        )
+        stmt_counter += 1
+
+        # Add lead block depending on question type
+        if plan.question_type == QuestionType.PROCEDURE:
+            # Procedural questions render a checklist block
+            checklist_stmts = [lead_stmt]
+            for c in verified_claims[1:5]:
+                stmt = ExplanationStatement(
+                    id=f"stmt-{stmt_counter}",
+                    text=f"Verification requirement: {c.object} [Source {c.source_index}].",
+                    claim_ids=[c.claim_id],
+                    source_indices=[c.source_index],
+                    is_normative=True,
+                    modality=c.modality,
+                )
+                checklist_stmts.append(stmt)
+                stmt_counter += 1
+
+            blocks.append(
+                ExplanationBlock(
+                    id="block-procedure-steps",
+                    heading="Prerequisites & Operational Checklist",
+                    block_type="checklist",
+                    statements=checklist_stmts,
+                )
+            )
+
+        elif plan.question_type == QuestionType.COMPARISON:
+            comp_stmts = [lead_stmt]
+            for c in verified_claims[1:5]:
+                stmt = ExplanationStatement(
+                    id=f"stmt-{stmt_counter}",
+                    text=f"Term in {c.document_title}: {c.object} [Source {c.source_index}].",
+                    claim_ids=[c.claim_id],
+                    source_indices=[c.source_index],
+                    is_normative=True,
+                    modality=c.modality,
+                )
+                comp_stmts.append(stmt)
+                stmt_counter += 1
+
+            blocks.append(
+                ExplanationBlock(
+                    id="block-comparison-table",
+                    heading="Comparative Rule Analysis",
+                    block_type="table",
+                    statements=comp_stmts,
+                )
+            )
+
+        elif plan.question_type == QuestionType.CONFLICT and conflict_analysis:
+            conflict_stmts = [lead_stmt]
+            for p in conflict_analysis.pathways:
+                stmt = ExplanationStatement(
+                    id=f"stmt-{stmt_counter}",
+                    text=f"{p.path_label}: {p.rule_summary}",
+                    claim_ids=conflict_analysis.affected_claim_ids,
+                    source_indices=[1],
+                    is_normative=True,
+                    modality="MUST",
+                )
+                conflict_stmts.append(stmt)
+                stmt_counter += 1
+
+            blocks.append(
+                ExplanationBlock(
+                    id="block-conflict-pathways",
+                    heading="Policy Pathway Analysis",
+                    block_type="key_value",
+                    statements=conflict_stmts,
+                )
+            )
+
+        else:
+            # Lookup, Interpretation, Overview
+            stmts = [lead_stmt]
+            if len(verified_claims) > 1:
+                for c in verified_claims[1:4]:
+                    stmt = ExplanationStatement(
+                        id=f"stmt-{stmt_counter}",
+                        text=f"Supporting operative rule: {c.object} [Source {c.source_index}].",
+                        claim_ids=[c.claim_id],
+                        source_indices=[c.source_index],
+                        is_normative=True,
+                        modality=c.modality,
+                    )
+                    stmts.append(stmt)
+                    stmt_counter += 1
+
+            blocks.append(
+                ExplanationBlock(
+                    id="block-operative-rules",
+                    heading="Operative Requirements & Policy Meaning",
+                    block_type="paragraph",
+                    statements=stmts,
+                )
+            )
+
+        # Block 2: Conditions and Qualifications Block (if material conditions or exceptions exist)
+        if (conditions or exceptions) and plan.question_type != QuestionType.PROCEDURE:
+            cond_stmts = []
+            for cond in conditions[:3]:
+                cond_stmts.append(
+                    ExplanationStatement(
+                        id=f"stmt-{stmt_counter}",
+                        text=f"Applies provided that {cond}.",
+                        claim_ids=lead_claim_ids,
+                        source_indices=lead_source_indices,
+                        is_normative=True,
+                        modality="MUST",
+                    )
+                )
+                stmt_counter += 1
+
+            for exc in exceptions[:3]:
+                cond_stmts.append(
+                    ExplanationStatement(
+                        id=f"stmt-{stmt_counter}",
+                        text=f"Exception applies where: {exc}.",
+                        claim_ids=lead_claim_ids,
+                        source_indices=lead_source_indices,
+                        is_normative=True,
+                        modality="MUST",
+                    )
+                )
+                stmt_counter += 1
+
+            if cond_stmts:
+                blocks.append(
+                    ExplanationBlock(
+                        id="block-conditions",
+                        heading="Conditions, Prerequisites & Exceptions",
+                        block_type="checklist",
+                        statements=cond_stmts,
+                    )
+                )
+
+        return blocks
+
+    @classmethod
     def synthesize_structured(
         cls,
         query: str,
@@ -231,19 +444,34 @@ class PolicyAnswerSynthesizer:
         warnings: Optional[List[str]] = None,
         history: Optional[Sequence[dict[str, Any]]] = None,
         workspace: str = "policy",
+        requested_depth: Optional[str] = None,
+        mode: str = "document_qa",
     ) -> PolicyAnswerContract:
-        """Produces a strictly typed PolicyAnswerContract from verified claims and decoupled context."""
+        """Produces a strictly typed Schema v2 PolicyAnswerContract from verified claims and decoupled context."""
         q_lower = query.lower()
         doc_ids = [str(c["document_id"]) for c in citations if c.get("document_id")]
 
-        # 1. Rule 5: If active conflicts detected on this topic, build ConflictPathwayAnalysis immediately
+        # 1. Plan Response structure, depth, and sections
+        plan = ResponsePlanner.plan_response(
+            query=query,
+            citations=citations,
+            has_conflicts=has_conflicts,
+            requested_depth=requested_depth,
+            mode=mode,
+        )
+
+        # 2. Build Scope Summary
+        scope_summary = cls.build_scope_summary(citations=citations, workspace=workspace)
+
+        # 3. Rule 5: If active conflicts detected on this topic, build ConflictPathwayAnalysis immediately
         conflict_analysis: Optional[ConflictPathwayAnalysis] = None
         if has_conflicts and conflicts_data:
             conflict_analysis = cls.classify_conflict_pathways(query, conflicts_data, citations)
 
-        # 2. Rule 4: If no verified operative rule exists and no conflict detected, return NO_VERIFIED_RULE fail-closed
+        # 4. Rule 4: If no verified operative rule exists and no conflict detected, return NO_VERIFIED_RULE fail-closed
         if not citations and not conflict_analysis:
             return PolicyAnswerContract(
+                schema_version="2",
                 bottom_line_answer=f'No verified policy records matching "{query}" were found in governing policies.',
                 conditions=[],
                 exceptions=[],
@@ -254,14 +482,21 @@ class PolicyAnswerSynthesizer:
                 verification_status="NO_VERIFIED_RULE",
                 recommended_human_action="Consult organization document steward to ingest and certify policy documentation for this topic.",
                 answer_scope=AnswerScope(document_ids=[], workspace=workspace, temporal_validity="current"),
+                response_plan=plan,
+                scope_summary=scope_summary,
+                explanation_blocks=[],
+                limitations=["No certified claims available within the evaluated workspace boundary."],
+                unanswered_parts=plan.unanswered_parts,
             )
 
-        # 2. Extract structured GroundedClaimItems
+        # 5. Extract structured GroundedClaimItems
         verified_claims_used: List[GroundedClaimItem] = []
         all_conditions: List[str] = []
         all_exceptions: List[str] = []
         decoupled_section_context: List[SectionContextItem] = []
         seen_sec_keys = set()
+        seen_cond_keys = set()
+        seen_exc_keys = set()
 
         for idx, c in enumerate(citations, start=1):
             claim_txt = cls.clean_claim_text(c.get("claim_text", ""))
@@ -271,13 +506,17 @@ class PolicyAnswerSynthesizer:
             trust_sc = float(c.get("trust_score", 1.0))
             cid = str(c.get("claim_id") or f"clm-{idx}")
 
-            # Extract conditions & exceptions from verbatim evidence
+            # Extract conditions & exceptions from verbatim evidence with semantic deduplication
             conds, excs = cls.extract_conditions_and_exceptions(claim_txt)
             for cd in conds:
-                if cd not in all_conditions:
+                norm_cd = re.sub(r"[^\w\s]", "", cd.lower()).strip()
+                if norm_cd not in seen_cond_keys:
+                    seen_cond_keys.add(norm_cd)
                     all_conditions.append(cd)
             for ex in excs:
-                if ex not in all_exceptions:
+                norm_ex = re.sub(r"[^\w\s]", "", ex.lower()).strip()
+                if norm_ex not in seen_exc_keys:
+                    seen_exc_keys.add(norm_ex)
                     all_exceptions.append(ex)
 
             # Build grounded claim
@@ -325,16 +564,13 @@ class PolicyAnswerSynthesizer:
                         )
                     )
 
-        # 3. Rule 5: If conflicting verified claims exist, ensure ConflictPathwayAnalysis is populated
+        # 6. Rule 5: If conflicting verified claims exist, ensure ConflictPathwayAnalysis is populated
         if conflict_analysis is None and has_conflicts and conflicts_data:
             conflict_analysis = cls.classify_conflict_pathways(query, conflicts_data, citations)
 
-        # 4. Formulate crisp Bottom-Line Answer
+        # 7. Formulate crisp Bottom-Line Answer
         cats = cls.categorize_claims(citations)
         timeline_items = cats["timeline"]
-        authority_items = cats["authority"]
-        eligibility_items = cats["eligibility"]
-        enterprise_items = cats["enterprise"]
 
         is_transfer_query = any(k in q_lower for k in ["transfer", "transferring", "assign", "assignment", "transferee"])
         is_graph_query = any(k in q_lower for k in ["graph", "microsoft graph", "manage groups", "directory", "administrator"])
@@ -410,7 +646,19 @@ class PolicyAnswerSynthesizer:
             grounding_score = 1.0
             rec_action = None
 
+        # 8. Build Schema v2 Explanation Blocks
+        explanation_blocks = cls.build_explanation_blocks(
+            plan=plan,
+            bottom_line_answer=bottom_line,
+            verified_claims=verified_claims_used,
+            citations=citations,
+            conditions=all_conditions,
+            exceptions=all_exceptions,
+            conflict_analysis=conflict_analysis,
+        )
+
         return PolicyAnswerContract(
+            schema_version="2",
             bottom_line_answer=bottom_line,
             conditions=all_conditions[:4],
             exceptions=all_exceptions[:4],
@@ -421,28 +669,53 @@ class PolicyAnswerSynthesizer:
             verification_status=verification_status,
             recommended_human_action=rec_action,
             answer_scope=AnswerScope(document_ids=doc_ids, workspace=workspace, temporal_validity="current"),
+            response_plan=plan,
+            scope_summary=scope_summary,
+            explanation_blocks=explanation_blocks,
+            limitations=[],
+            unanswered_parts=plan.unanswered_parts,
         )
 
     @classmethod
     def render_markdown(cls, contract: PolicyAnswerContract) -> str:
-        """Renders the typed PolicyAnswerContract into clean, human-readable Markdown."""
+        """Renders the typed PolicyAnswerContract into clean, human-readable Markdown synchronized with UI."""
         sections = []
+
+        # Scope badge line if present
+        if contract.scope_summary and contract.scope_summary.label:
+            sections.append(f"**Scope:** `{contract.scope_summary.label}`")
 
         # 1. Bottom-line answer
         sections.append(f"### 🛡️ Bottom-Line Answer\n{contract.bottom_line_answer}")
 
-        # 2. Conditions & Exceptions (if any)
-        cond_lines = []
-        if contract.conditions:
-            for cond in contract.conditions:
-                cond_lines.append(f"• **Condition:** {cond}")
-        if contract.exceptions:
-            for exc in contract.exceptions:
-                cond_lines.append(f"• **Exception:** {exc}")
-        if cond_lines:
-            sections.append("### ⚖️ Conditions & Exceptions\n" + "\n".join(cond_lines))
+        # 2. Explanation Blocks (Schema v2)
+        if contract.explanation_blocks:
+            for block in contract.explanation_blocks:
+                b_lines = []
+                if block.heading:
+                    b_lines.append(f"### {block.heading}")
+                for stmt in block.statements:
+                    if block.block_type == "checklist":
+                        b_lines.append(f"- [ ] {stmt.text}")
+                    elif block.block_type == "table":
+                        b_lines.append(f"• {stmt.text}")
+                    else:
+                        b_lines.append(stmt.text)
+                sections.append("\n".join(b_lines))
 
-        # 3. Verified Claims Used
+        # 3. Conditions & Exceptions (if not rendered via blocks)
+        if not contract.explanation_blocks or not any(b.id == "block-conditions" for b in contract.explanation_blocks):
+            cond_lines = []
+            if contract.conditions:
+                for cond in contract.conditions:
+                    cond_lines.append(f"• **Condition:** {cond}")
+            if contract.exceptions:
+                for exc in contract.exceptions:
+                    cond_lines.append(f"• **Exception:** {exc}")
+            if cond_lines:
+                sections.append("### ⚖️ Conditions & Exceptions\n" + "\n".join(cond_lines))
+
+        # 4. Verified Claims Used
         if contract.verified_claims_used:
             claim_lines = []
             for c in contract.verified_claims_used:
@@ -453,7 +726,7 @@ class PolicyAnswerSynthesizer:
                 )
             sections.append("### 📜 Verified Operative Claims\n" + "\n".join(claim_lines))
 
-        # 4. Decoupled Section Context (Strictly Non-Normative)
+        # 5. Decoupled Section Context (Strictly Non-Normative)
         if contract.section_context:
             context_lines = []
             for sc in contract.section_context[:3]:
@@ -465,7 +738,7 @@ class PolicyAnswerSynthesizer:
                 )
             sections.append("### 📖 Supporting Context (Non-Normative)\n" + "\n\n".join(context_lines))
 
-        # 5. Conflict Analysis & Pathways (if applicable)
+        # 6. Conflict Analysis & Pathways (if applicable)
         if contract.conflict_analysis:
             ca = contract.conflict_analysis
             path_lines = [
@@ -480,10 +753,16 @@ class PolicyAnswerSynthesizer:
         elif contract.recommended_human_action:
             sections.append(f"**Recommended Action:** {contract.recommended_human_action}")
 
-        # 6. Verification & Grounding Telemetry
+        # 7. Unanswered / Scope Gaps (if any)
+        if contract.unanswered_parts:
+            unans_lines = [f"• {u}" for u in contract.unanswered_parts]
+            sections.append("### ⚠️ Unanswered Query Parameters\n" + "\n".join(unans_lines))
+
+        # 8. Verification & Grounding Telemetry (Accurate, non-inflated)
+        claims_count = len(contract.verified_claims_used)
         sections.append(
             f"🔒 **Verification Status:** `{contract.verification_status}` "
-            f"• Grounding Confidence: `{contract.grounding_score * 100:.0f}%` "
+            f"• Grounding: `{claims_count} Certified Operative Claims ({contract.grounding_score * 100:.0f}%)` "
             f"• Temporal Validity: `{contract.answer_scope.temporal_validity}`"
         )
 
@@ -499,6 +778,8 @@ class PolicyAnswerSynthesizer:
         history: Optional[Sequence[dict[str, Any]]] = None,
         conflicts_data: Optional[List[dict[str, Any]]] = None,
         workspace: str = "policy",
+        requested_depth: Optional[str] = None,
+        mode: str = "document_qa",
     ) -> str:
         """Backwards-compatible string synthesizer that delegates to the structured contract."""
         contract = cls.synthesize_structured(
@@ -509,5 +790,7 @@ class PolicyAnswerSynthesizer:
             warnings=warnings,
             history=history,
             workspace=workspace,
+            requested_depth=requested_depth,
+            mode=mode,
         )
         return cls.render_markdown(contract)

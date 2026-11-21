@@ -163,6 +163,7 @@ class ChatService:
         user_role: str = "developer",
         workspace_id: str | None = None,
         domain: str | None = None,
+        requested_depth: str | None = None,
     ) -> dict[str, Any]:
         # 1. Fetch existing session & conversation history
         session_obj = await self.repo.get_session(session_id)
@@ -336,6 +337,8 @@ class ChatService:
                 warnings=warnings,
                 history=recent_history,
                 workspace=effective_workspace,
+                requested_depth=requested_depth,
+                mode=mode,
             )
             structured_contract, synthesized_answer = await PolicyWordingRefiner.refine_contract(
                 contract=structured_contract,
@@ -397,6 +400,8 @@ class ChatService:
             "total_evaluated_claims": len(context_res.context),
             "verification": verification_result.to_dict(),
             "structured_answer": structured_contract.model_dump() if "structured_contract" in locals() else None,
+            "response_plan": structured_contract.response_plan.model_dump() if ("structured_contract" in locals() and structured_contract.response_plan) else None,
+            "scope_summary": structured_contract.scope_summary.model_dump() if ("structured_contract" in locals() and structured_contract.scope_summary) else None,
             "action_evaluation": action_eval_data if "action_eval_data" in locals() else None,
         }
 

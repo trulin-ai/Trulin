@@ -3,16 +3,19 @@ Policy Wording Refiner Service.
 
 A strictly constrained, optional wording layer that polishes deterministic policy answers:
 1. Operates only on already-synthesized PolicyAnswerContract instances.
-2. Zero new facts: prompt strictly prohibits inventing claims, numbers, dates, or exceptions.
-3. Citation preservation: requires preserving all [Source X] references verbatim.
-4. Fail-closed abstentions: completely bypasses LLM for NO_VERIFIED_RULE and UNVERIFIED states.
-5. Strict post-verification: validates output through AnswerVerifier.verify().
-6. Fail-safe: if LLM fails, times out, or fails verification, immediately returns deterministic Markdown.
+2. Structured statement-level rewriting: provides statement IDs and demands JSON output.
+3. Zero new facts: prompt strictly prohibits inventing claims, numbers, dates, or exceptions.
+4. Citation preservation: requires preserving all [Source X] references verbatim.
+5. Fail-closed abstentions: completely bypasses LLM for NO_VERIFIED_RULE and UNVERIFIED states.
+6. Strict post-verification: validates each statement through AnswerVerifier.verify_statement_mutation()
+   to prevent negation flips, modality changes, or dropped numbers.
+7. Fail-safe: if LLM fails, times out, or fails verification, immediately returns deterministic Markdown.
 """
 
+import json
 import logging
 import re
-from typing import Any, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 from app.core.config import settings
 from app.llm.base import BaseLLMProvider
@@ -25,14 +28,15 @@ logger = logging.getLogger(__name__)
 
 WORDING_REFINER_SYSTEM_PROMPT = (
     "You are an executive wording assistant for an enterprise governance copilot.\n"
-    "Your ONLY job is to improve the readability, polish, and professional tone of the provided policy answer.\n\n"
-    "CRITICAL CONSTRAINTS (ZERO-HALLUCINATION CONTRACT):\n"
-    "1. FACTUAL BOUNDARY: Use ONLY the exact facts, numbers, windows, and entities present in the input text.\n"
+    "Your ONLY job is to improve the readability, polish, and professional tone of the provided policy statements.\n\n"
+    "CRITICAL CONSTRAINTS (ZERO-MUTATION CONTRACT):\n"
+    "1. FACTUAL BOUNDARY: Use ONLY the exact facts, numbers, windows, and entities present in the input.\n"
     "2. NO INVENTED ENTITIES: Never introduce new dates, dollar amounts, percentages, timelines, or obligations.\n"
-    "3. CITATION PRESERVATION: Preserve every citation tag like [Source 1], [Source 2] verbatim in the output.\n"
-    "4. NO SPECULATION: Do not infer, generalize, or extrapolate beyond what is explicitly stated.\n"
-    "5. PRESERVE CONFLICTS: If multiple policy pathways or conflicting terms are mentioned, you must preserve the distinction and NEVER choose one side over another.\n"
-    "6. CONCISE & EXECUTIVE: Deliver a clear, direct bottom-line response in 1-3 sentences.\n"
+    "3. CITATION PRESERVATION: Preserve every citation tag like [Source 1], [Source 2] verbatim.\n"
+    "4. MODALITY PRESERVATION: Never change permission ('may') to obligation ('must'), or vice-versa.\n"
+    "5. NEGATION PRESERVATION: Never remove or introduce negations ('not', 'cannot', 'prohibited', 'unless').\n"
+    "6. STRUCTURED OUTPUT: Return ONLY a valid JSON object matching this schema:\n"
+    "   {\"statements\": [{\"id\": \"stmt-1\", \"text\": \"Polished statement [Source 1]\"}]}\n"
 )
 
 
@@ -73,16 +77,119 @@ class PolicyWordingRefiner:
         if isinstance(llm_provider, MockLLMProvider) and not hasattr(llm_provider, "mock_completion_text"):
             return contract, deterministic_markdown
 
-        # 3. Construct zero-hallucination prompt
-        conditions_str = ""
-        if contract.conditions:
-            conditions_str += "\nConditions:\n" + "\n".join(f"- {c}" for c in contract.conditions)
-        if contract.exceptions:
-            conditions_str += "\nExceptions:\n" + "\n".join(f"- {e}" for e in contract.exceptions)
+        # 3. Handle Structured Statement Rewriting if explanation_blocks exist
+        if contract.explanation_blocks:
+            normative_statements = [
+                s for b in contract.explanation_blocks
+                for s in b.statements
+                if s.is_normative
+            ]
 
+            if normative_statements:
+                statements_payload = [
+                    {"id": s.id, "text": s.text, "modality": s.modality}
+                    for s in normative_statements
+                ]
+
+                user_prompt = (
+                    f"Scope: {contract.scope_summary.label if contract.scope_summary else 'Governing Policy'}\n"
+                    f"Input Statements:\n{json.dumps(statements_payload, indent=2)}\n\n"
+                    "Rewrite each statement for executive readability while strictly preserving all facts, numbers, modality, conditions, and [Source X] tags.\n"
+                    "Return ONLY valid JSON matching: {\"statements\": [{\"id\": \"stmt-id\", \"text\": \"...\"}]}"
+                )
+
+                try:
+                    if hasattr(llm_provider, "generate_completion"):
+                        raw_completion = await llm_provider.generate_completion(
+                            prompt=user_prompt,
+                            system_prompt=WORDING_REFINER_SYSTEM_PROMPT,
+                            max_tokens=400,
+                            temperature=0.0,
+                        )
+                    elif hasattr(llm_provider, "mock_completion_text"):
+                        raw_completion = getattr(llm_provider, "mock_completion_text")
+                    else:
+                        return contract, deterministic_markdown
+
+                    # Parse JSON from completion
+                    cleaned_completion = raw_completion.strip()
+                    # Extract json block if wrapped in markdown code fence
+                    json_match = re.search(r"```(?:json)?\s*([\s\S]*?)\s*```", cleaned_completion)
+                    if json_match:
+                        cleaned_completion = json_match.group(1).strip()
+
+                    parsed_data = None
+                    try:
+                        parsed_data = json.loads(cleaned_completion)
+                    except Exception:
+                        # Fallback heuristic: search for {"statements": ...}
+                        dict_match = re.search(r"(\{[\s\S]*\"statements\"[\s\S]*\})", cleaned_completion)
+                        if dict_match:
+                            try:
+                                parsed_data = json.loads(dict_match.group(1))
+                            except Exception:
+                                pass
+
+                    if not parsed_data or not isinstance(parsed_data, dict) or "statements" not in parsed_data:
+                        logger.warning("LLM wording refinement produced non-JSON output; safely using deterministic contract.")
+                        contract.wording_metadata = {"requested": True, "applied": False, "fallback_reason": "invalid_json_format"}
+                        return contract, deterministic_markdown
+
+                    rewritten_list = parsed_data.get("statements", [])
+                    rewritten_map = {item.get("id"): item.get("text") for item in rewritten_list if isinstance(item, dict) and item.get("id") and item.get("text")}
+
+                    applied_count = 0
+                    fallback_reasons = []
+
+                    # Verify and apply rewrites statement by statement
+                    for stmt in normative_statements:
+                        new_text = rewritten_map.get(stmt.id)
+                        if not new_text:
+                            continue
+
+                        is_safe, reason = AnswerVerifier.verify_statement_mutation(
+                            original_text=stmt.text,
+                            rewritten_text=new_text,
+                            required_modality=stmt.modality,
+                        )
+
+                        if is_safe:
+                            stmt.text = new_text
+                            applied_count += 1
+                            # If stmt-1 was bottom-line, update bottom-line too
+                            if stmt.id == "stmt-1":
+                                contract.bottom_line_answer = new_text
+                        else:
+                            fallback_reasons.append(f"{stmt.id}: {reason}")
+                            logger.warning("Statement %s rejected: %s", stmt.id, reason)
+
+                    if applied_count > 0:
+                        contract.wording_metadata = {
+                            "requested": True,
+                            "applied": True,
+                            "statements_polished": applied_count,
+                            "rejected_mutations": fallback_reasons,
+                        }
+                        refined_markdown = PolicyAnswerSynthesizer.render_markdown(contract)
+                        logger.info("Successfully polished %d statements in answer contract.", applied_count)
+                        return contract, refined_markdown
+                    else:
+                        contract.wording_metadata = {
+                            "requested": True,
+                            "applied": False,
+                            "fallback_reason": "all_statements_failed_mutation_verification",
+                            "details": fallback_reasons,
+                        }
+                        return contract, deterministic_markdown
+
+                except Exception as e:
+                    logger.warning("LLM structured wording refinement failed (%s); returning deterministic contract.", e)
+                    contract.wording_metadata = {"requested": True, "applied": False, "fallback_reason": str(e)}
+                    return contract, deterministic_markdown
+
+        # 4. Fallback for contracts without explanation_blocks (legacy V1 path)
         user_prompt = (
-            f"Draft Answer: {contract.bottom_line_answer}"
-            f"{conditions_str}\n\n"
+            f"Draft Answer: {contract.bottom_line_answer}\n\n"
             "Rewrite the draft answer for executive clarity while strictly preserving all facts, numbers, and [Source X] tags exactly."
         )
 
@@ -99,7 +206,6 @@ class PolicyWordingRefiner:
             else:
                 return contract, deterministic_markdown
 
-            # Clean output preamble if any
             rewritten = re.sub(
                 r"^(?:Here is (?:the|a) (?:rewritten|clarified|polished|revised) (?:answer|response):?\s*)",
                 "",
@@ -108,55 +214,23 @@ class PolicyWordingRefiner:
             ).strip('"` \n')
 
             if not rewritten or len(rewritten) < 15:
-                logger.warning("LLM wording refinement produced empty or trivial response; using deterministic contract.")
                 return contract, deterministic_markdown
 
-            # 4. Strict Post-Verification Gate
-            verification = AnswerVerifier.verify(
-                synthesized_answer=rewritten,
-                citations=citations,
-                has_conflicts=has_conflicts,
-                mode="document_qa",
+            is_safe, reason = AnswerVerifier.verify_statement_mutation(
+                original_text=contract.bottom_line_answer,
+                rewritten_text=rewritten,
             )
-
-            # Check 1: Verification status
-            if not verification.is_verified:
-                logger.warning(
-                    "LLM wording failed verification (status=%s, warnings=%s); falling back to deterministic answer.",
-                    verification.verification_status,
-                    verification.hallucination_warnings,
-                )
+            if not is_safe:
+                logger.warning("LLM wording rejected by mutation verifier (%s); falling back to deterministic answer.", reason)
+                contract.wording_metadata = {"requested": True, "applied": False, "fallback_reason": reason}
                 return contract, deterministic_markdown
 
-            # Check 2: Ungrounded numbers, percentages, durations
-            if verification.unverified_numbers:
-                logger.warning(
-                    "LLM wording introduced ungrounded numbers (%s); falling back to deterministic answer.",
-                    verification.unverified_numbers,
-                )
-                return contract, deterministic_markdown
-
-            # Check 3: Invalid source indices
-            if verification.invalid_source_indices:
-                logger.warning(
-                    "LLM wording referenced non-existent sources (%s); falling back to deterministic answer.",
-                    verification.invalid_source_indices,
-                )
-                return contract, deterministic_markdown
-
-            # Check 4: Citation dropping - if input answer had citations, output must cite at least one valid source
-            if citations and not verification.cited_source_indices:
-                logger.warning(
-                    "LLM wording omitted all citations; falling back to deterministic answer."
-                )
-                return contract, deterministic_markdown
-
-            # 5. Success: update contract with polished wording and re-render
             contract.bottom_line_answer = rewritten
+            contract.wording_metadata = {"requested": True, "applied": True}
             refined_markdown = PolicyAnswerSynthesizer.render_markdown(contract)
-            logger.info("Successfully refined answer wording with verified LLM output.")
             return contract, refined_markdown
 
         except Exception as e:
             logger.warning("LLM wording refinement call raised exception (%s); safely falling back to deterministic answer.", e)
+            contract.wording_metadata = {"requested": True, "applied": False, "fallback_reason": str(e)}
             return contract, deterministic_markdown

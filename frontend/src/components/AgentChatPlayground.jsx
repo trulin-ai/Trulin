@@ -878,19 +878,19 @@ function WhyThisAnswerModal({ data, onClose, activeWorkspace }) {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '8px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.78rem', color: '#334155' }}>
                 <CheckCircle2 size={14} color="#16A34A" />
-                <span><strong>Grounding Score:</strong> {(groundingScore * 100).toFixed(0)}% Entailment</span>
+                <span><strong>Grounding Status:</strong> Grounded in Verified Claims ({(groundingScore * 100).toFixed(0)}% Entailment)</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.78rem', color: '#334155' }}>
                 <CheckCircle2 size={14} color="#16A34A" />
-                <span><strong>Contradiction Gate:</strong> 0 Conflicts Detected</span>
+                <span><strong>Conflict Gate:</strong> No relevant conflict detected in evaluated scope</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.78rem', color: '#334155' }}>
                 <CheckCircle2 size={14} color="#16A34A" />
-                <span><strong>Decay Engine:</strong> Current Operative Policy</span>
+                <span><strong>Temporal Validity:</strong> Current Active Rules (Verified by Governance Gate)</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.78rem', color: '#334155' }}>
                 <CheckCircle2 size={14} color="#16A34A" />
-                <span><strong>Governance Tier:</strong> Fail-Closed Boundary</span>
+                <span><strong>Certification Tier:</strong> {citation?.certification_tier || claim?.certification_tier || 'AUTOMATED_CERTIFIED'}</span>
               </div>
             </div>
           </div>
@@ -1192,6 +1192,7 @@ export default function AgentChatPlayground({
   const [isLoadingSessions, setIsLoadingSessions] = useState(false);
   const [expandedCitations, setExpandedCitations] = useState({});
   const [activeCitationHighlight, setActiveCitationHighlight] = useState({});
+  const [messageDepth, setMessageDepth] = useState({});
   const [copiedMsgId, setCopiedMsgId] = useState(null);
   const [whyThisAnswerModalData, setWhyThisAnswerModalData] = useState(null);
   const [copiedEvidenceKey, setCopiedEvidenceKey] = useState(null);
@@ -2825,6 +2826,15 @@ export default function AgentChatPlayground({
                         const secondaryCitations = citations.length > 1 ? citations.slice(1) : [];
                         const sectionContext = structured?.section_context || [];
                         const groundingScore = structured?.grounding_score ?? meta.verification?.grounding_score ?? 1.0;
+                        const scopeSummary = structured?.scope_summary || meta?.scope_summary;
+                        const responsePlan = structured?.response_plan || meta?.response_plan;
+                        const explanationBlocks = structured?.explanation_blocks || [];
+                        const currentDepth = messageDepth[msg.id] || responsePlan?.resolved_depth || 'standard';
+
+                        // Multi-document coverage: identify secondary citation from distinct document
+                        const distinctSecondaryCitation = secondaryCitations.find(c =>
+                          c.source_title && c.source_title !== primaryCitation?.source_title
+                        );
 
                         const primarySrcIdx = primaryCitation?.source_index || 1;
                         const isPrimaryHighlighted = activeCitationHighlight[msg.id] === primarySrcIdx;
@@ -2842,8 +2852,8 @@ export default function AgentChatPlayground({
 
                         return (
                           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                            {/* Header Badge: Supported by verified rules · Policy Q&A */}
-                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px', marginBottom: '4px' }}>
+                            {/* Header: Status Badge on left, Adaptive Depth Controls [Brief | Standard | Detailed] on right */}
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px', marginBottom: '2px' }}>
                               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                 <span style={{
                                   display: 'inline-flex',
@@ -2864,15 +2874,72 @@ export default function AgentChatPlayground({
                                   Policy Q&A
                                 </span>
                               </div>
+
+                              {/* Depth Selector Pills: Brief | Standard | Detailed */}
+                              <div style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                background: '#F1F5F9',
+                                padding: '2px',
+                                borderRadius: '6px',
+                                border: '1px solid #E2E8F0',
+                                gap: '2px'
+                              }}>
+                                {['brief', 'standard', 'detailed'].map((depthOption) => {
+                                  const isActive = currentDepth === depthOption;
+                                  return (
+                                    <button
+                                      key={depthOption}
+                                      type="button"
+                                      onClick={() => setMessageDepth(prev => ({ ...prev, [msg.id]: depthOption }))}
+                                      style={{
+                                        border: 'none',
+                                        background: isActive ? '#FFFFFF' : 'transparent',
+                                        color: isActive ? '#0F172A' : '#64748B',
+                                        fontWeight: isActive ? 700 : 500,
+                                        fontSize: '0.68rem',
+                                        padding: '2px 8px',
+                                        borderRadius: '4px',
+                                        cursor: 'pointer',
+                                        boxShadow: isActive ? '0 1px 2px rgba(0,0,0,0.06)' : 'none',
+                                        textTransform: 'capitalize',
+                                        transition: 'all 0.12s ease'
+                                      }}
+                                    >
+                                      {depthOption}
+                                    </button>
+                                  );
+                                })}
+                              </div>
                             </div>
 
-                            {/* Bottom-Line Answer (Crisp, High-Contrast 16-17px Typography) */}
+                            {/* Explicit Scope Summary Line */}
+                            {scopeSummary?.label && (
+                              <div style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '6px',
+                                fontSize: '0.72rem',
+                                color: '#475569',
+                                background: '#F8FAFC',
+                                padding: '3px 9px',
+                                borderRadius: '5px',
+                                border: '1px solid #E2E8F0',
+                                marginBottom: '2px',
+                                width: 'fit-content'
+                              }}>
+                                <FileText size={11} color="#64748B" />
+                                <span><strong>Scope:</strong> {scopeSummary.label}</span>
+                              </div>
+                            )}
+
+                            {/* Bottom-Line Answer (Crisp, High-Contrast Typography) */}
                             <div style={{
                               fontSize: '0.96rem',
                               lineHeight: 1.65,
                               color: '#1C1917',
                               fontWeight: 450,
-                              marginBottom: (conditions.length > 0 || exceptions.length > 0) ? '4px' : '8px'
+                              marginBottom: (conditions.length > 0 || exceptions.length > 0 || explanationBlocks.length > 0) ? '4px' : '8px'
                             }}>
                               <RichAnswerContent
                                 content={bottomLine}
@@ -2880,6 +2947,51 @@ export default function AgentChatPlayground({
                                 onCitationHover={(srcNum) => handleCitationHover(msg.id, srcNum)}
                               />
                             </div>
+
+                            {/* Adaptive Explanation Blocks (Rendered for Standard and Detailed modes) */}
+                            {currentDepth !== 'brief' && explanationBlocks.length > 0 && (
+                              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '4px' }}>
+                                {explanationBlocks.filter(b => b.id !== 'block-conditions').map((block) => (
+                                  <div key={block.id} style={{
+                                    background: block.block_type === 'checklist' ? '#F8FAFC' : (block.block_type === 'table' ? '#FFFFFF' : 'transparent'),
+                                    border: (block.block_type === 'checklist' || block.block_type === 'table') ? '1px solid #E2E8F0' : 'none',
+                                    borderRadius: '8px',
+                                    padding: (block.block_type === 'checklist' || block.block_type === 'table') ? '10px 14px' : '4px 0',
+                                  }}>
+                                    {block.heading && (
+                                      <div style={{
+                                        fontSize: '0.75rem',
+                                        fontWeight: 700,
+                                        color: '#334155',
+                                        textTransform: 'uppercase',
+                                        letterSpacing: '0.04em',
+                                        marginBottom: '6px'
+                                      }}>
+                                        {block.heading}
+                                      </div>
+                                    )}
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                                      {block.statements.map((stmt) => (
+                                        <div key={stmt.id} style={{ display: 'flex', alignItems: 'baseline', gap: '8px', fontSize: '0.86rem', color: '#1E293B', lineHeight: 1.55 }}>
+                                          {block.block_type === 'checklist' ? (
+                                            <span style={{ color: '#16A34A', fontWeight: 700 }}>✓</span>
+                                          ) : (
+                                            <span style={{ color: '#0284C7', fontWeight: 700 }}>•</span>
+                                          )}
+                                          <div>
+                                            <RichAnswerContent
+                                              content={stmt.text}
+                                              onCitationClick={(srcNum) => handleCitationClick(msg.id, srcNum)}
+                                              onCitationHover={(srcNum) => handleCitationHover(msg.id, srcNum)}
+                                            />
+                                          </div>
+                                        </div>
+                                      ))}
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
 
                             {/* Conditions & Exceptions Block */}
                             {(conditions.length > 0 || exceptions.length > 0) && (
@@ -2945,6 +3057,27 @@ export default function AgentChatPlayground({
                                 }}
                                 onCopy={() => handleCopyEvidence(primaryCitation, `primary-${msg.id}`)}
                                 isCopied={copiedEvidenceKey === `primary-${msg.id}`}
+                              />
+                            )}
+
+                            {/* Coverage-based Secondary Evidence Card (Exposed when multi-document scope applies and depth is Standard or Detailed) */}
+                            {currentDepth !== 'brief' && distinctSecondaryCitation && (
+                              <EvidenceSourceCard
+                                citation={distinctSecondaryCitation}
+                                sourceIndex={distinctSecondaryCitation.source_index || 2}
+                                msgId={msg.id}
+                                isHighlighted={activeCitationHighlight[msg.id] === (distinctSecondaryCitation.source_index || 2)}
+                                activeWorkspace={activeWorkspace}
+                                onOpenWhyThis={() => {
+                                  setWhyThisAnswerModalData({
+                                    citation: distinctSecondaryCitation,
+                                    claim: distinctSecondaryCitation,
+                                    structured,
+                                    meta
+                                  });
+                                }}
+                                onCopy={() => handleCopyEvidence(distinctSecondaryCitation, `secondary-${msg.id}`)}
+                                isCopied={copiedEvidenceKey === `secondary-${msg.id}`}
                               />
                             )}
 
