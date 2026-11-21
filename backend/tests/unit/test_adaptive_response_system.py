@@ -261,6 +261,100 @@ def test_mutation_verifier_accepts_clean_executive_polish():
     assert reason is None
 
 
+def test_mutation_verifier_rejects_temporal_preposition_mutation():
+    """Reject rewrites that flip temporal boundaries ('within 30 days' -> 'after 30 days')."""
+    original = "Return requests must be submitted within 30 days of delivery [Source 1]."
+    mutated = "Return requests must be submitted after 30 days of delivery [Source 1]."
+    is_safe, reason = AnswerVerifier.verify_statement_mutation(original, mutated, required_modality="MUST")
+    assert is_safe is False
+    assert "temporal_mutation" in reason
+
+
+def test_mutation_verifier_rejects_dropped_conditional_qualification():
+    """Reject rewrites that drop material exception conditions like 'unless otherwise agreed'."""
+    original = "Direct liability is capped at fees paid, unless otherwise agreed in writing [Source 1]."
+    mutated = "Direct liability is capped at total fees paid [Source 1]."
+    is_safe, reason = AnswerVerifier.verify_statement_mutation(original, mutated)
+    assert is_safe is False
+    assert "conditional_qualification_dropped" in reason
+
+
+def test_mutation_verifier_rejects_conjunction_weakening():
+    """Reject rewrites that weaken mandatory conjunction ('and') into disjunctive permission ('or')."""
+    original = "Customer must provide both documented notice and written transferee consent [Source 1]."
+    mutated = "Customer must provide documented notice or written transferee consent [Source 1]."
+    is_safe, reason = AnswerVerifier.verify_statement_mutation(original, mutated, required_modality="MUST")
+    assert is_safe is False
+    assert "logical_weakening_mutation" in reason
+
+
+def test_depth_content_differentiation(sample_citations):
+    """Verifies that Brief, Standard, and Detailed produce genuinely differentiated content volumes."""
+    contract_brief = PolicyAnswerSynthesizer.synthesize_structured(
+        query="What notice is required before terminating for material breach?",
+        citations=sample_citations,
+        requested_depth="brief",
+    )
+    contract_standard = PolicyAnswerSynthesizer.synthesize_structured(
+        query="What notice is required before terminating for material breach?",
+        citations=sample_citations,
+        requested_depth="standard",
+    )
+    contract_detailed = PolicyAnswerSynthesizer.synthesize_structured(
+        query="What notice is required before terminating for material breach?",
+        citations=sample_citations,
+        requested_depth="detailed",
+    )
+
+    stmts_brief = [s for b in contract_brief.explanation_blocks for s in b.statements]
+    stmts_standard = [s for b in contract_standard.explanation_blocks for s in b.statements]
+    stmts_detailed = [s for b in contract_detailed.explanation_blocks for s in b.statements]
+
+    assert len(stmts_brief) < len(stmts_standard)
+    assert len(stmts_standard) < len(stmts_detailed)
+    assert any(b.id == "block-detailed-governance" for b in contract_detailed.explanation_blocks)
+
+
+@pytest.mark.asyncio
+async def test_live_structured_wording_refinement_success(sample_citations):
+    """Exercises the live wording refiner path when valid structured JSON is returned."""
+    from app.llm.mock_provider import MockLLMProvider
+    from app.services.policy_wording_refiner import PolicyWordingRefiner
+
+    contract = PolicyAnswerSynthesizer.synthesize_structured(
+        query="What must a customer do before transferring a license?",
+        citations=sample_citations,
+        requested_depth="standard",
+    )
+
+    # Valid structured JSON completion preserving facts, modality, negation, and citations
+    valid_json = (
+        '{\n'
+        '  "statements": [\n'
+        '    {\n'
+        '      "id": "stmt-1",\n'
+        '      "text": "No license transfer is valid unless the licensee provides 30 days prior written notice and written consent [Source 1]."\n'
+        '    }\n'
+        '  ]\n'
+        '}'
+    )
+
+    mock_llm = MockLLMProvider()
+    mock_llm.mock_completion_text = valid_json
+
+    refined_contract, refined_md = await PolicyWordingRefiner.refine_contract(
+        contract=contract,
+        citations=sample_citations,
+        llm_provider=mock_llm,
+        enabled=True,
+    )
+
+    assert refined_contract.wording_metadata is not None
+    assert refined_contract.wording_metadata.get("applied") is True
+    assert "No license transfer is valid unless the licensee" in refined_contract.bottom_line_answer
+    assert "[Source 1]" in refined_md
+
+
 # ==============================================================================
 # Group 5: Synthesizer Composition & Dual Envelope Synchronization
 # ==============================================================================

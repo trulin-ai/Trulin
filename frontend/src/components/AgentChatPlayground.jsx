@@ -881,12 +881,12 @@ function WhyThisAnswerModal({ data, onClose, activeWorkspace }) {
                 <span><strong>Grounding Status:</strong> Grounded in Verified Claims ({(groundingScore * 100).toFixed(0)}% Entailment)</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.78rem', color: '#334155' }}>
-                <CheckCircle2 size={14} color="#16A34A" />
-                <span><strong>Conflict Gate:</strong> No relevant conflict detected in evaluated scope</span>
+                <CheckCircle2 size={14} color={meta?.has_conflicts || structured?.conflict_analysis?.is_conflicted ? "#D97706" : "#16A34A"} />
+                <span><strong>Conflict Gate:</strong> {meta?.has_conflicts || structured?.conflict_analysis?.is_conflicted ? "Disputed: Conflict pathways detected" : "No conflicts detected in evaluated scope"}</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.78rem', color: '#334155' }}>
                 <CheckCircle2 size={14} color="#16A34A" />
-                <span><strong>Temporal Validity:</strong> Current Active Rules (Verified by Governance Gate)</span>
+                <span><strong>Temporal Validity:</strong> {citation?.validity ? `Verified Active (${citation.validity})` : (structured?.answer_scope?.temporal_validity ? `Validity: ${structured.answer_scope.temporal_validity}` : 'Validity: Not established in metadata')}</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.78rem', color: '#334155' }}>
                 <CheckCircle2 size={14} color="#16A34A" />
@@ -1662,6 +1662,7 @@ export default function AgentChatPlayground({
           user_role: activePersona?.role || 'developer',
           workspace_id: activeWorkspace?.id || 'all',
           domain: activeWorkspace?.domain || 'global',
+          requested_depth: 'auto',
         }),
       });
 
@@ -2971,10 +2972,25 @@ export default function AgentChatPlayground({
                                       </div>
                                     )}
                                     <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                                      {block.statements.map((stmt) => (
+                                      {block.statements.map((stmt, stmtIdx) => (
                                         <div key={stmt.id} style={{ display: 'flex', alignItems: 'baseline', gap: '8px', fontSize: '0.86rem', color: '#1E293B', lineHeight: 1.55 }}>
                                           {block.block_type === 'checklist' ? (
-                                            <span style={{ color: '#16A34A', fontWeight: 700 }}>✓</span>
+                                            <span style={{
+                                              display: 'inline-flex',
+                                              alignItems: 'center',
+                                              justifyContent: 'center',
+                                              width: '18px',
+                                              height: '18px',
+                                              borderRadius: '50%',
+                                              background: '#EFF6FF',
+                                              color: '#2563EB',
+                                              fontSize: '0.68rem',
+                                              fontWeight: 700,
+                                              border: '1px solid #BFDBFE',
+                                              flexShrink: 0
+                                            }}>
+                                              {stmtIdx + 1}
+                                            </span>
                                           ) : (
                                             <span style={{ color: '#0284C7', fontWeight: 700 }}>•</span>
                                           )}
@@ -3036,6 +3052,29 @@ export default function AgentChatPlayground({
                                     </div>
                                   ))}
                                 </div>
+                              </div>
+                            )}
+
+                            {/* Evidence Coverage & Accounting Banner */}
+                            {citations.length > 0 && (
+                              <div style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                fontSize: '0.72rem',
+                                color: '#475569',
+                                background: '#F8FAFC',
+                                border: '1px solid #E2E8F0',
+                                borderRadius: '6px',
+                                padding: '5px 10px',
+                                marginBottom: '4px'
+                              }}>
+                                <span>
+                                  <strong>Evidence Accounting:</strong> {(currentDepth !== 'brief' && distinctSecondaryCitation) ? '2 primary sources displayed' : '1 primary source displayed'}
+                                  {Math.max(0, citations.length - ((currentDepth !== 'brief' && distinctSecondaryCitation) ? 2 : 1)) > 0 &&
+                                    ` · ${Math.max(0, citations.length - ((currentDepth !== 'brief' && distinctSecondaryCitation) ? 2 : 1))} additional verified sources in Supporting Claims`}
+                                </span>
+                                <span style={{ fontSize: '0.68rem', color: '#94A3B8' }}>Individual statement citations</span>
                               </div>
                             )}
 

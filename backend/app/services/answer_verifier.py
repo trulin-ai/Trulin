@@ -123,6 +123,41 @@ class AnswerVerifier:
             if oc not in rewr_citations:
                 return False, f"citation_mutation: original citation [Source {oc}] omitted from rewrite"
 
+        # 5. Temporal Preposition Invariance
+        bounded_preps = [r"\bwithin\b", r"\bprior to\b", r"\bbefore\b", r"\bduring\b"]
+        unbounded_preps = [r"\bafter\b", r"\bfollowing\b", r"\bsubsequent to\b"]
+
+        for bp in bounded_preps:
+            clean_bp = bp.replace(r"\b", "")
+            if re.search(bp, orig_lower) and not any(re.search(up, orig_lower) for up in unbounded_preps):
+                if any(re.search(up, rewr_lower) for up in unbounded_preps) and not re.search(bp, rewr_lower):
+                    return False, f"temporal_mutation: bounded window '{clean_bp}' mutated to delayed/unbounded preposition"
+
+        for up in unbounded_preps:
+            clean_up = up.replace(r"\b", "")
+            if re.search(up, orig_lower) and not any(re.search(bp, orig_lower) for bp in bounded_preps):
+                if any(re.search(bp, rewr_lower) for bp in bounded_preps) and not re.search(up, rewr_lower):
+                    return False, f"temporal_mutation: delayed condition '{clean_up}' mutated to bounded preposition"
+
+        # 6. Conditional Qualification Invariance
+        conditional_qualifiers = [
+            "unless otherwise agreed",
+            "subject to prior written consent",
+            "except as provided",
+            "save for",
+            "unless agreed",
+        ]
+        for qual in conditional_qualifiers:
+            if qual in orig_lower and qual not in rewr_lower:
+                root_word = qual.split()[0]
+                if root_word not in rewr_lower:
+                    return False, f"conditional_qualification_dropped: material qualification '{qual}' omitted from rewrite"
+
+        # 7. Logical Conjunction Weakening (AND -> OR)
+        if ("both " in orig_lower or " and " in orig_lower) and " or " not in orig_lower:
+            if " or " in rewr_lower and " and " not in rewr_lower:
+                return False, "logical_weakening_mutation: mandatory conjunction (AND) weakened to disjunction (OR)"
+
         return True, None
 
     @classmethod

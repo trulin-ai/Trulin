@@ -237,7 +237,7 @@ class PolicyAnswerSynthesizer:
 
     @classmethod
     def build_scope_summary(cls, citations: List[dict[str, Any]], workspace: str = "policy") -> ScopeSummary:
-        """Formulates an explicit, verifiable scope summary from citations."""
+        """Formulates an explicit, verifiable scope summary reflecting actual metadata."""
         doc_ids = list(dict.fromkeys(str(c["document_id"]) for c in citations if c.get("document_id")))
         doc_titles = list(dict.fromkeys(str(c.get("source_title", "")).strip() for c in citations if c.get("source_title")))
 
@@ -250,12 +250,23 @@ class PolicyAnswerSynthesizer:
                 governance_boundary="Evaluated active policies; zero operative matches found.",
             )
 
+        # Inspect actual metadata for version and active validity
+        has_active = any(str(c.get("validity", "")).lower() == "active" for c in citations)
+        version_val = next((c.get("version") for c in citations if c.get("version")), None)
+
         if len(doc_titles) == 1:
-            label = f"Selected Policy: {doc_titles[0]} · Current Approved Version"
+            if version_val and has_active:
+                status_part = f"v{version_val} (Approved Active)"
+            elif has_active:
+                status_part = "Current Operative Version"
+            else:
+                status_part = "Version Status: Not Established"
+            label = f"Selected Document: {doc_titles[0]} · {status_part}"
         elif len(doc_titles) > 1:
             prefix = ", ".join(doc_titles[:2])
             suffix = f" (+{len(doc_titles) - 2} more)" if len(doc_titles) > 2 else ""
-            label = f"Governing Scope: {len(doc_titles)} Policies ({prefix}{suffix}) · Current Approved Versions"
+            status_part = "Evaluated Active Set" if has_active else "Version Status: Not Established"
+            label = f"Governing Scope: {len(doc_titles)} Documents ({prefix}{suffix}) · {status_part}"
         else:
             label = f"Enterprise Baseline Scope · Workspace: {workspace}"
 
@@ -279,7 +290,8 @@ class PolicyAnswerSynthesizer:
         conflict_analysis: Optional[ConflictPathwayAnalysis] = None,
     ) -> List[ExplanationBlock]:
         """
-        Builds structured ExplanationBlock items with statement-level claim mapping.
+        Builds structured ExplanationBlock items with statement-level claim mapping,
+        tailored by question type and resolved depth (Brief, Standard, Detailed).
         """
         blocks: List[ExplanationBlock] = []
         stmt_counter = 1
@@ -297,11 +309,25 @@ class PolicyAnswerSynthesizer:
         )
         stmt_counter += 1
 
-        # Add lead block depending on question type
+        # BRIEF DEPTH: Direct concise conclusion + immediate conditions only (50-100w)
+        if plan.resolved_depth == DisplayDepth.BRIEF and plan.question_type != QuestionType.CONFLICT:
+            blocks.append(
+                ExplanationBlock(
+                    id="block-brief-summary",
+                    heading="Bottom-Line Operative Rule",
+                    block_type="paragraph",
+                    statements=[lead_stmt],
+                )
+            )
+            return blocks
+
+        # STANDARD & DETAILED DEPTH:
+        claim_limit = 8 if plan.resolved_depth == DisplayDepth.DETAILED else 4
+
         if plan.question_type == QuestionType.PROCEDURE:
             # Procedural questions render a checklist block
             checklist_stmts = [lead_stmt]
-            for c in verified_claims[1:5]:
+            for c in verified_claims[1:claim_limit]:
                 stmt = ExplanationStatement(
                     id=f"stmt-{stmt_counter}",
                     text=f"Verification requirement: {c.object} [Source {c.source_index}].",
@@ -316,7 +342,7 @@ class PolicyAnswerSynthesizer:
             blocks.append(
                 ExplanationBlock(
                     id="block-procedure-steps",
-                    heading="Prerequisites & Operational Checklist",
+                    heading="Required Operational Steps",
                     block_type="checklist",
                     statements=checklist_stmts,
                 )
@@ -324,7 +350,7 @@ class PolicyAnswerSynthesizer:
 
         elif plan.question_type == QuestionType.COMPARISON:
             comp_stmts = [lead_stmt]
-            for c in verified_claims[1:5]:
+            for c in verified_claims[1:claim_limit]:
                 stmt = ExplanationStatement(
                     id=f"stmt-{stmt_counter}",
                     text=f"Term in {c.document_title}: {c.object} [Source {c.source_index}].",
@@ -372,7 +398,7 @@ class PolicyAnswerSynthesizer:
             # Lookup, Interpretation, Overview
             stmts = [lead_stmt]
             if len(verified_claims) > 1:
-                for c in verified_claims[1:4]:
+                for c in verified_claims[1:claim_limit]:
                     stmt = ExplanationStatement(
                         id=f"stmt-{stmt_counter}",
                         text=f"Supporting operative rule: {c.object} [Source {c.source_index}].",
@@ -393,10 +419,11 @@ class PolicyAnswerSynthesizer:
                 )
             )
 
-        # Block 2: Conditions and Qualifications Block (if material conditions or exceptions exist)
+        # Block 2: Conditions and Qualifications Block
+        cond_limit = 5 if plan.resolved_depth == DisplayDepth.DETAILED else 3
         if (conditions or exceptions) and plan.question_type != QuestionType.PROCEDURE:
             cond_stmts = []
-            for cond in conditions[:3]:
+            for cond in conditions[:cond_limit]:
                 cond_stmts.append(
                     ExplanationStatement(
                         id=f"stmt-{stmt_counter}",
@@ -409,7 +436,7 @@ class PolicyAnswerSynthesizer:
                 )
                 stmt_counter += 1
 
-            for exc in exceptions[:3]:
+            for exc in exceptions[:cond_limit]:
                 cond_stmts.append(
                     ExplanationStatement(
                         id=f"stmt-{stmt_counter}",
@@ -431,6 +458,34 @@ class PolicyAnswerSynthesizer:
                         statements=cond_stmts,
                     )
                 )
+
+        # DETAILED DEPTH ONLY: Additional block providing governance scope implications
+        if plan.resolved_depth == DisplayDepth.DETAILED:
+            detailed_stmts = []
+            for idx, c in enumerate(verified_claims[:4], start=1):
+                sec_info = f" §{c.section}" if c.section else ""
+                detailed_stmts.append(
+                    ExplanationStatement(
+                        id=f"stmt-{stmt_counter}",
+                        text=f"Governing source {c.document_title}{sec_info} establishes {c.subject} obligations under trust score {c.trust_score:.2f} [Source {c.source_index}].",
+                        claim_ids=[c.claim_id],
+                        source_indices=[c.source_index],
+                        is_normative=False,
+                        modality="MUST",
+                    )
+                )
+                stmt_counter += 1
+
+            blocks.append(
+                ExplanationBlock(
+                    id="block-detailed-governance",
+                    heading="Governance Precedence & Regulatory Context",
+                    block_type="paragraph",
+                    statements=detailed_stmts,
+                )
+            )
+
+        return blocks
 
         return blocks
 
