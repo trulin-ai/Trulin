@@ -1,10 +1,12 @@
 import decimal
 import logging
 import re
+import time
 import uuid
 from typing import Any
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.config import settings
 from app.db.repositories.chat_repository import ChatRepository
 from app.decision_engine.evaluator import DecisionEvaluator
 from app.llm.factory import get_llm_provider
@@ -165,6 +167,7 @@ class ChatService:
         domain: str | None = None,
         requested_depth: str | None = None,
     ) -> dict[str, Any]:
+        t0 = time.perf_counter()
         # 1. Fetch existing session & conversation history
         session_obj = await self.repo.get_session(session_id)
         recent_history: list[dict[str, str]] = []
@@ -403,6 +406,12 @@ class ChatService:
             "response_plan": structured_contract.response_plan.model_dump() if ("structured_contract" in locals() and structured_contract.response_plan) else None,
             "scope_summary": structured_contract.scope_summary.model_dump() if ("structured_contract" in locals() and structured_contract.scope_summary) else None,
             "action_evaluation": action_eval_data if "action_eval_data" in locals() else None,
+            "latency_ms": round((time.perf_counter() - t0) * 1000, 2),
+            "feature_flags": {
+                "enable_adaptive_composition": getattr(settings, "enable_adaptive_composition", True),
+                "enable_llm_wording_refinement": getattr(settings, "enable_llm_wording_refinement", True),
+            },
+            "wording_outcome": structured_contract.wording_metadata if ("structured_contract" in locals() and structured_contract.wording_metadata) else None,
         }
 
         # 8. Store assistant message in DB

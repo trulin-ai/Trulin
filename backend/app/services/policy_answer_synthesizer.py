@@ -561,8 +561,23 @@ class PolicyAnswerSynthesizer:
             trust_sc = float(c.get("trust_score", 1.0))
             cid = str(c.get("claim_id") or f"clm-{idx}")
 
+            # Incorporate explicit conditions & exceptions from citation payload if present
+            raw_c_conds = c.get("conditions") or []
+            raw_c_excs = c.get("exceptions") or []
+            for cd in raw_c_conds:
+                norm_cd = re.sub(r"[^\w\s]", "", str(cd).lower()).strip()
+                if norm_cd and norm_cd not in seen_cond_keys:
+                    seen_cond_keys.add(norm_cd)
+                    all_conditions.append(str(cd))
+            for ex in raw_c_excs:
+                norm_ex = re.sub(r"[^\w\s]", "", str(ex).lower()).strip()
+                if norm_ex and norm_ex not in seen_exc_keys:
+                    seen_exc_keys.add(norm_ex)
+                    all_exceptions.append(str(ex))
+
             # Extract conditions & exceptions from verbatim evidence with semantic deduplication
-            conds, excs = cls.extract_conditions_and_exceptions(claim_txt)
+            full_evidence_text = f"{claim_txt} {c.get('verbatim_evidence') or ''} {c.get('evidence_span') or ''}"
+            conds, excs = cls.extract_conditions_and_exceptions(full_evidence_text)
             for cd in conds:
                 norm_cd = re.sub(r"[^\w\s]", "", cd.lower()).strip()
                 if norm_cd not in seen_cond_keys:

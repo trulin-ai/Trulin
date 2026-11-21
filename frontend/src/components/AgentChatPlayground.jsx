@@ -5,7 +5,7 @@ import {
   Copy, Check, ChevronDown, ChevronRight, BookOpen, Layers, Shield,
   ExternalLink, ShieldAlert, ArrowUpRight, Mic, ArrowUp, FileText, X,
   PanelLeftClose, PanelLeftOpen, Pencil, Share2, Scale, Info, Hash,
-  UploadCloud, GitCompare, HelpCircle, Pin, PinOff
+  UploadCloud, GitCompare, HelpCircle, Pin, PinOff, ClipboardCheck
 } from 'lucide-react';
 
 const PROCESS_STEPS = [
@@ -981,6 +981,510 @@ function WhyThisAnswerModal({ data, onClose, activeWorkspace }) {
   );
 }
 
+// Controlled Pilot Evaluation Review Modal
+function PilotReviewModal({ data, onClose, onFeedbackSubmitted, showToast }) {
+  if (!data) return null;
+  const { message, sessionId } = data;
+  const meta = message?.metadata_json || {};
+  const plan = meta?.response_plan || {};
+  const wording = meta?.wording_outcome || {};
+  const featureFlags = meta?.feature_flags || {};
+
+  const [verdict, setVerdict] = useState('PASS');
+  const [issueCategory, setIssueCategory] = useState('DEPTH_QUALITY');
+  const [checklist, setChecklist] = useState({
+    scope_identified: true,
+    answers_inquiry: true,
+    grounded_evidence: true,
+    conditions_surfaced: true,
+    conflicts_flagged: true,
+    depth_appropriate: true,
+    navigation_works: true,
+    tone_and_safety: true,
+  });
+  const [reviewerName, setReviewerName] = useState(() => {
+    try {
+      return localStorage.getItem('trulin_pilot_reviewer_name') || 'Policy Reviewer';
+    } catch {
+      return 'Policy Reviewer';
+    }
+  });
+  const [reviewerRole, setReviewerRole] = useState(() => {
+    try {
+      return localStorage.getItem('trulin_pilot_reviewer_role') || 'Legal & Policy QA';
+    } catch {
+      return 'Legal & Policy QA';
+    }
+  });
+  const [notes, setNotes] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const toggleChecklistItem = (key) => {
+    setChecklist(prev => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  const checklistItems = [
+    { key: 'scope_identified', label: '1. Scope Identified', desc: 'Governing document, version, role, and business scope are explicitly established.' },
+    { key: 'answers_inquiry', label: '2. Answers Inquiry', desc: 'Directly answers the user question without deflection or generic evasion.' },
+    { key: 'grounded_evidence', label: '3. Grounded Evidence', desc: 'Supported strictly by cited operative clauses; no phantom citations or unverified assertions.' },
+    { key: 'conditions_surfaced', label: '4. Conditions & Exceptions', desc: 'Key prerequisites, notice periods, thresholds, and carve-outs are clearly surfaced.' },
+    { key: 'conflicts_flagged', label: '5. Conflict Separation', desc: 'Contradictory or divergent rules are surfaced as separate pathways rather than blended.' },
+    { key: 'depth_appropriate', label: '6. Depth Quality', desc: 'Explanation volume and detail match user expectation (Brief vs Standard vs Detailed).' },
+    { key: 'navigation_works', label: '7. Explorer Navigation', desc: 'Deep-link citations open Document Explorer to the exact source and claim.' },
+    { key: 'tone_and_safety', label: '8. Safety & Advisory Tone', desc: 'Advisory boundaries are respected; no unverified actions or phantom authority authorized.' },
+  ];
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    try {
+      localStorage.setItem('trulin_pilot_reviewer_name', reviewerName);
+      localStorage.setItem('trulin_pilot_reviewer_role', reviewerRole);
+
+      const payload = {
+        message_id: message.id,
+        session_id: sessionId,
+        reviewer_name: reviewerName || 'Reviewer',
+        reviewer_role: reviewerRole || 'Legal & Policy QA',
+        verdict: verdict,
+        issue_category: verdict !== 'PASS' ? issueCategory : null,
+        checklist: checklist,
+        notes: notes || null,
+        latency_ms: meta?.latency_ms ?? null,
+        feature_flags: featureFlags,
+        wording_outcome: wording,
+        question_type: plan?.question_type ?? null,
+        depth: plan?.resolved_depth ?? null,
+      };
+
+      const res = await fetch(`/v1/chat/sessions/${sessionId}/messages/${message.id}/pilot-feedback`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      if (res.ok) {
+        if (showToast) showToast(`Pilot review submitted: ${verdict}`);
+        if (onFeedbackSubmitted) onFeedbackSubmitted(message.id, payload);
+        onClose();
+      } else {
+        const err = await res.json().catch(() => ({}));
+        if (showToast) showToast(`Failed to submit review: ${err.detail || 'Server error'}`);
+      }
+    } catch (err) {
+      console.error('Pilot review submission error', err);
+      if (showToast) showToast('Network error submitting review');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <div
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        background: 'rgba(15, 23, 42, 0.65)',
+        backdropFilter: 'blur(3px)',
+        zIndex: 10000,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '16px'
+      }}
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
+      <div
+        style={{
+          background: '#FFFFFF',
+          borderRadius: '12px',
+          width: '100%',
+          maxWidth: '740px',
+          maxHeight: '90vh',
+          display: 'flex',
+          flexDirection: 'column',
+          boxShadow: '0 25px 50px -12px rgba(15, 23, 42, 0.35)',
+          border: '1px solid #E2E8F0',
+          overflow: 'hidden'
+        }}
+      >
+        {/* Header */}
+        <div style={{
+          padding: '16px 20px',
+          borderBottom: '1px solid #E2E8F0',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          background: '#F8FAFC'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div style={{
+              width: '32px',
+              height: '32px',
+              borderRadius: '8px',
+              background: '#EEF2FF',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              border: '1px solid #C7D2FE'
+            }}>
+              <ClipboardCheck size={18} color="#4F46E5" />
+            </div>
+            <div>
+              <div style={{ fontSize: '0.96rem', fontWeight: 700, color: '#0F172A' }}>
+                Controlled Internal Pilot — Response Review
+              </div>
+              <div style={{ fontSize: '0.74rem', color: '#64748B' }}>
+                Evaluating answer quality, response experience, and governance integrity
+              </div>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#64748B', padding: '4px' }}
+          >
+            <X size={18} />
+          </button>
+        </div>
+
+        {/* Scrollable Body */}
+        <div style={{ padding: '20px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          {/* Metadata Bar */}
+          <div style={{
+            background: '#F8FAFC',
+            borderRadius: '8px',
+            border: '1px solid #E2E8F0',
+            padding: '10px 14px',
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: '16px',
+            fontSize: '0.74rem'
+          }}>
+            <div>
+              <span style={{ color: '#64748B' }}>Response ID: </span>
+              <span style={{ fontFamily: 'monospace', fontWeight: 600, color: '#0F172A' }}>
+                {message?.id ? String(message.id).slice(0, 8) : 'N/A'}
+              </span>
+            </div>
+            {meta?.latency_ms !== undefined && (
+              <div>
+                <span style={{ color: '#64748B' }}>Latency: </span>
+                <span style={{ fontWeight: 600, color: '#0F172A' }}>{meta.latency_ms} ms</span>
+              </div>
+            )}
+            {plan?.question_type && (
+              <div>
+                <span style={{ color: '#64748B' }}>Type: </span>
+                <span style={{ fontWeight: 600, color: '#2563EB', textTransform: 'capitalize' }}>
+                  {plan.question_type}
+                </span>
+              </div>
+            )}
+            {plan?.resolved_depth && (
+              <div>
+                <span style={{ color: '#64748B' }}>Depth: </span>
+                <span style={{ fontWeight: 600, color: '#7C3AED', textTransform: 'capitalize' }}>
+                  {plan.resolved_depth}
+                </span>
+              </div>
+            )}
+            <div>
+              <span style={{ color: '#64748B' }}>Flags: </span>
+              <span style={{ fontWeight: 600, color: '#047857' }}>
+                adaptive:{featureFlags.enable_adaptive_composition !== false ? 'on' : 'off'} · wording:{featureFlags.enable_llm_wording_refinement !== false ? 'on' : 'off'}
+              </span>
+            </div>
+            {wording && (
+              <div>
+                <span style={{ color: '#64748B' }}>Wording: </span>
+                <span style={{
+                  fontWeight: 600,
+                  color: wording.applied ? '#16A34A' : (wording.requested ? '#D97706' : '#64748B')
+                }}>
+                  {wording.applied ? `polished (${wording.statements_polished || 1} stmts)` : (wording.requested ? 'fallback' : 'deterministic')}
+                </span>
+              </div>
+            )}
+          </div>
+
+          {/* Form */}
+          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            {/* Verdict Selection */}
+            <div>
+              <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 700, color: '#0F172A', marginBottom: '8px' }}>
+                Overall Verdict <span style={{ color: '#DC2626' }}>*</span>
+              </label>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
+                <button
+                  type="button"
+                  onClick={() => setVerdict('PASS')}
+                  style={{
+                    padding: '12px',
+                    borderRadius: '8px',
+                    border: `2px solid ${verdict === 'PASS' ? '#16A34A' : '#E2E8F0'}`,
+                    background: verdict === 'PASS' ? '#F0FDF4' : '#FFFFFF',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: '4px',
+                    transition: 'all 0.15s ease'
+                  }}
+                >
+                  <CheckCircle2 size={20} color="#16A34A" />
+                  <span style={{ fontSize: '0.84rem', fontWeight: 700, color: verdict === 'PASS' ? '#166534' : '#334155' }}>
+                    PASS
+                  </span>
+                  <span style={{ fontSize: '0.68rem', color: '#64748B', textAlign: 'center' }}>
+                    Meets enterprise rigor & accuracy
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setVerdict('NEEDS_IMPROVEMENT')}
+                  style={{
+                    padding: '12px',
+                    borderRadius: '8px',
+                    border: `2px solid ${verdict === 'NEEDS_IMPROVEMENT' ? '#D97706' : '#E2E8F0'}`,
+                    background: verdict === 'NEEDS_IMPROVEMENT' ? '#FFFBEB' : '#FFFFFF',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: '4px',
+                    transition: 'all 0.15s ease'
+                  }}
+                >
+                  <AlertTriangle size={20} color="#D97706" />
+                  <span style={{ fontSize: '0.84rem', fontWeight: 700, color: verdict === 'NEEDS_IMPROVEMENT' ? '#92400E' : '#334155' }}>
+                    NEEDS IMPROVEMENT
+                  </span>
+                  <span style={{ fontSize: '0.68rem', color: '#64748B', textAlign: 'center' }}>
+                    Minor gaps, depth or formatting flaw
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setVerdict('UNSAFE')}
+                  style={{
+                    padding: '12px',
+                    borderRadius: '8px',
+                    border: `2px solid ${verdict === 'UNSAFE' ? '#DC2626' : '#E2E8F0'}`,
+                    background: verdict === 'UNSAFE' ? '#FEF2F2' : '#FFFFFF',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: '4px',
+                    transition: 'all 0.15s ease'
+                  }}
+                >
+                  <ShieldAlert size={20} color="#DC2626" />
+                  <span style={{ fontSize: '0.84rem', fontWeight: 700, color: verdict === 'UNSAFE' ? '#991B1B' : '#334155' }}>
+                    UNSAFE
+                  </span>
+                  <span style={{ fontSize: '0.68rem', color: '#64748B', textAlign: 'center' }}>
+                    Material mutation, hallucination, or breach
+                  </span>
+                </button>
+              </div>
+            </div>
+
+            {/* Issue Category (if not PASS) */}
+            {verdict !== 'PASS' && (
+              <div>
+                <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 700, color: '#0F172A', marginBottom: '6px' }}>
+                  Primary Failure Category <span style={{ color: '#DC2626' }}>*</span>
+                </label>
+                <select
+                  value={issueCategory}
+                  onChange={(e) => setIssueCategory(e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '8px 12px',
+                    borderRadius: '6px',
+                    border: '1px solid #CBD5E1',
+                    fontSize: '0.82rem',
+                    color: '#0F172A',
+                    background: '#FFFFFF'
+                  }}
+                >
+                  <option value="SCOPE_FAILURE">SCOPE_FAILURE (Incorrect document version, role, or temporal scope)</option>
+                  <option value="MATERIAL_MUTATION">MATERIAL_MUTATION (Numbers dropped, negation flipped, modality weakened)</option>
+                  <option value="EVIDENCE_MAPPING_ERROR">EVIDENCE_MAPPING_ERROR (Uncited statements or disconnected evidence)</option>
+                  <option value="MISSING_CONDITION">MISSING_CONDITION (Omitted essential prerequisite or carve-out)</option>
+                  <option value="SILENT_CONFLICT">SILENT_CONFLICT (Merged contradictory rules into false harmony)</option>
+                  <option value="DEPTH_QUALITY">DEPTH_QUALITY (Brief is too verbose, or Detailed lacks depth)</option>
+                  <option value="NAVIGATION_FAILURE">NAVIGATION_FAILURE (Explorer link broken or points to wrong claim)</option>
+                  <option value="OTHER">OTHER (Formatting, wording, or general usability issue)</option>
+                </select>
+              </div>
+            )}
+
+            {/* 8-Point Pilot Checklist */}
+            <div>
+              <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#0F172A', marginBottom: '8px' }}>
+                Pilot Evaluation Criteria Checklist
+              </div>
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr',
+                gap: '8px',
+                background: '#F8FAFC',
+                padding: '12px',
+                borderRadius: '8px',
+                border: '1px solid #E2E8F0'
+              }}>
+                {checklistItems.map(item => (
+                  <label
+                    key={item.key}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'flex-start',
+                      gap: '8px',
+                      cursor: 'pointer',
+                      fontSize: '0.76rem',
+                      padding: '4px'
+                    }}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={checklist[item.key]}
+                      onChange={() => toggleChecklistItem(item.key)}
+                      style={{ marginTop: '2px' }}
+                    />
+                    <div>
+                      <div style={{ fontWeight: 600, color: checklist[item.key] ? '#0F172A' : '#DC2626' }}>
+                        {item.label}
+                      </div>
+                      <div style={{ fontSize: '0.68rem', color: '#64748B', lineHeight: '1.25' }}>
+                        {item.desc}
+                      </div>
+                    </div>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            {/* Reviewer Name and Role */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+              <div>
+                <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 600, color: '#334155', marginBottom: '4px' }}>
+                  Reviewer Name
+                </label>
+                <input
+                  type="text"
+                  value={reviewerName}
+                  onChange={(e) => setReviewerName(e.target.value)}
+                  placeholder="e.g. Sarah Jenkins (Legal)"
+                  style={{
+                    width: '100%',
+                    padding: '7px 10px',
+                    borderRadius: '6px',
+                    border: '1px solid #CBD5E1',
+                    fontSize: '0.8rem'
+                  }}
+                  required
+                />
+              </div>
+              <div>
+                <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 600, color: '#334155', marginBottom: '4px' }}>
+                  Reviewer Role / Department
+                </label>
+                <input
+                  type="text"
+                  value={reviewerRole}
+                  onChange={(e) => setReviewerRole(e.target.value)}
+                  placeholder="e.g. Legal Counsel / Policy Steward"
+                  style={{
+                    width: '100%',
+                    padding: '7px 10px',
+                    borderRadius: '6px',
+                    border: '1px solid #CBD5E1',
+                    fontSize: '0.8rem'
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* Review Notes */}
+            <div>
+              <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 600, color: '#334155', marginBottom: '4px' }}>
+                Evaluator Notes & Observations
+              </label>
+              <textarea
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+                placeholder="Detail any observed edge cases, missing caveats, or suggestions..."
+                rows={3}
+                style={{
+                  width: '100%',
+                  padding: '8px 10px',
+                  borderRadius: '6px',
+                  border: '1px solid #CBD5E1',
+                  fontSize: '0.8rem',
+                  resize: 'vertical'
+                }}
+              />
+            </div>
+
+            {/* Actions */}
+            <div style={{
+              display: 'flex',
+              justifyContent: 'flex-end',
+              gap: '10px',
+              paddingTop: '12px',
+              borderTop: '1px solid #E2E8F0'
+            }}>
+              <button
+                type="button"
+                onClick={onClose}
+                style={{
+                  padding: '8px 16px',
+                  borderRadius: '6px',
+                  border: '1px solid #CBD5E1',
+                  background: '#FFFFFF',
+                  color: '#475569',
+                  fontSize: '0.8rem',
+                  fontWeight: 600,
+                  cursor: 'pointer'
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                style={{
+                  padding: '8px 18px',
+                  borderRadius: '6px',
+                  border: 'none',
+                  background: verdict === 'PASS' ? '#16A34A' : (verdict === 'UNSAFE' ? '#DC2626' : '#D97706'),
+                  color: '#FFFFFF',
+                  fontSize: '0.8rem',
+                  fontWeight: 700,
+                  cursor: isSubmitting ? 'not-allowed' : 'pointer',
+                  opacity: isSubmitting ? 0.7 : 1
+                }}
+              >
+                {isSubmitting ? 'Submitting...' : `Submit Evaluation (${verdict})`}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // Executive Evidence Source Card with Micro-Interactions
 function EvidenceSourceCard({
   citation,
@@ -1195,6 +1699,8 @@ export default function AgentChatPlayground({
   const [messageDepth, setMessageDepth] = useState({});
   const [copiedMsgId, setCopiedMsgId] = useState(null);
   const [whyThisAnswerModalData, setWhyThisAnswerModalData] = useState(null);
+  const [pilotReviewModalData, setPilotReviewModalData] = useState(null);
+  const [pilotReviewsByMsgId, setPilotReviewsByMsgId] = useState({});
   const [copiedEvidenceKey, setCopiedEvidenceKey] = useState(null);
 
   const handleCitationHover = (msgId, sourceNum) => {
@@ -1418,6 +1924,20 @@ export default function AgentChatPlayground({
         setActiveSession(data);
         setMessages(data.messages || []);
         if (onSessionChange) onSessionChange(data.id);
+
+        try {
+          const pRes = await fetch(`/v1/chat/telemetry/pilot-feedback?session_id=${data.id}`);
+          if (pRes.ok) {
+            const pData = await pRes.json();
+            const map = {};
+            (pData.evaluations || []).forEach(ev => {
+              if (ev.message_id) map[ev.message_id] = ev;
+            });
+            setPilotReviewsByMsgId(map);
+          }
+        } catch {
+          // ignore telemetry failure
+        }
       }
     } catch (err) {
       console.error("Failed to load session details", err);
@@ -3267,42 +3787,85 @@ export default function AgentChatPlayground({
                         );
                       })()}
 
-                      {/* Minimal Bottom Action Row: Copy button and optional decision badge */}
+                      {/* Minimal Bottom Action Row: Copy button, latency badge, and Pilot Review button */}
                       <div style={{
                         display: 'flex',
                         alignItems: 'center',
-                        gap: '12px',
+                        justifyContent: 'space-between',
                         marginTop: '12px',
                         paddingTop: '6px',
                         fontSize: '0.74rem',
-                        color: '#78716C'
+                        color: '#78716C',
+                        borderTop: '1px solid #F8FAFC'
                       }}>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            const copyText = meta.structured_answer?.bottom_line_answer || msg.content;
-                            navigator.clipboard.writeText(copyText);
-                            setCopiedMsgId(msg.id);
-                            if (showToast) showToast("Copied to clipboard");
-                            setTimeout(() => setCopiedMsgId(null), 2000);
-                          }}
-                          style={{
-                            background: 'none',
-                            border: 'none',
-                            cursor: 'pointer',
-                            padding: '2px 0',
-                            color: isCopied ? '#16A34A' : '#78716C',
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: '4px',
-                            fontSize: '0.74rem',
-                            fontWeight: 500
-                          }}
-                          title="Copy Answer"
-                        >
-                          {isCopied ? <Check size={13} color="#16A34A" /> : <Copy size={13} />}
-                          <span>{isCopied ? "Copied" : "Copy"}</span>
-                        </button>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const copyText = meta.structured_answer?.bottom_line_answer || msg.content;
+                              navigator.clipboard.writeText(copyText);
+                              setCopiedMsgId(msg.id);
+                              if (showToast) showToast("Copied to clipboard");
+                              setTimeout(() => setCopiedMsgId(null), 2000);
+                            }}
+                            style={{
+                              background: 'none',
+                              border: 'none',
+                              cursor: 'pointer',
+                              padding: '2px 0',
+                              color: isCopied ? '#16A34A' : '#78716C',
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '4px',
+                              fontSize: '0.74rem',
+                              fontWeight: 500
+                            }}
+                            title="Copy Answer"
+                          >
+                            {isCopied ? <Check size={13} color="#16A34A" /> : <Copy size={13} />}
+                            <span>{isCopied ? "Copied" : "Copy"}</span>
+                          </button>
+
+                          {meta?.latency_ms !== undefined && (
+                            <span style={{ fontSize: '0.70rem', color: '#94A3B8' }}>
+                              ⚡ {meta.latency_ms}ms
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Pilot Review Modal Trigger */}
+                        {(() => {
+                          const reviewed = pilotReviewsByMsgId[msg.id];
+                          return (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setPilotReviewModalData({
+                                  message: msg,
+                                  sessionId: activeSessionId
+                                });
+                              }}
+                              style={{
+                                background: reviewed ? (reviewed.verdict === 'PASS' ? '#F0FDF4' : (reviewed.verdict === 'UNSAFE' ? '#FEF2F2' : '#FFFBEB')) : '#FFFFFF',
+                                border: `1px solid ${reviewed ? (reviewed.verdict === 'PASS' ? '#86EFAC' : (reviewed.verdict === 'UNSAFE' ? '#FCA5A5' : '#FDE68A')) : '#CBD5E1'}`,
+                                borderRadius: '5px',
+                                padding: '2px 8px',
+                                cursor: 'pointer',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '4px',
+                                fontSize: '0.72rem',
+                                fontWeight: 600,
+                                color: reviewed ? (reviewed.verdict === 'PASS' ? '#166534' : (reviewed.verdict === 'UNSAFE' ? '#991B1B' : '#92400E')) : '#475569',
+                                transition: 'all 0.15s ease'
+                              }}
+                              title="Submit formal pilot acceptance review (verdict, criteria checklist, and notes)"
+                            >
+                              <ClipboardCheck size={12} color={reviewed ? (reviewed.verdict === 'PASS' ? '#16A34A' : (reviewed.verdict === 'UNSAFE' ? '#DC2626' : '#D97706')) : '#4F46E5'} />
+                              <span>{reviewed ? `Pilot: ${reviewed.verdict}` : "Pilot Review"}</span>
+                            </button>
+                          );
+                        })()}
                       </div>
                     </div>
                   )}
@@ -3460,6 +4023,18 @@ export default function AgentChatPlayground({
           data={whyThisAnswerModalData}
           onClose={() => setWhyThisAnswerModalData(null)}
           activeWorkspace={activeWorkspace}
+        />
+      )}
+
+      {/* Controlled Pilot Review Modal */}
+      {pilotReviewModalData && (
+        <PilotReviewModal
+          data={pilotReviewModalData}
+          onClose={() => setPilotReviewModalData(null)}
+          onFeedbackSubmitted={(msgId, feedback) => {
+            setPilotReviewsByMsgId(prev => ({ ...prev, [msgId]: feedback }));
+          }}
+          showToast={showToast}
         />
       )}
     </div>

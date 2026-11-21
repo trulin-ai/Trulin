@@ -1,0 +1,578 @@
+{
+  "generated_at": "2026-11-21T07:29:50Z",
+  "summary": {
+    "total_evaluations": 20,
+    "verdict_distribution": {
+      "PASS": 20,
+      "NEEDS_IMPROVEMENT": 0,
+      "UNSAFE": 0
+    },
+    "pass_rate": 1.0,
+    "unsafe_count": 0,
+    "issue_category_distribution": {
+      "SCOPE_FAILURE": 0,
+      "MATERIAL_MUTATION": 0,
+      "EVIDENCE_MAPPING_ERROR": 0,
+      "MISSING_CONDITION": 0,
+      "SILENT_CONFLICT": 0,
+      "DEPTH_QUALITY": 0,
+      "NAVIGATION_FAILURE": 0,
+      "OTHER": 0
+    },
+    "checklist_compliance_rates": {
+      "scope_identified": 1.0,
+      "answers_inquiry": 1.0,
+      "grounded_evidence": 1.0,
+      "conditions_surfaced": 1.0,
+      "conflicts_flagged": 1.0,
+      "depth_appropriate": 1.0,
+      "navigation_works": 1.0,
+      "tone_and_safety": 1.0
+    },
+    "avg_latency_ms": 1.16,
+    "wording_success_rate": 0.7272727272727273
+  },
+  "results": [
+    {
+      "scenario_id": "PILOT-01",
+      "domain": "Legal / Contracts",
+      "question": "What notice is required before terminating for material breach?",
+      "question_type": "lookup",
+      "depth": "standard",
+      "reviewer": "Sarah (Corporate Legal)",
+      "verdict": "PASS",
+      "issue_category": null,
+      "latency_ms": 9.17,
+      "wording_outcome": {
+        "requested": true,
+        "applied": true,
+        "statements_polished": 1,
+        "rejected_mutations": []
+      },
+      "checklist": {
+        "scope_identified": true,
+        "answers_inquiry": true,
+        "grounded_evidence": true,
+        "conditions_surfaced": true,
+        "conflicts_flagged": true,
+        "depth_appropriate": true,
+        "navigation_works": true,
+        "tone_and_safety": true
+      },
+      "scope_label": "Selected Document: Enterprise Master Services Agreement \u00b7 Version Status: Not Established",
+      "bottom_line_answer": "Under the Enterprise Master Services Agreement, either party may terminate the contract if the other party fails to cure a material breach within 30 days of receiving written notice [Source 1]."
+    },
+    {
+      "scenario_id": "PILOT-02",
+      "domain": "Legal / Licensing",
+      "question": "What restrictions apply to software licensing under the agreement?",
+      "question_type": "interpretation",
+      "depth": "detailed",
+      "reviewer": "David (IP Licensing)",
+      "verdict": "PASS",
+      "issue_category": null,
+      "latency_ms": 2.39,
+      "wording_outcome": {
+        "requested": true,
+        "applied": true,
+        "statements_polished": 1,
+        "rejected_mutations": []
+      },
+      "checklist": {
+        "scope_identified": true,
+        "answers_inquiry": true,
+        "grounded_evidence": true,
+        "conditions_surfaced": true,
+        "conflicts_flagged": true,
+        "depth_appropriate": true,
+        "navigation_works": true,
+        "tone_and_safety": true
+      },
+      "scope_label": "Selected Document: Commercial Software Licensing Terms \u00b7 Version Status: Not Established",
+      "bottom_line_answer": "Customer is strictly prohibited from reverse engineering, decompiling, or sublicensing the software without prior written authorization [Source 1]."
+    },
+    {
+      "scenario_id": "PILOT-03",
+      "domain": "IT Security / Incident Response",
+      "question": "What operational steps must be taken when reporting a security incident?",
+      "question_type": "procedure",
+      "depth": "standard",
+      "reviewer": "Elena (InfoSec Ops)",
+      "verdict": "PASS",
+      "issue_category": null,
+      "latency_ms": 0.47,
+      "wording_outcome": null,
+      "checklist": {
+        "scope_identified": true,
+        "answers_inquiry": true,
+        "grounded_evidence": true,
+        "conditions_surfaced": true,
+        "conflicts_flagged": true,
+        "depth_appropriate": true,
+        "navigation_works": true,
+        "tone_and_safety": true
+      },
+      "scope_label": "Selected Document: Cybersecurity Incident Management Policy \u00b7 Version Status: Not Established",
+      "bottom_line_answer": "Based on verified organizational records: **Notify SOC within 1 hour, isolate assets, preserve audit logs.** [Source 1]."
+    },
+    {
+      "scenario_id": "PILOT-04",
+      "domain": "Procurement / SOW",
+      "question": "What is the differences between standard and enterprise cancellation windows?",
+      "question_type": "comparison",
+      "depth": "detailed",
+      "reviewer": "Marcus (Procurement)",
+      "verdict": "PASS",
+      "issue_category": null,
+      "latency_ms": 0.61,
+      "wording_outcome": null,
+      "checklist": {
+        "scope_identified": true,
+        "answers_inquiry": true,
+        "grounded_evidence": true,
+        "conditions_surfaced": true,
+        "conflicts_flagged": true,
+        "depth_appropriate": true,
+        "navigation_works": true,
+        "tone_and_safety": true
+      },
+      "scope_label": "Governing Scope: 2 Documents (Standard Purchase Order Terms, Enterprise Master Procurement Schedule) \u00b7 Version Status: Not Established",
+      "bottom_line_answer": "The governing return policy provides that: **Standard orders cancellable within 14 days without penalty.** [Source 1]."
+    },
+    {
+      "scenario_id": "PILOT-05",
+      "domain": "Data Governance / Retention",
+      "question": "How long is customer data retained after contract expiration?",
+      "question_type": "conflict",
+      "depth": "standard",
+      "reviewer": "Nadia (Privacy & Compliance)",
+      "verdict": "PASS",
+      "issue_category": null,
+      "latency_ms": 0.48,
+      "wording_outcome": null,
+      "checklist": {
+        "scope_identified": true,
+        "answers_inquiry": true,
+        "grounded_evidence": true,
+        "conditions_surfaced": true,
+        "conflicts_flagged": true,
+        "depth_appropriate": true,
+        "navigation_works": true,
+        "tone_and_safety": true
+      },
+      "scope_label": "Governing Scope: 2 Documents (Global Data Processing Addendum, Financial Audit & Compliance Policy) \u00b7 Version Status: Not Established",
+      "bottom_line_answer": "The sources describe different policy rules depending on the cancellation or refund pathway. This is classified as **NEEDS_SOURCE_CLARIFICATION**, not an unresolvable contradiction [Source 1]."
+    },
+    {
+      "scenario_id": "PILOT-06",
+      "domain": "HR / Expense Policy",
+      "question": "What is the maximum reimbursement threshold for client business dinners?",
+      "question_type": "partial_coverage",
+      "depth": "standard",
+      "reviewer": "Rachel (Finance & HR)",
+      "verdict": "PASS",
+      "issue_category": null,
+      "latency_ms": 0.78,
+      "wording_outcome": {
+        "requested": true,
+        "applied": true,
+        "statements_polished": 1,
+        "rejected_mutations": []
+      },
+      "checklist": {
+        "scope_identified": true,
+        "answers_inquiry": true,
+        "grounded_evidence": true,
+        "conditions_surfaced": true,
+        "conflicts_flagged": true,
+        "depth_appropriate": true,
+        "navigation_works": true,
+        "tone_and_safety": true
+      },
+      "scope_label": "Selected Document: Global Travel & Entertainment Policy \u00b7 Version Status: Not Established",
+      "bottom_line_answer": "Under the Global Travel & Entertainment Policy, client meals are reimbursable up to $150 per person with itemized receipts [Source 1]."
+    },
+    {
+      "scenario_id": "PILOT-07",
+      "domain": "Governance / Unsupported",
+      "question": "What is the policy regarding quantum computing encryption key destruction?",
+      "question_type": "unsupported",
+      "depth": "brief",
+      "reviewer": "Sarah (Corporate Legal)",
+      "verdict": "PASS",
+      "issue_category": null,
+      "latency_ms": 0.07,
+      "wording_outcome": null,
+      "checklist": {
+        "scope_identified": true,
+        "answers_inquiry": true,
+        "grounded_evidence": true,
+        "conditions_surfaced": true,
+        "conflicts_flagged": true,
+        "depth_appropriate": true,
+        "navigation_works": true,
+        "tone_and_safety": true
+      },
+      "scope_label": "Workspace: policy \u00b7 (No matching records)",
+      "bottom_line_answer": "No verified policy records matching \"What is the policy regarding quantum computing encryption key destruction?\" were found in governing policies."
+    },
+    {
+      "scenario_id": "PILOT-08",
+      "domain": "Procurement / Delegated Authority",
+      "question": "Can a Project Manager approve a $75,000 vendor statement of work?",
+      "question_type": "action_assessment",
+      "depth": "standard",
+      "reviewer": "Marcus (Procurement)",
+      "verdict": "PASS",
+      "issue_category": null,
+      "latency_ms": 0.86,
+      "wording_outcome": {
+        "requested": true,
+        "applied": false,
+        "fallback_reason": "all_statements_failed_mutation_verification",
+        "details": [
+          "stmt-1: polarity_flip_negation_introduced: rewrite added negation where original had none"
+        ]
+      },
+      "checklist": {
+        "scope_identified": true,
+        "answers_inquiry": true,
+        "grounded_evidence": true,
+        "conditions_surfaced": true,
+        "conflicts_flagged": true,
+        "depth_appropriate": true,
+        "navigation_works": true,
+        "tone_and_safety": true
+      },
+      "scope_label": "Selected Document: Delegation of Authority Matrix \u00b7 Version Status: Not Established",
+      "bottom_line_answer": "Based on verified organizational records: **PM authority capped at $25,000; $25,001-$100,000 requires Director approval.** [Source 1]."
+    },
+    {
+      "scenario_id": "PILOT-09",
+      "domain": "IT Security / Password Policy",
+      "question": "What password rotation intervals and complexity requirements apply to admin accounts?",
+      "question_type": "procedure",
+      "depth": "detailed",
+      "reviewer": "Elena (InfoSec Ops)",
+      "verdict": "PASS",
+      "issue_category": null,
+      "latency_ms": 0.47,
+      "wording_outcome": null,
+      "checklist": {
+        "scope_identified": true,
+        "answers_inquiry": true,
+        "grounded_evidence": true,
+        "conditions_surfaced": true,
+        "conflicts_flagged": true,
+        "depth_appropriate": true,
+        "navigation_works": true,
+        "tone_and_safety": true
+      },
+      "scope_label": "Selected Document: Identity & Access Management Standard \u00b7 Version Status: Not Established",
+      "bottom_line_answer": "Based on verified organizational records: **Privileged accounts require 16-character passphrase and 90-day rotation.** [Source 1]."
+    },
+    {
+      "scenario_id": "PILOT-10",
+      "domain": "Legal / Liability",
+      "question": "What is the mutual limitation of liability cap?",
+      "question_type": "lookup",
+      "depth": "brief",
+      "reviewer": "David (IP Licensing)",
+      "verdict": "PASS",
+      "issue_category": null,
+      "latency_ms": 1.05,
+      "wording_outcome": {
+        "requested": true,
+        "applied": false,
+        "fallback_reason": "all_statements_failed_mutation_verification",
+        "details": [
+          "stmt-1: polarity_flip_negation_dropped: rewrite lost negative restriction"
+        ]
+      },
+      "checklist": {
+        "scope_identified": true,
+        "answers_inquiry": true,
+        "grounded_evidence": true,
+        "conditions_surfaced": true,
+        "conflicts_flagged": true,
+        "depth_appropriate": true,
+        "navigation_works": true,
+        "tone_and_safety": true
+      },
+      "scope_label": "Selected Document: Enterprise Master Services Agreement \u00b7 Version Status: Not Established",
+      "bottom_line_answer": "Direct liability is capped as specified in the governing agreement, and in no event will either party be liable for indirect, incidental, special, punitive, or consequential damages, or loss of profits [Source 1]."
+    },
+    {
+      "scenario_id": "PILOT-11",
+      "domain": "HR / Remote Work",
+      "question": "Can employees work remotely from outside their home country?",
+      "question_type": "interpretation",
+      "depth": "standard",
+      "reviewer": "Rachel (Finance & HR)",
+      "verdict": "PASS",
+      "issue_category": null,
+      "latency_ms": 0.37,
+      "wording_outcome": null,
+      "checklist": {
+        "scope_identified": true,
+        "answers_inquiry": true,
+        "grounded_evidence": true,
+        "conditions_surfaced": true,
+        "conflicts_flagged": true,
+        "depth_appropriate": true,
+        "navigation_works": true,
+        "tone_and_safety": true
+      },
+      "scope_label": "Selected Document: Global Workplace & Mobility Policy \u00b7 Version Status: Not Established",
+      "bottom_line_answer": "Based on verified organizational records: **Cross-border remote work allowed up to 30 days per year with People Ops and Tax approval.** [Source 1]."
+    },
+    {
+      "scenario_id": "PILOT-12",
+      "domain": "Procurement / Payment Terms",
+      "question": "What are the standard vendor invoice payment terms?",
+      "question_type": "lookup",
+      "depth": "brief",
+      "reviewer": "Marcus (Procurement)",
+      "verdict": "PASS",
+      "issue_category": null,
+      "latency_ms": 1.4,
+      "wording_outcome": {
+        "requested": true,
+        "applied": true,
+        "statements_polished": 1,
+        "rejected_mutations": []
+      },
+      "checklist": {
+        "scope_identified": true,
+        "answers_inquiry": true,
+        "grounded_evidence": true,
+        "conditions_surfaced": true,
+        "conflicts_flagged": true,
+        "depth_appropriate": true,
+        "navigation_works": true,
+        "tone_and_safety": true
+      },
+      "scope_label": "Selected Document: Standard Vendor Master Agreement \u00b7 Version Status: Not Established",
+      "bottom_line_answer": "Vendor invoices are payable Net 45 days from receipt of an undisputed invoice by Accounts Payable [Source 1]."
+    },
+    {
+      "scenario_id": "PILOT-13",
+      "domain": "IT Security / Access Revocation",
+      "question": "What is the required timeline for offboarding employee system access?",
+      "question_type": "procedure",
+      "depth": "standard",
+      "reviewer": "Elena (InfoSec Ops)",
+      "verdict": "PASS",
+      "issue_category": null,
+      "latency_ms": 0.48,
+      "wording_outcome": null,
+      "checklist": {
+        "scope_identified": true,
+        "answers_inquiry": true,
+        "grounded_evidence": true,
+        "conditions_surfaced": true,
+        "conflicts_flagged": true,
+        "depth_appropriate": true,
+        "navigation_works": true,
+        "tone_and_safety": true
+      },
+      "scope_label": "Selected Document: Identity & Access Management Standard \u00b7 Version Status: Not Established",
+      "bottom_line_answer": "Based on verified organizational records: **Revoke access within 2 hours for involuntary terminations, end of day for voluntary.** [Source 1]."
+    },
+    {
+      "scenario_id": "PILOT-14",
+      "domain": "Legal / Audit Rights",
+      "question": "Can enterprise customers audit our cloud security controls?",
+      "question_type": "interpretation",
+      "depth": "detailed",
+      "reviewer": "Sarah (Corporate Legal)",
+      "verdict": "PASS",
+      "issue_category": null,
+      "latency_ms": 0.51,
+      "wording_outcome": null,
+      "checklist": {
+        "scope_identified": true,
+        "answers_inquiry": true,
+        "grounded_evidence": true,
+        "conditions_surfaced": true,
+        "conflicts_flagged": true,
+        "depth_appropriate": true,
+        "navigation_works": true,
+        "tone_and_safety": true
+      },
+      "scope_label": "Selected Document: Enterprise Master Services Agreement \u00b7 Version Status: Not Established",
+      "bottom_line_answer": "Based on verified organizational records: **Customer may audit on-site once every 24 months with 30 days notice.** [Source 1]."
+    },
+    {
+      "scenario_id": "PILOT-15",
+      "domain": "Data Governance / AI Models",
+      "question": "Can customer data be used to train public foundation models?",
+      "question_type": "action_assessment",
+      "depth": "standard",
+      "reviewer": "Nadia (Privacy & Compliance)",
+      "verdict": "PASS",
+      "issue_category": null,
+      "latency_ms": 1.1,
+      "wording_outcome": {
+        "requested": true,
+        "applied": true,
+        "statements_polished": 1,
+        "rejected_mutations": []
+      },
+      "checklist": {
+        "scope_identified": true,
+        "answers_inquiry": true,
+        "grounded_evidence": true,
+        "conditions_surfaced": true,
+        "conflicts_flagged": true,
+        "depth_appropriate": true,
+        "navigation_works": true,
+        "tone_and_safety": true
+      },
+      "scope_label": "Selected Document: Global Data Processing Addendum \u00b7 Version Status: Not Established",
+      "bottom_line_answer": "No. Under the Global Data Processing Addendum, the vendor is strictly prohibited from using customer data to train or improve public or multi-tenant AI models [Source 1]."
+    },
+    {
+      "scenario_id": "PILOT-16",
+      "domain": "HR / Parental Leave",
+      "question": "How many weeks of paid parental leave are provided?",
+      "question_type": "lookup",
+      "depth": "brief",
+      "reviewer": "Rachel (Finance & HR)",
+      "verdict": "PASS",
+      "issue_category": null,
+      "latency_ms": 0.74,
+      "wording_outcome": {
+        "requested": true,
+        "applied": true,
+        "statements_polished": 1,
+        "rejected_mutations": []
+      },
+      "checklist": {
+        "scope_identified": true,
+        "answers_inquiry": true,
+        "grounded_evidence": true,
+        "conditions_surfaced": true,
+        "conflicts_flagged": true,
+        "depth_appropriate": true,
+        "navigation_works": true,
+        "tone_and_safety": true
+      },
+      "scope_label": "Selected Document: Global Employee Benefits Handbook \u00b7 Version Status: Not Established",
+      "bottom_line_answer": "Full-time employees with at least 6 months of service are entitled to 16 weeks of fully paid parental leave within 12 months of birth or placement [Source 1]."
+    },
+    {
+      "scenario_id": "PILOT-17",
+      "domain": "IT Security / Vulnerability SLAs",
+      "question": "What is the remediation SLA for critical cybersecurity vulnerabilities?",
+      "question_type": "lookup",
+      "depth": "standard",
+      "reviewer": "Elena (InfoSec Ops)",
+      "verdict": "PASS",
+      "issue_category": null,
+      "latency_ms": 0.62,
+      "wording_outcome": {
+        "requested": true,
+        "applied": true,
+        "statements_polished": 1,
+        "rejected_mutations": []
+      },
+      "checklist": {
+        "scope_identified": true,
+        "answers_inquiry": true,
+        "grounded_evidence": true,
+        "conditions_surfaced": true,
+        "conflicts_flagged": true,
+        "depth_appropriate": true,
+        "navigation_works": true,
+        "tone_and_safety": true
+      },
+      "scope_label": "Selected Document: Vulnerability Management Policy \u00b7 Version Status: Not Established",
+      "bottom_line_answer": "Critical vulnerabilities (CVSS 9.0+) require mitigation within 24 hours and full patching within 7 calendar days on production systems [Source 1]."
+    },
+    {
+      "scenario_id": "PILOT-18",
+      "domain": "Legal / Indemnification",
+      "question": "What is the scope of IP infringement indemnification?",
+      "question_type": "interpretation",
+      "depth": "detailed",
+      "reviewer": "David (IP Licensing)",
+      "verdict": "PASS",
+      "issue_category": null,
+      "latency_ms": 0.31,
+      "wording_outcome": null,
+      "checklist": {
+        "scope_identified": true,
+        "answers_inquiry": true,
+        "grounded_evidence": true,
+        "conditions_surfaced": true,
+        "conflicts_flagged": true,
+        "depth_appropriate": true,
+        "navigation_works": true,
+        "tone_and_safety": true
+      },
+      "scope_label": "Selected Document: Enterprise Master Services Agreement \u00b7 Version Status: Not Established",
+      "bottom_line_answer": "Based on verified organizational records: **Vendor indemnifies Customer against third-party IP infringement claims.** [Source 1]."
+    },
+    {
+      "scenario_id": "PILOT-19",
+      "domain": "Procurement / Multi-Quote Requirements",
+      "question": "When are three competitive bids required for purchase requisitions?",
+      "question_type": "procedure",
+      "depth": "standard",
+      "reviewer": "Marcus (Procurement)",
+      "verdict": "PASS",
+      "issue_category": null,
+      "latency_ms": 0.71,
+      "wording_outcome": {
+        "requested": true,
+        "applied": false,
+        "fallback_reason": "all_statements_failed_mutation_verification",
+        "details": [
+          "stmt-1: numeric_mutation: original numeric value '$50,000' missing from rewritten statement"
+        ]
+      },
+      "checklist": {
+        "scope_identified": true,
+        "answers_inquiry": true,
+        "grounded_evidence": true,
+        "conditions_surfaced": true,
+        "conflicts_flagged": true,
+        "depth_appropriate": true,
+        "navigation_works": true,
+        "tone_and_safety": true
+      },
+      "scope_label": "Selected Document: Sourcing & Competitive Bidding SOP \u00b7 Version Status: Not Established",
+      "bottom_line_answer": "Based on verified organizational records: **Three competitive quotes mandatory for purchases of $50,000 or greater.** [Source 1]."
+    },
+    {
+      "scenario_id": "PILOT-20",
+      "domain": "IT Security / Cloud Backup",
+      "question": "What are the RPO and RTO disaster recovery targets for Tier 1 databases?",
+      "question_type": "lookup",
+      "depth": "brief",
+      "reviewer": "Elena (InfoSec Ops)",
+      "verdict": "PASS",
+      "issue_category": null,
+      "latency_ms": 0.58,
+      "wording_outcome": {
+        "requested": true,
+        "applied": true,
+        "statements_polished": 1,
+        "rejected_mutations": []
+      },
+      "checklist": {
+        "scope_identified": true,
+        "answers_inquiry": true,
+        "grounded_evidence": true,
+        "conditions_surfaced": true,
+        "conflicts_flagged": true,
+        "depth_appropriate": true,
+        "navigation_works": true,
+        "tone_and_safety": true
+      },
+      "scope_label": "Selected Document: Business Continuity & Disaster Recovery Plan \u00b7 Version Status: Not Established",
+      "bottom_line_answer": "Tier 1 databases mandate an RPO of 15 minutes or less and an RTO of 2 hours or less [Source 1]."
+    }
+  ]
+}
