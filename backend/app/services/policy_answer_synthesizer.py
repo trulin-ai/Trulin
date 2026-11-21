@@ -701,16 +701,21 @@ class PolicyAnswerSynthesizer:
             grounding_score = 1.0
             rec_action = None
 
-        # 8. Build Schema v2 Explanation Blocks
-        explanation_blocks = cls.build_explanation_blocks(
-            plan=plan,
-            bottom_line_answer=bottom_line,
-            verified_claims=verified_claims_used,
-            citations=citations,
-            conditions=all_conditions,
-            exceptions=all_exceptions,
-            conflict_analysis=conflict_analysis,
-        )
+        # 8. Build Schema v2 Explanation Blocks (toggled via feature flag)
+        from app.core.config import settings
+        is_adaptive_enabled = getattr(settings, "enable_adaptive_composition", True)
+        if is_adaptive_enabled:
+            explanation_blocks = cls.build_explanation_blocks(
+                plan=plan,
+                bottom_line_answer=bottom_line,
+                verified_claims=verified_claims_used,
+                citations=citations,
+                conditions=all_conditions,
+                exceptions=all_exceptions,
+                conflict_analysis=conflict_analysis,
+            )
+        else:
+            explanation_blocks = []
 
         return PolicyAnswerContract(
             schema_version="2",

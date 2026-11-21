@@ -375,3 +375,20 @@ def test_synthesizer_produces_synchronized_dual_envelope(sample_citations):
     assert "### 🛡️ Bottom-Line Answer" in markdown
     assert "[Source 1]" in markdown
     assert "🔒 **Verification Status:** `VERIFIED`" in markdown
+
+
+def test_feature_flag_rollback_adaptive_composition(sample_citations, monkeypatch):
+    """Setting enable_adaptive_composition = False safely falls back to V1 contract structure."""
+    from app.core.config import settings
+    monkeypatch.setattr(settings, "enable_adaptive_composition", False)
+
+    contract = PolicyAnswerSynthesizer.synthesize_structured(
+        query="What notice is required before terminating for material breach?",
+        citations=sample_citations,
+        workspace="procurement",
+    )
+    assert contract.explanation_blocks == []
+    assert contract.bottom_line_answer.startswith("Either party may terminate")
+    # Verify markdown still renders cleanly without explanation blocks
+    md = PolicyAnswerSynthesizer.render_markdown(contract)
+    assert "### 🛡️ Bottom-Line Answer" in md
