@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import {
   Zap,
   Filter,
@@ -56,7 +57,9 @@ export default function VisualLineageGraph({
   onAssetChange,
   onClaimChange,
   initialSection = 'summary',
-  onSectionChange
+  onSectionChange,
+  onOpenFileBrowser,
+  onLocateSource
 }) {
   const { user } = useAuth();
   const [deleteTargetAsset, setDeleteTargetAsset] = useState(null);
@@ -141,6 +144,7 @@ export default function VisualLineageGraph({
   const [docReaderSearch, setDocReaderSearch] = useState('');
   const [docReaderClauseFilter, setDocReaderClauseFilter] = useState('all'); // 'all' | 'conflicted' | 'verified'
   const [highlightedClaimIdInReader, setHighlightedClaimIdInReader] = useState(null);
+  const [locateDocClaimTrigger, setLocateDocClaimTrigger] = useState(null);
   const [isAssetDirectoryOpen, setIsAssetDirectoryOpen] = useState(false);
   const [isAssetDropdownOpen, setIsAssetDropdownOpen] = useState(false);
   const [assetDropdownSearch, setAssetDropdownSearch] = useState('');
@@ -373,6 +377,39 @@ export default function VisualLineageGraph({
   const decisionsList = useMemo(() => {
     return graphData?.nodes?.filter(n => n.type === 'decision') || [];
   }, [graphData]);
+
+  // Resolve parent document and source for any claim
+  const resolveClaimProvenance = useCallback((cl) => {
+    if (!cl) return { parentDoc: null, parentSrc: null, resolvedDocId: null, resolvedSrcId: null };
+    const clDocId = cl.document_id || cl.data?.document_id || cl.data?.doc_id || cl.doc_id;
+    const clRawId = String(cl.id || '').replace(/^cl_/, '');
+    const docEdge = graphData?.edges?.find(e =>
+      (e.target === cl.id || e.target === `cl_${cl.id}` || e.target === clRawId || e.target === `cl_${clRawId}`) && e.source.startsWith('doc_')
+    );
+    const resolvedDocId = docEdge
+      ? docEdge.source.replace(/^doc_/, '')
+      : (clDocId ? String(clDocId).replace(/^doc_/, '') : null);
+
+    const parentDoc = (resolvedDocId
+      ? documentsList.find(d => String(d.id).replace(/^doc_/, '') === resolvedDocId)
+      : null) || (docEdge ? graphData?.nodes?.find(n => n.id === docEdge.source) : null);
+
+    const parentDocSrcId = parentDoc?.data?.source_id || parentDoc?.source_id;
+    const srcEdge = parentDoc
+      ? graphData?.edges?.find(e => (e.target === parentDoc.id || e.target === `doc_${parentDoc.id}`) && e.source.startsWith('src_'))
+      : null;
+    const resolvedSrcId = srcEdge
+      ? srcEdge.source.replace(/^src_/, '')
+      : (parentDocSrcId ? String(parentDocSrcId).replace(/^src_/, '') : null);
+    const clSrcId = cl.source_id || cl.data?.source_id;
+
+    const parentSrc = (resolvedSrcId
+      ? sourcesList.find(s => String(s.id).replace(/^src_/, '') === resolvedSrcId)
+      : null) || (srcEdge ? graphData?.nodes?.find(n => n.id === srcEdge.source) : null)
+      || (clSrcId ? sourcesList.find(s => String(s.id).replace(/^src_/, '') === String(clSrcId).replace(/^src_/, '')) : null);
+
+    return { parentDoc, parentSrc, resolvedDocId, resolvedSrcId };
+  }, [graphData, documentsList, sourcesList]);
 
   const visualizeNodeInDag = (nodeId, nodeLabel, isResolvedConflict = false) => {
     if (isResolvedConflict) {
@@ -915,7 +952,7 @@ export default function VisualLineageGraph({
     if (groupCleanClaims) {
       const allClaims = result.filter(n => n.type === 'claim');
       const nonClaims = result.filter(n => n.type !== 'claim');
-      
+
       const cleanClaims = [];
       const anomalousClaims = [];
 
@@ -1610,7 +1647,7 @@ export default function VisualLineageGraph({
         const cp2X = x2 - (isForward ? dx : -dx);
         const cp2Y = y2;
         const pathData = `M ${x1} ${y1} C ${cp1X} ${cp1Y}, ${cp2X} ${cp2Y}, ${x2} ${y2}`;
-        
+
         // Exact cubic Bezier parametric midpoint at t = 0.5
         const midX = 0.125 * x1 + 0.375 * cp1X + 0.375 * cp2X + 0.125 * x2;
         const midY = 0.125 * y1 + 0.375 * cp1Y + 0.375 * cp2Y + 0.125 * y2;
@@ -1841,7 +1878,7 @@ export default function VisualLineageGraph({
 
     const scaleX = containerW / graphW;
     const scaleY = containerH / graphH;
-    
+
     // Auto-fit camera: Maximize at start with 60% (0.60) minimum zoom
     const minZoomLimit = 0.60;
     const newZoom = Math.min(0.95, Math.max(minZoomLimit, Math.min(scaleX, scaleY) * 0.90));
@@ -2006,8 +2043,8 @@ export default function VisualLineageGraph({
         const clA = cItem?.claimAId ? String(cItem.claimAId).replace(/^cl_/, '') : null;
         const clB = cItem?.claimBId ? String(cItem.claimBId).replace(/^cl_/, '') : null;
         return claimIds.has(cItem?.claimAId) || claimIds.has(cItem?.claimBId) ||
-               (clA && (claimIds.has(clA) || claimIds.has(`cl_${clA}`))) ||
-               (clB && (claimIds.has(clB) || claimIds.has(`cl_${clB}`)));
+          (clA && (claimIds.has(clA) || claimIds.has(`cl_${clA}`))) ||
+          (clB && (claimIds.has(clB) || claimIds.has(`cl_${clB}`)));
       });
       const activeAssetConflicts = assetConflicts.filter(c => {
         const st = (c.status || '').toLowerCase();
@@ -2094,7 +2131,15 @@ export default function VisualLineageGraph({
       {/* ========================================================= */}
       {/* VAULT HEADER & QUICK FILTER (DAG / CONFLICTS / CLAIMS)     */}
       {/* ========================================================= */}
-      {!selectedAsset360 && (vaultSubTab === 'dag' || vaultSubTab === 'conflicts' || vaultSubTab === 'claims') && (
+      {!selectedAsset360 && vaultSubTab === 'claims' && (
+        <div style={{ padding: '0 0 2px 0' }}>
+          <div style={{ fontSize: '0.94rem', fontWeight: 800, color: '#0F172A' }}>
+            Atomic Claims & Decisions
+          </div>
+        </div>
+      )}
+
+      {!selectedAsset360 && (vaultSubTab === 'dag' || vaultSubTab === 'conflicts') && (
         <div style={{
           display: 'flex',
           alignItems: 'center',
@@ -2104,7 +2149,7 @@ export default function VisualLineageGraph({
           padding: '0 0 4px 0'
         }}>
           <div style={{ fontSize: '0.94rem', fontWeight: 800, color: '#0F172A', textTransform: 'capitalize' }}>
-            {vaultSubTab === 'dag' ? 'Full Canvas DAG Lineage' : vaultSubTab === 'conflicts' ? 'Enterprise Conflicts Registry' : 'Atomic Claims & Decisions'}
+            {vaultSubTab === 'dag' ? 'Full Canvas DAG Lineage' : 'Enterprise Conflicts Registry'}
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
@@ -2680,186 +2725,385 @@ export default function VisualLineageGraph({
                   {selectedAsset360.description || `Enterprise normalized governance asset. Deconstructed into atomic facts and verified against cross-policy contradictions.`}
                 </p>
 
-              {/* Core Metrics Summary */}
-              <div style={{
-                border: '1px solid #E2E8F0',
-                borderRadius: '8px',
-                overflow: 'hidden',
-                background: '#FFFFFF'
-              }}>
-                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.74rem' }}>
-                  <tbody>
+                {/* Core Metrics Summary */}
+                <div style={{
+                  border: '1px solid #E2E8F0',
+                  borderRadius: '8px',
+                  overflow: 'hidden',
+                  background: '#FFFFFF'
+                }}>
+                  <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.74rem' }}>
+                    <tbody>
+                      {[
+                        {
+                          label: 'Atomic Claims',
+                          value: selectedAsset360.claims.length,
+                          badge: `${verifiedClaimsCount} verified`,
+                          badgeColor: '#16A34A',
+                          badgeBg: '#DCFCE7'
+                        },
+                        {
+                          label: 'Contradictions',
+                          value: selectedAsset360.activeConflicts.length,
+                          valueColor: selectedAsset360.activeConflicts.length > 0 ? '#EA580C' : '#0F172A',
+                          badge: selectedAsset360.conflicts.length > 0
+                            ? `${selectedAsset360.activeConflicts.length} active / ${selectedAsset360.conflicts.length} total`
+                            : '0 detected',
+                          badgeColor: selectedAsset360.activeConflicts.length > 0 ? '#C2410C' : '#16A34A',
+                          badgeBg: selectedAsset360.activeConflicts.length > 0 ? '#FFEDD5' : '#DCFCE7'
+                        },
+                        {
+                          label: 'Trust Integrity',
+                          value: `${trustPercent}%`,
+                          valueColor: '#16A34A',
+                          badge: trustPercent >= 70 ? 'High Trust' : trustPercent >= 40 ? 'Moderate' : 'Low',
+                          badgeColor: '#059669',
+                          badgeBg: '#ECFDF5'
+                        },
+                        {
+                          label: 'Downstream AI Impact',
+                          value: selectedAsset360.decisions.length,
+                          valueColor: '#0284C7',
+                          badge: `${selectedAsset360.decisions.length} Decisions`,
+                          badgeColor: '#0284C7',
+                          badgeBg: '#E0F2FE'
+                        }
+                      ].map((row, idx, arr) => (
+                        <tr
+                          key={row.label}
+                          style={{
+                            borderBottom: idx < arr.length - 1 ? '1px solid #F1F5F9' : 'none'
+                          }}
+                        >
+                          <td style={{ padding: '6px 10px', color: '#475569', fontWeight: 600, width: '40%' }}>
+                            {row.label}
+                          </td>
+                          <td style={{ padding: '6px 10px' }}>
+                            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+                              <span style={{ fontSize: '0.84rem', fontWeight: 800, color: row.valueColor || '#0F172A' }}>
+                                {row.value}
+                              </span>
+                              {row.badge && (
+                                <span style={{
+                                  fontSize: '0.64rem',
+                                  fontWeight: 700,
+                                  color: row.badgeColor,
+                                  background: row.badgeBg || '#F1F5F9',
+                                  padding: '1px 5px',
+                                  borderRadius: '4px'
+                                }}>
+                                  {row.badge}
+                                </span>
+                              )}
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* Complete Metadata & Technical Specifications Table */}
+                <div style={{
+                  background: '#FFFFFF',
+                  border: '1px solid #E2E8F0',
+                  borderRadius: '8px',
+                  overflow: 'hidden'
+                }}>
+                  <div style={{
+                    padding: '8px 12px',
+                    background: '#F8FAFC',
+                    borderBottom: '1px solid #E2E8F0',
+                    fontSize: '0.72rem',
+                    fontWeight: 800,
+                    color: '#334155',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.04em',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px'
+                  }}>
+                    <Layers size={12} color="#475569" />
+                    <span>Technical Specifications</span>
+                  </div>
+
+                  <div style={{ display: 'flex', flexDirection: 'column' }}>
                     {[
+                      { label: 'Artifact GUID', value: docId, isMono: true },
+                      { label: 'Parent Source', value: selectedAsset360.parentSource?.label || 'Direct File Upload' },
+                      { label: 'Classification', value: 'Restricted Policy Standard' },
+                      { label: 'Active Version', value: latestVer ? `v${latestVer.version_number}` : 'v1.0' },
+                      { label: 'Pipeline Engine', value: 'Trulin Semantic Deconstruction' },
+                      { label: 'Department / Scope', value: nodeData.domain || (activeWorkspace?.label || 'Enterprise Unified') },
                       {
-                        label: 'Atomic Claims',
-                        value: selectedAsset360.claims.length,
-                        badge: `${verifiedClaimsCount} verified`,
-                        badgeColor: '#16A34A',
-                        badgeBg: '#DCFCE7'
-                      },
-                      {
-                        label: 'Contradictions',
-                        value: selectedAsset360.activeConflicts.length,
-                        valueColor: selectedAsset360.activeConflicts.length > 0 ? '#EA580C' : '#0F172A',
-                        badge: selectedAsset360.conflicts.length > 0
-                          ? `${selectedAsset360.activeConflicts.length} active / ${selectedAsset360.conflicts.length} total`
-                          : '0 detected',
-                        badgeColor: selectedAsset360.activeConflicts.length > 0 ? '#C2410C' : '#16A34A',
-                        badgeBg: selectedAsset360.activeConflicts.length > 0 ? '#FFEDD5' : '#DCFCE7'
-                      },
-                      {
-                        label: 'Trust Integrity',
-                        value: `${trustPercent}%`,
-                        valueColor: '#16A34A',
-                        badge: trustPercent >= 70 ? 'High Trust' : trustPercent >= 40 ? 'Moderate' : 'Low',
-                        badgeColor: '#059669',
-                        badgeBg: '#ECFDF5'
-                      },
-                      {
-                        label: 'Downstream AI Impact',
-                        value: selectedAsset360.decisions.length,
-                        valueColor: '#0284C7',
-                        badge: `${selectedAsset360.decisions.length} Decisions`,
-                        badgeColor: '#0284C7',
-                        badgeBg: '#E0F2FE'
+                        label: 'SHA-256 Merkle Hash',
+                        value: contentHash,
+                        isMono: true,
+                        canCopy: true
                       }
                     ].map((row, idx, arr) => (
-                      <tr
-                        key={row.label}
+                      <div
+                        key={idx}
                         style={{
-                          borderBottom: idx < arr.length - 1 ? '1px solid #F1F5F9' : 'none'
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          padding: '6px 12px',
+                          borderBottom: idx < arr.length - 1 ? '1px solid #F1F5F9' : 'none',
+                          gap: '8px',
+                          fontSize: '0.72rem'
                         }}
                       >
-                        <td style={{ padding: '6px 10px', color: '#475569', fontWeight: 600, width: '40%' }}>
+                        <span style={{ color: '#64748B', fontWeight: 600 }}>
                           {row.label}
-                        </td>
-                        <td style={{ padding: '6px 10px' }}>
-                          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
-                            <span style={{ fontSize: '0.84rem', fontWeight: 800, color: row.valueColor || '#0F172A' }}>
-                              {row.value}
-                            </span>
-                            {row.badge && (
-                              <span style={{
-                                fontSize: '0.64rem',
-                                fontWeight: 700,
-                                color: row.badgeColor,
-                                background: row.badgeBg || '#F1F5F9',
-                                padding: '1px 5px',
-                                borderRadius: '4px'
-                              }}>
-                                {row.badge}
-                              </span>
-                            )}
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-
-              {/* Complete Metadata & Technical Specifications Table */}
-              <div style={{
-                background: '#FFFFFF',
-                border: '1px solid #E2E8F0',
-                borderRadius: '8px',
-                overflow: 'hidden'
-              }}>
-                <div style={{
-                  padding: '8px 12px',
-                  background: '#F8FAFC',
-                  borderBottom: '1px solid #E2E8F0',
-                  fontSize: '0.72rem',
-                  fontWeight: 800,
-                  color: '#334155',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.04em',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px'
-                }}>
-                  <Layers size={12} color="#475569" />
-                  <span>Technical Specifications</span>
-                </div>
-
-                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                  {[
-                    { label: 'Artifact GUID', value: docId, isMono: true },
-                    { label: 'Parent Source', value: selectedAsset360.parentSource?.label || 'Direct File Upload' },
-                    { label: 'Classification', value: 'Restricted Policy Standard' },
-                    { label: 'Active Version', value: latestVer ? `v${latestVer.version_number}` : 'v1.0' },
-                    { label: 'Pipeline Engine', value: 'Trulin Semantic Deconstruction' },
-                    { label: 'Department / Scope', value: nodeData.domain || (activeWorkspace?.label || 'Enterprise Unified') },
-                    {
-                      label: 'SHA-256 Merkle Hash',
-                      value: contentHash,
-                      isMono: true,
-                      canCopy: true
-                    }
-                  ].map((row, idx, arr) => (
-                    <div
-                      key={idx}
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        padding: '6px 12px',
-                        borderBottom: idx < arr.length - 1 ? '1px solid #F1F5F9' : 'none',
-                        gap: '8px',
-                        fontSize: '0.72rem'
-                      }}
-                    >
-                      <span style={{ color: '#64748B', fontWeight: 600 }}>
-                        {row.label}
-                      </span>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '4px', maxWidth: '60%' }}>
-                        <span style={{
-                          color: '#0F172A',
-                          fontWeight: 600,
-                          fontFamily: row.isMono ? 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace' : 'inherit',
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis',
-                          whiteSpace: 'nowrap'
-                        }}>
-                          {row.value}
                         </span>
-                        {row.canCopy && (
-                          <button
-                            type="button"
-                            onClick={() => {
-                              navigator.clipboard?.writeText(row.value);
-                              setCopiedHash(true);
-                              setTimeout(() => setCopiedHash(false), 2000);
-                              showToast?.("Hash copied to clipboard");
-                            }}
-                            style={{
-                              border: 'none',
-                              background: 'transparent',
-                              cursor: 'pointer',
-                              color: copiedHash ? '#16A34A' : '#94A3B8',
-                              padding: '1px',
-                              display: 'flex',
-                              alignItems: 'center'
-                            }}
-                            title="Copy hash"
-                          >
-                            {copiedHash ? <Check size={12} /> : <Copy size={12} />}
-                          </button>
-                        )}
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '4px', maxWidth: '60%' }}>
+                          <span style={{
+                            color: '#0F172A',
+                            fontWeight: 600,
+                            fontFamily: row.isMono ? 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace' : 'inherit',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap'
+                          }}>
+                            {row.value}
+                          </span>
+                          {row.canCopy && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                navigator.clipboard?.writeText(row.value);
+                                setCopiedHash(true);
+                                setTimeout(() => setCopiedHash(false), 2000);
+                                showToast?.("Hash copied to clipboard");
+                              }}
+                              style={{
+                                border: 'none',
+                                background: 'transparent',
+                                cursor: 'pointer',
+                                color: copiedHash ? '#16A34A' : '#94A3B8',
+                                padding: '1px',
+                                display: 'flex',
+                                alignItems: 'center'
+                              }}
+                              title="Copy hash"
+                            >
+                              {copiedHash ? <Check size={12} /> : <Copy size={12} />}
+                            </button>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
               </div>
-            </div>
             </div>
           );
         };
 
+        const topHeaderSlot = typeof document !== 'undefined' ? document.getElementById('top-header-left-slot') : null;
+
+        const assetTopRowContent = selectedAsset360 ? (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0, overflow: 'hidden' }}>
+            <button
+              type="button"
+              onClick={() => {
+                setOpenedAssetId(null);
+                onAssetChange?.(null);
+              }}
+              style={{
+                width: '28px',
+                height: '28px',
+                borderRadius: 0,
+                border: '1px solid #E2E8F0',
+                background: '#FFFFFF',
+                color: '#0F172A',
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                padding: 0,
+                boxShadow: 'none',
+                flexShrink: 0,
+                transition: 'all 0.18s cubic-bezier(0.16, 1, 0.3, 1)'
+              }}
+              title={`Back to ${vaultSubTab === 'documents' ? 'Documents' : 'Connectors'} list`}
+              onMouseEnter={e => {
+                e.currentTarget.style.background = '#FFF7ED';
+                e.currentTarget.style.borderColor = '#FED7AA';
+                e.currentTarget.style.color = '#EA580C';
+                e.currentTarget.style.transform = 'translateX(-2px)';
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.background = '#FFFFFF';
+                e.currentTarget.style.borderColor = '#E2E8F0';
+                e.currentTarget.style.color = '#0F172A';
+                e.currentTarget.style.transform = 'none';
+              }}
+            >
+              <ChevronLeft size={16} strokeWidth={2.5} />
+            </button>
+
+            <h2 style={{
+              margin: 0,
+              fontSize: '1.05rem',
+              fontWeight: 800,
+              color: '#0F172A',
+              letterSpacing: '-0.01em',
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              maxWidth: '380px'
+            }} title={selectedAsset360.node.label}>
+              {selectedAsset360.node.label}
+            </h2>
+
+            {/* Universal File Viewer Trigger Button: Available only in Overview tab when minimized */}
+            {asset360Section === 'summary' && !isFileViewerOpen && (
+              <button
+                type="button"
+                onClick={() => {
+                  setIsFileViewerOpen(true);
+                  showToast?.("Document preview opened");
+                }}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '5px',
+                  padding: '3px 8px',
+                  borderRadius: 0,
+                  border: '1px solid #EA580C',
+                  background: '#FFF7ED',
+                  color: '#EA580C',
+                  fontSize: '0.72rem',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  whiteSpace: 'nowrap',
+                  flexShrink: 0,
+                  boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
+                  transition: 'all 0.15s ease'
+                }}
+                title="Open document preview"
+              >
+                <FileText size={12} color="#EA580C" />
+                <span>Open Preview</span>
+              </button>
+            )}
+
+            {selectedAsset360.mode === 'document' && (
+              <a
+                href={`/v1/documents/${selectedAsset360.node.data?.doc_id || String(selectedAsset360.node.id || '').replace(/^doc_/, '')}/file`}
+                target="_blank"
+                rel="noreferrer"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  padding: '3px 8px',
+                  borderRadius: 0,
+                  border: '1px solid #E2E8F0',
+                  background: '#FFFFFF',
+                  color: '#0284C7',
+                  fontSize: '0.72rem',
+                  fontWeight: 600,
+                  textDecoration: 'none',
+                  whiteSpace: 'nowrap',
+                  flexShrink: 0,
+                  boxShadow: '0 1px 2px rgba(0,0,0,0.04)'
+                }}
+                title="Open document file in a new browser tab"
+              >
+                <ExternalLink size={12} />
+                <span>Open File ↗</span>
+              </a>
+            )}
+
+            {/* Details Symbol Toggle Button */}
+            <button
+              type="button"
+              onClick={() => {
+                setIsDetailsOpen(prev => !prev);
+                showToast?.(!isDetailsOpen ? "Details pane opened in split view" : "Details pane closed");
+              }}
+              title={isDetailsOpen ? "Hide Asset Details" : "Show Asset Details"}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '4px',
+                padding: '3px 8px',
+                borderRadius: 0,
+                border: isDetailsOpen ? '1px solid #EA580C' : '1px solid #E2E8F0',
+                background: isDetailsOpen ? '#FFF7ED' : '#FFFFFF',
+                color: isDetailsOpen ? '#EA580C' : '#475569',
+                fontSize: '0.72rem',
+                fontWeight: 600,
+                cursor: 'pointer',
+                whiteSpace: 'nowrap',
+                flexShrink: 0,
+                boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
+                transition: 'all 0.15s ease'
+              }}
+            >
+              <Info size={12} color={isDetailsOpen ? '#EA580C' : '#64748B'} />
+              <span>Details</span>
+            </button>
+
+            {user?.role === 'admin' && (
+              <button
+                type="button"
+                onClick={() => setDeleteTargetAsset(selectedAsset360.node)}
+                title={`Decommission or Purge ${selectedAsset360.node.label}`}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  padding: '3px 8px',
+                  borderRadius: 0,
+                  border: '1px solid #FCA5A5',
+                  background: '#FEF2F2',
+                  color: '#DC2626',
+                  fontSize: '0.72rem',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  whiteSpace: 'nowrap',
+                  flexShrink: 0,
+                  boxShadow: '0 1px 2px rgba(220,38,38,0.06)',
+                  transition: 'all 0.15s ease'
+                }}
+                onMouseEnter={e => { e.currentTarget.style.background = '#FEE2E2'; }}
+                onMouseLeave={e => { e.currentTarget.style.background = '#FEF2F2'; }}
+              >
+                <Trash2 size={12} strokeWidth={2.2} />
+                <span>Delete Asset</span>
+              </button>
+            )}
+          </div>
+        ) : null;
+
         return (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', width: '100%' }}>
 
-            {/* CLEAN MINIMALIST EXECUTIVE HEADER: MINIMAL BACK BUTTON (<), FILE NAME, TOGGLE FILE VIEW, & UNDERLINED TABS */}
+            {/* Top Row: Portaled directly into the top breadcrumb slot next to workspace selector, or fallback inline */}
+            {selectedAsset360 && (
+              topHeaderSlot ? createPortal(assetTopRowContent, topHeaderSlot) : (
+                <div style={{
+                  background: 'transparent',
+                  border: 'none',
+                  boxShadow: 'none',
+                  padding: '0',
+                  marginBottom: '2px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  flexWrap: 'wrap',
+                  gap: '10px'
+                }}>
+                  {assetTopRowContent}
+                </div>
+              )
+            )}
+
+            {/* CLEAN MINIMALIST EXECUTIVE HEADER: UNDERLINED TABS */}
             {selectedAsset360 && (
               <div style={{
                 background: 'transparent',
@@ -2871,165 +3115,6 @@ export default function VisualLineageGraph({
                 flexDirection: 'column',
                 gap: '4px'
               }}>
-                {/* Top Row: Minimal Back Button (<), File Name, and File Viewer Toggle / Stepper */}
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setOpenedAssetId(null);
-                        onAssetChange?.(null);
-                      }}
-                      style={{
-                        width: '28px',
-                        height: '28px',
-                        borderRadius: '6px',
-                        border: '1px solid #E2E8F0',
-                        background: '#FFFFFF',
-                        color: '#0F172A',
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        cursor: 'pointer',
-                        padding: 0,
-                        boxShadow: 'none',
-                        transition: 'all 0.18s cubic-bezier(0.16, 1, 0.3, 1)'
-                      }}
-                      title={`Back to ${vaultSubTab === 'documents' ? 'Documents' : 'Connectors'} list`}
-                      onMouseEnter={e => {
-                        e.currentTarget.style.background = '#FFF7ED';
-                        e.currentTarget.style.borderColor = '#FED7AA';
-                        e.currentTarget.style.color = '#EA580C';
-                        e.currentTarget.style.transform = 'translateX(-2px)';
-                      }}
-                      onMouseLeave={e => {
-                        e.currentTarget.style.background = '#FFFFFF';
-                        e.currentTarget.style.borderColor = '#E2E8F0';
-                        e.currentTarget.style.color = '#0F172A';
-                        e.currentTarget.style.transform = 'none';
-                      }}
-                    >
-                      <ChevronLeft size={16} strokeWidth={2.5} />
-                    </button>
-
-                    <h2 style={{ margin: 0, fontSize: '1.12rem', fontWeight: 800, color: '#0F172A', letterSpacing: '-0.01em' }}>
-                      {selectedAsset360.node.label}
-                    </h2>
-
-                    {/* Universal File Viewer Trigger Button: Available only in Overview tab when minimized */}
-                    {asset360Section === 'summary' && !isFileViewerOpen && (
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setIsFileViewerOpen(true);
-                          showToast?.("Document preview opened");
-                        }}
-                        style={{
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: '6px',
-                          padding: '4px 10px',
-                          borderRadius: '6px',
-                          border: '1px solid #EA580C',
-                          background: '#FFF7ED',
-                          color: '#EA580C',
-                          fontSize: '0.74rem',
-                          fontWeight: 700,
-                          cursor: 'pointer',
-                          boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
-                          transition: 'all 0.15s ease'
-                        }}
-                        title="Open document preview"
-                      >
-                        <FileText size={13} color="#EA580C" />
-                        <span>Open Document Preview</span>
-                      </button>
-                    )}
-
-                    {selectedAsset360.mode === 'document' && (
-                      <a
-                        href={`/v1/documents/${selectedAsset360.node.data?.doc_id || String(selectedAsset360.node.id || '').replace(/^doc_/, '')}/file`}
-                        target="_blank"
-                        rel="noreferrer"
-                        style={{
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: '5px',
-                          padding: '4px 9px',
-                          borderRadius: '6px',
-                          border: '1px solid #E2E8F0',
-                          background: '#FFFFFF',
-                          color: '#0284C7',
-                          fontSize: '0.74rem',
-                          fontWeight: 600,
-                          textDecoration: 'none',
-                          boxShadow: '0 1px 2px rgba(0,0,0,0.04)'
-                        }}
-                        title="Open document file in a new browser tab"
-                      >
-                        <ExternalLink size={12} />
-                        <span>Open File ↗</span>
-                      </a>
-                    )}
-
-                    {/* Details Symbol Toggle Button (Placed at top of filename, right after Open File) */}
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setIsDetailsOpen(prev => !prev);
-                        showToast?.(!isDetailsOpen ? "Details pane opened in split view" : "Details pane closed");
-                      }}
-                      title={isDetailsOpen ? "Hide Asset Details" : "Show Asset Details"}
-                      style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '5px',
-                        padding: '4px 9px',
-                        borderRadius: '6px',
-                        border: isDetailsOpen ? '1px solid #EA580C' : '1px solid #E2E8F0',
-                        background: isDetailsOpen ? '#FFF7ED' : '#FFFFFF',
-                        color: isDetailsOpen ? '#EA580C' : '#475569',
-                        fontSize: '0.74rem',
-                        fontWeight: 600,
-                        cursor: 'pointer',
-                        boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
-                        transition: 'all 0.15s ease'
-                      }}
-                    >
-                      <Info size={13} color={isDetailsOpen ? '#EA580C' : '#64748B'} />
-                      <span>Details</span>
-                    </button>
-
-                    {user?.role === 'admin' && (
-                      <button
-                        type="button"
-                        onClick={() => setDeleteTargetAsset(selectedAsset360.node)}
-                        title={`Decommission or Purge ${selectedAsset360.node.label}`}
-                        style={{
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: '5px',
-                          padding: '4px 10px',
-                          borderRadius: '6px',
-                          border: '1px solid #FCA5A5',
-                          background: '#FEF2F2',
-                          color: '#DC2626',
-                          fontSize: '0.74rem',
-                          fontWeight: 700,
-                          cursor: 'pointer',
-                          boxShadow: '0 1px 2px rgba(220,38,38,0.06)',
-                          transition: 'all 0.15s ease'
-                        }}
-                        onMouseEnter={e => { e.currentTarget.style.background = '#FEE2E2'; }}
-                        onMouseLeave={e => { e.currentTarget.style.background = '#FEF2F2'; }}
-                      >
-                        <Trash2 size={13} strokeWidth={2.2} />
-                        <span>Delete Asset</span>
-                      </button>
-                    )}
-                  </div>
-                </div>
-
                 {/* Plane Text Tabs with Separator Line */}
                 <div style={{
                   display: 'flex',
@@ -3128,6 +3213,13 @@ export default function VisualLineageGraph({
                     claims={selectedAsset360.claims}
                     allConflictedClaimIds={allConflictedClaimIds}
                     graphData={graphData}
+                    onLocateSource={(claim, cleanDocId) => {
+                      if (onLocateSource) {
+                        onLocateSource(cleanDocId, claim);
+                      } else if (onOpenFileBrowser) {
+                        onOpenFileBrowser(cleanDocId);
+                      }
+                    }}
                     onLocateInDoc={(claim) => {
                       handleSectionChange('summary');
                       setIsFileViewerOpen(true);
@@ -3140,7 +3232,8 @@ export default function VisualLineageGraph({
                       setSelectedNodeId(actualNodeId);
                       setInteractiveRootId(actualNodeId);
                       fetchBlastRadius(cid);
-                      showToast?.(`Locating claim in document canvas: "${(claim.label || claim.fullText || '').substring(0, 45)}..."`);
+                      setLocateDocClaimTrigger({ claim, timestamp: Date.now() });
+                      showToast?.(`Locating claim in document: "${(claim.label || claim.fullText || '').substring(0, 45)}..."`);
                     }}
                     onInspectInDag={(claim) => {
                       const cid = claim.cleanId || String(claim.id || '').replace(/^cl_/, '');
@@ -3197,7 +3290,8 @@ export default function VisualLineageGraph({
                       setSelectedNodeId(actualNodeId);
                       setInteractiveRootId(actualNodeId);
                       fetchBlastRadius(cid);
-                      showToast?.(`Locating assertion in document canvas: "${(claim.label || claim.fullText || '').substring(0, 45)}..."`);
+                      setLocateDocClaimTrigger({ claim, timestamp: Date.now() });
+                      showToast?.(`Locating assertion in document: "${(claim.label || claim.fullText || '').substring(0, 45)}..."`);
                     }}
                     showToast={showToast}
                   />
@@ -3258,6 +3352,8 @@ export default function VisualLineageGraph({
                       setTimeout(() => handleFitView(), 320);
                     }}
                     selectedClaimId={activeClaimInspector?.cleanId || activeClaimInspector?.id}
+                    selectedClaim={activeClaimInspector}
+                    locateTarget={locateDocClaimTrigger}
                   />
                 ) : (
                   <div style={{
@@ -3361,2268 +3457,2268 @@ export default function VisualLineageGraph({
 
               const renderDagFacility = () => (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', width: '100%' }}>
-{/* Unified Executive Lineage Command Card (Single Card Container) - Hidden in Overview mode as it concentrates on a single claim */}
-      {asset360Section !== 'summary' && (
-      <div style={{
-        background: '#FFFFFF',
-        border: '1px solid #E2E8F0',
-        borderRadius: '10px',
-        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.02)',
-        display: 'flex',
-        flexDirection: 'column',
-        overflow: 'hidden',
-        width: '100%',
-        boxSizing: 'border-box'
-      }}>
-        {/* Row 1: Primary Command Bar */}
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          flexWrap: 'wrap',
-          gap: '8px',
-          padding: '6px 12px',
-          background: '#F8FAFC',
-          borderBottom: isFilterPanelOpen ? '1px solid #E2E8F0' : 'none'
-        }}>
-          {/* Left Group: Granularity & View Modes */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-            {/* Context Investigation Lenses (Scaling Engine for Large-Scale Context Graphs) */}
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              background: '#EDF2F7',
-              padding: '2px',
-              borderRadius: '7px',
-              border: '1px solid #E2E8F0',
-              gap: '2px'
-            }}>
-              <button
-                type="button"
-                onClick={() => {
-                  setInvestigationLens('risk');
-                  setViewMode('conflicts');
-                  const firstConf = conflictsList[0];
-                  if (firstConf) setSelectedNodeId(firstConf.id);
-                  showToast?.("Switched to Risk & Conflict Investigation Lens");
-                }}
-                style={{
-                  padding: '3px 9px',
-                  fontSize: '0.68rem',
-                  fontWeight: 700,
-                  borderRadius: '5px',
-                  border: 'none',
-                  cursor: 'pointer',
-                  background: investigationLens === 'risk' ? '#EA580C' : 'transparent',
-                  color: investigationLens === 'risk' ? '#FFFFFF' : '#C2410C',
-                  boxShadow: investigationLens === 'risk' ? '0 1px 3px rgba(234,88,12,0.3)' : 'none',
-                  transition: 'all 0.15s ease',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '4px',
-                  height: '25px'
-                }}
-                title="Focus on contradictions, anomalies, and severed flows"
-              >
-                <AlertTriangle size={11} />
-                <span>Risk & Conflicts ({conflictsList.length})</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => {
-                  setInvestigationLens('decision');
-                  setViewMode('interactive');
-                  showToast?.("Switched to AI Decision Impact Lens");
-                }}
-                style={{
-                  padding: '3px 9px',
-                  fontSize: '0.68rem',
-                  fontWeight: 700,
-                  borderRadius: '5px',
-                  border: 'none',
-                  cursor: 'pointer',
-                  background: investigationLens === 'decision' ? '#7C3AED' : 'transparent',
-                  color: investigationLens === 'decision' ? '#FFFFFF' : '#6B21A8',
-                  boxShadow: investigationLens === 'decision' ? '0 1px 3px rgba(124,58,237,0.3)' : 'none',
-                  transition: 'all 0.15s ease',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '4px',
-                  height: '25px'
-                }}
-                title="Trace policy rules directly to AI Copilot decisions"
-              >
-                <span>🤖 AI Impact</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => {
-                  setInvestigationLens('evidence');
-                  setViewMode('interactive');
-                  showToast?.("Switched to Evidence & Provenance Trace Lens");
-                }}
-                style={{
-                  padding: '3px 9px',
-                  fontSize: '0.68rem',
-                  fontWeight: 700,
-                  borderRadius: '5px',
-                  border: 'none',
-                  cursor: 'pointer',
-                  background: investigationLens === 'evidence' ? '#2563EB' : 'transparent',
-                  color: investigationLens === 'evidence' ? '#FFFFFF' : '#1E40AF',
-                  boxShadow: investigationLens === 'evidence' ? '0 1px 3px rgba(37,99,235,0.3)' : 'none',
-                  transition: 'all 0.15s ease',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '4px',
-                  height: '25px'
-                }}
-                title="Trace claim evidence spans back to original document text"
-              >
-                <ShieldCheck size={12} />
-                <span>Evidence Trace</span>
-              </button>
-            </div>
-
-
-            {/* Interactive Flow Quick Controls */}
-            {viewMode === 'interactive' && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <button
-                  type="button"
-                  onClick={resetToSingleNode}
-                  style={{
-                    padding: '3px 9px',
-                    fontSize: '0.68rem',
-                    fontWeight: 600,
-                    borderRadius: '5px',
-                    border: '1px solid #CBD5E1',
-                    background: '#FFFFFF',
-                    color: '#334155',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '4px',
-                    height: '25px',
-                    transition: 'all 0.15s ease'
-                  }}
-                  title="Reset canvas to only the single starting node"
-                >
-                  <RotateCcw size={11} />
-                  <span>Single Node</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={expandAllFlow}
-                  style={{
-                    padding: '3px 9px',
-                    fontSize: '0.68rem',
-                    fontWeight: 700,
-                    borderRadius: '5px',
-                    border: '1px solid #BFDBFE',
-                    background: '#EFF6FF',
-                    color: '#1D4ED8',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '4px',
-                    height: '25px',
-                    transition: 'all 0.15s ease'
-                  }}
-                  title="Expand all upstream and downstream connections"
-                >
-                  <span>➕ Expand All</span>
-                </button>
-              </div>
-            )}
-          </div>
-
-          {/* Right Group: Action Tools */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <button
-              onClick={() => setIsFilterPanelOpen(prev => !prev)}
-              style={{
-                padding: '4px 10px',
-                fontSize: '0.70rem',
-                fontWeight: 700,
-                borderRadius: '6px',
-                border: activeFilterCount > 0 ? '1px solid #EA580C' : (isFilterPanelOpen ? '1px solid #CBD5E1' : '1px solid #E2E8F0'),
-                background: isFilterPanelOpen || activeFilterCount > 0 ? '#FFF7ED' : '#FFFFFF',
-                color: isFilterPanelOpen || activeFilterCount > 0 ? '#EA580C' : '#334155',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '5px',
-                height: '27px',
-                transition: 'all 0.15s ease'
-              }}
-              title="Toggle Filters"
-            >
-              <Sliders size={12} />
-              <span>Filters</span>
-              {activeFilterCount > 0 && (
-                <span style={{
-                  background: '#EA580C',
-                  color: '#FFFFFF',
-                  borderRadius: '10px',
-                  padding: '1px 5px',
-                  fontSize: '0.62rem',
-                  fontWeight: 800,
-                  lineHeight: 1
-                }}>
-                  {activeFilterCount}
-                </span>
-              )}
-              <ChevronDown size={11} style={{ transform: isFilterPanelOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s ease' }} />
-            </button>
-
-            <button
-              onClick={() => setIsDrawerOpen(true)}
-              style={{
-                padding: '4px 10px',
-                fontSize: '0.70rem',
-                fontWeight: 600,
-                borderRadius: '6px',
-                border: '1px solid #E2E8F0',
-                background: '#FFFFFF',
-                color: '#334155',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '5px',
-                height: '27px',
-                transition: 'all 0.15s ease'
-              }}
-              title="Claims Drawer"
-            >
-              <FileText size={12} color="#64748B" />
-              <span>Claims</span>
-              <span style={{
-                background: '#F1F5F9',
-                color: '#475569',
-                borderRadius: '10px',
-                padding: '1px 5px',
-                fontSize: '0.62rem',
-                fontWeight: 700
-              }}>
-                {graphData?.nodes?.filter(n => n.type === 'claim')?.length || 0}
-              </span>
-            </button>
-
-            <button
-              onClick={() => setIsImpactReportOpen(true)}
-              style={{
-                padding: '4px 10px',
-                fontSize: '0.70rem',
-                fontWeight: 700,
-                borderRadius: '6px',
-                border: '1px solid #DDD6FE',
-                background: isImpactReportOpen ? '#7C3AED' : 'linear-gradient(135deg, #FAF5FF 0%, #F3E8FF 100%)',
-                color: isImpactReportOpen ? '#FFFFFF' : '#7C3AED',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '5px',
-                height: '27px',
-                boxShadow: isImpactReportOpen ? '0 1px 3px rgba(124,58,237,0.3)' : '0 1px 2px rgba(124,58,237,0.06)',
-                transition: 'all 0.15s ease'
-              }}
-              title="Open Proactive Impact & Blast Radius Report"
-            >
-              <BarChart3 size={12} />
-              <span>Impact Report</span>
-            </button>
-
-            <button
-              onClick={fetchLineage}
-              disabled={loading}
-              style={{
-                padding: '4px 8px',
-                fontSize: '0.70rem',
-                fontWeight: 600,
-                borderRadius: '6px',
-                border: '1px solid #E2E8F0',
-                background: '#FFFFFF',
-                color: '#475569',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                height: '27px',
-                transition: 'all 0.15s ease'
-              }}
-              title="Refresh Graph"
-            >
-              <RefreshCw size={12} className={loading ? "animate-spin" : ""} />
-            </button>
-          </div>
-        </div>
-
-        {/* Row 2: Integrated Filter Section (Inside the SAME Card) */}
-        {isFilterPanelOpen && (
-          <div style={{
-            borderTop: '1px solid #E2E8F0',
-            padding: '8px 12px',
-            background: '#FFFFFF',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: '8px'
-          }}>
-            {/* Filter Selects Strip */}
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              flexWrap: 'wrap'
-            }}>
-              {/* Conflict Selector */}
-              <div style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '5px',
-                background: selectedConflictId !== 'all' ? '#FFF7ED' : '#F8FAFC',
-                border: selectedConflictId !== 'all' ? '1px solid #FDBA74' : '1px solid #E2E8F0',
-                padding: '2px 6px',
-                borderRadius: '6px'
-              }}>
-                <span style={{ fontSize: '0.64rem', fontWeight: 700, color: '#EA580C', textTransform: 'uppercase', letterSpacing: '0.02em' }}>
-                  Conflict
-                </span>
-                <select
-                  value={selectedConflictId}
-                  onChange={(e) => {
-                    const val = e.target.value;
-                    setSelectedConflictId(val);
-                    if (val !== 'all') {
-                      setSelectedNodeId(val);
-                      setViewMode('conflicts');
-                      showToast?.(`Spotlighted Conflict in DAG`);
-                    }
-                  }}
-                  style={{
-                    padding: '2px 4px',
-                    border: 'none',
-                    background: 'transparent',
-                    fontSize: '0.69rem',
-                    fontWeight: selectedConflictId !== 'all' ? 700 : 500,
-                    color: selectedConflictId !== 'all' ? '#C2410C' : '#334155',
-                    outline: 'none',
-                    cursor: 'pointer'
-                  }}
-                >
-                  <option value="all">All ({conflictsList.length})</option>
-                  {conflictsList.map((c, i) => (
-                    <option key={c.id} value={c.id}>
-                      #{i + 1} [{c.severity || 'HIGH'}] {c.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Conflict Status Selector */}
-              <div style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '5px',
-                background: filterStatus === 'active' ? '#FFF7ED' : '#F8FAFC',
-                border: filterStatus === 'active' ? '1px solid #FDBA74' : '1px solid #E2E8F0',
-                padding: '2px 6px',
-                borderRadius: '6px'
-              }}>
-                <span style={{ fontSize: '0.64rem', fontWeight: 700, color: '#EA580C', textTransform: 'uppercase', letterSpacing: '0.02em' }}>
-                  Status
-                </span>
-                <select
-                  value={filterStatus}
-                  onChange={(e) => setFilterStatus(e.target.value)}
-                  style={{
-                    padding: '2px 4px',
-                    border: 'none',
-                    background: 'transparent',
-                    fontSize: '0.69rem',
-                    color: filterStatus === 'active' ? '#C2410C' : '#334155',
-                    fontWeight: 700,
-                    outline: 'none',
-                    cursor: 'pointer'
-                  }}
-                >
-                  <option value="active">Active / Unresolved Only</option>
-                  <option value="resolved">Resolved Only</option>
-                  <option value="all">All (Active + Resolved)</option>
-                </select>
-              </div>
-
-              {/* Severity Selector */}
-              <div style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '5px',
-                background: filterSeverity !== 'all' ? '#EFF6FF' : '#F8FAFC',
-                border: filterSeverity !== 'all' ? '1px solid #BFDBFE' : '1px solid #E2E8F0',
-                padding: '2px 6px',
-                borderRadius: '6px'
-              }}>
-                <span style={{ fontSize: '0.64rem', fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.02em' }}>
-                  Severity
-                </span>
-                <select
-                  value={filterSeverity}
-                  onChange={(e) => setFilterSeverity(e.target.value)}
-                  style={{
-                    padding: '2px 4px',
-                    border: 'none',
-                    background: 'transparent',
-                    fontSize: '0.69rem',
-                    color: filterSeverity !== 'all' ? '#1D4ED8' : '#334155',
-                    fontWeight: filterSeverity !== 'all' ? 700 : 500,
-                    outline: 'none',
-                    cursor: 'pointer'
-                  }}
-                >
-                  <option value="all">All</option>
-                  <option value="HIGH">High</option>
-                  <option value="CRITICAL">Critical</option>
-                  <option value="MEDIUM">Med</option>
-                  <option value="LOW">Low</option>
-                </select>
-              </div>
-
-              {/* Trust Selector */}
-              <div style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '5px',
-                background: filterClaimTrust !== 'all' ? '#F0FDF4' : '#F8FAFC',
-                border: filterClaimTrust !== 'all' ? '1px solid #BBF7D0' : '1px solid #E2E8F0',
-                padding: '2px 6px',
-                borderRadius: '6px'
-              }}>
-                <span style={{ fontSize: '0.64rem', fontWeight: 700, color: '#16A34A', textTransform: 'uppercase', letterSpacing: '0.02em' }}>
-                  Trust
-                </span>
-                <select
-                  value={filterClaimTrust}
-                  onChange={(e) => setFilterClaimTrust(e.target.value)}
-                  style={{
-                    padding: '2px 4px',
-                    border: 'none',
-                    background: 'transparent',
-                    fontSize: '0.69rem',
-                    color: filterClaimTrust !== 'all' ? '#15803D' : '#334155',
-                    fontWeight: filterClaimTrust !== 'all' ? 700 : 500,
-                    outline: 'none',
-                    cursor: 'pointer'
-                  }}
-                >
-                  <option value="all">All</option>
-                  <option value="verified">Verified (≥90%)</option>
-                  <option value="review">Review (&lt;90%)</option>
-                  <option value="outdated">Outdated</option>
-                </select>
-              </div>
-
-              {/* Conflicted Only Quick Toggle */}
-              <button
-                type="button"
-                onClick={() => {
-                  setShowOnlyConflicted(prev => !prev);
-                  if (!showOnlyConflicted) showToast?.("Focused on contradictory paths");
-                }}
-                style={{
-                  padding: '2px 8px',
-                  borderRadius: '5px',
-                  fontSize: '0.67rem',
-                  fontWeight: 700,
-                  cursor: 'pointer',
-                  border: showOnlyConflicted ? '1px solid #EA580C' : '1px solid #CBD5E1',
-                  background: showOnlyConflicted ? '#EA580C' : '#FFFFFF',
-                  color: showOnlyConflicted ? '#FFFFFF' : '#475569',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '4px',
-                  height: '24px'
-                }}
-              >
-                <AlertTriangle size={11} />
-                <span>Conflicted Only</span>
-                {showOnlyConflicted && <span>✓</span>}
-              </button>
-            </div>
-
-            {/* Reset Filters (Only when a filter is active) */}
-            {activeFilterCount > 0 && (
-              <button
-                type="button"
-                onClick={resetAllFilters}
-                style={{
-                  padding: '3px 8px',
-                  borderRadius: '5px',
-                  border: '1px solid #FCA5A5',
-                  background: '#FEF2F2',
-                  color: '#DC2626',
-                  fontSize: '0.68rem',
-                  fontWeight: 700,
-                  cursor: 'pointer',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '3px',
-                  height: '24px'
-                }}
-                title="Reset all filters"
-              >
-                <RotateCcw size={10} />
-                <span>Reset Filters</span>
-              </button>
-            )}
-          </div>
-        )}
-      </div>
-      )}
-
-      {/* 3. Interactive DAG Canvas */}
-      <div style={{
-        position: 'relative',
-        width: '100%',
-        borderRadius: '10px',
-        overflow: 'hidden',
-        border: '1px solid #CBD5E1',
-        background: '#fff',
-        display: 'flex',
-        flexDirection: 'column',
-        height: isSplitActive ? 'calc(100vh - 108px)' : 'auto',
-        maxHeight: isSplitActive ? 'calc(100vh - 108px)' : 'none',
-        minHeight: isSplitActive ? '380px' : 'auto'
-      }}>
-        
-        {/* Sticky Top Header Bar for DAG (Draggable in Split View, Normal White Header in Individual Lineage View) */}
-        <div
-          draggable={isSplitActive}
-          onDragStart={isSplitActive ? (e) => {
-            e.dataTransfer.setData('text/plain', 'dag');
-            setDraggedPane('dag');
-          } : undefined}
-          onDragEnd={isSplitActive ? () => {
-            setDraggedPane(null);
-            setDragOverPane(null);
-          } : undefined}
-          title={isSplitActive ? "Hold and drag header to move/shuffle tab position" : undefined}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'flex-end',
-            padding: '6px 12px',
-            background: isSplitActive ? 'linear-gradient(180deg, #1E293B 0%, #0F172A 100%)' : '#FFFFFF',
-            borderBottom: isSplitActive ? '1px solid #334155' : '1px solid #E2E8F0',
-            zIndex: 30,
-            cursor: isSplitActive ? 'grab' : 'default',
-            userSelect: isSplitActive ? 'none' : 'auto',
-            flexShrink: 0
-          }}
-        >
-          {/* Right: Floating Controls (Search, Zoom, Fit, Close) */}
-          <div
-            onClick={(e) => e.stopPropagation()}
-            onMouseDown={(e) => e.stopPropagation()}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '4px',
-              background: isSplitActive ? 'rgba(255, 255, 255, 0.10)' : '#F8FAFC',
-              padding: '2px 5px',
-              borderRadius: '6px',
-              border: isSplitActive ? '1px solid rgba(255,255,255,0.15)' : '1px solid #E2E8F0',
-              cursor: 'default'
-            }}
-          >
-            {/* Find in canvas (Global across all nodes) */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '3px', paddingRight: '4px', borderRight: isSplitActive ? '1px solid rgba(255,255,255,0.15)' : '1px solid #E2E8F0' }}>
-              <span style={{ fontSize: '0.66rem', color: isSplitActive ? '#94A3B8' : '#64748B' }}>🔍</span>
-              <input
-                type="text"
-                placeholder="Find..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                style={{
-                  border: 'none',
-                  background: 'transparent',
-                  fontSize: '0.68rem',
-                  outline: 'none',
-                  width: isThreePane ? '56px' : '82px',
-                  color: isSplitActive ? '#F8FAFC' : '#0F172A',
-                  transition: 'width 0.15s ease'
-                }}
-              />
-              {searchQuery && (
-                <button
-                  onClick={() => setSearchQuery('')}
-                  style={{ border: 'none', background: 'transparent', cursor: 'pointer', color: isSplitActive ? '#CBD5E1' : '#64748B', fontSize: '0.66rem', padding: '0 2px' }}
-                >
-                  ✕
-                </button>
-              )}
-            </div>
-
-            {/* Zoom Controls */}
-            <button
-              onClick={() => setZoom(z => Math.max(0.4, Number((z - 0.1).toFixed(2))))}
-              className="canvas-btn"
-              style={{
-                width: '19px',
-                height: '19px',
-                borderRadius: '4px',
-                border: isSplitActive ? '1px solid rgba(255,255,255,0.2)' : '1px solid #E2E8F0',
-                background: isSplitActive ? 'rgba(255,255,255,0.1)' : '#FFFFFF',
-                cursor: 'pointer',
-                fontWeight: 700,
-                fontSize: '0.74rem',
-                color: isSplitActive ? '#F8FAFC' : '#334155',
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                padding: 0
-              }}
-              title="Zoom Out"
-            >
-              -
-            </button>
-            <span style={{ fontSize: '0.65rem', fontWeight: 700, minWidth: '25px', textAlign: 'center', color: isSplitActive ? '#CBD5E1' : '#475569' }}>
-              {(zoom * 100).toFixed(0)}%
-            </span>
-            <button
-              onClick={() => setZoom(z => Math.min(1.4, Number((z + 0.1).toFixed(2))))}
-              className="canvas-btn"
-              style={{
-                width: '19px',
-                height: '19px',
-                borderRadius: '4px',
-                border: isSplitActive ? '1px solid rgba(255,255,255,0.2)' : '1px solid #E2E8F0',
-                background: isSplitActive ? 'rgba(255,255,255,0.1)' : '#FFFFFF',
-                cursor: 'pointer',
-                fontWeight: 700,
-                fontSize: '0.74rem',
-                color: isSplitActive ? '#F8FAFC' : '#334155',
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                padding: 0
-              }}
-              title="Zoom In"
-            >
-              +
-            </button>
-            <button
-              onClick={handleFitView}
-              className="canvas-btn"
-              style={{
-                padding: '0 6px',
-                height: '20px',
-                borderRadius: '4px',
-                border: isSplitActive ? '1px solid #3B82F6' : '1px solid #BFDBFE',
-                background: isSplitActive ? '#1D4ED8' : '#EFF6FF',
-                cursor: 'pointer',
-                fontSize: '0.65rem',
-                color: isSplitActive ? '#FFFFFF' : '#1D4ED8',
-                fontWeight: 700,
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '3px'
-              }}
-              title="Auto-Fit all visible nodes to screen"
-            >
-              <span>⛶</span>
-              <span>Fit</span>
-            </button>
-            {/* Document DAG Switcher (When inspecting a single claim) */}
-            {activeClaimInspector && (
-              <button
-                type="button"
-                onClick={() => {
-                  setActiveClaimInspector(null);
-                  const docNodeId = selectedAsset360?.node?.id || openedAssetId;
-                  if (docNodeId) {
-                    setSelectedNodeId(docNodeId);
-                    setInteractiveRootId(docNodeId);
-                    setExpandedUpstreamSet(new Set([docNodeId]));
-                    setExpandedDownstreamSet(new Set([docNodeId]));
-                    setLineageGranularity('document');
-                    showToast?.("Switched to full Document Lineage DAG");
-                  }
-                }}
-                className="canvas-btn"
-                style={{
-                  padding: '0 7px',
-                  height: '20px',
-                  borderRadius: '4px',
-                  border: isSplitActive ? '1px solid #38BDF8' : '1px solid #BAE6FD',
-                  background: isSplitActive ? 'rgba(56, 189, 248, 0.18)' : '#F0F9FF',
-                  cursor: 'pointer',
-                  fontSize: '0.65rem',
-                  color: isSplitActive ? '#38BDF8' : '#0284C7',
-                  fontWeight: 700,
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '3px'
-                }}
-                title="Switch back to full Document Lineage DAG"
-              >
-                <span>📄 Doc DAG</span>
-              </button>
-            )}
-
-            {activeClaimInspector && asset360Section === 'summary' && (
-              <button
-                type="button"
-                onClick={() => {
-                  setActiveClaimInspector(null);
-                  const docNodeId = selectedAsset360?.node?.id || openedAssetId;
-                  if (docNodeId) {
-                    setSelectedNodeId(docNodeId);
-                    setInteractiveRootId(docNodeId);
-                    setExpandedUpstreamSet(new Set([docNodeId]));
-                    setExpandedDownstreamSet(new Set([docNodeId]));
-                    setLineageGranularity('document');
-                  }
-                }}
-                className="canvas-btn"
-                style={{
-                  padding: '0 6px',
-                  height: '20px',
-                  borderRadius: '4px',
-                  border: '1px solid #EA580C',
-                  background: '#C2410C',
-                  cursor: 'pointer',
-                  fontSize: '0.65rem',
-                  color: '#FFFFFF',
-                  fontWeight: 700,
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '3px'
-                }}
-                title="Close Lineage view and return document reader to full width"
-              >
-                <X size={10} strokeWidth={2.4} />
-                <span>Close</span>
-              </button>
-            )}
-          </div>
-        </div>
-
-        {/* Floating Legend / Quick Status at bottom left */}
-        <div style={{
-          position: 'absolute',
-          bottom: '10px',
-          left: '10px',
-          zIndex: 30,
-          background: 'rgba(255,255,255,0.92)',
-          backdropFilter: 'blur(8px)',
-          padding: '4px 8px',
-          borderRadius: '6px',
-          boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
-          border: '1px solid #e2e8f0',
-          display: 'flex',
-          alignItems: 'center',
-          flexWrap: 'wrap',
-          gap: '6px 8px',
-          fontSize: '0.64rem',
-          color: '#475569',
-          maxWidth: 'calc(100% - 20px)'
-        }}>
-          <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-            <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#2026d2' }} /> Data Source
-          </span>
-          <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-            <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#0284c7' }} /> Document
-          </span>
-          <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-            <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#16a34a' }} /> Atomic Claim
-          </span>
-          <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-            <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#ea580c' }} /> Contradiction
-          </span>
-          <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-            <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#7c3aed' }} /> AI Decision
-          </span>
-          <span style={{ color: '#94a3b8', marginLeft: '2px' }}>| Drag nodes freely to customize layout</span>
-        </div>
-
-        {/* Free-form Pan Canvas Container */}
-        <div
-          ref={containerRef}
-          onMouseDown={handleCanvasMouseDown}
-          onMouseMove={handleMouseMove}
-          onMouseUp={handleMouseUp}
-          style={{
-            height: isSplitActive ? '100%' : ((activeClaimInspector && asset360Section === 'summary') ? '660px' : '640px'),
-            flex: isSplitActive ? 1 : 'none',
-            width: '100%',
-            cursor: isPanning ? 'grabbing' : isWiringEdge ? 'crosshair' : 'grab',
-            overflow: 'hidden',
-            position: 'relative',
-            background: 'radial-gradient(#cbd5e1 1.2px, transparent 1.2px)',
-            backgroundSize: '22px 22px',
-            backgroundColor: '#fafbfc'
-          }}
-        >
-          {/* Actionable DAG: Live "What-If" Simulation & Draft Changes HUD */}
-          {(draftAddedEdges.length > 0 || draftSeveredEdgeIds.size > 0) && (
-            <div style={{
-              position: 'absolute',
-              top: '12px',
-              left: '50%',
-              transform: 'translateX(-50%)',
-              zIndex: 35,
-              background: 'rgba(15, 23, 42, 0.95)',
-              backdropFilter: 'blur(8px)',
-              color: '#F8FAFC',
-              borderRadius: '10px',
-              boxShadow: '0 8px 28px rgba(0,0,0,0.28)',
-              border: '1px solid #334155',
-              padding: '7px 14px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '14px',
-              fontSize: '0.73rem',
-              maxWidth: '92%',
-              pointerEvents: 'auto',
-              animation: 'fadeIn 0.2s ease'
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <span style={{ background: '#EA580C', color: '#FFFFFF', padding: '2px 7px', borderRadius: '4px', fontWeight: 800, fontSize: '0.66rem', letterSpacing: '0.04em' }}>
-                  ⚡ DRAFT LINEAGE
-                </span>
-                <span style={{ fontWeight: 600 }}>
-                  {draftAddedEdges.length > 0 && <span style={{ color: '#4ADE80', marginRight: '6px' }}>+{draftAddedEdges.length} Connected</span>}
-                  {draftSeveredEdgeIds.size > 0 && <span style={{ color: '#F87171' }}>-{draftSeveredEdgeIds.size} Severed</span>}
-                </span>
-              </div>
-
-              <div style={{ borderLeft: '1px solid #334155', paddingLeft: '10px', display: 'flex', alignItems: 'center', gap: '8px', color: '#94A3B8' }}>
-                <span>Simulated Trust: <strong style={{ color: '#4ADE80' }}>98% (+14%)</strong></span>
-                <span>•</span>
-                <span>AI Grounding: <strong style={{ color: '#38BDF8' }}>100% Safe</strong></span>
-              </div>
-
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginLeft: 'auto' }}>
-                <button
-                  type="button"
-                  onClick={handleDiscardLineageMutations}
-                  style={{
-                    background: 'rgba(255,255,255,0.08)',
-                    border: '1px solid #475569',
-                    color: '#E2E8F0',
-                    padding: '3px 9px',
-                    borderRadius: '5px',
-                    fontSize: '0.70rem',
-                    fontWeight: 600,
-                    cursor: 'pointer',
-                    transition: 'all 0.15s ease'
-                  }}
-                  onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.16)'}
-                  onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.08)'}
-                >
-                  ↺ Discard
-                </button>
-                <button
-                  type="button"
-                  onClick={handleDeployLineageMutations}
-                  disabled={isDeployingLineage}
-                  style={{
-                    background: '#16A34A',
-                    border: '1px solid #22C55E',
-                    color: '#FFFFFF',
-                    padding: '3px 11px',
-                    borderRadius: '5px',
-                    fontSize: '0.70rem',
-                    fontWeight: 700,
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '4px',
-                    boxShadow: '0 2px 8px rgba(22,163,74,0.3)',
-                    transition: 'all 0.15s ease'
-                  }}
-                  onMouseEnter={e => e.currentTarget.style.background = '#15803D'}
-                  onMouseLeave={e => e.currentTarget.style.background = '#16A34A'}
-                >
-                  {isDeployingLineage ? 'Deploying...' : 'Deploy Graph ✓'}
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* Zoom & Pan Transform Layer */}
-          <div
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              width: '100%',
-              height: '100%',
-              transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`,
-              transformOrigin: '0 0'
-            }}
-          >
-            {/* SVG Connecting Bezier Lines */}
-            <svg
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '3600px',
-                height: '2400px',
-                overflow: 'visible',
-                pointerEvents: 'none',
-                zIndex: 2
-              }}
-            >
-              <defs>
-                <marker id="atlan-arrow-default" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
-                  <polygon points="0 1, 8 4, 0 7" fill="#94A3B8" />
-                </marker>
-                <marker id="atlan-arrow-active" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
-                  <polygon points="0 1, 8 4, 0 7" fill="#2563EB" />
-                </marker>
-                <marker id="atlan-arrow-conflict" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
-                  <polygon points="0 1, 8 4, 0 7" fill="#EA580C" />
-                </marker>
-                <marker id="atlan-arrow-decision" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
-                  <polygon points="0 1, 8 4, 0 7" fill="#7C3AED" />
-                </marker>
-                <marker id="atlan-arrow-draft-add" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
-                  <polygon points="0 1, 8 4, 0 7" fill="#16A34A" />
-                </marker>
-                <marker id="atlan-arrow-severed" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
-                  <polygon points="0 1, 8 4, 0 7" fill="#DC2626" />
-                </marker>
-              </defs>
-
-              {renderedEdges.map(edge => {
-                const isHovered = hoveredEdgeId === edge.id;
-                const isConflictLine = edge.type === 'conflict' || edge.isConflictConnection;
-                
-                let strokeColor = '#94A3B8';
-                let marker = 'url(#atlan-arrow-default)';
-                let strokeDash = 'none';
-                let strokeWidth = 1.8;
-                let strokeOpacity = 1;
-
-                if (edge.isSevered) {
-                  strokeColor = '#DC2626';
-                  marker = 'url(#atlan-arrow-severed)';
-                  strokeDash = '5 4';
-                  strokeWidth = 2.2;
-                  strokeOpacity = 0.55;
-                } else if (edge.isDraft) {
-                  strokeColor = '#16A34A';
-                  marker = 'url(#atlan-arrow-draft-add)';
-                  strokeDash = '6 4';
-                  strokeWidth = 2.6;
-                } else if (isConflictLine) {
-                  strokeColor = '#EA580C';
-                  marker = 'url(#atlan-arrow-conflict)';
-                  strokeWidth = 2.5;
-                } else if (edge.isActive) {
-                  strokeColor = edge.type === 'decision_grounding' ? '#7C3AED' : '#2563EB';
-                  marker = edge.type === 'decision_grounding' ? 'url(#atlan-arrow-decision)' : 'url(#atlan-arrow-active)';
-                  strokeWidth = 2.2;
-                }
-
-                if (isHovered && !edge.isSevered && !edge.isDraft) {
-                  strokeWidth = 3.2;
-                  strokeColor = '#2563EB';
-                }
-
-                // Remove arrowheads on edges entering claim rows so the curve lands cleanly on the filled circle
-                if (edge.target.startsWith('cl_') && !edge.isSevered && !edge.isDraft) {
-                  marker = 'none';
-                }
-
-                return (
-                  <g
-                    key={edge.id}
-                    onMouseEnter={() => setHoveredEdgeId(edge.id)}
-                    onMouseLeave={() => setHoveredEdgeId(prev => prev === edge.id ? null : prev)}
-                  >
-                    {/* Invisible Wide Hitbox for Effortless Hover Detection */}
-                    <path
-                      d={edge.pathData}
-                      fill="none"
-                      stroke="transparent"
-                      strokeWidth={18}
-                      style={{ pointerEvents: 'stroke', cursor: 'pointer' }}
-                    />
-
-                    {/* Visible Lineage Bezier Spline */}
-                    <path
-                      d={edge.pathData}
-                      fill="none"
-                      stroke={strokeColor}
-                      strokeWidth={strokeWidth}
-                      strokeDasharray={strokeDash}
-                      strokeOpacity={strokeOpacity}
-                      markerEnd={marker}
-                      style={{
-                        transition: 'stroke 0.2s ease, stroke-width 0.2s ease, stroke-opacity 0.2s ease',
-                        pointerEvents: 'none'
-                      }}
-                    />
-
-                    {/* Interactive Action Pill at Spline Midpoint (Hover to Sever / Restore / Remove) */}
-                    {(isHovered || edge.isSevered || edge.isDraft) && (
-                      <foreignObject
-                        x={edge.midX - 52}
-                        y={edge.midY - 14}
-                        width={104}
-                        height={28}
-                        style={{ overflow: 'visible', pointerEvents: 'auto', zIndex: 50 }}
-                      >
-                        <button
-                          type="button"
-                          onClick={(e) => handleToggleSeverEdge(e, edge.id)}
-                          style={{
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            gap: '4px',
-                            padding: '3px 8px',
-                            borderRadius: '12px',
-                            fontSize: '0.64rem',
-                            fontWeight: 800,
-                            cursor: 'pointer',
-                            border: edge.isSevered
-                              ? '1px solid #F87171'
-                              : edge.isDraft
-                                ? '1px solid #4ADE80'
-                                : '1px solid #38BDF8',
-                            background: edge.isSevered
-                              ? '#FEF2F2'
-                              : edge.isDraft
-                                ? '#F0FDF4'
-                                : '#0F172A',
-                            color: edge.isSevered
-                              ? '#DC2626'
-                              : edge.isDraft
-                                ? '#16A34A'
-                                : '#FFFFFF',
-                            boxShadow: '0 4px 12px rgba(0,0,0,0.18)',
-                            whiteSpace: 'nowrap',
-                            transition: 'all 0.15s ease'
-                          }}
-                          title={
-                            edge.isSevered
-                              ? "Click to restore this severed connection"
-                              : edge.isDraft
-                                ? "Click to cancel this drafted connection"
-                                : "Click to sever this connection and isolate context flow"
-                          }
-                        >
-                          {edge.isSevered ? (
-                            <span>↺ Restore</span>
-                          ) : edge.isDraft ? (
-                            <span>✓ Linked (✕)</span>
-                          ) : (
-                            <span>✂️ Sever Flow</span>
-                          )}
-                        </button>
-                      </foreignObject>
-                    )}
-                  </g>
-                );
-              })}
-
-              {/* Dynamic Live Wiring Spline while Dragging */}
-              {isWiringEdge && (() => {
-                const startX = wireStartPos.x;
-                const startY = wireStartPos.y;
-                let targetX = wireCurrentPos.x;
-                let targetY = wireCurrentPos.y;
-
-                if (wireHoveredTargetId) {
-                  const tPos = nodePositions[wireHoveredTargetId];
-                  if (tPos) {
-                    targetX = tPos.x;
-                    targetY = tPos.y + CARD_HEIGHT / 2;
-                  }
-                }
-
-                const isForward = targetX >= startX + 20;
-                const dx = Math.max(40, Math.abs(targetX - startX) * 0.45);
-                const cp1X = startX + (isForward ? dx : -dx);
-                const cp1Y = startY;
-                const cp2X = targetX - (isForward ? dx : -dx);
-                const cp2Y = targetY;
-                const dynamicPath = `M ${startX} ${startY} C ${cp1X} ${cp1Y}, ${cp2X} ${cp2Y}, ${targetX} ${targetY}`;
-
-                return (
-                  <g style={{ pointerEvents: 'none' }}>
-                    <path
-                      d={dynamicPath}
-                      fill="none"
-                      stroke="#16A34A"
-                      strokeWidth={3}
-                      strokeDasharray="6 4"
-                      markerEnd="url(#atlan-arrow-draft-add)"
-                    />
-                    <circle cx={startX} cy={startY} r={5} fill="#16A34A" />
-                    <circle cx={targetX} cy={targetY} r={6} fill="#22C55E" />
-                  </g>
-                );
-              })()}
-            </svg>
-
-            {/* Empty State Banner */}
-            {renderedNodes.length === 0 && (
-              <div style={{
-                position: 'absolute',
-                top: '200px',
-                left: '260px',
-                textAlign: 'center',
-                background: 'rgba(255,255,255,0.96)',
-                backdropFilter: 'blur(8px)',
-                padding: '32px 40px',
-                borderRadius: '14px',
-                border: '1px solid #cbd5e1',
-                boxShadow: '0 12px 32px rgba(0,0,0,0.06)',
-                maxWidth: '500px',
-                pointerEvents: 'auto'
-              }}>
-                <div style={{ fontSize: '2.5rem', marginBottom: '8px' }}>🔎</div>
-                <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#1e293b', margin: '0 0 8px 0' }}>
-                  No Nodes Match Active Filters
-                </h3>
-                <p style={{ fontSize: '0.82rem', color: '#64748b', lineHeight: 1.55, margin: '0 0 14px 0' }}>
-                  No lineage nodes match your current combination of filters. Try clearing some filters or resetting to default view.
-                </p>
-                <button
-                  onClick={resetAllFilters}
-                  className="btn btn-primary"
-                  style={{ padding: '6px 16px', fontSize: '0.78rem' }}
-                >
-                  Reset Filters to Default
-                </button>
-              </div>
-            )}
-
-            {/* Interactive Mode Initial Guidance Pill */}
-            {viewMode === 'interactive' && renderedNodes.length === 1 && (
-              <div style={{
-                position: 'absolute',
-                top: '90px',
-                left: '480px',
-                transform: 'translateX(-50%)',
-                background: 'rgba(255, 255, 255, 0.96)',
-                border: '1px solid #BFDBFE',
-                borderRadius: '20px',
-                padding: '6px 18px',
-                boxShadow: '0 4px 14px rgba(29, 78, 216, 0.08)',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                fontSize: '0.72rem',
-                color: '#1E293B',
-                pointerEvents: 'none',
-                zIndex: 10,
-                whiteSpace: 'nowrap'
-              }}>
-                <span style={{ fontSize: '13px' }}>🎯</span>
-                <span>
-                  <strong>Interactive Flow:</strong> Click <strong>+</strong> / <strong>−</strong> on the left for Upstream or <strong>+</strong> / <strong>−</strong> on the right for Downstream.
-                </span>
-              </div>
-            )}
-
-            {/* Draggable Node Cards */}
-            {renderedNodes.map(node => {
-              const pos = nodePositions[node.id] || { x: 100, y: 100 };
-              const isSelected = selectedNodeId === node.id;
-              const isConnected = connectedNodeMap.all.has(node.id);
-              const isConflictedClaim = allConflictedClaimIds.has(node.id);
-
-              const upstreamParents = getUpstreamParentIds(node.id);
-              const downstreamChildren = getDownstreamChildIds(node.id);
-              const upstreamCount = upstreamParents.length;
-              const downstreamCount = downstreamChildren.length;
-              const isUpstreamExpanded = expandedUpstreamSet.has(node.id);
-              const isDownstreamExpanded = expandedDownstreamSet.has(node.id);
-              const isClaimsExpanded = expandedConflictClaimsSet.has(node.id);
-              const cItem = conflictMap[node.id];
-              const claimANode = cItem?.claimAId ? graphData?.nodes?.find(n => n.id === cItem.claimAId) : null;
-              const claimBNode = cItem?.claimBId ? graphData?.nodes?.find(n => n.id === cItem.claimBId) : null;
-
-              let borderColor = '#3b82f6';
-              let badgeBg = '#f0f7ff';
-              let badgeColor = '#2563eb';
-              let nodeIcon = '⚡';
-              let categoryLabel = 'ATOMIC CLAIM';
-              let subtitleText = `SCOPE / ${node.data?.scope || 'ENTERPRISE'}`;
-
-              if (node.type === 'source') {
-                borderColor = '#2026d2';
-                badgeBg = '#eef2ff';
-                badgeColor = '#2026d2';
-                nodeIcon = '🔌';
-                categoryLabel = 'DATA SOURCE';
-                subtitleText = `TYPE / ${node.subType?.toUpperCase() || 'CONNECTOR'} • AUTH ${node.authority}%`;
-              } else if (node.type === 'document') {
-                borderColor = '#0284c7';
-                badgeBg = '#f0f9ff';
-                badgeColor = '#0284c7';
-                nodeIcon = '📄';
-                categoryLabel = 'DOCUMENT';
-                subtitleText = `TYPE / ${node.subType?.toUpperCase() || 'POLICY'} • v${node.data?.version_count || 1}.0`;
-              } else if (node.type === 'conflict') {
-                borderColor = '#ea580c';
-                badgeBg = '#fff7ed';
-                badgeColor = '#ea580c';
-                nodeIcon = '⚖️';
-                categoryLabel = 'CONTRADICTION';
-                subtitleText = `STATUS / ${node.status || 'REVIEW_REQUIRED'}`;
-              } else if (node.type === 'decision') {
-                borderColor = '#7c3aed';
-                badgeBg = '#faf5ff';
-                badgeColor = '#7c3aed';
-                nodeIcon = '🤖';
-                categoryLabel = 'AI DECISION';
-                subtitleText = `ACTOR / ${node.actor || 'AGENT_EVAL'}`;
-              }
-
-              // Special highlight for contradictory claims
-              if (isConflictedClaim && node.type === 'claim') {
-                borderColor = '#ea580c';
-                badgeColor = '#ea580c';
-              }
-
-              // Big Claims Container Card (Multi-Claim List with connecting dots & pagination)
-              if (node.type === 'claims_group_card') {
-                const docClaims = node.claims || [];
-                const visibleClaims = docClaims.slice(0, claimsPageLimit);
-                const totalCount = docClaims.length;
-                const hasMore = totalCount > claimsPageLimit;
-
-                return (
-                  <div
-                    key={node.id}
-                    className="atlan-node-card"
-                    onMouseDown={(e) => handleNodeDragStart(e, node.id)}
-                    style={{
-                      position: 'absolute',
-                      left: `${pos.x}px`,
-                      top: `${pos.y}px`,
-                      width: '330px',
+                  {/* Unified Executive Lineage Command Card (Single Card Container) - Hidden in Overview mode as it concentrates on a single claim */}
+                  {asset360Section !== 'summary' && (
+                    <div style={{
                       background: '#FFFFFF',
-                      borderRadius: '12px',
-                      border: '1.5px solid #3B82F6',
-                      boxShadow: '0 4px 20px rgba(59,130,246,0.12)',
-                      boxSizing: 'border-box',
-                      zIndex: 15,
+                      border: '1px solid #E2E8F0',
+                      borderRadius: '10px',
+                      boxShadow: '0 1px 3px rgba(0, 0, 0, 0.02)',
                       display: 'flex',
                       flexDirection: 'column',
-                      overflow: 'visible',
-                      cursor: draggedNodeId === node.id ? 'grabbing' : 'default',
-                      userSelect: 'none'
-                    }}
-                  >
-                    {/* Draggable Title Header */}
-                    <div
-                      style={{
-                        height: '36px',
-                        boxSizing: 'border-box',
-                        padding: '0 12px',
-                        background: 'linear-gradient(180deg, #1E293B 0%, #0F172A 100%)',
-                        borderRadius: '10px 10px 0 0',
+                      overflow: 'hidden',
+                      width: '100%',
+                      boxSizing: 'border-box'
+                    }}>
+                      {/* Row 1: Primary Command Bar */}
+                      <div style={{
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
-                        color: '#FFFFFF',
-                        cursor: 'grab'
-                      }}
-                      title="Hold and drag to move entire claims table"
-                    >
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                        <span style={{ fontSize: '13px' }}>🛡️</span>
-                        <span style={{ fontSize: '0.72rem', fontWeight: 800, letterSpacing: '0.02em' }}>
-                          ATOMIC CLAIMS ({visibleClaims.length}/{totalCount})
-                        </span>
-                      </div>
-                      <span style={{
-                        fontSize: '0.62rem',
-                        background: 'rgba(59,130,246,0.25)',
-                        color: '#93C5FD',
-                        padding: '1px 6px',
-                        borderRadius: '4px',
-                        fontWeight: 700
+                        flexWrap: 'wrap',
+                        gap: '8px',
+                        padding: '6px 12px',
+                        background: '#F8FAFC',
+                        borderBottom: isFilterPanelOpen ? '1px solid #E2E8F0' : 'none'
                       }}>
-                        {node.docTitle || 'Context Rules'}
-                      </span>
-                    </div>
-
-                    {/* Claims List Rows */}
-                    <div style={{ padding: '8px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                      {visibleClaims.map((cl) => {
-                        const isSelected = selectedNodeId === cl.id;
-                        const isConflicted = allConflictedClaimIds.has(cl.id);
-                        const isHoveredTarget = wireHoveredTargetId === cl.id;
-
-                        return (
-                          <div
-                            key={cl.id}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setSelectedNodeId(cl.id);
-                              fetchBlastRadius(cl.cleanId || String(cl.id).replace(/^cl_/, ''));
-                            }}
-                            style={{
-                              position: 'relative',
-                              height: '56px',
-                              boxSizing: 'border-box',
-                              padding: '5px 10px',
-                              background: isSelected ? '#EFF6FF' : isConflicted ? '#FFF7ED' : '#F8FAFC',
-                              border: isSelected ? '1.5px solid #2563EB' : isConflicted ? '1px solid #FDBA74' : '1px solid #E2E8F0',
-                              borderRadius: '8px',
-                              cursor: 'pointer',
-                              display: 'flex',
-                              flexDirection: 'column',
-                              justifyContent: 'center',
-                              transition: 'all 0.15s ease'
-                            }}
-                          >
-                            {/* Left Input Dot (Port) - Solid Fully Filled Circle (No Radio Button Style) */}
-                            <div
-                              style={{
-                                position: 'absolute',
-                                left: '-13px',
-                                top: '23px',
-                                width: '10px',
-                                height: '10px',
-                                borderRadius: '50%',
-                                background: isHoveredTarget
-                                  ? '#16A34A'
-                                  : isConflicted
-                                    ? '#EA580C'
-                                    : '#2563EB',
-                                border: 'none',
-                                boxShadow: 'none',
-                                zIndex: 25
-                              }}
-                              title="Active context connection from source document"
-                            />
-
-                            {/* Claim Row Content */}
-                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '6px', marginBottom: '2px' }}>
-                              <span style={{
-                                fontSize: '0.60rem',
-                                fontWeight: 800,
-                                color: isConflicted ? '#EA580C' : '#2563EB',
-                                background: isConflicted ? '#FFEDD5' : '#DBEAFE',
-                                padding: '1px 5px',
-                                borderRadius: '3px'
-                              }}>
-                                {isConflicted ? 'CONFLICTED' : 'VERIFIED'}
-                              </span>
-                              <span style={{ fontSize: '0.62rem', fontWeight: 700, color: '#16A34A' }}>
-                                {Math.round((cl.trustScore || 0.96) * 100)}% Trust
-                              </span>
-                            </div>
-
-                            <p style={{
-                              margin: 0,
-                              fontSize: '0.69rem',
-                              fontWeight: 600,
-                              color: '#1E293B',
-                              lineHeight: 1.35,
-                              overflow: 'hidden',
-                              textOverflow: 'ellipsis',
-                              display: '-webkit-box',
-                              WebkitLineClamp: 2,
-                              WebkitBoxOrient: 'vertical'
-                            }}>
-                              {cl.label}
-                            </p>
-
-                            {/* Right Output Dot (Port - ⚡ Draggable Handle) */}
-                            <div
-                              onMouseDown={(e) => handlePortMouseDown(e, cl.id)}
-                              style={{
-                                position: 'absolute',
-                                right: '-9px',
-                                top: 'calc(50% - 9px)',
-                                width: '18px',
-                                height: '18px',
-                                borderRadius: '50%',
-                                background: 'linear-gradient(135deg, #1D4ED8 0%, #3B82F6 100%)',
-                                border: '1.5px solid #FFFFFF',
-                                color: '#FFFFFF',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                fontSize: '9px',
-                                boxShadow: '0 2px 6px rgba(29,78,216,0.35)',
-                                cursor: 'crosshair',
-                                zIndex: 25
-                              }}
-                              title="Hold and drag to wire to Decision Agent or Contradiction"
-                            >
-                              ⚡
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-
-                    {/* Footer Load More / Collapse */}
-                    {totalCount > 6 && (
-                      <div style={{ padding: '4px 8px 8px 8px', borderTop: '1px solid #F1F5F9' }}>
-                        {hasMore ? (
-                          <button
-                            type="button"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setClaimsPageLimit(prev => prev + 6);
-                              showToast?.(`Loaded 6 more claims (${Math.min(totalCount, claimsPageLimit + 6)}/${totalCount})`);
-                            }}
-                            style={{
-                              width: '100%',
-                              padding: '5px',
-                              borderRadius: '6px',
-                              border: '1px solid #BFDBFE',
-                              background: '#EFF6FF',
-                              color: '#1D4ED8',
-                              fontSize: '0.68rem',
-                              fontWeight: 700,
-                              cursor: 'pointer',
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              gap: '4px',
-                              transition: 'all 0.15s ease'
-                            }}
-                          >
-                            <span>➕ Load 6 More Claims ({totalCount - visibleClaims.length} remaining)</span>
-                          </button>
-                        ) : (
-                          <button
-                            type="button"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setClaimsPageLimit(6);
-                              showToast?.("Collapsed claims list to 6");
-                            }}
-                            style={{
-                              width: '100%',
-                              padding: '4px',
-                              borderRadius: '6px',
-                              border: '1px solid #E2E8F0',
-                              background: '#F8FAFC',
-                              color: '#64748B',
-                              fontSize: '0.66rem',
-                              fontWeight: 600,
-                              cursor: 'pointer',
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              gap: '4px'
-                            }}
-                          >
-                            <span>↺ Collapse to 6 Claims</span>
-                          </button>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                );
-              }
-
-              // Anomaly Roll-up Cluster Card
-              if (node.type === 'claim_cluster') {
-                return (
-                  <div
-                    key={node.id}
-                    className="atlan-node-card"
-                    onClick={() => {
-                      setDrawerDocFilter(node.docId || 'all');
-                      setIsDrawerOpen(true);
-                      showToast?.(`Viewing ${node.count} clean claims from ${node.docTitle}`);
-                    }}
-                    style={{
-                      position: 'absolute',
-                      left: `${pos.x}px`,
-                      top: `${pos.y}px`,
-                      width: `${CARD_WIDTH}px`,
-                      height: `${CARD_HEIGHT}px`,
-                      background: 'linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%)',
-                      borderRadius: '10px',
-                      border: '1.5px dashed #059669',
-                      boxShadow: '0 2px 8px rgba(5,150,105,0.12)',
-                      boxSizing: 'border-box',
-                      padding: '10px 12px',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      justifyContent: 'space-between',
-                      cursor: 'pointer',
-                      zIndex: 10,
-                      userSelect: 'none',
-                      transition: 'all 0.15s ease'
-                    }}
-                    title="Click to view all clean, verified claims in Claims Drawer"
-                  >
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <span style={{ fontSize: '0.64rem', fontWeight: 800, color: '#166534', background: '#BBF7D0', padding: '1px 6px', borderRadius: '4px', display: 'flex', alignItems: 'center', gap: '3px' }}>
-                        <ShieldCheck size={11} /> CLUSTER (CLEAN)
-                      </span>
-                      <span style={{ fontSize: '0.66rem', color: '#15803D', fontWeight: 700 }}>
-                        {node.count} Claims
-                      </span>
-                    </div>
-                    <div>
-                      <h4 style={{ margin: 0, fontSize: '0.78rem', fontWeight: 700, color: '#14532D', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        🛡️ {node.label}
-                      </h4>
-                      <p style={{ margin: '2px 0 0 0', fontSize: '0.68rem', color: '#166534', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        Source: {node.docTitle}
-                      </p>
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid rgba(5,150,105,0.2)', paddingTop: '4px', fontSize: '0.65rem', color: '#15803D' }}>
-                      <span>Non-Conflicting</span>
-                      <span style={{ fontWeight: 700, textDecoration: 'underline' }}>Browse Claims ›</span>
-                    </div>
-                  </div>
-                );
-              }
-
-              // High-Density Column Overflow Cluster Card
-              if (node.type === 'density_cluster') {
-                return (
-                  <div
-                    key={node.id}
-                    className="atlan-node-card"
-                    onClick={() => {
-                      setDisplayLimit('all');
-                      showToast?.("Expanded all claims in column");
-                    }}
-                    style={{
-                      position: 'absolute',
-                      left: `${pos.x}px`,
-                      top: `${pos.y}px`,
-                      width: `${CARD_WIDTH}px`,
-                      height: `${CARD_HEIGHT}px`,
-                      background: 'linear-gradient(135deg, #F8FAFC 0%, #EEF2F6 100%)',
-                      borderRadius: '10px',
-                      border: '1.5px dashed #64748B',
-                      boxShadow: '0 1px 4px rgba(0,0,0,0.02)',
-                      boxSizing: 'border-box',
-                      padding: '10px 12px',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      justifyContent: 'space-between',
-                      cursor: 'pointer',
-                      zIndex: 10,
-                      userSelect: 'none',
-                      transition: 'all 0.15s ease'
-                    }}
-                    title="Click to expand full column density"
-                  >
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <span style={{ fontSize: '0.64rem', fontWeight: 800, color: '#334155', background: '#E2E8F0', padding: '1px 6px', borderRadius: '4px' }}>
-                        COLUMN OVERFLOW
-                      </span>
-                      <span style={{ fontSize: '0.66rem', color: '#64748B', fontWeight: 700 }}>
-                        +{node.count} Hidden
-                      </span>
-                    </div>
-                    <div>
-                      <h4 style={{ margin: 0, fontSize: '0.78rem', fontWeight: 700, color: '#0F172A' }}>
-                        {node.label}
-                      </h4>
-                      <p style={{ margin: '2px 0 0 0', fontSize: '0.68rem', color: '#64748B' }}>
-                        {node.desc}
-                      </p>
-                    </div>
-                    <div style={{ borderTop: '1px solid #CBD5E1', paddingTop: '4px', fontSize: '0.66rem', color: '#2563EB', fontWeight: 700, textAlign: 'center' }}>
-                      ⚡ Click to Expand All
-                    </div>
-                  </div>
-                );
-              }
-
-              return (
-                <div
-                  key={node.id}
-                  className="atlan-node-card"
-                  onClick={() => setSelectedNodeId(node.id)}
-                  onMouseDown={(e) => handleNodeDragStart(e, node.id)}
-                  style={{
-                    position: 'absolute',
-                    left: `${pos.x}px`,
-                    top: `${pos.y}px`,
-                    width: (node.type === 'conflict' && isClaimsExpanded) ? '310px' : `${CARD_WIDTH}px`,
-                    height: (node.type === 'conflict' && isClaimsExpanded) ? 'auto' : `${CARD_HEIGHT}px`,
-                    minHeight: `${CARD_HEIGHT}px`,
-                    background: '#fff',
-                    borderRadius: '10px',
-                    border: isSelected
-                      ? `2px solid ${borderColor}`
-                      : isConflictedClaim
-                        ? '1.5px solid #ea580c'
-                        : isConnected
-                          ? `1.5px solid ${borderColor}`
-                          : '1px solid #cbd5e1',
-                    boxShadow: isSelected
-                      ? `0 0 0 4px ${borderColor}30, 0 8px 24px rgba(0,0,0,0.12)`
-                      : (node.type === 'conflict' && isClaimsExpanded)
-                        ? '0 0 0 3px rgba(234,88,12,0.3), 0 12px 32px rgba(234,88,12,0.18)'
-                        : isConflictedClaim
-                          ? '0 0 0 2px rgba(234,88,12,0.25), 0 4px 14px rgba(234,88,12,0.15)'
-                          : isConnected
-                            ? `0 0 0 2px ${borderColor}20, 0 4px 12px rgba(0,0,0,0.06)`
-                            : '0 2px 8px rgba(0,0,0,0.04)',
-                    boxSizing: 'border-box',
-                    padding: '10px 14px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between',
-                    cursor: draggedNodeId === node.id ? 'grabbing' : 'pointer',
-                    userSelect: 'none',
-                    zIndex: (node.type === 'conflict' && isClaimsExpanded) ? 40 : (isSelected ? 20 : isConflictedClaim ? 15 : isConnected ? 10 : 5),
-                    transition: draggedNodeId === node.id ? 'none' : 'box-shadow 0.15s ease, border-color 0.15s ease'
-                  }}
-                >
-                  {/* Atlan-Style Home / Origin Beacon */}
-                  {isSelected && (
-                    <div style={{
-                      position: 'absolute',
-                      top: '-16px',
-                      left: '10px',
-                      background: '#1D4ED8',
-                      color: '#fff',
-                      borderRadius: '4px 4px 0 0',
-                      padding: '2px 8px',
-                      fontSize: '0.62rem',
-                      fontWeight: 800,
-                      letterSpacing: '0.04em',
-                      boxShadow: '0 2px 6px rgba(29,78,216,0.35)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '4px'
-                    }}>
-                      <Home size={10} />
-                      <span>YOU ARE HERE</span>
-                    </div>
-                  )}
-
-                  {/* Left Connection Port: Upstream Expand (+) / Collapse (−) & Snap Highlight */}
-                  {node.type !== 'source' && upstreamCount > 0 && (
-                    <div
-                      onMouseDown={(e) => e.stopPropagation()}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        toggleUpstream(node.id);
-                      }}
-                      style={{
-                        position: 'absolute',
-                        left: '-13px',
-                        top: (node.type === 'conflict' && isClaimsExpanded) ? '26px' : 'calc(50% - 11px)',
-                        width: '22px',
-                        height: '22px',
-                        borderRadius: '50%',
-                        background: isUpstreamExpanded ? '#1D4ED8' : '#fff',
-                        border: `1.5px solid ${isUpstreamExpanded ? '#1D4ED8' : borderColor}`,
-                        color: isUpstreamExpanded ? '#fff' : borderColor,
-                        boxShadow: '0 2px 6px rgba(0,0,0,0.14)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontSize: '0.85rem',
-                        fontWeight: 900,
-                        lineHeight: 1,
-                        cursor: 'pointer',
-                        zIndex: 25,
-                        transition: 'all 0.15s ease'
-                      }}
-                      title={
-                        isUpstreamExpanded
-                          ? 'Click (−) to collapse upstream nodes'
-                          : 'Click (+) to expand upstream nodes'
-                      }
-                    >
-                      {isUpstreamExpanded ? '−' : '+'}
-                    </div>
-                  )}
-
-                  {/* Input Port Snap Indicator when Wiring */}
-                  {isWiringEdge && wireHoveredTargetId === node.id && (
-                    <div style={{
-                      position: 'absolute',
-                      left: '-26px',
-                      top: 'calc(50% - 10px)',
-                      background: '#16A34A',
-                      color: '#FFFFFF',
-                      borderRadius: '12px',
-                      padding: '2px 7px',
-                      fontSize: '0.62rem',
-                      fontWeight: 800,
-                      boxShadow: '0 2px 8px rgba(22,163,74,0.4)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '3px',
-                      zIndex: 35,
-                      pointerEvents: 'none',
-                      whiteSpace: 'nowrap'
-                    }}>
-                      <span>✓ Snap Link</span>
-                    </div>
-                  )}
-
-                  {/* Actionable Output Wiring Port Handle (Drag to Wire Context Flow) */}
-                  {node.type !== 'decision' && (
-                    <div
-                      className="atlan-port-handle"
-                      onMouseDown={(e) => handlePortMouseDown(e, node.id)}
-                      title="Click and drag to wire context flow into downstream AI or node"
-                      style={{
-                        position: 'absolute',
-                        right: '-10px',
-                        top: (node.type === 'conflict' && isClaimsExpanded) ? '54px' : (downstreamCount > 0 ? 'calc(50% + 14px)' : 'calc(50% - 9px)'),
-                        width: '18px',
-                        height: '18px',
-                        borderRadius: '50%',
-                        background: '#2563EB',
-                        border: '2px solid #FFFFFF',
-                        boxShadow: '0 2px 6px rgba(37,99,235,0.4)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        cursor: 'crosshair',
-                        zIndex: 26,
-                        transition: 'transform 0.15s ease, background-color 0.15s ease'
-                      }}
-                      onMouseEnter={e => {
-                        e.currentTarget.style.transform = 'scale(1.25)';
-                        e.currentTarget.style.backgroundColor = '#1D4ED8';
-                      }}
-                      onMouseLeave={e => {
-                        e.currentTarget.style.transform = 'scale(1.0)';
-                        e.currentTarget.style.backgroundColor = '#2563EB';
-                      }}
-                    >
-                      <span style={{ fontSize: '9px', color: '#FFFFFF', lineHeight: 1, pointerEvents: 'none' }}>⚡</span>
-                    </div>
-                  )}
-
-                  {/* Right Connection Port: Downstream Expand (+) / Collapse (−) Only */}
-                  {node.type !== 'decision' && downstreamCount > 0 && (
-                    <div
-                      onMouseDown={(e) => e.stopPropagation()}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        toggleDownstream(node.id);
-                      }}
-                      style={{
-                        position: 'absolute',
-                        right: '-13px',
-                        top: (node.type === 'conflict' && isClaimsExpanded) ? '26px' : 'calc(50% - 11px)',
-                        width: '22px',
-                        height: '22px',
-                        borderRadius: '50%',
-                        background: isDownstreamExpanded ? '#1D4ED8' : '#fff',
-                        border: `1.5px solid ${isDownstreamExpanded ? '#1D4ED8' : borderColor}`,
-                        color: isDownstreamExpanded ? '#fff' : borderColor,
-                        boxShadow: '0 2px 6px rgba(0,0,0,0.14)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontSize: '0.85rem',
-                        fontWeight: 900,
-                        lineHeight: 1,
-                        cursor: 'pointer',
-                        zIndex: 25,
-                        transition: 'all 0.15s ease'
-                      }}
-                      title={
-                        isDownstreamExpanded
-                          ? 'Click (−) to collapse downstream nodes'
-                          : 'Click (+) to expand downstream nodes'
-                      }
-                    >
-                      {isDownstreamExpanded ? '−' : '+'}
-                    </div>
-                  )}
-
-                  {/* Card Header: Category & Metrics */}
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <span style={{
-                      fontSize: '0.62rem',
-                      fontWeight: 800,
-                      color: badgeColor,
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.04em'
-                    }}>
-                      {isConflictedClaim && node.type === 'claim' ? '⚠️ CONTRADICTION' : categoryLabel}
-                    </span>
-
-                    {node.trustScore !== undefined && (
-                      <span className="badge badge-verified" style={{ fontSize: '0.62rem', padding: '1px 5px', fontWeight: 700 }}>
-                        {(node.trustScore * 100).toFixed(0)}% Trust
-                      </span>
-                    )}
-                    {node.severity && (
-                      <span className="badge badge-review" style={{ fontSize: '0.62rem', padding: '1px 5px', fontWeight: 700 }}>
-                        {node.severity}
-                      </span>
-                    )}
-                    {node.verdict && (
-                      <span className={node.verdict === 'ALLOW' ? 'badge badge-verified' : 'badge badge-warning'} style={{ fontSize: '0.62rem', padding: '1px 5px', fontWeight: 700 }}>
-                        {node.verdict}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Card Body: Entity Title */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '2px' }}>
-                    <span style={{ fontSize: '15px' }}>{nodeIcon}</span>
-                    <span style={{
-                      fontSize: '0.78rem',
-                      fontWeight: 700,
-                      color: '#1e293b',
-                      lineHeight: 1.25,
-                      whiteSpace: 'nowrap',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis'
-                    }}>
-                      {node.label}
-                    </span>
-                  </div>
-
-                  {/* Card Footer: Metadata / Scope */}
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid #f1f5f9', paddingTop: '4px', fontSize: '0.65rem', color: '#64748b' }}>
-                    <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '170px' }}>
-                      {subtitleText}
-                    </span>
-                    {node.type === 'document' ? (
-                      <span
-                        style={{
-                          color: '#0284c7',
-                          fontWeight: 700,
-                          fontSize: '0.62rem'
-                        }}
-                      >
-                        inspect doc &rsaquo;
-                      </span>
-                    ) : node.type === 'conflict' ? (
-                      <span
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          toggleConflictClaims(node.id);
-                          if (!isClaimsExpanded) {
-                            showToast?.(`Revealed clashing assertions for ${node.label}`);
-                          }
-                        }}
-                        style={{
-                          color: isClaimsExpanded ? '#C2410C' : '#EA580C',
-                          fontWeight: 800,
-                          fontSize: '0.64rem',
-                          cursor: 'pointer',
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: '3px',
-                          background: isClaimsExpanded ? '#FFEDD5' : '#FFF7ED',
-                          padding: '1px 6px',
-                          borderRadius: '4px',
-                          border: '1px solid #FED7AA',
-                          transition: 'all 0.15s ease'
-                        }}
-                        title="Inspect the 2 conflicting assertions"
-                      >
-                        <span>⚖️ {isClaimsExpanded ? 'Hide Claims ▲' : 'Claims (2) ▾'}</span>
-                      </span>
-                    ) : (
-                      <span style={{ color: '#2563eb', fontWeight: 600, fontSize: '0.62rem' }}>
-                        view lineage &rsaquo;
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Inline Clashing Claims Drawer for Contradiction Card */}
-                  {node.type === 'conflict' && isClaimsExpanded && (
-                    <div
-                      onClick={(e) => e.stopPropagation()}
-                      style={{
-                        marginTop: '8px',
-                        padding: '8px 10px',
-                        background: '#FFF7ED',
-                        borderRadius: '8px',
-                        border: '1px solid #FED7AA',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '6px',
-                        fontSize: '0.66rem',
-                        boxShadow: 'inset 0 1px 3px rgba(234,88,12,0.06)'
-                      }}
-                    >
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <span style={{ fontWeight: 800, color: '#9A3412', textTransform: 'uppercase', fontSize: '0.59rem', letterSpacing: '0.03em' }}>
-                          ⚖️ CLASHING ASSERTIONS
-                        </span>
-                        <span style={{ fontSize: '0.58rem', color: '#EA580C', fontWeight: 800, background: '#FFEDD5', padding: '1px 5px', borderRadius: '3px' }}>
-                          {node.severity || cItem?.severity || 'HIGH'} SEVERITY
-                        </span>
-                      </div>
-
-                      {/* Assertion A */}
-                      <div style={{
-                        background: '#FFFFFF',
-                        padding: '6px 8px',
-                        borderRadius: '5px',
-                        borderLeft: '3px solid #0284C7',
-                        boxShadow: '0 1px 2px rgba(0,0,0,0.04)'
-                      }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', color: '#0369A1', fontWeight: 700, fontSize: '0.58rem', marginBottom: '2px' }}>
-                          <span>ASSERTION A (BASELINE)</span>
-                          <span>{claimANode?.trustScore ? `${(claimANode.trustScore * 100).toFixed(0)}% TRUST` : 'VERIFIED'}</span>
-                        </div>
-                        <p style={{ margin: 0, color: '#1E293B', fontSize: '0.65rem', lineHeight: 1.35, fontWeight: 500 }}>
-                          "{claimANode?.fullText || claimANode?.label || cItem?.claimAId || 'SOP refund eligibility window is strictly 30 days.'}"
-                        </p>
-                        {claimANode?.docTitle && (
-                          <span style={{ fontSize: '0.56rem', color: '#64748B', display: 'block', marginTop: '2px' }}>
-                            Doc: {claimANode.docTitle}
-                          </span>
-                        )}
-                      </div>
-
-                      {/* Assertion B */}
-                      <div style={{
-                        background: '#FFFFFF',
-                        padding: '6px 8px',
-                        borderRadius: '5px',
-                        borderLeft: '3px solid #EA580C',
-                        boxShadow: '0 1px 2px rgba(0,0,0,0.04)'
-                      }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', color: '#C2410C', fontWeight: 700, fontSize: '0.58rem', marginBottom: '2px' }}>
-                          <span>ASSERTION B (CONTRADICTION)</span>
-                          <span>{claimBNode?.trustScore ? `${(claimBNode.trustScore * 100).toFixed(0)}% TRUST` : 'FLAGGED'}</span>
-                        </div>
-                        <p style={{ margin: 0, color: '#1E293B', fontSize: '0.65rem', lineHeight: 1.35, fontWeight: 500 }}>
-                          "{claimBNode?.fullText || claimBNode?.label || cItem?.claimBId || 'VIP Tier-1 customer exceptions allow 45-day refund grants.'}"
-                        </p>
-                        {claimBNode?.docTitle && (
-                          <span style={{ fontSize: '0.56rem', color: '#64748B', display: 'block', marginTop: '2px' }}>
-                            Doc: {claimBNode.docTitle}
-                          </span>
-                        )}
-                      </div>
-
-                      {/* Resolution Action */}
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setSelectedNodeId(node.id);
-                          showToast?.(`Selected contradiction: ${node.label} for curator review`);
-                        }}
-                        style={{
-                          marginTop: '2px',
-                          padding: '4px 8px',
-                          background: '#EA580C',
-                          color: '#FFFFFF',
-                          border: 'none',
-                          borderRadius: '4px',
-                          fontWeight: 700,
-                          fontSize: '0.62rem',
-                          cursor: 'pointer',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          gap: '4px',
-                          boxShadow: '0 1px 3px rgba(234,88,12,0.3)',
-                          transition: 'background 0.15s ease'
-                        }}
-                      >
-                        <span>⚖️ Inspect Full Evidence & Resolve</span>
-                      </button>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </div>
-
-      {/* 4. Selected Entity Inspector & Conflict Resolution Console (Hidden in Split-Screen view to keep DAG clean and spacious) */}
-      {!isSplitActive && selectedNode && (
-        <div style={{
-          background: 'var(--bg-surface)',
-          border: '1px solid var(--border-color)',
-          borderRadius: '12px',
-          padding: '16px 20px',
-          display: 'grid',
-          gridTemplateColumns: 'minmax(300px, 1.2fr) minmax(320px, 1fr)',
-          gap: '18px',
-          alignItems: 'start'
-        }}>
-          {/* Left Column: Node Details & Lineage Stats */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <span style={{ fontSize: '22px' }}>
-                {selectedNode.type === 'source' ? '🔌' : selectedNode.type === 'document' ? '📄' : selectedNode.type === 'claim' ? '⚡' : selectedNode.type === 'conflict' ? '⚖️' : '🤖'}
-              </span>
-              <div>
-                <h3 style={{ margin: 0, fontSize: '0.98rem', fontWeight: 800, color: 'var(--text-main)' }}>
-                  {selectedNode.label}
-                </h3>
-                <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
-                  Node Type: <strong style={{ textTransform: 'uppercase' }}>{selectedNode.type}</strong> &bull; ID: <code style={{ fontSize: '0.7rem' }}>{selectedNode.id}</code>
-                </span>
-              </div>
-            </div>
-
-            {selectedNode.fullText && (
-              <p style={{ margin: '4px 0 0 0', fontSize: '0.82rem', color: 'var(--text-main)', lineHeight: 1.45, background: 'var(--bg-card)', padding: '10px 14px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
-                "{selectedNode.fullText}"
-              </p>
-            )}
-
-            {/* Upstream & Downstream Lineage Metrics */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px', marginTop: '4px' }}>
-              <div style={{ background: 'var(--bg-card)', padding: '8px 10px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
-                <span style={{ fontSize: '0.66rem', color: 'var(--text-muted)', fontWeight: 600, textTransform: 'uppercase' }}>Upstream Roots</span>
-                <div style={{ fontSize: '1.15rem', fontWeight: 800, color: '#0284c7', marginTop: '2px' }}>{connectedNodeMap.up.size}</div>
-              </div>
-              <div style={{ background: 'var(--bg-card)', padding: '8px 10px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
-                <span style={{ fontSize: '0.66rem', color: 'var(--text-muted)', fontWeight: 600, textTransform: 'uppercase' }}>Downstream Targets</span>
-                <div style={{ fontSize: '1.15rem', fontWeight: 800, color: '#7c3aed', marginTop: '2px' }}>{connectedNodeMap.down.size}</div>
-              </div>
-              <div style={{ background: 'var(--bg-card)', padding: '8px 10px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
-                <span style={{ fontSize: '0.66rem', color: 'var(--text-muted)', fontWeight: 600, textTransform: 'uppercase' }}>Trust Score</span>
-                <div style={{ fontSize: '1.15rem', fontWeight: 800, color: '#16a34a', marginTop: '2px' }}>
-                  {selectedNode.trustScore !== undefined ? `${(selectedNode.trustScore * 100).toFixed(0)}%` : '98%'}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Right Column: Contextual Inspector */}
-          <div>
-            {selectedNode.type === 'conflict' ? (
-              /* Dedicated Side-by-Side Conflict Discrepancy Viewer */
-              (() => {
-                const cItem = conflictMap[selectedNode.id];
-                const claimA = graphData?.nodes?.find(n => n.id === cItem?.claimAId);
-                const claimB = graphData?.nodes?.find(n => n.id === cItem?.claimBId);
-
-                return (
-                  <div style={{
-                    background: 'rgba(234,88,12,0.05)',
-                    border: '1px solid rgba(234,88,12,0.3)',
-                    borderRadius: '10px',
-                    padding: '14px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '10px'
-                  }}>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <span style={{ fontSize: '0.82rem', fontWeight: 800, color: '#ea580c' }}>
-                        ⚖️ Contradiction Comparison
-                      </span>
-                      <span className="badge badge-warning" style={{ fontSize: '0.7rem' }}>
-                        {selectedNode.severity || 'HIGH'} SEVERITY
-                      </span>
-                    </div>
-
-                    {/* Claim A vs Claim B Comparison Box */}
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
-                      <div style={{ background: '#fff', padding: '10px', borderRadius: '8px', border: '1px solid #fed7aa', fontSize: '0.74rem' }}>
-                        <div style={{ fontWeight: 800, color: '#ea580c', marginBottom: '4px' }}>Claim A (Candidate)</div>
-                        <p style={{ margin: 0, color: '#334155', lineHeight: 1.35 }}>
-                          "{claimA?.fullText || claimA?.label || 'Loading claim...'}"
-                        </p>
-                      </div>
-                      <div style={{ background: '#fff', padding: '10px', borderRadius: '8px', border: '1px solid #fed7aa', fontSize: '0.74rem' }}>
-                        <div style={{ fontWeight: 800, color: '#2563eb', marginBottom: '4px' }}>Claim B (Contender)</div>
-                        <p style={{ margin: 0, color: '#334155', lineHeight: 1.35 }}>
-                          "{claimB?.fullText || claimB?.label || 'Loading claim...'}"
-                        </p>
-                      </div>
-                    </div>
-
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '4px' }}>
-                      <span style={{ fontSize: '0.72rem', color: '#64748b' }}>
-                        Status: <strong>{selectedNode.status || 'Pending Review'}</strong>
-                      </span>
-                      <button
-                        onClick={() => {
-                          setSelectedConflictId(selectedNode.id);
-                          setViewMode('conflicts');
-                          showToast?.("Isolated conflict lineage on canvas");
-                        }}
-                        style={{
-                          padding: '4px 12px',
-                          borderRadius: '6px',
-                          background: '#ea580c',
-                          color: '#fff',
-                          border: 'none',
-                          fontSize: '0.74rem',
-                          fontWeight: 700,
-                          cursor: 'pointer'
-                        }}
-                      >
-                        ⚡ Isolate Conflict DAG
-                      </button>
-                    </div>
-                  </div>
-                );
-              })()
-            ) : selectedNode.type === 'claim' ? (
-              /* Blast Radius Simulation */
-              <div style={{
-                background: blastRadius?.risk_tier === 'CRITICAL' || blastRadius?.risk_tier === 'HIGH' ? 'rgba(234,88,12,0.06)' : 'rgba(25,195,125,0.06)',
-                border: `1px solid ${blastRadius?.risk_tier === 'CRITICAL' || blastRadius?.risk_tier === 'HIGH' ? 'rgba(234,88,12,0.3)' : 'rgba(25,195,125,0.3)'}`,
-                borderRadius: '10px',
-                padding: '14px',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '8px'
-              }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
-                  <span style={{ fontSize: '0.82rem', fontWeight: 800, color: 'var(--text-main)' }}>
-                    Downstream Policy Blast Radius
-                  </span>
-                  <span className={blastRadius?.risk_tier === 'CRITICAL' || blastRadius?.risk_tier === 'HIGH' ? 'badge badge-warning' : 'badge badge-verified'} style={{ fontSize: '0.7rem' }}>
-                    {blastRadius?.risk_tier || 'LOW'} RISK ({blastRadius?.risk_score || 15}/100)
-                  </span>
-                </div>
-
-                <p style={{ margin: 0, fontSize: '0.78rem', color: 'var(--text-muted)', lineHeight: 1.4 }}>
-                  {blastRadius?.recommendation || 'Calculates what breaks across AI models if this knowledge is modified.'}
-                </p>
-
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginTop: '4px' }}>
-                  <div style={{ background: 'var(--bg-card)', padding: '8px 10px', borderRadius: '8px', border: '1px solid var(--border-color)', fontSize: '0.74rem' }}>
-                    <span style={{ color: 'var(--text-muted)' }}>Connected Conflicts: </span>
-                    <strong style={{ color: '#ea580c' }}>{blastRadius?.connected_conflicts_count || 0}</strong>
-                  </div>
-                  <div style={{ background: 'var(--bg-card)', padding: '8px 10px', borderRadius: '8px', border: '1px solid var(--border-color)', fontSize: '0.74rem' }}>
-                    <span style={{ color: 'var(--text-muted)' }}>Affected AI Decisions: </span>
-                    <strong style={{ color: '#7c3aed' }}>{blastRadius?.impacted_decisions_count || 0}</strong>
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <div style={{ background: 'var(--bg-card)', padding: '14px', borderRadius: '10px', border: '1px solid var(--border-color)', fontSize: '0.78rem', color: 'var(--text-muted)' }}>
-                <strong style={{ color: 'var(--text-main)' }}>Lineage Context:</strong> Select an individual <strong>Atomic Claim (⚡)</strong> or <strong>Contradiction (⚖️)</strong> to inspect connected rules and downstream AI decisions.
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-
-            {/* 3. SELECTED ASSET'S CONTRADICTIONS & CONFLICTS (Active & Resolved for THIS Document / Connector) */}
-            {selectedAsset360 && (asset360Section === 'all' || asset360Section === 'conflicts') && (
-              <div style={{
-                background: '#FFFFFF',
-                border: '1px solid #E2E8F0',
-                borderRadius: '10px',
-                padding: '14px 18px',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '12px'
-              }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px', borderBottom: '1px solid #F1F5F9', paddingBottom: '8px' }}>
-                  <div>
-                    <h4 style={{ margin: 0, fontSize: '0.88rem', fontWeight: 800, color: '#0F172A' }}>
-                      ⚖️ Contradictions & Conflicts for "{selectedAsset360.node.label}" ({selectedAsset360.conflicts.length})
-                    </h4>
-                    <span style={{ fontSize: '0.72rem', color: '#64748B' }}>
-                      {selectedAsset360.activeConflicts.length} Active / Unresolved &bull; {selectedAsset360.conflicts.length - selectedAsset360.activeConflicts.length} Resolved
-                    </span>
-                  </div>
-                </div>
-
-                {selectedAsset360.conflicts.length === 0 ? (
-                  <div style={{ padding: '14px', background: '#F0FDF4', border: '1px solid #BBF7D0', borderRadius: '8px', fontSize: '0.78rem', color: '#15803D', fontWeight: 600 }}>
-                    ✅ Zero contradictions detected for this {selectedAsset360.mode}. All extracted policy claims are consistent.
-                  </div>
-                ) : (
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(380px, 1fr))', gap: '10px' }}>
-                    {selectedAsset360.conflicts.map((c, idx) => {
-                      const cItem = conflictMap[c.id];
-                      const clA = graphData?.nodes?.find(n => n.id === cItem?.claimAId);
-                      const clB = graphData?.nodes?.find(n => n.id === cItem?.claimBId);
-                      const st = (c.status || '').toLowerCase();
-                      const isResolved = st === 'resolved' || st === 'dismissed';
-
-                      return (
-                        <div
-                          key={c.id}
-                          style={{
-                            border: isResolved ? '1px solid #BBF7D0' : '1.5px solid #FED7AA',
-                            background: isResolved ? '#F0FDF4' : '#FFF7ED',
-                            borderRadius: '9px',
-                            padding: '12px 14px',
+                        {/* Left Group: Granularity & View Modes */}
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                          {/* Context Investigation Lenses (Scaling Engine for Large-Scale Context Graphs) */}
+                          <div style={{
                             display: 'flex',
-                            flexDirection: 'column',
-                            gap: '8px'
-                          }}
-                        >
-                          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '6px' }}>
-                            <span style={{
-                              fontSize: '0.62rem',
-                              fontWeight: 800,
-                              padding: '2px 7px',
-                              borderRadius: '999px',
-                              background: isResolved ? '#DCFCE7' : '#FFEDD5',
-                              color: isResolved ? '#15803D' : '#C2410C'
-                            }}>
-                              {isResolved ? '✅ RESOLVED' : '⚠️ ACTIVE / UNRESOLVED'} &bull; {c.severity || 'HIGH'}
-                            </span>
+                            alignItems: 'center',
+                            background: '#EDF2F7',
+                            padding: '2px',
+                            borderRadius: '7px',
+                            border: '1px solid #E2E8F0',
+                            gap: '2px'
+                          }}>
                             <button
                               type="button"
                               onClick={() => {
-                                if (isResolved) setFilterStatus('all');
-                                setExpandedDownstreamSet(prev => new Set(prev).add(selectedAsset360.node.id));
-                                setSelectedNodeId(c.id);
-                                showToast?.(`Selected "${c.label}" in the DAG above`);
+                                setInvestigationLens('risk');
+                                setViewMode('conflicts');
+                                const firstConf = conflictsList[0];
+                                if (firstConf) setSelectedNodeId(firstConf.id);
+                                showToast?.("Switched to Risk & Conflict Investigation Lens");
                               }}
                               style={{
-                                padding: '3px 8px',
-                                borderRadius: '5px',
-                                border: '1px solid #EA580C',
-                                background: '#FFFFFF',
-                                color: '#C2410C',
-                                fontSize: '0.66rem',
+                                padding: '3px 9px',
+                                fontSize: '0.68rem',
                                 fontWeight: 700,
-                                cursor: 'pointer'
+                                borderRadius: '5px',
+                                border: 'none',
+                                cursor: 'pointer',
+                                background: investigationLens === 'risk' ? '#EA580C' : 'transparent',
+                                color: investigationLens === 'risk' ? '#FFFFFF' : '#C2410C',
+                                boxShadow: investigationLens === 'risk' ? '0 1px 3px rgba(234,88,12,0.3)' : 'none',
+                                transition: 'all 0.15s ease',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '4px',
+                                height: '25px'
                               }}
+                              title="Focus on contradictions, anomalies, and severed flows"
                             >
-                              Focus in DAG ↑
+                              <AlertTriangle size={11} />
+                              <span>Risk & Conflicts ({conflictsList.length})</span>
+                            </button>
+
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setInvestigationLens('decision');
+                                setViewMode('interactive');
+                                showToast?.("Switched to AI Decision Impact Lens");
+                              }}
+                              style={{
+                                padding: '3px 9px',
+                                fontSize: '0.68rem',
+                                fontWeight: 700,
+                                borderRadius: '5px',
+                                border: 'none',
+                                cursor: 'pointer',
+                                background: investigationLens === 'decision' ? '#7C3AED' : 'transparent',
+                                color: investigationLens === 'decision' ? '#FFFFFF' : '#6B21A8',
+                                boxShadow: investigationLens === 'decision' ? '0 1px 3px rgba(124,58,237,0.3)' : 'none',
+                                transition: 'all 0.15s ease',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '4px',
+                                height: '25px'
+                              }}
+                              title="Trace policy rules directly to AI Copilot decisions"
+                            >
+                              <span>AI Impact</span>
+                            </button>
+
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setInvestigationLens('evidence');
+                                setViewMode('interactive');
+                                showToast?.("Switched to Evidence & Provenance Trace Lens");
+                              }}
+                              style={{
+                                padding: '3px 9px',
+                                fontSize: '0.68rem',
+                                fontWeight: 700,
+                                borderRadius: '5px',
+                                border: 'none',
+                                cursor: 'pointer',
+                                background: investigationLens === 'evidence' ? '#2563EB' : 'transparent',
+                                color: investigationLens === 'evidence' ? '#FFFFFF' : '#1E40AF',
+                                boxShadow: investigationLens === 'evidence' ? '0 1px 3px rgba(37,99,235,0.3)' : 'none',
+                                transition: 'all 0.15s ease',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '4px',
+                                height: '25px'
+                              }}
+                              title="Trace claim evidence spans back to original document text"
+                            >
+                              <ShieldCheck size={12} />
+                              <span>Evidence Trace</span>
                             </button>
                           </div>
 
-                          <div style={{ fontSize: '0.8rem', fontWeight: 800, color: '#0F172A' }}>
-                            #{idx + 1} {c.label}
+
+                          {/* Interactive Flow Quick Controls */}
+                          {viewMode === 'interactive' && (
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                              <button
+                                type="button"
+                                onClick={resetToSingleNode}
+                                style={{
+                                  padding: '3px 9px',
+                                  fontSize: '0.68rem',
+                                  fontWeight: 600,
+                                  borderRadius: '5px',
+                                  border: '1px solid #CBD5E1',
+                                  background: '#FFFFFF',
+                                  color: '#334155',
+                                  cursor: 'pointer',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  gap: '4px',
+                                  height: '25px',
+                                  transition: 'all 0.15s ease'
+                                }}
+                                title="Reset canvas to only the single starting node"
+                              >
+                                <RotateCcw size={11} />
+                                <span>Single Node</span>
+                              </button>
+
+                              <button
+                                type="button"
+                                onClick={expandAllFlow}
+                                style={{
+                                  padding: '3px 9px',
+                                  fontSize: '0.68rem',
+                                  fontWeight: 700,
+                                  borderRadius: '5px',
+                                  border: '1px solid #BFDBFE',
+                                  background: '#EFF6FF',
+                                  color: '#1D4ED8',
+                                  cursor: 'pointer',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  gap: '4px',
+                                  height: '25px',
+                                  transition: 'all 0.15s ease'
+                                }}
+                                title="Expand all upstream and downstream connections"
+                              >
+                                <span>➕ Expand All</span>
+                              </button>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Right Group: Action Tools */}
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <button
+                            onClick={() => setIsFilterPanelOpen(prev => !prev)}
+                            style={{
+                              padding: '4px 10px',
+                              fontSize: '0.70rem',
+                              fontWeight: 700,
+                              borderRadius: '6px',
+                              border: activeFilterCount > 0 ? '1px solid #EA580C' : (isFilterPanelOpen ? '1px solid #CBD5E1' : '1px solid #E2E8F0'),
+                              background: isFilterPanelOpen || activeFilterCount > 0 ? '#FFF7ED' : '#FFFFFF',
+                              color: isFilterPanelOpen || activeFilterCount > 0 ? '#EA580C' : '#334155',
+                              cursor: 'pointer',
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '5px',
+                              height: '27px',
+                              transition: 'all 0.15s ease'
+                            }}
+                            title="Toggle Filters"
+                          >
+                            <Sliders size={12} />
+                            <span>Filters</span>
+                            {activeFilterCount > 0 && (
+                              <span style={{
+                                background: '#EA580C',
+                                color: '#FFFFFF',
+                                borderRadius: '10px',
+                                padding: '1px 5px',
+                                fontSize: '0.62rem',
+                                fontWeight: 800,
+                                lineHeight: 1
+                              }}>
+                                {activeFilterCount}
+                              </span>
+                            )}
+                            <ChevronDown size={11} style={{ transform: isFilterPanelOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s ease' }} />
+                          </button>
+
+                          <button
+                            onClick={() => setIsDrawerOpen(true)}
+                            style={{
+                              padding: '4px 10px',
+                              fontSize: '0.70rem',
+                              fontWeight: 600,
+                              borderRadius: '6px',
+                              border: '1px solid #E2E8F0',
+                              background: '#FFFFFF',
+                              color: '#334155',
+                              cursor: 'pointer',
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '5px',
+                              height: '27px',
+                              transition: 'all 0.15s ease'
+                            }}
+                            title="Claims Drawer"
+                          >
+                            <FileText size={12} color="#64748B" />
+                            <span>Claims</span>
+                            <span style={{
+                              background: '#F1F5F9',
+                              color: '#475569',
+                              borderRadius: '10px',
+                              padding: '1px 5px',
+                              fontSize: '0.62rem',
+                              fontWeight: 700
+                            }}>
+                              {graphData?.nodes?.filter(n => n.type === 'claim')?.length || 0}
+                            </span>
+                          </button>
+
+                          <button
+                            onClick={() => setIsImpactReportOpen(true)}
+                            style={{
+                              padding: '4px 10px',
+                              fontSize: '0.70rem',
+                              fontWeight: 700,
+                              borderRadius: '6px',
+                              border: '1px solid #DDD6FE',
+                              background: isImpactReportOpen ? '#7C3AED' : 'linear-gradient(135deg, #FAF5FF 0%, #F3E8FF 100%)',
+                              color: isImpactReportOpen ? '#FFFFFF' : '#7C3AED',
+                              cursor: 'pointer',
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '5px',
+                              height: '27px',
+                              boxShadow: isImpactReportOpen ? '0 1px 3px rgba(124,58,237,0.3)' : '0 1px 2px rgba(124,58,237,0.06)',
+                              transition: 'all 0.15s ease'
+                            }}
+                            title="Open Proactive Impact & Blast Radius Report"
+                          >
+                            <BarChart3 size={12} />
+                            <span>Impact Report</span>
+                          </button>
+
+                          <button
+                            onClick={fetchLineage}
+                            disabled={loading}
+                            style={{
+                              padding: '4px 8px',
+                              fontSize: '0.70rem',
+                              fontWeight: 600,
+                              borderRadius: '6px',
+                              border: '1px solid #E2E8F0',
+                              background: '#FFFFFF',
+                              color: '#475569',
+                              cursor: 'pointer',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              height: '27px',
+                              transition: 'all 0.15s ease'
+                            }}
+                            title="Refresh Graph"
+                          >
+                            <RefreshCw size={12} className={loading ? "animate-spin" : ""} />
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Row 2: Integrated Filter Section (Inside the SAME Card) */}
+                      {isFilterPanelOpen && (
+                        <div style={{
+                          borderTop: '1px solid #E2E8F0',
+                          padding: '8px 12px',
+                          background: '#FFFFFF',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          flexWrap: 'wrap',
+                          gap: '8px'
+                        }}>
+                          {/* Filter Selects Strip */}
+                          <div style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '8px',
+                            flexWrap: 'wrap'
+                          }}>
+                            {/* Conflict Selector */}
+                            <div style={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '5px',
+                              background: selectedConflictId !== 'all' ? '#FFF7ED' : '#F8FAFC',
+                              border: selectedConflictId !== 'all' ? '1px solid #FDBA74' : '1px solid #E2E8F0',
+                              padding: '2px 6px',
+                              borderRadius: '6px'
+                            }}>
+                              <span style={{ fontSize: '0.64rem', fontWeight: 700, color: '#EA580C', textTransform: 'uppercase', letterSpacing: '0.02em' }}>
+                                Conflict
+                              </span>
+                              <select
+                                value={selectedConflictId}
+                                onChange={(e) => {
+                                  const val = e.target.value;
+                                  setSelectedConflictId(val);
+                                  if (val !== 'all') {
+                                    setSelectedNodeId(val);
+                                    setViewMode('conflicts');
+                                    showToast?.(`Spotlighted Conflict in DAG`);
+                                  }
+                                }}
+                                style={{
+                                  padding: '2px 4px',
+                                  border: 'none',
+                                  background: 'transparent',
+                                  fontSize: '0.69rem',
+                                  fontWeight: selectedConflictId !== 'all' ? 700 : 500,
+                                  color: selectedConflictId !== 'all' ? '#C2410C' : '#334155',
+                                  outline: 'none',
+                                  cursor: 'pointer'
+                                }}
+                              >
+                                <option value="all">All ({conflictsList.length})</option>
+                                {conflictsList.map((c, i) => (
+                                  <option key={c.id} value={c.id}>
+                                    #{i + 1} [{c.severity || 'HIGH'}] {c.label}
+                                  </option>
+                                ))}
+                              </select>
+                            </div>
+
+                            {/* Conflict Status Selector */}
+                            <div style={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '5px',
+                              background: filterStatus === 'active' ? '#FFF7ED' : '#F8FAFC',
+                              border: filterStatus === 'active' ? '1px solid #FDBA74' : '1px solid #E2E8F0',
+                              padding: '2px 6px',
+                              borderRadius: '6px'
+                            }}>
+                              <span style={{ fontSize: '0.64rem', fontWeight: 700, color: '#EA580C', textTransform: 'uppercase', letterSpacing: '0.02em' }}>
+                                Status
+                              </span>
+                              <select
+                                value={filterStatus}
+                                onChange={(e) => setFilterStatus(e.target.value)}
+                                style={{
+                                  padding: '2px 4px',
+                                  border: 'none',
+                                  background: 'transparent',
+                                  fontSize: '0.69rem',
+                                  color: filterStatus === 'active' ? '#C2410C' : '#334155',
+                                  fontWeight: 700,
+                                  outline: 'none',
+                                  cursor: 'pointer'
+                                }}
+                              >
+                                <option value="active">Active / Unresolved Only</option>
+                                <option value="resolved">Resolved Only</option>
+                                <option value="all">All (Active + Resolved)</option>
+                              </select>
+                            </div>
+
+                            {/* Severity Selector */}
+                            <div style={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '5px',
+                              background: filterSeverity !== 'all' ? '#EFF6FF' : '#F8FAFC',
+                              border: filterSeverity !== 'all' ? '1px solid #BFDBFE' : '1px solid #E2E8F0',
+                              padding: '2px 6px',
+                              borderRadius: '6px'
+                            }}>
+                              <span style={{ fontSize: '0.64rem', fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.02em' }}>
+                                Severity
+                              </span>
+                              <select
+                                value={filterSeverity}
+                                onChange={(e) => setFilterSeverity(e.target.value)}
+                                style={{
+                                  padding: '2px 4px',
+                                  border: 'none',
+                                  background: 'transparent',
+                                  fontSize: '0.69rem',
+                                  color: filterSeverity !== 'all' ? '#1D4ED8' : '#334155',
+                                  fontWeight: filterSeverity !== 'all' ? 700 : 500,
+                                  outline: 'none',
+                                  cursor: 'pointer'
+                                }}
+                              >
+                                <option value="all">All</option>
+                                <option value="HIGH">High</option>
+                                <option value="CRITICAL">Critical</option>
+                                <option value="MEDIUM">Med</option>
+                                <option value="LOW">Low</option>
+                              </select>
+                            </div>
+
+                            {/* Trust Selector */}
+                            <div style={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '5px',
+                              background: filterClaimTrust !== 'all' ? '#F0FDF4' : '#F8FAFC',
+                              border: filterClaimTrust !== 'all' ? '1px solid #BBF7D0' : '1px solid #E2E8F0',
+                              padding: '2px 6px',
+                              borderRadius: '6px'
+                            }}>
+                              <span style={{ fontSize: '0.64rem', fontWeight: 700, color: '#16A34A', textTransform: 'uppercase', letterSpacing: '0.02em' }}>
+                                Trust
+                              </span>
+                              <select
+                                value={filterClaimTrust}
+                                onChange={(e) => setFilterClaimTrust(e.target.value)}
+                                style={{
+                                  padding: '2px 4px',
+                                  border: 'none',
+                                  background: 'transparent',
+                                  fontSize: '0.69rem',
+                                  color: filterClaimTrust !== 'all' ? '#15803D' : '#334155',
+                                  fontWeight: filterClaimTrust !== 'all' ? 700 : 500,
+                                  outline: 'none',
+                                  cursor: 'pointer'
+                                }}
+                              >
+                                <option value="all">All</option>
+                                <option value="verified">Verified (≥90%)</option>
+                                <option value="review">Review (&lt;90%)</option>
+                                <option value="outdated">Outdated</option>
+                              </select>
+                            </div>
+
+                            {/* Conflicted Only Quick Toggle */}
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setShowOnlyConflicted(prev => !prev);
+                                if (!showOnlyConflicted) showToast?.("Focused on contradictory paths");
+                              }}
+                              style={{
+                                padding: '2px 8px',
+                                borderRadius: '5px',
+                                fontSize: '0.67rem',
+                                fontWeight: 700,
+                                cursor: 'pointer',
+                                border: showOnlyConflicted ? '1px solid #EA580C' : '1px solid #CBD5E1',
+                                background: showOnlyConflicted ? '#EA580C' : '#FFFFFF',
+                                color: showOnlyConflicted ? '#FFFFFF' : '#475569',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '4px',
+                                height: '24px'
+                              }}
+                            >
+                              <AlertTriangle size={11} />
+                              <span>Conflicted Only</span>
+                              {showOnlyConflicted && <span>✓</span>}
+                            </button>
                           </div>
 
-                          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px' }}>
-                            <div style={{ background: '#FFFFFF', padding: '7px 9px', borderRadius: '6px', borderLeft: '3px solid #0284C7', fontSize: '0.7rem', color: '#1E293B' }}>
-                              <strong style={{ color: '#0284C7', display: 'block', fontSize: '0.6rem' }}>ASSERTION A</strong>
-                              "{clA?.fullText || clA?.label}"
+                          {/* Reset Filters (Only when a filter is active) */}
+                          {activeFilterCount > 0 && (
+                            <button
+                              type="button"
+                              onClick={resetAllFilters}
+                              style={{
+                                padding: '3px 8px',
+                                borderRadius: '5px',
+                                border: '1px solid #FCA5A5',
+                                background: '#FEF2F2',
+                                color: '#DC2626',
+                                fontSize: '0.68rem',
+                                fontWeight: 700,
+                                cursor: 'pointer',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '3px',
+                                height: '24px'
+                              }}
+                              title="Reset all filters"
+                            >
+                              <RotateCcw size={10} />
+                              <span>Reset Filters</span>
+                            </button>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* 3. Interactive DAG Canvas */}
+                  <div style={{
+                    position: 'relative',
+                    width: '100%',
+                    borderRadius: '10px',
+                    overflow: 'hidden',
+                    border: '1px solid #CBD5E1',
+                    background: '#fff',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    height: isSplitActive ? 'calc(100vh - 108px)' : 'auto',
+                    maxHeight: isSplitActive ? 'calc(100vh - 108px)' : 'none',
+                    minHeight: isSplitActive ? '380px' : 'auto'
+                  }}>
+
+                    {/* Sticky Top Header Bar for DAG (Draggable in Split View, Normal White Header in Individual Lineage View) */}
+                    <div
+                      draggable={isSplitActive}
+                      onDragStart={isSplitActive ? (e) => {
+                        e.dataTransfer.setData('text/plain', 'dag');
+                        setDraggedPane('dag');
+                      } : undefined}
+                      onDragEnd={isSplitActive ? () => {
+                        setDraggedPane(null);
+                        setDragOverPane(null);
+                      } : undefined}
+                      title={isSplitActive ? "Hold and drag header to move/shuffle tab position" : undefined}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'flex-end',
+                        padding: '6px 12px',
+                        background: isSplitActive ? 'linear-gradient(180deg, #1E293B 0%, #0F172A 100%)' : '#FFFFFF',
+                        borderBottom: isSplitActive ? '1px solid #334155' : '1px solid #E2E8F0',
+                        zIndex: 30,
+                        cursor: isSplitActive ? 'grab' : 'default',
+                        userSelect: isSplitActive ? 'none' : 'auto',
+                        flexShrink: 0
+                      }}
+                    >
+                      {/* Right: Floating Controls (Search, Zoom, Fit, Close) */}
+                      <div
+                        onClick={(e) => e.stopPropagation()}
+                        onMouseDown={(e) => e.stopPropagation()}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '4px',
+                          background: isSplitActive ? 'rgba(255, 255, 255, 0.10)' : '#F8FAFC',
+                          padding: '2px 5px',
+                          borderRadius: '6px',
+                          border: isSplitActive ? '1px solid rgba(255,255,255,0.15)' : '1px solid #E2E8F0',
+                          cursor: 'default'
+                        }}
+                      >
+                        {/* Find in canvas (Global across all nodes) */}
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '3px', paddingRight: '4px', borderRight: isSplitActive ? '1px solid rgba(255,255,255,0.15)' : '1px solid #E2E8F0' }}>
+                          <span style={{ fontSize: '0.66rem', color: isSplitActive ? '#94A3B8' : '#64748B' }}>🔍</span>
+                          <input
+                            type="text"
+                            placeholder="Find..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            style={{
+                              border: 'none',
+                              background: 'transparent',
+                              fontSize: '0.68rem',
+                              outline: 'none',
+                              width: isThreePane ? '56px' : '82px',
+                              color: isSplitActive ? '#F8FAFC' : '#0F172A',
+                              transition: 'width 0.15s ease'
+                            }}
+                          />
+                          {searchQuery && (
+                            <button
+                              onClick={() => setSearchQuery('')}
+                              style={{ border: 'none', background: 'transparent', cursor: 'pointer', color: isSplitActive ? '#CBD5E1' : '#64748B', fontSize: '0.66rem', padding: '0 2px' }}
+                            >
+                              ✕
+                            </button>
+                          )}
+                        </div>
+
+                        {/* Zoom Controls */}
+                        <button
+                          onClick={() => setZoom(z => Math.max(0.4, Number((z - 0.1).toFixed(2))))}
+                          className="canvas-btn"
+                          style={{
+                            width: '19px',
+                            height: '19px',
+                            borderRadius: '4px',
+                            border: isSplitActive ? '1px solid rgba(255,255,255,0.2)' : '1px solid #E2E8F0',
+                            background: isSplitActive ? 'rgba(255,255,255,0.1)' : '#FFFFFF',
+                            cursor: 'pointer',
+                            fontWeight: 700,
+                            fontSize: '0.74rem',
+                            color: isSplitActive ? '#F8FAFC' : '#334155',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            padding: 0
+                          }}
+                          title="Zoom Out"
+                        >
+                          -
+                        </button>
+                        <span style={{ fontSize: '0.65rem', fontWeight: 700, minWidth: '25px', textAlign: 'center', color: isSplitActive ? '#CBD5E1' : '#475569' }}>
+                          {(zoom * 100).toFixed(0)}%
+                        </span>
+                        <button
+                          onClick={() => setZoom(z => Math.min(1.4, Number((z + 0.1).toFixed(2))))}
+                          className="canvas-btn"
+                          style={{
+                            width: '19px',
+                            height: '19px',
+                            borderRadius: '4px',
+                            border: isSplitActive ? '1px solid rgba(255,255,255,0.2)' : '1px solid #E2E8F0',
+                            background: isSplitActive ? 'rgba(255,255,255,0.1)' : '#FFFFFF',
+                            cursor: 'pointer',
+                            fontWeight: 700,
+                            fontSize: '0.74rem',
+                            color: isSplitActive ? '#F8FAFC' : '#334155',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            padding: 0
+                          }}
+                          title="Zoom In"
+                        >
+                          +
+                        </button>
+                        <button
+                          onClick={handleFitView}
+                          className="canvas-btn"
+                          style={{
+                            padding: '0 6px',
+                            height: '20px',
+                            borderRadius: '4px',
+                            border: isSplitActive ? '1px solid #3B82F6' : '1px solid #BFDBFE',
+                            background: isSplitActive ? '#1D4ED8' : '#EFF6FF',
+                            cursor: 'pointer',
+                            fontSize: '0.65rem',
+                            color: isSplitActive ? '#FFFFFF' : '#1D4ED8',
+                            fontWeight: 700,
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '3px'
+                          }}
+                          title="Auto-Fit all visible nodes to screen"
+                        >
+                          <span>⛶</span>
+                          <span>Fit</span>
+                        </button>
+                        {/* Document DAG Switcher (When inspecting a single claim) */}
+                        {activeClaimInspector && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setActiveClaimInspector(null);
+                              const docNodeId = selectedAsset360?.node?.id || openedAssetId;
+                              if (docNodeId) {
+                                setSelectedNodeId(docNodeId);
+                                setInteractiveRootId(docNodeId);
+                                setExpandedUpstreamSet(new Set([docNodeId]));
+                                setExpandedDownstreamSet(new Set([docNodeId]));
+                                setLineageGranularity('document');
+                                showToast?.("Switched to full Document Lineage DAG");
+                              }
+                            }}
+                            className="canvas-btn"
+                            style={{
+                              padding: '0 7px',
+                              height: '20px',
+                              borderRadius: '4px',
+                              border: isSplitActive ? '1px solid #38BDF8' : '1px solid #BAE6FD',
+                              background: isSplitActive ? 'rgba(56, 189, 248, 0.18)' : '#F0F9FF',
+                              cursor: 'pointer',
+                              fontSize: '0.65rem',
+                              color: isSplitActive ? '#38BDF8' : '#0284C7',
+                              fontWeight: 700,
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '3px'
+                            }}
+                            title="Switch back to full Document Lineage DAG"
+                          >
+                            <span>📄 Doc DAG</span>
+                          </button>
+                        )}
+
+                        {activeClaimInspector && asset360Section === 'summary' && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setActiveClaimInspector(null);
+                              const docNodeId = selectedAsset360?.node?.id || openedAssetId;
+                              if (docNodeId) {
+                                setSelectedNodeId(docNodeId);
+                                setInteractiveRootId(docNodeId);
+                                setExpandedUpstreamSet(new Set([docNodeId]));
+                                setExpandedDownstreamSet(new Set([docNodeId]));
+                                setLineageGranularity('document');
+                              }
+                            }}
+                            className="canvas-btn"
+                            style={{
+                              padding: '0 6px',
+                              height: '20px',
+                              borderRadius: '4px',
+                              border: '1px solid #EA580C',
+                              background: '#C2410C',
+                              cursor: 'pointer',
+                              fontSize: '0.65rem',
+                              color: '#FFFFFF',
+                              fontWeight: 700,
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '3px'
+                            }}
+                            title="Close Lineage view and return document reader to full width"
+                          >
+                            <X size={10} strokeWidth={2.4} />
+                            <span>Close</span>
+                          </button>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Floating Legend / Quick Status at bottom left */}
+                    <div style={{
+                      position: 'absolute',
+                      bottom: '10px',
+                      left: '10px',
+                      zIndex: 30,
+                      background: 'rgba(255,255,255,0.92)',
+                      backdropFilter: 'blur(8px)',
+                      padding: '4px 8px',
+                      borderRadius: '6px',
+                      boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+                      border: '1px solid #e2e8f0',
+                      display: 'flex',
+                      alignItems: 'center',
+                      flexWrap: 'wrap',
+                      gap: '6px 8px',
+                      fontSize: '0.64rem',
+                      color: '#475569',
+                      maxWidth: 'calc(100% - 20px)'
+                    }}>
+                      <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#2026d2' }} /> Data Source
+                      </span>
+                      <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#0284c7' }} /> Document
+                      </span>
+                      <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#16a34a' }} /> Atomic Claim
+                      </span>
+                      <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#ea580c' }} /> Contradiction
+                      </span>
+                      <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#7c3aed' }} /> AI Decision
+                      </span>
+                      <span style={{ color: '#94a3b8', marginLeft: '2px' }}>| Drag nodes freely to customize layout</span>
+                    </div>
+
+                    {/* Free-form Pan Canvas Container */}
+                    <div
+                      ref={containerRef}
+                      onMouseDown={handleCanvasMouseDown}
+                      onMouseMove={handleMouseMove}
+                      onMouseUp={handleMouseUp}
+                      style={{
+                        height: isSplitActive ? '100%' : ((activeClaimInspector && asset360Section === 'summary') ? '660px' : '640px'),
+                        flex: isSplitActive ? 1 : 'none',
+                        width: '100%',
+                        cursor: isPanning ? 'grabbing' : isWiringEdge ? 'crosshair' : 'grab',
+                        overflow: 'hidden',
+                        position: 'relative',
+                        background: 'radial-gradient(#cbd5e1 1.2px, transparent 1.2px)',
+                        backgroundSize: '22px 22px',
+                        backgroundColor: '#fafbfc'
+                      }}
+                    >
+                      {/* Actionable DAG: Live "What-If" Simulation & Draft Changes HUD */}
+                      {(draftAddedEdges.length > 0 || draftSeveredEdgeIds.size > 0) && (
+                        <div style={{
+                          position: 'absolute',
+                          top: '12px',
+                          left: '50%',
+                          transform: 'translateX(-50%)',
+                          zIndex: 35,
+                          background: 'rgba(15, 23, 42, 0.95)',
+                          backdropFilter: 'blur(8px)',
+                          color: '#F8FAFC',
+                          borderRadius: '10px',
+                          boxShadow: '0 8px 28px rgba(0,0,0,0.28)',
+                          border: '1px solid #334155',
+                          padding: '7px 14px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '14px',
+                          fontSize: '0.73rem',
+                          maxWidth: '92%',
+                          pointerEvents: 'auto',
+                          animation: 'fadeIn 0.2s ease'
+                        }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                            <span style={{ background: '#EA580C', color: '#FFFFFF', padding: '2px 7px', borderRadius: '4px', fontWeight: 800, fontSize: '0.66rem', letterSpacing: '0.04em' }}>
+                              DRAFT LINEAGE
+                            </span>
+                            <span style={{ fontWeight: 600 }}>
+                              {draftAddedEdges.length > 0 && <span style={{ color: '#4ADE80', marginRight: '6px' }}>+{draftAddedEdges.length} Connected</span>}
+                              {draftSeveredEdgeIds.size > 0 && <span style={{ color: '#F87171' }}>-{draftSeveredEdgeIds.size} Severed</span>}
+                            </span>
+                          </div>
+
+                          <div style={{ borderLeft: '1px solid #334155', paddingLeft: '10px', display: 'flex', alignItems: 'center', gap: '8px', color: '#94A3B8' }}>
+                            <span>Simulated Trust: <strong style={{ color: '#4ADE80' }}>98% (+14%)</strong></span>
+                            <span>•</span>
+                            <span>AI Grounding: <strong style={{ color: '#38BDF8' }}>100% Safe</strong></span>
+                          </div>
+
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginLeft: 'auto' }}>
+                            <button
+                              type="button"
+                              onClick={handleDiscardLineageMutations}
+                              style={{
+                                background: 'rgba(255,255,255,0.08)',
+                                border: '1px solid #475569',
+                                color: '#E2E8F0',
+                                padding: '3px 9px',
+                                borderRadius: '5px',
+                                fontSize: '0.70rem',
+                                fontWeight: 600,
+                                cursor: 'pointer',
+                                transition: 'all 0.15s ease'
+                              }}
+                              onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.16)'}
+                              onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.08)'}
+                            >
+                              ↺ Discard
+                            </button>
+                            <button
+                              type="button"
+                              onClick={handleDeployLineageMutations}
+                              disabled={isDeployingLineage}
+                              style={{
+                                background: '#16A34A',
+                                border: '1px solid #22C55E',
+                                color: '#FFFFFF',
+                                padding: '3px 11px',
+                                borderRadius: '5px',
+                                fontSize: '0.70rem',
+                                fontWeight: 700,
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '4px',
+                                boxShadow: '0 2px 8px rgba(22,163,74,0.3)',
+                                transition: 'all 0.15s ease'
+                              }}
+                              onMouseEnter={e => e.currentTarget.style.background = '#15803D'}
+                              onMouseLeave={e => e.currentTarget.style.background = '#16A34A'}
+                            >
+                              {isDeployingLineage ? 'Deploying...' : 'Deploy Graph ✓'}
+                            </button>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Zoom & Pan Transform Layer */}
+                      <div
+                        style={{
+                          position: 'absolute',
+                          top: 0,
+                          left: 0,
+                          width: '100%',
+                          height: '100%',
+                          transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`,
+                          transformOrigin: '0 0'
+                        }}
+                      >
+                        {/* SVG Connecting Bezier Lines */}
+                        <svg
+                          style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            width: '3600px',
+                            height: '2400px',
+                            overflow: 'visible',
+                            pointerEvents: 'none',
+                            zIndex: 2
+                          }}
+                        >
+                          <defs>
+                            <marker id="atlan-arrow-default" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+                              <polygon points="0 1, 8 4, 0 7" fill="#94A3B8" />
+                            </marker>
+                            <marker id="atlan-arrow-active" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+                              <polygon points="0 1, 8 4, 0 7" fill="#2563EB" />
+                            </marker>
+                            <marker id="atlan-arrow-conflict" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+                              <polygon points="0 1, 8 4, 0 7" fill="#EA580C" />
+                            </marker>
+                            <marker id="atlan-arrow-decision" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+                              <polygon points="0 1, 8 4, 0 7" fill="#7C3AED" />
+                            </marker>
+                            <marker id="atlan-arrow-draft-add" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+                              <polygon points="0 1, 8 4, 0 7" fill="#16A34A" />
+                            </marker>
+                            <marker id="atlan-arrow-severed" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+                              <polygon points="0 1, 8 4, 0 7" fill="#DC2626" />
+                            </marker>
+                          </defs>
+
+                          {renderedEdges.map(edge => {
+                            const isHovered = hoveredEdgeId === edge.id;
+                            const isConflictLine = edge.type === 'conflict' || edge.isConflictConnection;
+
+                            let strokeColor = '#94A3B8';
+                            let marker = 'url(#atlan-arrow-default)';
+                            let strokeDash = 'none';
+                            let strokeWidth = 1.8;
+                            let strokeOpacity = 1;
+
+                            if (edge.isSevered) {
+                              strokeColor = '#DC2626';
+                              marker = 'url(#atlan-arrow-severed)';
+                              strokeDash = '5 4';
+                              strokeWidth = 2.2;
+                              strokeOpacity = 0.55;
+                            } else if (edge.isDraft) {
+                              strokeColor = '#16A34A';
+                              marker = 'url(#atlan-arrow-draft-add)';
+                              strokeDash = '6 4';
+                              strokeWidth = 2.6;
+                            } else if (isConflictLine) {
+                              strokeColor = '#EA580C';
+                              marker = 'url(#atlan-arrow-conflict)';
+                              strokeWidth = 2.5;
+                            } else if (edge.isActive) {
+                              strokeColor = edge.type === 'decision_grounding' ? '#7C3AED' : '#2563EB';
+                              marker = edge.type === 'decision_grounding' ? 'url(#atlan-arrow-decision)' : 'url(#atlan-arrow-active)';
+                              strokeWidth = 2.2;
+                            }
+
+                            if (isHovered && !edge.isSevered && !edge.isDraft) {
+                              strokeWidth = 3.2;
+                              strokeColor = '#2563EB';
+                            }
+
+                            // Remove arrowheads on edges entering claim rows so the curve lands cleanly on the filled circle
+                            if (edge.target.startsWith('cl_') && !edge.isSevered && !edge.isDraft) {
+                              marker = 'none';
+                            }
+
+                            return (
+                              <g
+                                key={edge.id}
+                                onMouseEnter={() => setHoveredEdgeId(edge.id)}
+                                onMouseLeave={() => setHoveredEdgeId(prev => prev === edge.id ? null : prev)}
+                              >
+                                {/* Invisible Wide Hitbox for Effortless Hover Detection */}
+                                <path
+                                  d={edge.pathData}
+                                  fill="none"
+                                  stroke="transparent"
+                                  strokeWidth={18}
+                                  style={{ pointerEvents: 'stroke', cursor: 'pointer' }}
+                                />
+
+                                {/* Visible Lineage Bezier Spline */}
+                                <path
+                                  d={edge.pathData}
+                                  fill="none"
+                                  stroke={strokeColor}
+                                  strokeWidth={strokeWidth}
+                                  strokeDasharray={strokeDash}
+                                  strokeOpacity={strokeOpacity}
+                                  markerEnd={marker}
+                                  style={{
+                                    transition: 'stroke 0.2s ease, stroke-width 0.2s ease, stroke-opacity 0.2s ease',
+                                    pointerEvents: 'none'
+                                  }}
+                                />
+
+                                {/* Interactive Action Pill at Spline Midpoint (Hover to Sever / Restore / Remove) */}
+                                {(isHovered || edge.isSevered || edge.isDraft) && (
+                                  <foreignObject
+                                    x={edge.midX - 52}
+                                    y={edge.midY - 14}
+                                    width={104}
+                                    height={28}
+                                    style={{ overflow: 'visible', pointerEvents: 'auto', zIndex: 50 }}
+                                  >
+                                    <button
+                                      type="button"
+                                      onClick={(e) => handleToggleSeverEdge(e, edge.id)}
+                                      style={{
+                                        display: 'inline-flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        gap: '4px',
+                                        padding: '3px 8px',
+                                        borderRadius: '12px',
+                                        fontSize: '0.64rem',
+                                        fontWeight: 800,
+                                        cursor: 'pointer',
+                                        border: edge.isSevered
+                                          ? '1px solid #F87171'
+                                          : edge.isDraft
+                                            ? '1px solid #4ADE80'
+                                            : '1px solid #38BDF8',
+                                        background: edge.isSevered
+                                          ? '#FEF2F2'
+                                          : edge.isDraft
+                                            ? '#F0FDF4'
+                                            : '#0F172A',
+                                        color: edge.isSevered
+                                          ? '#DC2626'
+                                          : edge.isDraft
+                                            ? '#16A34A'
+                                            : '#FFFFFF',
+                                        boxShadow: '0 4px 12px rgba(0,0,0,0.18)',
+                                        whiteSpace: 'nowrap',
+                                        transition: 'all 0.15s ease'
+                                      }}
+                                      title={
+                                        edge.isSevered
+                                          ? "Click to restore this severed connection"
+                                          : edge.isDraft
+                                            ? "Click to cancel this drafted connection"
+                                            : "Click to sever this connection and isolate context flow"
+                                      }
+                                    >
+                                      {edge.isSevered ? (
+                                        <span>↺ Restore</span>
+                                      ) : edge.isDraft ? (
+                                        <span>✓ Linked (✕)</span>
+                                      ) : (
+                                        <span>✂️ Sever Flow</span>
+                                      )}
+                                    </button>
+                                  </foreignObject>
+                                )}
+                              </g>
+                            );
+                          })}
+
+                          {/* Dynamic Live Wiring Spline while Dragging */}
+                          {isWiringEdge && (() => {
+                            const startX = wireStartPos.x;
+                            const startY = wireStartPos.y;
+                            let targetX = wireCurrentPos.x;
+                            let targetY = wireCurrentPos.y;
+
+                            if (wireHoveredTargetId) {
+                              const tPos = nodePositions[wireHoveredTargetId];
+                              if (tPos) {
+                                targetX = tPos.x;
+                                targetY = tPos.y + CARD_HEIGHT / 2;
+                              }
+                            }
+
+                            const isForward = targetX >= startX + 20;
+                            const dx = Math.max(40, Math.abs(targetX - startX) * 0.45);
+                            const cp1X = startX + (isForward ? dx : -dx);
+                            const cp1Y = startY;
+                            const cp2X = targetX - (isForward ? dx : -dx);
+                            const cp2Y = targetY;
+                            const dynamicPath = `M ${startX} ${startY} C ${cp1X} ${cp1Y}, ${cp2X} ${cp2Y}, ${targetX} ${targetY}`;
+
+                            return (
+                              <g style={{ pointerEvents: 'none' }}>
+                                <path
+                                  d={dynamicPath}
+                                  fill="none"
+                                  stroke="#16A34A"
+                                  strokeWidth={3}
+                                  strokeDasharray="6 4"
+                                  markerEnd="url(#atlan-arrow-draft-add)"
+                                />
+                                <circle cx={startX} cy={startY} r={5} fill="#16A34A" />
+                                <circle cx={targetX} cy={targetY} r={6} fill="#22C55E" />
+                              </g>
+                            );
+                          })()}
+                        </svg>
+
+                        {/* Empty State Banner */}
+                        {renderedNodes.length === 0 && (
+                          <div style={{
+                            position: 'absolute',
+                            top: '200px',
+                            left: '260px',
+                            textAlign: 'center',
+                            background: 'rgba(255,255,255,0.96)',
+                            backdropFilter: 'blur(8px)',
+                            padding: '32px 40px',
+                            borderRadius: '14px',
+                            border: '1px solid #cbd5e1',
+                            boxShadow: '0 12px 32px rgba(0,0,0,0.06)',
+                            maxWidth: '500px',
+                            pointerEvents: 'auto'
+                          }}>
+                            <div style={{ fontSize: '2.5rem', marginBottom: '8px' }}>🔎</div>
+                            <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#1e293b', margin: '0 0 8px 0' }}>
+                              No Nodes Match Active Filters
+                            </h3>
+                            <p style={{ fontSize: '0.82rem', color: '#64748b', lineHeight: 1.55, margin: '0 0 14px 0' }}>
+                              No lineage nodes match your current combination of filters. Try clearing some filters or resetting to default view.
+                            </p>
+                            <button
+                              onClick={resetAllFilters}
+                              className="btn btn-primary"
+                              style={{ padding: '6px 16px', fontSize: '0.78rem' }}
+                            >
+                              Reset Filters to Default
+                            </button>
+                          </div>
+                        )}
+
+                        {/* Interactive Mode Initial Guidance Pill */}
+                        {viewMode === 'interactive' && renderedNodes.length === 1 && (
+                          <div style={{
+                            position: 'absolute',
+                            top: '90px',
+                            left: '480px',
+                            transform: 'translateX(-50%)',
+                            background: 'rgba(255, 255, 255, 0.96)',
+                            border: '1px solid #BFDBFE',
+                            borderRadius: '20px',
+                            padding: '6px 18px',
+                            boxShadow: '0 4px 14px rgba(29, 78, 216, 0.08)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '8px',
+                            fontSize: '0.72rem',
+                            color: '#1E293B',
+                            pointerEvents: 'none',
+                            zIndex: 10,
+                            whiteSpace: 'nowrap'
+                          }}>
+                            <span style={{ fontSize: '13px' }}>🎯</span>
+                            <span>
+                              <strong>Interactive Flow:</strong> Click <strong>+</strong> / <strong>−</strong> on the left for Upstream or <strong>+</strong> / <strong>−</strong> on the right for Downstream.
+                            </span>
+                          </div>
+                        )}
+
+                        {/* Draggable Node Cards */}
+                        {renderedNodes.map(node => {
+                          const pos = nodePositions[node.id] || { x: 100, y: 100 };
+                          const isSelected = selectedNodeId === node.id;
+                          const isConnected = connectedNodeMap.all.has(node.id);
+                          const isConflictedClaim = allConflictedClaimIds.has(node.id);
+
+                          const upstreamParents = getUpstreamParentIds(node.id);
+                          const downstreamChildren = getDownstreamChildIds(node.id);
+                          const upstreamCount = upstreamParents.length;
+                          const downstreamCount = downstreamChildren.length;
+                          const isUpstreamExpanded = expandedUpstreamSet.has(node.id);
+                          const isDownstreamExpanded = expandedDownstreamSet.has(node.id);
+                          const isClaimsExpanded = expandedConflictClaimsSet.has(node.id);
+                          const cItem = conflictMap[node.id];
+                          const claimANode = cItem?.claimAId ? graphData?.nodes?.find(n => n.id === cItem.claimAId) : null;
+                          const claimBNode = cItem?.claimBId ? graphData?.nodes?.find(n => n.id === cItem.claimBId) : null;
+
+                          let borderColor = '#3b82f6';
+                          let badgeBg = '#f0f7ff';
+                          let badgeColor = '#2563eb';
+                          let nodeIcon = '📋';
+                          let categoryLabel = 'ATOMIC CLAIM';
+                          let subtitleText = `SCOPE / ${node.data?.scope || 'ENTERPRISE'}`;
+
+                          if (node.type === 'source') {
+                            borderColor = '#2026d2';
+                            badgeBg = '#eef2ff';
+                            badgeColor = '#2026d2';
+                            nodeIcon = '🔌';
+                            categoryLabel = 'DATA SOURCE';
+                            subtitleText = `TYPE / ${node.subType?.toUpperCase() || 'CONNECTOR'} • AUTH ${node.authority}%`;
+                          } else if (node.type === 'document') {
+                            borderColor = '#0284c7';
+                            badgeBg = '#f0f9ff';
+                            badgeColor = '#0284c7';
+                            nodeIcon = '📄';
+                            categoryLabel = 'DOCUMENT';
+                            subtitleText = `TYPE / ${node.subType?.toUpperCase() || 'POLICY'} • v${node.data?.version_count || 1}.0`;
+                          } else if (node.type === 'conflict') {
+                            borderColor = '#ea580c';
+                            badgeBg = '#fff7ed';
+                            badgeColor = '#ea580c';
+                            nodeIcon = '⚖️';
+                            categoryLabel = 'CONTRADICTION';
+                            subtitleText = `STATUS / ${node.status || 'REVIEW_REQUIRED'}`;
+                          } else if (node.type === 'decision') {
+                            borderColor = '#7c3aed';
+                            badgeBg = '#faf5ff';
+                            badgeColor = '#7c3aed';
+                            nodeIcon = '🎯';
+                            categoryLabel = 'AI DECISION';
+                            subtitleText = `ACTOR / ${node.actor || 'AGENT_EVAL'}`;
+                          }
+
+                          // Special highlight for contradictory claims
+                          if (isConflictedClaim && node.type === 'claim') {
+                            borderColor = '#ea580c';
+                            badgeColor = '#ea580c';
+                          }
+
+                          // Big Claims Container Card (Multi-Claim List with connecting dots & pagination)
+                          if (node.type === 'claims_group_card') {
+                            const docClaims = node.claims || [];
+                            const visibleClaims = docClaims.slice(0, claimsPageLimit);
+                            const totalCount = docClaims.length;
+                            const hasMore = totalCount > claimsPageLimit;
+
+                            return (
+                              <div
+                                key={node.id}
+                                className="atlan-node-card"
+                                onMouseDown={(e) => handleNodeDragStart(e, node.id)}
+                                style={{
+                                  position: 'absolute',
+                                  left: `${pos.x}px`,
+                                  top: `${pos.y}px`,
+                                  width: '330px',
+                                  background: '#FFFFFF',
+                                  borderRadius: '12px',
+                                  border: '1.5px solid #3B82F6',
+                                  boxShadow: '0 4px 20px rgba(59,130,246,0.12)',
+                                  boxSizing: 'border-box',
+                                  zIndex: 15,
+                                  display: 'flex',
+                                  flexDirection: 'column',
+                                  overflow: 'visible',
+                                  cursor: draggedNodeId === node.id ? 'grabbing' : 'default',
+                                  userSelect: 'none'
+                                }}
+                              >
+                                {/* Draggable Title Header */}
+                                <div
+                                  style={{
+                                    height: '36px',
+                                    boxSizing: 'border-box',
+                                    padding: '0 12px',
+                                    background: 'linear-gradient(180deg, #1E293B 0%, #0F172A 100%)',
+                                    borderRadius: '10px 10px 0 0',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'space-between',
+                                    color: '#FFFFFF',
+                                    cursor: 'grab'
+                                  }}
+                                  title="Hold and drag to move entire claims table"
+                                >
+                                  <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                                    <span style={{ fontSize: '13px' }}>🛡️</span>
+                                    <span style={{ fontSize: '0.72rem', fontWeight: 800, letterSpacing: '0.02em' }}>
+                                      ATOMIC CLAIMS ({visibleClaims.length}/{totalCount})
+                                    </span>
+                                  </div>
+                                  <span style={{
+                                    fontSize: '0.62rem',
+                                    background: 'rgba(59,130,246,0.25)',
+                                    color: '#93C5FD',
+                                    padding: '1px 6px',
+                                    borderRadius: '4px',
+                                    fontWeight: 700
+                                  }}>
+                                    {node.docTitle || 'Context Rules'}
+                                  </span>
+                                </div>
+
+                                {/* Claims List Rows */}
+                                <div style={{ padding: '8px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                                  {visibleClaims.map((cl) => {
+                                    const isSelected = selectedNodeId === cl.id;
+                                    const isConflicted = allConflictedClaimIds.has(cl.id);
+                                    const isHoveredTarget = wireHoveredTargetId === cl.id;
+
+                                    return (
+                                      <div
+                                        key={cl.id}
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          setSelectedNodeId(cl.id);
+                                          fetchBlastRadius(cl.cleanId || String(cl.id).replace(/^cl_/, ''));
+                                        }}
+                                        style={{
+                                          position: 'relative',
+                                          height: '56px',
+                                          boxSizing: 'border-box',
+                                          padding: '5px 10px',
+                                          background: isSelected ? '#EFF6FF' : isConflicted ? '#FFF7ED' : '#F8FAFC',
+                                          border: isSelected ? '1.5px solid #2563EB' : isConflicted ? '1px solid #FDBA74' : '1px solid #E2E8F0',
+                                          borderRadius: '8px',
+                                          cursor: 'pointer',
+                                          display: 'flex',
+                                          flexDirection: 'column',
+                                          justifyContent: 'center',
+                                          transition: 'all 0.15s ease'
+                                        }}
+                                      >
+                                        {/* Left Input Dot (Port) - Solid Fully Filled Circle (No Radio Button Style) */}
+                                        <div
+                                          style={{
+                                            position: 'absolute',
+                                            left: '-13px',
+                                            top: '23px',
+                                            width: '10px',
+                                            height: '10px',
+                                            borderRadius: '50%',
+                                            background: isHoveredTarget
+                                              ? '#16A34A'
+                                              : isConflicted
+                                                ? '#EA580C'
+                                                : '#2563EB',
+                                            border: 'none',
+                                            boxShadow: 'none',
+                                            zIndex: 25
+                                          }}
+                                          title="Active context connection from source document"
+                                        />
+
+                                        {/* Claim Row Content */}
+                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '6px', marginBottom: '2px' }}>
+                                          <span style={{
+                                            fontSize: '0.60rem',
+                                            fontWeight: 800,
+                                            color: isConflicted ? '#EA580C' : '#2563EB',
+                                            background: isConflicted ? '#FFEDD5' : '#DBEAFE',
+                                            padding: '1px 5px',
+                                            borderRadius: '3px'
+                                          }}>
+                                            {isConflicted ? 'CONFLICTED' : 'VERIFIED'}
+                                          </span>
+                                          <span style={{ fontSize: '0.62rem', fontWeight: 700, color: '#16A34A' }}>
+                                            {Math.round((cl.trustScore || 0.96) * 100)}% Trust
+                                          </span>
+                                        </div>
+
+                                        <p style={{
+                                          margin: 0,
+                                          fontSize: '0.69rem',
+                                          fontWeight: 600,
+                                          color: '#1E293B',
+                                          lineHeight: 1.35,
+                                          overflow: 'hidden',
+                                          textOverflow: 'ellipsis',
+                                          display: '-webkit-box',
+                                          WebkitLineClamp: 2,
+                                          WebkitBoxOrient: 'vertical'
+                                        }}>
+                                          {cl.label}
+                                        </p>
+
+                                        {/* Right Output Dot (Port Draggable Handle) */}
+                                        <div
+                                          onMouseDown={(e) => handlePortMouseDown(e, cl.id)}
+                                          style={{
+                                            position: 'absolute',
+                                            right: '-9px',
+                                            top: 'calc(50% - 9px)',
+                                            width: '18px',
+                                            height: '18px',
+                                            borderRadius: '50%',
+                                            background: 'linear-gradient(135deg, #1D4ED8 0%, #3B82F6 100%)',
+                                            border: '1.5px solid #FFFFFF',
+                                            color: '#FFFFFF',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            fontSize: '9px',
+                                            boxShadow: '0 2px 6px rgba(29,78,216,0.35)',
+                                            cursor: 'crosshair',
+                                            zIndex: 25
+                                          }}
+                                          title="Hold and drag to wire to Decision Agent or Contradiction"
+                                        >
+                                          <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#FFFFFF' }} />
+                                        </div>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+
+                                {/* Footer Load More / Collapse */}
+                                {totalCount > 6 && (
+                                  <div style={{ padding: '4px 8px 8px 8px', borderTop: '1px solid #F1F5F9' }}>
+                                    {hasMore ? (
+                                      <button
+                                        type="button"
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          setClaimsPageLimit(prev => prev + 6);
+                                          showToast?.(`Loaded 6 more claims (${Math.min(totalCount, claimsPageLimit + 6)}/${totalCount})`);
+                                        }}
+                                        style={{
+                                          width: '100%',
+                                          padding: '5px',
+                                          borderRadius: '6px',
+                                          border: '1px solid #BFDBFE',
+                                          background: '#EFF6FF',
+                                          color: '#1D4ED8',
+                                          fontSize: '0.68rem',
+                                          fontWeight: 700,
+                                          cursor: 'pointer',
+                                          display: 'flex',
+                                          alignItems: 'center',
+                                          justifyContent: 'center',
+                                          gap: '4px',
+                                          transition: 'all 0.15s ease'
+                                        }}
+                                      >
+                                        <span>➕ Load 6 More Claims ({totalCount - visibleClaims.length} remaining)</span>
+                                      </button>
+                                    ) : (
+                                      <button
+                                        type="button"
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          setClaimsPageLimit(6);
+                                          showToast?.("Collapsed claims list to 6");
+                                        }}
+                                        style={{
+                                          width: '100%',
+                                          padding: '4px',
+                                          borderRadius: '6px',
+                                          border: '1px solid #E2E8F0',
+                                          background: '#F8FAFC',
+                                          color: '#64748B',
+                                          fontSize: '0.66rem',
+                                          fontWeight: 600,
+                                          cursor: 'pointer',
+                                          display: 'flex',
+                                          alignItems: 'center',
+                                          justifyContent: 'center',
+                                          gap: '4px'
+                                        }}
+                                      >
+                                        <span>↺ Collapse to 6 Claims</span>
+                                      </button>
+                                    )}
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          }
+
+                          // Anomaly Roll-up Cluster Card
+                          if (node.type === 'claim_cluster') {
+                            return (
+                              <div
+                                key={node.id}
+                                className="atlan-node-card"
+                                onClick={() => {
+                                  setDrawerDocFilter(node.docId || 'all');
+                                  setIsDrawerOpen(true);
+                                  showToast?.(`Viewing ${node.count} clean claims from ${node.docTitle}`);
+                                }}
+                                style={{
+                                  position: 'absolute',
+                                  left: `${pos.x}px`,
+                                  top: `${pos.y}px`,
+                                  width: `${CARD_WIDTH}px`,
+                                  height: `${CARD_HEIGHT}px`,
+                                  background: 'linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%)',
+                                  borderRadius: '10px',
+                                  border: '1.5px dashed #059669',
+                                  boxShadow: '0 2px 8px rgba(5,150,105,0.12)',
+                                  boxSizing: 'border-box',
+                                  padding: '10px 12px',
+                                  display: 'flex',
+                                  flexDirection: 'column',
+                                  justifyContent: 'space-between',
+                                  cursor: 'pointer',
+                                  zIndex: 10,
+                                  userSelect: 'none',
+                                  transition: 'all 0.15s ease'
+                                }}
+                                title="Click to view all clean, verified claims in Claims Drawer"
+                              >
+                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                  <span style={{ fontSize: '0.64rem', fontWeight: 800, color: '#166534', background: '#BBF7D0', padding: '1px 6px', borderRadius: '4px', display: 'flex', alignItems: 'center', gap: '3px' }}>
+                                    <ShieldCheck size={11} /> CLUSTER (CLEAN)
+                                  </span>
+                                  <span style={{ fontSize: '0.66rem', color: '#15803D', fontWeight: 700 }}>
+                                    {node.count} Claims
+                                  </span>
+                                </div>
+                                <div>
+                                  <h4 style={{ margin: 0, fontSize: '0.78rem', fontWeight: 700, color: '#14532D', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                    🛡️ {node.label}
+                                  </h4>
+                                  <p style={{ margin: '2px 0 0 0', fontSize: '0.68rem', color: '#166534', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                    Source: {node.docTitle}
+                                  </p>
+                                </div>
+                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid rgba(5,150,105,0.2)', paddingTop: '4px', fontSize: '0.65rem', color: '#15803D' }}>
+                                  <span>Non-Conflicting</span>
+                                  <span style={{ fontWeight: 700, textDecoration: 'underline' }}>Browse Claims ›</span>
+                                </div>
+                              </div>
+                            );
+                          }
+
+                          // High-Density Column Overflow Cluster Card
+                          if (node.type === 'density_cluster') {
+                            return (
+                              <div
+                                key={node.id}
+                                className="atlan-node-card"
+                                onClick={() => {
+                                  setDisplayLimit('all');
+                                  showToast?.("Expanded all claims in column");
+                                }}
+                                style={{
+                                  position: 'absolute',
+                                  left: `${pos.x}px`,
+                                  top: `${pos.y}px`,
+                                  width: `${CARD_WIDTH}px`,
+                                  height: `${CARD_HEIGHT}px`,
+                                  background: 'linear-gradient(135deg, #F8FAFC 0%, #EEF2F6 100%)',
+                                  borderRadius: '10px',
+                                  border: '1.5px dashed #64748B',
+                                  boxShadow: '0 1px 4px rgba(0,0,0,0.02)',
+                                  boxSizing: 'border-box',
+                                  padding: '10px 12px',
+                                  display: 'flex',
+                                  flexDirection: 'column',
+                                  justifyContent: 'space-between',
+                                  cursor: 'pointer',
+                                  zIndex: 10,
+                                  userSelect: 'none',
+                                  transition: 'all 0.15s ease'
+                                }}
+                                title="Click to expand full column density"
+                              >
+                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                  <span style={{ fontSize: '0.64rem', fontWeight: 800, color: '#334155', background: '#E2E8F0', padding: '1px 6px', borderRadius: '4px' }}>
+                                    COLUMN OVERFLOW
+                                  </span>
+                                  <span style={{ fontSize: '0.66rem', color: '#64748B', fontWeight: 700 }}>
+                                    +{node.count} Hidden
+                                  </span>
+                                </div>
+                                <div>
+                                  <h4 style={{ margin: 0, fontSize: '0.78rem', fontWeight: 700, color: '#0F172A' }}>
+                                    {node.label}
+                                  </h4>
+                                  <p style={{ margin: '2px 0 0 0', fontSize: '0.68rem', color: '#64748B' }}>
+                                    {node.desc}
+                                  </p>
+                                </div>
+                                <div style={{ borderTop: '1px solid #CBD5E1', paddingTop: '4px', fontSize: '0.66rem', color: '#2563EB', fontWeight: 700, textAlign: 'center' }}>
+                                  Click to Expand All
+                                </div>
+                              </div>
+                            );
+                          }
+
+                          return (
+                            <div
+                              key={node.id}
+                              className="atlan-node-card"
+                              onClick={() => setSelectedNodeId(node.id)}
+                              onMouseDown={(e) => handleNodeDragStart(e, node.id)}
+                              style={{
+                                position: 'absolute',
+                                left: `${pos.x}px`,
+                                top: `${pos.y}px`,
+                                width: (node.type === 'conflict' && isClaimsExpanded) ? '310px' : `${CARD_WIDTH}px`,
+                                height: (node.type === 'conflict' && isClaimsExpanded) ? 'auto' : `${CARD_HEIGHT}px`,
+                                minHeight: `${CARD_HEIGHT}px`,
+                                background: '#fff',
+                                borderRadius: '10px',
+                                border: isSelected
+                                  ? `2px solid ${borderColor}`
+                                  : isConflictedClaim
+                                    ? '1.5px solid #ea580c'
+                                    : isConnected
+                                      ? `1.5px solid ${borderColor}`
+                                      : '1px solid #cbd5e1',
+                                boxShadow: isSelected
+                                  ? `0 0 0 4px ${borderColor}30, 0 8px 24px rgba(0,0,0,0.12)`
+                                  : (node.type === 'conflict' && isClaimsExpanded)
+                                    ? '0 0 0 3px rgba(234,88,12,0.3), 0 12px 32px rgba(234,88,12,0.18)'
+                                    : isConflictedClaim
+                                      ? '0 0 0 2px rgba(234,88,12,0.25), 0 4px 14px rgba(234,88,12,0.15)'
+                                      : isConnected
+                                        ? `0 0 0 2px ${borderColor}20, 0 4px 12px rgba(0,0,0,0.06)`
+                                        : '0 2px 8px rgba(0,0,0,0.04)',
+                                boxSizing: 'border-box',
+                                padding: '10px 14px',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                justifyContent: 'space-between',
+                                cursor: draggedNodeId === node.id ? 'grabbing' : 'pointer',
+                                userSelect: 'none',
+                                zIndex: (node.type === 'conflict' && isClaimsExpanded) ? 40 : (isSelected ? 20 : isConflictedClaim ? 15 : isConnected ? 10 : 5),
+                                transition: draggedNodeId === node.id ? 'none' : 'box-shadow 0.15s ease, border-color 0.15s ease'
+                              }}
+                            >
+                              {/* Atlan-Style Home / Origin Beacon */}
+                              {isSelected && (
+                                <div style={{
+                                  position: 'absolute',
+                                  top: '-16px',
+                                  left: '10px',
+                                  background: '#1D4ED8',
+                                  color: '#fff',
+                                  borderRadius: '4px 4px 0 0',
+                                  padding: '2px 8px',
+                                  fontSize: '0.62rem',
+                                  fontWeight: 800,
+                                  letterSpacing: '0.04em',
+                                  boxShadow: '0 2px 6px rgba(29,78,216,0.35)',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  gap: '4px'
+                                }}>
+                                  <Home size={10} />
+                                  <span>YOU ARE HERE</span>
+                                </div>
+                              )}
+
+                              {/* Left Connection Port: Upstream Expand (+) / Collapse (−) & Snap Highlight */}
+                              {node.type !== 'source' && upstreamCount > 0 && (
+                                <div
+                                  onMouseDown={(e) => e.stopPropagation()}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    toggleUpstream(node.id);
+                                  }}
+                                  style={{
+                                    position: 'absolute',
+                                    left: '-13px',
+                                    top: (node.type === 'conflict' && isClaimsExpanded) ? '26px' : 'calc(50% - 11px)',
+                                    width: '22px',
+                                    height: '22px',
+                                    borderRadius: '50%',
+                                    background: isUpstreamExpanded ? '#1D4ED8' : '#fff',
+                                    border: `1.5px solid ${isUpstreamExpanded ? '#1D4ED8' : borderColor}`,
+                                    color: isUpstreamExpanded ? '#fff' : borderColor,
+                                    boxShadow: '0 2px 6px rgba(0,0,0,0.14)',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    fontSize: '0.85rem',
+                                    fontWeight: 900,
+                                    lineHeight: 1,
+                                    cursor: 'pointer',
+                                    zIndex: 25,
+                                    transition: 'all 0.15s ease'
+                                  }}
+                                  title={
+                                    isUpstreamExpanded
+                                      ? 'Click (−) to collapse upstream nodes'
+                                      : 'Click (+) to expand upstream nodes'
+                                  }
+                                >
+                                  {isUpstreamExpanded ? '−' : '+'}
+                                </div>
+                              )}
+
+                              {/* Input Port Snap Indicator when Wiring */}
+                              {isWiringEdge && wireHoveredTargetId === node.id && (
+                                <div style={{
+                                  position: 'absolute',
+                                  left: '-26px',
+                                  top: 'calc(50% - 10px)',
+                                  background: '#16A34A',
+                                  color: '#FFFFFF',
+                                  borderRadius: '12px',
+                                  padding: '2px 7px',
+                                  fontSize: '0.62rem',
+                                  fontWeight: 800,
+                                  boxShadow: '0 2px 8px rgba(22,163,74,0.4)',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  gap: '3px',
+                                  zIndex: 35,
+                                  pointerEvents: 'none',
+                                  whiteSpace: 'nowrap'
+                                }}>
+                                  <span>✓ Snap Link</span>
+                                </div>
+                              )}
+
+                              {/* Actionable Output Wiring Port Handle (Drag to Wire Context Flow) */}
+                              {node.type !== 'decision' && (
+                                <div
+                                  className="atlan-port-handle"
+                                  onMouseDown={(e) => handlePortMouseDown(e, node.id)}
+                                  title="Click and drag to wire context flow into downstream AI or node"
+                                  style={{
+                                    position: 'absolute',
+                                    right: '-10px',
+                                    top: (node.type === 'conflict' && isClaimsExpanded) ? '54px' : (downstreamCount > 0 ? 'calc(50% + 14px)' : 'calc(50% - 9px)'),
+                                    width: '18px',
+                                    height: '18px',
+                                    borderRadius: '50%',
+                                    background: '#2563EB',
+                                    border: '2px solid #FFFFFF',
+                                    boxShadow: '0 2px 6px rgba(37,99,235,0.4)',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    cursor: 'crosshair',
+                                    zIndex: 26,
+                                    transition: 'transform 0.15s ease, background-color 0.15s ease'
+                                  }}
+                                  onMouseEnter={e => {
+                                    e.currentTarget.style.transform = 'scale(1.25)';
+                                    e.currentTarget.style.backgroundColor = '#1D4ED8';
+                                  }}
+                                  onMouseLeave={e => {
+                                    e.currentTarget.style.transform = 'scale(1.0)';
+                                    e.currentTarget.style.backgroundColor = '#2563EB';
+                                  }}
+                                >
+                                  <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#FFFFFF', pointerEvents: 'none' }} />
+                                </div>
+                              )}
+
+                              {/* Right Connection Port: Downstream Expand (+) / Collapse (−) Only */}
+                              {node.type !== 'decision' && downstreamCount > 0 && (
+                                <div
+                                  onMouseDown={(e) => e.stopPropagation()}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    toggleDownstream(node.id);
+                                  }}
+                                  style={{
+                                    position: 'absolute',
+                                    right: '-13px',
+                                    top: (node.type === 'conflict' && isClaimsExpanded) ? '26px' : 'calc(50% - 11px)',
+                                    width: '22px',
+                                    height: '22px',
+                                    borderRadius: '50%',
+                                    background: isDownstreamExpanded ? '#1D4ED8' : '#fff',
+                                    border: `1.5px solid ${isDownstreamExpanded ? '#1D4ED8' : borderColor}`,
+                                    color: isDownstreamExpanded ? '#fff' : borderColor,
+                                    boxShadow: '0 2px 6px rgba(0,0,0,0.14)',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    fontSize: '0.85rem',
+                                    fontWeight: 900,
+                                    lineHeight: 1,
+                                    cursor: 'pointer',
+                                    zIndex: 25,
+                                    transition: 'all 0.15s ease'
+                                  }}
+                                  title={
+                                    isDownstreamExpanded
+                                      ? 'Click (−) to collapse downstream nodes'
+                                      : 'Click (+) to expand downstream nodes'
+                                  }
+                                >
+                                  {isDownstreamExpanded ? '−' : '+'}
+                                </div>
+                              )}
+
+                              {/* Card Header: Category & Metrics */}
+                              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                <span style={{
+                                  fontSize: '0.62rem',
+                                  fontWeight: 800,
+                                  color: badgeColor,
+                                  textTransform: 'uppercase',
+                                  letterSpacing: '0.04em'
+                                }}>
+                                  {isConflictedClaim && node.type === 'claim' ? '⚠️ CONTRADICTION' : categoryLabel}
+                                </span>
+
+                                {node.trustScore !== undefined && (
+                                  <span className="badge badge-verified" style={{ fontSize: '0.62rem', padding: '1px 5px', fontWeight: 700 }}>
+                                    {(node.trustScore * 100).toFixed(0)}% Trust
+                                  </span>
+                                )}
+                                {node.severity && (
+                                  <span className="badge badge-review" style={{ fontSize: '0.62rem', padding: '1px 5px', fontWeight: 700 }}>
+                                    {node.severity}
+                                  </span>
+                                )}
+                                {node.verdict && (
+                                  <span className={node.verdict === 'ALLOW' ? 'badge badge-verified' : 'badge badge-warning'} style={{ fontSize: '0.62rem', padding: '1px 5px', fontWeight: 700 }}>
+                                    {node.verdict}
+                                  </span>
+                                )}
+                              </div>
+
+                              {/* Card Body: Entity Title */}
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '2px' }}>
+                                <span style={{ fontSize: '15px' }}>{nodeIcon}</span>
+                                <span style={{
+                                  fontSize: '0.78rem',
+                                  fontWeight: 700,
+                                  color: '#1e293b',
+                                  lineHeight: 1.25,
+                                  whiteSpace: 'nowrap',
+                                  overflow: 'hidden',
+                                  textOverflow: 'ellipsis'
+                                }}>
+                                  {node.label}
+                                </span>
+                              </div>
+
+                              {/* Card Footer: Metadata / Scope */}
+                              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid #f1f5f9', paddingTop: '4px', fontSize: '0.65rem', color: '#64748b' }}>
+                                <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '170px' }}>
+                                  {subtitleText}
+                                </span>
+                                {node.type === 'document' ? (
+                                  <span
+                                    style={{
+                                      color: '#0284c7',
+                                      fontWeight: 700,
+                                      fontSize: '0.62rem'
+                                    }}
+                                  >
+                                    inspect doc &rsaquo;
+                                  </span>
+                                ) : node.type === 'conflict' ? (
+                                  <span
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      toggleConflictClaims(node.id);
+                                      if (!isClaimsExpanded) {
+                                        showToast?.(`Revealed clashing assertions for ${node.label}`);
+                                      }
+                                    }}
+                                    style={{
+                                      color: isClaimsExpanded ? '#C2410C' : '#EA580C',
+                                      fontWeight: 800,
+                                      fontSize: '0.64rem',
+                                      cursor: 'pointer',
+                                      display: 'inline-flex',
+                                      alignItems: 'center',
+                                      gap: '3px',
+                                      background: isClaimsExpanded ? '#FFEDD5' : '#FFF7ED',
+                                      padding: '1px 6px',
+                                      borderRadius: '4px',
+                                      border: '1px solid #FED7AA',
+                                      transition: 'all 0.15s ease'
+                                    }}
+                                    title="Inspect the 2 conflicting assertions"
+                                  >
+                                    <span>⚖️ {isClaimsExpanded ? 'Hide Claims ▲' : 'Claims (2) ▾'}</span>
+                                  </span>
+                                ) : (
+                                  <span style={{ color: '#2563eb', fontWeight: 600, fontSize: '0.62rem' }}>
+                                    view lineage &rsaquo;
+                                  </span>
+                                )}
+                              </div>
+
+                              {/* Inline Clashing Claims Drawer for Contradiction Card */}
+                              {node.type === 'conflict' && isClaimsExpanded && (
+                                <div
+                                  onClick={(e) => e.stopPropagation()}
+                                  style={{
+                                    marginTop: '8px',
+                                    padding: '8px 10px',
+                                    background: '#FFF7ED',
+                                    borderRadius: '8px',
+                                    border: '1px solid #FED7AA',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    gap: '6px',
+                                    fontSize: '0.66rem',
+                                    boxShadow: 'inset 0 1px 3px rgba(234,88,12,0.06)'
+                                  }}
+                                >
+                                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                    <span style={{ fontWeight: 800, color: '#9A3412', textTransform: 'uppercase', fontSize: '0.59rem', letterSpacing: '0.03em' }}>
+                                      ⚖️ CLASHING ASSERTIONS
+                                    </span>
+                                    <span style={{ fontSize: '0.58rem', color: '#EA580C', fontWeight: 800, background: '#FFEDD5', padding: '1px 5px', borderRadius: '3px' }}>
+                                      {node.severity || cItem?.severity || 'HIGH'} SEVERITY
+                                    </span>
+                                  </div>
+
+                                  {/* Assertion A */}
+                                  <div style={{
+                                    background: '#FFFFFF',
+                                    padding: '6px 8px',
+                                    borderRadius: '5px',
+                                    borderLeft: '3px solid #0284C7',
+                                    boxShadow: '0 1px 2px rgba(0,0,0,0.04)'
+                                  }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', color: '#0369A1', fontWeight: 700, fontSize: '0.58rem', marginBottom: '2px' }}>
+                                      <span>ASSERTION A (BASELINE)</span>
+                                      <span>{claimANode?.trustScore ? `${(claimANode.trustScore * 100).toFixed(0)}% TRUST` : 'VERIFIED'}</span>
+                                    </div>
+                                    <p style={{ margin: 0, color: '#1E293B', fontSize: '0.65rem', lineHeight: 1.35, fontWeight: 500 }}>
+                                      "{claimANode?.fullText || claimANode?.label || cItem?.claimAId || 'SOP refund eligibility window is strictly 30 days.'}"
+                                    </p>
+                                    {claimANode?.docTitle && (
+                                      <span style={{ fontSize: '0.56rem', color: '#64748B', display: 'block', marginTop: '2px' }}>
+                                        Doc: {claimANode.docTitle}
+                                      </span>
+                                    )}
+                                  </div>
+
+                                  {/* Assertion B */}
+                                  <div style={{
+                                    background: '#FFFFFF',
+                                    padding: '6px 8px',
+                                    borderRadius: '5px',
+                                    borderLeft: '3px solid #EA580C',
+                                    boxShadow: '0 1px 2px rgba(0,0,0,0.04)'
+                                  }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', color: '#C2410C', fontWeight: 700, fontSize: '0.58rem', marginBottom: '2px' }}>
+                                      <span>ASSERTION B (CONTRADICTION)</span>
+                                      <span>{claimBNode?.trustScore ? `${(claimBNode.trustScore * 100).toFixed(0)}% TRUST` : 'FLAGGED'}</span>
+                                    </div>
+                                    <p style={{ margin: 0, color: '#1E293B', fontSize: '0.65rem', lineHeight: 1.35, fontWeight: 500 }}>
+                                      "{claimBNode?.fullText || claimBNode?.label || cItem?.claimBId || 'VIP Tier-1 customer exceptions allow 45-day refund grants.'}"
+                                    </p>
+                                    {claimBNode?.docTitle && (
+                                      <span style={{ fontSize: '0.56rem', color: '#64748B', display: 'block', marginTop: '2px' }}>
+                                        Doc: {claimBNode.docTitle}
+                                      </span>
+                                    )}
+                                  </div>
+
+                                  {/* Resolution Action */}
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      setSelectedNodeId(node.id);
+                                      showToast?.(`Selected contradiction: ${node.label} for curator review`);
+                                    }}
+                                    style={{
+                                      marginTop: '2px',
+                                      padding: '4px 8px',
+                                      background: '#EA580C',
+                                      color: '#FFFFFF',
+                                      border: 'none',
+                                      borderRadius: '4px',
+                                      fontWeight: 700,
+                                      fontSize: '0.62rem',
+                                      cursor: 'pointer',
+                                      display: 'flex',
+                                      alignItems: 'center',
+                                      justifyContent: 'center',
+                                      gap: '4px',
+                                      boxShadow: '0 1px 3px rgba(234,88,12,0.3)',
+                                      transition: 'background 0.15s ease'
+                                    }}
+                                  >
+                                    <span>⚖️ Inspect Full Evidence & Resolve</span>
+                                  </button>
+                                </div>
+                              )}
                             </div>
-                            <div style={{ background: '#FFFFFF', padding: '7px 9px', borderRadius: '6px', borderLeft: '3px solid #EA580C', fontSize: '0.7rem', color: '#1E293B' }}>
-                              <strong style={{ color: '#EA580C', display: 'block', fontSize: '0.6rem' }}>ASSERTION B</strong>
-                              "{clB?.fullText || clB?.label}"
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 4. Selected Entity Inspector & Conflict Resolution Console (Hidden in Split-Screen view to keep DAG clean and spacious) */}
+                  {!isSplitActive && selectedNode && (
+                    <div style={{
+                      background: 'var(--bg-surface)',
+                      border: '1px solid var(--border-color)',
+                      borderRadius: '12px',
+                      padding: '16px 20px',
+                      display: 'grid',
+                      gridTemplateColumns: 'minmax(300px, 1.2fr) minmax(320px, 1fr)',
+                      gap: '18px',
+                      alignItems: 'start'
+                    }}>
+                      {/* Left Column: Node Details & Lineage Stats */}
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                          <span style={{ fontSize: '22px' }}>
+                            {selectedNode.type === 'source' ? '🔌' : selectedNode.type === 'document' ? '📄' : selectedNode.type === 'claim' ? '📋' : selectedNode.type === 'conflict' ? '⚖️' : '🎯'}
+                          </span>
+                          <div>
+                            <h3 style={{ margin: 0, fontSize: '0.98rem', fontWeight: 800, color: 'var(--text-main)' }}>
+                              {selectedNode.label}
+                            </h3>
+                            <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
+                              Node Type: <strong style={{ textTransform: 'uppercase' }}>{selectedNode.type}</strong> &bull; ID: <code style={{ fontSize: '0.7rem' }}>{selectedNode.id}</code>
+                            </span>
+                          </div>
+                        </div>
+
+                        {selectedNode.fullText && (
+                          <p style={{ margin: '4px 0 0 0', fontSize: '0.82rem', color: 'var(--text-main)', lineHeight: 1.45, background: 'var(--bg-card)', padding: '10px 14px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+                            "{selectedNode.fullText}"
+                          </p>
+                        )}
+
+                        {/* Upstream & Downstream Lineage Metrics */}
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px', marginTop: '4px' }}>
+                          <div style={{ background: 'var(--bg-card)', padding: '8px 10px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+                            <span style={{ fontSize: '0.66rem', color: 'var(--text-muted)', fontWeight: 600, textTransform: 'uppercase' }}>Upstream Roots</span>
+                            <div style={{ fontSize: '1.15rem', fontWeight: 800, color: '#0284c7', marginTop: '2px' }}>{connectedNodeMap.up.size}</div>
+                          </div>
+                          <div style={{ background: 'var(--bg-card)', padding: '8px 10px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+                            <span style={{ fontSize: '0.66rem', color: 'var(--text-muted)', fontWeight: 600, textTransform: 'uppercase' }}>Downstream Targets</span>
+                            <div style={{ fontSize: '1.15rem', fontWeight: 800, color: '#7c3aed', marginTop: '2px' }}>{connectedNodeMap.down.size}</div>
+                          </div>
+                          <div style={{ background: 'var(--bg-card)', padding: '8px 10px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+                            <span style={{ fontSize: '0.66rem', color: 'var(--text-muted)', fontWeight: 600, textTransform: 'uppercase' }}>Trust Score</span>
+                            <div style={{ fontSize: '1.15rem', fontWeight: 800, color: '#16a34a', marginTop: '2px' }}>
+                              {selectedNode.trustScore !== undefined ? `${(selectedNode.trustScore * 100).toFixed(0)}%` : '98%'}
                             </div>
                           </div>
                         </div>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-            )}
+                      </div>
+
+                      {/* Right Column: Contextual Inspector */}
+                      <div>
+                        {selectedNode.type === 'conflict' ? (
+                          /* Dedicated Side-by-Side Conflict Discrepancy Viewer */
+                          (() => {
+                            const cItem = conflictMap[selectedNode.id];
+                            const claimA = graphData?.nodes?.find(n => n.id === cItem?.claimAId);
+                            const claimB = graphData?.nodes?.find(n => n.id === cItem?.claimBId);
+
+                            return (
+                              <div style={{
+                                background: 'rgba(234,88,12,0.05)',
+                                border: '1px solid rgba(234,88,12,0.3)',
+                                borderRadius: '10px',
+                                padding: '14px',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: '10px'
+                              }}>
+                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                  <span style={{ fontSize: '0.82rem', fontWeight: 800, color: '#ea580c' }}>
+                                    ⚖️ Contradiction Comparison
+                                  </span>
+                                  <span className="badge badge-warning" style={{ fontSize: '0.7rem' }}>
+                                    {selectedNode.severity || 'HIGH'} SEVERITY
+                                  </span>
+                                </div>
+
+                                {/* Claim A vs Claim B Comparison Box */}
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+                                  <div style={{ background: '#fff', padding: '10px', borderRadius: '8px', border: '1px solid #fed7aa', fontSize: '0.74rem' }}>
+                                    <div style={{ fontWeight: 800, color: '#ea580c', marginBottom: '4px' }}>Claim A (Candidate)</div>
+                                    <p style={{ margin: 0, color: '#334155', lineHeight: 1.35 }}>
+                                      "{claimA?.fullText || claimA?.label || 'Loading claim...'}"
+                                    </p>
+                                  </div>
+                                  <div style={{ background: '#fff', padding: '10px', borderRadius: '8px', border: '1px solid #fed7aa', fontSize: '0.74rem' }}>
+                                    <div style={{ fontWeight: 800, color: '#2563eb', marginBottom: '4px' }}>Claim B (Contender)</div>
+                                    <p style={{ margin: 0, color: '#334155', lineHeight: 1.35 }}>
+                                      "{claimB?.fullText || claimB?.label || 'Loading claim...'}"
+                                    </p>
+                                  </div>
+                                </div>
+
+                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '4px' }}>
+                                  <span style={{ fontSize: '0.72rem', color: '#64748b' }}>
+                                    Status: <strong>{selectedNode.status || 'Pending Review'}</strong>
+                                  </span>
+                                  <button
+                                    onClick={() => {
+                                      setSelectedConflictId(selectedNode.id);
+                                      setViewMode('conflicts');
+                                      showToast?.("Isolated conflict lineage on canvas");
+                                    }}
+                                    style={{
+                                      padding: '4px 12px',
+                                      borderRadius: '6px',
+                                      background: '#ea580c',
+                                      color: '#fff',
+                                      border: 'none',
+                                      fontSize: '0.74rem',
+                                      fontWeight: 700,
+                                      cursor: 'pointer'
+                                    }}
+                                  >
+                                    Isolate Conflict DAG
+                                  </button>
+                                </div>
+                              </div>
+                            );
+                          })()
+                        ) : selectedNode.type === 'claim' ? (
+                          /* Blast Radius Simulation */
+                          <div style={{
+                            background: blastRadius?.risk_tier === 'CRITICAL' || blastRadius?.risk_tier === 'HIGH' ? 'rgba(234,88,12,0.06)' : 'rgba(25,195,125,0.06)',
+                            border: `1px solid ${blastRadius?.risk_tier === 'CRITICAL' || blastRadius?.risk_tier === 'HIGH' ? 'rgba(234,88,12,0.3)' : 'rgba(25,195,125,0.3)'}`,
+                            borderRadius: '10px',
+                            padding: '14px',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '8px'
+                          }}>
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
+                              <span style={{ fontSize: '0.82rem', fontWeight: 800, color: 'var(--text-main)' }}>
+                                Downstream Policy Blast Radius
+                              </span>
+                              <span className={blastRadius?.risk_tier === 'CRITICAL' || blastRadius?.risk_tier === 'HIGH' ? 'badge badge-warning' : 'badge badge-verified'} style={{ fontSize: '0.7rem' }}>
+                                {blastRadius?.risk_tier || 'LOW'} RISK ({blastRadius?.risk_score || 15}/100)
+                              </span>
+                            </div>
+
+                            <p style={{ margin: 0, fontSize: '0.78rem', color: 'var(--text-muted)', lineHeight: 1.4 }}>
+                              {blastRadius?.recommendation || 'Calculates what breaks across AI models if this knowledge is modified.'}
+                            </p>
+
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginTop: '4px' }}>
+                              <div style={{ background: 'var(--bg-card)', padding: '8px 10px', borderRadius: '8px', border: '1px solid var(--border-color)', fontSize: '0.74rem' }}>
+                                <span style={{ color: 'var(--text-muted)' }}>Connected Conflicts: </span>
+                                <strong style={{ color: '#ea580c' }}>{blastRadius?.connected_conflicts_count || 0}</strong>
+                              </div>
+                              <div style={{ background: 'var(--bg-card)', padding: '8px 10px', borderRadius: '8px', border: '1px solid var(--border-color)', fontSize: '0.74rem' }}>
+                                <span style={{ color: 'var(--text-muted)' }}>Affected AI Decisions: </span>
+                                <strong style={{ color: '#7c3aed' }}>{blastRadius?.impacted_decisions_count || 0}</strong>
+                              </div>
+                            </div>
+                          </div>
+                        ) : (
+                          <div style={{ background: 'var(--bg-card)', padding: '14px', borderRadius: '10px', border: '1px solid var(--border-color)', fontSize: '0.78rem', color: 'var(--text-muted)' }}>
+                            <strong style={{ color: 'var(--text-main)' }}>Lineage Context:</strong> Select an individual <strong>Atomic Claim</strong> or <strong>Contradiction (⚖️)</strong> to inspect connected rules and downstream AI decisions.
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* 3. SELECTED ASSET'S CONTRADICTIONS & CONFLICTS (Active & Resolved for THIS Document / Connector) */}
+                  {selectedAsset360 && (asset360Section === 'all' || asset360Section === 'conflicts') && (
+                    <div style={{
+                      background: '#FFFFFF',
+                      border: '1px solid #E2E8F0',
+                      borderRadius: '10px',
+                      padding: '14px 18px',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '12px'
+                    }}>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px', borderBottom: '1px solid #F1F5F9', paddingBottom: '8px' }}>
+                        <div>
+                          <h4 style={{ margin: 0, fontSize: '0.88rem', fontWeight: 800, color: '#0F172A' }}>
+                            ⚖️ Contradictions & Conflicts for "{selectedAsset360.node.label}" ({selectedAsset360.conflicts.length})
+                          </h4>
+                          <span style={{ fontSize: '0.72rem', color: '#64748B' }}>
+                            {selectedAsset360.activeConflicts.length} Active / Unresolved &bull; {selectedAsset360.conflicts.length - selectedAsset360.activeConflicts.length} Resolved
+                          </span>
+                        </div>
+                      </div>
+
+                      {selectedAsset360.conflicts.length === 0 ? (
+                        <div style={{ padding: '14px', background: '#F0FDF4', border: '1px solid #BBF7D0', borderRadius: '8px', fontSize: '0.78rem', color: '#15803D', fontWeight: 600 }}>
+                          ✅ Zero contradictions detected for this {selectedAsset360.mode}. All extracted policy claims are consistent.
+                        </div>
+                      ) : (
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(380px, 1fr))', gap: '10px' }}>
+                          {selectedAsset360.conflicts.map((c, idx) => {
+                            const cItem = conflictMap[c.id];
+                            const clA = graphData?.nodes?.find(n => n.id === cItem?.claimAId);
+                            const clB = graphData?.nodes?.find(n => n.id === cItem?.claimBId);
+                            const st = (c.status || '').toLowerCase();
+                            const isResolved = st === 'resolved' || st === 'dismissed';
+
+                            return (
+                              <div
+                                key={c.id}
+                                style={{
+                                  border: isResolved ? '1px solid #BBF7D0' : '1.5px solid #FED7AA',
+                                  background: isResolved ? '#F0FDF4' : '#FFF7ED',
+                                  borderRadius: '9px',
+                                  padding: '12px 14px',
+                                  display: 'flex',
+                                  flexDirection: 'column',
+                                  gap: '8px'
+                                }}
+                              >
+                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '6px' }}>
+                                  <span style={{
+                                    fontSize: '0.62rem',
+                                    fontWeight: 800,
+                                    padding: '2px 7px',
+                                    borderRadius: '999px',
+                                    background: isResolved ? '#DCFCE7' : '#FFEDD5',
+                                    color: isResolved ? '#15803D' : '#C2410C'
+                                  }}>
+                                    {isResolved ? '✅ RESOLVED' : '⚠️ ACTIVE / UNRESOLVED'} &bull; {c.severity || 'HIGH'}
+                                  </span>
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      if (isResolved) setFilterStatus('all');
+                                      setExpandedDownstreamSet(prev => new Set(prev).add(selectedAsset360.node.id));
+                                      setSelectedNodeId(c.id);
+                                      showToast?.(`Selected "${c.label}" in the DAG above`);
+                                    }}
+                                    style={{
+                                      padding: '3px 8px',
+                                      borderRadius: '5px',
+                                      border: '1px solid #EA580C',
+                                      background: '#FFFFFF',
+                                      color: '#C2410C',
+                                      fontSize: '0.66rem',
+                                      fontWeight: 700,
+                                      cursor: 'pointer'
+                                    }}
+                                  >
+                                    Focus in DAG ↑
+                                  </button>
+                                </div>
+
+                                <div style={{ fontSize: '0.8rem', fontWeight: 800, color: '#0F172A' }}>
+                                  #{idx + 1} {c.label}
+                                </div>
+
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px' }}>
+                                  <div style={{ background: '#FFFFFF', padding: '7px 9px', borderRadius: '6px', borderLeft: '3px solid #0284C7', fontSize: '0.7rem', color: '#1E293B' }}>
+                                    <strong style={{ color: '#0284C7', display: 'block', fontSize: '0.6rem' }}>ASSERTION A</strong>
+                                    "{clA?.fullText || clA?.label}"
+                                  </div>
+                                  <div style={{ background: '#FFFFFF', padding: '7px 9px', borderRadius: '6px', borderLeft: '3px solid #EA580C', fontSize: '0.7rem', color: '#1E293B' }}>
+                                    <strong style={{ color: '#EA580C', display: 'block', fontSize: '0.6rem' }}>ASSERTION B</strong>
+                                    "{clB?.fullText || clB?.label}"
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  )}
 
 
                 </div>
@@ -6040,454 +6136,65 @@ export default function VisualLineageGraph({
       {/* ========================================================= */}
       {/* SUB-TAB 5: ATOMIC CLAIMS & AI DECISIONS CATALOG           */}
       {/* ========================================================= */}
-      {vaultSubTab === 'claims' && (() => {
-        // Resolve parent document and source for any claim
-        const resolveClaimProvenance = (cl) => {
-          const clDocId = cl.document_id || cl.data?.document_id || cl.data?.doc_id || cl.doc_id;
-          const clRawId = String(cl.id || '').replace(/^cl_/, '');
-          const docEdge = graphData?.edges?.find(e =>
-            (e.target === cl.id || e.target === `cl_${cl.id}` || e.target === clRawId || e.target === `cl_${clRawId}`) && e.source.startsWith('doc_')
-          );
-          const resolvedDocId = docEdge
-            ? docEdge.source.replace(/^doc_/, '')
-            : (clDocId ? String(clDocId).replace(/^doc_/, '') : null);
-
-          const parentDoc = (resolvedDocId
-            ? documentsList.find(d => String(d.id).replace(/^doc_/, '') === resolvedDocId)
-            : null) || (docEdge ? graphData?.nodes?.find(n => n.id === docEdge.source) : null);
-
-          const parentDocSrcId = parentDoc?.data?.source_id || parentDoc?.source_id;
-          const srcEdge = parentDoc
-            ? graphData?.edges?.find(e => (e.target === parentDoc.id || e.target === `doc_${parentDoc.id}`) && e.source.startsWith('src_'))
-            : null;
-          const resolvedSrcId = srcEdge
-            ? srcEdge.source.replace(/^src_/, '')
-            : (parentDocSrcId ? String(parentDocSrcId).replace(/^src_/, '') : null);
-          const clSrcId = cl.source_id || cl.data?.source_id;
-
-          const parentSrc = (resolvedSrcId
-            ? sourcesList.find(s => String(s.id).replace(/^src_/, '') === resolvedSrcId)
-            : null) || (srcEdge ? graphData?.nodes?.find(n => n.id === srcEdge.source) : null)
-            || (clSrcId ? sourcesList.find(s => String(s.id).replace(/^src_/, '') === String(clSrcId).replace(/^src_/, '')) : null);
-
-          return { parentDoc, parentSrc, resolvedDocId, resolvedSrcId };
-        };
-
-        const filteredClaims = allClaimsRaw.filter(cl => {
-          const isConf = allConflictedClaimIds.has(cl.id);
-          if (vaultClaimFilter === 'verified' && isConf) return false;
-          if (vaultClaimFilter === 'conflicted' && !isConf) return false;
-
-          const { parentDoc, parentSrc, resolvedDocId, resolvedSrcId } = resolveClaimProvenance(cl);
-
-          // Document filter
-          if (vaultDocumentFilter !== 'all') {
-            const targetDocClean = String(vaultDocumentFilter).replace(/^doc_/, '');
-            const matchDocId = resolvedDocId === targetDocClean || String(parentDoc?.id || '').replace(/^doc_/, '') === targetDocClean;
-            if (!matchDocId) return false;
-          }
-
-          // Connection / Source filter
-          if (vaultSourceFilter !== 'all') {
-            const targetSrcClean = String(vaultSourceFilter).replace(/^src_/, '');
-            const matchSrcId = resolvedSrcId === targetSrcClean || String(parentSrc?.id || '').replace(/^src_/, '') === targetSrcClean;
-            if (!matchSrcId) return false;
-          }
-
-          // Search query
-          if (vaultSearch.trim()) {
-            const q = vaultSearch.toLowerCase();
-            const text = `${cl.fullText || cl.label || ''} ${cl.subject || ''} ${cl.predicate || ''} ${cl.object || ''} ${parentDoc?.label || ''} ${parentSrc?.label || ''}`.toLowerCase();
-            if (!text.includes(q)) return false;
-          }
-
-          return true;
-        });
-
-        const hasActiveFilters = vaultDocumentFilter !== 'all' || vaultSourceFilter !== 'all' || vaultClaimFilter !== 'all' || Boolean(vaultSearch.trim());
-
-        return (
-          <div style={{
-            background: '#FFFFFF',
-            border: '1px solid #E2E8F0',
-            borderRadius: '12px',
-            padding: '18px 20px',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '14px'
-          }}>
-            {/* Header: Title and Status Chips */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px', borderBottom: '1px solid #F1F5F9', paddingBottom: '12px' }}>
-              <div>
-                <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 800, color: '#0F172A', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <span>⚡ Extracted Atomic Claims & Evaluated AI Decisions</span>
-                </h3>
-                <p style={{ margin: '3px 0 0 0', fontSize: '0.76rem', color: '#64748B' }}>
-                  Search and inspect normalized atomic assertions. Filter by document or connector provenance, or visualize in the lineage DAG.
-                </p>
-              </div>
-
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
-                {[
-                  { id: 'all', label: `All Claims (${allClaimsRaw.length})` },
-                  { id: 'verified', label: '✅ Verified' },
-                  { id: 'conflicted', label: '⚠️ In Conflict' },
-                  { id: 'decisions', label: `🤖 AI Decisions (${decisionsList.length})` }
-                ].map(f => {
-                  const isSel = vaultClaimFilter === f.id;
-                  return (
-                    <button
-                      key={f.id}
-                      type="button"
-                      onClick={() => setVaultClaimFilter(f.id)}
-                      style={{
-                        padding: '5px 10px',
-                        borderRadius: '6px',
-                        border: isSel ? '1.5px solid #059669' : '1px solid #CBD5E1',
-                        background: isSel ? '#ECFDF5' : '#F8FAFC',
-                        color: isSel ? '#059669' : '#475569',
-                        fontSize: '0.72rem',
-                        fontWeight: isSel ? 800 : 600,
-                        cursor: 'pointer'
-                      }}
-                    >
-                      {f.label}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Comprehensive Document & Connection Filter Bar */}
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              flexWrap: 'wrap',
-              gap: '10px',
-              background: '#F8FAFC',
-              padding: '10px 14px',
-              borderRadius: '8px',
-              border: '1px solid #E2E8F0'
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap', flex: 1 }}>
-                {/* Document-Wise Filter */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <FileText size={13} color="#0284C7" />
-                  <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#475569' }}>Document:</span>
-                  <select
-                    value={vaultDocumentFilter}
-                    onChange={e => setVaultDocumentFilter(e.target.value)}
-                    style={{
-                      padding: '4px 8px',
-                      borderRadius: '6px',
-                      border: '1px solid #CBD5E1',
-                      fontSize: '0.72rem',
-                      background: '#FFFFFF',
-                      color: '#0F172A',
-                      fontWeight: 600,
-                      outline: 'none',
-                      maxWidth: '240px'
-                    }}
-                  >
-                    <option value="all">All Documents ({documentsList.length})</option>
-                    {documentsList.map(doc => (
-                      <option key={doc.id} value={doc.id}>
-                        {doc.label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                {/* Connection-Wise Filter */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <Server size={13} color="#7C3AED" />
-                  <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#475569' }}>Connection:</span>
-                  <select
-                    value={vaultSourceFilter}
-                    onChange={e => setVaultSourceFilter(e.target.value)}
-                    style={{
-                      padding: '4px 8px',
-                      borderRadius: '6px',
-                      border: '1px solid #CBD5E1',
-                      fontSize: '0.72rem',
-                      background: '#FFFFFF',
-                      color: '#0F172A',
-                      fontWeight: 600,
-                      outline: 'none',
-                      maxWidth: '220px'
-                    }}
-                  >
-                    <option value="all">All Connections ({sourcesList.length})</option>
-                    {sourcesList.map(src => (
-                      <option key={src.id} value={src.id}>
-                        {src.label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                {/* Search within Claims */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', minWidth: '180px', flex: 1 }}>
-                  <Search size={13} color="#94A3B8" />
-                  <input
-                    type="text"
-                    placeholder="Search claims text, subject, predicate..."
-                    value={vaultSearch}
-                    onChange={e => setVaultSearch(e.target.value)}
-                    style={{
-                      width: '100%',
-                      padding: '4px 8px',
-                      borderRadius: '6px',
-                      border: '1px solid #CBD5E1',
-                      fontSize: '0.72rem',
-                      background: '#FFFFFF',
-                      outline: 'none'
-                    }}
-                  />
-                </div>
-
-                {/* Reset Filters */}
-                {hasActiveFilters && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setVaultDocumentFilter('all');
-                      setVaultSourceFilter('all');
-                      setVaultClaimFilter('all');
-                      setVaultSearch('');
-                    }}
-                    style={{
-                      background: '#FEE2E2',
-                      border: '1px solid #FCA5A5',
-                      borderRadius: '6px',
-                      padding: '3px 8px',
-                      fontSize: '0.68rem',
-                      fontWeight: 700,
-                      color: '#B91C1C',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    Reset Filters ✕
-                  </button>
-                )}
-              </div>
-
-              {/* Claims Matched Counter */}
-              <div style={{ fontSize: '0.72rem', color: '#64748B', fontWeight: 600, whiteSpace: 'nowrap' }}>
-                Showing <strong style={{ color: '#0F172A' }}>{vaultClaimFilter === 'decisions' ? decisionsList.length : filteredClaims.length}</strong> of {vaultClaimFilter === 'decisions' ? decisionsList.length : allClaimsRaw.length} {vaultClaimFilter === 'decisions' ? 'decisions' : 'claims'}
-              </div>
-            </div>
-
-            {/* Claims / Decisions Cards Grid */}
-            {vaultClaimFilter === 'decisions' ? (
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: '12px' }}>
-                {decisionsList
-                  .filter(d => !vaultSearch.trim() || (d.label || '').toLowerCase().includes(vaultSearch.toLowerCase()))
-                  .map(dec => (
-                    <div
-                      key={dec.id}
-                      style={{
-                        border: '1px solid #DDD6FE',
-                        borderRadius: '10px',
-                        padding: '12px 14px',
-                        background: '#FAF5FF',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'space-between',
-                        gap: '8px'
-                      }}
-                    >
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <span style={{ fontSize: '0.64rem', fontWeight: 800, color: '#7C3AED', background: '#EDE9FE', padding: '2px 7px', borderRadius: '4px' }}>
-                          🤖 AI GOVERNANCE DECISION
-                        </span>
-                        <span className={dec.verdict === 'ALLOW' ? 'badge badge-verified' : 'badge badge-warning'} style={{ fontSize: '0.66rem' }}>
-                          {dec.verdict || 'EVALUATED'}
-                        </span>
-                      </div>
-                      <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#0F172A' }}>
-                        {dec.label}
-                      </div>
-                      <div style={{ display: 'flex', justifyContent: 'flex-end', borderTop: '1px solid #E9D5FF', paddingTop: '6px' }}>
-                        <button
-                          type="button"
-                          onClick={() => visualizeNodeInDag(dec.id, dec.label)}
-                          style={{
-                            padding: '4px 10px',
-                            borderRadius: '6px',
-                            border: '1px solid #7C3AED',
-                            background: '#7C3AED',
-                            color: '#FFFFFF',
-                            fontSize: '0.7rem',
-                            fontWeight: 700,
-                            cursor: 'pointer'
-                          }}
-                        >
-                          🕸️ Visualize in DAG
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-              </div>
-            ) : (
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(380px, 1fr))', gap: '10px' }}>
-                {filteredClaims.length === 0 ? (
-                  <div style={{
-                    padding: '40px 20px',
-                    textAlign: 'center',
-                    background: '#F8FAFC',
-                    borderRadius: '8px',
-                    border: '1px dashed #CBD5E1',
-                    gridColumn: '1 / -1'
-                  }}>
-                    <ShieldCheck size={28} color="#94A3B8" style={{ margin: '0 auto 8px auto' }} />
-                    <div style={{ fontSize: '0.86rem', fontWeight: 700, color: '#334155' }}>
-                      No atomic claims match the selected filters
-                    </div>
-                    <p style={{ fontSize: '0.76rem', color: '#64748B', margin: '4px 0 12px 0' }}>
-                      Try selecting "All Documents", "All Connections", or clearing search terms.
-                    </p>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setVaultDocumentFilter('all');
-                        setVaultSourceFilter('all');
-                        setVaultClaimFilter('all');
-                        setVaultSearch('');
-                      }}
-                      className="btn btn-secondary"
-                      style={{ padding: '6px 14px', fontSize: '0.74rem' }}
-                    >
-                      Clear All Filters
-                    </button>
-                  </div>
-                ) : (
-                  filteredClaims.map(cl => {
-                    const isConf = allConflictedClaimIds.has(cl.id);
-                    const { parentDoc, parentSrc } = resolveClaimProvenance(cl);
-
-                    return (
-                      <div
-                        key={cl.id}
-                        style={{
-                          border: isConf ? '1.5px solid #FED7AA' : '1px solid #E2E8F0',
-                          background: isConf ? '#FFF7ED' : '#F8FAFC',
-                          borderRadius: '9px',
-                          padding: '12px 14px',
-                          display: 'flex',
-                          flexDirection: 'column',
-                          justifyContent: 'space-between',
-                          gap: '8px',
-                          boxShadow: '0 1px 3px rgba(0,0,0,0.02)'
-                        }}
-                      >
-                        {/* Card Header: Document Badge & Connection Badge + Status */}
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '6px', flexWrap: 'wrap' }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '5px', flexWrap: 'wrap' }}>
-                            {parentDoc ? (
-                              <button
-                                type="button"
-                                onClick={() => setVaultDocumentFilter(parentDoc.id)}
-                                style={{
-                                  background: '#EFF6FF',
-                                  border: '1px solid #BFDBFE',
-                                  color: '#0284C7',
-                                  fontSize: '0.64rem',
-                                  fontWeight: 700,
-                                  padding: '2px 6px',
-                                  borderRadius: '4px',
-                                  cursor: 'pointer',
-                                  display: 'inline-flex',
-                                  alignItems: 'center',
-                                  gap: '4px'
-                                }}
-                                title="Filter by this document"
-                              >
-                                <FileText size={10} />
-                                <span>{parentDoc.label}</span>
-                              </button>
-                            ) : (
-                              <span style={{ fontSize: '0.64rem', color: '#64748B', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                                <FileText size={10} />
-                                <span>Policy Document</span>
-                              </span>
-                            )}
-
-                            {parentSrc && (
-                              <button
-                                type="button"
-                                onClick={() => setVaultSourceFilter(parentSrc.id)}
-                                style={{
-                                  background: '#FAF5FF',
-                                  border: '1px solid #DDD6FE',
-                                  color: '#7C3AED',
-                                  fontSize: '0.64rem',
-                                  fontWeight: 700,
-                                  padding: '2px 6px',
-                                  borderRadius: '4px',
-                                  cursor: 'pointer',
-                                  display: 'inline-flex',
-                                  alignItems: 'center',
-                                  gap: '4px'
-                                }}
-                                title="Filter by this connection"
-                              >
-                                <Server size={10} />
-                                <span>{parentSrc.label}</span>
-                              </button>
-                            )}
-                          </div>
-
-                          <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
-                            <span className={isConf ? 'badge badge-warning' : 'badge badge-verified'} style={{ fontSize: '0.62rem' }}>
-                              {isConf ? '⚠️ In Conflict' : '✅ Verified'}
-                            </span>
-                            <span className="badge badge-verified" style={{ fontSize: '0.62rem' }}>
-                              {((cl.trustScore || 0.92) * 100).toFixed(0)}% Trust
-                            </span>
-                          </div>
-                        </div>
-
-                        {/* Claim Text */}
-                        <p style={{ margin: 0, fontSize: '0.78rem', color: '#1E293B', lineHeight: 1.4, fontWeight: 500 }}>
-                          "{cl.fullText || cl.label}"
-                        </p>
-
-                        {/* Card Footer */}
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid #E2E8F0', paddingTop: '6px' }}>
-                          <span style={{ fontSize: '0.64rem', color: '#64748B' }}>
-                            ID: <code>{cl.id.slice(0, 12)}</code>
-                          </span>
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setLineageGranularity('claim');
-                              visualizeNodeInDag(cl.id, cl.label);
-                            }}
-                            style={{
-                              padding: '3px 9px',
-                              borderRadius: '5px',
-                              border: '1px solid #059669',
-                              background: '#059669',
-                              color: '#FFFFFF',
-                              fontSize: '0.68rem',
-                              fontWeight: 700,
-                              cursor: 'pointer'
-                            }}
-                          >
-                            🕸️ Visualize in DAG
-                          </button>
-                        </div>
-                      </div>
-                    );
-                  })
-                )}
-              </div>
-            )}
-          </div>
-        );
-      })()}
+      {vaultSubTab === 'claims' && (
+        <AssetClaimsStudioPane
+          claims={allClaimsRaw}
+          documentsList={documentsList}
+          selectedDocFilter={vaultDocumentFilter}
+          onDocFilterChange={setVaultDocumentFilter}
+          allConflictedClaimIds={allConflictedClaimIds}
+          graphData={graphData}
+          onLocateSource={(claim, cleanDocId) => {
+            let targetDocId = cleanDocId;
+            if (!targetDocId && claim) {
+              const { resolvedDocId } = resolveClaimProvenance(claim);
+              targetDocId = resolvedDocId;
+            }
+            if (onLocateSource) {
+              onLocateSource(targetDocId, claim);
+            } else if (onOpenFileBrowser) {
+              onOpenFileBrowser(targetDocId);
+            }
+          }}
+          onLocateInDoc={(claim) => {
+            const { parentDoc, resolvedDocId } = resolveClaimProvenance(claim);
+            if (parentDoc) {
+              setSelectedNodeId(parentDoc.id);
+              if (onAssetChange) onAssetChange(resolvedDocId || parentDoc.id);
+              setVaultSubTab('documents');
+              handleSectionChange('summary');
+              setIsFileViewerOpen(true);
+              setIsDetailsOpen(true);
+              setActiveClaimInspector(claim);
+              const cid = claim.cleanId || String(claim.id || '').replace(/^cl_/, '');
+              const targetId = claim.id.startsWith('cl_') ? claim.id : `cl_${cid}`;
+              setLocateDocClaimTrigger({ claim, timestamp: Date.now() });
+              showToast?.(`Opening "${parentDoc.label}" to locate claim...`);
+            } else {
+              showToast?.(`Locating claim "${(claim.label || claim.fullText || '').substring(0, 35)}..."`);
+            }
+          }}
+          onInspectInDag={(claim) => {
+            const cid = claim.cleanId || String(claim.id || '').replace(/^cl_/, '');
+            const targetId = claim.id.startsWith('cl_') ? claim.id : `cl_${cid}`;
+            const matchedNode = graphData?.nodes?.find(n => n.id === targetId || n.id === claim.id || n.id === `cl_${claim.id}`);
+            const actualNodeId = matchedNode ? matchedNode.id : targetId;
+            setActiveClaimInspector(claim);
+            setSelectedNodeId(actualNodeId);
+            setInteractiveRootId(actualNodeId);
+            setViewMode('interactive');
+            setLineageGranularity('claim');
+            setExpandedUpstreamSet(new Set([actualNodeId]));
+            setExpandedDownstreamSet(new Set([actualNodeId]));
+            setExpandedConflictClaimsSet(new Set());
+            setVaultSubTab('dag');
+            fetchBlastRadius(cid);
+            showToast?.(`Loaded claim "${(claim.label || '').substring(0, 35)}" in Interactive Lineage DAG`);
+            setTimeout(() => handleFitView?.(), 150);
+          }}
+          showToast={showToast}
+        />
+      )}
 
       {/* 5. Slide-Out All Claims Explorer Drawer */}
       {isDrawerOpen && (
@@ -6530,7 +6237,6 @@ export default function VisualLineageGraph({
             }}>
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <span style={{ fontSize: '18px' }}>⚡</span>
                   <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 800, color: '#0f172a' }}>
                     Enterprise Atomic Claims Explorer
                   </h3>
@@ -7025,7 +6731,7 @@ export default function VisualLineageGraph({
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
                   <h4 style={{ margin: 0, fontSize: '0.84rem', fontWeight: 800, color: '#7C3AED', display: 'flex', alignItems: 'center', gap: '5px' }}>
-                    <span>🤖</span> Downstream Blast Radius ({connectedNodeMap.down.size})
+                    Downstream Blast Radius ({connectedNodeMap.down.size})
                   </h4>
                   <span style={{ fontSize: '0.68rem', color: '#64748B' }}>AI decisions & workflows influenced</span>
                 </div>

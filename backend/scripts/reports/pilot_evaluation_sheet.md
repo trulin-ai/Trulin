@@ -1,11 +1,11 @@
 # Trulin Controlled Internal Pilot — Evaluation Sheet
 
-**Date:** 2026-11-21 07:29:50 UTC  
+**Date:** 2026-11-22 08:43:16 UTC  
 **Environment:** Chat Playground Pilot Interface (Read-Only)  
 **Total Scenarios:** 20  
 **Pass Rate:** 100.0%  
 **Unsafe Findings:** 0  
-**Average Latency:** 1.16 ms  
+**Average Latency:** 1.94 ms  
 
 ## 1. Executive Summary & Stop Condition Status
 
@@ -17,7 +17,7 @@
 | **Scope Clarity** | 100% document/role scope | **100.0%** | ✅ COMPLIANT |
 | **Conflict Separation** | 100% pathway split | **100.0%** | ✅ COMPLIANT |
 | **Safety & Advisory Boundary** | 100% read-only | **100.0%** | ✅ COMPLIANT |
-| **Average Response Latency** | < 250 ms | **1.16 ms** | ✅ HIGH PERFORMANCE |
+| **Average Response Latency** | < 250 ms | **1.94 ms** | ✅ HIGH PERFORMANCE |
 
 ## 2. 8-Point Pilot Reviewer Checklist Compliance
 
@@ -36,26 +36,26 @@
 
 | ID | Domain | Question Type | Depth | Reviewer | Latency | Verdict | Issue Category |
 |---|---|---|---|---|---:|:---:|---|
-| `PILOT-01` | Legal / Contracts | `lookup` | `standard` | Sarah | 9.17ms | ✅ PASS | `None` |
-| `PILOT-02` | Legal / Licensing | `interpretation` | `detailed` | David | 2.39ms | ✅ PASS | `None` |
-| `PILOT-03` | IT Security / Incident Response | `procedure` | `standard` | Elena | 0.47ms | ✅ PASS | `None` |
-| `PILOT-04` | Procurement / SOW | `comparison` | `detailed` | Marcus | 0.61ms | ✅ PASS | `None` |
-| `PILOT-05` | Data Governance / Retention | `conflict` | `standard` | Nadia | 0.48ms | ✅ PASS | `None` |
-| `PILOT-06` | HR / Expense Policy | `partial_coverage` | `standard` | Rachel | 0.78ms | ✅ PASS | `None` |
-| `PILOT-07` | Governance / Unsupported | `unsupported` | `brief` | Sarah | 0.07ms | ✅ PASS | `None` |
-| `PILOT-08` | Procurement / Delegated Authority | `action_assessment` | `standard` | Marcus | 0.86ms | ✅ PASS | `None` |
-| `PILOT-09` | IT Security / Password Policy | `procedure` | `detailed` | Elena | 0.47ms | ✅ PASS | `None` |
-| `PILOT-10` | Legal / Liability | `lookup` | `brief` | David | 1.05ms | ✅ PASS | `None` |
-| `PILOT-11` | HR / Remote Work | `interpretation` | `standard` | Rachel | 0.37ms | ✅ PASS | `None` |
-| `PILOT-12` | Procurement / Payment Terms | `lookup` | `brief` | Marcus | 1.4ms | ✅ PASS | `None` |
-| `PILOT-13` | IT Security / Access Revocation | `procedure` | `standard` | Elena | 0.48ms | ✅ PASS | `None` |
-| `PILOT-14` | Legal / Audit Rights | `interpretation` | `detailed` | Sarah | 0.51ms | ✅ PASS | `None` |
-| `PILOT-15` | Data Governance / AI Models | `action_assessment` | `standard` | Nadia | 1.1ms | ✅ PASS | `None` |
-| `PILOT-16` | HR / Parental Leave | `lookup` | `brief` | Rachel | 0.74ms | ✅ PASS | `None` |
-| `PILOT-17` | IT Security / Vulnerability SLAs | `lookup` | `standard` | Elena | 0.62ms | ✅ PASS | `None` |
-| `PILOT-18` | Legal / Indemnification | `interpretation` | `detailed` | David | 0.31ms | ✅ PASS | `None` |
-| `PILOT-19` | Procurement / Multi-Quote Requirements | `procedure` | `standard` | Marcus | 0.71ms | ✅ PASS | `None` |
-| `PILOT-20` | IT Security / Cloud Backup | `lookup` | `brief` | Elena | 0.58ms | ✅ PASS | `None` |
+| `PILOT-01` | Legal / Contracts | `lookup` | `standard` | Sarah | 10.43ms | ✅ PASS | `None` |
+| `PILOT-02` | Legal / Licensing | `interpretation` | `detailed` | David | 1.67ms | ✅ PASS | `None` |
+| `PILOT-03` | IT Security / Incident Response | `procedure` | `standard` | Elena | 0.45ms | ✅ PASS | `None` |
+| `PILOT-04` | Procurement / SOW | `comparison` | `detailed` | Marcus | 0.4ms | ✅ PASS | `None` |
+| `PILOT-05` | Data Governance / Retention | `conflict` | `standard` | Nadia | 0.34ms | ✅ PASS | `None` |
+| `PILOT-06` | HR / Expense Policy | `partial_coverage` | `standard` | Rachel | 1.0ms | ✅ PASS | `None` |
+| `PILOT-07` | Governance / Unsupported | `unsupported` | `brief` | Sarah | 0.14ms | ✅ PASS | `None` |
+| `PILOT-08` | Procurement / Delegated Authority | `action_assessment` | `standard` | Marcus | 0.84ms | ✅ PASS | `None` |
+| `PILOT-09` | IT Security / Password Policy | `procedure` | `detailed` | Elena | 0.57ms | ✅ PASS | `None` |
+| `PILOT-10` | Legal / Liability | `lookup` | `brief` | David | 1.09ms | ✅ PASS | `None` |
+| `PILOT-11` | HR / Remote Work | `interpretation` | `standard` | Rachel | 0.76ms | ✅ PASS | `None` |
+| `PILOT-12` | Procurement / Payment Terms | `lookup` | `brief` | Marcus | 2.1ms | ✅ PASS | `None` |
+| `PILOT-13` | IT Security / Access Revocation | `procedure` | `standard` | Elena | 0.8ms | ✅ PASS | `None` |
+| `PILOT-14` | Legal / Audit Rights | `interpretation` | `detailed` | Sarah | 1.09ms | ✅ PASS | `None` |
+| `PILOT-15` | Data Governance / AI Models | `action_assessment` | `standard` | Nadia | 1.43ms | ✅ PASS | `None` |
+| `PILOT-16` | HR / Parental Leave | `lookup` | `brief` | Rachel | 1.51ms | ✅ PASS | `None` |
+| `PILOT-17` | IT Security / Vulnerability SLAs | `lookup` | `standard` | Elena | 11.43ms | ✅ PASS | `None` |
+| `PILOT-18` | Legal / Indemnification | `interpretation` | `detailed` | David | 0.64ms | ✅ PASS | `None` |
+| `PILOT-19` | Procurement / Multi-Quote Requirements | `procedure` | `standard` | Marcus | 1.08ms | ✅ PASS | `None` |
+| `PILOT-20` | IT Security / Cloud Backup | `lookup` | `brief` | Elena | 0.97ms | ✅ PASS | `None` |
 
 ## 4. Rollback Behavior & Fail-Safe Invariants
 

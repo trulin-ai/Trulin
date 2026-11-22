@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import {
   AlertTriangle,
-  Zap,
+  CheckCircle2,
   Check,
   Copy,
   X,
@@ -14,7 +14,8 @@ import {
   Layers,
   BookOpen,
   FileText,
-  GripVertical
+  GripVertical,
+  Network
 } from 'lucide-react';
 
 /**
@@ -314,11 +315,18 @@ function LazyDocumentPage({
   renderBlock,
   onVisible,
   zoomLevel,
-  scrollContainerRef
+  scrollContainerRef,
+  forceRender
 }) {
   const pageRef = useRef(null);
-  // Initial top 2 pages are rendered immediately so top of document is instantly interactive
-  const [isRendered, setIsRendered] = useState(pageIndex < 2);
+  // Initial top 2 pages or forceRender are rendered immediately so top of document is instantly interactive
+  const [isRendered, setIsRendered] = useState(pageIndex < 2 || !!forceRender);
+
+  useEffect(() => {
+    if (forceRender && !isRendered) {
+      setIsRendered(true);
+    }
+  }, [forceRender, isRendered]);
 
   // Lazy render observer: activates rendering when user scrolls within 600px of this page
   useEffect(() => {
@@ -429,11 +437,14 @@ export default function SmartDocumentCanvas({
   onMinimize,
   onSelectClaim,
   selectedClaimId,
+  selectedClaim,
+  locateTarget,
   onDragStartHandle,
   onDragEndHandle
 }) {
   // Highlight state: 'conflicts' | 'claims' | 'none'
   const [highlightFilter, setHighlightFilter] = useState(() => (conflicts && conflicts.length > 0) ? 'conflicts' : 'claims');
+  const [forceRenderPages, setForceRenderPages] = useState(new Set([0, 1]));
   const [isFilterDropdownOpen, setIsFilterDropdownOpen] = useState(false);
   const filterDropdownRef = useRef(null);
 
@@ -607,28 +618,125 @@ export default function SmartDocumentCanvas({
     }
   };
 
-  // Auto-scroll to page containing selectedClaimId if selected
+  // Ensure highlight filter displays claims when a claim is targeted
   useEffect(() => {
-    if (!selectedClaimId || pages.length <= 1) return;
-    const targetClaim = enrichedClaimsList.find(c =>
-      c.id === selectedClaimId || c.cleanId === selectedClaimId || `cl_${c.cleanId}` === selectedClaimId
-    );
-    if (!targetClaim) return;
+    if (selectedClaimId || locateTarget) {
+      setHighlightFilter('claims');
+    }
+  }, [selectedClaimId, locateTarget]);
 
-    for (let pIdx = 0; pIdx < pages.length; pIdx++) {
-      const p = pages[pIdx];
-      const found = p.blocks.some(b => {
-        const bText = (b.text || '').toLowerCase();
-        if (targetClaim.snippet && bText.includes(targetClaim.snippet.slice(0, 30))) return true;
-        if (bText.includes(targetClaim.cleanClaim.slice(0, 30))) return true;
-        return false;
-      });
-      if (found) {
-        scrollToPage(pIdx + 1);
-        break;
+  // Target claim resolution for deep document navigation
+  const activeTargetClaim = useMemo(() => {
+    const target = locateTarget?.claim || selectedClaim;
+    const cid = String(selectedClaimId || target?.cleanId || target?.id || '').replace(/^cl_/, '');
+    if (!cid && !target) return null;
+
+    const found = enrichedClaimsList.find(c =>
+      c.cleanId === cid ||
+      c.id === selectedClaimId ||
+      `cl_${c.cleanId}` === selectedClaimId ||
+      String(c.id || '').replace(/^cl_/, '') === cid
+    );
+    return found || target || null;
+  }, [selectedClaimId, selectedClaim, locateTarget, enrichedClaimsList]);
+
+  // Deep auto-scroll directly to the exact location of the claim in the document
+  useEffect(() => {
+    if (!activeTargetClaim) return;
+
+    // 1. Identify which page contains this claim's quote/snippet/text
+    const searchTerms = [
+      activeTargetClaim.snippet,
+      activeTargetClaim.raw?.data?.evidence_snippet,
+      activeTargetClaim.data?.evidence_snippet,
+      activeTargetClaim.data?.quote,
+      activeTargetClaim.data?.context_clause,
+      activeTargetClaim.cleanClaim,
+      activeTargetClaim.fullText,
+      activeTargetClaim.label
+    ].filter(Boolean).map(s => String(s).toLowerCase().trim()).filter(s => s.length > 5);
+
+    let targetPageIndex = 0;
+    if (pages && pages.length > 0) {
+      for (let pIdx = 0; pIdx < pages.length; pIdx++) {
+        const p = pages[pIdx];
+        const matchFound = (p.blocks || []).some(b => {
+          const bText = (b.text || '').toLowerCase();
+          return searchTerms.some(term => bText.includes(term.slice(0, 20)) || term.includes(bText.slice(0, 20)));
+        });
+        if (matchFound) {
+          targetPageIndex = pIdx;
+          break;
+        }
       }
     }
-  }, [selectedClaimId, pages, enrichedClaimsList]);
+
+    // Force render target page and update current page
+    setForceRenderPages(prev => new Set(prev).add(targetPageIndex));
+    setCurrentPage(targetPageIndex + 1);
+
+    // 2. Perform smooth scroll directly to the exact claim element
+    const cleanId = activeTargetClaim.cleanId || String(activeTargetClaim.id || '').replace(/^cl_/, '');
+    const candidateSelectors = [
+      '[data-selected-claim="true"]',
+      `#claim-highlight-${cleanId}`,
+      `#claim-highlight-${activeTargetClaim.id}`,
+      `[data-claim-id="${cleanId}"]`,
+      `[data-claim-id="${activeTargetClaim.id}"]`
+    ];
+
+    let attempts = 0;
+    const maxAttempts = 10;
+    const timer = setInterval(() => {
+      attempts++;
+      let targetEl = null;
+      for (const sel of candidateSelectors) {
+        targetEl = scrollContainerRef.current?.querySelector(sel);
+        if (targetEl) break;
+      }
+
+      // Fallback: search text nodes in the scroll container
+      if (!targetEl && scrollContainerRef.current && searchTerms.length > 0) {
+        const walker = document.createTreeWalker(scrollContainerRef.current, NodeFilter.SHOW_TEXT, null, false);
+        let node;
+        while ((node = walker.nextNode())) {
+          const val = (node.nodeValue || '').toLowerCase();
+          if (searchTerms.some(term => val.includes(term.slice(0, 20)))) {
+            targetEl = node.parentElement;
+            break;
+          }
+        }
+      }
+
+      if (targetEl) {
+        clearInterval(timer);
+        targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        targetEl.style.transition = 'all 0.3s ease';
+        targetEl.style.outline = '3px solid #EA580C';
+        targetEl.style.boxShadow = '0 0 16px rgba(234, 88, 12, 0.45)';
+        setTimeout(() => {
+          if (targetEl) {
+            targetEl.style.outline = '2px solid #EA580C';
+            targetEl.style.boxShadow = '0 0 8px rgba(234, 88, 12, 0.25)';
+          }
+        }, 2500);
+
+        const pos = calculatePopoverPos(targetEl);
+        setPopoverPos(pos);
+        setPinnedClaimInfo(activeTargetClaim);
+        setHoveredClaimInfo(null);
+      } else if (attempts >= maxAttempts) {
+        clearInterval(timer);
+        // Fallback: scroll to page container
+        const pageEl = document.getElementById(`doc-page-${targetPageIndex + 1}`);
+        if (pageEl) {
+          pageEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }
+    }, 100);
+
+    return () => clearInterval(timer);
+  }, [activeTargetClaim, locateTarget?.timestamp, pages]);
 
   // High-performance sentence match cache
   const sentenceCache = useRef(new Map());
@@ -653,6 +761,20 @@ export default function SmartDocumentCanvas({
     if (sentWords.length === 0) {
       sentenceCache.current.set(sentenceText, null);
       return null;
+    }
+
+    // Prioritize checking currently targeted / located claim first
+    if (activeTargetClaim) {
+      const targetSnippet = (activeTargetClaim.snippet || activeTargetClaim.data?.evidence_snippet || activeTargetClaim.data?.quote || activeTargetClaim.raw?.data?.evidence_snippet || '').toLowerCase().trim();
+      const targetClean = (activeTargetClaim.cleanClaim || activeTargetClaim.fullText || activeTargetClaim.label || '').toLowerCase().trim();
+      if (targetSnippet && (cleanSent.includes(targetSnippet.slice(0, 20)) || targetSnippet.includes(cleanSent.slice(0, 20)))) {
+        sentenceCache.current.set(sentenceText, activeTargetClaim);
+        return activeTargetClaim;
+      }
+      if (targetClean && (cleanSent.includes(targetClean.slice(0, 25)) || targetClean.includes(cleanSent.slice(0, 25)))) {
+        sentenceCache.current.set(sentenceText, activeTargetClaim);
+        return activeTargetClaim;
+      }
     }
 
     let bestClaim = null;
@@ -769,12 +891,17 @@ export default function SmartDocumentCanvas({
     if (highlightFilter === 'conflicts' && isConflicted) shouldHighlight = true;
     if (highlightFilter === 'claims' && isClaim) shouldHighlight = true;
 
+    const cleanSentId = String(selectedClaimId || activeTargetClaim?.cleanId || activeTargetClaim?.id || '').replace(/^cl_/, '');
+    const isSelected = Boolean(claim && cleanSentId && (
+      claim.id === selectedClaimId ||
+      claim.cleanId === cleanSentId ||
+      `cl_${claim.cleanId}` === selectedClaimId ||
+      String(claim.id || '').replace(/^cl_/, '') === cleanSentId ||
+      (activeTargetClaim && (claim.id === activeTargetClaim.id || claim.cleanId === activeTargetClaim.cleanId))
+    ));
+    if (isSelected) shouldHighlight = true;
+
     if (shouldHighlight) {
-      const isSelected = selectedClaimId && (
-        claim.id === selectedClaimId ||
-        claim.cleanId === selectedClaimId ||
-        `cl_${claim.cleanId}` === selectedClaimId
-      );
       const isCardPinned = pinnedClaimInfo && (
         claim.id === pinnedClaimInfo.id ||
         claim.cleanId === pinnedClaimInfo.cleanId
@@ -788,7 +915,10 @@ export default function SmartDocumentCanvas({
       return (
         <span
           key={keyPrefix}
+          id={isSelected ? `claim-highlight-${claim.cleanId || cleanSentId}` : undefined}
           data-claim-highlight="true"
+          data-selected-claim={isSelected ? "true" : undefined}
+          data-claim-id={claim.cleanId || claim.id}
           onMouseEnter={(e) => handleSentenceMouseEnter(e, claim)}
           onMouseLeave={handleSentenceMouseLeave}
           onClick={(e) => handleSentenceClick(e, claim)}
@@ -802,11 +932,13 @@ export default function SmartDocumentCanvas({
             fontWeight: isConflicted ? 700 : 600,
             transition: 'all 0.15s ease',
             display: 'inline',
-            boxShadow: (isSelected || isCardPinned) ? '0 0 0 2px #EA580C, 0 2px 8px rgba(234,88,12,0.25)' : 'none',
+            boxShadow: isSelected
+              ? '0 0 0 3px #EA580C, 0 4px 14px rgba(234,88,12,0.45)'
+              : isCardPinned ? '0 0 0 2px #EA580C, 0 2px 8px rgba(234,88,12,0.25)' : 'none',
             position: (isSelected || isCardPinned) ? 'relative' : 'static',
             zIndex: (isSelected || isCardPinned) ? 2 : 1
           }}
-          title={isConflicted ? '⚠️ Contradicted Rule: Click to pin action card & inspect Lineage' : '⚡ Verified Rule: Click to pin action card & inspect Lineage'}
+          title={isConflicted ? '⚠️ Contradicted Rule: Click to pin action card & inspect Lineage' : 'Verified Rule: Click to pin action card & inspect Lineage'}
         >
           {sentenceText}
         </span>
@@ -1221,7 +1353,7 @@ export default function SmartDocumentCanvas({
               }}
               title="Show all verified atomic policy rules"
             >
-              <Zap size={isCompact ? 11 : 12} strokeWidth={2.4} color={highlightFilter === 'claims' ? '#FFFFFF' : '#34D399'} />
+              <CheckCircle2 size={isCompact ? 11 : 12} strokeWidth={2.4} color={highlightFilter === 'claims' ? '#FFFFFF' : '#34D399'} />
               <span>{isUltraCompact ? `(${claimsCount})` : `Claims (${claimsCount})`}</span>
             </button>
 
@@ -1311,6 +1443,7 @@ export default function SmartDocumentCanvas({
             onVisible={pageNum => setCurrentPage(pageNum)}
             zoomLevel={zoomLevel}
             scrollContainerRef={scrollContainerRef}
+            forceRender={forceRenderPages.has(pIdx)}
           />
         ))}
 
@@ -1384,7 +1517,7 @@ export default function SmartDocumentCanvas({
                   color: activeCardClaim.hasConflict ? '#EA580C' : '#059669',
                   border: activeCardClaim.hasConflict ? '1px solid #FED7AA' : '1px solid #A7F3D0'
                 }}>
-                  {activeCardClaim.hasConflict ? '⚠️ ACTIVE CONTRADICTION' : '⚡ VERIFIED ATOMIC RULE'}
+                  {activeCardClaim.hasConflict ? '⚠️ ACTIVE CONTRADICTION' : 'VERIFIED ATOMIC RULE'}
                 </span>
                 {isPinned && (
                   <span style={{
@@ -1532,7 +1665,7 @@ export default function SmartDocumentCanvas({
                     cursor: 'pointer'
                   }}
                 >
-                  <Zap size={12} />
+                  <Network size={12} />
                   <span>Inspect Lineage</span>
                 </button>
               </div>

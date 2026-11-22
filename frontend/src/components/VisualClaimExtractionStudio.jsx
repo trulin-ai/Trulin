@@ -157,9 +157,9 @@ export default function VisualClaimExtractionStudio({
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px', flexWrap: 'wrap', gap: '8px' }}>
           <div>
             <div style={{ fontSize: '0.85rem', fontWeight: 800, color: '#0F172A', display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <span>⚡ Autonomous Policy Deconstruction & Grounding Pipeline</span>
+              <span>Autonomous Policy Deconstruction & Grounding Pipeline</span>
               <span style={{ fontSize: '0.66rem', fontWeight: 800, padding: '2px 7px', borderRadius: '999px', background: '#DCFCE7', color: '#166534' }}>
-                LIVE AI EXTRACTOR
+                EXTRACTION PIPELINE
               </span>
             </div>
             <div style={{ fontSize: '0.73rem', color: '#64748B', marginTop: '2px' }}>
@@ -186,7 +186,7 @@ export default function VisualClaimExtractionStudio({
               boxShadow: '0 1px 2px rgba(37,99,235,0.2)'
             }}
           >
-            <span>{isScanning ? '⏳ Scanning Sections...' : '⚡ Re-run Visual Extraction'}</span>
+            <span>{isScanning ? 'Scanning Sections...' : 'Re-run Visual Extraction'}</span>
           </button>
         </div>
 
@@ -202,28 +202,24 @@ export default function VisualClaimExtractionStudio({
               step: '01',
               title: 'Structure & Layout',
               desc: 'PDF layout & header detection',
-              icon: '📄',
               metric: 'Parsed Clean'
             },
             {
               step: '02',
               title: 'Clause Boundary',
               desc: 'Semantic paragraph chunking',
-              icon: '✂️',
               metric: `${sectionList.length} Sections`
             },
             {
               step: '03',
               title: 'Atomic Triples',
               desc: 'Subject • Predicate • Object',
-              icon: '🧠',
               metric: `${enrichedClaims.length} Claims`
             },
             {
               step: '04',
               title: 'Trust & Hash Lock',
               desc: 'SHA-256 Merkle Provenance',
-              icon: '🛡️',
               metric: '95%+ Trust'
             }
           ].map((st, i) => (
@@ -246,7 +242,6 @@ export default function VisualClaimExtractionStudio({
                 <span style={{ fontSize: '0.62rem', fontWeight: 800, color: '#2563EB', background: '#EFF6FF', padding: '1px 6px', borderRadius: '4px' }}>
                   STAGE {st.step}
                 </span>
-                <span style={{ fontSize: '1rem' }}>{st.icon}</span>
               </div>
               <div style={{ fontSize: '0.78rem', fontWeight: 800, color: '#0F172A', marginTop: '2px' }}>
                 {st.title}
@@ -297,7 +292,7 @@ export default function VisualClaimExtractionStudio({
               cursor: 'pointer'
             }}
           >
-            🔗 Clause-to-Claim Grounding
+            Clause-to-Claim Grounding
           </button>
 
           <button
@@ -315,7 +310,7 @@ export default function VisualClaimExtractionStudio({
               cursor: 'pointer'
             }}
           >
-            📐 Knowledge Triples
+            Knowledge Triples
           </button>
 
           <button
@@ -333,7 +328,7 @@ export default function VisualClaimExtractionStudio({
               cursor: 'pointer'
             }}
           >
-            🏷️ Extracted Entities ({extractedEntities.length})
+            Extracted Entities ({extractedEntities.length})
           </button>
         </div>
 
@@ -415,7 +410,7 @@ export default function VisualClaimExtractionStudio({
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                       {item.hasConflict && (
                         <span style={{ fontSize: '0.62rem', fontWeight: 800, padding: '2px 7px', borderRadius: '999px', background: '#FFEDD5', color: '#C2410C' }}>
-                          ⚠️ Active Contradiction
+                          Active Contradiction
                         </span>
                       )}
                       <span style={{ fontSize: '0.66rem', fontWeight: 800, padding: '2px 8px', borderRadius: '4px', background: '#DCFCE7', color: '#15803D' }}>
@@ -442,7 +437,7 @@ export default function VisualClaimExtractionStudio({
                       gap: '6px'
                     }}>
                       <div style={{ fontSize: '0.62rem', fontWeight: 800, color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                        📄 Source Document Clause
+                        Source Document Clause
                       </div>
                       <div style={{
                         fontSize: '0.74rem',
@@ -473,7 +468,7 @@ export default function VisualClaimExtractionStudio({
                               cursor: 'pointer'
                             }}
                           >
-                            👁️ View in PDF
+                            View in PDF
                           </button>
                         )}
                       </div>
@@ -488,7 +483,7 @@ export default function VisualClaimExtractionStudio({
                       gap: '2px'
                     }}>
                       <span style={{ fontSize: '0.60rem', fontWeight: 800, color: '#3B82F6', whiteSpace: 'nowrap' }}>
-                        ⚡ LLM PARSER
+                        PARSER
                       </span>
                       <div style={{
                         width: '32px',
@@ -524,7 +519,7 @@ export default function VisualClaimExtractionStudio({
                     }}>
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                         <span style={{ fontSize: '0.62rem', fontWeight: 800, color: '#0F172A', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                          ⚡ Extracted Atomic Rule
+                          Extracted Atomic Rule
                         </span>
                         <span style={{ fontSize: '0.60rem', fontWeight: 700, color: '#64748B' }}>
                           {item.extractionModel}
@@ -639,7 +634,7 @@ export default function VisualClaimExtractionStudio({
                   boxShadow: '0 1px 2px rgba(0,0,0,0.03)'
                 }}
               >
-                <span>🏷️ {ent}</span>
+                <span>{ent}</span>
                 <span style={{ fontSize: '0.64rem', padding: '1px 6px', borderRadius: '999px', background: '#F1F5F9', color: '#475569' }}>
                   {count} rule{count > 1 ? 's' : ''}
                 </span>

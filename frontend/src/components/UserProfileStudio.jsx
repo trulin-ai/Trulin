@@ -8,7 +8,7 @@ import {
   Settings,
   Mail,
   Lock,
-  Sparkles,
+  RefreshCw,
   Save,
   CheckCircle2,
   Camera,
@@ -843,7 +843,7 @@ export default function UserProfileStudio({
                   boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)'
                 }}
               >
-                {isSavingProfile ? <Sparkles size={14} className="spinning" /> : <Save size={14} />}
+                {isSavingProfile ? <RefreshCw size={14} className="spinning" /> : <Save size={14} />}
                 <span>{isSavingProfile ? 'Saving Changes...' : 'Save Profile Changes'}</span>
               </button>
             </div>
@@ -1500,7 +1500,7 @@ export default function UserProfileStudio({
                   gap: '6px'
                 }}
               >
-                {isRegistering ? <Sparkles size={14} className="spinning" /> : <Plus size={14} />}
+                {isRegistering ? <RefreshCw size={14} className="spinning" /> : <Plus size={14} />}
                 <span>{isRegistering ? 'Provisioning...' : 'Register Enterprise Organization'}</span>
               </button>
             </div>

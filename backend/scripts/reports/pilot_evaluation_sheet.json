@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-21T07:29:50Z",
+  "generated_at": "2026-11-22T08:43:16Z",
   "summary": {
     "total_evaluations": 20,
     "verdict_distribution": {
@@ -29,7 +29,7 @@
       "navigation_works": 1.0,
       "tone_and_safety": 1.0
     },
-    "avg_latency_ms": 1.16,
+    "avg_latency_ms": 1.94,
     "wording_success_rate": 0.7272727272727273
   },
   "results": [
@@ -42,7 +42,7 @@
       "reviewer": "Sarah (Corporate Legal)",
       "verdict": "PASS",
       "issue_category": null,
-      "latency_ms": 9.17,
+      "latency_ms": 10.43,
       "wording_outcome": {
         "requested": true,
         "applied": true,
@@ -71,7 +71,7 @@
       "reviewer": "David (IP Licensing)",
       "verdict": "PASS",
       "issue_category": null,
-      "latency_ms": 2.39,
+      "latency_ms": 1.67,
       "wording_outcome": {
         "requested": true,
         "applied": true,
@@ -100,7 +100,7 @@
       "reviewer": "Elena (InfoSec Ops)",
       "verdict": "PASS",
       "issue_category": null,
-      "latency_ms": 0.47,
+      "latency_ms": 0.45,
       "wording_outcome": null,
       "checklist": {
         "scope_identified": true,
@@ -124,7 +124,7 @@
       "reviewer": "Marcus (Procurement)",
       "verdict": "PASS",
       "issue_category": null,
-      "latency_ms": 0.61,
+      "latency_ms": 0.4,
       "wording_outcome": null,
       "checklist": {
         "scope_identified": true,
@@ -148,7 +148,7 @@
       "reviewer": "Nadia (Privacy & Compliance)",
       "verdict": "PASS",
       "issue_category": null,
-      "latency_ms": 0.48,
+      "latency_ms": 0.34,
       "wording_outcome": null,
       "checklist": {
         "scope_identified": true,
@@ -172,7 +172,7 @@
       "reviewer": "Rachel (Finance & HR)",
       "verdict": "PASS",
       "issue_category": null,
-      "latency_ms": 0.78,
+      "latency_ms": 1.0,
       "wording_outcome": {
         "requested": true,
         "applied": true,
@@ -201,7 +201,7 @@
       "reviewer": "Sarah (Corporate Legal)",
       "verdict": "PASS",
       "issue_category": null,
-      "latency_ms": 0.07,
+      "latency_ms": 0.14,
       "wording_outcome": null,
       "checklist": {
         "scope_identified": true,
@@ -225,7 +225,7 @@
       "reviewer": "Marcus (Procurement)",
       "verdict": "PASS",
       "issue_category": null,
-      "latency_ms": 0.86,
+      "latency_ms": 0.84,
       "wording_outcome": {
         "requested": true,
         "applied": false,
@@ -256,7 +256,7 @@
       "reviewer": "Elena (InfoSec Ops)",
       "verdict": "PASS",
       "issue_category": null,
-      "latency_ms": 0.47,
+      "latency_ms": 0.57,
       "wording_outcome": null,
       "checklist": {
         "scope_identified": true,
@@ -280,7 +280,7 @@
       "reviewer": "David (IP Licensing)",
       "verdict": "PASS",
       "issue_category": null,
-      "latency_ms": 1.05,
+      "latency_ms": 1.09,
       "wording_outcome": {
         "requested": true,
         "applied": false,
@@ -311,7 +311,7 @@
       "reviewer": "Rachel (Finance & HR)",
       "verdict": "PASS",
       "issue_category": null,
-      "latency_ms": 0.37,
+      "latency_ms": 0.76,
       "wording_outcome": null,
       "checklist": {
         "scope_identified": true,
@@ -335,7 +335,7 @@
       "reviewer": "Marcus (Procurement)",
       "verdict": "PASS",
       "issue_category": null,
-      "latency_ms": 1.4,
+      "latency_ms": 2.1,
       "wording_outcome": {
         "requested": true,
         "applied": true,
@@ -364,7 +364,7 @@
       "reviewer": "Elena (InfoSec Ops)",
       "verdict": "PASS",
       "issue_category": null,
-      "latency_ms": 0.48,
+      "latency_ms": 0.8,
       "wording_outcome": null,
       "checklist": {
         "scope_identified": true,
@@ -388,7 +388,7 @@
       "reviewer": "Sarah (Corporate Legal)",
       "verdict": "PASS",
       "issue_category": null,
-      "latency_ms": 0.51,
+      "latency_ms": 1.09,
       "wording_outcome": null,
       "checklist": {
         "scope_identified": true,
@@ -412,7 +412,7 @@
       "reviewer": "Nadia (Privacy & Compliance)",
       "verdict": "PASS",
       "issue_category": null,
-      "latency_ms": 1.1,
+      "latency_ms": 1.43,
       "wording_outcome": {
         "requested": true,
         "applied": true,
@@ -441,7 +441,7 @@
       "reviewer": "Rachel (Finance & HR)",
       "verdict": "PASS",
       "issue_category": null,
-      "latency_ms": 0.74,
+      "latency_ms": 1.51,
       "wording_outcome": {
         "requested": true,
         "applied": true,
@@ -470,7 +470,7 @@
       "reviewer": "Elena (InfoSec Ops)",
       "verdict": "PASS",
       "issue_category": null,
-      "latency_ms": 0.62,
+      "latency_ms": 11.43,
       "wording_outcome": {
         "requested": true,
         "applied": true,
@@ -499,7 +499,7 @@
       "reviewer": "David (IP Licensing)",
       "verdict": "PASS",
       "issue_category": null,
-      "latency_ms": 0.31,
+      "latency_ms": 0.64,
       "wording_outcome": null,
       "checklist": {
         "scope_identified": true,
@@ -523,7 +523,7 @@
       "reviewer": "Marcus (Procurement)",
       "verdict": "PASS",
       "issue_category": null,
-      "latency_ms": 0.71,
+      "latency_ms": 1.08,
       "wording_outcome": {
         "requested": true,
         "applied": false,
@@ -554,7 +554,7 @@
       "reviewer": "Elena (InfoSec Ops)",
       "verdict": "PASS",
       "issue_category": null,
-      "latency_ms": 0.58,
+      "latency_ms": 0.97,
       "wording_outcome": {
         "requested": true,
         "applied": true,

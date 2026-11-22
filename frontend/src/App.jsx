@@ -42,7 +42,8 @@ import {
   X,
   LogOut,
   Settings,
-  Upload
+  Upload,
+  Play
 } from 'lucide-react';
 import AuthLandingView from './components/AuthLandingView';
 import UserProfileStudio from './components/UserProfileStudio';
@@ -719,6 +720,7 @@ export default function App() {
   const [profileSubTab, setProfileSubTab] = useState(() => initialUrlState?.profileSubTab || 'user_profile');
   const [mcpActiveSubView, setMcpActiveSubView] = useState(() => initialUrlState?.mcpSubView || 'tester'); // 'tester' | 'configs' | 'sdks' | 'schemas'
   const [selectedDocForViewer, setSelectedDocForViewer] = useState(null);
+  const [docExplorerTargetDocId, setDocExplorerTargetDocId] = useState(() => initialUrlState?.docId || null);
 
   // -------------------------------------------------------------
   const {
@@ -3904,7 +3906,7 @@ export default function App() {
             className={`nav-item ${activeTab === 'playground' ? 'nav-item-active' : ''}`}
             title="AI Copilot Chat"
           >
-            <Bot size={16} strokeWidth={1.75} />
+            <MessageSquare size={16} strokeWidth={1.75} />
             <span>AI Copilot Chat</span>
           </button>
         </div>
@@ -3963,8 +3965,8 @@ export default function App() {
         {/* ========================================================= */}
         {/* TOP HEADER CONTROLS (Identical position for all tabs/pages) */}
         {/* ========================================================= */}
-        <div className="top-breadcrumb-bar" style={{ position: 'relative', zIndex: 50, paddingTop: '10px', paddingBottom: '6px', flexShrink: 0 }}>
-          <div />
+        <div className="top-breadcrumb-bar" style={{ position: 'relative', zIndex: 50, paddingTop: '4px', paddingBottom: '4px', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px' }}>
+          <div id="top-header-left-slot" style={{ display: 'flex', alignItems: 'center', flex: 1, minWidth: 0, overflow: 'hidden' }} />
           {renderHeaderRightControls()}
         </div>
 
@@ -4921,7 +4923,6 @@ export default function App() {
                       className={`sim-floating-preset-chip ${simulatorMode === 'presets' && demoScenario === 'refund_trap' ? 'active' : ''}`}
                       title="Freshness Trap: Tests if agent honors updated 60-day Enterprise refund rule over stale 30-day handbook"
                     >
-                      <Zap size={11} color={simulatorMode === 'presets' && demoScenario === 'refund_trap' ? '#EA580C' : '#94A3B8'} />
                       <span>1. Refund Window</span>
                       <span className="sim-chip-tag tag-warning">Freshness</span>
                     </button>
@@ -4941,7 +4942,6 @@ export default function App() {
                       className={`sim-floating-preset-chip ${simulatorMode === 'presets' && demoScenario === 'remote_work' ? 'active' : ''}`}
                       title="Scope Override: Tests VP memo 4-day remote authorization for Engineering over general 2-day policy"
                     >
-                      <Zap size={11} color={simulatorMode === 'presets' && demoScenario === 'remote_work' ? '#EA580C' : '#94A3B8'} />
                       <span>2. Remote Work</span>
                       <span className="sim-chip-tag tag-blue">Scope</span>
                     </button>
@@ -4961,7 +4961,6 @@ export default function App() {
                       className={`sim-floating-preset-chip ${simulatorMode === 'presets' && demoScenario === 'unauthorized_deploy' ? 'active' : ''}`}
                       title="Role Gate: Intercepts unauthorized plaintext HTTP port 8080 ingress attempt on Production"
                     >
-                      <Zap size={11} color={simulatorMode === 'presets' && demoScenario === 'unauthorized_deploy' ? '#EA580C' : '#94A3B8'} />
                       <span>3. Prod Ingress</span>
                       <span className="sim-chip-tag tag-green">Role Gate</span>
                     </button>
@@ -5008,13 +5007,12 @@ export default function App() {
                   {/* Pulsing Auto-Inferred Badge */}
                   <div className="sim-telemetry-chip lead">
                     <span className="sim-telemetry-dot" />
-                    <Sparkles size={11} />
                     <span>AUTO-INFERRED</span>
                   </div>
 
                   {/* Actor Persona Card */}
                   <div className="sim-telemetry-chip actor" title={`Actor ID: ${customActorId} (${detectedContext.roleLabel})`}>
-                    <Bot size={11} style={{ color: '#64748B' }} />
+                    <User size={11} style={{ color: '#64748B' }} />
                     <span className="sim-chip-label">ACTOR</span>
                     <span className="sim-chip-val">{customActorId}</span>
                     <span className="sim-chip-sub">· {detectedContext.role === customActorRole ? (detectedContext.roleShort || detectedContext.role) : customActorRole}</span>
@@ -5029,7 +5027,7 @@ export default function App() {
 
                   {/* Match Confidence Card */}
                   <div className="sim-telemetry-chip match" title={detectedContext.rationale}>
-                    <Zap size={10} style={{ color: '#16A34A' }} />
+                    <CheckCircle2 size={10} style={{ color: '#16A34A' }} />
                     <span className="sim-chip-val">{detectedContext.confidence}</span>
                     <span className="sim-chip-sub">match</span>
                   </div>
@@ -5070,7 +5068,7 @@ export default function App() {
                       </>
                     ) : (
                       <>
-                        <Zap size={14} />
+                        <Play size={14} />
                         <span>Evaluate Action</span>
                       </>
                     )}
@@ -5283,7 +5281,7 @@ export default function App() {
                           Risk: <strong style={{ color: demoResult.risk === 'LOW' ? '#059669' : '#DC2626' }}>{demoResult.risk}</strong> • Validity: <strong>{demoResult.validity}</strong>
                         </span>
                         <span className="code-pill" style={{ fontSize: '0.72rem' }}>
-                          ⚡ {demoResult.execution_ms || 22}ms
+                          {demoResult.execution_ms || 22}ms
                         </span>
                       </div>
 
@@ -5760,7 +5758,7 @@ export default function App() {
                       <div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                           <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#0F172A', margin: 0 }}>
-                            ⚡ Live Connectors ({liveConfiguredSources.length})
+                            Live Connectors ({liveConfiguredSources.length})
                           </h3>
                           <span style={{ fontSize: '0.7rem', fontWeight: 700, padding: '2px 8px', borderRadius: '12px', background: '#F1F5F9', color: '#475569' }}>
                             Encrypted Credentials • Per-Connection Locking
@@ -7349,7 +7347,7 @@ export default function App() {
                         border: '1px solid #CBD5E1'
                       }}
                     >
-                      <span className={isTestingConnection ? "spin" : ""}>⚡</span>
+                      <RefreshCw size={13} className={isTestingConnection ? "spin" : ""} />
                       {isTestingConnection ? "Running Connection Diagnostic..." : "Test Connection"}
                     </button>
 
@@ -7415,7 +7413,7 @@ export default function App() {
                   user={authUser}
                   showToast={showToast}
                   readOnly={false}
-                  initialDocId={initialUrlState?.docId}
+                  initialDocId={docExplorerTargetDocId || initialUrlState?.docId}
                   initialClaimId={initialUrlState?.claimId}
                   onClaimExtracted={() => {
                     fetchLiveDatabaseRecords();
@@ -7906,6 +7904,11 @@ export default function App() {
               initialSection={lineageSection}
               onSectionChange={setLineageSection}
               onOpenFileBrowser={() => { setActiveTab('ingestion'); setDocExplorerView('folders'); }}
+              onLocateSource={(cleanDocId) => {
+                if (cleanDocId) setDocExplorerTargetDocId(cleanDocId);
+                setDocExplorerView('folders');
+                setActiveTab('ingestion');
+              }}
             />
           </div>
           )

@@ -24,7 +24,7 @@ export const ENTERPRISE_CONNECTORS = [
     description: "Serverless interactive query service that makes it easy to analyze data in Amazon S3 using standard SQL.",
     monitored_scope: "Athena Glue data catalogs, partitioned S3 tables, Iceberg datasets & SQL view contracts.",
     default_port: 443,
-    icon: "⚡",
+    icon: "📊",
   },
   {
     id: "documentdb",
@@ -46,7 +46,7 @@ export const ENTERPRISE_CONNECTORS = [
     description: "Fully managed serverless key-value and document database delivering single-digit millisecond performance.",
     monitored_scope: "DynamoDB tables, partition keys, global secondary indexes (GSI) & TTL expiration rules.",
     default_port: 443,
-    icon: "⚡",
+    icon: "💾",
   },
   {
     id: "clickhouse",
@@ -233,7 +233,7 @@ export const ENTERPRISE_CONNECTORS = [
     description: "High-performance distributed query engine for running interactive SQL queries on large data sources.",
     monitored_scope: "Presto federated catalogs, external table schemas, connector properties & query plans.",
     default_port: 8080,
-    icon: "⚡",
+    icon: "🔍",
   },
   {
     id: "sap_ase",
@@ -288,7 +288,7 @@ export const ENTERPRISE_CONNECTORS = [
     description: "Fast distributed SQL query engine for big data analytics running across heterogeneous sources.",
     monitored_scope: "Trino connector schema mappings, distributed execution plans & catalog contracts.",
     default_port: 8080,
-    icon: "⚡",
+    icon: "🔎",
   },
 
   // 2. Data Warehouses / Lakehouses / Storage (9)
@@ -367,7 +367,7 @@ export const ENTERPRISE_CONNECTORS = [
     description: "Enterprise analytics service that accelerates time to insight across data warehouses and big data.",
     monitored_scope: "Synapse dedicated SQL pools, serverless views, lake database schemas & external tables.",
     default_port: 1433,
-    icon: "⚡",
+    icon: "🏢",
   },
   {
     id: "sap_datasphere",
@@ -558,7 +558,7 @@ export const ENTERPRISE_CONNECTORS = [
     description: "Framework and distributed processing engine for stateful stream computations over data streams.",
     monitored_scope: "Flink streaming jobs, state checkpoints, source/sink topologies & watermarking contracts.",
     default_port: 8081,
-    icon: "⚡",
+    icon: "🌊",
   },
   {
     id: "spark_openlineage",
@@ -569,7 +569,7 @@ export const ENTERPRISE_CONNECTORS = [
     description: "Unified analytics engine for large-scale data processing with automated OpenLineage event emitters.",
     monitored_scope: "Spark application metrics, stage lineage, RDD transformations & dataset I/O schemas.",
     default_port: 4040,
-    icon: "✨",
+    icon: "🔥",
   },
   {
     id: "astronomer_openlineage",
@@ -681,7 +681,7 @@ export const ENTERPRISE_CONNECTORS = [
     description: "Fully managed, real-time data ingestion service that is scalable and Kafka-protocol compatible.",
     monitored_scope: "Event Hub namespaces, consumer groups, partition counts, capture destinations & throughput.",
     default_port: 9093,
-    icon: "⚡",
+    icon: "📡",
   },
   {
     id: "redpanda_kafka",
@@ -940,7 +940,7 @@ export const ENTERPRISE_CONNECTORS = [
     description: "Enterprise machine learning governance, data quality, and model registry hub.",
     monitored_scope: "Model cards, training dataset lineage, explainability metrics & model quality.",
     default_port: 443,
-    icon: "🧠",
+    icon: "📊",
   },
   {
     id: "anomalo",
@@ -1164,7 +1164,7 @@ export const ENTERPRISE_CONNECTORS = [
     description: "Fully managed machine learning service for building, training, and deploying ML models.",
     monitored_scope: "SageMaker Model Registry cards, Feature Store feature groups, Model Monitor drift rules.",
     default_port: 443,
-    icon: "🧠",
+    icon: "📈",
   },
   {
     id: "sagemaker_studio_ml",
@@ -1175,7 +1175,7 @@ export const ENTERPRISE_CONNECTORS = [
     description: "End-to-end ML governance, foundation model evaluation, and lifecycle tracking.",
     monitored_scope: "SageMaker AI governance cards, foundation model benchmark ratings & safety guardrails.",
     default_port: 443,
-    icon: "🤖",
+    icon: "🛡️",
   },
 ];
 
