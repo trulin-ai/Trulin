@@ -3965,7 +3965,7 @@ export default function App() {
         {/* ========================================================= */}
         {/* TOP HEADER CONTROLS (Identical position for all tabs/pages) */}
         {/* ========================================================= */}
-        <div className="top-breadcrumb-bar" style={{ position: 'relative', zIndex: 50, paddingTop: '4px', paddingBottom: '4px', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px' }}>
+        <div className="top-breadcrumb-bar" style={{ position: 'relative', zIndex: 50, paddingTop: '6px', paddingBottom: '6px', paddingLeft: '16px', paddingRight: '20px', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px' }}>
           <div id="top-header-left-slot" style={{ display: 'flex', alignItems: 'center', flex: 1, minWidth: 0, overflow: 'hidden' }} />
           {renderHeaderRightControls()}
         </div>
@@ -5557,9 +5557,8 @@ export default function App() {
             flexDirection: 'column',
             overflow: 'hidden',
             boxSizing: 'border-box',
-            ...(docExplorerView === 'folders' || docExplorerView === 'documents'
-              ? { margin: '0 -24px 0 -24px', width: 'calc(100% + 48px)' }
-              : {})
+            width: '100%',
+            height: '100%'
           }}>
             {/* Clean Document Explorer Header - Only show for sub-views other than folders/documents */}
             {docExplorerView !== 'folders' && docExplorerView !== 'documents' && (

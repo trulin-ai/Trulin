@@ -1205,17 +1205,20 @@ export default function DocumentWorkspaceExplorer({
         display: 'flex',
         alignItems: 'center',
         padding: '5px 8px',
-        paddingLeft: `${depth * 16 + 8}px`,
-        borderRadius: '4px',
+        paddingLeft: `${depth * 18 + 10}px`,
+        borderRadius: '5px',
         background: '#FFFFFF',
-        gap: '6px'
+        gap: '6px',
+        border: '1px dashed #CBD5E1',
+        margin: '2px 0',
+        boxSizing: 'border-box'
       }}
     >
       {/* Spacer matching chevron width */}
-      <span style={{ width: 14, height: 14, display: 'inline-block', flexShrink: 0 }} />
+      <span style={{ width: 16, height: 16, display: 'inline-block', flexShrink: 0 }} />
 
       {/* Folder Icon */}
-      <Folder size={15} style={{ color: '#3B82F6', flexShrink: 0 }} />
+      <Folder size={16} style={{ color: '#2563EB', flexShrink: 0 }} />
 
       {/* Inline Input Box */}
       <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '4px', minWidth: 0 }}>
@@ -1301,20 +1304,21 @@ export default function DocumentWorkspaceExplorer({
             style={{
               display: 'flex',
               alignItems: 'center',
-              padding: '5px 8px',
-              paddingLeft: `${depth * 16 + 8}px`,
-              borderRadius: '4px',
+              padding: '6px 8px',
+              paddingLeft: `${depth * 18 + 10}px`,
+              borderRadius: '6px',
               cursor: 'pointer',
               userSelect: 'none',
-              background: isFolderActive ? 'rgba(37, 99, 235, 0.08)' : 'transparent',
-              color: isFolderActive ? '#1E40AF' : 'var(--text-main)',
+              background: isFolderActive ? '#EBF3FF' : 'transparent',
+              color: isFolderActive ? '#1D4ED8' : '#1C1917',
               fontWeight: isFolderActive ? 600 : 500,
-              fontSize: '0.80rem',
-              transition: 'background 0.1s ease',
-              gap: '6px'
+              fontSize: '0.82rem',
+              transition: 'all 0.12s ease',
+              gap: '7px',
+              boxSizing: 'border-box'
             }}
             onMouseEnter={e => {
-              if (!isFolderActive) e.currentTarget.style.background = '#F8FAFC';
+              if (!isFolderActive) e.currentTarget.style.background = '#F1EFEA';
             }}
             onMouseLeave={e => {
               if (!isFolderActive) e.currentTarget.style.background = 'transparent';
@@ -1323,8 +1327,8 @@ export default function DocumentWorkspaceExplorer({
             {/* Expand / Collapse Chevron OR Folder-specific Loading Spinner */}
             <span
               style={{
-                width: 14,
-                height: 14,
+                width: 16,
+                height: 16,
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -1347,18 +1351,23 @@ export default function DocumentWorkspaceExplorer({
                     cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'center',
-                    color: isExpanded ? '#2563EB' : '#64748B',
-                    width: 14
+                    justifyContent: 'center',
+                    color: isExpanded ? '#2563EB' : '#94A3B8',
+                    width: 16,
+                    height: 16,
+                    borderRadius: '3px',
+                    transition: 'color 0.12s ease',
+                    flexShrink: 0
                   }}
                   title={isExpanded ? 'Collapse folder' : 'Expand folder to view files'}
                 >
-                  {isExpanded ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
+                  {isExpanded ? <ChevronDown size={14} strokeWidth={2.2} /> : <ChevronRight size={14} strokeWidth={2.2} />}
                 </button>
               )}
             </span>
 
             {/* Folder Icon (Customized per folder type/domain) */}
-            {renderFolderIcon(node, 15)}
+            {renderFolderIcon(node, 16)}
 
             {/* Folder Name OR Inline Rename Input (Just like Drive / Windows Explorer) */}
             {renamingFolderId === node.id ? (
@@ -1468,20 +1477,21 @@ export default function DocumentWorkspaceExplorer({
                       display: 'flex',
                       alignItems: 'center',
                       padding: '5px 8px',
-                      paddingLeft: `${(depth + 1) * 16 + 8}px`,
-                      borderRadius: '4px',
+                      paddingLeft: `${(depth + 1) * 18 + 10}px`,
+                      borderRadius: '5px',
                       cursor: 'pointer',
                       userSelect: 'none',
-                      background: isSelected ? '#EFF6FF' : 'transparent',
-                      color: isSelected ? '#1E40AF' : 'var(--text-secondary)',
-                      fontWeight: isSelected ? 600 : 400,
+                      background: isSelected ? '#EBF3FF' : 'transparent',
+                      color: isSelected ? '#1D4ED8' : '#334155',
+                      fontWeight: isSelected ? 600 : 450,
                       fontSize: '0.78rem',
                       gap: '7px',
-                      transition: 'background 0.1s ease',
-                      borderLeft: isSelected ? '2px solid #2563EB' : '2px solid transparent'
+                      transition: 'all 0.12s ease',
+                      borderLeft: isSelected ? '2px solid #2563EB' : '2px solid transparent',
+                      boxSizing: 'border-box'
                     }}
                     onMouseEnter={e => {
-                      if (!isSelected) e.currentTarget.style.background = '#F8FAFC';
+                      if (!isSelected) e.currentTarget.style.background = '#F1EFEA';
                     }}
                     onMouseLeave={e => {
                       if (!isSelected) e.currentTarget.style.background = 'transparent';
@@ -1513,8 +1523,8 @@ export default function DocumentWorkspaceExplorer({
               {childFolders.length === 0 && uniqueFiles.length === 0 && !isFolderLoading && creatingInParentId !== node.id && (
                 <div
                   style={{
-                    padding: '3px 8px',
-                    paddingLeft: `${(depth + 1) * 16 + 8}px`,
+                    padding: '4px 8px',
+                    paddingLeft: `${(depth + 1) * 18 + 10}px`,
                     fontSize: '0.74rem',
                     color: '#94A3B8',
                     fontStyle: 'italic'
@@ -1592,12 +1602,12 @@ export default function DocumentWorkspaceExplorer({
         }}
         style={{
           width: '280px',
-          minWidth: '240px',
+          minWidth: '250px',
           maxWidth: '340px',
           flexShrink: 0,
-          background: '#FFFFFF',
+          background: '#FAF8F5',
           borderRadius: 0,
-          borderRight: '1px solid var(--border-subtle, #E2E8F0)',
+          borderRight: '1px solid #E8E3DC',
           display: 'flex',
           flexDirection: 'column',
           height: '100%',
@@ -1609,37 +1619,44 @@ export default function DocumentWorkspaceExplorer({
         {/* Directory Top Bar */}
         <div
           style={{
-            padding: '8px 12px',
-            borderBottom: '1px solid var(--border-subtle, #E2E8F0)',
-            background: '#faf8f5',
+            padding: '12px 14px 10px 14px',
+            borderBottom: '1px solid #E8E3DC',
+            background: '#FAF8F5',
             borderRadius: 0,
             display: 'flex',
             flexDirection: 'column',
-            gap: '6px',
-            flexShrink: 0
+            gap: '8px',
+            flexShrink: 0,
+            boxSizing: 'border-box'
           }}
         >
           {/* Header Title + Actions */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <span style={{ fontSize: '0.78rem', fontWeight: 800, color: 'var(--text-main)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
+              <Folder size={14} style={{ color: '#EA580C', flexShrink: 0 }} />
+              <span style={{ fontSize: '0.78rem', fontWeight: 800, color: '#1C1917', textTransform: 'uppercase', letterSpacing: '0.6px' }}>
                 Directory
               </span>
+              {folderTree.length > 0 && (
+                <span style={{ fontSize: '0.66rem', fontWeight: 600, color: '#78716C', background: '#EFECE6', padding: '1px 6px', borderRadius: '10px' }}>
+                  {folderTree.length}
+                </span>
+              )}
               <span
                 title="Tip: Right-click any folder or file for options (rename, move, delete, upload)"
                 style={{ display: 'inline-flex', alignItems: 'center', cursor: 'help' }}
               >
-                <Info size={13} style={{ color: '#94A3B8' }} />
+                <Info size={13} style={{ color: '#A8A29E' }} />
               </span>
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
               {readOnly && (
                 <span
                   style={{
                     fontSize: '0.68rem',
                     padding: '2px 8px',
-                    borderRadius: 0,
+                    borderRadius: '4px',
                     background: '#F1F5F9',
                     color: '#64748B',
                     fontWeight: 600,
@@ -1662,24 +1679,25 @@ export default function DocumentWorkspaceExplorer({
                   type="button"
                   onClick={() => startInlineCreate(null)}
                   style={{
-                    background: '#F8FAFC',
-                    border: '1px solid #CBD5E1',
-                    borderRadius: 0,
+                    background: '#FFFFFF',
+                    border: '1px solid #D6D3D1',
+                    borderRadius: '5px',
                     cursor: 'pointer',
                     color: '#2563EB',
-                    padding: '2px 6px',
+                    padding: '3px 8px',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '3px',
+                    gap: '4px',
                     fontSize: '0.70rem',
                     fontWeight: 600,
+                    boxShadow: '0 1px 2px rgba(0, 0, 0, 0.04)',
                     transition: 'all 0.15s ease'
                   }}
                   onMouseEnter={e => { e.currentTarget.style.background = '#EFF6FF'; e.currentTarget.style.borderColor = '#93C5FD'; }}
-                  onMouseLeave={e => { e.currentTarget.style.background = '#F8FAFC'; e.currentTarget.style.borderColor = '#CBD5E1'; }}
+                  onMouseLeave={e => { e.currentTarget.style.background = '#FFFFFF'; e.currentTarget.style.borderColor = '#D6D3D1'; }}
                   title="Create New Root Folder (or right-click canvas)"
                 >
-                  <FolderPlus size={13} />
+                  <FolderPlus size={12} />
                   <span>+ Root</span>
                 </button>
               )}
@@ -1688,7 +1706,20 @@ export default function DocumentWorkspaceExplorer({
               <button
                 type="button"
                 onClick={() => fetchData(true)}
-                style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#64748B', padding: '3px' }}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  color: '#78716C',
+                  padding: '4px',
+                  borderRadius: '4px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  transition: 'all 0.15s ease'
+                }}
+                onMouseEnter={e => { e.currentTarget.style.background = '#EFECE6'; e.currentTarget.style.color = '#1C1917'; }}
+                onMouseLeave={e => { e.currentTarget.style.background = 'none'; e.currentTarget.style.color = '#78716C'; }}
                 title="Refresh Directory"
               >
                 <RefreshCw size={13} className={isRefreshing ? 'spin' : ''} />
@@ -1697,27 +1728,51 @@ export default function DocumentWorkspaceExplorer({
           </div>
 
           {/* Search Filter input */}
-          <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-            <Search size={13} style={{ position: 'absolute', left: '8px', color: '#94A3B8' }} />
+          <div style={{ position: 'relative', display: 'flex', alignItems: 'center', width: '100%', boxSizing: 'border-box' }}>
+            <Search size={13} style={{ position: 'absolute', left: '9px', color: '#A8A29E', pointerEvents: 'none' }} />
             <input
               type="text"
-              placeholder="Filter files... (right-click for options)"
+              placeholder="Filter files & folders..."
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
               style={{
                 width: '100%',
-                padding: '4px 8px 4px 26px',
+                boxSizing: 'border-box',
+                padding: '5px 26px 5px 28px',
                 fontSize: '0.76rem',
-                borderRadius: 0,
-                
-                background: '#FFFFFF'
+                borderRadius: '6px',
+                border: '1px solid #E2E8F0',
+                background: '#FFFFFF',
+                color: '#1C1917',
+                outline: 'none',
+                transition: 'border-color 0.15s ease, box-shadow 0.15s ease'
+              }}
+              onFocus={e => {
+                e.target.style.borderColor = '#3B82F6';
+                e.target.style.boxShadow = '0 0 0 2px rgba(59, 130, 246, 0.15)';
+              }}
+              onBlur={e => {
+                e.target.style.borderColor = '#E2E8F0';
+                e.target.style.boxShadow = 'none';
               }}
             />
             {searchQuery && (
               <button
                 type="button"
                 onClick={() => setSearchQuery('')}
-                style={{ position: 'absolute', right: '6px', background: 'none', border: 'none', cursor: 'pointer', color: '#94A3B8', padding: 0 }}
+                style={{
+                  position: 'absolute',
+                  right: '7px',
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  color: '#A8A29E',
+                  padding: '2px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+                title="Clear filter"
               >
                 <X size={12} />
               </button>
@@ -1733,8 +1788,8 @@ export default function DocumentWorkspaceExplorer({
             minHeight: 0,
             overflowY: 'auto',
             overflowX: 'hidden',
-            padding: '6px 4px 32px 4px',
-            background: '#faf8f5',
+            padding: '8px 8px 32px 8px',
+            background: '#FAF8F5',
             boxSizing: 'border-box'
           }}
         >

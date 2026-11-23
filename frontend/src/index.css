@@ -111,7 +111,7 @@ body {
 
 .main-content {
   flex: 1;
-  padding: 2px 20px 16px 6px;
+  padding: 2px 20px 16px 16px;
   max-width: 100%;
   min-width: 0;
   width: 100%;
@@ -2933,7 +2933,7 @@ html, body, #root, .app-layout {
   overflow: hidden !important;
   display: flex !important;
   flex-direction: column !important;
-  padding: 0 20px 0 6px !important;
+  padding: 0 !important;
   box-sizing: border-box !important;
 }
 
