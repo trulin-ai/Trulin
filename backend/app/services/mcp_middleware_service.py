@@ -1,6 +1,9 @@
+import base64
 import hashlib
+import hmac
 import json
 import logging
+import os
 import re
 import time
 import uuid
@@ -17,6 +20,91 @@ from app.schemas.mcp_middleware import (
 from app.services.webhook_service import compute_single_incident_liability
 
 logger = logging.getLogger(__name__)
+
+def _get_permit_secret() -> bytes:
+    secret = os.environ.get("TRULIN_MCP_PERMIT_SECRET")
+    if not secret:
+        if os.environ.get("ENVIRONMENT", "").lower() == "production":
+            raise RuntimeError("TRULIN_MCP_PERMIT_SECRET must be configured in production.")
+        secret = "trulin-dev-permit-hmac-secret-v1"
+    return secret.encode("utf-8")
+
+
+DEFAULT_PERMIT_TTL_SECONDS = 120
+
+
+def _canonical_args_hash(arguments: Dict[str, Any]) -> str:
+    canonical = json.dumps(arguments or {}, sort_keys=True, separators=(",", ":"), default=str)
+    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()[:32]
+
+
+def issue_permit_token(
+    tool_name: str,
+    arguments: Dict[str, Any],
+    organization_id: str,
+    actor_id: str,
+    workspace_id: Optional[str] = None,
+    policy_decision_id: Optional[str] = None,
+    ttl_seconds: int = DEFAULT_PERMIT_TTL_SECONDS,
+) -> str:
+    """Issues a short-lived HMAC-SHA256 signed permit token bound to permit_id, agent, org, workspace, tool, args, and expiry."""
+    now = int(time.time())
+    claims = {
+        "jti": str(uuid.uuid4()),
+        "agent_id": actor_id,
+        "org_id": organization_id,
+        "ws_id": workspace_id,
+        "tool": tool_name,
+        "args_hash": _canonical_args_hash(arguments),
+        "iat": now,
+        "exp": now + ttl_seconds,
+        "decision_id": policy_decision_id or f"dec_{uuid.uuid4().hex[:12]}",
+    }
+    payload_b64 = base64.urlsafe_b64encode(
+        json.dumps(claims, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    ).decode("ascii").rstrip("=")
+    sig = hmac.new(_get_permit_secret(), payload_b64.encode("ascii"), hashlib.sha256).hexdigest()[:32]
+    return f"permit_{payload_b64}.{sig}"
+
+
+def verify_permit_token(
+    permit_token: Optional[str],
+    tool_name: str,
+    arguments: Dict[str, Any],
+    organization_id: str,
+    workspace_id: Optional[str] = None,
+) -> Tuple[bool, str, Optional[Dict[str, Any]]]:
+    """Verifies HMAC signature, expiry, tool_name, arguments_hash, organization_id, and workspace_id."""
+    if not permit_token or not isinstance(permit_token, str) or not permit_token.startswith("permit_"):
+        return False, "Missing or malformed permit token", None
+
+    body = permit_token[len("permit_"):]
+    if "." not in body:
+        return False, "Invalid permit token format", None
+
+    payload_b64, provided_sig = body.rsplit(".", 1)
+    expected_sig = hmac.new(_get_permit_secret(), payload_b64.encode("ascii"), hashlib.sha256).hexdigest()[:32]
+    if not hmac.compare_digest(provided_sig, expected_sig):
+        return False, "Permit token signature verification failed", None
+
+    try:
+        padded = payload_b64 + "=" * (-len(payload_b64) % 4)
+        claims = json.loads(base64.urlsafe_b64decode(padded.encode("ascii")).decode("utf-8"))
+    except Exception:
+        return False, "Permit token payload decoding failed", None
+
+    if int(claims.get("exp", 0)) < int(time.time()):
+        return False, "Permit token has expired", None
+    if claims.get("tool") != tool_name:
+        return False, f"Permit token bound to tool '{claims.get('tool')}', not '{tool_name}'", None
+    if claims.get("org_id") != organization_id:
+        return False, "Permit token organization_id mismatch", None
+    if workspace_id is not None and claims.get("ws_id") != workspace_id:
+        return False, "Permit token workspace_id mismatch", None
+    if claims.get("args_hash") != _canonical_args_hash(arguments):
+        return False, "Permit token arguments_hash mismatch", None
+
+    return True, "Valid permit token", claims
 
 # Heuristic patterns for SQL & Shell Injection in tool arguments
 SQL_INJECTION_PATTERNS = [
@@ -166,11 +254,16 @@ async def intercept_tool_call(
     if verdict == "BLOCK":
         risk_score = max(risk_score, 90.0)
 
-    # Cryptographic permit token generation
+    # Cryptographic HMAC-signed permit token generation (bound to permit_id, agent, org, workspace, tool, args, expiry)
     permit_token = None
     if verdict in ("PERMIT", "SANITIZE_AND_PERMIT"):
-        payload_bytes = f"{proposal.tool_name}:{proposal.actor_id}:{time.time()}".encode("utf-8")
-        permit_token = f"permit_{hashlib.sha256(payload_bytes).hexdigest()[:24]}"
+        permit_token = issue_permit_token(
+            tool_name=proposal.tool_name,
+            arguments=proposal.arguments,
+            organization_id=str(proposal.organization_id or ""),
+            actor_id=proposal.actor_id,
+            workspace_id=getattr(proposal, "workspace_id", None),
+        )
 
     duration_ms = int((time.perf_counter() - t0) * 1000)
 

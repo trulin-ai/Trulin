@@ -28,6 +28,7 @@ class SendMessageRequest(BaseModel):
     user_role: str = "developer"
     workspace_id: str | None = None
     domain: str | None = None
+    requested_depth: str | None = None
 
 
 @router.get("/sessions")
@@ -132,6 +133,7 @@ async def send_chat_message(
         user_role=req.user_role,
         workspace_id=req.workspace_id,
         domain=req.domain,
+        requested_depth=req.requested_depth,
     )
     return result
 
@@ -139,6 +141,7 @@ async def send_chat_message(
 from app.services.feedback_telemetry_service import (
     FeedbackSubmitRequest,
     FeedbackTelemetryService,
+    PilotFeedbackRequest,
 )
 
 
@@ -154,7 +157,32 @@ async def submit_message_feedback(
     return FeedbackTelemetryService.record_feedback(req)
 
 
+@router.post("/sessions/{session_id}/messages/{message_id}/pilot-feedback")
+async def submit_pilot_feedback(
+    session_id: uuid.UUID,
+    message_id: str,
+    req: PilotFeedbackRequest,
+):
+    """Log formal pilot evaluator review (verdict, category, 8-point checklist)."""
+    req.session_id = str(session_id)
+    req.message_id = str(message_id)
+    return FeedbackTelemetryService.record_pilot_feedback(req)
+
+
 @router.get("/telemetry/feedback")
 async def get_feedback_telemetry():
     """Get aggregated failure taxonomy distribution and steward queue stats."""
     return FeedbackTelemetryService.get_stage_distribution()
+
+
+@router.get("/telemetry/pilot-feedback")
+async def get_pilot_feedback_telemetry(
+    session_id: str | None = None,
+):
+    """Get all recorded pilot evaluations and summary compliance statistics."""
+    evaluations = FeedbackTelemetryService.list_pilot_feedback(session_id=session_id)
+    summary = FeedbackTelemetryService.get_pilot_summary()
+    return {
+        "evaluations": evaluations,
+        "summary": summary,
+    }

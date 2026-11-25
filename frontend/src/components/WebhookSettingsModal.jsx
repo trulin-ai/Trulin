@@ -346,7 +346,7 @@ export default function WebhookSettingsModal({
                 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                      <Zap size={16} color="#38BDF8" />
+                      <Send size={16} color="#38BDF8" />
                       <h4 style={{ margin: 0, fontSize: '0.95rem', fontWeight: 700, color: 'var(--text-main, #F8FAFC)' }}>
                         Register New Incident Destination
                       </h4>

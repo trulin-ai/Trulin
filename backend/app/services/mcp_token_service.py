@@ -17,6 +17,7 @@ class AgentToken(BaseModel):
     last_used_at: Optional[datetime] = None
     status: str = "active"  # "active" | "revoked"
     organization_id: str = "11111111-1111-1111-1111-111111111111"
+    workspace_id: Optional[str] = None
 
 
 class CreateAgentTokenRequest(BaseModel):
@@ -26,6 +27,7 @@ class CreateAgentTokenRequest(BaseModel):
     allowed_tools: List[str] = Field(default_factory=lambda: ["*"])
     rate_limit_rpm: int = 60
     organization_id: str = "11111111-1111-1111-1111-111111111111"
+    workspace_id: Optional[str] = None
 
 
 class MCPTokenService:
@@ -81,6 +83,7 @@ class MCPTokenService:
             created_at=datetime.now(timezone.utc),
             status="active",
             organization_id=req.organization_id,
+            workspace_id=req.workspace_id,
         )
         self._tokens[token_obj.id] = token_obj
         return token_obj
@@ -91,15 +94,27 @@ class MCPTokenService:
             return True
         return False
 
-    def validate_token(self, token_str: str, requested_tool: str) -> Optional[AgentToken]:
+    def resolve_token(self, token_str: str) -> Optional[AgentToken]:
+        """Resolves an active token without checking tool-level entitlements."""
+        if not token_str:
+            return None
         for t in self._tokens.values():
             if t.token == token_str:
                 if t.status != "active":
                     return None
                 t.last_used_at = datetime.now(timezone.utc)
-                if "*" in t.allowed_tools or requested_tool in t.allowed_tools:
-                    return t
-                return None
+                return t
+        return None
+
+    def is_tool_allowed(self, token_obj: AgentToken, requested_tool: str) -> bool:
+        return "*" in token_obj.allowed_tools or requested_tool in token_obj.allowed_tools
+
+    def validate_token(self, token_str: str, requested_tool: str) -> Optional[AgentToken]:
+        token_obj = self.resolve_token(token_str)
+        if not token_obj:
+            return None
+        if self.is_tool_allowed(token_obj, requested_tool):
+            return token_obj
         return None
 
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ShieldCheck } from 'lucide-react';
+import { ShieldCheck, Activity } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 export default function TeamAndActivityHub({
@@ -326,7 +326,7 @@ export default function TeamAndActivityHub({
             <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase' }}>
               Recorded Actions
             </span>
-            <span style={{ fontSize: '1.2rem' }}>⚡</span>
+            <Activity size={18} color="var(--primary)" />
           </div>
           <div style={{ fontSize: '1.8rem', fontWeight: 900, color: 'var(--text-main)' }}>
             {activityTotal || activities.length}
@@ -406,7 +406,7 @@ export default function TeamAndActivityHub({
             gap: '8px'
           }}
         >
-          <span>⚡ Collaborative Activity Feed</span>
+          <span>Collaborative Activity Feed</span>
           <span className="badge badge-verified" style={{ fontSize: '0.65rem' }}>Live</span>
         </button>
 
@@ -534,7 +534,7 @@ export default function TeamAndActivityHub({
                           className="btn btn-secondary"
                           style={{ fontSize: '0.72rem', padding: '4px 10px', fontWeight: 600 }}
                         >
-                          ⚡ Switch Persona
+                          Switch Persona
                         </button>
                         {u.role !== 'admin' && (
                           <button
@@ -697,7 +697,7 @@ export default function TeamAndActivityHub({
                     <span style={{ fontSize: '1.4rem' }}>
                       {dom.id.includes('finance') ? '💳' :
                        dom.id.includes('eng') ? '⚙️' :
-                       dom.id.includes('compliance') ? '⚖️' : '🤖'}
+                       dom.id.includes('compliance') ? '⚖️' : '📁'}
                     </span>
                     <div>
                       <h4 style={{ margin: 0, fontSize: '1rem', fontWeight: 800, color: 'var(--text-main)' }}>

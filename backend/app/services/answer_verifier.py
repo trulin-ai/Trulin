@@ -11,7 +11,7 @@ Inspects LLM outputs to guarantee evidence-first integrity:
 import logging
 import re
 from dataclasses import dataclass, field
-from typing import Any
+from typing import Any, Optional, Tuple
 
 logger = logging.getLogger(__name__)
 
@@ -52,6 +52,115 @@ class AnswerVerifier:
     )
 
     @classmethod
+    def verify_statement_mutation(
+        cls,
+        original_text: str,
+        rewritten_text: str,
+        required_modality: Optional[str] = None,
+    ) -> Tuple[bool, Optional[str]]:
+        """
+        Guarantees semantic preservation between deterministic and rephrased statements:
+        1. Negation/Polarity Invariance (rejects flips: 'is required' <-> 'is not required').
+        2. Modality Invariance (rejects 'may' -> 'must', or 'must' -> 'optional').
+        3. Numeric Entity Invariance (all original numbers/durations/amounts must persist).
+        4. Citation Invariance (all original [Source X] references must persist).
+        Returns: (is_safe, rejection_reason)
+        """
+        if not rewritten_text or len(rewritten_text.strip()) < 8:
+            return False, "rewritten_statement_empty_or_too_short"
+
+        orig_clean = re.sub(r"\s+", " ", original_text).strip()
+        rewr_clean = re.sub(r"\s+", " ", rewritten_text).strip()
+
+        orig_lower = orig_clean.lower()
+        rewr_lower = rewr_clean.lower()
+
+        # 1. Negation & Polarity Invariance
+        neg_patterns = [
+            r"\bnot\b", r"\bcannot\b", r"\bnever\b", r"\bneither\b", r"\bnor\b",
+            r"\bprohibited\b", r"\bunauthorized\b", r"\bforbidden\b", r"\bdisallowed\b",
+            r"\bdoes not\b", r"\bdo not\b", r"\bshall not\b", r"\bwill not\b",
+            r"\bin no event\b", r"\bno license\b", r"\bno refund\b", r"\bwithout\b",
+            r"\bnon-refundable\b", r"\bnon-transferable\b"
+        ]
+
+        def count_negatives(text: str) -> int:
+            return sum(len(re.findall(p, text)) for p in neg_patterns)
+
+        orig_negs = count_negatives(orig_lower)
+        rewr_negs = count_negatives(rewr_lower)
+
+        # If original has zero negation, but rewrite adds negation (e.g. "approval is required" -> "approval is not required")
+        if orig_negs == 0 and rewr_negs > 0:
+            return False, "polarity_flip_negation_introduced: rewrite added negation where original had none"
+
+        # If original had negative prohibition/qualification, but rewrite dropped it
+        if orig_negs > 0 and rewr_negs == 0:
+            return False, "polarity_flip_negation_dropped: rewrite lost negative restriction"
+
+        # 2. Modality Invariance
+        if required_modality:
+            mod_upper = required_modality.upper()
+            if mod_upper == "MUST":
+                if any(k in rewr_lower for k in ["optional", "at discretion"]) and not any(k in orig_lower for k in ["optional", "at discretion"]):
+                    return False, "modality_mutation: changed obligation (MUST) to optional"
+            elif mod_upper == "MAY":
+                if any(k in rewr_lower for k in ["must", "shall", "mandatory", "is required to"]) and not any(k in orig_lower for k in ["must", "shall", "mandatory", "required"]):
+                    return False, "modality_mutation: changed permission (MAY) to mandatory obligation (MUST)"
+
+        # 3. Numeric Entity Invariance
+        orig_entities = cls.NUMERIC_ENTITY_PATTERN.findall(orig_clean)
+        for entity in orig_entities:
+            clean_ent = entity.strip().lower()
+            num_only = re.sub(r"[^\d.]", "", clean_ent)
+            if num_only and num_only not in rewr_lower:
+                return False, f"numeric_mutation: original numeric value '{entity}' missing from rewritten statement"
+
+        # 4. Citation Invariance
+        orig_citations = cls.SOURCE_PATTERN.findall(orig_clean)
+        rewr_citations = cls.SOURCE_PATTERN.findall(rewr_clean)
+        for oc in orig_citations:
+            if oc not in rewr_citations:
+                return False, f"citation_mutation: original citation [Source {oc}] omitted from rewrite"
+
+        # 5. Temporal Preposition Invariance
+        bounded_preps = [r"\bwithin\b", r"\bprior to\b", r"\bbefore\b", r"\bduring\b"]
+        unbounded_preps = [r"\bafter\b", r"\bfollowing\b", r"\bsubsequent to\b"]
+
+        for bp in bounded_preps:
+            clean_bp = bp.replace(r"\b", "")
+            if re.search(bp, orig_lower) and not any(re.search(up, orig_lower) for up in unbounded_preps):
+                if any(re.search(up, rewr_lower) for up in unbounded_preps) and not re.search(bp, rewr_lower):
+                    return False, f"temporal_mutation: bounded window '{clean_bp}' mutated to delayed/unbounded preposition"
+
+        for up in unbounded_preps:
+            clean_up = up.replace(r"\b", "")
+            if re.search(up, orig_lower) and not any(re.search(bp, orig_lower) for bp in bounded_preps):
+                if any(re.search(bp, rewr_lower) for bp in bounded_preps) and not re.search(up, rewr_lower):
+                    return False, f"temporal_mutation: delayed condition '{clean_up}' mutated to bounded preposition"
+
+        # 6. Conditional Qualification Invariance
+        conditional_qualifiers = [
+            "unless otherwise agreed",
+            "subject to prior written consent",
+            "except as provided",
+            "save for",
+            "unless agreed",
+        ]
+        for qual in conditional_qualifiers:
+            if qual in orig_lower and qual not in rewr_lower:
+                root_word = qual.split()[0]
+                if root_word not in rewr_lower:
+                    return False, f"conditional_qualification_dropped: material qualification '{qual}' omitted from rewrite"
+
+        # 7. Logical Conjunction Weakening (AND -> OR)
+        if ("both " in orig_lower or " and " in orig_lower) and " or " not in orig_lower:
+            if " or " in rewr_lower and " and " not in rewr_lower:
+                return False, "logical_weakening_mutation: mandatory conjunction (AND) weakened to disjunction (OR)"
+
+        return True, None
+
+    @classmethod
     def verify(
         cls,
         synthesized_answer: str,
@@ -68,6 +177,19 @@ class AnswerVerifier:
                 verification_status="UNVERIFIED",
                 grounding_score=0.0,
                 hallucination_warnings=["Synthesized answer is empty."],
+            )
+
+        lower_ans = synthesized_answer.lower()
+        if "no verified rule found" in lower_ans or "no verified policy records" in lower_ans:
+            return AnswerVerificationResult(
+                is_verified=True,
+                verification_status="NO_VERIFIED_RULE",
+                grounding_score=1.0,
+                cited_source_indices=[],
+                invalid_source_indices=[],
+                unverified_numbers=[],
+                hallucination_warnings=[],
+                disputed_conflict_flagged=False,
             )
 
         num_citations = len(citations)
@@ -116,19 +238,27 @@ class AnswerVerifier:
         for idx in valid_indices:
             c = citations[idx - 1]
             cited_evidence_corpus.append(str(c.get("claim_text", "")))
+            cited_evidence_corpus.append(str(c.get("verbatim_evidence", "")))
+            cited_evidence_corpus.append(str(c.get("evidence_span", "")))
             evidence = c.get("evidence")
             if isinstance(evidence, dict):
                 cited_evidence_corpus.append(str(evidence.get("verbatim_quote", "")))
                 cited_evidence_corpus.append(str(evidence.get("clause_text", "")))
+            elif isinstance(evidence, str):
+                cited_evidence_corpus.append(evidence)
 
         # Also compile all available citations as fallback
         all_evidence_corpus = []
         for c in citations:
             all_evidence_corpus.append(str(c.get("claim_text", "")))
+            all_evidence_corpus.append(str(c.get("verbatim_evidence", "")))
+            all_evidence_corpus.append(str(c.get("evidence_span", "")))
             evidence = c.get("evidence")
             if isinstance(evidence, dict):
                 all_evidence_corpus.append(str(evidence.get("verbatim_quote", "")))
                 all_evidence_corpus.append(str(evidence.get("clause_text", "")))
+            elif isinstance(evidence, str):
+                all_evidence_corpus.append(evidence)
 
         cited_text_block = " ".join(cited_evidence_corpus).lower()
         all_text_block = " ".join(all_evidence_corpus).lower()

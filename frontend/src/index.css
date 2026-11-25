@@ -111,7 +111,7 @@ body {
 
 .main-content {
   flex: 1;
-  padding: 2px 24px 16px 24px;
+  padding: 2px 20px 16px 16px;
   max-width: 100%;
   min-width: 0;
   width: 100%;
@@ -2933,7 +2933,7 @@ html, body, #root, .app-layout {
   overflow: hidden !important;
   display: flex !important;
   flex-direction: column !important;
-  padding: 0 24px 0 24px !important;
+  padding: 0 !important;
   box-sizing: border-box !important;
 }
 
@@ -3181,6 +3181,7 @@ input.copilot-history-search-input[type="text"] {
 }
 
 .copilot-history-item:hover .copilot-history-item-actions,
+.copilot-history-item-active .copilot-history-item-actions,
 .copilot-history-item-actions-visible {
   opacity: 1 !important;
 }

@@ -100,9 +100,10 @@ async def test_retrieval_rrf_scoring_and_section_context():
 
     assert len(resp.context) >= 1
     assert "credit" in resp.context[0].claim.lower()
-    # Check that section context expansion populated evidence quotes with related clause from Section 4.1
-    all_evidence = " ".join(resp.context[0].evidence)
-    assert "[Section Context" in all_evidence or len(resp.context[0].evidence) >= 1
+    # Check that section context expansion cleanly decoupled into section_context items
+    assert len(resp.context[0].section_context) >= 1
+    assert resp.context[0].section_context[0].is_normative is False
+    assert resp.context[0].section_context[0].section == "Section 4.1"
     # Check governed packages are populated
     assert len(resp.governed_packages) >= 1
     assert resp.governed_packages[0].rule_text == c1.claim_text

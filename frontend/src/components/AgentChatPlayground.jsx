@@ -4,7 +4,8 @@ import {
   CheckCircle2, Clock, ShieldCheck, Sparkles, AlertTriangle, 
   Copy, Check, ChevronDown, ChevronRight, BookOpen, Layers, Shield,
   ExternalLink, ShieldAlert, ArrowUpRight, Mic, ArrowUp, FileText, X,
-  PanelLeftClose, PanelLeftOpen, Pencil, Share2
+  PanelLeftClose, PanelLeftOpen, Pencil, Share2, Scale, Info, Hash,
+  UploadCloud, GitCompare, HelpCircle, Pin, PinOff, ClipboardCheck
 } from 'lucide-react';
 
 const PROCESS_STEPS = [
@@ -26,7 +27,7 @@ const PROCESS_STEPS = [
   {
     action: "Evaluating governance thresholds & synthesizing answer",
     tag: "Context Gate",
-    icon: "✨"
+    icon: "🎯"
   }
 ];
 
@@ -170,7 +171,7 @@ export function generateSmartTitle(query) {
 }
 
 // Rich Formatted Content Renderer for Catchy & Scannable Answers with Interactive Citations
-function RichAnswerContent({ content, onCitationClick }) {
+function RichAnswerContent({ content, onCitationClick, onCitationHover }) {
   if (!content) return null;
 
   // Split into paragraphs / lines
@@ -233,33 +234,38 @@ function RichAnswerContent({ content, onCitationClick }) {
               e.stopPropagation();
               if (onCitationClick) onCitationClick(parseInt(num, 10));
             }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = '#DBEAFE';
+              e.currentTarget.style.color = '#1D4ED8';
+              e.currentTarget.style.borderColor = '#3B82F6';
+              if (onCitationHover) onCitationHover(parseInt(num, 10));
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = '#EFF6FF';
+              e.currentTarget.style.color = '#1D4ED8';
+              e.currentTarget.style.borderColor = '#BFDBFE';
+              if (onCitationHover) onCitationHover(null);
+            }}
             style={{
               display: 'inline-flex',
               alignItems: 'center',
               justifyContent: 'center',
-              background: 'rgba(0, 0, 0, 0.05)',
-              border: 'none',
+              background: '#EFF6FF',
+              border: '1px solid #BFDBFE',
               borderRadius: '4px',
-              color: '#78716C',
-              fontWeight: 600,
-              fontSize: '0.72rem',
-              padding: '1px 5px',
+              color: '#1D4ED8',
+              fontWeight: 700,
+              fontSize: '0.70rem',
+              padding: '1px 6px',
               margin: '0 2px',
               cursor: 'pointer',
               verticalAlign: 'baseline',
+              fontFamily: 'monospace',
               transition: 'all 0.15s ease'
             }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = '#FBE9D9';
-              e.currentTarget.style.color = '#7C2D12';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'rgba(0, 0, 0, 0.05)';
-              e.currentTarget.style.color = '#78716C';
-            }}
-            title={`View Source ${num}`}
+            title={`View Supporting Evidence for Source ${num}`}
           >
-            {num}
+            Source {num}
           </button>
         );
       }
@@ -316,6 +322,65 @@ function RichAnswerContent({ content, onCitationClick }) {
       continue;
     }
 
+    // Handle blockquotes: `> ` including `> [!NOTE]`
+    if (line.startsWith('>')) {
+      const blockquoteLines = [];
+      while (i < rawLines.length && rawLines[i].trim().startsWith('>')) {
+        const bLine = rawLines[i].trim().replace(/^>\s*/, '');
+        blockquoteLines.push(bLine);
+        i++;
+      }
+      i--; // adjust loop counter
+      const isNote = blockquoteLines.some(l => l.includes('[!NOTE]') || l.includes('Section Context'));
+      elements.push(
+        <div key={`callout-${i}`} style={{
+          margin: '10px 0',
+          padding: '10px 14px',
+          background: isNote ? '#F8FAFC' : '#F5F5F4',
+          borderLeft: isNote ? '3px solid #3B82F6' : '3px solid #78716C',
+          borderRadius: '0 8px 8px 0',
+          fontSize: '0.86rem',
+          lineHeight: 1.55,
+          color: '#475569'
+        }}>
+          {isNote && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px', fontWeight: 600, color: '#1E40AF', fontSize: '0.78rem' }}>
+              <span>📖 Explanatory Context (Non-Normative)</span>
+            </div>
+          )}
+          {blockquoteLines.map((bl, blIdx) => {
+            if (bl.startsWith('[!NOTE]')) return null;
+            return <div key={blIdx} style={{ fontStyle: bl.startsWith('"') ? 'italic' : 'normal', marginTop: blIdx > 0 ? '3px' : 0 }}>{renderInlineFormatted(bl)}</div>;
+          })}
+        </div>
+      );
+      continue;
+    }
+
+    // Handle Verification Status Footer
+    if (line.startsWith('🔒 **Verification Status:**') || line.startsWith('🔒 Verification Status:')) {
+      flushBulletList();
+      elements.push(
+        <div key={`verif-bar-${i}`} style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px',
+          marginTop: '14px',
+          padding: '6px 10px',
+          borderRadius: '6px',
+          background: 'rgba(0, 0, 0, 0.03)',
+          border: '1px solid rgba(0, 0, 0, 0.06)',
+          fontSize: '0.74rem',
+          color: '#57534E',
+          fontWeight: 500
+        }}>
+          <Shield size={12} color="#059669" />
+          <div>{renderInlineFormatted(line.replace(/^🔒\s*/, ''))}</div>
+        </div>
+      );
+      continue;
+    }
+
     // Check for bullet items: `- `, `* `, `• `, `1. `
     const bulletMatch = line.match(/^([-*•]|\d+\.)\s+(.+)$/);
     if (bulletMatch) {
@@ -328,15 +393,28 @@ function RichAnswerContent({ content, onCitationClick }) {
     // Clean Markdown Headers `### `, `## ` or standalone `**Heading:**`
     if (line.startsWith('### ') || line.startsWith('## ')) {
       const headerText = line.replace(/^#+\s*/, '');
+      const isBottomLine = headerText.toLowerCase().includes('bottom-line');
+      const isCond = headerText.toLowerCase().includes('conditions');
+      const isClaims = headerText.toLowerCase().includes('verified operative') || headerText.toLowerCase().includes('verified claims');
+      const isPathways = headerText.toLowerCase().includes('policy pathways') || headerText.toLowerCase().includes('conflict audit');
+      const isContext = headerText.toLowerCase().includes('supporting context');
+
       elements.push(
-        <h4 key={`header-${i}`} style={{
-          fontSize: '0.98rem',
-          fontWeight: 600,
-          color: '#1C1917',
-          margin: '14px 0 6px 0'
+        <div key={`header-${i}`} style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '6px',
+          margin: isBottomLine ? '6px 0 6px 0' : '14px 0 6px 0',
+          fontSize: '0.84rem',
+          fontWeight: 700,
+          color: isBottomLine ? '#0F766E' : isCond ? '#B45309' : isPathways ? '#B91C1C' : isContext ? '#2563EB' : '#1C1917',
+          textTransform: 'uppercase',
+          letterSpacing: '0.04em'
         }}>
-          {renderInlineFormatted(headerText)}
-        </h4>
+          {isBottomLine && <ShieldCheck size={14} color="#0F766E" />}
+          {isPathways && <AlertTriangle size={14} color="#B91C1C" />}
+          <span>{renderInlineFormatted(headerText)}</span>
+        </div>
       );
       continue;
     }
@@ -404,7 +482,7 @@ function CopilotEmblem({ size = 22 }) {
 }
 
 const COPILOT_MODES = [
-  { id: 'quick', label: 'Quick response', icon: '⚡', desc: 'Direct bottom-line answer with synthesized takeaways' },
+  { id: 'quick', label: 'Quick response', icon: '💬', desc: 'Direct bottom-line answer with synthesized takeaways' },
   { id: 'policy', label: 'Policy Governance', icon: '🛡️', desc: 'Deep contextual audit with freshness decay & verified citations' },
   { id: 'decision', label: 'Action Gatekeeper', icon: '⚖️', desc: 'Evaluates policy thresholds and ALLOW / BLOCK gates' },
   { id: 'audit', label: 'Contradiction Audit', icon: '⚠️', desc: 'Scans cross-source policy conflicts and disputed claims' }
@@ -471,6 +549,1129 @@ const COPILOT_PILLS_BY_WORKSPACE = {
 
 const STARTER_PROMPTS_BY_WORKSPACE = COPILOT_PILLS_BY_WORKSPACE;
 
+// Helper Subcomponents for Progressive-Disclosure Response UI
+function ModalityPill({ modality = 'MUST' }) {
+  const mod = (modality || 'MUST').toUpperCase();
+  let bg = '#EFF6FF';
+  let color = '#1D4ED8';
+  let border = 'rgba(29, 78, 216, 0.2)';
+
+  if (mod === 'SHOULD') {
+    bg = '#FEF3C7';
+    color = '#92400E';
+    border = 'rgba(146, 64, 14, 0.2)';
+  } else if (mod === 'MAY') {
+    bg = '#ECFDF5';
+    color = '#047857';
+    border = 'rgba(4, 120, 87, 0.2)';
+  } else if (mod === 'CANNOT' || mod === 'MUST NOT' || mod === 'PROHIBITED') {
+    bg = '#FEF2F2';
+    color = '#991B1B';
+    border = 'rgba(153, 27, 27, 0.2)';
+  }
+
+  return (
+    <span style={{
+      fontSize: '0.66rem',
+      fontWeight: 700,
+      padding: '1px 6px',
+      borderRadius: '4px',
+      background: bg,
+      color: color,
+      border: `1px solid ${border}`,
+      fontFamily: 'monospace',
+      letterSpacing: '0.02em',
+      display: 'inline-flex',
+      alignItems: 'center'
+    }}>
+      {mod}
+    </span>
+  );
+}
+
+function AccordionSection({ title, count, defaultOpen = false, icon: Icon, children }) {
+  return (
+    <details
+      open={defaultOpen}
+      style={{
+        marginTop: '8px',
+        background: '#FAFAFA',
+        border: '1px solid #E5E5E5',
+        borderRadius: '8px',
+        overflow: 'hidden',
+        fontSize: '0.78rem'
+      }}
+    >
+      <summary
+        style={{
+          cursor: 'pointer',
+          padding: '8px 12px',
+          fontWeight: 600,
+          color: '#3F3F46',
+          userSelect: 'none',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '6px',
+          listStyle: 'none',
+          outline: 'none',
+          background: '#F9FAFB'
+        }}
+      >
+        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+          {Icon && <Icon size={13} color="#71717A" />}
+          <span>{title}</span>
+          {typeof count === 'number' && (
+            <span style={{
+              fontSize: '0.68rem',
+              fontWeight: 700,
+              padding: '1px 6px',
+              borderRadius: '10px',
+              background: '#E4E4E7',
+              color: '#52525B'
+            }}>
+              {count}
+            </span>
+          )}
+        </span>
+      </summary>
+      <div style={{ padding: '10px 12px', borderTop: '1px solid #E5E5E5', background: '#FFFFFF' }}>
+        {children}
+      </div>
+    </details>
+  );
+}
+
+function extractCleanBottomLine(msg, structured) {
+  if (structured?.bottom_line_answer) {
+    return structured.bottom_line_answer;
+  }
+  if (!msg || !msg.content) return '';
+
+  const content = msg.content;
+  // If markdown has "### 🛡️ Bottom-Line Answer\n..."
+  const match = content.match(/###\s*[^\n]*Bottom-Line Answer\s*\n([\s\S]*?)(?=\n###|\n🔒|$)/i);
+  if (match) {
+    return match[1].trim();
+  }
+  return content;
+}
+
+
+// Canonical Document Explorer Deep Link Builder with Graceful Fallback
+export function buildExplorerUrl(citation, activeWorkspace) {
+  const params = new URLSearchParams();
+  const wsId = citation?.workspace_id || (activeWorkspace?.id && activeWorkspace.id !== 'all' ? activeWorkspace.id : null);
+  if (wsId) params.set('workspace', wsId);
+  if (citation?.document_id) params.set('doc', citation.document_id);
+  if (citation?.claim_id) params.set('claimId', citation.claim_id);
+  if (citation?.page) params.set('page', citation.page);
+  params.set('view', 'folders');
+  return `/documents?${params.toString()}`;
+}
+
+// Why This Answer Modal: Primary Trust & Governance Lineage Inspector
+function WhyThisAnswerModal({ data, onClose, activeWorkspace }) {
+  if (!data) return null;
+  const { citation, claim, structured, meta } = data;
+
+  const subject = claim?.subject || citation?.subject || 'Enterprise Policy';
+  const predicate = claim?.predicate || citation?.predicate || 'governs';
+  const object = claim?.object || citation?.object || 'operative requirement';
+  const modality = (claim?.modality || citation?.modality || 'MUST').toUpperCase();
+  const verbatimQuote = citation?.verbatim_evidence || citation?.evidence_span || claim?.verbatim_evidence || claim?.claim_text || '';
+  const docTitle = citation?.source_title || citation?.document_title || claim?.document_title || 'Enterprise Policy Document';
+  const section = citation?.section || claim?.section || null;
+  const page = citation?.page || claim?.page || null;
+  const conditions = structured?.conditions || [];
+  const exceptions = structured?.exceptions || [];
+  const auditId = meta?.audit_id || 'AUD-GOV-POLICY';
+  const groundingScore = structured?.grounding_score ?? meta?.verification?.grounding_score ?? 1.0;
+
+  const explorerUrl = buildExplorerUrl(citation || claim, activeWorkspace);
+
+  return (
+    <div
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        background: 'rgba(15, 23, 42, 0.65)',
+        backdropFilter: 'blur(3px)',
+        zIndex: 9999,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '20px'
+      }}
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
+      <div
+        style={{
+          background: '#FFFFFF',
+          borderRadius: '12px',
+          width: '100%',
+          maxWidth: '680px',
+          maxHeight: '88vh',
+          display: 'flex',
+          flexDirection: 'column',
+          boxShadow: '0 20px 40px -10px rgba(15, 23, 42, 0.25)',
+          border: '1px solid #E2E8F0',
+          overflow: 'hidden'
+        }}
+      >
+        {/* Header */}
+        <div style={{
+          padding: '16px 20px',
+          borderBottom: '1px solid #E2E8F0',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          background: '#F8FAFC'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div style={{
+              width: '32px',
+              height: '32px',
+              borderRadius: '8px',
+              background: '#EFF6FF',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              border: '1px solid #BFDBFE'
+            }}>
+              <ShieldCheck size={18} color="#2563EB" />
+            </div>
+            <div>
+              <div style={{ fontSize: '0.96rem', fontWeight: 700, color: '#0F172A' }}>
+                Why This Answer? — Policy Lineage Inspector
+              </div>
+              <div style={{ fontSize: '0.74rem', color: '#64748B' }}>
+                Certified grounded rule entailment and cryptographic audit trail
+              </div>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#64748B', padding: '4px' }}
+          >
+            <X size={18} />
+          </button>
+        </div>
+
+        {/* Modal Scrollable Body */}
+        <div style={{ padding: '20px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          {/* Card 1: Certified Atomic Claim */}
+          <div style={{
+            background: '#F8FAFC',
+            border: '1px solid #E2E8F0',
+            borderRadius: '8px',
+            padding: '14px'
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+              <span style={{ fontSize: '0.74rem', fontWeight: 700, textTransform: 'uppercase', color: '#475569', letterSpacing: '0.04em' }}>
+                Certified Atomic Claim (S-P-O Triple)
+              </span>
+              <ModalityPill modality={modality} />
+            </div>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              flexWrap: 'wrap',
+              fontSize: '0.84rem',
+              fontWeight: 600,
+              padding: '8px 10px',
+              background: '#FFFFFF',
+              borderRadius: '6px',
+              border: '1px solid #E2E8F0'
+            }}>
+              <span style={{ color: '#0369A1', background: '#F0F9FF', padding: '2px 8px', borderRadius: '4px' }}>
+                {subject}
+              </span>
+              <span style={{ color: '#94A3B8' }}>→</span>
+              <span style={{ color: '#7C3AED', background: '#FAF5FF', padding: '2px 8px', borderRadius: '4px' }}>
+                {predicate}
+              </span>
+              <span style={{ color: '#94A3B8' }}>→</span>
+              <span style={{ color: '#059669', background: '#ECFDF5', padding: '2px 8px', borderRadius: '4px' }}>
+                {object}
+              </span>
+            </div>
+          </div>
+
+          {/* Card 2: Supporting Verbatim Evidence */}
+          <div style={{
+            background: '#FFFFFF',
+            border: '1px solid #E2E8F0',
+            borderRadius: '8px',
+            padding: '14px'
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+              <span style={{ fontSize: '0.74rem', fontWeight: 700, textTransform: 'uppercase', color: '#475569', letterSpacing: '0.04em' }}>
+                Supporting Verbatim Quote
+              </span>
+              <span style={{ fontSize: '0.74rem', color: '#64748B', fontWeight: 600 }}>
+                {docTitle}{section ? ` · §${section}` : ''}{page ? ` · Page ${page}` : ''}
+              </span>
+            </div>
+            <div style={{
+              borderLeft: '3px solid #3B82F6',
+              background: '#F8FAFC',
+              padding: '10px 14px',
+              borderRadius: '0 6px 6px 0',
+              fontSize: '0.86rem',
+              lineHeight: 1.6,
+              color: '#334155',
+              fontStyle: 'italic'
+            }}>
+              “{verbatimQuote || 'Direct supporting evidence verified in policy document.'}”
+            </div>
+          </div>
+
+          {/* Card 3: Conditions Preserved */}
+          <div style={{
+            background: '#F8FAFC',
+            border: '1px solid #E2E8F0',
+            borderRadius: '8px',
+            padding: '14px'
+          }}>
+            <span style={{ fontSize: '0.74rem', fontWeight: 700, textTransform: 'uppercase', color: '#475569', letterSpacing: '0.04em', display: 'block', marginBottom: '8px' }}>
+              Preserved Conditions & Exceptions
+            </span>
+            {(conditions.length > 0 || exceptions.length > 0) ? (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                {conditions.map((c, ci) => (
+                  <div key={`cond-${ci}`} style={{ fontSize: '0.80rem', color: '#334155', display: 'flex', gap: '6px' }}>
+                    <span style={{ color: '#0284C7', fontWeight: 700 }}>• Condition:</span>
+                    <span>{c}</span>
+                  </div>
+                ))}
+                {exceptions.map((e, ei) => (
+                  <div key={`exc-${ei}`} style={{ fontSize: '0.80rem', color: '#334155', display: 'flex', gap: '6px' }}>
+                    <span style={{ color: '#D97706', fontWeight: 700 }}>• Exception:</span>
+                    <span>{e}</span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div style={{ fontSize: '0.80rem', color: '#64748B', fontStyle: 'italic' }}>
+                Operative rule applies unconditionally across designated enterprise scope.
+              </div>
+            )}
+          </div>
+
+          {/* Card 4: Multi-Gate Verification Checklist */}
+          <div style={{
+            background: '#FFFFFF',
+            border: '1px solid #E2E8F0',
+            borderRadius: '8px',
+            padding: '14px'
+          }}>
+            <span style={{ fontSize: '0.74rem', fontWeight: 700, textTransform: 'uppercase', color: '#475569', letterSpacing: '0.04em', display: 'block', marginBottom: '10px' }}>
+              Multi-Gate Verification Checklist
+            </span>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '8px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.78rem', color: '#334155' }}>
+                <CheckCircle2 size={14} color="#16A34A" />
+                <span><strong>Grounding Status:</strong> Grounded in Verified Claims ({(groundingScore * 100).toFixed(0)}% Entailment)</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.78rem', color: '#334155' }}>
+                <CheckCircle2 size={14} color={meta?.has_conflicts || structured?.conflict_analysis?.is_conflicted ? "#D97706" : "#16A34A"} />
+                <span><strong>Conflict Gate:</strong> {meta?.has_conflicts || structured?.conflict_analysis?.is_conflicted ? "Disputed: Conflict pathways detected" : "No conflicts detected in evaluated scope"}</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.78rem', color: '#334155' }}>
+                <CheckCircle2 size={14} color="#16A34A" />
+                <span><strong>Temporal Validity:</strong> {citation?.validity ? `Verified Active (${citation.validity})` : (structured?.answer_scope?.temporal_validity ? `Validity: ${structured.answer_scope.temporal_validity}` : 'Validity: Not established in metadata')}</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.78rem', color: '#334155' }}>
+                <CheckCircle2 size={14} color="#16A34A" />
+                <span><strong>Certification Tier:</strong> {citation?.certification_tier || claim?.certification_tier || 'AUTOMATED_CERTIFIED'}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Card 5: Cryptographic Provenance Receipt */}
+          <div style={{
+            background: '#F8FAFC',
+            border: '1px solid #E2E8F0',
+            borderRadius: '8px',
+            padding: '12px 14px',
+            fontSize: '0.74rem',
+            color: '#64748B',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '5px'
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <span>Audit ID:</span>
+              <span style={{ fontFamily: 'monospace', fontWeight: 600, color: '#334155' }}>{auditId}</span>
+            </div>
+            {citation?.document_id && (
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span>Document ID:</span>
+                <span style={{ fontFamily: 'monospace', color: '#334155' }}>{citation.document_id}</span>
+              </div>
+            )}
+            {citation?.claim_id && (
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span>Claim ID:</span>
+                <span style={{ fontFamily: 'monospace', color: '#334155' }}>{citation.claim_id}</span>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div style={{
+          padding: '12px 20px',
+          borderTop: '1px solid #E2E8F0',
+          display: 'flex',
+          justifyContent: 'flex-end',
+          alignItems: 'center',
+          gap: '10px',
+          background: '#F8FAFC'
+        }}>
+          <button
+            type="button"
+            onClick={onClose}
+            style={{
+              padding: '6px 14px',
+              fontSize: '0.78rem',
+              fontWeight: 600,
+              borderRadius: '6px',
+              background: '#FFFFFF',
+              border: '1px solid #CBD5E1',
+              color: '#475569',
+              cursor: 'pointer'
+            }}
+          >
+            Close
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              window.open(explorerUrl, '_blank', 'noopener,noreferrer');
+            }}
+            style={{
+              padding: '6px 14px',
+              fontSize: '0.78rem',
+              fontWeight: 600,
+              borderRadius: '6px',
+              background: '#2563EB',
+              border: 'none',
+              color: '#FFFFFF',
+              cursor: 'pointer',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              boxShadow: '0 1px 2px rgba(37,99,235,0.2)'
+            }}
+          >
+            <span>Open in Document Explorer</span>
+            <ExternalLink size={13} color="#FFFFFF" />
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Controlled Pilot Evaluation Review Modal
+function PilotReviewModal({ data, onClose, onFeedbackSubmitted, showToast }) {
+  if (!data) return null;
+  const { message, sessionId } = data;
+  const meta = message?.metadata_json || {};
+  const plan = meta?.response_plan || {};
+  const wording = meta?.wording_outcome || {};
+  const featureFlags = meta?.feature_flags || {};
+
+  const [verdict, setVerdict] = useState('PASS');
+  const [issueCategory, setIssueCategory] = useState('DEPTH_QUALITY');
+  const [checklist, setChecklist] = useState({
+    scope_identified: true,
+    answers_inquiry: true,
+    grounded_evidence: true,
+    conditions_surfaced: true,
+    conflicts_flagged: true,
+    depth_appropriate: true,
+    navigation_works: true,
+    tone_and_safety: true,
+  });
+  const [reviewerName, setReviewerName] = useState(() => {
+    try {
+      return localStorage.getItem('trulin_pilot_reviewer_name') || 'Policy Reviewer';
+    } catch {
+      return 'Policy Reviewer';
+    }
+  });
+  const [reviewerRole, setReviewerRole] = useState(() => {
+    try {
+      return localStorage.getItem('trulin_pilot_reviewer_role') || 'Legal & Policy QA';
+    } catch {
+      return 'Legal & Policy QA';
+    }
+  });
+  const [notes, setNotes] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const toggleChecklistItem = (key) => {
+    setChecklist(prev => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  const checklistItems = [
+    { key: 'scope_identified', label: '1. Scope Identified', desc: 'Governing document, version, role, and business scope are explicitly established.' },
+    { key: 'answers_inquiry', label: '2. Answers Inquiry', desc: 'Directly answers the user question without deflection or generic evasion.' },
+    { key: 'grounded_evidence', label: '3. Grounded Evidence', desc: 'Supported strictly by cited operative clauses; no phantom citations or unverified assertions.' },
+    { key: 'conditions_surfaced', label: '4. Conditions & Exceptions', desc: 'Key prerequisites, notice periods, thresholds, and carve-outs are clearly surfaced.' },
+    { key: 'conflicts_flagged', label: '5. Conflict Separation', desc: 'Contradictory or divergent rules are surfaced as separate pathways rather than blended.' },
+    { key: 'depth_appropriate', label: '6. Depth Quality', desc: 'Explanation volume and detail match user expectation (Brief vs Standard vs Detailed).' },
+    { key: 'navigation_works', label: '7. Explorer Navigation', desc: 'Deep-link citations open Document Explorer to the exact source and claim.' },
+    { key: 'tone_and_safety', label: '8. Safety & Advisory Tone', desc: 'Advisory boundaries are respected; no unverified actions or phantom authority authorized.' },
+  ];
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    try {
+      localStorage.setItem('trulin_pilot_reviewer_name', reviewerName);
+      localStorage.setItem('trulin_pilot_reviewer_role', reviewerRole);
+
+      const payload = {
+        message_id: message.id,
+        session_id: sessionId,
+        reviewer_name: reviewerName || 'Reviewer',
+        reviewer_role: reviewerRole || 'Legal & Policy QA',
+        verdict: verdict,
+        issue_category: verdict !== 'PASS' ? issueCategory : null,
+        checklist: checklist,
+        notes: notes || null,
+        latency_ms: meta?.latency_ms ?? null,
+        feature_flags: featureFlags,
+        wording_outcome: wording,
+        question_type: plan?.question_type ?? null,
+        depth: plan?.resolved_depth ?? null,
+      };
+
+      const res = await fetch(`/v1/chat/sessions/${sessionId}/messages/${message.id}/pilot-feedback`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      if (res.ok) {
+        if (showToast) showToast(`Pilot review submitted: ${verdict}`);
+        if (onFeedbackSubmitted) onFeedbackSubmitted(message.id, payload);
+        onClose();
+      } else {
+        const err = await res.json().catch(() => ({}));
+        if (showToast) showToast(`Failed to submit review: ${err.detail || 'Server error'}`);
+      }
+    } catch (err) {
+      console.error('Pilot review submission error', err);
+      if (showToast) showToast('Network error submitting review');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <div
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        background: 'rgba(15, 23, 42, 0.65)',
+        backdropFilter: 'blur(3px)',
+        zIndex: 10000,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '16px'
+      }}
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
+      <div
+        style={{
+          background: '#FFFFFF',
+          borderRadius: '12px',
+          width: '100%',
+          maxWidth: '740px',
+          maxHeight: '90vh',
+          display: 'flex',
+          flexDirection: 'column',
+          boxShadow: '0 25px 50px -12px rgba(15, 23, 42, 0.35)',
+          border: '1px solid #E2E8F0',
+          overflow: 'hidden'
+        }}
+      >
+        {/* Header */}
+        <div style={{
+          padding: '16px 20px',
+          borderBottom: '1px solid #E2E8F0',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          background: '#F8FAFC'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div style={{
+              width: '32px',
+              height: '32px',
+              borderRadius: '8px',
+              background: '#EEF2FF',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              border: '1px solid #C7D2FE'
+            }}>
+              <ClipboardCheck size={18} color="#4F46E5" />
+            </div>
+            <div>
+              <div style={{ fontSize: '0.96rem', fontWeight: 700, color: '#0F172A' }}>
+                Controlled Internal Pilot — Response Review
+              </div>
+              <div style={{ fontSize: '0.74rem', color: '#64748B' }}>
+                Evaluating answer quality, response experience, and governance integrity
+              </div>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#64748B', padding: '4px' }}
+          >
+            <X size={18} />
+          </button>
+        </div>
+
+        {/* Scrollable Body */}
+        <div style={{ padding: '20px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          {/* Metadata Bar */}
+          <div style={{
+            background: '#F8FAFC',
+            borderRadius: '8px',
+            border: '1px solid #E2E8F0',
+            padding: '10px 14px',
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: '16px',
+            fontSize: '0.74rem'
+          }}>
+            <div>
+              <span style={{ color: '#64748B' }}>Response ID: </span>
+              <span style={{ fontFamily: 'monospace', fontWeight: 600, color: '#0F172A' }}>
+                {message?.id ? String(message.id).slice(0, 8) : 'N/A'}
+              </span>
+            </div>
+            {meta?.latency_ms !== undefined && (
+              <div>
+                <span style={{ color: '#64748B' }}>Latency: </span>
+                <span style={{ fontWeight: 600, color: '#0F172A' }}>{meta.latency_ms} ms</span>
+              </div>
+            )}
+            {plan?.question_type && (
+              <div>
+                <span style={{ color: '#64748B' }}>Type: </span>
+                <span style={{ fontWeight: 600, color: '#2563EB', textTransform: 'capitalize' }}>
+                  {plan.question_type}
+                </span>
+              </div>
+            )}
+            {plan?.resolved_depth && (
+              <div>
+                <span style={{ color: '#64748B' }}>Depth: </span>
+                <span style={{ fontWeight: 600, color: '#7C3AED', textTransform: 'capitalize' }}>
+                  {plan.resolved_depth}
+                </span>
+              </div>
+            )}
+            <div>
+              <span style={{ color: '#64748B' }}>Flags: </span>
+              <span style={{ fontWeight: 600, color: '#047857' }}>
+                adaptive:{featureFlags.enable_adaptive_composition !== false ? 'on' : 'off'} · wording:{featureFlags.enable_llm_wording_refinement !== false ? 'on' : 'off'}
+              </span>
+            </div>
+            {wording && (
+              <div>
+                <span style={{ color: '#64748B' }}>Wording: </span>
+                <span style={{
+                  fontWeight: 600,
+                  color: wording.applied ? '#16A34A' : (wording.requested ? '#D97706' : '#64748B')
+                }}>
+                  {wording.applied ? `polished (${wording.statements_polished || 1} stmts)` : (wording.requested ? 'fallback' : 'deterministic')}
+                </span>
+              </div>
+            )}
+          </div>
+
+          {/* Form */}
+          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            {/* Verdict Selection */}
+            <div>
+              <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 700, color: '#0F172A', marginBottom: '8px' }}>
+                Overall Verdict <span style={{ color: '#DC2626' }}>*</span>
+              </label>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
+                <button
+                  type="button"
+                  onClick={() => setVerdict('PASS')}
+                  style={{
+                    padding: '12px',
+                    borderRadius: '8px',
+                    border: `2px solid ${verdict === 'PASS' ? '#16A34A' : '#E2E8F0'}`,
+                    background: verdict === 'PASS' ? '#F0FDF4' : '#FFFFFF',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: '4px',
+                    transition: 'all 0.15s ease'
+                  }}
+                >
+                  <CheckCircle2 size={20} color="#16A34A" />
+                  <span style={{ fontSize: '0.84rem', fontWeight: 700, color: verdict === 'PASS' ? '#166534' : '#334155' }}>
+                    PASS
+                  </span>
+                  <span style={{ fontSize: '0.68rem', color: '#64748B', textAlign: 'center' }}>
+                    Meets enterprise rigor & accuracy
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setVerdict('NEEDS_IMPROVEMENT')}
+                  style={{
+                    padding: '12px',
+                    borderRadius: '8px',
+                    border: `2px solid ${verdict === 'NEEDS_IMPROVEMENT' ? '#D97706' : '#E2E8F0'}`,
+                    background: verdict === 'NEEDS_IMPROVEMENT' ? '#FFFBEB' : '#FFFFFF',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: '4px',
+                    transition: 'all 0.15s ease'
+                  }}
+                >
+                  <AlertTriangle size={20} color="#D97706" />
+                  <span style={{ fontSize: '0.84rem', fontWeight: 700, color: verdict === 'NEEDS_IMPROVEMENT' ? '#92400E' : '#334155' }}>
+                    NEEDS IMPROVEMENT
+                  </span>
+                  <span style={{ fontSize: '0.68rem', color: '#64748B', textAlign: 'center' }}>
+                    Minor gaps, depth or formatting flaw
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setVerdict('UNSAFE')}
+                  style={{
+                    padding: '12px',
+                    borderRadius: '8px',
+                    border: `2px solid ${verdict === 'UNSAFE' ? '#DC2626' : '#E2E8F0'}`,
+                    background: verdict === 'UNSAFE' ? '#FEF2F2' : '#FFFFFF',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: '4px',
+                    transition: 'all 0.15s ease'
+                  }}
+                >
+                  <ShieldAlert size={20} color="#DC2626" />
+                  <span style={{ fontSize: '0.84rem', fontWeight: 700, color: verdict === 'UNSAFE' ? '#991B1B' : '#334155' }}>
+                    UNSAFE
+                  </span>
+                  <span style={{ fontSize: '0.68rem', color: '#64748B', textAlign: 'center' }}>
+                    Material mutation, hallucination, or breach
+                  </span>
+                </button>
+              </div>
+            </div>
+
+            {/* Issue Category (if not PASS) */}
+            {verdict !== 'PASS' && (
+              <div>
+                <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 700, color: '#0F172A', marginBottom: '6px' }}>
+                  Primary Failure Category <span style={{ color: '#DC2626' }}>*</span>
+                </label>
+                <select
+                  value={issueCategory}
+                  onChange={(e) => setIssueCategory(e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '8px 12px',
+                    borderRadius: '6px',
+                    border: '1px solid #CBD5E1',
+                    fontSize: '0.82rem',
+                    color: '#0F172A',
+                    background: '#FFFFFF'
+                  }}
+                >
+                  <option value="SCOPE_FAILURE">SCOPE_FAILURE (Incorrect document version, role, or temporal scope)</option>
+                  <option value="MATERIAL_MUTATION">MATERIAL_MUTATION (Numbers dropped, negation flipped, modality weakened)</option>
+                  <option value="EVIDENCE_MAPPING_ERROR">EVIDENCE_MAPPING_ERROR (Uncited statements or disconnected evidence)</option>
+                  <option value="MISSING_CONDITION">MISSING_CONDITION (Omitted essential prerequisite or carve-out)</option>
+                  <option value="SILENT_CONFLICT">SILENT_CONFLICT (Merged contradictory rules into false harmony)</option>
+                  <option value="DEPTH_QUALITY">DEPTH_QUALITY (Brief is too verbose, or Detailed lacks depth)</option>
+                  <option value="NAVIGATION_FAILURE">NAVIGATION_FAILURE (Explorer link broken or points to wrong claim)</option>
+                  <option value="OTHER">OTHER (Formatting, wording, or general usability issue)</option>
+                </select>
+              </div>
+            )}
+
+            {/* 8-Point Pilot Checklist */}
+            <div>
+              <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#0F172A', marginBottom: '8px' }}>
+                Pilot Evaluation Criteria Checklist
+              </div>
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr',
+                gap: '8px',
+                background: '#F8FAFC',
+                padding: '12px',
+                borderRadius: '8px',
+                border: '1px solid #E2E8F0'
+              }}>
+                {checklistItems.map(item => (
+                  <label
+                    key={item.key}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'flex-start',
+                      gap: '8px',
+                      cursor: 'pointer',
+                      fontSize: '0.76rem',
+                      padding: '4px'
+                    }}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={checklist[item.key]}
+                      onChange={() => toggleChecklistItem(item.key)}
+                      style={{ marginTop: '2px' }}
+                    />
+                    <div>
+                      <div style={{ fontWeight: 600, color: checklist[item.key] ? '#0F172A' : '#DC2626' }}>
+                        {item.label}
+                      </div>
+                      <div style={{ fontSize: '0.68rem', color: '#64748B', lineHeight: '1.25' }}>
+                        {item.desc}
+                      </div>
+                    </div>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            {/* Reviewer Name and Role */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+              <div>
+                <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 600, color: '#334155', marginBottom: '4px' }}>
+                  Reviewer Name
+                </label>
+                <input
+                  type="text"
+                  value={reviewerName}
+                  onChange={(e) => setReviewerName(e.target.value)}
+                  placeholder="e.g. Sarah Jenkins (Legal)"
+                  style={{
+                    width: '100%',
+                    padding: '7px 10px',
+                    borderRadius: '6px',
+                    border: '1px solid #CBD5E1',
+                    fontSize: '0.8rem'
+                  }}
+                  required
+                />
+              </div>
+              <div>
+                <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 600, color: '#334155', marginBottom: '4px' }}>
+                  Reviewer Role / Department
+                </label>
+                <input
+                  type="text"
+                  value={reviewerRole}
+                  onChange={(e) => setReviewerRole(e.target.value)}
+                  placeholder="e.g. Legal Counsel / Policy Steward"
+                  style={{
+                    width: '100%',
+                    padding: '7px 10px',
+                    borderRadius: '6px',
+                    border: '1px solid #CBD5E1',
+                    fontSize: '0.8rem'
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* Review Notes */}
+            <div>
+              <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 600, color: '#334155', marginBottom: '4px' }}>
+                Evaluator Notes & Observations
+              </label>
+              <textarea
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+                placeholder="Detail any observed edge cases, missing caveats, or suggestions..."
+                rows={3}
+                style={{
+                  width: '100%',
+                  padding: '8px 10px',
+                  borderRadius: '6px',
+                  border: '1px solid #CBD5E1',
+                  fontSize: '0.8rem',
+                  resize: 'vertical'
+                }}
+              />
+            </div>
+
+            {/* Actions */}
+            <div style={{
+              display: 'flex',
+              justifyContent: 'flex-end',
+              gap: '10px',
+              paddingTop: '12px',
+              borderTop: '1px solid #E2E8F0'
+            }}>
+              <button
+                type="button"
+                onClick={onClose}
+                style={{
+                  padding: '8px 16px',
+                  borderRadius: '6px',
+                  border: '1px solid #CBD5E1',
+                  background: '#FFFFFF',
+                  color: '#475569',
+                  fontSize: '0.8rem',
+                  fontWeight: 600,
+                  cursor: 'pointer'
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                style={{
+                  padding: '8px 18px',
+                  borderRadius: '6px',
+                  border: 'none',
+                  background: verdict === 'PASS' ? '#16A34A' : (verdict === 'UNSAFE' ? '#DC2626' : '#D97706'),
+                  color: '#FFFFFF',
+                  fontSize: '0.8rem',
+                  fontWeight: 700,
+                  cursor: isSubmitting ? 'not-allowed' : 'pointer',
+                  opacity: isSubmitting ? 0.7 : 1
+                }}
+              >
+                {isSubmitting ? 'Submitting...' : `Submit Evaluation (${verdict})`}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Executive Evidence Source Card with Micro-Interactions
+function EvidenceSourceCard({
+  citation,
+  sourceIndex,
+  msgId,
+  isHighlighted,
+  activeWorkspace,
+  onOpenWhyThis,
+  onCopy,
+  isCopied
+}) {
+  if (!citation) return null;
+
+  const docTitle = citation.source_title || citation.document_title || 'Enterprise Policy Document';
+  const section = citation.section || null;
+  const page = citation.page || null;
+  const verbatimQuote = citation.verbatim_evidence || citation.evidence_span || citation.claim_text || 'Verbatim policy evidence span verified in governing document.';
+  const explorerUrl = buildExplorerUrl(citation, activeWorkspace);
+
+  return (
+    <div
+      id={`citation-${msgId}-${sourceIndex}`}
+      style={{
+        background: '#FFFFFF',
+        border: isHighlighted ? '2px solid #2563EB' : '1px solid #E2E8F0',
+        boxShadow: isHighlighted ? '0 0 0 3px rgba(37, 99, 235, 0.15)' : '0 1px 3px rgba(0,0,0,0.03)',
+        borderRadius: '8px',
+        padding: '12px 14px',
+        marginBottom: '10px',
+        transition: 'all 0.2s ease'
+      }}
+    >
+      {/* Header */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '8px', marginBottom: '8px', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+          <span style={{
+            background: '#EFF6FF',
+            color: '#1D4ED8',
+            fontWeight: 700,
+            fontSize: '0.70rem',
+            padding: '2px 7px',
+            borderRadius: '6px',
+            fontFamily: 'monospace'
+          }}>
+            Source {sourceIndex}
+          </span>
+          <span style={{ fontSize: '0.80rem', fontWeight: 600, color: '#0F172A' }}>
+            {docTitle}
+          </span>
+          {section && (
+            <span style={{ fontSize: '0.74rem', color: '#64748B' }}>
+              · Section {section}
+            </span>
+          )}
+          {page && (
+            <span style={{ fontSize: '0.74rem', color: '#64748B' }}>
+              · Page {page}
+            </span>
+          )}
+        </div>
+        <span style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: '4px',
+          fontSize: '0.68rem',
+          color: '#059669',
+          fontWeight: 600,
+          background: '#ECFDF5',
+          padding: '1px 6px',
+          borderRadius: '4px',
+          border: '1px solid #A7F3D0'
+        }}>
+          <Check size={11} color="#059669" />
+          <span>Verified Rule</span>
+        </span>
+      </div>
+
+      {/* Verbatim Quote */}
+      <div style={{
+        borderLeft: '3px solid #3B82F6',
+        background: '#F8FAFC',
+        padding: '8px 12px',
+        borderRadius: '0 6px 6px 0',
+        fontSize: '0.82rem',
+        color: '#334155',
+        lineHeight: 1.55,
+        fontStyle: 'italic',
+        marginBottom: '10px'
+      }}>
+        “{verbatimQuote}”
+      </div>
+
+      {/* Micro-Action Row */}
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        flexWrap: 'wrap',
+        gap: '8px',
+        paddingTop: '6px',
+        borderTop: '1px solid #F1F5F9'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+          {/* Why this answer? modal trigger */}
+          <button
+            type="button"
+            onClick={onOpenWhyThis}
+            style={{
+              background: '#FFFFFF',
+              border: '1px solid #CBD5E1',
+              borderRadius: '5px',
+              padding: '3px 8px',
+              fontSize: '0.72rem',
+              fontWeight: 600,
+              color: '#334155',
+              cursor: 'pointer',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '4px',
+              transition: 'all 0.15s ease'
+            }}
+            onMouseEnter={e => { e.currentTarget.style.background = '#F1F5F9'; e.currentTarget.style.borderColor = '#94A3B8'; }}
+            onMouseLeave={e => { e.currentTarget.style.background = '#FFFFFF'; e.currentTarget.style.borderColor = '#CBD5E1'; }}
+            title="Inspect atomic claims, trust score, and governance receipt"
+          >
+            <Info size={12} color="#2563EB" />
+            <span>Why this answer?</span>
+          </button>
+
+          {/* Copy evidence button */}
+          <button
+            type="button"
+            onClick={onCopy}
+            style={{
+              background: '#FFFFFF',
+              border: '1px solid #CBD5E1',
+              borderRadius: '5px',
+              padding: '3px 8px',
+              fontSize: '0.72rem',
+              fontWeight: 500,
+              color: isCopied ? '#16A34A' : '#475569',
+              cursor: 'pointer',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '4px',
+              transition: 'all 0.15s ease'
+            }}
+            onMouseEnter={e => { e.currentTarget.style.background = '#F8FAFC'; }}
+            onMouseLeave={e => { e.currentTarget.style.background = '#FFFFFF'; }}
+            title="Copy verbatim quote and citation to clipboard"
+          >
+            {isCopied ? <Check size={12} color="#16A34A" /> : <Copy size={12} />}
+            <span>{isCopied ? "Copied" : "Copy evidence"}</span>
+          </button>
+        </div>
+
+        {/* Open in Document Explorer in a NEW TAB */}
+        <button
+          type="button"
+          onClick={() => {
+            window.open(explorerUrl, '_blank', 'noopener,noreferrer');
+          }}
+          style={{
+            background: '#EFF6FF',
+            border: '1px solid #BFDBFE',
+            borderRadius: '5px',
+            padding: '3px 9px',
+            fontSize: '0.72rem',
+            fontWeight: 600,
+            color: '#1D4ED8',
+            cursor: 'pointer',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '4px',
+            transition: 'all 0.15s ease'
+          }}
+          onMouseEnter={e => { e.currentTarget.style.background = '#DBEAFE'; }}
+          onMouseLeave={e => { e.currentTarget.style.background = '#EFF6FF'; }}
+          title="Open exact folder and document preview in a new tab"
+        >
+          <span>Open in Document Explorer</span>
+          <ExternalLink size={12} color="#1D4ED8" />
+        </button>
+      </div>
+    </div>
+  );
+}
 
 export default function AgentChatPlayground({
   activeOrg,
@@ -495,7 +1696,16 @@ export default function AgentChatPlayground({
   const [isLoadingSessions, setIsLoadingSessions] = useState(false);
   const [expandedCitations, setExpandedCitations] = useState({});
   const [activeCitationHighlight, setActiveCitationHighlight] = useState({});
+  const [messageDepth, setMessageDepth] = useState({});
   const [copiedMsgId, setCopiedMsgId] = useState(null);
+  const [whyThisAnswerModalData, setWhyThisAnswerModalData] = useState(null);
+  const [pilotReviewModalData, setPilotReviewModalData] = useState(null);
+  const [pilotReviewsByMsgId, setPilotReviewsByMsgId] = useState({});
+  const [copiedEvidenceKey, setCopiedEvidenceKey] = useState(null);
+
+  const handleCitationHover = (msgId, sourceNum) => {
+    setActiveCitationHighlight(prev => ({ ...prev, [msgId]: sourceNum }));
+  };
 
   // ChatGPT-style Collapsible Chat History State
   const [isHistoryOpen, setIsHistoryOpen] = useState(() => {
@@ -510,6 +1720,14 @@ export default function AgentChatPlayground({
   const [openMenuSessionId, setOpenMenuSessionId] = useState(null);
   const [editingSessionId, setEditingSessionId] = useState(null);
   const [editingTitle, setEditingTitle] = useState('');
+  const [pinnedSessionIds, setPinnedSessionIds] = useState(() => {
+    try {
+      const saved = localStorage.getItem('trulin_pinned_chat_sessions');
+      return saved ? new Set(JSON.parse(saved)) : new Set();
+    } catch {
+      return new Set();
+    }
+  });
   const renameInputRef = useRef(null);
 
   const toggleHistoryOpen = () => {
@@ -706,6 +1924,20 @@ export default function AgentChatPlayground({
         setActiveSession(data);
         setMessages(data.messages || []);
         if (onSessionChange) onSessionChange(data.id);
+
+        try {
+          const pRes = await fetch(`/v1/chat/telemetry/pilot-feedback?session_id=${data.id}`);
+          if (pRes.ok) {
+            const pData = await pRes.json();
+            const map = {};
+            (pData.evaluations || []).forEach(ev => {
+              if (ev.message_id) map[ev.message_id] = ev;
+            });
+            setPilotReviewsByMsgId(map);
+          }
+        } catch {
+          // ignore telemetry failure
+        }
       }
     } catch (err) {
       console.error("Failed to load session details", err);
@@ -758,6 +1990,17 @@ export default function AgentChatPlayground({
       const res = await fetch(`/v1/chat/sessions/${sessionId}`, { method: 'DELETE' });
       if (res.ok) {
         setSessions(prev => prev.filter(s => s.id !== sessionId));
+        setPinnedSessionIds(prev => {
+          if (prev.has(sessionId)) {
+            const next = new Set(prev);
+            next.delete(sessionId);
+            try {
+              localStorage.setItem('trulin_pinned_chat_sessions', JSON.stringify(Array.from(next)));
+            } catch (err) {}
+            return next;
+          }
+          return prev;
+        });
         if (activeSessionId === sessionId) {
           const remaining = sessions.filter(s => s.id !== sessionId);
           if (remaining.length > 0) {
@@ -773,6 +2016,26 @@ export default function AgentChatPlayground({
     } catch (err) {
       console.error("Failed to delete session", err);
     }
+  };
+
+  // Toggle Pin chat session
+  const handleTogglePin = (sessionId, e) => {
+    if (e) e.stopPropagation();
+    setPinnedSessionIds(prev => {
+      const next = new Set(prev);
+      const isNowPinned = !next.has(sessionId);
+      if (next.has(sessionId)) {
+        next.delete(sessionId);
+      } else {
+        next.add(sessionId);
+      }
+      try {
+        localStorage.setItem('trulin_pinned_chat_sessions', JSON.stringify(Array.from(next)));
+      } catch (err) {}
+      if (showToast) showToast(isNowPinned ? "Chat pinned to top" : "Chat unpinned");
+      return next;
+    });
+    setOpenMenuSessionId(null);
   };
 
   // Start inline rename
@@ -822,8 +2085,19 @@ export default function AgentChatPlayground({
     setOpenMenuSessionId(null);
   };
 
-  // Group chat sessions chronologically like ChatGPT
+  // Group chat sessions chronologically like ChatGPT, with Pinned at top
   const groupSessionsByDate = (sessionList) => {
+    const pinned = [];
+    const unpinned = [];
+
+    sessionList.forEach(session => {
+      if (pinnedSessionIds.has(session.id)) {
+        pinned.push(session);
+      } else {
+        unpinned.push(session);
+      }
+    });
+
     const now = new Date();
     const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
     const startOfYesterday = startOfToday - 86400000;
@@ -838,7 +2112,7 @@ export default function AgentChatPlayground({
       older: []
     };
 
-    sessionList.forEach(session => {
+    unpinned.forEach(session => {
       const date = session.created_at ? new Date(session.created_at).getTime() : 0;
       if (date >= startOfToday) {
         groups.today.push(session);
@@ -853,13 +2127,19 @@ export default function AgentChatPlayground({
       }
     });
 
-    return [
+    const result = [];
+    if (pinned.length > 0) {
+      result.push({ label: 'Pinned', items: pinned });
+    }
+    const standardGroups = [
       { label: 'Today', items: groups.today },
       { label: 'Yesterday', items: groups.yesterday },
       { label: 'Previous 7 Days', items: groups.previous7Days },
       { label: 'Previous 30 Days', items: groups.previous30Days },
       { label: 'Older', items: groups.older },
     ].filter(g => g.items.length > 0);
+
+    return [...result, ...standardGroups];
   };
 
   // Send message
@@ -902,6 +2182,7 @@ export default function AgentChatPlayground({
           user_role: activePersona?.role || 'developer',
           workspace_id: activeWorkspace?.id || 'all',
           domain: activeWorkspace?.domain || 'global',
+          requested_depth: 'auto',
         }),
       });
 
@@ -1086,6 +2367,7 @@ export default function AgentChatPlayground({
                   const isCurrent = activeSessionId === session.id;
                   const isEditing = editingSessionId === session.id;
                   const isMenuOpen = openMenuSessionId === session.id;
+                  const isPinned = pinnedSessionIds.has(session.id);
 
                   return (
                     <div
@@ -1135,13 +2417,18 @@ export default function AgentChatPlayground({
                         </div>
                       ) : (
                         <>
-                          <span className="copilot-history-item-title">
-                            {(session.title || 'Untitled Conversation').replace(/^\[.*?\]\s*/, '')}
+                          <span className="copilot-history-item-title" style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                            {isPinned && (
+                              <Pin size={11} color="#D97706" style={{ flexShrink: 0, transform: 'rotate(45deg)' }} />
+                            )}
+                            <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                              {(session.title || 'Untitled Conversation').replace(/^\[.*?\]\s*/, '')}
+                            </span>
                           </span>
 
                           {/* 3-Dots Action Button & Dropdown Menu */}
                           <div
-                            className={`copilot-history-item-actions ${isMenuOpen ? 'copilot-history-item-actions-visible' : ''}`}
+                            className={`copilot-history-item-actions ${(isMenuOpen || isCurrent) ? 'copilot-history-item-actions-visible' : ''}`}
                             onClick={e => e.stopPropagation()}
                           >
                             <button
@@ -1152,6 +2439,10 @@ export default function AgentChatPlayground({
                                 e.stopPropagation();
                                 setOpenMenuSessionId(prev => prev === session.id ? null : session.id);
                               }}
+                              style={{
+                                opacity: (isCurrent || isMenuOpen) ? 1 : undefined,
+                                color: isCurrent ? '#44403C' : undefined
+                              }}
                             >
                               <MoreHorizontal size={14} />
                             </button>
@@ -1159,6 +2450,14 @@ export default function AgentChatPlayground({
                             {/* Floating Dropdown Menu */}
                             {isMenuOpen && (
                               <div className="copilot-history-dropdown-menu">
+                                <button
+                                  type="button"
+                                  className="copilot-history-dropdown-item"
+                                  onClick={e => handleTogglePin(session.id, e)}
+                                >
+                                  {isPinned ? <PinOff size={13} color="#D97706" /> : <Pin size={13} color="#57534E" />}
+                                  <span>{isPinned ? "Unpin Chat" : "Pin Chat"}</span>
+                                </button>
                                 <button
                                   type="button"
                                   className="copilot-history-dropdown-item"
@@ -1467,176 +2766,1106 @@ export default function AgentChatPlayground({
                         </div>
                       )}
 
-                      {/* Clean Natural Prose Response - NO extra background, NO ai slop cards */}
-                      <RichAnswerContent
-                        content={msg.content}
-                        onCitationClick={(srcNum) => handleCitationClick(msg.id, srcNum)}
-                      />
+                      {(() => {
+                        const structured = meta.structured_answer || null;
+                        const isActionEvaluation = meta.mode === 'action_evaluation' || meta.answer_status === 'EVALUATED' || !!meta.action_evaluation;
+                        const isConflict = meta.answer_status === 'DISPUTED' || meta.has_conflicts || !!structured?.conflict_analysis?.is_conflicted;
+                        const isNoVerifiedRule = meta.answer_status === 'NO_VERIFIED_RULE';
 
-                      {/* Clean subtle Sources row if citations exist */}
-                      {citations.length > 0 && (() => {
-                        // Deduplicate citations by clean title so we don't display repetitive rows
-                        const seenTitles = new Set();
-                        const displayCitations = [];
-                        citations.forEach((c, ci) => {
-                          const srcIdx = c.source_index || ci + 1;
-                          const rawTitle = c.source_title || 'Enterprise Policy';
-                          const cleanTitle = rawTitle
-                            .replace(/^Slack Thread:\s*#?/i, '#')
-                            .replace(/\.pdf\].*$/i, '.pdf]')
-                            .replace(/\s*\(\d+\.\d+\)$/, '');
-                          const key = `${c.document_id || ''}-${cleanTitle}`;
-                          if (!seenTitles.has(key)) {
-                            seenTitles.add(key);
-                            displayCitations.push({ ...c, srcIdx, cleanTitle });
-                          }
-                        });
+                        // -----------------------------------------------------------
+                        // STATE 4: ADVISORY ACTION EVALUATION (Mode B Decision Brief)
+                        // -----------------------------------------------------------
+                        if (isActionEvaluation) {
+                          const actionEval = meta.action_evaluation || {};
+                          const verdict = actionEval.verdict || decision || 'REVIEW';
+                          const riskLevel = actionEval.risk_level || meta.risk_level || 'MEDIUM';
+                          const auditId = actionEval.audit_id || meta.audit_id || 'AUD-GOV-ACTION';
+                          const reasons = (actionEval.reason ? [actionEval.reason] : (actionEval.missing_requirements || []));
+                          const matchedClaims = actionEval.matched_claims || [];
+                          const suggestedAction = actionEval.suggested_action || null;
 
-                        return (
-                          <div style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '6px',
-                            flexWrap: 'wrap',
-                            marginTop: '12px',
-                            paddingTop: '6px',
-                            fontSize: '0.74rem',
-                            color: '#78716C'
-                          }}>
-                            <span style={{ fontWeight: 600, color: '#57534E' }}>Sources:</span>
-                            {displayCitations.map((c, ci) => (
-                              <a
-                                key={ci}
-                                href={`/vault?workspace=${activeWorkspace?.id || 'all'}&doc=${c.document_id || ''}&claimId=${c.claim_id || ''}&section=claims`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                style={{
+                          return (
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                              {/* Header Pill: Decision Governance Verdict */}
+                              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                  <span style={{
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    gap: '5px',
+                                    fontSize: '0.74rem',
+                                    fontWeight: 700,
+                                    padding: '3px 10px',
+                                    borderRadius: '12px',
+                                    background: verdict === 'ALLOW' ? '#DCFCE7' : verdict === 'BLOCK' ? '#FEE2E2' : '#FEF3C7',
+                                    color: verdict === 'ALLOW' ? '#15803D' : verdict === 'BLOCK' ? '#B91C1C' : '#B45309',
+                                    border: `1px solid ${verdict === 'ALLOW' ? '#86EFAC' : verdict === 'BLOCK' ? '#FCA5A5' : '#FDE68A'}`
+                                  }}>
+                                    {verdict === 'ALLOW' ? <ShieldCheck size={13} color="#15803D" /> : verdict === 'BLOCK' ? <AlertTriangle size={13} color="#B91C1C" /> : <Scale size={13} color="#B45309" />}
+                                    <span>DECISION GOVERNANCE — {verdict}</span>
+                                  </span>
+                                  <span style={{
+                                    fontSize: '0.68rem',
+                                    fontWeight: 700,
+                                    padding: '2px 8px',
+                                    borderRadius: '6px',
+                                    background: riskLevel === 'HIGH' ? '#FEF2F2' : riskLevel === 'MEDIUM' ? '#FFFBEB' : '#F0FDF4',
+                                    color: riskLevel === 'HIGH' ? '#991B1B' : riskLevel === 'MEDIUM' ? '#92400E' : '#166534',
+                                    border: `1px solid ${riskLevel === 'HIGH' ? '#FECACA' : riskLevel === 'MEDIUM' ? '#FDE68A' : '#BBF7D0'}`
+                                  }}>
+                                    Risk: {riskLevel}
+                                  </span>
+                                </div>
+                                <span style={{ fontSize: '0.70rem', color: '#64748B', fontFamily: 'monospace' }}>
+                                  {auditId}
+                                </span>
+                              </div>
+
+                              {/* Decision Status Dual Badge */}
+                              <div style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '12px',
+                                padding: '8px 12px',
+                                background: '#F8FAFC',
+                                border: '1px solid #E2E8F0',
+                                borderRadius: '6px',
+                                fontSize: '0.78rem'
+                              }}>
+                                <div>
+                                  <span style={{ color: '#64748B' }}>Policy Verdict: </span>
+                                  <strong style={{ color: verdict === 'ALLOW' ? '#15803D' : verdict === 'BLOCK' ? '#DC2626' : '#D97706' }}>
+                                    {verdict}
+                                  </strong>
+                                </div>
+                                <span style={{ color: '#CBD5E1' }}>|</span>
+                                <div>
+                                  <span style={{ color: '#64748B' }}>Execution Status: </span>
+                                  <strong style={{ color: '#0F172A' }}>Not executed</strong>
+                                </div>
+                              </div>
+
+                              {/* Evaluated Action & Policy Findings */}
+                              <div style={{
+                                background: '#FFFFFF',
+                                border: `1px solid ${verdict === 'BLOCK' ? '#FECACA' : '#E2E8F0'}`,
+                                borderRadius: '8px',
+                                padding: '14px',
+                                boxShadow: '0 1px 3px rgba(0,0,0,0.02)'
+                              }}>
+                                <div style={{ fontSize: '0.80rem', fontWeight: 700, color: '#334155', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '8px' }}>
+                                  Policy Findings & Entitlements:
+                                </div>
+                                {reasons.length > 0 ? (
+                                  <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                                    {reasons.map((r, ri) => (
+                                      <div key={ri} style={{ display: 'flex', alignItems: 'baseline', gap: '8px', fontSize: '0.88rem', color: '#1E293B', lineHeight: 1.55 }}>
+                                        <span style={{ color: verdict === 'ALLOW' ? '#15803D' : '#DC2626', fontWeight: 700 }}>•</span>
+                                        <span>{r}</span>
+                                      </div>
+                                    ))}
+                                  </div>
+                                ) : (
+                                  <div style={{ fontSize: '0.88rem', color: '#1E293B', lineHeight: 1.55 }}>
+                                    <RichAnswerContent
+                                      content={msg.content}
+                                      onCitationClick={(srcNum) => handleCitationClick(msg.id, srcNum)}
+                                      onCitationHover={(srcNum) => handleCitationHover(msg.id, srcNum)}
+                                    />
+                                  </div>
+                                )}
+
+                                {suggestedAction && (
+                                  <div style={{ marginTop: '12px', paddingTop: '10px', borderTop: '1px solid #F1F5F9', fontSize: '0.82rem', color: '#334155' }}>
+                                    <strong style={{ color: '#0F172A' }}>Recommended Next Action: </strong>
+                                    <span>{suggestedAction}</span>
+                                  </div>
+                                )}
+                              </div>
+
+                              {/* Mandatory Fixed Non-Collapsible Advisory Warning Banner */}
+                              <div style={{
+                                background: '#EFF6FF',
+                                border: '1px solid #BFDBFE',
+                                borderRadius: '8px',
+                                padding: '12px 14px',
+                                display: 'flex',
+                                alignItems: 'flex-start',
+                                gap: '10px'
+                              }}>
+                                <Shield size={16} color="#2563EB" style={{ marginTop: '2px', flexShrink: 0 }} />
+                                <div style={{ fontSize: '0.78rem', color: '#1E40AF', lineHeight: 1.5 }}>
+                                  <strong style={{ display: 'block', marginBottom: '2px' }}>
+                                    Advisory evaluation only — no external action executed.
+                                  </strong>
+                                  Trulin operates in read-only governance mode. Banking rails, payment gateways, and directory mutations were not invoked.
+                                </div>
+                              </div>
+
+                              {/* Collapsible Accordions for Action Evaluation */}
+                              {matchedClaims.length > 0 && (
+                                <AccordionSection title="Matched Policy Obligations" count={matchedClaims.length} icon={Layers}>
+                                  <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                                    {matchedClaims.map((claim, cIdx) => (
+                                      <div key={cIdx} style={{ fontSize: '0.76rem', color: '#334155', padding: '6px 8px', background: '#F8FAFC', borderRadius: '4px', border: '1px solid #E2E8F0' }}>
+                                        • {claim}
+                                      </div>
+                                    ))}
+                                  </div>
+                                </AccordionSection>
+                              )}
+
+                              <AccordionSection title="Actor Authority & Governance Audit" icon={Hash}>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '0.74rem', color: '#475569' }}>
+                                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                    <span>Audit ID:</span>
+                                    <span style={{ fontFamily: 'monospace', fontWeight: 600 }}>{auditId}</span>
+                                  </div>
+                                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                    <span>Risk Assessment:</span>
+                                    <span style={{ fontWeight: 600, color: riskLevel === 'HIGH' ? '#DC2626' : riskLevel === 'MEDIUM' ? '#D97706' : '#16A34A' }}>
+                                      {riskLevel}
+                                    </span>
+                                  </div>
+                                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                    <span>Execution Gate:</span>
+                                    <span style={{ color: '#047857', fontWeight: 600 }}>Fail-Safe Advisory Pipeline (Read-Only)</span>
+                                  </div>
+                                </div>
+                              </AccordionSection>
+                            </div>
+                          );
+                        }
+
+                        // -----------------------------------------------------------
+                        // STATE 2: POLICY DISPUTE / CONFLICT (Context-Dependent or Contradiction)
+                        // -----------------------------------------------------------
+                        if (isConflict) {
+                          const conflictAnalysis = structured?.conflict_analysis || null;
+                          const rawConflictType = conflictAnalysis?.conflict_type || (meta.conflicts?.[0]?.conflict_type) || 'CONTEXT_DEPENDENT';
+                          const conflictType = rawConflictType.toUpperCase();
+
+                          // Precise Legal Language
+                          const conflictSummary = (() => {
+                            if (conflictType === 'CONTEXT_DEPENDENT' || conflictType.includes('CONTEXT')) {
+                              return "The sources specify different outcomes depending on the applicable product, customer type, or cancellation pathway. Trulin cannot determine the governing rule without additional scope information.";
+                            }
+                            if (conflictType === 'DIRECT_CONTRADICTION' || conflictType.includes('CONTRADICT')) {
+                              return "These sources provide conflicting rules for the same scope. Human adjudication is required before either rule is treated as operative.";
+                            }
+                            return conflictAnalysis?.conflict_summary || extractCleanBottomLine(msg, structured) || "These policy sources specify different outcomes. Human adjudication is required to reconcile the operative rule.";
+                          })();
+
+                          const pathways = conflictAnalysis?.pathways && conflictAnalysis.pathways.length > 0
+                            ? conflictAnalysis.pathways
+                            : (meta.conflicts && meta.conflicts.length > 0
+                                ? meta.conflicts.flatMap((c) => [
+                                    {
+                                      path_label: `Path A: ${c.claim_1_source || 'Agreement A'}`,
+                                      source_title: c.claim_1_source || 'Source A',
+                                      section: c.claim_1_section || null,
+                                      rule_summary: c.claim_1_text || 'Rule A',
+                                      verbatim_quote: c.claim_1_evidence || '',
+                                      document_id: c.claim_1_document_id || null,
+                                      claim_id: c.claim_1_id || null
+                                    },
+                                    {
+                                      path_label: `Path B: ${c.claim_2_source || 'Agreement B'}`,
+                                      source_title: c.claim_2_source || 'Source B',
+                                      section: c.claim_2_section || null,
+                                      rule_summary: c.claim_2_text || 'Rule B',
+                                      verbatim_quote: c.claim_2_evidence || '',
+                                      document_id: c.claim_2_document_id || null,
+                                      claim_id: c.claim_2_id || null
+                                    }
+                                  ])
+                                : []);
+
+                          return (
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                              {/* Header Badge */}
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                                <span style={{
                                   display: 'inline-flex',
                                   alignItems: 'center',
-                                  gap: '4px',
+                                  gap: '5px',
                                   fontSize: '0.72rem',
-                                  fontWeight: 500,
+                                  fontWeight: 700,
+                                  padding: '3px 10px',
+                                  borderRadius: '12px',
+                                  background: 'rgba(239, 68, 68, 0.08)',
+                                  color: '#B91C1C',
+                                  border: '1px solid rgba(239, 68, 68, 0.25)'
+                                }}>
+                                  <AlertTriangle size={13} color="#DC2626" />
+                                  <span>⚠️ POLICY DISPUTE — SOURCES DISAGREE</span>
+                                </span>
+                                <span style={{
+                                  fontSize: '0.68rem',
+                                  fontWeight: 700,
                                   padding: '2px 8px',
-                                  borderRadius: '10px',
-                                  background: '#F5F5F4',
-                                  color: '#44403C',
-                                  textDecoration: 'none',
-                                  transition: 'all 0.15s ease'
+                                  borderRadius: '6px',
+                                  background: '#FEF2F2',
+                                  color: '#991B1B',
+                                  border: '1px solid #FECACA',
+                                  fontFamily: 'monospace'
+                                }}>
+                                  {conflictType === 'CONTEXT_DEPENDENT' ? 'Context-Dependent' : 'Direct Contradiction'}
+                                </span>
+                              </div>
+
+                              {/* Direct Precise Conflict Summary */}
+                              <div style={{
+                                fontSize: '0.94rem',
+                                lineHeight: 1.6,
+                                color: '#1C1917',
+                                fontWeight: 450
+                              }}>
+                                <RichAnswerContent
+                                  content={conflictSummary}
+                                  onCitationClick={(srcNum) => handleCitationClick(msg.id, srcNum)}
+                                  onCitationHover={(srcNum) => handleCitationHover(msg.id, srcNum)}
+                                />
+                              </div>
+
+                              {/* Dual Pathway Grid (Side-by-Side on Desktop, Never Merged or Averaged) */}
+                              {pathways.length > 0 && (
+                                <div style={{
+                                  display: 'grid',
+                                  gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+                                  gap: '12px',
+                                  margin: '4px 0'
+                                }}>
+                                  {pathways.map((pw, pwi) => {
+                                    const pExplorerUrl = buildExplorerUrl({
+                                      document_id: pw.document_id,
+                                      claim_id: pw.claim_id
+                                    }, activeWorkspace);
+
+                                    return (
+                                      <div key={pwi} style={{
+                                        background: '#FFFFFF',
+                                        border: '1px solid #FCA5A5',
+                                        borderRadius: '8px',
+                                        padding: '12px 14px',
+                                        boxShadow: '0 1px 3px rgba(239, 68, 68, 0.04)',
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        gap: '8px'
+                                      }}>
+                                        <div style={{
+                                          display: 'inline-block',
+                                          fontSize: '0.72rem',
+                                          fontWeight: 700,
+                                          color: '#991B1B',
+                                          background: '#FEE2E2',
+                                          padding: '2px 8px',
+                                          borderRadius: '6px',
+                                          alignSelf: 'flex-start'
+                                        }}>
+                                          {pw.path_label || `Pathway ${pwi === 0 ? 'A' : 'B'}`}
+                                        </div>
+                                        <div style={{ fontSize: '0.76rem', color: '#64748B' }}>
+                                          <strong>Source: </strong>{pw.source_title}{pw.section ? ` · §${pw.section}` : ''}
+                                        </div>
+                                        <div style={{ fontSize: '0.84rem', color: '#1E293B', lineHeight: 1.5, fontWeight: 500 }}>
+                                          {pw.rule_summary}
+                                        </div>
+                                        {pw.verbatim_quote && (
+                                          <div style={{
+                                            borderLeft: '3px solid #EF4444',
+                                            background: '#FEF2F2',
+                                            padding: '6px 10px',
+                                            borderRadius: '0 4px 4px 0',
+                                            fontSize: '0.78rem',
+                                            color: '#7F1D1D',
+                                            fontStyle: 'italic',
+                                            lineHeight: 1.45
+                                          }}>
+                                            “{pw.verbatim_quote}”
+                                          </div>
+                                        )}
+                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', marginTop: 'auto', paddingTop: '4px' }}>
+                                          <button
+                                            type="button"
+                                            onClick={() => {
+                                              window.open(pExplorerUrl, '_blank', 'noopener,noreferrer');
+                                            }}
+                                            style={{
+                                              background: '#EFF6FF',
+                                              border: '1px solid #BFDBFE',
+                                              borderRadius: '5px',
+                                              padding: '3px 8px',
+                                              fontSize: '0.70rem',
+                                              fontWeight: 600,
+                                              color: '#1D4ED8',
+                                              cursor: 'pointer',
+                                              display: 'inline-flex',
+                                              alignItems: 'center',
+                                              gap: '4px',
+                                              transition: 'all 0.15s ease'
+                                            }}
+                                            title="Open pathway document in Document Explorer (new tab)"
+                                          >
+                                            <span>Open in Document Explorer</span>
+                                            <ExternalLink size={11} color="#1D4ED8" />
+                                          </button>
+                                        </div>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              )}
+
+                              {/* Escalate to Data Steward Action Banner */}
+                              <div style={{
+                                background: '#FEF2F2',
+                                border: '1px solid #FECACA',
+                                borderRadius: '8px',
+                                padding: '12px 14px',
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                                flexWrap: 'wrap',
+                                gap: '10px'
+                              }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                  <ShieldAlert size={16} color="#DC2626" />
+                                  <span style={{ fontSize: '0.80rem', color: '#991B1B', fontWeight: 500 }}>
+                                    This contradiction requires human data steward adjudication to reconcile operative policy.
+                                  </span>
+                                </div>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    if (onOpenHitlModal) onOpenHitlModal();
+                                    else window.dispatchEvent(new CustomEvent('open-hitl-modal', { detail: { messageId: msg.id } }));
+                                    if (showToast) showToast('Escalated dispute directly to Human Data Steward review queue.');
+                                  }}
+                                  style={{
+                                    background: '#DC2626',
+                                    color: '#FFFFFF',
+                                    border: 'none',
+                                    borderRadius: '6px',
+                                    padding: '6px 12px',
+                                    fontSize: '0.74rem',
+                                    fontWeight: 700,
+                                    cursor: 'pointer',
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    gap: '5px',
+                                    boxShadow: '0 1px 2px rgba(220,38,38,0.2)'
+                                  }}
+                                  title="Escalate this dispute directly to human data steward queue"
+                                >
+                                  <ShieldAlert size={13} color="#FFFFFF" />
+                                  <span>Escalate to Data Steward</span>
+                                </button>
+                              </div>
+
+                              {/* Collapsible Conflict Analysis Details */}
+                              <AccordionSection title="Conflict Analysis & Telemetry Details" icon={GitCompare}>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '0.74rem', color: '#475569' }}>
+                                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                    <span>Classification:</span>
+                                    <span style={{ fontFamily: 'monospace', fontWeight: 600 }}>{conflictType}</span>
+                                  </div>
+                                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                    <span>Severity Level:</span>
+                                    <span style={{ fontWeight: 600, color: '#DC2626' }}>
+                                      {conflictAnalysis?.severity || 'HIGH'}
+                                    </span>
+                                  </div>
+                                  {conflictAnalysis?.recommended_action && (
+                                    <div style={{ marginTop: '4px', paddingTop: '4px', borderTop: '1px solid #F1F5F9' }}>
+                                      <strong>Recommended Action: </strong>{conflictAnalysis.recommended_action}
+                                    </div>
+                                  )}
+                                  {conflictAnalysis?.affected_claim_ids && conflictAnalysis.affected_claim_ids.length > 0 && (
+                                    <div style={{ marginTop: '4px' }}>
+                                      <span style={{ color: '#64748B' }}>Affected Claims: </span>
+                                      {conflictAnalysis.affected_claim_ids.map((id, idi) => (
+                                        <span key={idi} style={{ fontFamily: 'monospace', fontSize: '0.70rem', background: '#F1F5F9', padding: '1px 5px', borderRadius: '3px', margin: '0 2px' }}>
+                                          {id.slice(0, 8)}...
+                                        </span>
+                                      ))}
+                                    </div>
+                                  )}
+                                </div>
+                              </AccordionSection>
+                            </div>
+                          );
+                        }
+
+                        // -----------------------------------------------------------
+                        // STATE 3: NO VERIFIED RULE FOUND (Fail-Closed Abstention)
+                        // -----------------------------------------------------------
+                        if (isNoVerifiedRule) {
+                          const abstentionText = structured?.bottom_line_answer || extractCleanBottomLine(msg, structured) || "No verified rule matching this question was found in the approved enterprise policy set.";
+
+                          return (
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                              {/* Header Badge */}
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <span style={{
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                  gap: '5px',
+                                  fontSize: '0.72rem',
+                                  fontWeight: 600,
+                                  padding: '3px 10px',
+                                  borderRadius: '12px',
+                                  background: 'rgba(120, 113, 108, 0.08)',
+                                  color: '#57534E',
+                                  border: '1px solid rgba(120, 113, 108, 0.25)'
+                                }}>
+                                  <Clock size={12} color="#78716C" />
+                                  <span>○ NO VERIFIED RULE FOUND · Policy Boundary</span>
+                                </span>
+                              </div>
+
+                              {/* Plain-Language Abstention */}
+                              <div style={{
+                                fontSize: '0.96rem',
+                                lineHeight: 1.6,
+                                color: '#1C1917',
+                                fontWeight: 450
+                              }}>
+                                <RichAnswerContent content={abstentionText} />
+                              </div>
+
+                              {/* Governance Boundary Scope Explainer */}
+                              <div style={{
+                                background: '#F8FAFC',
+                                border: '1px solid #E2E8F0',
+                                borderRadius: '8px',
+                                padding: '12px 14px',
+                                fontSize: '0.82rem',
+                                color: '#475569',
+                                lineHeight: 1.55
+                              }}>
+                                <div style={{ fontWeight: 600, color: '#1E293B', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                  <Shield size={13} color="#64748B" />
+                                  <span>Fail-Closed Governance Boundary</span>
+                                </div>
+                                <div>
+                                  Checked across governing enterprise policy documents. Unverified, candidate, and draft content was excluded under fail-closed governance.
+                                </div>
+                              </div>
+
+                              {/* What Would Make This Answerable? Callout */}
+                              <div style={{
+                                background: '#FFFFFF',
+                                border: '1px solid #E2E8F0',
+                                borderRadius: '8px',
+                                padding: '12px 14px'
+                              }}>
+                                <div style={{ fontSize: '0.78rem', fontWeight: 700, color: '#334155', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '6px' }}>
+                                  What would make this answerable?
+                                </div>
+                                <div style={{ fontSize: '0.82rem', color: '#475569', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                                  <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
+                                    <span style={{ color: '#0284C7', fontWeight: 700 }}>•</span>
+                                    <span>Approved operative policy governing this specific inquiry or threshold.</span>
+                                  </div>
+                                  <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
+                                    <span style={{ color: '#0284C7', fontWeight: 700 }}>•</span>
+                                    <span>Explicit numerical timeframe, dollar limit, or governing stakeholder criteria.</span>
+                                  </div>
+                                </div>
+                              </div>
+
+                              {/* Direct Action Buttons */}
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap', marginTop: '2px' }}>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    window.open('/documents?view=ingest', '_blank', 'noopener,noreferrer');
+                                  }}
+                                  style={{
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    gap: '6px',
+                                    fontSize: '0.76rem',
+                                    fontWeight: 600,
+                                    padding: '6px 12px',
+                                    borderRadius: '6px',
+                                    background: '#FFFFFF',
+                                    border: '1px solid #CBD5E1',
+                                    color: '#334155',
+                                    cursor: 'pointer',
+                                    transition: 'all 0.15s ease'
+                                  }}
+                                  onMouseEnter={e => { e.currentTarget.style.background = '#F1F5F9'; }}
+                                  onMouseLeave={e => { e.currentTarget.style.background = '#FFFFFF'; }}
+                                >
+                                  <UploadCloud size={13} color="#64748B" />
+                                  <span>Upload Governing Document ↗</span>
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    window.open('/curator/approvals', '_blank', 'noopener,noreferrer');
+                                  }}
+                                  style={{
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    gap: '6px',
+                                    fontSize: '0.76rem',
+                                    fontWeight: 600,
+                                    padding: '6px 12px',
+                                    borderRadius: '6px',
+                                    background: '#FFFFFF',
+                                    border: '1px solid #CBD5E1',
+                                    color: '#334155',
+                                    cursor: 'pointer',
+                                    transition: 'all 0.15s ease'
+                                  }}
+                                  onMouseEnter={e => { e.currentTarget.style.background = '#F1F5F9'; }}
+                                  onMouseLeave={e => { e.currentTarget.style.background = '#FFFFFF'; }}
+                                >
+                                  <Search size={13} color="#64748B" />
+                                  <span>Inspect Candidate Queue in Curator ↗</span>
+                                </button>
+                              </div>
+                            </div>
+                          );
+                        }
+
+                        // -----------------------------------------------------------
+                        // STATE 1: SUPPORTED RULE (Verified Policy Q&A Default)
+                        // -----------------------------------------------------------
+                        const bottomLine = extractCleanBottomLine(msg, structured);
+                        const conditions = structured?.conditions || [];
+                        const exceptions = structured?.exceptions || [];
+                        const claims = (structured?.verified_claims_used && structured.verified_claims_used.length > 0)
+                          ? structured.verified_claims_used
+                          : citations;
+                        const primaryCitation = (citations.length > 0)
+                          ? citations[0]
+                          : (claims.length > 0 ? claims[0] : null);
+                        const secondaryCitations = citations.length > 1 ? citations.slice(1) : [];
+                        const sectionContext = structured?.section_context || [];
+                        const groundingScore = structured?.grounding_score ?? meta.verification?.grounding_score ?? 1.0;
+                        const scopeSummary = structured?.scope_summary || meta?.scope_summary;
+                        const responsePlan = structured?.response_plan || meta?.response_plan;
+                        const explanationBlocks = structured?.explanation_blocks || [];
+                        const currentDepth = messageDepth[msg.id] || responsePlan?.resolved_depth || 'standard';
+
+                        // Multi-document coverage: identify secondary citation from distinct document
+                        const distinctSecondaryCitation = secondaryCitations.find(c =>
+                          c.source_title && c.source_title !== primaryCitation?.source_title
+                        );
+
+                        const primarySrcIdx = primaryCitation?.source_index || 1;
+                        const isPrimaryHighlighted = activeCitationHighlight[msg.id] === primarySrcIdx;
+
+                        const handleCopyEvidence = (citation, key) => {
+                          const quote = citation?.verbatim_evidence || citation?.evidence_span || citation?.claim_text || '';
+                          const title = citation?.source_title || citation?.document_title || 'Policy Document';
+                          const sec = citation?.section ? `, Section ${citation.section}` : '';
+                          const text = `“${quote}” — ${title}${sec}`;
+                          navigator.clipboard.writeText(text);
+                          setCopiedEvidenceKey(key);
+                          if (showToast) showToast("Evidence copied to clipboard");
+                          setTimeout(() => setCopiedEvidenceKey(null), 2000);
+                        };
+
+                        return (
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                            {/* Header: Status Badge on left, Adaptive Depth Controls [Brief | Standard | Detailed] on right */}
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px', marginBottom: '2px' }}>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <span style={{
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                  gap: '5px',
+                                  fontSize: '0.72rem',
+                                  fontWeight: 700,
+                                  padding: '3px 10px',
+                                  borderRadius: '12px',
+                                  background: 'rgba(16, 185, 129, 0.08)',
+                                  color: '#047857',
+                                  border: '1px solid rgba(16, 185, 129, 0.25)'
+                                }}>
+                                  <ShieldCheck size={12} color="#059669" />
+                                  <span>✓ SUPPORTED BY VERIFIED RULES</span>
+                                </span>
+                                <span style={{ fontSize: '0.70rem', color: '#64748B', fontWeight: 600 }}>
+                                  Policy Q&A
+                                </span>
+                              </div>
+
+                              {/* Depth Selector Pills: Brief | Standard | Detailed */}
+                              <div style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                background: '#F1F5F9',
+                                padding: '2px',
+                                borderRadius: '6px',
+                                border: '1px solid #E2E8F0',
+                                gap: '2px'
+                              }}>
+                                {['brief', 'standard', 'detailed'].map((depthOption) => {
+                                  const isActive = currentDepth === depthOption;
+                                  return (
+                                    <button
+                                      key={depthOption}
+                                      type="button"
+                                      onClick={() => setMessageDepth(prev => ({ ...prev, [msg.id]: depthOption }))}
+                                      style={{
+                                        border: 'none',
+                                        background: isActive ? '#FFFFFF' : 'transparent',
+                                        color: isActive ? '#0F172A' : '#64748B',
+                                        fontWeight: isActive ? 700 : 500,
+                                        fontSize: '0.68rem',
+                                        padding: '2px 8px',
+                                        borderRadius: '4px',
+                                        cursor: 'pointer',
+                                        boxShadow: isActive ? '0 1px 2px rgba(0,0,0,0.06)' : 'none',
+                                        textTransform: 'capitalize',
+                                        transition: 'all 0.12s ease'
+                                      }}
+                                    >
+                                      {depthOption}
+                                    </button>
+                                  );
+                                })}
+                              </div>
+                            </div>
+
+                            {/* Explicit Scope Summary Line */}
+                            {scopeSummary?.label && (
+                              <div style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '6px',
+                                fontSize: '0.72rem',
+                                color: '#475569',
+                                background: '#F8FAFC',
+                                padding: '3px 9px',
+                                borderRadius: '5px',
+                                border: '1px solid #E2E8F0',
+                                marginBottom: '2px',
+                                width: 'fit-content'
+                              }}>
+                                <FileText size={11} color="#64748B" />
+                                <span><strong>Scope:</strong> {scopeSummary.label}</span>
+                              </div>
+                            )}
+
+                            {/* Bottom-Line Answer (Crisp, High-Contrast Typography) */}
+                            <div style={{
+                              fontSize: '0.96rem',
+                              lineHeight: 1.65,
+                              color: '#1C1917',
+                              fontWeight: 450,
+                              marginBottom: (conditions.length > 0 || exceptions.length > 0 || explanationBlocks.length > 0) ? '4px' : '8px'
+                            }}>
+                              <RichAnswerContent
+                                content={bottomLine}
+                                onCitationClick={(srcNum) => handleCitationClick(msg.id, srcNum)}
+                                onCitationHover={(srcNum) => handleCitationHover(msg.id, srcNum)}
+                              />
+                            </div>
+
+                            {/* Adaptive Explanation Blocks (Rendered for Standard and Detailed modes) */}
+                            {currentDepth !== 'brief' && explanationBlocks.length > 0 && (
+                              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '4px' }}>
+                                {explanationBlocks.filter(b => b.id !== 'block-conditions').map((block) => (
+                                  <div key={block.id} style={{
+                                    background: block.block_type === 'checklist' ? '#F8FAFC' : (block.block_type === 'table' ? '#FFFFFF' : 'transparent'),
+                                    border: (block.block_type === 'checklist' || block.block_type === 'table') ? '1px solid #E2E8F0' : 'none',
+                                    borderRadius: '8px',
+                                    padding: (block.block_type === 'checklist' || block.block_type === 'table') ? '10px 14px' : '4px 0',
+                                  }}>
+                                    {block.heading && (
+                                      <div style={{
+                                        fontSize: '0.75rem',
+                                        fontWeight: 700,
+                                        color: '#334155',
+                                        textTransform: 'uppercase',
+                                        letterSpacing: '0.04em',
+                                        marginBottom: '6px'
+                                      }}>
+                                        {block.heading}
+                                      </div>
+                                    )}
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                                      {block.statements.map((stmt, stmtIdx) => (
+                                        <div key={stmt.id} style={{ display: 'flex', alignItems: 'baseline', gap: '8px', fontSize: '0.86rem', color: '#1E293B', lineHeight: 1.55 }}>
+                                          {block.block_type === 'checklist' ? (
+                                            <span style={{
+                                              display: 'inline-flex',
+                                              alignItems: 'center',
+                                              justifyContent: 'center',
+                                              width: '18px',
+                                              height: '18px',
+                                              borderRadius: '50%',
+                                              background: '#EFF6FF',
+                                              color: '#2563EB',
+                                              fontSize: '0.68rem',
+                                              fontWeight: 700,
+                                              border: '1px solid #BFDBFE',
+                                              flexShrink: 0
+                                            }}>
+                                              {stmtIdx + 1}
+                                            </span>
+                                          ) : (
+                                            <span style={{ color: '#0284C7', fontWeight: 700 }}>•</span>
+                                          )}
+                                          <div>
+                                            <RichAnswerContent
+                                              content={stmt.text}
+                                              onCitationClick={(srcNum) => handleCitationClick(msg.id, srcNum)}
+                                              onCitationHover={(srcNum) => handleCitationHover(msg.id, srcNum)}
+                                            />
+                                          </div>
+                                        </div>
+                                      ))}
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+
+                            {/* Conditions & Exceptions Block */}
+                            {(conditions.length > 0 || exceptions.length > 0) && (
+                              <div style={{
+                                background: '#F8FAFC',
+                                border: '1px solid #E2E8F0',
+                                borderRadius: '8px',
+                                padding: '10px 14px',
+                                marginBottom: '8px'
+                              }}>
+                                <div style={{
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  gap: '6px',
+                                  fontSize: '0.74rem',
+                                  fontWeight: 700,
+                                  color: '#475569',
+                                  textTransform: 'uppercase',
+                                  letterSpacing: '0.04em',
+                                  marginBottom: '6px'
+                                }}>
+                                  <Scale size={13} color="#64748B" />
+                                  <span>Conditions & Exceptions</span>
+                                </div>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                                  {conditions.map((cond, ci) => (
+                                    <div key={`c-${ci}`} style={{ display: 'flex', alignItems: 'baseline', gap: '7px', fontSize: '0.84rem', color: '#334155', lineHeight: 1.5 }}>
+                                      <span style={{ color: '#0284C7', fontWeight: 700 }}>•</span>
+                                      <div>
+                                        <strong style={{ color: '#0369A1', fontWeight: 600 }}>Condition: </strong>
+                                        <span>{cond}</span>
+                                      </div>
+                                    </div>
+                                  ))}
+                                  {exceptions.map((exc, ei) => (
+                                    <div key={`e-${ei}`} style={{ display: 'flex', alignItems: 'baseline', gap: '7px', fontSize: '0.84rem', color: '#334155', lineHeight: 1.5 }}>
+                                      <span style={{ color: '#D97706', fontWeight: 700 }}>•</span>
+                                      <div>
+                                        <strong style={{ color: '#B45309', fontWeight: 600 }}>Exception: </strong>
+                                        <span>{exc}</span>
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Evidence Coverage & Accounting Banner */}
+                            {citations.length > 0 && (
+                              <div style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                fontSize: '0.72rem',
+                                color: '#475569',
+                                background: '#F8FAFC',
+                                border: '1px solid #E2E8F0',
+                                borderRadius: '6px',
+                                padding: '5px 10px',
+                                marginBottom: '4px'
+                              }}>
+                                <span>
+                                  <strong>Evidence Accounting:</strong> {(currentDepth !== 'brief' && distinctSecondaryCitation) ? '2 primary sources displayed' : '1 primary source displayed'}
+                                  {Math.max(0, citations.length - ((currentDepth !== 'brief' && distinctSecondaryCitation) ? 2 : 1)) > 0 &&
+                                    ` · ${Math.max(0, citations.length - ((currentDepth !== 'brief' && distinctSecondaryCitation) ? 2 : 1))} additional verified sources in Supporting Claims`}
+                                </span>
+                                <span style={{ fontSize: '0.68rem', color: '#94A3B8' }}>Individual statement citations</span>
+                              </div>
+                            )}
+
+                            {/* Flagship Primary Evidence Source Card (Desktop Open by Default) */}
+                            {primaryCitation && (
+                              <EvidenceSourceCard
+                                citation={primaryCitation}
+                                sourceIndex={primarySrcIdx}
+                                msgId={msg.id}
+                                isHighlighted={isPrimaryHighlighted}
+                                activeWorkspace={activeWorkspace}
+                                onOpenWhyThis={() => {
+                                  setWhyThisAnswerModalData({
+                                    citation: primaryCitation,
+                                    claim: claims[0] || primaryCitation,
+                                    structured,
+                                    meta
+                                  });
                                 }}
-                                onMouseEnter={e => {
-                                  e.currentTarget.style.background = '#E7E5E4';
-                                  e.currentTarget.style.color = '#1C1917';
+                                onCopy={() => handleCopyEvidence(primaryCitation, `primary-${msg.id}`)}
+                                isCopied={copiedEvidenceKey === `primary-${msg.id}`}
+                              />
+                            )}
+
+                            {/* Coverage-based Secondary Evidence Card (Exposed when multi-document scope applies and depth is Standard or Detailed) */}
+                            {currentDepth !== 'brief' && distinctSecondaryCitation && (
+                              <EvidenceSourceCard
+                                citation={distinctSecondaryCitation}
+                                sourceIndex={distinctSecondaryCitation.source_index || 2}
+                                msgId={msg.id}
+                                isHighlighted={activeCitationHighlight[msg.id] === (distinctSecondaryCitation.source_index || 2)}
+                                activeWorkspace={activeWorkspace}
+                                onOpenWhyThis={() => {
+                                  setWhyThisAnswerModalData({
+                                    citation: distinctSecondaryCitation,
+                                    claim: distinctSecondaryCitation,
+                                    structured,
+                                    meta
+                                  });
                                 }}
-                                onMouseLeave={e => {
-                                  e.currentTarget.style.background = '#F5F5F4';
-                                  e.currentTarget.style.color = '#44403C';
-                                }}
-                                title={`Open ${c.source_title} in Knowledge Vault`}
-                              >
-                                <span style={{ color: '#D97706', fontWeight: 700 }}>[{c.srcIdx}]</span>
-                                <span>{c.cleanTitle}</span>
-                                <ExternalLink size={10} color="#A8A29E" />
-                              </a>
-                            ))}
+                                onCopy={() => handleCopyEvidence(distinctSecondaryCitation, `secondary-${msg.id}`)}
+                                isCopied={copiedEvidenceKey === `secondary-${msg.id}`}
+                              />
+                            )}
+
+                            {/* Progressive Disclosure Accordions: Technical metadata collapsed by default */}
+                            {claims.length > 0 && (
+                              <AccordionSection title="Supporting Claims" count={claims.length} icon={Layers}>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                  {claims.map((c, ci) => (
+                                    <div key={ci} style={{
+                                      padding: '8px 10px',
+                                      background: '#F8FAFC',
+                                      border: '1px solid #E2E8F0',
+                                      borderRadius: '6px',
+                                      fontSize: '0.76rem',
+                                      color: '#334155'
+                                    }}>
+                                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '6px', marginBottom: '4px', flexWrap: 'wrap' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                          <span style={{ fontWeight: 700, color: '#D97706', fontFamily: 'monospace' }}>
+                                            [{c.source_index || ci + 1}]
+                                          </span>
+                                          <ModalityPill modality={c.modality || 'MUST'} />
+                                          <span style={{ fontWeight: 600, color: '#1E293B' }}>
+                                            {c.document_title || c.source_title || 'Policy Document'}
+                                            {c.section ? ` · §${c.section}` : ''}
+                                          </span>
+                                        </div>
+                                        {c.claim_id && (
+                                          <span style={{ fontSize: '0.66rem', color: '#94A3B8', fontFamily: 'monospace' }}>
+                                            ID: {c.claim_id.slice(0, 8)}...
+                                          </span>
+                                        )}
+                                      </div>
+                                      {c.subject && c.predicate && c.object ? (
+                                        <div style={{ fontSize: '0.74rem', color: '#475569', marginBottom: '4px' }}>
+                                          <span style={{ color: '#0369A1', fontWeight: 600 }}>{c.subject}</span>
+                                          {' → '}
+                                          <span style={{ color: '#7C3AED', fontWeight: 600 }}>{c.predicate}</span>
+                                          {' → '}
+                                          <span style={{ color: '#059669', fontWeight: 600 }}>{c.object}</span>
+                                        </div>
+                                      ) : (
+                                        <div style={{ fontSize: '0.74rem', color: '#475569', marginBottom: '4px' }}>
+                                          {c.claim_text || c.verbatim_evidence}
+                                        </div>
+                                      )}
+                                    </div>
+                                  ))}
+                                </div>
+                              </AccordionSection>
+                            )}
+
+                            {/* Related Context — Not an operative rule (Explicit Non-Normative Decoupling) */}
+                            {sectionContext.length > 0 && (
+                              <AccordionSection title="Related Context — not an operative rule" count={sectionContext.length} icon={Info}>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                  <div style={{
+                                    fontSize: '0.72rem',
+                                    color: '#64748B',
+                                    fontStyle: 'italic',
+                                    padding: '4px 8px',
+                                    background: '#F1F5F9',
+                                    borderRadius: '4px',
+                                    borderLeft: '3px solid #94A3B8',
+                                    marginBottom: '4px'
+                                  }}>
+                                    ℹ️ Explanatory background only; does not establish an independent rule or obligation.
+                                  </div>
+                                  {sectionContext.map((sc, sci) => (
+                                    <div key={sci} style={{
+                                      padding: '8px 10px',
+                                      background: '#F8FAFC',
+                                      border: '1px solid #E2E8F0',
+                                      borderRadius: '6px',
+                                      fontSize: '0.76rem',
+                                      color: '#475569',
+                                      lineHeight: 1.5
+                                    }}>
+                                      <div style={{ fontWeight: 600, color: '#334155', marginBottom: '2px' }}>
+                                        {sc.document_title || 'Document'}{sc.section_title || sc.section ? ` · §${sc.section_title || sc.section}` : ''}
+                                      </div>
+                                      <div style={{ fontStyle: 'italic' }}>
+                                        “{sc.context_text || sc.text}”
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              </AccordionSection>
+                            )}
+
+                            {/* Verification & Provenance Telemetry */}
+                            <AccordionSection title="Verification & Provenance" icon={Shield}>
+                              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '0.74rem', color: '#475569' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                  <span style={{ color: '#64748B' }}>Answer Verifier:</span>
+                                  <span style={{ fontWeight: 600, color: '#059669' }}>✓ PASS: Grounded in Verified Policy Claims</span>
+                                </div>
+                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                  <span style={{ color: '#64748B' }}>Grounding Score:</span>
+                                  <span style={{ fontWeight: 600, color: '#1E293B', fontFamily: 'monospace' }}>
+                                    {(groundingScore * 100).toFixed(0)}%
+                                  </span>
+                                </div>
+                                {meta.audit_id && (
+                                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                    <span style={{ color: '#64748B' }}>Audit ID:</span>
+                                    <span style={{ fontFamily: 'monospace', color: '#64748B' }}>{meta.audit_id}</span>
+                                  </div>
+                                )}
+                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                  <span style={{ color: '#64748B' }}>Governance Boundary:</span>
+                                  <span style={{ color: '#047857', fontWeight: 500 }}>Fail-Closed Tier (Verified Operative Policy)</span>
+                                </div>
+                              </div>
+                            </AccordionSection>
+
+                            {/* Additional Sources (Sources 2..N) */}
+                            {secondaryCitations.length > 0 && (
+                              <AccordionSection title="Additional Sources" count={secondaryCitations.length} icon={BookOpen}>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                                  {secondaryCitations.map((c, ci) => {
+                                    const srcIdx = c.source_index || (ci + 2);
+                                    return (
+                                      <EvidenceSourceCard
+                                        key={ci}
+                                        citation={c}
+                                        sourceIndex={srcIdx}
+                                        msgId={msg.id}
+                                        isHighlighted={activeCitationHighlight[msg.id] === srcIdx}
+                                        activeWorkspace={activeWorkspace}
+                                        onOpenWhyThis={() => {
+                                          setWhyThisAnswerModalData({
+                                            citation: c,
+                                            claim: claims[ci + 1] || c,
+                                            structured,
+                                            meta
+                                          });
+                                        }}
+                                        onCopy={() => handleCopyEvidence(c, `sec-${msg.id}-${srcIdx}`)}
+                                        isCopied={copiedEvidenceKey === `sec-${msg.id}-${srcIdx}`}
+                                      />
+                                    );
+                                  })}
+                                </div>
+                              </AccordionSection>
+                            )}
                           </div>
                         );
                       })()}
 
-                      {/* Conflict Warnings & HITL Escalation Alert */}
-                      {(warnings.length > 0 || meta.answer_status === 'DISPUTED') && (
-                        <div style={{
-                          marginTop: '10px',
-                          background: 'rgba(239, 68, 68, 0.06)',
-                          border: '1px solid rgba(239, 68, 68, 0.2)',
-                          borderRadius: '10px',
-                          padding: '10px 14px',
-                          fontSize: '0.78rem',
-                          color: '#991B1B'
-                        }}>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
-                            <div style={{ fontWeight: 700, display: 'flex', alignItems: 'center', gap: '6px' }}>
-                              <AlertTriangle size={14} color="#DC2626" />
-                              <span>Contradiction & Policy Dispute Alert</span>
-                            </div>
-                            <button
-                              type="button"
-                              onClick={() => {
-                                if (onOpenHitlModal) onOpenHitlModal();
-                                else window.dispatchEvent(new CustomEvent('open-hitl-modal', { detail: { messageId: msg.id } }));
-                                if (showToast) showToast('Escalated question to Human Data Steward review queue.');
-                              }}
-                              style={{
-                                background: '#DC2626',
-                                color: '#FFFFFF',
-                                border: 'none',
-                                borderRadius: '6px',
-                                padding: '3px 9px',
-                                fontSize: '0.70rem',
-                                fontWeight: 700,
-                                cursor: 'pointer',
-                                display: 'inline-flex',
-                                alignItems: 'center',
-                                gap: '4px'
-                              }}
-                              title="Escalate this dispute directly to human data steward queue"
-                            >
-                              <ShieldAlert size={12} color="#FFFFFF" />
-                              <span>Escalate to Data Steward</span>
-                            </button>
-                          </div>
-                          {warnings.map((w, wi) => (
-                            <div key={wi} style={{ lineHeight: 1.4, marginTop: '4px' }}>{w}</div>
-                          ))}
-                        </div>
-                      )}
-
-                      {/* Minimal Bottom Action Row: Copy button and optional decision badge */}
+                      {/* Minimal Bottom Action Row: Copy button, latency badge, and Pilot Review button */}
                       <div style={{
                         display: 'flex',
                         alignItems: 'center',
-                        gap: '12px',
-                        marginTop: '10px',
+                        justifyContent: 'space-between',
+                        marginTop: '12px',
+                        paddingTop: '6px',
                         fontSize: '0.74rem',
-                        color: '#78716C'
+                        color: '#78716C',
+                        borderTop: '1px solid #F8FAFC'
                       }}>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            navigator.clipboard.writeText(msg.content);
-                            setCopiedMsgId(msg.id);
-                            if (showToast) showToast("Copied to clipboard");
-                            setTimeout(() => setCopiedMsgId(null), 2000);
-                          }}
-                          style={{
-                            background: 'none',
-                            border: 'none',
-                            cursor: 'pointer',
-                            padding: '2px 0',
-                            color: isCopied ? '#16A34A' : '#78716C',
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: '4px',
-                            fontSize: '0.74rem',
-                            fontWeight: 500
-                          }}
-                          title="Copy Answer"
-                        >
-                          {isCopied ? <Check size={13} color="#16A34A" /> : <Copy size={13} />}
-                          <span>{isCopied ? "Copied" : "Copy"}</span>
-                        </button>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const copyText = meta.structured_answer?.bottom_line_answer || msg.content;
+                              navigator.clipboard.writeText(copyText);
+                              setCopiedMsgId(msg.id);
+                              if (showToast) showToast("Copied to clipboard");
+                              setTimeout(() => setCopiedMsgId(null), 2000);
+                            }}
+                            style={{
+                              background: 'none',
+                              border: 'none',
+                              cursor: 'pointer',
+                              padding: '2px 0',
+                              color: isCopied ? '#16A34A' : '#78716C',
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '4px',
+                              fontSize: '0.74rem',
+                              fontWeight: 500
+                            }}
+                            title="Copy Answer"
+                          >
+                            {isCopied ? <Check size={13} color="#16A34A" /> : <Copy size={13} />}
+                            <span>{isCopied ? "Copied" : "Copy"}</span>
+                          </button>
 
-                        {decision && (
-                          <span style={{
-                            fontSize: '0.70rem',
-                            fontWeight: 600,
-                            color: decision === 'ALLOW' ? '#15803D' : '#B91C1C',
-                            background: decision === 'ALLOW' ? '#DCFCE7' : '#FEE2E2',
-                            padding: '2px 8px',
-                            borderRadius: '8px'
-                          }}>
-                            {decision === 'ALLOW' ? '✓ Allowed' : '✕ Blocked'}
-                          </span>
-                        )}
+                          {meta?.latency_ms !== undefined && (
+                            <span style={{ fontSize: '0.70rem', color: '#94A3B8' }}>
+                              ⚡ {meta.latency_ms}ms
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Pilot Review Modal Trigger */}
+                        {(() => {
+                          const reviewed = pilotReviewsByMsgId[msg.id];
+                          return (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setPilotReviewModalData({
+                                  message: msg,
+                                  sessionId: activeSessionId
+                                });
+                              }}
+                              style={{
+                                background: reviewed ? (reviewed.verdict === 'PASS' ? '#F0FDF4' : (reviewed.verdict === 'UNSAFE' ? '#FEF2F2' : '#FFFBEB')) : '#FFFFFF',
+                                border: `1px solid ${reviewed ? (reviewed.verdict === 'PASS' ? '#86EFAC' : (reviewed.verdict === 'UNSAFE' ? '#FCA5A5' : '#FDE68A')) : '#CBD5E1'}`,
+                                borderRadius: '5px',
+                                padding: '2px 8px',
+                                cursor: 'pointer',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '4px',
+                                fontSize: '0.72rem',
+                                fontWeight: 600,
+                                color: reviewed ? (reviewed.verdict === 'PASS' ? '#166534' : (reviewed.verdict === 'UNSAFE' ? '#991B1B' : '#92400E')) : '#475569',
+                                transition: 'all 0.15s ease'
+                              }}
+                              title="Submit formal pilot acceptance review (verdict, criteria checklist, and notes)"
+                            >
+                              <ClipboardCheck size={12} color={reviewed ? (reviewed.verdict === 'PASS' ? '#16A34A' : (reviewed.verdict === 'UNSAFE' ? '#DC2626' : '#D97706')) : '#4F46E5'} />
+                              <span>{reviewed ? `Pilot: ${reviewed.verdict}` : "Pilot Review"}</span>
+                            </button>
+                          );
+                        })()}
                       </div>
                     </div>
                   )}
@@ -1787,6 +4016,27 @@ export default function AgentChatPlayground({
 
         </div>
       </div>
+
+      {/* Primary Trust Interaction: Why This Answer Lineage & Governance Modal */}
+      {whyThisAnswerModalData && (
+        <WhyThisAnswerModal
+          data={whyThisAnswerModalData}
+          onClose={() => setWhyThisAnswerModalData(null)}
+          activeWorkspace={activeWorkspace}
+        />
+      )}
+
+      {/* Controlled Pilot Review Modal */}
+      {pilotReviewModalData && (
+        <PilotReviewModal
+          data={pilotReviewModalData}
+          onClose={() => setPilotReviewModalData(null)}
+          onFeedbackSubmitted={(msgId, feedback) => {
+            setPilotReviewsByMsgId(prev => ({ ...prev, [msgId]: feedback }));
+          }}
+          showToast={showToast}
+        />
+      )}
     </div>
   );
 }

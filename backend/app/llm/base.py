@@ -47,3 +47,14 @@ class BaseLLMProvider(ABC):
     ) -> str:
         """Synthesize a factual, grounded answer to query based strictly on verified context claims."""
         pass
+
+    @abstractmethod
+    async def generate_completion(
+        self,
+        prompt: str,
+        system_prompt: str | None = None,
+        max_tokens: int = 300,
+        temperature: float = 0.0,
+    ) -> str:
+        """Generate a raw text completion from the provider."""
+        pass

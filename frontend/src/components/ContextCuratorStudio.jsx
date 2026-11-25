@@ -262,7 +262,7 @@ export default function ContextCuratorStudio({
           .join(', ');
         showToast?.(
           data.auto_resolved_count > 0
-            ? `⚡ Autonomously resolved ${data.auto_resolved_count} conflicts! (${breakdown || 'Precedence rules applied'})`
+            ? `Autonomously resolved ${data.auto_resolved_count} conflicts! (${breakdown || 'Precedence rules applied'})`
             : `Evaluated ${data.total_evaluated} conflicts: All remaining require human auditor review.`,
           'success'
         );
@@ -699,7 +699,7 @@ export default function ContextCuratorStudio({
                           </>
                         ) : (
                           <>
-                            <span>⚡</span>
+                            <span>✓</span>
                             <span>Review & Approve Recommendation</span>
                           </>
                         )}
@@ -947,7 +947,7 @@ export default function ContextCuratorStudio({
                   textAlign: 'center',
                   color: 'var(--text-muted)'
                 }}>
-                  <span style={{ fontSize: '32px' }}>✨</span>
+                  <span style={{ fontSize: '32px' }}>🛡️</span>
                   <h4 style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--text-main)', marginTop: '8px' }}>
                     Zero Pending Governance Issues
                   </h4>
@@ -992,7 +992,7 @@ export default function ContextCuratorStudio({
                               letterSpacing: '0.02em',
                               boxShadow: '0 1px 4px rgba(79,70,229,0.25)'
                             }}>
-                              ⚡ {issue.total_conflicts} CONFLICTS COLLAPSED
+                              {issue.total_conflicts} CONFLICTS COLLAPSED
                             </span>
                             <span className="badge badge-warning" style={{ fontSize: '0.65rem' }}>
                               Severity: {issue.severity?.toUpperCase() || 'HIGH'}
@@ -1057,7 +1057,7 @@ export default function ContextCuratorStudio({
                                 fontSize: '0.66rem',
                                 fontWeight: 800
                               }} title="Lex Specialis: Specific conditional exception carveout coexists with baseline rule">
-                                ⚡ Exception Detected
+                                Exception Detected
                               </span>
                             )}
 
@@ -1312,7 +1312,7 @@ export default function ContextCuratorStudio({
                   textAlign: 'center',
                   color: 'var(--text-muted)'
                 }}>
-                  <span style={{ fontSize: '32px' }}>✨</span>
+                  <span style={{ fontSize: '32px' }}>🛡️</span>
                   <h4 style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--text-main)', marginTop: '8px' }}>
                     Zero Pending Policy Conflicts
                   </h4>
@@ -1554,7 +1554,7 @@ export default function ContextCuratorStudio({
                 gap: '8px'
               }}
             >
-              <span>{driftLoading ? 'Running Background Sweep...' : '⚡ Run Active Drift Sweep'}</span>
+              <span>{driftLoading ? 'Running Background Sweep...' : 'Run Active Drift Sweep'}</span>
             </button>
           </div>
 

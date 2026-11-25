@@ -6,9 +6,12 @@ from typing import Any, Dict, List, Optional
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response, status
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.security import decode_token
 from app.db.database import get_db
+from app.db.models.user import User
 from app.mcp.server import (
     MCP_PROTOCOL_VERSION,
     MCP_SERVER_NAME,
@@ -49,6 +52,127 @@ from app.services.mcp_proxy_service import (
 )
 
 router = APIRouter(prefix="/mcp", tags=["Model Context Protocol (MCP)"])
+
+
+def _extract_mcp_token(request: Request) -> Optional[str]:
+    """Extracts Bearer token or X-MCP-Token header from the incoming HTTP request."""
+    auth_header = request.headers.get("authorization") or request.headers.get("Authorization")
+    if auth_header and auth_header.lower().startswith("bearer "):
+        return auth_header[7:].strip()
+    x_token = request.headers.get("x-mcp-token") or request.headers.get("X-MCP-Token")
+    if x_token:
+        return x_token.strip()
+    return None
+
+
+def require_mcp_token(
+    request: Request,
+    requested_tool: Optional[str] = None,
+    require_admin: bool = False,
+) -> AgentToken:
+    """FastAPI helper that enforces active MCP token authentication, tool entitlement, and optional admin role."""
+    token_str = _extract_mcp_token(request)
+    token_obj = mcp_token_service.resolve_token(token_str or "")
+    if not token_obj:
+        mcp_telemetry_service.record_event(
+            tool_name=requested_tool or request.url.path,
+            arguments={"path": request.url.path},
+            client_type="MCP HTTP Auth",
+            actor_id="unauthenticated",
+            actor_role="none",
+            verdict="BLOCK",
+            trust_score=0.0,
+            latency_ms=0.0,
+            error="Unauthorized: Missing or invalid MCP token",
+            response_summary="Auth denial (401) - raw token not logged",
+        )
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Unauthorized: Missing or invalid MCP token",
+        )
+    if require_admin and (token_obj.role or "").lower() != "admin":
+        mcp_telemetry_service.record_event(
+            tool_name=requested_tool or request.url.path,
+            arguments={"path": request.url.path},
+            client_type="MCP HTTP Auth",
+            actor_id=token_obj.agent_id,
+            actor_role=token_obj.role,
+            verdict="BLOCK",
+            trust_score=0.0,
+            latency_ms=0.0,
+            error="Forbidden: Admin role required",
+            response_summary=f"Admin denial (403) for role '{token_obj.role}'",
+            organization_id=token_obj.organization_id,
+        )
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Forbidden: Admin role required",
+        )
+    if requested_tool and not mcp_token_service.is_tool_allowed(token_obj, requested_tool):
+        mcp_telemetry_service.record_event(
+            tool_name=requested_tool,
+            arguments={"path": request.url.path},
+            client_type="MCP HTTP Auth",
+            actor_id=token_obj.agent_id,
+            actor_role=token_obj.role,
+            verdict="BLOCK",
+            trust_score=0.0,
+            latency_ms=0.0,
+            error=f"Forbidden: Token not authorized for tool '{requested_tool}'",
+            response_summary=f"Tool entitlement denial (403) for '{requested_tool}'",
+            organization_id=token_obj.organization_id,
+        )
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail=f"Forbidden: Token is not authorized for tool '{requested_tool}'",
+        )
+    return token_obj
+
+
+async def require_mcp_or_ui_auth(
+    request: Request,
+    db: AsyncSession,
+    requested_tool: Optional[str] = None,
+    require_admin: bool = False,
+) -> AgentToken:
+    """
+    Authenticates Control-Plane / Studio UI endpoints via either:
+    1) A valid MCP Agent Token (trulin_mcp_*), or
+    2) An authenticated Trulin Web User JWT (ctl_token), preserving audience separation
+       by keeping /v1/mcp and /v1/mcp/sse strictly MCP-token-only.
+    """
+    token_str = _extract_mcp_token(request)
+    if token_str:
+        mcp_tok = mcp_token_service.resolve_token(token_str)
+        if mcp_tok:
+            return require_mcp_token(request, requested_tool=requested_tool, require_admin=require_admin)
+        try:
+            payload = decode_token(token_str)
+            if payload.get("type") == "access" and payload.get("sub"):
+                user_id = uuid.UUID(str(payload["sub"]))
+                res = await db.execute(select(User).where(User.id == user_id))
+                user = res.scalar_one_or_none()
+                if user:
+                    user_role = (user.role.value if hasattr(user.role, "value") else str(user.role or "admin")).lower()
+                    if require_admin and user_role not in ("admin", "owner", "super_admin", "curator"):
+                        raise HTTPException(
+                            status_code=status.HTTP_403_FORBIDDEN,
+                            detail="Forbidden: Admin role required",
+                        )
+                    return AgentToken(
+                        id=f"ui-{user.id}",
+                        name=user.name or user.email,
+                        token="ui-session-jwt",
+                        agent_id=str(user.id),
+                        role=user_role,
+                        allowed_tools=["*"],
+                        organization_id=str(user.organization_id),
+                    )
+        except HTTPException:
+            raise
+        except Exception:
+            pass
+    return require_mcp_token(request, requested_tool=requested_tool, require_admin=require_admin)
 
 
 # -------------------------------------------------------------
@@ -132,12 +256,22 @@ async def list_mcp_tools():
 @router.post("/invoke", response_model=MCPToolInvokeResponse)
 async def invoke_mcp_tool_rest(
     req: MCPToolInvokeRequest,
+    request: Request,
     db: AsyncSession = Depends(get_db),
 ):
     """Invokes an MCP tool directly via RESTful interface with full telemetry instrumentation."""
+    token_obj = await require_mcp_or_ui_auth(request, db, req.tool)
     start_time = time.perf_counter()
     try:
-        res = await execute_mcp_tool(req.tool, req.arguments, db)
+        res = await execute_mcp_tool(
+            req.tool,
+            req.arguments,
+            db,
+            auth_org_id=token_obj.organization_id,
+            auth_workspace_id=token_obj.workspace_id,
+            auth_actor_id=req.actor_id or token_obj.agent_id,
+            auth_actor_role=req.actor_role or token_obj.role,
+        )
         latency = round((time.perf_counter() - start_time) * 1000, 2)
         
         verdict = res.get("decision") or res.get("verdict") or ("ALLOW" if res.get("status") == "success" or res.get("is_safe", True) else "REVIEW")
@@ -148,12 +282,13 @@ async def invoke_mcp_tool_rest(
             tool_name=req.tool,
             arguments=req.arguments,
             client_type=req.client_type or "REST Client",
-            actor_id=req.actor_id or "mcp-agent",
-            actor_role=req.actor_role or "support",
+            actor_id=req.actor_id or token_obj.agent_id,
+            actor_role=req.actor_role or token_obj.role,
             verdict=verdict,
             trust_score=score,
             latency_ms=latency,
             response_summary=f"Executed {req.tool} successfully",
+            organization_id=token_obj.organization_id,
         )
 
         return MCPToolInvokeResponse(
@@ -172,7 +307,8 @@ async def invoke_mcp_tool_rest(
             verdict="ERROR",
             trust_score=0.0,
             latency_ms=latency,
-            error=str(e)
+            error=str(e),
+            organization_id=token_obj.organization_id,
         )
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
     except Exception as e:
@@ -184,7 +320,8 @@ async def invoke_mcp_tool_rest(
             verdict="ERROR",
             trust_score=0.0,
             latency_ms=latency,
-            error=str(e)
+            error=str(e),
+            organization_id=token_obj.organization_id,
         )
         return MCPToolInvokeResponse(
             success=False,
@@ -209,11 +346,18 @@ async def list_resources():
 
 @router.get("/resources/read")
 async def read_resource(
+    request: Request,
     uri: str = Query(..., description="The context:// URI to read"),
     db: AsyncSession = Depends(get_db),
 ):
     """Directly reads and parses an MCP context resource URI."""
-    res = await execute_mcp_resource(uri, db)
+    token_obj = await require_mcp_or_ui_auth(request, db)
+    res = await execute_mcp_resource(
+        uri,
+        db,
+        auth_org_id=token_obj.organization_id,
+        auth_workspace_id=token_obj.workspace_id,
+    )
     return res
 
 
@@ -231,10 +375,12 @@ async def list_prompts():
 @router.post("/prompts/{prompt_name}")
 async def get_prompt_template(
     prompt_name: str,
+    request: Request,
     args: Dict[str, Any] = {},
     db: AsyncSession = Depends(get_db),
 ):
     """Retrieves and hydrates a governed prompt template with given parameters."""
+    await require_mcp_or_ui_auth(request, db)
     try:
         res = await execute_mcp_prompt(prompt_name, args, db)
         return res
@@ -248,12 +394,37 @@ async def get_prompt_template(
 @router.post("")
 async def handle_mcp_jsonrpc(
     rpc_req: JSONRPCRequest,
+    request: Request,
     db: AsyncSession = Depends(get_db),
 ):
     """Standard JSON-RPC 2.0 MCP endpoint compatible with Claude Desktop, Cursor, and SDK clients."""
     method = rpc_req.method
     params = rpc_req.params or {}
     req_id = rpc_req.id
+
+    token_str = _extract_mcp_token(request)
+    token_obj = mcp_token_service.resolve_token(token_str or "")
+    if not token_obj:
+        mcp_telemetry_service.record_event(
+            tool_name=params.get("name") or method,
+            arguments={"method": method},
+            client_type="JSON-RPC Auth",
+            actor_id="unauthenticated",
+            actor_role="none",
+            verdict="BLOCK",
+            trust_score=0.0,
+            latency_ms=0.0,
+            error="Unauthorized: Missing or invalid MCP token",
+            response_summary="JSON-RPC auth denial (-32001) - raw token not logged",
+        )
+        return {
+            "jsonrpc": "2.0",
+            "id": req_id,
+            "error": {
+                "code": -32001,
+                "message": "Unauthorized: Missing or invalid MCP token",
+            },
+        }
 
     # 1. Initialize
     if method == "initialize":
@@ -298,9 +469,39 @@ async def handle_mcp_jsonrpc(
     elif method in ("tools/call", "call_tool"):
         tool_name = params.get("name")
         args = params.get("arguments") or {}
+        if not mcp_token_service.is_tool_allowed(token_obj, tool_name or ""):
+            mcp_telemetry_service.record_event(
+                tool_name=tool_name or "unknown",
+                arguments={"method": method},
+                client_type="JSON-RPC Auth",
+                actor_id=token_obj.agent_id,
+                actor_role=token_obj.role,
+                verdict="BLOCK",
+                trust_score=0.0,
+                latency_ms=0.0,
+                error=f"Forbidden: Token is not authorized for tool '{tool_name}'",
+                response_summary=f"JSON-RPC tool entitlement denial (-32003) for '{tool_name}'",
+                organization_id=token_obj.organization_id,
+            )
+            return {
+                "jsonrpc": "2.0",
+                "id": req_id,
+                "error": {
+                    "code": -32003,
+                    "message": f"Forbidden: Token is not authorized for tool '{tool_name}'",
+                },
+            }
         start_t = time.perf_counter()
         try:
-            tool_res = await execute_mcp_tool(tool_name, args, db)
+            tool_res = await execute_mcp_tool(
+                tool_name,
+                args,
+                db,
+                auth_org_id=token_obj.organization_id,
+                auth_workspace_id=token_obj.workspace_id,
+                auth_actor_id=token_obj.agent_id,
+                auth_actor_role=token_obj.role,
+            )
             latency = round((time.perf_counter() - start_t) * 1000, 2)
             
             verdict = tool_res.get("decision") or tool_res.get("verdict") or ("ALLOW" if tool_res.get("status") == "success" or tool_res.get("is_safe", True) else "REVIEW")
@@ -310,10 +511,13 @@ async def handle_mcp_jsonrpc(
                 tool_name=tool_name,
                 arguments=args,
                 client_type="Claude / Cursor JSON-RPC",
+                actor_id=token_obj.agent_id,
+                actor_role=token_obj.role,
                 verdict=verdict,
                 trust_score=score,
                 latency_ms=latency,
-                response_summary=f"JSON-RPC call executed {tool_name}"
+                response_summary=f"JSON-RPC call executed {tool_name}",
+                organization_id=token_obj.organization_id,
             )
 
             return {
@@ -335,10 +539,13 @@ async def handle_mcp_jsonrpc(
                 tool_name=tool_name,
                 arguments=args,
                 client_type="Claude / Cursor JSON-RPC",
+                actor_id=token_obj.agent_id,
+                actor_role=token_obj.role,
                 verdict="ERROR",
                 trust_score=0.0,
                 latency_ms=latency,
-                error=str(err)
+                error=str(err),
+                organization_id=token_obj.organization_id,
             )
             return {
                 "jsonrpc": "2.0",
@@ -378,7 +585,12 @@ async def handle_mcp_jsonrpc(
     elif method in ("resources/read", "read_resource"):
         uri = params.get("uri", "")
         try:
-            content_res = await execute_mcp_resource(uri, db)
+            content_res = await execute_mcp_resource(
+                uri,
+                db,
+                auth_org_id=token_obj.organization_id,
+                auth_workspace_id=token_obj.workspace_id,
+            )
             return {
                 "jsonrpc": "2.0",
                 "id": req_id,
@@ -462,6 +674,7 @@ async def handle_mcp_jsonrpc(
 @router.get("/sse")
 async def mcp_sse_transport(request: Request):
     """Opens a Server-Sent Events (SSE) streaming channel conforming to MCP spec for remote hosts."""
+    require_mcp_token(request)
     session_id = str(uuid.uuid4())
 
     async def event_generator():
@@ -496,7 +709,7 @@ async def mcp_sse_message_handler(
     """Processes JSON-RPC messages routed through an active SSE session."""
     body = await request.json()
     rpc_req = JSONRPCRequest(**body)
-    return await handle_mcp_jsonrpc(rpc_req, db)
+    return await handle_mcp_jsonrpc(rpc_req, request, db)
 
 
 # -------------------------------------------------------------
@@ -504,12 +717,17 @@ async def mcp_sse_message_handler(
 # -------------------------------------------------------------
 @router.get("/telemetry")
 async def get_mcp_telemetry(
+    request: Request,
     limit: int = Query(50, ge=1, le=200),
     filter: Optional[str] = Query(None),
+    organization_id: Optional[str] = Query(None),
+    db: AsyncSession = Depends(get_db),
 ):
     """Retrieves real-time invocation telemetry, waterfall logs, and health statistics."""
-    events = mcp_telemetry_service.get_events(limit=limit, tool_filter=filter)
-    stats = mcp_telemetry_service.get_stats()
+    token_obj = await require_mcp_or_ui_auth(request, db)
+    effective_org = organization_id if (token_obj.role or "").lower() == "admin" else token_obj.organization_id
+    events = mcp_telemetry_service.get_events(limit=limit, tool_filter=filter, organization_id=effective_org)
+    stats = mcp_telemetry_service.get_stats(organization_id=effective_org)
     return {
         "stats": stats.model_dump(),
         "events": [e.model_dump() for e in events]
@@ -517,8 +735,9 @@ async def get_mcp_telemetry(
 
 
 @router.delete("/telemetry")
-async def clear_mcp_telemetry():
-    """Clears invocation logs."""
+async def clear_mcp_telemetry(request: Request, db: AsyncSession = Depends(get_db)):
+    """Clears invocation logs (admin role required)."""
+    await require_mcp_or_ui_auth(request, db, require_admin=True)
     mcp_telemetry_service.clear()
     return {"status": "cleared"}
 
@@ -528,22 +747,36 @@ async def clear_mcp_telemetry():
 # -------------------------------------------------------------
 @router.get("/tokens")
 async def list_agent_tokens(
+    request: Request,
     organization_id: Optional[str] = Query(None),
+    db: AsyncSession = Depends(get_db),
 ):
-    """Lists all active and revoked Agent MCP API tokens with role entitlements."""
-    tokens = mcp_token_service.list_tokens(organization_id)
+    """Lists all active and revoked Agent MCP API tokens with role entitlements (admin role required)."""
+    token_obj = await require_mcp_or_ui_auth(request, db, require_admin=True)
+    effective_org = organization_id or token_obj.organization_id
+    tokens = mcp_token_service.list_tokens(effective_org)
     return {"tokens": [t.model_dump() for t in tokens]}
 
 
 @router.post("/tokens", response_model=AgentToken)
-async def create_agent_token(req: CreateAgentTokenRequest):
-    """Creates and registers a new scoped Agent API token."""
+async def create_agent_token(
+    req: CreateAgentTokenRequest,
+    request: Request,
+    db: AsyncSession = Depends(get_db),
+):
+    """Creates and registers a new scoped Agent API token (admin role required)."""
+    await require_mcp_or_ui_auth(request, db, require_admin=True)
     return mcp_token_service.create_token(req)
 
 
 @router.delete("/tokens/{token_id}")
-async def revoke_agent_token(token_id: str):
-    """Revokes an agent's MCP access token."""
+async def revoke_agent_token(
+    token_id: str,
+    request: Request,
+    db: AsyncSession = Depends(get_db),
+):
+    """Revokes an agent's MCP access token (admin role required)."""
+    await require_mcp_or_ui_auth(request, db, require_admin=True)
     success = mcp_token_service.revoke_token(token_id)
     if not success:
         raise HTTPException(status_code=404, detail="Token not found")
@@ -561,14 +794,24 @@ async def list_proxy_tools():
 
 
 @router.post("/proxies", response_model=ThirdPartyToolDefinition)
-async def register_proxy_tool(tool: ThirdPartyToolDefinition):
-    """Registers a new external MCP tool to be proxied and governed."""
+async def register_proxy_tool(
+    tool: ThirdPartyToolDefinition,
+    request: Request,
+    db: AsyncSession = Depends(get_db),
+):
+    """Registers a new external MCP tool to be proxied and governed (admin role required)."""
+    await require_mcp_or_ui_auth(request, db, require_admin=True)
     return mcp_proxy_service.register_tool(tool)
 
 
 @router.post("/proxies/execute", response_model=ProxyToolExecuteResponse)
-async def execute_proxy_tool(req: ProxyToolExecuteRequest):
+async def execute_proxy_tool(
+    req: ProxyToolExecuteRequest,
+    request: Request,
+    db: AsyncSession = Depends(get_db),
+):
     """Executes a 3rd-party tool proposal through the zero-trust interception and sandboxing pipeline."""
+    token_obj = await require_mcp_or_ui_auth(request, db)
     try:
         res = await mcp_proxy_service.execute_proxy_tool(req)
         mcp_telemetry_service.record_event(
@@ -580,7 +823,8 @@ async def execute_proxy_tool(req: ProxyToolExecuteRequest):
             verdict=res.guardrail_verdict,
             trust_score=0.95 if res.guardrail_verdict == "PERMIT" else 0.30,
             latency_ms=res.execution_ms,
-            response_summary=f"Executed via {res.provider} proxy wrapper with verdict {res.guardrail_verdict}"
+            response_summary=f"Executed via {res.provider} proxy wrapper with verdict {res.guardrail_verdict}",
+            organization_id=token_obj.organization_id,
         )
         return res
     except ValueError as e:
@@ -591,12 +835,38 @@ async def execute_proxy_tool(req: ProxyToolExecuteRequest):
 # Tool Call Interception & Multi-Step Workflow Endpoints
 # -------------------------------------------------------------
 @router.post("/intercept-tool", response_model=ToolInterceptionResult)
-async def intercept_tool(proposal: ToolCallProposal):
+async def intercept_tool(
+    proposal: ToolCallProposal,
+    request: Request,
+    db: AsyncSession = Depends(get_db),
+):
     """Pre-execution gateway interceptor for AI agent tool invocations."""
-    return await intercept_tool_call(proposal)
+    token_obj = await require_mcp_or_ui_auth(request, db, "context_trust_intercept_tool_call")
+    scoped_proposal = proposal.model_copy(
+        update={
+            "organization_id": token_obj.organization_id,
+            "workspace_id": token_obj.workspace_id,
+        }
+    )
+    res = await intercept_tool_call(scoped_proposal)
+    mcp_telemetry_service.record_event(
+        tool_name=scoped_proposal.tool_name,
+        arguments=scoped_proposal.arguments,
+        client_type="Gateway Interceptor",
+        actor_id=scoped_proposal.actor_id,
+        actor_role=scoped_proposal.actor_role,
+        verdict=res.verdict,
+        trust_score=max(0.0, round(1.0 - (res.risk_score / 100.0), 2)),
+        latency_ms=float(res.execution_ms),
+        response_summary=f"Intercepted {scoped_proposal.tool_name} -> {res.verdict}",
+        organization_id=token_obj.organization_id,
+    )
+    return res
 
 
 @router.post("/workflow/evaluate", response_model=WorkflowPlanEvaluateResponse)
-async def evaluate_workflow(plan: WorkflowPlanEvaluateRequest):
+async def evaluate_workflow(plan: WorkflowPlanEvaluateRequest, request: Request):
     """Evaluates an entire multi-step agent workflow execution plan before tools execute."""
-    return await evaluate_workflow_plan(plan)
+    token_obj = require_mcp_token(request)
+    scoped_plan = plan.model_copy(update={"organization_id": token_obj.organization_id})
+    return await evaluate_workflow_plan(scoped_plan)

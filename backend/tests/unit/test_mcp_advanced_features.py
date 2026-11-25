@@ -4,6 +4,7 @@ from httpx import AsyncClient, ASGITransport
 from app.main import app
 
 DEMO_ORG_ID = "11111111-1111-1111-1111-111111111111"
+ADMIN_MCP_HEADERS = {"Authorization": "Bearer trulin_mcp_claude_live_9a8b7c6d5e4f"}
 
 
 @pytest.mark.asyncio
@@ -34,7 +35,10 @@ async def test_mcp_resources_and_prompts_discovery():
         assert "context://policies/active" in uris
 
         # Read active policies resource
-        read_res = await client.get("/v1/mcp/resources/read?uri=context://policies/active")
+        read_res = await client.get(
+            "/v1/mcp/resources/read?uri=context://policies/active",
+            headers=ADMIN_MCP_HEADERS,
+        )
         assert read_res.status_code == 200
         assert "refund_window_days" in read_res.json()["text"]
 
@@ -49,6 +53,7 @@ async def test_mcp_resources_and_prompts_discovery():
         # Hydrate prompt
         eval_p = await client.post(
             "/v1/mcp/prompts/governed_financial_decision",
+            headers=ADMIN_MCP_HEADERS,
             json={"action_description": "Issue customer discount", "amount_usd": 450}
         )
         assert eval_p.status_code == 200
@@ -60,12 +65,20 @@ async def test_mcp_jsonrpc_resources_and_prompts():
     transport = ASGITransport(app=app)
     async with AsyncClient(transport=transport, base_url="http://test") as client:
         # JSON-RPC resources/list
-        res_list = await client.post("/v1/mcp", json={"jsonrpc": "2.0", "method": "resources/list", "id": 101})
+        res_list = await client.post(
+            "/v1/mcp",
+            headers=ADMIN_MCP_HEADERS,
+            json={"jsonrpc": "2.0", "method": "resources/list", "id": 101},
+        )
         assert res_list.status_code == 200
         assert "resources" in res_list.json()["result"]
 
         # JSON-RPC prompts/list
-        prompt_list = await client.post("/v1/mcp", json={"jsonrpc": "2.0", "method": "prompts/list", "id": 102})
+        prompt_list = await client.post(
+            "/v1/mcp",
+            headers=ADMIN_MCP_HEADERS,
+            json={"jsonrpc": "2.0", "method": "prompts/list", "id": 102},
+        )
         assert prompt_list.status_code == 200
         assert "prompts" in prompt_list.json()["result"]
 
@@ -75,7 +88,7 @@ async def test_mcp_telemetry_and_tokens():
     transport = ASGITransport(app=app)
     async with AsyncClient(transport=transport, base_url="http://test") as client:
         # Telemetry stats & events
-        res_t = await client.get("/v1/mcp/telemetry")
+        res_t = await client.get("/v1/mcp/telemetry", headers=ADMIN_MCP_HEADERS)
         assert res_t.status_code == 200
         data_t = res_t.json()
         assert "stats" in data_t
@@ -83,13 +96,13 @@ async def test_mcp_telemetry_and_tokens():
         assert data_t["stats"]["total_invocations"] >= 1
 
         # Tokens list
-        res_tok = await client.get("/v1/mcp/tokens")
+        res_tok = await client.get("/v1/mcp/tokens", headers=ADMIN_MCP_HEADERS)
         assert res_tok.status_code == 200
         tokens = res_tok.json()["tokens"]
         assert len(tokens) >= 1
 
         # Create token
-        create_res = await client.post("/v1/mcp/tokens", json={
+        create_res = await client.post("/v1/mcp/tokens", headers=ADMIN_MCP_HEADERS, json={
             "name": "Integration Test Agent Token",
             "agent_id": "test-agent-99",
             "role": "secops",
@@ -101,7 +114,7 @@ async def test_mcp_telemetry_and_tokens():
         assert new_token["token"].startswith("trulin_mcp_secops_")
 
         # Revoke token
-        rev_res = await client.delete(f"/v1/mcp/tokens/{new_token['id']}")
+        rev_res = await client.delete(f"/v1/mcp/tokens/{new_token['id']}", headers=ADMIN_MCP_HEADERS)
         assert rev_res.status_code == 200
         assert rev_res.json()["status"] == "revoked"
 
@@ -117,7 +130,7 @@ async def test_mcp_proxies_execution():
         assert len(proxies) >= 4
 
         # Execute safe proxy query (SELECT)
-        exec_safe = await client.post("/v1/mcp/proxies/execute", json={
+        exec_safe = await client.post("/v1/mcp/proxies/execute", headers=ADMIN_MCP_HEADERS, json={
             "tool_id": "tool-postgres-query",
             "arguments": {"query": "SELECT user_id, email FROM users LIMIT 10;"},
             "actor_id": "dev-bot",
@@ -128,7 +141,7 @@ async def test_mcp_proxies_execution():
         assert exec_safe.json()["simulated_output"] is not None
 
         # Execute destructive SQL proxy query (DROP TABLE)
-        exec_bad = await client.post("/v1/mcp/proxies/execute", json={
+        exec_bad = await client.post("/v1/mcp/proxies/execute", headers=ADMIN_MCP_HEADERS, json={
             "tool_id": "tool-postgres-query",
             "arguments": {"query": "DROP TABLE accounts CASCADE;"},
             "actor_id": "dev-bot",

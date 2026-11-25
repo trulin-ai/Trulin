@@ -91,7 +91,7 @@ export default function OrganizationSetupChecklistBanner({
           flexShrink: 0,
           boxShadow: '0 2px 8px rgba(255, 171, 74, 0.3)'
         }}>
-          <Sparkles size={18} />
+          <Building2 size={18} />
         </div>
 
         <div style={{ flex: 1 }}>

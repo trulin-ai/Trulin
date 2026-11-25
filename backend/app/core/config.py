@@ -42,6 +42,8 @@ class Settings(BaseSettings):
     ollama_timeout: int = 120  # seconds to wait for Ollama completions
     ollama_temperature: float = 0.0
     ollama_num_ctx: int = 8192
+    enable_llm_wording_refinement: bool = True
+    enable_adaptive_composition: bool = True
 
     # Hybrid Extraction & Grounding Settings
     extraction_chunk_chars: int = 3000

@@ -315,3 +315,24 @@ class OpenAIProvider(BaseLLMProvider):
         from app.llm.mock_provider import MockLLMProvider
         return await MockLLMProvider().generate_grounded_answer(query, citations, has_conflicts, warnings, history=history)
 
+    async def generate_completion(
+        self,
+        prompt: str,
+        system_prompt: str | None = None,
+        max_tokens: int = 300,
+        temperature: float = 0.0,
+    ) -> str:
+        """Generate text completion via OpenAI or OpenAI-compatible gateway (OpenRouter)."""
+        messages = []
+        if system_prompt:
+            messages.append({"role": "system", "content": system_prompt})
+        messages.append({"role": "user", "content": prompt})
+
+        response = await self.client.chat.completions.create(
+            model=self.model,
+            messages=messages,
+            max_tokens=max_tokens,
+            temperature=temperature,
+        )
+        return response.choices[0].message.content or ""
+

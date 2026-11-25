@@ -49,6 +49,8 @@ export default function CandidateApprovalsStudio({
   const [searchQuery, setSearchQuery] = useState('');
   const [trustFilter, setTrustFilter] = useState('all'); // 'all' | 'high' | 'med' | 'low'
   const [predicateFilter, setPredicateFilter] = useState('all');
+  const [categoryFilter, setCategoryFilter] = useState('all');
+  const [patternCategories, setPatternCategories] = useState([]);
 
   // Inline editing state
   const [editingClaimId, setEditingClaimId] = useState(null);
@@ -133,6 +135,16 @@ export default function CandidateApprovalsStudio({
     return Array.from(set).sort();
   }, [candidates]);
 
+  // Combined available categories from patterns and candidate predicates
+  const availableCategories = useMemo(() => {
+    const set = new Set(patternCategories);
+    candidates.forEach(c => {
+      if (c.predicate) set.add(c.predicate);
+      if (c.claim_type) set.add(c.claim_type);
+    });
+    return Array.from(set).sort();
+  }, [patternCategories, candidates]);
+
   // Filtered candidate claims
   const filteredCandidates = useMemo(() => {
     return candidates.filter(cl => {
@@ -153,12 +165,13 @@ export default function CandidateApprovalsStudio({
       if (trustFilter === 'med' && (trust < 0.80 || trust >= 0.90)) return false;
       if (trustFilter === 'low' && trust >= 0.80) return false;
 
-      // Predicate filter
+      // Category / Predicate filter
+      if (categoryFilter !== 'all' && cl.predicate !== categoryFilter && cl.claim_type !== categoryFilter) return false;
       if (predicateFilter !== 'all' && cl.predicate !== predicateFilter) return false;
 
       return true;
     });
-  }, [candidates, searchQuery, trustFilter, predicateFilter, docMap]);
+  }, [candidates, searchQuery, trustFilter, predicateFilter, categoryFilter, docMap]);
 
   // Active selected claim object
   const activeClaim = useMemo(() => {
@@ -272,223 +285,47 @@ export default function CandidateApprovalsStudio({
     fetchData();
   };
 
+  // Metrics calculation
+  const queuedCount = summary?.total_queued_for_review ?? candidates.length;
+  const approvedCount = summary?.approved_claims_count ?? 0;
+  const rejectedCount = summary?.rejected_claims_count ?? 0;
+  const totalMetricsCount = queuedCount + approvedCount + rejectedCount;
+
+  const queuedPct = totalMetricsCount > 0 ? Math.round((queuedCount / totalMetricsCount) * 100) : 0;
+  const approvedPct = totalMetricsCount > 0 ? Math.round((approvedCount / totalMetricsCount) * 100) : 0;
+  const rejectedPct = totalMetricsCount > 0 ? Math.round((rejectedCount / totalMetricsCount) * 100) : 0;
+
+  const throughputRate = summary?.review_throughput_rate ?? (totalMetricsCount > 0 ? (approvedCount + rejectedCount) / totalMetricsCount : 0.0);
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '100%', minHeight: '620px' }}>
       
-      {/* ── TOP KPI & SUMMARY STRIP ── */}
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))',
-        gap: '12px'
-      }}>
-        {/* Metric 1: Pending Queue */}
-        <div style={{
-          background: '#FFFFFF',
-          border: '1px solid #E2E8F0',
-          borderRadius: '10px',
-          padding: '14px 18px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          boxShadow: '0 1px 3px rgba(0,0,0,0.03)'
-        }}>
-          <div>
-            <div style={{ fontSize: '0.70rem', fontWeight: 700, textTransform: 'uppercase', color: '#64748B', letterSpacing: '0.04em' }}>
-              Pending Candidate Triage
-            </div>
-            <div style={{ fontSize: '1.45rem', fontWeight: 800, color: '#D97706', marginTop: '2px' }}>
-              {summary?.total_queued_for_review ?? candidates.length}
-            </div>
-          </div>
-          <div style={{ width: '38px', height: '38px', borderRadius: '8px', background: '#FEF3C7', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <AlertTriangle size={18} style={{ color: '#D97706' }} />
-          </div>
+      {/* ── TOP HEADER ── */}
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap' }}>
+        <div>
+          <h2 style={{ fontSize: '1.30rem', fontWeight: 800, color: '#0F172A', margin: 0, letterSpacing: '-0.02em' }}>
+            Policy Rule Triage
+          </h2>
+          <p style={{ fontSize: '0.80rem', color: '#64748B', margin: '3px 0 0 0' }}>
+            Review, verify, and certify candidate claims into active rules.
+          </p>
         </div>
 
-        {/* Metric 2: Certified / Approved Claims */}
-        <div style={{
-          background: '#FFFFFF',
-          border: '1px solid #E2E8F0',
-          borderRadius: '10px',
-          padding: '14px 18px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          boxShadow: '0 1px 3px rgba(0,0,0,0.03)'
-        }}>
-          <div>
-            <div style={{ fontSize: '0.70rem', fontWeight: 700, textTransform: 'uppercase', color: '#64748B', letterSpacing: '0.04em' }}>
-              Certified Policy Rules
-            </div>
-            <div style={{ fontSize: '1.45rem', fontWeight: 800, color: '#16A34A', marginTop: '2px' }}>
-              {summary?.approved_claims_count ?? '—'}
-            </div>
-          </div>
-          <div style={{ width: '38px', height: '38px', borderRadius: '8px', background: '#DCFCE7', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <CheckCircle2 size={18} style={{ color: '#16A34A' }} />
-          </div>
-        </div>
-
-        {/* Metric 3: Rejected / Filtered Noise */}
-        <div style={{
-          background: '#FFFFFF',
-          border: '1px solid #E2E8F0',
-          borderRadius: '10px',
-          padding: '14px 18px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          boxShadow: '0 1px 3px rgba(0,0,0,0.03)'
-        }}>
-          <div>
-            <div style={{ fontSize: '0.70rem', fontWeight: 700, textTransform: 'uppercase', color: '#64748B', letterSpacing: '0.04em' }}>
-              Rejected / Filtered Noise
-            </div>
-            <div style={{ fontSize: '1.45rem', fontWeight: 800, color: '#DC2626', marginTop: '2px' }}>
-              {summary?.rejected_claims_count ?? '—'}
-            </div>
-          </div>
-          <div style={{ width: '38px', height: '38px', borderRadius: '8px', background: '#FEE2E2', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <XCircle size={18} style={{ color: '#DC2626' }} />
-          </div>
-        </div>
-
-        {/* Metric 4: Triage Throughput & Batch Action */}
-        <div style={{
-          background: '#FFFFFF',
-          border: '1px solid #E2E8F0',
-          borderRadius: '10px',
-          padding: '14px 18px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          boxShadow: '0 1px 3px rgba(0,0,0,0.03)'
-        }}>
-          <div>
-            <div style={{ fontSize: '0.70rem', fontWeight: 700, textTransform: 'uppercase', color: '#64748B', letterSpacing: '0.04em' }}>
-              Review Throughput
-            </div>
-            <div style={{ fontSize: '1.45rem', fontWeight: 800, color: '#2563EB', marginTop: '2px' }}>
-              {summary ? `${(summary.review_throughput_rate * 100).toFixed(1)}%` : '—'}
-            </div>
-          </div>
-          <button
-            type="button"
-            disabled={batchActionLoading || candidates.length === 0}
-            onClick={handleBatchApproveHighTrust}
-            style={{
-              padding: '6px 11px',
-              fontSize: '0.72rem',
-              fontWeight: 700,
-              background: '#F0FDF4',
-              color: '#166534',
-              border: '1px solid #BBF7D0',
-              borderRadius: '6px',
-              cursor: batchActionLoading || candidates.length === 0 ? 'not-allowed' : 'pointer',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '4px',
-              transition: 'all 0.15s ease'
-            }}
-            title="Automatically approve and promote all candidate claims with >=95% confidence"
-          >
-            <Sparkles size={12} className={batchActionLoading ? 'spin' : ''} style={{ color: '#16A34A' }} />
-            <span>{batchActionLoading ? 'Certifying...' : 'Certify ≥95%'}</span>
-          </button>
-        </div>
-      </div>
-
-      {/* ── WORKSPACE MODE SWITCHER (10-MIN PATTERN BOARD VS DETAILED STREAM) ── */}
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        background: '#FFFFFF',
-        padding: '6px 10px',
-        borderRadius: '8px',
-        border: '1px solid #E2E8F0',
-        flexWrap: 'wrap',
-        gap: '8px',
-        boxShadow: '0 1px 2px rgba(0,0,0,0.02)'
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <button
-            type="button"
-            onClick={() => setViewMode('patterns')}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '6px',
-              padding: '6px 12px',
-              fontSize: '0.78rem',
-              fontWeight: viewMode === 'patterns' ? 800 : 600,
-              borderRadius: '6px',
-              border: viewMode === 'patterns' ? '1px solid #F59E0B' : '1px solid transparent',
-              background: viewMode === 'patterns' ? '#FEF3C7' : 'transparent',
-              color: viewMode === 'patterns' ? '#92400E' : '#64748B',
-              cursor: 'pointer',
-              transition: 'all 0.15s ease'
-            }}
-          >
-            <Zap size={14} style={{ color: viewMode === 'patterns' ? '#D97706' : '#94A3B8' }} />
-            <span>⚡ 10-Minute Pattern Approval Board</span>
-            <span style={{
-              fontSize: '0.65rem',
-              padding: '1px 6px',
-              background: '#FFFFFF',
-              borderRadius: '10px',
-              color: '#92400E',
-              fontWeight: 800,
-              boxShadow: '0 1px 2px rgba(0,0,0,0.05)'
-            }}>
-              Fast Track
-            </span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setViewMode('stream')}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '6px',
-              padding: '6px 12px',
-              fontSize: '0.78rem',
-              fontWeight: viewMode === 'stream' ? 800 : 600,
-              borderRadius: '6px',
-              border: viewMode === 'stream' ? '1px solid #CBD5E1' : '1px solid transparent',
-              background: viewMode === 'stream' ? '#F1F5F9' : 'transparent',
-              color: viewMode === 'stream' ? '#0F172A' : '#64748B',
-              cursor: 'pointer',
-              transition: 'all 0.15s ease'
-            }}
-          >
-            <Layers size={14} style={{ color: viewMode === 'stream' ? '#2563EB' : '#94A3B8' }} />
-            <span>📋 Detailed Stream (One-by-One HITL)</span>
-            <span style={{ fontSize: '0.68rem', color: '#94A3B8', fontWeight: 600 }}>
-              ({candidates.length})
-            </span>
-          </button>
-        </div>
-
-        {/* Global Document Scope Filter */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <span style={{ fontSize: '0.72rem', color: '#64748B', fontWeight: 600 }}>Document Scope:</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <select
             value={selectedDocFilter}
             onChange={e => setSelectedDocFilter(e.target.value)}
             style={{
-              height: '28px',
-              padding: '0 8px',
-              fontSize: '0.74rem',
+              height: '34px',
+              padding: '0 10px',
+              fontSize: '0.78rem',
               fontWeight: 600,
               color: '#0F172A',
-              background: '#F8FAFC',
-              border: '1px solid #CBD5E1',
-              borderRadius: '5px',
+              background: '#FFFFFF',
+              border: '1px solid #E2E8F0',
+              borderRadius: '8px',
               outline: 'none',
-              cursor: 'pointer',
-              maxWidth: '240px'
+              cursor: 'pointer'
             }}
           >
             <option value="all">All Documents ({documents.length})</option>
@@ -496,160 +333,390 @@ export default function CandidateApprovalsStudio({
               <option key={d.id} value={d.id}>{d.title || d.file_name}</option>
             ))}
           </select>
-        </div>
-      </div>
-
-      {/* ── MODE 1: PATTERN APPROVAL BOARD (10-MIN BATCH TRIAGE) ── */}
-      {viewMode === 'patterns' ? (
-        <PatternApprovalBoard
-          activeOrg={activeOrg}
-          token={token}
-          user={user}
-          showToast={showToast}
-          selectedDocFilter={selectedDocFilter}
-          documents={documents}
-          onReviewSuccess={fetchData}
-        />
-      ) : (
-        <>
-          {/* ── FILTER & SCOPE TOOLBAR ── */}
-          <div style={{
-            background: '#FAF8F5',
-            border: '1px solid #E2E8F0',
-            borderRadius: '10px',
-            padding: '10px 14px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: '10px'
-          }}>
-        {/* Left: Document Scope Selector & Search */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap', flex: 1, minWidth: '300px' }}>
-          
-          {/* Document Scope Dropdown */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <FileText size={14} style={{ color: '#0284C7' }} />
-            <select
-              value={selectedDocFilter}
-              onChange={e => setSelectedDocFilter(e.target.value)}
-              style={{
-                height: '32px',
-                padding: '2px 8px',
-                fontSize: '0.78rem',
-                fontWeight: 600,
-                color: '#0F172A',
-                background: '#FFFFFF',
-                border: '1px solid #CBD5E1',
-                borderRadius: '6px',
-                outline: 'none',
-                maxWidth: '220px',
-                cursor: 'pointer'
-              }}
-            >
-              <option value="all">All Documents ({documents.length})</option>
-              {documents.map(d => (
-                <option key={d.id} value={d.id}>
-                  {d.title || d.file_name}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* Search Box */}
-          <div style={{ position: 'relative', flex: 1, minWidth: '180px', maxWidth: '360px' }}>
-            <Search size={13} style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: '#94A3B8' }} />
-            <input
-              type="text"
-              placeholder="Filter by keyword, actor, or predicate..."
-              value={searchQuery}
-              onChange={e => setSearchQuery(e.target.value)}
-              style={{
-                width: '100%',
-                height: '32px',
-                padding: '4px 10px 4px 28px',
-                fontSize: '0.76rem',
-                border: '1px solid #CBD5E1',
-                borderRadius: '6px',
-                background: '#FFFFFF',
-                outline: 'none',
-                boxSizing: 'border-box'
-              }}
-            />
-            {searchQuery && (
-              <button
-                type="button"
-                onClick={() => setSearchQuery('')}
-                style={{ position: 'absolute', right: '8px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', padding: 0, cursor: 'pointer', color: '#94A3B8' }}
-              >
-                <X size={12} />
-              </button>
-            )}
-          </div>
-        </div>
-
-        {/* Right: Trust Tier & Predicate Filter Chips */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-          
-          {/* Trust Tier Pills */}
-          <div style={{ display: 'inline-flex', background: '#E2E8F0', padding: '2px', borderRadius: '6px', gap: '2px' }}>
-            {[
-              { id: 'all', label: 'All Trust' },
-              { id: 'high', label: 'High (≥90%)' },
-              { id: 'med', label: 'Med (80-89%)' },
-              { id: 'low', label: 'Low (<80%)' }
-            ].map(pill => {
-              const isActive = trustFilter === pill.id;
-              return (
-                <button
-                  key={pill.id}
-                  type="button"
-                  onClick={() => setTrustFilter(pill.id)}
-                  style={{
-                    padding: '3px 8px',
-                    fontSize: '0.70rem',
-                    fontWeight: isActive ? 700 : 500,
-                    borderRadius: '4px',
-                    border: 'none',
-                    background: isActive ? '#FFFFFF' : 'transparent',
-                    color: isActive ? '#0F172A' : '#64748B',
-                    cursor: 'pointer',
-                    boxShadow: isActive ? '0 1px 2px rgba(0,0,0,0.06)' : 'none'
-                  }}
-                >
-                  {pill.label}
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Refresh Button */}
           <button
             type="button"
             onClick={fetchData}
             disabled={loading}
             style={{
-              height: '30px',
-              padding: '0 8px',
-              fontSize: '0.72rem',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '4px',
+              width: '34px',
+              height: '34px',
+              borderRadius: '8px',
+              border: '1px solid #E2E8F0',
               background: '#FFFFFF',
-              border: '1px solid #CBD5E1',
-              borderRadius: '6px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
               cursor: loading ? 'not-allowed' : 'pointer',
-              color: '#475569',
-              fontWeight: 600
+              color: '#64748B',
+              transition: 'all 0.15s ease'
             }}
-            title="Refresh candidate review queue"
+            title="Refresh review queue"
           >
-            <RefreshCw size={12} className={loading ? 'spin' : ''} />
-            <span>Refresh</span>
+            <RefreshCw size={14} className={loading ? 'spin' : ''} />
           </button>
         </div>
       </div>
 
+      {/* ── TWO-COLUMN MAIN WORKBENCH ── */}
+      <div style={{
+        display: 'flex',
+        alignItems: 'flex-start',
+        gap: '16px',
+        width: '100%'
+      }}>
+        
+        {/* ── LEFT COLUMN: METRICS & SCOPE SIDEBAR (~250px) ── */}
+        <div style={{
+          width: '250px',
+          flexShrink: 0,
+          background: '#FFFFFF',
+          border: '1px solid #E8E3DC',
+          borderRadius: '10px',
+          padding: '16px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '16px',
+          boxShadow: '0 1px 2px rgba(0,0,0,0.02)'
+        }}>
+          {/* Document Scope */}
+          <div>
+            <div style={{ fontSize: '0.80rem', fontWeight: 700, color: '#1E293B', marginBottom: '8px' }}>
+              Document Scope
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <select
+                value={selectedDocFilter}
+                onChange={e => setSelectedDocFilter(e.target.value)}
+                style={{
+                  flex: 1,
+                  height: '32px',
+                  padding: '0 8px',
+                  fontSize: '0.74rem',
+                  fontWeight: 500,
+                  color: '#0F172A',
+                  background: '#F8FAFC',
+                  border: '1px solid #E2E8F0',
+                  borderRadius: '6px',
+                  outline: 'none',
+                  cursor: 'pointer',
+                  minWidth: 0
+                }}
+              >
+                <option value="all">All Documents ({documents.length})</option>
+                {documents.map(d => (
+                  <option key={d.id} value={d.id}>{d.title || d.file_name}</option>
+                ))}
+              </select>
+              <button
+                type="button"
+                onClick={fetchData}
+                disabled={loading}
+                style={{
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '6px',
+                  border: '1px solid #E2E8F0',
+                  background: '#FFFFFF',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: loading ? 'not-allowed' : 'pointer',
+                  color: '#64748B',
+                  flexShrink: 0
+                }}
+                title="Refresh"
+              >
+                <RefreshCw size={12} className={loading ? 'spin' : ''} />
+              </button>
+            </div>
+          </div>
+
+          {/* Review Throughput */}
+          <div>
+            <div style={{ fontSize: '0.80rem', fontWeight: 700, color: '#1E293B', marginBottom: '6px' }}>
+              Review Throughput
+            </div>
+            <div style={{ position: 'relative', width: '116px', height: '116px', margin: '4px auto 0 auto' }}>
+              <svg width="116" height="116" viewBox="0 0 116 116">
+                <circle cx="58" cy="58" r="46" stroke="#EFECE6" strokeWidth="9" fill="none" />
+                <circle
+                  cx="58"
+                  cy="58"
+                  r="46"
+                  stroke={throughputRate >= 0.95 ? '#10B981' : throughputRate > 0 ? '#CBD5E1' : '#E2E8F0'}
+                  strokeWidth="9"
+                  fill="none"
+                  strokeDasharray={289.02}
+                  strokeDashoffset={289.02 * (1 - Math.min(Math.max(throughputRate, 0), 1))}
+                  strokeLinecap="round"
+                  transform="rotate(-90 58 58)"
+                  style={{ transition: 'stroke-dashoffset 0.5s ease' }}
+                />
+              </svg>
+              <div style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}>
+                <div style={{ fontSize: '1.25rem', fontWeight: 800, color: '#1E293B', lineHeight: 1.1 }}>
+                  {(throughputRate * 100).toFixed(1)}%
+                </div>
+                <div style={{ fontSize: '0.66rem', fontWeight: 600, color: '#64748B', marginTop: '3px' }}>
+                  Target ≥95%
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style={{ borderTop: '1px solid #F1F5F9' }} />
+
+          {/* 3 Metric Rows */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+            {/* Pending Triage */}
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#F59E0B' }} />
+                <span style={{ fontSize: '0.78rem', fontWeight: 600, color: '#334155' }}>Pending Triage</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', margin: '4px 0 6px 0' }}>
+                <span style={{ fontSize: '1.35rem', fontWeight: 800, color: '#0F172A' }}>{queuedCount}</span>
+                <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#64748B' }}>{queuedPct}%</span>
+              </div>
+              <div style={{ width: '100%', height: '4px', background: '#F1F5F9', borderRadius: '2px', overflow: 'hidden' }}>
+                <div style={{ width: `${queuedPct}%`, height: '100%', background: '#F59E0B', borderRadius: '2px', transition: 'width 0.3s ease' }} />
+              </div>
+            </div>
+
+            {/* Certified Rules */}
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#10B981' }} />
+                <span style={{ fontSize: '0.78rem', fontWeight: 600, color: '#334155' }}>Certified Rules</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', margin: '4px 0 6px 0' }}>
+                <span style={{ fontSize: '1.35rem', fontWeight: 800, color: '#0F172A' }}>{approvedCount}</span>
+                <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#64748B' }}>{approvedPct}%</span>
+              </div>
+              <div style={{ width: '100%', height: '4px', background: '#F1F5F9', borderRadius: '2px', overflow: 'hidden' }}>
+                <div style={{ width: `${approvedPct}%`, height: '100%', background: '#10B981', borderRadius: '2px', transition: 'width 0.3s ease' }} />
+              </div>
+            </div>
+
+            {/* Rejected / Filtered Noise */}
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#EF4444' }} />
+                <span style={{ fontSize: '0.78rem', fontWeight: 600, color: '#334155' }}>Rejected / Filtered Noise</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', margin: '4px 0 6px 0' }}>
+                <span style={{ fontSize: '1.35rem', fontWeight: 800, color: '#0F172A' }}>{rejectedCount}</span>
+                <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#64748B' }}>{rejectedPct}%</span>
+              </div>
+              <div style={{ width: '100%', height: '4px', background: '#F1F5F9', borderRadius: '2px', overflow: 'hidden' }}>
+                <div style={{ width: `${rejectedPct}%`, height: '100%', background: '#EF4444', borderRadius: '2px', transition: 'width 0.3s ease' }} />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* ── RIGHT MAIN AREA (FLEX: 1) ── */}
+        <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: '14px' }}>
+          
+          {/* Top Toolbar */}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '12px',
+            flexWrap: 'wrap'
+          }}>
+            {/* Segmented Toggle: Batch Patterns | Individual Stream */}
+            <div style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              background: '#EFECE6',
+              padding: '3px',
+              borderRadius: '8px',
+              gap: '2px'
+            }}>
+              <button
+                type="button"
+                onClick={() => setViewMode('patterns')}
+                style={{
+                  padding: '6px 14px',
+                  fontSize: '0.78rem',
+                  fontWeight: viewMode === 'patterns' ? 700 : 500,
+                  color: viewMode === 'patterns' ? '#0F172A' : '#64748B',
+                  background: viewMode === 'patterns' ? '#FFFFFF' : 'transparent',
+                  border: 'none',
+                  borderRadius: '6px',
+                  cursor: 'pointer',
+                  boxShadow: viewMode === 'patterns' ? '0 1px 2px rgba(0,0,0,0.06)' : 'none',
+                  transition: 'all 0.15s ease'
+                }}
+              >
+                Batch Patterns
+              </button>
+              <button
+                type="button"
+                onClick={() => setViewMode('stream')}
+                style={{
+                  padding: '6px 14px',
+                  fontSize: '0.78rem',
+                  fontWeight: viewMode === 'stream' ? 700 : 500,
+                  color: viewMode === 'stream' ? '#0F172A' : '#64748B',
+                  background: viewMode === 'stream' ? '#FFFFFF' : 'transparent',
+                  border: 'none',
+                  borderRadius: '6px',
+                  cursor: 'pointer',
+                  boxShadow: viewMode === 'stream' ? '0 1px 2px rgba(0,0,0,0.06)' : 'none',
+                  transition: 'all 0.15s ease'
+                }}
+              >
+                Individual Stream
+              </button>
+            </div>
+
+            {/* Search & Category Filter */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: 1, justifyContent: 'flex-end' }}>
+              <div style={{ position: 'relative', width: '100%', maxWidth: '300px' }}>
+                <Search size={14} style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: '#94A3B8' }} />
+                <input
+                  type="text"
+                  placeholder="Filter by keyword, actor, or predicate..."
+                  value={searchQuery}
+                  onChange={e => setSearchQuery(e.target.value)}
+                  style={{
+                    width: '100%',
+                    height: '32px',
+                    padding: '0 10px 0 32px',
+                    fontSize: '0.76rem',
+                    border: '1px solid #E2E8F0',
+                    borderRadius: '6px',
+                    background: '#FFFFFF',
+                    outline: 'none',
+                    boxSizing: 'border-box',
+                    color: '#0F172A'
+                  }}
+                />
+                {searchQuery && (
+                  <button
+                    type="button"
+                    onClick={() => setSearchQuery('')}
+                    style={{
+                      position: 'absolute',
+                      right: '8px',
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      background: 'none',
+                      border: 'none',
+                      cursor: 'pointer',
+                      color: '#94A3B8',
+                      padding: 0
+                    }}
+                  >
+                    <X size={12} />
+                  </button>
+                )}
+              </div>
+
+              <select
+                value={categoryFilter}
+                onChange={e => setCategoryFilter(e.target.value)}
+                style={{
+                  height: '32px',
+                  padding: '0 10px',
+                  fontSize: '0.76rem',
+                  border: '1px solid #E2E8F0',
+                  borderRadius: '6px',
+                  background: '#FFFFFF',
+                  outline: 'none',
+                  cursor: 'pointer',
+                  color: '#475569',
+                  minWidth: '170px'
+                }}
+              >
+                <option value="all">Category or quick filter</option>
+                {availableCategories.map(cat => (
+                  <option key={cat} value={cat}>{cat}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          {/* View Mode 1: 3-Column Kanban Board */}
+          {viewMode === 'patterns' ? (
+            <PatternApprovalBoard
+              activeOrg={activeOrg}
+              token={token}
+              user={user}
+              showToast={showToast}
+              selectedDocFilter={selectedDocFilter}
+              documents={documents}
+              searchQuery={searchQuery}
+              categoryFilter={categoryFilter}
+              onCategoriesLoaded={setPatternCategories}
+              onReviewSuccess={fetchData}
+            />
+          ) : (
+            /* View Mode 2: Individual Stream */
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              {/* Stream Trust Level sub-bar */}
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                background: '#FAF8F5',
+                padding: '8px 12px',
+                borderRadius: '8px',
+                border: '1px solid #E8E3DC'
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#64748B', textTransform: 'uppercase' }}>
+                    Trust Level:
+                  </span>
+                  <div style={{ display: 'inline-flex', background: '#E2E8F0', padding: '2px', borderRadius: '6px', gap: '2px' }}>
+                    {[
+                      { id: 'all', label: 'All Trust' },
+                      { id: 'high', label: 'High (≥90%)' },
+                      { id: 'med', label: 'Med (80-89%)' },
+                      { id: 'low', label: 'Low (<80%)' }
+                    ].map(pill => {
+                      const isActive = trustFilter === pill.id;
+                      return (
+                        <button
+                          key={pill.id}
+                          type="button"
+                          onClick={() => setTrustFilter(pill.id)}
+                          style={{
+                            padding: '3px 8px',
+                            fontSize: '0.70rem',
+                            fontWeight: isActive ? 700 : 500,
+                            borderRadius: '4px',
+                            border: 'none',
+                            background: isActive ? '#FFFFFF' : 'transparent',
+                            color: isActive ? '#0F172A' : '#64748B',
+                            cursor: 'pointer',
+                            boxShadow: isActive ? '0 1px 2px rgba(0,0,0,0.06)' : 'none'
+                          }}
+                        >
+                          {pill.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                <div style={{ fontSize: '0.72rem', color: '#64748B' }}>
+                  {filteredCandidates.length} candidate claims in stream
+                </div>
+              </div>
       {/* ── MAIN WORKSPACE: DUAL-PANE TRIAGE STREAM ── */}
       <div style={{
         display: 'flex',
@@ -1194,8 +1261,10 @@ export default function CandidateApprovalsStudio({
           )}
         </div>
       </div>
-    </>
-  )}
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

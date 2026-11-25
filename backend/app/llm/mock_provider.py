@@ -575,3 +575,13 @@ class MockLLMProvider(BaseLLMProvider):
             history=history,
         )
 
+    async def generate_completion(
+        self,
+        prompt: str,
+        system_prompt: str | None = None,
+        max_tokens: int = 300,
+        temperature: float = 0.0,
+    ) -> str:
+        """Mock completion; returns mock_completion_text if set, else empty string."""
+        return getattr(self, "mock_completion_text", "")
+

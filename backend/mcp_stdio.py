@@ -1,11 +1,13 @@
 import json
+import os
 import sys
 import httpx
 
-API_URL = "http://127.0.0.1:8000/v1/mcp"
+API_URL = os.environ.get("CONTEXT_LAYER_API_URL", "http://127.0.0.1:8000/v1/mcp")
+MCP_TOKEN = os.environ.get("TRULIN_MCP_TOKEN", "")
 
 
-def process_line(line: str, client: httpx.Client) -> None:
+def process_line(line: str, client: httpx.Client, token: str | None = None) -> None:
     line = line.strip()
     if not line:
         return
@@ -22,8 +24,13 @@ def process_line(line: str, client: httpx.Client) -> None:
         return
 
     # Forward to Context Trust Layer MCP endpoint
+    headers = {}
+    effective_token = token if token is not None else MCP_TOKEN
+    if effective_token:
+        headers["Authorization"] = f"Bearer {effective_token}"
+
     try:
-        res = client.post(API_URL, json=req, timeout=30.0)
+        res = client.post(API_URL, json=req, headers=headers, timeout=30.0)
         if res.status_code == 200:
             response_data = res.json()
         else:

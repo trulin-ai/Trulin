@@ -6,8 +6,11 @@ from pydantic import BaseModel, Field
 
 
 class MCPTelemetryEvent(BaseModel):
+    """Audit event record intended to support compliance review (not proof of regulatory compliance)."""
+
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    organization_id: Optional[str] = None
     tool_name: str
     client_type: str = "Claude Desktop"  # "Claude Desktop", "Cursor IDE", "LangChain", "Ollama", "REST Client"
     actor_id: str = "mcp-agent"
@@ -84,10 +87,12 @@ class MCPTelemetryService:
         latency_ms: float = 30.0,
         error: Optional[str] = None,
         response_summary: Optional[str] = None,
+        organization_id: Optional[str] = None,
     ) -> MCPTelemetryEvent:
         event = MCPTelemetryEvent(
             id=str(uuid.uuid4()),
             timestamp=datetime.now(timezone.utc),
+            organization_id=organization_id,
             tool_name=tool_name,
             client_type=client_type,
             actor_id=actor_id,
@@ -104,14 +109,24 @@ class MCPTelemetryService:
             self._events.pop()
         return event
 
-    def get_events(self, limit: int = 100, tool_filter: Optional[str] = None) -> List[MCPTelemetryEvent]:
+    def get_events(
+        self,
+        limit: int = 100,
+        tool_filter: Optional[str] = None,
+        organization_id: Optional[str] = None,
+    ) -> List[MCPTelemetryEvent]:
         events = self._events
+        if organization_id:
+            events = [e for e in events if e.organization_id == organization_id]
         if tool_filter and tool_filter != "all":
             events = [e for e in events if e.tool_name == tool_filter or e.client_type.lower() == tool_filter.lower()]
         return events[:limit]
 
-    def get_stats(self) -> MCPTelemetryStats:
-        if not self._events:
+    def get_stats(self, organization_id: Optional[str] = None) -> MCPTelemetryStats:
+        events = self._events
+        if organization_id:
+            events = [e for e in events if e.organization_id == organization_id]
+        if not events:
             return MCPTelemetryStats(
                 total_invocations=0,
                 allowed_count=0,
@@ -119,23 +134,23 @@ class MCPTelemetryService:
                 review_count=0,
                 avg_latency_ms=0.0,
                 avg_trust_score=0.0,
-                active_connections=3,
+                active_connections=0 if organization_id else 3,
             )
 
-        allowed = sum(1 for e in self._events if e.verdict in ("ALLOW", "PERMIT", "SUCCESS"))
-        blocked = sum(1 for e in self._events if e.verdict in ("BLOCK", "ERROR"))
-        review = sum(1 for e in self._events if e.verdict in ("REVIEW", "REQUIRE_REVIEW"))
-        avg_lat = sum(e.latency_ms for e in self._events) / len(self._events)
-        avg_trust = sum(e.trust_score for e in self._events) / len(self._events)
+        allowed = sum(1 for e in events if e.verdict in ("ALLOW", "PERMIT", "SUCCESS"))
+        blocked = sum(1 for e in events if e.verdict in ("BLOCK", "ERROR"))
+        review = sum(1 for e in events if e.verdict in ("REVIEW", "REQUIRE_REVIEW"))
+        avg_lat = sum(e.latency_ms for e in events) / len(events)
+        avg_trust = sum(e.trust_score for e in events) / len(events)
 
         return MCPTelemetryStats(
-            total_invocations=len(self._events),
+            total_invocations=len(events),
             allowed_count=allowed,
             blocked_count=blocked,
             review_count=review,
             avg_latency_ms=round(avg_lat, 1),
             avg_trust_score=round(avg_trust, 2),
-            active_connections=len(set(e.client_type for e in self._events[:20])),
+            active_connections=len(set(e.client_type for e in events[:20])),
         )
 
     def clear(self):
