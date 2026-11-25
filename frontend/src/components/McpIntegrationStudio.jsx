@@ -1,12 +1,39 @@
 import React, { useState, useEffect } from 'react';
+import {
+  Compass,
+  Terminal,
+  KeyRound,
+  Activity,
+  ShieldAlert,
+  BookOpen,
+  CheckCircle2,
+  ArrowRight,
+  ShieldCheck,
+  Database
+} from 'lucide-react';
+
+const normalizeMcpSubView = (view) => {
+  if (!view || view === 'overview') return 'overview';
+  if (view === 'tester' || view === 'resources' || view === 'middleware' || view === 'explorer') return 'explorer';
+  if (view === 'tokens' || view === 'configs' || view === 'sdks' || view === 'credentials') return 'credentials';
+  if (view === 'telemetry') return 'telemetry';
+  if (view === 'proxies' || view === 'sandbox') return 'sandbox';
+  return 'overview';
+};
 
 export default function McpIntegrationStudio({
   activeOrg,
   showToast,
-  initialSubView = 'tester',
-  onSubViewChange
+  initialSubView = 'overview',
+  onSubViewChange,
+  onOpenDocs
 }) {
-  const [activeSubView, setActiveSubView] = useState(initialSubView); // 'tester' | 'telemetry' | 'tokens' | 'resources' | 'proxies' | 'middleware' | 'configs'
+  const [activeSubView, setActiveSubView] = useState(() => normalizeMcpSubView(initialSubView));
+  const [explorerMode, setExplorerMode] = useState(() => {
+    if (initialSubView === 'resources') return 'resources';
+    if (initialSubView === 'middleware') return 'interception';
+    return 'tools';
+  });
   
   // Interactive Tester State
   const [selectedTool, setSelectedTool] = useState('context_trust_steward_audit');
@@ -93,13 +120,21 @@ export default function McpIntegrationStudio({
 
   useEffect(() => {
     if (initialSubView) {
-      setActiveSubView(initialSubView);
+      setActiveSubView(normalizeMcpSubView(initialSubView));
+      if (initialSubView === 'resources') setExplorerMode('resources');
+      else if (initialSubView === 'middleware') setExplorerMode('interception');
+      else if (initialSubView === 'tester') setExplorerMode('tools');
     }
   }, [initialSubView]);
 
   const handleSelectSubView = (subView) => {
     setActiveSubView(subView);
     if (onSubViewChange) onSubViewChange(subView);
+  };
+
+  const getStudioAuthHeaders = (extra = {}) => {
+    const jwt = localStorage.getItem('ctl_token');
+    return jwt ? { Authorization: `Bearer ${jwt}`, ...extra } : { ...extra };
   };
 
   // Fetch telemetry
@@ -109,7 +144,7 @@ export default function McpIntegrationStudio({
       if (telemetryFilter !== 'all') {
         url += `&filter=${encodeURIComponent(telemetryFilter)}`;
       }
-      const res = await fetch(url);
+      const res = await fetch(url, { headers: getStudioAuthHeaders() });
       if (res.ok) {
         const data = await res.json();
         setTelemetryEvents(data.events || []);
@@ -123,7 +158,7 @@ export default function McpIntegrationStudio({
   // Fetch Tokens
   const fetchTokens = async () => {
     try {
-      const res = await fetch('/v1/mcp/tokens');
+      const res = await fetch('/v1/mcp/tokens', { headers: getStudioAuthHeaders() });
       if (res.ok) {
         const data = await res.json();
         setAgentTokens(data.tokens || []);
@@ -174,14 +209,14 @@ export default function McpIntegrationStudio({
   useEffect(() => {
     if (activeSubView === 'telemetry') {
       fetchTelemetry();
-    } else if (activeSubView === 'tokens') {
+    } else if (activeSubView === 'credentials') {
       fetchTokens();
-    } else if (activeSubView === 'resources') {
+    } else if (activeSubView === 'explorer' && explorerMode === 'resources') {
       fetchResourcesAndPrompts();
-    } else if (activeSubView === 'proxies') {
+    } else if (activeSubView === 'sandbox') {
       fetchProxyTools();
     }
-  }, [activeSubView, telemetryFilter]);
+  }, [activeSubView, explorerMode, telemetryFilter]);
 
   // Auto-refresh telemetry interval
   useEffect(() => {
@@ -266,7 +301,7 @@ export default function McpIntegrationStudio({
     try {
       const res = await fetch('/v1/mcp/invoke', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getStudioAuthHeaders({ 'Content-Type': 'application/json' }),
         body: JSON.stringify({
           tool: selectedTool,
           arguments: args,
@@ -280,6 +315,9 @@ export default function McpIntegrationStudio({
         const data = await res.json();
         setInvocationResult(data);
         showToast?.(`MCP tool '${selectedTool}' executed (${data.latency_ms || 35}ms)!`);
+      } else {
+        const errData = await res.json().catch(() => ({}));
+        showToast?.(errData.detail || `MCP request failed (${res.status})`, "error");
       }
     } catch (e) {
       showToast?.(`MCP error: ${e.message}`, "error");
@@ -292,7 +330,9 @@ export default function McpIntegrationStudio({
     setIsLoadingResource(true);
     setSelectedResourceUri(uri);
     try {
-      const res = await fetch(`/v1/mcp/resources/read?uri=${encodeURIComponent(uri)}`);
+      const res = await fetch(`/v1/mcp/resources/read?uri=${encodeURIComponent(uri)}`, {
+        headers: getStudioAuthHeaders(),
+      });
       if (res.ok) {
         const data = await res.json();
         setResourceContent(data);
@@ -319,7 +359,7 @@ export default function McpIntegrationStudio({
 
       const res = await fetch(`/v1/mcp/prompts/${selectedPromptName}`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getStudioAuthHeaders({ 'Content-Type': 'application/json' }),
         body: JSON.stringify(parsedArgs)
       });
       if (res.ok) {
@@ -341,7 +381,7 @@ export default function McpIntegrationStudio({
     try {
       const res = await fetch('/v1/mcp/tokens', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getStudioAuthHeaders({ 'Content-Type': 'application/json' }),
         body: JSON.stringify({
           name: newTokenName,
           agent_id: newTokenAgentId,
@@ -368,7 +408,10 @@ export default function McpIntegrationStudio({
 
   const handleRevokeToken = async (tokenId) => {
     try {
-      const res = await fetch(`/v1/mcp/tokens/${tokenId}`, { method: 'DELETE' });
+      const res = await fetch(`/v1/mcp/tokens/${tokenId}`, {
+        method: 'DELETE',
+        headers: getStudioAuthHeaders(),
+      });
       if (res.ok) {
         setAgentTokens(prev => prev.map(t => t.id === tokenId ? { ...t, status: 'revoked' } : t));
         showToast?.("Token revoked");
@@ -385,7 +428,7 @@ export default function McpIntegrationStudio({
       let parsedArgs = JSON.parse(proxyToolArgs);
       const res = await fetch('/v1/mcp/proxies/execute', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getStudioAuthHeaders({ 'Content-Type': 'application/json' }),
         body: JSON.stringify({
           tool_id: selectedProxyTool.id,
           arguments: parsedArgs,
@@ -445,17 +488,16 @@ export default function McpIntegrationStudio({
     }
     return `curl -X POST http://127.0.0.1:8000/v1/mcp \\
   -H "Content-Type: application/json" \\
+  -H "Authorization: Bearer trulin_mcp_claude_live_9a8b7c6d5e4f" \\
   -d '{"jsonrpc": "2.0", "method": "tools/call", "params": {"name": "context_trust_get_trusted_context", "arguments": {"query": "refund policy", "organization_id": "${orgId}"}}, "id": 1}'`;
   };
 
   const subViewsList = [
-    { id: 'tester', kicker: 'TEST', title: 'Tool tester', icon: '✏️', num: '01' },
-    { id: 'telemetry', kicker: 'MONITOR', title: 'Live telemetry', icon: '📊', num: '02' },
-    { id: 'tokens', kicker: 'ACCESS', title: 'Agent tokens', icon: '🔑', num: '03' },
-    { id: 'resources', kicker: 'CONTEXT', title: 'Resources & prompts', icon: '📖', num: '04' },
-    { id: 'proxies', kicker: 'CONNECT', title: 'Third-party proxies', icon: '🌐', num: '05' },
-    { id: 'middleware', kicker: 'PROTECT', title: 'Interception guardrail', icon: '🛡️', num: '06' },
-    { id: 'configs', kicker: 'BUILD', title: 'Configs & SDKs', icon: '💻', num: '07' },
+    { id: 'overview', kicker: 'START', title: 'Overview & Quickstart', icon: <Compass size={15} /> },
+    { id: 'explorer', kicker: 'EXPLORE', title: 'Tool & Resource Explorer', icon: <Terminal size={15} /> },
+    { id: 'credentials', kicker: 'CONNECT', title: 'Credentials & Client Setup', icon: <KeyRound size={15} /> },
+    { id: 'telemetry', kicker: 'MONITOR', title: 'Telemetry & Audit', icon: <Activity size={15} /> },
+    { id: 'sandbox', kicker: 'SANDBOX', title: 'Sandbox & Proxies', icon: <ShieldAlert size={15} />, badge: 'Simulated' },
   ];
 
   const currentWorkspaceInfo = subViewsList.find(s => s.id === activeSubView) || subViewsList[0];
@@ -463,8 +505,8 @@ export default function McpIntegrationStudio({
   return (
     <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '20px' }}>
       
-      {/* 2. SUB-NAVIGATION STRIP (7 Segmented Tabs) */}
-      <div className="mcp-subnav-strip">
+      {/* 2. SUB-NAVIGATION STRIP (5 Clean Enterprise Tabs) */}
+      <div className="mcp-subnav-strip" style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
         {subViewsList.map((tab) => {
           const isActive = activeSubView === tab.id;
           return (
@@ -472,15 +514,23 @@ export default function McpIntegrationStudio({
               key={tab.id}
               className={`mcp-subnav-tab ${isActive ? 'active' : 'inactive'}`}
               onClick={() => handleSelectSubView(tab.id)}
+              style={{ flex: '1 1 170px' }}
             >
-              <div className="mcp-tab-icon-badge">
-                <span>{tab.icon}</span>
+              <div className="mcp-tab-icon-badge" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: isActive ? '#EA580C' : '#64748B' }}>
+                {tab.icon}
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column' }}>
-                <span style={{ fontSize: '0.6rem', fontWeight: 800, color: isActive ? '#EA580C' : '#94A3B8', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
-                  {tab.kicker}
-                </span>
-                <span style={{ fontSize: '0.76rem', fontWeight: isActive ? 700 : 600, color: isActive ? '#0F172A' : '#475569' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minWidth: 0 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <span style={{ fontSize: '0.6rem', fontWeight: 800, color: isActive ? '#EA580C' : '#94A3B8', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+                    {tab.kicker}
+                  </span>
+                  {tab.badge && (
+                    <span style={{ fontSize: '0.58rem', fontWeight: 700, color: '#9A3412', background: '#FFEDD5', padding: '1px 5px', borderRadius: '4px' }}>
+                      {tab.badge}
+                    </span>
+                  )}
+                </div>
+                <span style={{ fontSize: '0.77rem', fontWeight: isActive ? 700 : 600, color: isActive ? '#0F172A' : '#475569', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                   {tab.title}
                 </span>
               </div>
@@ -490,22 +540,192 @@ export default function McpIntegrationStudio({
       </div>
 
       {/* 3. WORKSPACE TITLE HEADER */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', marginTop: '2px' }}>
-        <div style={{ fontSize: '0.66rem', fontWeight: 800, color: '#EA580C', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-          MCP WORKSPACE
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px', marginTop: '2px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+          <div style={{ fontSize: '0.66rem', fontWeight: 800, color: '#EA580C', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+            MCP & AGENT HUB
+          </div>
+          <h2 style={{ fontSize: '1.3rem', fontWeight: 700, margin: 0, color: '#0F172A', display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <span style={{ color: '#EA580C', display: 'inline-flex', alignItems: 'center' }}>{currentWorkspaceInfo.icon}</span>
+            <span>{currentWorkspaceInfo.title}</span>
+          </h2>
         </div>
-        <h2 style={{ fontSize: '1.35rem', fontWeight: 700, margin: 0, color: '#0F172A', display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <span style={{ color: '#F97316', fontWeight: 800 }}>{currentWorkspaceInfo.num}</span>
-          <span>{currentWorkspaceInfo.title}</span>
-        </h2>
+
+        {onOpenDocs && (
+          <button
+            type="button"
+            onClick={() => onOpenDocs('mcp-architecture')}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '7px 12px',
+              borderRadius: '8px',
+              border: '1px solid #E2E8F0',
+              background: '#FFFFFF',
+              color: '#334155',
+              fontSize: '0.76rem',
+              fontWeight: 600,
+              cursor: 'pointer'
+            }}
+          >
+            <BookOpen size={14} color="#EA580C" />
+            <span>MCP Docs & Reference</span>
+          </button>
+        )}
       </div>
 
       {/* 4. WORKSPACE CONTENT AREAS */}
 
       {/* ------------------------------------------------------------- */}
+      {/* OVERVIEW & QUICKSTART                                         */}
+      {/* ------------------------------------------------------------- */}
+      {activeSubView === 'overview' && (
+        <div className="mcp-view-animated" style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
+          {/* 3-Step Quickstart Strip */}
+          <div style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: '14px', padding: '20px' }}>
+            <div style={{ fontSize: '0.72rem', fontWeight: 800, color: '#EA580C', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '6px' }}>
+              3-Step Integration Quickstart
+            </div>
+            <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#0F172A', margin: '0 0 14px 0' }}>
+              Connect external agents to Trulin’s governed policy context
+            </h3>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '12px' }}>
+              {[
+                {
+                  step: '01',
+                  title: 'Issue a Scoped Agent Token',
+                  desc: 'Create a bearer token bound to your organization, workspace subtree, and allowed MCP tools.',
+                  action: 'Open Credentials',
+                  target: 'credentials'
+                },
+                {
+                  step: '02',
+                  title: 'Connect Client or Stdio Bridge',
+                  desc: 'Paste the ready-to-use config for Claude Desktop, Cursor, or backend/mcp_stdio.py.',
+                  action: 'View Client Snippets',
+                  target: 'credentials'
+                },
+                {
+                  step: '03',
+                  title: 'Verify Retrieval & Policy Gate',
+                  desc: 'Test verified claim retrieval, advisory evaluation, and pre-execution interception.',
+                  action: 'Open Tool Explorer',
+                  target: 'explorer'
+                }
+              ].map((card) => (
+                <div key={card.step} style={{ border: '1px solid #E2E8F0', borderRadius: '12px', padding: '16px', background: '#F8FAFC', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: '12px' }}>
+                  <div>
+                    <div style={{ fontSize: '0.7rem', fontWeight: 800, color: '#EA580C', marginBottom: '4px' }}>STEP {card.step}</div>
+                    <div style={{ fontSize: '0.88rem', fontWeight: 700, color: '#0F172A', marginBottom: '6px' }}>{card.title}</div>
+                    <div style={{ fontSize: '0.78rem', color: '#475569', lineHeight: 1.5 }}>{card.desc}</div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => handleSelectSubView(card.target)}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      alignSelf: 'flex-start',
+                      padding: '6px 10px',
+                      borderRadius: '7px',
+                      border: '1px solid #CBD5E1',
+                      background: '#FFFFFF',
+                      color: '#0F172A',
+                      fontSize: '0.74rem',
+                      fontWeight: 600,
+                      cursor: 'pointer'
+                    }}
+                  >
+                    <span>{card.action}</span>
+                    <ArrowRight size={13} />
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* 3 Honest Capability Boundary Cards */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '14px' }}>
+            <div style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: '14px', padding: '18px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 700, fontSize: '0.88rem', color: '#0F172A' }}>
+                  <Database size={16} color="#2563EB" />
+                  <span>Context Delivery</span>
+                </div>
+                <span style={{ fontSize: '0.66rem', fontWeight: 700, color: '#166534', background: '#DCFCE7', padding: '2px 8px', borderRadius: '999px' }}>Live DB</span>
+              </div>
+              <p style={{ fontSize: '0.78rem', color: '#475569', lineHeight: 1.55, margin: 0 }}>
+                Queries PostgreSQL for <code>VERIFIED</code>, 9-gate-passed claims scoped to the token’s organization and workspace folder subtree, with explicit abstention on unsupported queries.
+              </p>
+            </div>
+
+            <div style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: '14px', padding: '18px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 700, fontSize: '0.88rem', color: '#0F172A' }}>
+                  <ShieldCheck size={16} color="#EA580C" />
+                  <span>Advisory Evaluation</span>
+                </div>
+                <span style={{ fontSize: '0.66rem', fontWeight: 700, color: '#1D4ED8', background: '#DBEAFE', padding: '2px 8px', borderRadius: '999px' }}>Advisory Only</span>
+              </div>
+              <p style={{ fontSize: '0.78rem', color: '#475569', lineHeight: 1.55, margin: 0 }}>
+                Evaluates proposed agent actions and returns <code>ALLOW</code>, <code>BLOCK</code>, or <code>REQUIRE_REVIEW</code> with supported reasons and explicit <code>execution_status: "Not executed by Trulin"</code>.
+              </p>
+            </div>
+
+            <div style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: '14px', padding: '18px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 700, fontSize: '0.88rem', color: '#0F172A' }}>
+                  <CheckCircle2 size={16} color="#9A3412" />
+                  <span>Sandbox Enforcement</span>
+                </div>
+                <span style={{ fontSize: '0.66rem', fontWeight: 700, color: '#9A3412', background: '#FFEDD5', padding: '2px 8px', borderRadius: '999px' }}>Simulated</span>
+              </div>
+              <p style={{ fontSize: '0.78rem', color: '#475569', lineHeight: 1.55, margin: 0 }}>
+                Demonstrates single-use, HMAC-signed permit verification via the local sandbox gateway. Real external tool mutations (Stripe, Postgres, Slack) remain disabled.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ------------------------------------------------------------- */}
+      {/* EXPLORER MODE SWITCHER (Tools | Resources & Prompts | Guardrail) */}
+      {/* ------------------------------------------------------------- */}
+      {activeSubView === 'explorer' && (
+        <div style={{ display: 'flex', gap: '6px', background: '#F1F5F9', padding: '4px', borderRadius: '10px', alignSelf: 'flex-start' }}>
+          {[
+            { id: 'tools', label: 'MCP Tools (7)' },
+            { id: 'resources', label: 'Resources & Prompts' },
+            { id: 'interception', label: 'Interception Guardrail' }
+          ].map((m) => (
+            <button
+              key={m.id}
+              type="button"
+              onClick={() => setExplorerMode(m.id)}
+              style={{
+                padding: '6px 14px',
+                borderRadius: '7px',
+                border: 'none',
+                background: explorerMode === m.id ? '#FFFFFF' : 'transparent',
+                color: explorerMode === m.id ? '#0F172A' : '#64748B',
+                fontWeight: explorerMode === m.id ? 700 : 600,
+                fontSize: '0.76rem',
+                cursor: 'pointer',
+                boxShadow: explorerMode === m.id ? '0 1px 2px rgba(15,23,42,0.06)' : 'none'
+              }}
+            >
+              {m.label}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/* ------------------------------------------------------------- */}
       {/* 01: TOOL TESTER WORKSPACE                                     */}
       {/* ------------------------------------------------------------- */}
-      {activeSubView === 'tester' && (
+      {activeSubView === 'explorer' && explorerMode === 'tools' && (
         <div className="mcp-view-animated" style={{ display: 'grid', gridTemplateColumns: 'minmax(420px, 1.25fr) minmax(400px, 1fr)', gap: '20px' }}>
           {/* Left Panel: Select an Endpoint */}
           <div style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: '14px', padding: '20px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
@@ -606,6 +826,14 @@ export default function McpIntegrationStudio({
       {/* ------------------------------------------------------------- */}
       {activeSubView === 'telemetry' && (
         <div className="mcp-view-animated" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', fontSize: '0.73rem' }}>
+            <span style={{ background: '#DCFCE7', color: '#166534', padding: '3px 9px', borderRadius: '999px', fontWeight: 700 }}>
+              Persisted Audit: user_activity_logs (PostgreSQL)
+            </span>
+            <span style={{ background: '#F1F5F9', color: '#475569', padding: '3px 9px', borderRadius: '999px', fontWeight: 600 }}>
+              Live Stream: In-Memory Ring Buffer (300 events)
+            </span>
+          </div>
           {/* 4 KPI Cards with top stripes */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '14px' }}>
             <div className="mcp-kpi-card stripe-orange">
@@ -721,7 +949,7 @@ export default function McpIntegrationStudio({
       {/* ------------------------------------------------------------- */}
       {/* 03: AGENT TOKENS WORKSPACE                                    */}
       {/* ------------------------------------------------------------- */}
-      {activeSubView === 'tokens' && (
+      {activeSubView === 'credentials' && (
         <div className="mcp-view-animated" style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
             <div>
@@ -878,7 +1106,7 @@ export default function McpIntegrationStudio({
       {/* ------------------------------------------------------------- */}
       {/* 04: RESOURCES & PROMPTS WORKSPACE                             */}
       {/* ------------------------------------------------------------- */}
-      {activeSubView === 'resources' && (
+      {activeSubView === 'explorer' && explorerMode === 'resources' && (
         <div className="mcp-view-animated" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
           {/* Left: A MCP Resources */}
           <div style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: '14px', padding: '20px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
@@ -997,8 +1225,12 @@ export default function McpIntegrationStudio({
       {/* ------------------------------------------------------------- */}
       {/* 05: THIRD-PARTY PROXIES WORKSPACE                             */}
       {/* ------------------------------------------------------------- */}
-      {activeSubView === 'proxies' && (
-        <div className="mcp-view-animated" style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '20px' }}>
+      {activeSubView === 'sandbox' && (
+        <div className="mcp-view-animated" style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+          <div style={{ background: '#FFF7ED', border: '1px solid #FED7AA', borderRadius: '10px', padding: '10px 14px', fontSize: '0.78rem', color: '#9A3412', fontWeight: 600 }}>
+            Simulated Sandbox: 3rd-party proxy tools (PostgreSQL, Stripe, GitHub, Slack) return simulated responses after policy interception. Real external mutations are disabled.
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '20px' }}>
           {/* Left Panel: 01 External tools */}
           <div style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: '14px', padding: '20px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #F1F5F9', paddingBottom: '10px' }}>
@@ -1124,12 +1356,13 @@ export default function McpIntegrationStudio({
             </div>
           </div>
         </div>
+        </div>
       )}
 
       {/* ------------------------------------------------------------- */}
       {/* 06: INTERCEPTION GUARDRAIL WORKSPACE                          */}
       {/* ------------------------------------------------------------- */}
-      {activeSubView === 'middleware' && (
+      {activeSubView === 'explorer' && explorerMode === 'interception' && (
         <div className="mcp-view-animated" style={{ display: 'grid', gridTemplateColumns: '1.1fr 1fr', gap: '20px' }}>
           <div style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: '14px', padding: '20px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
             <h3 style={{ margin: 0, fontSize: '0.96rem', fontWeight: 700, color: '#0F172A' }}>
@@ -1177,7 +1410,7 @@ export default function McpIntegrationStudio({
                 try {
                   const res = await fetch('/v1/mcp/intercept-tool', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: getStudioAuthHeaders({ 'Content-Type': 'application/json' }),
                     body: JSON.stringify({
                       tool_name: interceptToolName,
                       arguments: JSON.parse(interceptArgs),
@@ -1237,9 +1470,9 @@ export default function McpIntegrationStudio({
       )}
 
       {/* ------------------------------------------------------------- */}
-      {/* 07: CONFIGS & SDKS WORKSPACE                                  */}
+      {/* 07: CONFIGS & SDKS WORKSPACE (Included under Credentials tab) */}
       {/* ------------------------------------------------------------- */}
-      {activeSubView === 'configs' && (
+      {activeSubView === 'credentials' && (
         <div className="mcp-view-animated" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
             <div style={{ display: 'flex', background: '#F1F3F5', padding: '3px', borderRadius: '8px', gap: '3px', flexWrap: 'wrap' }}>

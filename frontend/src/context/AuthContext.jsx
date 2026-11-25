@@ -660,7 +660,7 @@ export function AuthProvider({ children }) {
   };
 
   const isTabVisible = (tabKey) => {
-    if (tabKey === 'home' || tabKey === 'profile' || tabKey === 'settings' || tabKey === 'register_company') return true;
+    if (tabKey === 'home' || tabKey === 'profile' || tabKey === 'settings' || tabKey === 'register_company' || tabKey === 'docs') return true;
     const meta = ROLE_METADATA[effectiveRole] || ROLE_METADATA.admin;
     return meta.allowed_tabs ? meta.allowed_tabs.includes(tabKey) : true;
   };
@@ -770,7 +770,7 @@ export const ROLE_METADATA = {
     separation_of_duties: 'Executive override authority across all workflows.',
     badge_color: '#047857',
     badge_bg: 'rgba(4, 120, 87, 0.12)',
-    allowed_tabs: ['home', 'profile', 'settings', 'register_company', 'demo', 'live_ingestion', 'visual_lineage', 'context_curator', 'ingestion', 'integrations', 'audit', 'team', 'playground', 'conflicts'],
+    allowed_tabs: ['home', 'profile', 'settings', 'register_company', 'live_ingestion', 'visual_lineage', 'context_curator', 'ingestion', 'integrations', 'audit', 'team', 'playground', 'conflicts'],
   },
   data_owner: {
     title: 'Data Steward',
@@ -788,7 +788,7 @@ export const ROLE_METADATA = {
     separation_of_duties: 'Restricted from altering source ingestion connectors or uploading raw data (SoD enforced).',
     badge_color: '#4338CA',
     badge_bg: 'rgba(67, 56, 202, 0.12)',
-    allowed_tabs: ['home', 'profile', 'demo', 'visual_lineage', 'context_curator', 'conflicts', 'audit', 'playground'],
+    allowed_tabs: ['home', 'profile', 'visual_lineage', 'context_curator', 'conflicts', 'audit', 'playground'],
   },
   developer: {
     title: 'Operator / Developer / Agent',
@@ -797,7 +797,7 @@ export const ROLE_METADATA = {
     separation_of_duties: 'Read-only policy access; no authority to resolve conflicts or alter source pipelines (SoD enforced).',
     badge_color: '#B45309',
     badge_bg: 'rgba(180, 83, 9, 0.12)',
-    allowed_tabs: ['home', 'profile', 'demo', 'visual_lineage', 'ingestion', 'integrations', 'playground'],
+    allowed_tabs: ['home', 'profile', 'visual_lineage', 'ingestion', 'integrations', 'playground'],
   },
   viewer: {
     title: 'Compliance Observer',

@@ -18,6 +18,7 @@ class ToolCallProposal(BaseModel):
     actor_id: str = Field(default="autonomous-agent", description="Calling AI agent identifier")
     actor_role: str = Field(default="support", description="Role of the agent executing the tool")
     organization_id: Optional[uuid.UUID] = None
+    workspace_id: Optional[str] = None
     workflow_id: Optional[str] = Field(default=None, description="Multi-step workflow correlation ID")
     step_index: Optional[int] = Field(default=1, description="Step number in multi-step plan")
     justification: Optional[str] = Field(default=None, description="Agent's stated rationale for invoking this tool")
@@ -49,6 +50,7 @@ class WorkflowPlanEvaluateRequest(BaseModel):
     actor_id: str
     actor_role: str
     organization_id: Optional[uuid.UUID] = None
+    workspace_id: Optional[str] = None
     steps: List[WorkflowPlanStep] = Field(..., min_length=1)
 
 
