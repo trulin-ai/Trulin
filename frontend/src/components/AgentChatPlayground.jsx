@@ -2258,6 +2258,8 @@ export default function AgentChatPlayground({
     ? [{ label: `Search Results (${filteredSessions.length})`, items: filteredSessions }]
     : groupSessionsByDate(filteredSessions);
 
+  const hasChatHistory = sessions.length > 0;
+
   return (
     <div
       className="copilot-canvas"
@@ -2274,7 +2276,8 @@ export default function AgentChatPlayground({
         flexDirection: 'row'
       }}
     >
-      {/* 1. LEFT SIDE: CHATGPT-STYLE COLLAPSIBLE CHAT HISTORY PANEL */}
+      {/* 1. LEFT SIDE: CHATGPT-STYLE COLLAPSIBLE CHAT HISTORY PANEL (hidden until first chat exists) */}
+      {hasChatHistory && (
       <aside
         className={`copilot-history-sidebar ${!isHistoryOpen ? 'copilot-history-sidebar-closed' : ''}`}
         aria-label="Chat History"
@@ -2496,6 +2499,7 @@ export default function AgentChatPlayground({
           )}
         </div>
       </aside>
+      )}
 
       {/* 2. RIGHT SIDE: MAIN COPILOT WORKSPACE */}
       <div
@@ -2510,36 +2514,20 @@ export default function AgentChatPlayground({
           position: 'relative'
         }}
       >
-        {/* Top Header Bar for Right Side */}
-        <header className="copilot-top-header">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0 }}>
-            {!isHistoryOpen && (
-              <button
-                type="button"
-                className="copilot-topbar-toggle-btn"
-                onClick={toggleHistoryOpen}
-                title="Open chat history sidebar"
-              >
-                <PanelLeftOpen size={15} strokeWidth={2} />
-                <span>History</span>
-              </button>
-            )}
-
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0 }}>
-              <span style={{
-                fontSize: '0.86rem',
-                fontWeight: 600,
-                color: '#1C1917',
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                maxWidth: '420px'
-              }}>
-                {(activeSession?.title || 'New Conversation').replace(/^\[.*?\]\s*/, '')}
-              </span>
-            </div>
+        {/* Compact reopen button only when history sidebar is collapsed */}
+        {hasChatHistory && !isHistoryOpen && (
+          <div style={{ position: 'absolute', top: '12px', left: '14px', zIndex: 20 }}>
+            <button
+              type="button"
+              className="copilot-topbar-toggle-btn"
+              onClick={toggleHistoryOpen}
+              title="Open chat history sidebar"
+            >
+              <PanelLeftOpen size={15} strokeWidth={2} />
+              <span>History</span>
+            </button>
           </div>
-        </header>
+        )}
 
         {/* Conversation Stream & Bottom Floating Bar */}
         <div

@@ -3044,6 +3044,34 @@ export default function App() {
 
   const isEnvironmentReady = Boolean(isOrgReady && isWorkspaceReady);
 
+  const getHeaderTabTitle = () => {
+    switch (activeTab) {
+      case 'home': return 'Home Overview';
+      case 'ingestion':
+        if (docExplorerView === 'ingest') return 'Upload & Ingest';
+        if (docExplorerView === 'connectors') return 'Live Connectors';
+        if (docExplorerView === 'connect') return 'Connect Data Source';
+        if (docExplorerView === 'claims') return 'Atomic Claims';
+        return 'Documents';
+      case 'visual_lineage':
+        return vaultSubTab === 'dag' ? 'Knowledge Vault · Full Canvas DAG' : 'Knowledge Vault';
+      case 'context_curator':
+      case 'conflicts':
+        if (curatorSubView === 'approvals') return 'Curator · Policy Rule Triage';
+        if (curatorSubView === 'conflicts') return 'Curator · Conflicts';
+        if (curatorSubView === 'drift') return 'Curator · Drift';
+        return 'Curator';
+      case 'playground': return 'AI Copilot';
+      case 'integrations': return 'MCP & Agent Hub';
+      case 'audit': return 'Audit Log';
+      case 'team': return 'Team & Access';
+      case 'docs': return 'Documentation';
+      case 'profile': return 'Profile';
+      case 'settings': return 'Workspace Settings';
+      default: return 'Trulin';
+    }
+  };
+
   return (
     <div className={`app-layout ${activeTab === 'playground' || (activeTab === 'ingestion' && (docExplorerView === 'folders' || docExplorerView === 'documents')) ? 'app-layout-fixed' : ''}`}>
 
@@ -3320,25 +3348,6 @@ export default function App() {
               {isSidebarOpen && (
                 <div className={`sidebar-accordion-wrapper ${openSidebarMenu === 'vault' ? 'expanded' : ''}`}>
                   <div className="sidebar-accordion-inner">
-                    {/* Bridge button to Document Explorer */}
-                    <button
-                      type="button"
-                      onClick={() => { setActiveTab('ingestion'); setDocExplorerView('folders'); setOpenSidebarMenu('explorer'); }}
-                      style={{
-                        display: 'flex', alignItems: 'center', gap: '6px',
-                        padding: '5px 8px', borderRadius: '6px', border: '1px solid #E2E8F0',
-                        background: 'transparent', color: '#94A3B8', fontSize: '0.72rem',
-                        fontWeight: 600, cursor: 'pointer', width: '100%', marginBottom: '4px',
-                        transition: 'all 0.15s ease'
-                      }}
-                      onMouseEnter={e => { e.currentTarget.style.background = '#F8FAFC'; e.currentTarget.style.color = '#475569'; e.currentTarget.style.borderColor = '#CBD5E1'; }}
-                      onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#94A3B8'; e.currentTarget.style.borderColor = '#E2E8F0'; }}
-                      title="Open folder browser in Document Explorer"
-                    >
-                      <FolderTree size={11} strokeWidth={1.75} />
-                      <span>Open File Browser</span>
-                      <span style={{ marginLeft: 'auto', opacity: 0.5, fontSize: '0.65rem' }}>→</span>
-                    </button>
                     {[
                       { id: 'claims', label: 'Atomic Claims', count: dbClaims.length },
                       { id: 'dag', label: 'Full Canvas DAG', count: null }
@@ -3604,9 +3613,16 @@ export default function App() {
         {/* TOP HEADER CONTROLS (Identical position for all tabs/pages) */}
         {/* ========================================================= */}
         <div className="top-breadcrumb-bar" style={{ position: 'relative', zIndex: 50, paddingTop: '6px', paddingBottom: '6px', paddingLeft: '16px', paddingRight: '20px', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px' }}>
-          <div id="top-header-left-slot" style={{ display: 'flex', alignItems: 'center', flex: 1, minWidth: 0, overflow: 'hidden' }} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flex: 1, minWidth: 0, overflow: 'hidden' }}>
+            <span style={{ fontSize: '0.9rem', fontWeight: 700, color: '#0F172A', letterSpacing: '-0.01em', whiteSpace: 'nowrap', flexShrink: 0 }}>
+              {getHeaderTabTitle()}
+            </span>
+            <div id="top-header-left-slot" style={{ display: 'flex', alignItems: 'center', flex: 1, minWidth: 0, overflow: 'hidden' }} />
+          </div>
           {renderHeaderRightControls()}
         </div>
+
+        <div className="main-workspace-surface">
 
         {/* Enterprise Organization Setup Progress Checklist Banner */}
         {!(activeTab === 'ingestion' && (docExplorerView === 'folders' || docExplorerView === 'documents')) && (
@@ -3710,23 +3726,9 @@ export default function App() {
         {/* ========================================================= */}
         {activeTab === 'home' && (
           <div>
-            {/* Centered Hero Banner */}
-            <div className="tab-header-center" style={{ padding: '16px 20px', marginBottom: '28px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '8px' }}>
-                <img
-                  src="/Trulin-Main-NoBg.png"
-                  alt="Trulin"
-                  style={{ height: '38px', maxWidth: '175px', objectFit: 'contain' }}
-                />
-              </div>
-              <h1 className="tab-main-heading">
-                Context Trust Gateway
-              </h1>
-              <p className="tab-subtitle">
-                A deterministic evidence validation gate that prevents autonomous AI agents from acting on outdated policies, unverified rumors, and contradictory instructions across enterprise knowledge bases.
-              </p>
-
-              <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap', marginTop: '18px' }}>
+            {/* Compact Hero Actions */}
+            <div className="tab-header-center" style={{ padding: '10px 20px', marginBottom: '20px' }}>
+              <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap' }}>
                 <button
                   onClick={() => { setActiveTab('playground'); setExpandedMenu('playground'); }}
                   className="btn btn-primary"
@@ -4171,54 +4173,35 @@ export default function App() {
             width: '100%',
             height: '100%'
           }}>
-            {/* Clean Document Explorer Header - Only show for sub-views other than folders/documents */}
-            {docExplorerView !== 'folders' && docExplorerView !== 'documents' && (
+            {/* Back button only on Connect Enterprise Data Source sub-view */}
+            {docExplorerView === 'connect' && (
               <div style={{
                 display: 'flex',
-                justifyContent: 'space-between',
+                justifyContent: 'flex-end',
                 alignItems: 'center',
-                marginBottom: '16px',
-                flexWrap: 'wrap',
-                gap: '12px'
+                marginBottom: '12px'
               }}>
-                <div>
-                  <h1 className="tab-main-heading" style={{ margin: 0, textAlign: 'left', fontSize: '1.45rem' }}>
-                    {docExplorerView === 'ingest' && 'Upload & Ingestion Studio'}
-                    {docExplorerView === 'connectors' && 'Live Connectors'}
-                    {docExplorerView === 'connect' && 'Connect Enterprise Data Source'}
-                    {docExplorerView === 'claims' && 'Atomic Claims Browser'}
-                  </h1>
-                  <p className="tab-subtitle" style={{ margin: '4px 0 0 0', textAlign: 'left' }}>
-                    {docExplorerView === 'ingest' && 'Upload raw policy files or markdown to parse atomic claims with 9-gate verification into PostgreSQL.'}
-                    {docExplorerView === 'connectors' && 'Manage live external data source connectors, real-time synchronization schedules, and automated schema ingestion.'}
-                    {docExplorerView === 'connect' && 'Configure automated schema extraction, governance rules, and continuous synchronization.'}
-                    {docExplorerView === 'claims' && 'Inspect atomic claims extracted from stored enterprise policies across all active workspaces.'}
-                  </p>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <button
+                    type="button"
+                    onClick={() => { setDocExplorerView('connectors'); setTestConnectionResult(null); }}
+                    style={{
+                      padding: '8px 16px',
+                      fontSize: '0.82rem',
+                      fontWeight: 700,
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      background: '#F1F5F9',
+                      color: '#334155',
+                      border: '1px solid #CBD5E1',
+                      borderRadius: '8px',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    <span>← Back to Live Connectors</span>
+                  </button>
                 </div>
-
-                {docExplorerView === 'connect' && (
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <button
-                      type="button"
-                      onClick={() => { setDocExplorerView('connectors'); setTestConnectionResult(null); }}
-                      style={{
-                        padding: '8px 16px',
-                        fontSize: '0.82rem',
-                        fontWeight: 700,
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '6px',
-                        background: '#F1F5F9',
-                        color: '#334155',
-                        border: '1px solid #CBD5E1',
-                        borderRadius: '8px',
-                        cursor: 'pointer'
-                      }}
-                    >
-                      <span>← Back to Live Connectors</span>
-                    </button>
-                  </div>
-                )}
               </div>
             )}
 
@@ -6104,18 +6087,10 @@ export default function App() {
           ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
 
-            {/* Centered Top Header & Compliance Export Actions */}
-            <div className="tab-header-center clean-panel" style={{ padding: '24px', background: 'var(--bg-card)', marginBottom: '24px' }}>
-
-              <h1 className="tab-main-heading">
-                Live Decision Audit Trail & Lineage Explorer
-              </h1>
-              <p className="tab-subtitle">
-                Cryptographically tamper-evident decision logs with 4-stage end-to-end lineage tracing, actor authorization gates, and candidate evidence provenance.
-              </p>
-
+            {/* Compliance Export Actions */}
+            <div className="tab-header-center clean-panel" style={{ padding: '14px 20px', background: 'var(--bg-card)', marginBottom: '16px' }}>
               {/* Centered Export & Refresh Buttons */}
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', flexWrap: 'wrap', marginTop: '16px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', flexWrap: 'wrap' }}>
                 <button
                   onClick={() => fetchAuditLogs(activeOrg?.id)}
                   className="btn btn-secondary"
@@ -6582,15 +6557,6 @@ export default function App() {
             />
           ) : (
           <div>
-            <div className="tab-header-center" style={{ marginBottom: '20px' }}>
-
-              <h1 className="tab-main-heading">
-                Model Context Protocol (MCP) & Agent Integrations
-              </h1>
-              <p className="tab-subtitle">
-                Connect external autonomous agent frameworks (LangChain, CrewAI, AutoGen, Claude Desktop) to the Context Trust Gateway via standardized MCP endpoints.
-              </p>
-            </div>
             <McpIntegrationStudio
               activeOrg={activeOrg}
               showToast={showToast}
@@ -6625,15 +6591,6 @@ export default function App() {
         {/* ========================================================= */}
         {activeTab === 'team' && (
           <div>
-            <div className="tab-header-center" style={{ marginBottom: '20px' }}>
-
-              <h1 className="tab-main-heading">
-                Enterprise Team, Personas & Governance Activity
-              </h1>
-              <p className="tab-subtitle">
-                Manage organizational users, switch testing personas, review Atlan-grade separation of duties (SoD), and audit real-time user activities.
-              </p>
-            </div>
             <TeamAndActivityHub
               activeOrg={activeOrg}
               activePersona={activePersona}
@@ -6709,6 +6666,7 @@ export default function App() {
             />
           </div>
         )}
+        </div>
       </main>
 
       {/* ========================================================= */}
