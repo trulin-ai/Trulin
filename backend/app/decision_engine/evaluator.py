@@ -365,6 +365,9 @@ class DecisionEvaluator:
                         "updated_at": it.updated_at,
                         "authority_level": it.authority_level,
                         "scope": it.scope,
+                        "claim_id": it.claim_id,
+                        "claim_version": it.claim_version,
+                        "role": it.role,
                     }
                     for it in req.context
                 ]

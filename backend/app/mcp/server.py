@@ -672,7 +672,10 @@ async def handle_evaluate_decision(session: AsyncSession, args: Dict[str, Any]) 
                     source=doc_title,
                     updated_at="2026-09-17",
                     authority_level=95,
-                    scope="Enterprise"
+                    scope="Enterprise",
+                    claim_id=str(fc.id),
+                    claim_version=str(fc.document_version_id) if fc.document_version_id else None,
+                    role="supporting",
                 )
             )
             if len(context_items) >= 5:

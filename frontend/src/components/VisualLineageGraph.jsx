@@ -42,6 +42,7 @@ import SmartDocumentCanvas from './SmartDocumentCanvas';
 import ExecutiveDeleteModal from './ExecutiveDeleteModal';
 import AssetClaimsStudioPane from './AssetClaimsStudioPane';
 import AssetConflictsStudioPane from './AssetConflictsStudioPane';
+import LineageExplorer from './lineage/LineageExplorer';
 
 const CARD_WIDTH = 260;
 const CARD_HEIGHT = 76;
@@ -297,7 +298,10 @@ export default function VisualLineageGraph({
     setLoading(true);
     try {
       const orgId = activeOrg?.id || '11111111-1111-1111-1111-111111111111';
-      const res = await fetch(`/v1/lineage/graph?organization_id=${orgId}`);
+      const jwt = localStorage.getItem('ctl_token');
+      const headers = jwt ? { Authorization: `Bearer ${jwt}` } : {};
+      const wsQuery = activeWorkspace?.id && activeWorkspace.id !== 'all' ? `&workspace_id=${encodeURIComponent(activeWorkspace.id)}` : '';
+      const res = await fetch(`/v1/lineage/graph?organization_id=${orgId}${wsQuery}`, { headers });
       if (res.ok) {
         const data = await res.json();
         setGraphData(data);
@@ -323,7 +327,9 @@ export default function VisualLineageGraph({
     if (!claimId) return;
     setLoadingBlastRadius(true);
     try {
-      const res = await fetch(`/v1/lineage/blast-radius/${claimId}`);
+      const jwt = localStorage.getItem('ctl_token');
+      const headers = jwt ? { Authorization: `Bearer ${jwt}` } : {};
+      const res = await fetch(`/v1/lineage/blast-radius/${claimId}`, { headers });
       if (res.ok) {
         const data = await res.json();
         setBlastRadius(data);
@@ -2139,7 +2145,7 @@ export default function VisualLineageGraph({
         </div>
       )}
 
-      {!selectedAsset360 && (vaultSubTab === 'dag' || vaultSubTab === 'conflicts') && (
+      {!selectedAsset360 && vaultSubTab === 'conflicts' && (
         <div style={{
           display: 'flex',
           alignItems: 'center',
@@ -2180,9 +2186,28 @@ export default function VisualLineageGraph({
       )}
 
       {/* ========================================================= */}
-      {/* MASTER-DETAIL 360° WORKBENCH (DOCUMENTS, CONNECTORS, DAG) */}
+      {/* MODULAR GOVERNED-CONTEXT LINEAGE EXPLORER (FULL CANVAS)   */}
       {/* ========================================================= */}
-      {(vaultSubTab === 'documents' || vaultSubTab === 'connectors' || vaultSubTab === 'dag') && (() => {
+      {vaultSubTab === 'dag' && !selectedAsset360 && (
+        <LineageExplorer
+          organizationId={activeOrg?.id}
+          workspaceId={activeWorkspace?.id}
+          workspaceName={activeWorkspace?.name}
+          onOpenDocument={(docId) => {
+            const cleanDocId = String(docId).replace(/^doc_/, '');
+            if (onOpenFileBrowser) onOpenFileBrowser(cleanDocId);
+            else {
+              setVaultSubTab('documents');
+              setOpenedAssetId(`doc_${cleanDocId}`);
+            }
+          }}
+        />
+      )}
+
+      {/* ========================================================= */}
+      {/* MASTER-DETAIL 360° WORKBENCH (DOCUMENTS, CONNECTORS)      */}
+      {/* ========================================================= */}
+      {(vaultSubTab === 'documents' || vaultSubTab === 'connectors') && (() => {
         const rawItems = vaultSubTab === 'documents' ? documentsList : sourcesList;
         const itemEdges = graphData?.edges || [];
 

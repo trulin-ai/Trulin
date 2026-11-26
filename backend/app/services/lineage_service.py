@@ -1,18 +1,21 @@
 import uuid
-from typing import Any, Dict, List, Optional
+from datetime import datetime, timezone
+from typing import Any, Dict, List, Optional, Set
 from sqlalchemy import select, or_, and_, desc
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import selectinload
+from sqlalchemy.orm import aliased, selectinload
 
-from app.db.enums import ClaimStatus
+from app.db.enums import ClaimStatus, ConflictStatus
 from app.db.models.claim import Claim
 from app.db.models.claim_conflict import ClaimConflict
+from app.db.models.claim_evidence import ClaimEvidence
 from app.db.models.claim_trust_score import ClaimTrustScore
 from app.db.models.claim_validity import ClaimValidity
 from app.db.models.data_source import DataSource
 from app.db.models.decision_evaluation import DecisionEvaluation
 from app.db.models.document import Document
 from app.db.models.document_version import DocumentVersion
+from app.db.models.folder import Folder
 from app.services.claim_gate_evaluator import ClaimGateEvaluator
 
 
@@ -22,23 +25,67 @@ class LineageService:
     def __init__(self, db: AsyncSession):
         self.db = db
 
-    async def get_lineage_graph(self, organization_id: uuid.UUID) -> Dict[str, Any]:
-        """Builds a complete DAG representing sources -> documents -> versions -> claims -> conflicts -> decisions."""
+    async def _resolve_workspace_folder_ids(
+        self,
+        organization_id: uuid.UUID,
+        workspace_id: Optional[str | uuid.UUID],
+    ) -> Optional[Set[uuid.UUID]]:
+        """Resolves a workspace_id (Folder UUID) to its Folder subtree within organization_id."""
+        if workspace_id is None or str(workspace_id).lower() in ("all", "default", ""):
+            return None
+        try:
+            ws_uuid = workspace_id if isinstance(workspace_id, uuid.UUID) else uuid.UUID(str(workspace_id))
+        except Exception:
+            # Logical UI workspace slugs (e.g. 'ws_83659a4d26' for General Workspace) do not map to a Folder UUID
+            return None
+
+        res = await self.db.execute(
+            select(Folder.id, Folder.parent_id).where(Folder.organization_id == organization_id)
+        )
+        children_map: Dict[Optional[uuid.UUID], List[uuid.UUID]] = {}
+        all_ids: Set[uuid.UUID] = set()
+        for fid, pid in res.all():
+            all_ids.add(fid)
+            children_map.setdefault(pid, []).append(fid)
+
+        if ws_uuid not in all_ids:
+            return {ws_uuid}
+
+        allowed: Set[uuid.UUID] = set()
+        queue = [ws_uuid]
+        while queue:
+            curr = queue.pop(0)
+            if curr in allowed:
+                continue
+            allowed.add(curr)
+            queue.extend(children_map.get(curr, []))
+        return allowed
+
+    async def get_lineage_graph(
+        self,
+        organization_id: uuid.UUID,
+        workspace_id: Optional[uuid.UUID] = None,
+    ) -> Dict[str, Any]:
+        """Builds a scoped DAG representing sources -> documents -> evidence -> claims -> conflicts -> decisions."""
+        allowed_folder_ids = await self._resolve_workspace_folder_ids(organization_id, workspace_id)
+
         # 1. Fetch Data Sources
         stmt_sources = select(DataSource).where(DataSource.organization_id == organization_id)
         res_sources = await self.db.execute(stmt_sources)
         sources = res_sources.scalars().all()
 
-        # 2. Fetch Documents with Versions
+        # 2. Fetch Documents with Versions (scoped by workspace folder subtree if provided)
         stmt_docs = (
             select(Document)
             .where(Document.organization_id == organization_id)
             .options(selectinload(Document.versions))
         )
+        if allowed_folder_ids is not None:
+            stmt_docs = stmt_docs.where(Document.folder_id.in_(allowed_folder_ids))
         res_docs = await self.db.execute(stmt_docs)
         documents = res_docs.scalars().all()
 
-        # 3. Fetch Claims with Trust Scores and Validity
+        # 3. Fetch Claims with Trust Scores, Validity & Evidence (scoped by workspace if provided)
         stmt_claims = (
             select(Claim)
             .where(Claim.organization_id == organization_id)
@@ -46,24 +93,40 @@ class LineageService:
                 selectinload(Claim.trust_scores),
                 selectinload(Claim.validity_records),
                 selectinload(Claim.document_version),
-                selectinload(Claim.evidence),
+                selectinload(Claim.evidence).selectinload(ClaimEvidence.document),
             )
         )
+        if allowed_folder_ids is not None:
+            stmt_claims = stmt_claims.where(
+                Claim.evidence.any(ClaimEvidence.document.has(Document.folder_id.in_(allowed_folder_ids)))
+            )
         res_claims = await self.db.execute(stmt_claims)
         claims = res_claims.scalars().all()
+        allowed_claim_ids: Set[uuid.UUID] = {c.id for c in claims}
+        allowed_claim_by_str: Dict[str, Claim] = {str(c.id): c for c in claims}
 
-        # 4. Fetch Conflicts
+        # 4. Fetch Conflicts where BOTH claim_a and claim_b belong to the authorized org & workspace
+        ClaimA = aliased(Claim)
+        ClaimB = aliased(Claim)
         stmt_conflicts = (
             select(ClaimConflict)
-            .join(Claim, ClaimConflict.claim_a_id == Claim.id)
-            .where(Claim.organization_id == organization_id)
+            .join(ClaimA, ClaimConflict.claim_a_id == ClaimA.id)
+            .join(ClaimB, ClaimConflict.claim_b_id == ClaimB.id)
+            .where(
+                ClaimA.organization_id == organization_id,
+                ClaimB.organization_id == organization_id,
+            )
             .options(
                 selectinload(ClaimConflict.claim_a),
                 selectinload(ClaimConflict.claim_b),
             )
         )
         res_conflicts = await self.db.execute(stmt_conflicts)
-        conflicts = res_conflicts.scalars().all()
+        raw_conflicts = res_conflicts.scalars().all()
+        conflicts = [
+            cf for cf in raw_conflicts
+            if cf.claim_a_id in allowed_claim_ids and cf.claim_b_id in allowed_claim_ids
+        ]
 
         # 5. Fetch Decision Evaluations
         stmt_decisions = (
@@ -258,14 +321,17 @@ class LineageService:
                 }
             })
 
-            # Edge from Document
+            # Edge from Document (carrying explicit evidence span metadata)
             if cl.document_version and cl.document_version.document_id:
                 edges.append({
                     "id": f"e_doc_{cl.document_version.document_id}_cl_{cl.id}",
                     "source": f"doc_{cl.document_version.document_id}",
                     "target": cl_node_id,
                     "label": "extracted_from",
-                    "type": "extraction"
+                    "type": "extraction",
+                    "inferred": False,
+                    "evidence_snippet": ev_snippet,
+                    "evidence_section": ev_section,
                 })
 
         # Build Conflict Nodes & Edges
@@ -317,36 +383,69 @@ class LineageService:
             })
 
             items_list = dec.context_items if dec.context_items and isinstance(dec.context_items, list) else []
+            seen_claim_edges: Set[str] = set()
             for item in items_list:
-                item_text = item.get("claim", "") if isinstance(item, dict) else str(item)
-                for cl in claims:
-                    if cl.claim_text in item_text or item_text in cl.claim_text:
+                if isinstance(item, dict) and item.get("claim_id"):
+                    explicit_cid = str(item["claim_id"])
+                    if explicit_cid in allowed_claim_by_str and explicit_cid not in seen_claim_edges:
+                        seen_claim_edges.add(explicit_cid)
+                        claim_role = item.get("role") or "grounded_in"
                         edges.append({
-                            "id": f"e_cl_{cl.id}_dec_{dec.id}",
+                            "id": f"e_cl_{explicit_cid}_dec_{dec.id}",
+                            "source": f"cl_{explicit_cid}",
+                            "target": dec_node_id,
+                            "label": claim_role,
+                            "type": "decision_grounding",
+                            "inferred": False,
+                            "claim_role": item.get("role", "context"),
+                        })
+                    continue
+
+                # Legacy fallback only when explicit claim_id was not persisted
+                item_text = item.get("claim", "") if isinstance(item, dict) else str(item)
+                if not item_text:
+                    continue
+                for cl in claims:
+                    if (cl.claim_text in item_text or item_text in cl.claim_text) and str(cl.id) not in seen_claim_edges:
+                        seen_claim_edges.add(str(cl.id))
+                        edges.append({
+                            "id": f"e_cl_{cl.id}_dec_{dec.id}_inf",
                             "source": f"cl_{cl.id}",
                             "target": dec_node_id,
-                            "label": "grounded_in",
-                            "type": "decision_grounding"
+                            "label": "inferred_grounding",
+                            "type": "inferred_grounding",
+                            "inferred": True,
                         })
                         break
 
+        # If workspace-scoped, drop decisions that have zero edges to authorized claims in that workspace
+        if allowed_folder_ids is not None:
+            connected_dec_ids = {e["target"] for e in edges if str(e.get("target", "")).startswith("dec_")}
+            nodes = [n for n in nodes if n["type"] != "decision" or n["id"] in connected_dec_ids]
+
         return {
             "organization_id": str(organization_id),
+            "workspace_id": str(workspace_id) if workspace_id else None,
             "total_nodes": len(nodes),
             "total_edges": len(edges),
             "counts": {
-                "sources": len(sources),
-                "documents": len(documents),
-                "claims": len(claims),
-                "conflicts": len(conflicts),
-                "decisions": len(decisions),
+                "sources": sum(1 for n in nodes if n["type"] == "source"),
+                "documents": sum(1 for n in nodes if n["type"] == "document"),
+                "claims": sum(1 for n in nodes if n["type"] == "claim"),
+                "conflicts": sum(1 for n in nodes if n["type"] == "conflict"),
+                "decisions": sum(1 for n in nodes if n["type"] == "decision"),
             },
             "nodes": nodes,
             "edges": edges,
         }
 
-    async def get_blast_radius(self, claim_id: uuid.UUID) -> Dict[str, Any]:
-        """Calculates downstream blast radius of deprecating or updating a claim."""
+    async def get_blast_radius(
+        self,
+        claim_id: uuid.UUID,
+        organization_id: Optional[uuid.UUID] = None,
+        workspace_id: Optional[uuid.UUID] = None,
+    ) -> Dict[str, Any]:
+        """Calculates downstream blast radius of deprecating or updating an authorized claim."""
         stmt = (
             select(Claim)
             .where(Claim.id == claim_id)
@@ -354,20 +453,33 @@ class LineageService:
                 selectinload(Claim.trust_scores),
                 selectinload(Claim.validity_records),
                 selectinload(Claim.document_version),
+                selectinload(Claim.evidence).selectinload(ClaimEvidence.document),
             )
         )
+        if organization_id is not None:
+            stmt = stmt.where(Claim.organization_id == organization_id)
+
         res = await self.db.execute(stmt)
         claim = res.scalar_one_or_none()
         if not claim:
-            return {"error": "Claim not found", "claim_id": str(claim_id)}
+            return {"error": "Claim not found in authorized scope", "claim_id": str(claim_id)}
 
-        # 1. Connected Conflicts
+        allowed_folder_ids = await self._resolve_workspace_folder_ids(claim.organization_id, workspace_id)
+        if allowed_folder_ids is not None:
+            in_ws = any(
+                ev.document and ev.document.folder_id in allowed_folder_ids
+                for ev in (claim.evidence or [])
+            )
+            if not in_ws:
+                return {"error": "Claim not found in authorized workspace", "claim_id": str(claim_id)}
+
+        # 1. Connected Conflicts (verify BOTH sides belong to authorized org & workspace)
         stmt_conflicts = (
             select(ClaimConflict)
             .where(or_(ClaimConflict.claim_a_id == claim_id, ClaimConflict.claim_b_id == claim_id))
             .options(
-                selectinload(ClaimConflict.claim_a),
-                selectinload(ClaimConflict.claim_b),
+                selectinload(ClaimConflict.claim_a).selectinload(Claim.evidence).selectinload(ClaimEvidence.document),
+                selectinload(ClaimConflict.claim_b).selectinload(Claim.evidence).selectinload(ClaimEvidence.document),
             )
         )
         res_conflicts = await self.db.execute(stmt_conflicts)
@@ -376,13 +488,21 @@ class LineageService:
         conflicting_claims = []
         for c in conflicts:
             opp_claim = c.claim_b if c.claim_a_id == claim_id else c.claim_a
-            if opp_claim:
-                conflicting_claims.append({
-                    "claim_id": str(opp_claim.id),
-                    "text": opp_claim.claim_text,
-                    "status": opp_claim.status.value if hasattr(opp_claim.status, "value") else str(opp_claim.status),
-                    "conflict_severity": str(c.severity),
-                })
+            if not opp_claim or opp_claim.organization_id != claim.organization_id:
+                continue
+            if allowed_folder_ids is not None:
+                opp_in_ws = any(
+                    ev.document and ev.document.folder_id in allowed_folder_ids
+                    for ev in (opp_claim.evidence or [])
+                )
+                if not opp_in_ws:
+                    continue
+            conflicting_claims.append({
+                "claim_id": str(opp_claim.id),
+                "text": opp_claim.claim_text,
+                "status": opp_claim.status.value if hasattr(opp_claim.status, "value") else str(opp_claim.status),
+                "conflict_severity": str(c.severity),
+            })
 
         stmt_decisions = (
             select(DecisionEvaluation)
@@ -450,19 +570,69 @@ class LineageService:
     async def investigate_lineage_subgraph(
         self,
         organization_id: uuid.UUID,
+        workspace_id: Optional[uuid.UUID] = None,
         mode: str = "risk",
         root_id: Optional[str] = None,
         max_depth: int = 2,
         limit: int = 40,
+        cursor: Optional[str] = None,
         topic_cluster: bool = True
     ) -> Dict[str, Any]:
-        """Calculates bounded, high-impact subgraphs (20-60 nodes) for targeted enterprise context investigations."""
-        full_graph = await self.get_lineage_graph(organization_id)
+        """Calculates bounded, ranked subgraphs with scope, summary, truncation, and cursor metadata."""
+        full_graph = await self.get_lineage_graph(organization_id, workspace_id=workspace_id)
         nodes = full_graph.get("nodes", [])
         edges = full_graph.get("edges", [])
 
+        snapshot_at = datetime.now(timezone.utc).isoformat()
+        ranking_basis = {
+            "risk": "conflict_severity_and_trust",
+            "evidence": "provenance_depth",
+            "impact": "downstream_dependency_count",
+            "decision": "decision_grounding",
+        }.get(mode, "conflict_severity_and_trust")
+
+        unresolved_conflicts = sum(
+            1 for n in nodes
+            if n.get("type") == "conflict" and str(n.get("status", "")).lower() != "resolved"
+        )
+        review_claims = sum(
+            1 for n in nodes
+            if n.get("type") == "claim" and not n.get("is_canonical", False)
+        )
+        inferred_edges = sum(1 for e in edges if e.get("inferred") is True)
+
+        base_scope = {
+            "organization_id": str(organization_id),
+            "workspace_id": str(workspace_id) if workspace_id else None,
+            "snapshot_at": snapshot_at,
+        }
+        base_summary = {
+            "node_counts": full_graph.get("counts", {}),
+            "risk_counts": {
+                "unresolved_conflicts": unresolved_conflicts,
+                "review_required_claims": review_claims,
+                "inferred_edges": inferred_edges,
+            },
+            "total_universe_nodes": len(nodes),
+            "total_universe_edges": len(edges),
+        }
+
         if not nodes:
-            return {"nodes": [], "edges": [], "mode": mode, "total_universe_nodes": 0}
+            return {
+                "scope": base_scope,
+                "summary": base_summary,
+                "nodes": [],
+                "edges": [],
+                "truncated": False,
+                "next_cursor": None,
+                "ranking_basis": ranking_basis,
+                "mode": mode,
+                "root_id": root_id,
+                "total_universe_nodes": 0,
+                "rendered_nodes_count": 0,
+                "rendered_edges_count": 0,
+                "has_more": False,
+            }
 
         # Build adjacency maps
         node_map = {n["id"]: n for n in nodes}
@@ -545,24 +715,37 @@ class LineageService:
         if len(selected_node_ids) < 3:
             selected_node_ids = set([n["id"] for n in nodes[:min(len(nodes), limit)]])
 
-        # Filter nodes and bounded edges
-        filtered_nodes = [node_map[nid] for nid in selected_node_ids if nid in node_map][:limit]
-        valid_node_id_set = set(n["id"] for n in filtered_nodes)
-        filtered_edges = [e for e in edges if e["source"] in valid_node_id_set and e["target"] in valid_node_id_set]
+        # Filter nodes and bounded edges with cursor pagination
+        ordered_ids = [nid for nid in selected_node_ids if nid in node_map]
+        offset = 0
+        if cursor:
+            try:
+                offset = max(0, int(cursor))
+            except ValueError:
+                offset = 0
 
-        # Apply Semantic Topic Clustering if enabled and claim count > 6
-        final_nodes = list(filtered_nodes)
-        final_edges = list(filtered_edges)
+        page_ids = ordered_ids[offset : offset + limit]
+        final_nodes = [node_map[nid] for nid in page_ids]
+        valid_node_id_set = set(page_ids)
+        final_edges = [e for e in edges if e["source"] in valid_node_id_set and e["target"] in valid_node_id_set]
+
+        truncated = (offset + len(final_nodes)) < len(nodes)
+        next_cursor = str(offset + limit) if (offset + limit) < len(ordered_ids) else None
 
         return {
+            "scope": base_scope,
+            "summary": base_summary,
             "nodes": final_nodes,
             "edges": final_edges,
+            "truncated": truncated,
+            "next_cursor": next_cursor,
+            "ranking_basis": ranking_basis,
             "mode": mode,
             "root_id": root_id,
             "total_universe_nodes": len(nodes),
             "rendered_nodes_count": len(final_nodes),
             "rendered_edges_count": len(final_edges),
-            "has_more": len(nodes) > len(final_nodes),
+            "has_more": truncated,
             "investigation_summary": {
                 "conflicts_count": sum(1 for n in final_nodes if n.get("type") == "conflict"),
                 "decisions_count": sum(1 for n in final_nodes if n.get("type") == "decision"),

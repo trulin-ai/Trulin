@@ -9,6 +9,9 @@ class DecisionContextItem(BaseModel):
     updated_at: str | None = Field(default=None, description="ISO timestamp or date string, e.g. 2025-11-04")
     authority_level: int | None = Field(default=50, ge=0, le=100, description="Authority rating 0-100")
     scope: str | None = Field(default=None, description="Applicable region/entity/tier, e.g. US, Enterprise, Global")
+    claim_id: str | None = Field(default=None, description="Explicit UUID of the supporting/conflicting Claim")
+    claim_version: str | None = Field(default=None, description="DocumentVersion UUID or snapshot hash")
+    role: str = Field(default="context", description="Relationship role: supporting | conflicting | context")
 
 
 class DecisionActor(BaseModel):
