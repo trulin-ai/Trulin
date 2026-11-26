@@ -503,76 +503,79 @@ export default function McpIntegrationStudio({
   const currentWorkspaceInfo = subViewsList.find(s => s.id === activeSubView) || subViewsList[0];
 
   return (
-    <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '20px' }}>
-      
-      {/* 2. SUB-NAVIGATION STRIP (5 Clean Enterprise Tabs) */}
-      <div className="mcp-subnav-strip" style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+    <div style={{ width: 'calc(100% + 20px)', display: 'grid', gridTemplateColumns: '256px minmax(0, 1fr)', gap: '24px', alignItems: 'stretch', marginLeft: '-20px' }}>
+
+      {/* 2. LEFT-SIDE PROFESSIONAL MENU BAR (Flush, border-attached, no separate card bg) */}
+      <aside
+        style={{
+          position: 'sticky',
+          top: '0',
+          alignSelf: 'start',
+          background: 'transparent',
+          borderRight: '1px solid #E2DDD4',
+          padding: '8px 0 16px 0',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '2px',
+          minHeight: 'calc(100vh - 180px)'
+        }}
+      >
+        <div style={{ fontSize: '0.64rem', fontWeight: 800, color: '#94A3B8', letterSpacing: '0.08em', textTransform: 'uppercase', padding: '6px 16px 8px 16px' }}>
+          MCP & Agent Hub
+        </div>
+
         {subViewsList.map((tab) => {
           const isActive = activeSubView === tab.id;
           return (
-            <div
+            <button
               key={tab.id}
-              className={`mcp-subnav-tab ${isActive ? 'active' : 'inactive'}`}
+              type="button"
               onClick={() => handleSelectSubView(tab.id)}
-              style={{ flex: '1 1 170px' }}
+              className={`mcp-side-nav-btn ${isActive ? 'active' : ''}`}
             >
-              <div className="mcp-tab-icon-badge" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: isActive ? '#EA580C' : '#64748B' }}>
+              <span style={{ color: isActive ? '#EA580C' : '#64748B', display: 'inline-flex', alignItems: 'center', flexShrink: 0 }}>
                 {tab.icon}
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minWidth: 0 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <span style={{ fontSize: '0.6rem', fontWeight: 800, color: isActive ? '#EA580C' : '#94A3B8', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
-                    {tab.kicker}
-                  </span>
-                  {tab.badge && (
-                    <span style={{ fontSize: '0.58rem', fontWeight: 700, color: '#9A3412', background: '#FFEDD5', padding: '1px 5px', borderRadius: '4px' }}>
-                      {tab.badge}
-                    </span>
-                  )}
-                </div>
-                <span style={{ fontSize: '0.77rem', fontWeight: isActive ? 700 : 600, color: isActive ? '#0F172A' : '#475569', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                  {tab.title}
+              </span>
+              <span style={{ flex: 1, minWidth: 0, whiteSpace: 'nowrap' }}>
+                {tab.title}
+              </span>
+              {tab.badge && (
+                <span style={{ fontSize: '0.58rem', fontWeight: 700, color: '#9A3412', background: '#FFEDD5', padding: '1px 6px', borderRadius: '999px', flexShrink: 0 }}>
+                  {tab.badge}
                 </span>
-              </div>
-            </div>
+              )}
+            </button>
           );
         })}
-      </div>
+
+        {onOpenDocs && (
+          <div style={{ marginTop: '10px', paddingTop: '8px', borderTop: '1px solid #E2DDD4' }}>
+            <button
+              type="button"
+              onClick={() => onOpenDocs('mcp-architecture')}
+              className="mcp-side-nav-btn"
+            >
+              <BookOpen size={14} color="#EA580C" style={{ flexShrink: 0 }} />
+              <span>MCP Docs & Reference</span>
+            </button>
+          </div>
+        )}
+      </aside>
+
+      {/* RIGHT WORKSPACE CONTENT */}
+      <div style={{ minWidth: 0, display: 'flex', flexDirection: 'column', gap: '18px' }}>
 
       {/* 3. WORKSPACE TITLE HEADER */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px', marginTop: '2px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
           <div style={{ fontSize: '0.66rem', fontWeight: 800, color: '#EA580C', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-            MCP & AGENT HUB
+            {currentWorkspaceInfo.kicker}
           </div>
-          <h2 style={{ fontSize: '1.3rem', fontWeight: 700, margin: 0, color: '#0F172A', display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <h2 style={{ fontSize: '1.28rem', fontWeight: 700, margin: 0, color: '#0F172A', display: 'flex', alignItems: 'center', gap: '10px' }}>
             <span style={{ color: '#EA580C', display: 'inline-flex', alignItems: 'center' }}>{currentWorkspaceInfo.icon}</span>
             <span>{currentWorkspaceInfo.title}</span>
           </h2>
         </div>
-
-        {onOpenDocs && (
-          <button
-            type="button"
-            onClick={() => onOpenDocs('mcp-architecture')}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '6px',
-              padding: '7px 12px',
-              borderRadius: '8px',
-              border: '1px solid #E2E8F0',
-              background: '#FFFFFF',
-              color: '#334155',
-              fontSize: '0.76rem',
-              fontWeight: 600,
-              cursor: 'pointer'
-            }}
-          >
-            <BookOpen size={14} color="#EA580C" />
-            <span>MCP Docs & Reference</span>
-          </button>
-        )}
       </div>
 
       {/* 4. WORKSPACE CONTENT AREAS */}
@@ -1517,6 +1520,7 @@ export default function McpIntegrationStudio({
         </div>
       )}
 
+      </div>
     </div>
   );
 }

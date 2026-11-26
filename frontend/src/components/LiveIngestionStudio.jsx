@@ -609,15 +609,6 @@ export default function LiveIngestionStudio({
           gap: '16px',
           boxShadow: '0 2px 10px rgba(0, 0, 0, 0.02)'
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid var(--border-color)', paddingBottom: '12px' }}>
-            <span style={{ fontSize: '0.82rem', fontWeight: 800, color: 'var(--text-main)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-              Document & Folder Controller
-            </span>
-            <span style={{ fontSize: '0.70rem', color: '#64748B' }}>
-              {stagedFiles.length > 0 ? `${stagedFiles.length} File(s) Staged` : 'No Files Selected'}
-            </span>
-          </div>
-
           {/* Interactive Unified Drop Zone for Files & Folders */}
           <div
             onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}

@@ -300,17 +300,8 @@ export default function CandidateApprovalsStudio({
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '100%', minHeight: '620px' }}>
       
-      {/* ── TOP HEADER ── */}
-      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap' }}>
-        <div>
-          <h2 style={{ fontSize: '1.30rem', fontWeight: 800, color: '#0F172A', margin: 0, letterSpacing: '-0.02em' }}>
-            Policy Rule Triage
-          </h2>
-          <p style={{ fontSize: '0.80rem', color: '#64748B', margin: '3px 0 0 0' }}>
-            Review, verify, and certify candidate claims into active rules.
-          </p>
-        </div>
-
+      {/* ── TOP HEADER CONTROLS ── */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '16px', flexWrap: 'wrap' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <select
             value={selectedDocFilter}

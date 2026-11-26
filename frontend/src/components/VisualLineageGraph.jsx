@@ -2143,15 +2143,11 @@ export default function VisualLineageGraph({
         <div style={{
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'space-between',
+          justifyContent: 'flex-end',
           flexWrap: 'wrap',
           gap: '10px',
           padding: '0 0 4px 0'
         }}>
-          <div style={{ fontSize: '0.94rem', fontWeight: 800, color: '#0F172A', textTransform: 'capitalize' }}>
-            {vaultSubTab === 'dag' ? 'Full Canvas DAG Lineage' : 'Enterprise Conflicts Registry'}
-          </div>
-
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
             <input
               type="text"

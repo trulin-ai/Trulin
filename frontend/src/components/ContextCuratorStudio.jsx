@@ -820,29 +820,7 @@ export default function ContextCuratorStudio({
       {curatorSubView === 'conflicts' && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '14px' }}>
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <h3 style={{ fontSize: '1.15rem', fontWeight: 800, margin: 0, color: 'var(--text-main)' }}>
-                  Auditor Conflict Resolution Queue
-                </h3>
-                <span className="badge badge-warning" style={{ fontSize: '0.72rem', padding: '2px 8px' }}>
-                  {conflictIssues.length} Governance Issues ({conflicts.length} Total Pairwise Pairs)
-                </span>
-                {hasPermission('conflicts:resolve') ? (
-                  <span style={{ fontSize: '0.70rem', padding: '2px 8px', borderRadius: '12px', background: '#DCFCE7', color: '#15803D', border: '1px solid #86EFAC', fontWeight: 700 }}>
-                    ✓ Resolution Clearance Active
-                  </span>
-                ) : (
-                  <span style={{ fontSize: '0.70rem', padding: '2px 8px', borderRadius: '12px', background: '#FEE2E2', color: '#DC2626', border: '1px solid #FCA5A5', fontWeight: 700 }} title="Separation of Duties (SoD) Barred: Your active role cannot adjudicate conflicts">
-                    🔒 SoD Barred: Read-Only View
-                  </span>
-                )}
-              </div>
-              <p style={{ color: 'var(--text-muted)', fontSize: '0.82rem', margin: '4px 0 0 0' }}>
-                Arbitrate and supersede conflicting enterprise policies to eliminate ambiguity for autonomous AI agents.
-              </p>
-            </div>
+          <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', flexWrap: 'wrap', gap: '14px' }}>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
               {/* Grouping View Toggle */}
@@ -1516,26 +1494,13 @@ export default function ContextCuratorStudio({
             background: 'var(--bg-surface)',
             border: '1px solid var(--border-color)',
             borderRadius: '16px',
-            padding: '20px 24px',
+            padding: '14px 20px',
             display: 'flex',
-            justifyContent: 'space-between',
+            justifyContent: 'flex-end',
             alignItems: 'center',
             flexWrap: 'wrap',
             gap: '16px'
           }}>
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-                <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 700, color: 'var(--text-main)' }}>
-                  Continuous Context Drift & Claim Decay Radar
-                </h3>
-                <span className="badge badge-verified" style={{ background: '#ECFDF5', color: '#047857', border: '1px solid #A7F3D0' }}>
-                  Half-Life Attestation
-                </span>
-              </div>
-              <p style={{ margin: 0, fontSize: '0.84rem', color: 'var(--text-muted)' }}>
-                Monitors knowledge degradation over time. Claims older than 90 days lose authority score unless re-attested by verified Data Owners.
-              </p>
-            </div>
 
             <button
               type="button"
