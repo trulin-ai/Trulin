@@ -173,3 +173,19 @@ def require_permission(permission: Permission):
         )
 
     return _perm_checker
+
+
+def require_authenticated_permission(permission: Permission):
+    """Strict RBAC dependency requiring an authenticated Bearer user with the given permission."""
+    async def _strict_perm_checker(
+        current_user: User = Depends(get_current_user),
+    ) -> User:
+        if not has_permission(current_user.role, permission):
+            role_label = current_user.role.value if hasattr(current_user.role, "value") else str(current_user.role)
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=f"Access Denied: Role '{role_label.upper()}' lacks required permission '{permission.value}'.",
+            )
+        return current_user
+
+    return _strict_perm_checker

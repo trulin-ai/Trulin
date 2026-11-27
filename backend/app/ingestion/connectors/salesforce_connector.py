@@ -13,7 +13,7 @@ from app.schemas.document import DocumentCreate
 
 class SalesforceConnector(BaseConnector):
     """
-    Enterprise Salesforce CRM Connector modeled after Atlan's Salesforce Crawler.
+    Enterprise Salesforce CRM Schema & Metadata Connector.
     Extracts live Standard and Custom SObjects, field definitions, validation constraints, and SLA rules.
     """
 

@@ -19,6 +19,9 @@ class UserRole(str, Enum):
 
 class RecordStatus(str, Enum):
     ACTIVE = "active"
+    INVITED = "invited"
+    SUSPENDED = "suspended"
+    DEACTIVATED = "deactivated"
     INACTIVE = "inactive"
     DELETED = "deleted"
     PROCESSING = "processing"

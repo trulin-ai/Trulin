@@ -1,5 +1,5 @@
 """
-Governed Context Package Schema (Atlan & Enterprise Context Fabric Pattern).
+Governed Context Package Schema (Enterprise Context Fabric Pattern).
 
 Instead of treating retrieved context as loose, unanchored strings of text,
 the GovernedContextPackage bundles:

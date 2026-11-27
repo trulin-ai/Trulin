@@ -1682,7 +1682,7 @@ export default function VisualLineageGraph({
 
   // Canvas Pan & Interactive Wiring Handlers
   const handleCanvasMouseDown = (e) => {
-    if (e.target.closest('.atlan-node-card') || e.target.closest('.atlan-port-handle') || e.target.closest('.canvas-btn') || e.target.closest('select') || e.target.closest('input') || e.target.closest('button')) return;
+    if (e.target.closest('.lineage-node-card') || e.target.closest('.lineage-port-handle') || e.target.closest('.canvas-btn') || e.target.closest('select') || e.target.closest('input') || e.target.closest('button')) return;
     setIsPanning(true);
     setPanStart({ x: e.clientX - pan.x, y: e.clientY - pan.y });
   };
@@ -4398,22 +4398,22 @@ export default function VisualLineageGraph({
                           }}
                         >
                           <defs>
-                            <marker id="atlan-arrow-default" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+                            <marker id="lineage-arrow-default" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
                               <polygon points="0 1, 8 4, 0 7" fill="#94A3B8" />
                             </marker>
-                            <marker id="atlan-arrow-active" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+                            <marker id="lineage-arrow-active" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
                               <polygon points="0 1, 8 4, 0 7" fill="#2563EB" />
                             </marker>
-                            <marker id="atlan-arrow-conflict" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+                            <marker id="lineage-arrow-conflict" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
                               <polygon points="0 1, 8 4, 0 7" fill="#EA580C" />
                             </marker>
-                            <marker id="atlan-arrow-decision" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+                            <marker id="lineage-arrow-decision" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
                               <polygon points="0 1, 8 4, 0 7" fill="#7C3AED" />
                             </marker>
-                            <marker id="atlan-arrow-draft-add" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+                            <marker id="lineage-arrow-draft-add" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
                               <polygon points="0 1, 8 4, 0 7" fill="#16A34A" />
                             </marker>
-                            <marker id="atlan-arrow-severed" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+                            <marker id="lineage-arrow-severed" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
                               <polygon points="0 1, 8 4, 0 7" fill="#DC2626" />
                             </marker>
                           </defs>
@@ -4423,29 +4423,29 @@ export default function VisualLineageGraph({
                             const isConflictLine = edge.type === 'conflict' || edge.isConflictConnection;
 
                             let strokeColor = '#94A3B8';
-                            let marker = 'url(#atlan-arrow-default)';
+                            let marker = 'url(#lineage-arrow-default)';
                             let strokeDash = 'none';
                             let strokeWidth = 1.8;
                             let strokeOpacity = 1;
 
                             if (edge.isSevered) {
                               strokeColor = '#DC2626';
-                              marker = 'url(#atlan-arrow-severed)';
+                              marker = 'url(#lineage-arrow-severed)';
                               strokeDash = '5 4';
                               strokeWidth = 2.2;
                               strokeOpacity = 0.55;
                             } else if (edge.isDraft) {
                               strokeColor = '#16A34A';
-                              marker = 'url(#atlan-arrow-draft-add)';
+                              marker = 'url(#lineage-arrow-draft-add)';
                               strokeDash = '6 4';
                               strokeWidth = 2.6;
                             } else if (isConflictLine) {
                               strokeColor = '#EA580C';
-                              marker = 'url(#atlan-arrow-conflict)';
+                              marker = 'url(#lineage-arrow-conflict)';
                               strokeWidth = 2.5;
                             } else if (edge.isActive) {
                               strokeColor = edge.type === 'decision_grounding' ? '#7C3AED' : '#2563EB';
-                              marker = edge.type === 'decision_grounding' ? 'url(#atlan-arrow-decision)' : 'url(#atlan-arrow-active)';
+                              marker = edge.type === 'decision_grounding' ? 'url(#lineage-arrow-decision)' : 'url(#lineage-arrow-active)';
                               strokeWidth = 2.2;
                             }
 
@@ -4583,7 +4583,7 @@ export default function VisualLineageGraph({
                                   stroke="#16A34A"
                                   strokeWidth={3}
                                   strokeDasharray="6 4"
-                                  markerEnd="url(#atlan-arrow-draft-add)"
+                                  markerEnd="url(#lineage-arrow-draft-add)"
                                 />
                                 <circle cx={startX} cy={startY} r={5} fill="#16A34A" />
                                 <circle cx={targetX} cy={targetY} r={6} fill="#22C55E" />
@@ -4724,7 +4724,7 @@ export default function VisualLineageGraph({
                             return (
                               <div
                                 key={node.id}
-                                className="atlan-node-card"
+                                className="lineage-node-card"
                                 onMouseDown={(e) => handleNodeDragStart(e, node.id)}
                                 style={{
                                   position: 'absolute',
@@ -4959,7 +4959,7 @@ export default function VisualLineageGraph({
                             return (
                               <div
                                 key={node.id}
-                                className="atlan-node-card"
+                                className="lineage-node-card"
                                 onClick={() => {
                                   setDrawerDocFilter(node.docId || 'all');
                                   setIsDrawerOpen(true);
@@ -5016,7 +5016,7 @@ export default function VisualLineageGraph({
                             return (
                               <div
                                 key={node.id}
-                                className="atlan-node-card"
+                                className="lineage-node-card"
                                 onClick={() => {
                                   setDisplayLimit('all');
                                   showToast?.("Expanded all claims in column");
@@ -5069,7 +5069,7 @@ export default function VisualLineageGraph({
                           return (
                             <div
                               key={node.id}
-                              className="atlan-node-card"
+                              className="lineage-node-card"
                               onClick={() => setSelectedNodeId(node.id)}
                               onMouseDown={(e) => handleNodeDragStart(e, node.id)}
                               style={{
@@ -5108,7 +5108,7 @@ export default function VisualLineageGraph({
                                 transition: draggedNodeId === node.id ? 'none' : 'box-shadow 0.15s ease, border-color 0.15s ease'
                               }}
                             >
-                              {/* Atlan-Style Home / Origin Beacon */}
+                              {/* Origin Beacon */}
                               {isSelected && (
                                 <div style={{
                                   position: 'absolute',
@@ -5197,7 +5197,7 @@ export default function VisualLineageGraph({
                               {/* Actionable Output Wiring Port Handle (Drag to Wire Context Flow) */}
                               {node.type !== 'decision' && (
                                 <div
-                                  className="atlan-port-handle"
+                                  className="lineage-port-handle"
                                   onMouseDown={(e) => handlePortMouseDown(e, node.id)}
                                   title="Click and drag to wire context flow into downstream AI or node"
                                   style={{
@@ -6431,7 +6431,7 @@ export default function VisualLineageGraph({
         </div>
       )}
 
-      {/* 5. Atlan-Style Proactive Impact Analysis & Blast Radius Drawer */}
+      {/* 5. Proactive Impact Analysis & Blast Radius Drawer */}
       {isImpactReportOpen && (
         <div style={{
           position: 'fixed',
@@ -6468,7 +6468,7 @@ export default function VisualLineageGraph({
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                   <span style={{ fontSize: '0.66rem', fontWeight: 800, color: '#7C3AED', background: '#F5F3FF', padding: '1px 6px', borderRadius: '4px', textTransform: 'uppercase' }}>
-                    ATLAN IMPACT ENGINE
+                    TRULIN IMPACT ENGINE
                   </span>
                   <span style={{ fontSize: '0.64rem', color: '#16A34A', fontWeight: 700, background: '#DCFCE7', padding: '1px 6px', borderRadius: '4px' }}>
                     Live Blast Radius

@@ -78,8 +78,10 @@ body {
 }
 
 .sidebar {
-  width: 250px;
-  min-width: 250px;
+  width: max-content;
+  min-width: 196px;
+  max-width: 250px;
+  flex-shrink: 0;
   background: #FAF8F5;
   border-right: 1px solid var(--border-subtle);
   display: flex;
@@ -92,6 +94,10 @@ body {
   padding: 14px 10px 14px 10px;
   box-sizing: border-box;
   transition: width 0.18s ease, min-width 0.18s ease, padding 0.18s ease;
+}
+
+.sidebar .nav-item {
+  white-space: nowrap;
 }
 
 .sidebar.sidebar-collapsed {

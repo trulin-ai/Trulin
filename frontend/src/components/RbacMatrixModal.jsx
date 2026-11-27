@@ -269,7 +269,7 @@ export default function RbacMatrixModal({ isOpen, onClose }) {
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <h2 style={{ fontSize: '18px', fontWeight: '700', color: '#0F172A', margin: 0 }}>
-                  Atlan-Grade RBAC & Policy Permissions Matrix
+                  Enterprise RBAC & Policy Permissions Matrix
                 </h2>
                 <span
                   style={{

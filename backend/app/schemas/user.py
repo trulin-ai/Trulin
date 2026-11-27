@@ -34,6 +34,7 @@ class UserUpdate(BaseModel):
     timezone: str | None = None
     user_preferences: dict[str, Any] | None = None
     status: RecordStatus | None = None
+    reason: str | None = None
 
 
 class UserResponse(UserBase):
@@ -42,6 +43,7 @@ class UserResponse(UserBase):
     id: uuid.UUID
     organization_id: uuid.UUID
     status: RecordStatus
+    last_active_device: str | None = None
     created_at: datetime
     updated_at: datetime
 

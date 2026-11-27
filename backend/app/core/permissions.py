@@ -31,7 +31,7 @@ class Permission(str, Enum):
     ORG_INVITE = "org:invite"
 
 
-# Atlan-Grade Role Permission Matrix (Separation of Duties enforced)
+# Enterprise Role Permission Matrix (Separation of Duties enforced)
 ROLE_PERMISSIONS: Dict[str, Set[str]] = {
     # 1. Chief Compliance Officer / Admin: Full System Authority
     "admin": {p.value for p in Permission},

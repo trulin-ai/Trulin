@@ -55,81 +55,55 @@ class UserRepository(BaseRepository[User]):
         return user
 
     async def seed_default_personas(self, organization_id: uuid.UUID) -> Sequence[User]:
-        """Seed 5 Atlan-inspired personas for an organization if not already seeded."""
+        """Seed 5 org-scoped default operational personas without mutating other organizations."""
         default_personas = [
             {
-                "id": uuid.UUID("22222222-2222-2222-2222-222222222222"),
                 "name": "Sarah Chen",
                 "email": "sarah.chen@ssfa.com",
                 "role": UserRole.ADMIN,
                 "title": "Chief Compliance Officer",
                 "department": "Risk, Trust & Security",
-                "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=Sarah",
             },
             {
-                "id": uuid.UUID("33333333-3333-3333-3333-333333333333"),
                 "name": "Marcus Vance",
                 "email": "marcus.vance@ssfa.com",
                 "role": UserRole.DATA_OWNER,
                 "title": "Principal Data Steward",
                 "department": "Enterprise Data Platform",
-                "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=Marcus",
             },
             {
-                "id": uuid.UUID("44444444-4444-4444-4444-444444444444"),
                 "name": "Elena Rostova",
                 "email": "elena.rostova@ssfa.com",
                 "role": UserRole.REVIEWER,
                 "title": "Lead Risk Auditor",
                 "department": "Independent Governance & Oversight",
-                "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=Elena",
             },
             {
-                "id": uuid.UUID("55555555-5555-5555-5555-555555555555"),
                 "name": "Alex Vance",
                 "email": "alex.vance@ssfa.com",
                 "role": UserRole.DEVELOPER,
                 "title": "Autonomous Systems Engineer",
                 "department": "AI Operations & Platform Engineering",
-                "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=Alex",
             },
             {
-                "id": uuid.UUID("66666666-6666-6666-6666-666666666666"),
                 "name": "Devin Zhao",
                 "email": "devin.zhao@regulatory-watch.org",
                 "role": UserRole.VIEWER,
                 "title": "Compliance Observer",
                 "department": "Regulatory Assurance & Oversight",
-                "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=Devin",
             },
         ]
 
-        created_users = []
         for p in default_personas:
-            existing_user = await self.get(p["id"])
-            if existing_user:
-                if existing_user.organization_id != organization_id:
-                    existing_user.organization_id = organization_id
-                if existing_user.role != p["role"]:
-                    existing_user.role = p["role"]
-                if existing_user.name != p["name"]:
-                    existing_user.name = p["name"]
-                created_users.append(existing_user)
-            else:
-                existing_by_email = await self.get_by_email(organization_id, p["email"])
-                if not existing_by_email:
-                    u = await self.create_user(
-                        id=p["id"],
-                        organization_id=organization_id,
-                        name=p["name"],
-                        email=p["email"],
-                        role=p["role"],
-                        title=p["title"],
-                        department=p["department"],
-                        avatar_url=p["avatar_url"],
-                    )
-                    created_users.append(u)
-                else:
-                    created_users.append(existing_by_email)
+            existing_by_email = await self.get_by_email(organization_id, p["email"])
+            if not existing_by_email:
+                await self.create_user(
+                    organization_id=organization_id,
+                    name=p["name"],
+                    email=p["email"],
+                    role=p["role"],
+                    title=p["title"],
+                    department=p["department"],
+                )
 
         return await self.list_by_organization(organization_id)

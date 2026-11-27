@@ -14,7 +14,7 @@ from app.schemas.document import DocumentCreate
 
 class KafkaConnector(BaseConnector):
     """
-    Enterprise Apache Kafka Connector modeled after Atlan's Kafka & Confluent Cloud Crawler.
+    Enterprise Apache Kafka & Confluent Cloud Connector.
     Extracts live stream topic topologies, partition counts, retention SLAs, and Schema Registry definitions.
     """
 

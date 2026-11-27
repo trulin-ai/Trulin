@@ -1004,10 +1004,17 @@ async def remove_member(
 async def create_invite(
     org_id: uuid.UUID,
     data: InviteCreateRequest,
-    current_user: Optional[User] = Depends(get_optional_current_user),
+    current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
     """Generate an enterprise invitation link for a corporate colleague."""
+    from app.core.permissions import Permission, has_permission
+
+    if current_user.organization_id != org_id:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Forbidden: Cross-organization invite denied.")
+    if not has_permission(current_user.role, Permission.ORG_INVITE):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Access Denied: Missing org:invite permission.")
+
     org_stmt = select(Organization).where(Organization.id == org_id).limit(1)
     res_org = await db.execute(org_stmt)
     org = res_org.scalar_one_or_none()
@@ -1021,7 +1028,7 @@ async def create_invite(
 
     token = secrets.token_urlsafe(32)
     expires_at = datetime.now(timezone.utc) + timedelta(days=7)
-    inviter_id = current_user.id if current_user else None
+    inviter_id = current_user.id
 
     invite = OrganizationInvite(
         id=uuid.uuid4(),
@@ -1055,9 +1062,12 @@ async def create_invite(
 @router.get("/{org_id}/invites", response_model=List[InviteResponse])
 async def list_invites(
     org_id: uuid.UUID,
+    current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
     """List all pending invitations for an organization workspace."""
+    if current_user.organization_id != org_id:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Forbidden: Cross-organization invite access denied.")
     org_stmt = select(Organization).where(Organization.id == org_id).limit(1)
     res_org = await db.execute(org_stmt)
     org = res_org.scalar_one_or_none()
@@ -1092,9 +1102,16 @@ async def list_invites(
 async def revoke_invite(
     org_id: uuid.UUID,
     invite_id: uuid.UUID,
+    current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
     """Revoke an active invitation."""
+    from app.core.permissions import Permission, has_permission
+
+    if current_user.organization_id != org_id:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Forbidden: Cross-organization invite revoke denied.")
+    if not has_permission(current_user.role, Permission.ORG_MEMBERS_MANAGE):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Access Denied: Missing org:members permission.")
     stmt = select(OrganizationInvite).where(
         (OrganizationInvite.id == invite_id) & (OrganizationInvite.organization_id == org_id)
     ).limit(1)
