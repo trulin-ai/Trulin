@@ -552,15 +552,42 @@ async def sso_sandbox_login(
 async def get_rbac_matrix(
     current_user: Optional[User] = Depends(get_optional_current_user),
 ):
-    """Retrieve full Atlan-grade RBAC permissions matrix and calling user's active permissions."""
+    """Retrieve full enterprise RBAC permissions matrix and calling user's active permissions."""
     from app.core.permissions import get_permission_matrix, get_role_permissions
 
     matrix_data = get_permission_matrix()
-    active_role = current_user.role.value if (current_user and hasattr(current_user.role, "value")) else (str(current_user.role) if current_user else "admin")
+    active_role = current_user.role.value if (current_user and hasattr(current_user.role, "value")) else (str(current_user.role) if current_user else "viewer")
     granted = get_role_permissions(active_role)
 
     return {
         **matrix_data,
         "active_role": active_role,
         "granted_permissions": granted,
+    }
+
+
+@router.get("/capabilities")
+async def get_my_capabilities(
+    current_user: User = Depends(get_current_user),
+):
+    """Return authenticated caller's server-computed UI capabilities and canonical role catalog."""
+    from app.core.permissions import Permission, get_permission_matrix, get_role_permissions, has_permission
+
+    active_role = current_user.role.value if hasattr(current_user.role, "value") else str(current_user.role)
+    matrix_data = get_permission_matrix()
+    return {
+        "user_id": str(current_user.id),
+        "organization_id": str(current_user.organization_id),
+        "active_role": active_role,
+        "granted_permissions": get_role_permissions(active_role),
+        "roles": matrix_data["roles"],
+        "capabilities": {
+            "can_view_members": True,
+            "can_invite_members": has_permission(active_role, Permission.ORG_INVITE),
+            "can_change_roles": has_permission(active_role, Permission.ORG_MEMBERS_MANAGE),
+            "can_remove_members": has_permission(active_role, Permission.ORG_MEMBERS_MANAGE),
+            "can_view_activity": has_permission(active_role, Permission.DECISIONS_AUDIT),
+            "can_export_activity": has_permission(active_role, Permission.DECISIONS_AUDIT),
+            "can_view_domains": has_permission(active_role, Permission.SOURCES_READ),
+        },
     }

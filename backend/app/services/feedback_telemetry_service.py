@@ -1,5 +1,5 @@
 """
-Feedback Telemetry & Failure Taxonomy Service (Atlan Feedback Loop Pattern).
+Feedback Telemetry & Failure Taxonomy Service.
 
 Enables rigorous diagnostic tracking of Copilot errors:
 Instead of treating failures as generic "bad model responses", every issue

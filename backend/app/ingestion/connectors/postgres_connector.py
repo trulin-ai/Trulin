@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 
 class PostgresConnector(BaseConnector):
     """
-    Enterprise PostgreSQL Connector modeled after Atlan's Postgres Crawler.
+    Enterprise PostgreSQL Schema & Metadata Connector.
     Extracts live relational schemas, constraints, column descriptions, and data dictionary policies.
     """
 

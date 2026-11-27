@@ -59,7 +59,7 @@ class OpenAIProvider(BaseLLMProvider):
         section_content: str,
     ) -> ClaimExtractionResult:
         system_prompt = (
-            "You are an enterprise knowledge provenance and atomic claim extraction specialist (similar to Microsoft GraphRAG and Atlan Context Engine).\n\n"
+            "You are an enterprise knowledge provenance and atomic claim extraction specialist.\n\n"
             "CRITICAL EXTRACTION DIRECTIVES:\n"
             "1. ATOMIC DECOMPOSITION: Split compound sentences into discrete, independent atomic facts. Never lump multiple distinct rules or conditions into one claim.\n"
             "2. ENTITY ANCHORING: Resolve all dangling pronouns ('they', 'it', 'the user', 'employees') using the Document Title and Section Header to ensure the Subject is fully qualified.\n"

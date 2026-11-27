@@ -25,7 +25,7 @@ from app.schemas.document import DocumentCreate
 
 class MongoDbConnector(BaseConnector):
     """
-    Enterprise MongoDB Connector modeled after Atlan's MongoDB Crawler.
+    Enterprise MongoDB Crawler & Schema Connector.
     Extracts live collection schemas, JSON schema validation rules, index structures, and document governance policies.
     """
 

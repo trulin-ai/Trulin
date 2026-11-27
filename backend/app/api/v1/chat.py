@@ -151,7 +151,7 @@ async def submit_message_feedback(
     message_id: str,
     req: FeedbackSubmitRequest,
 ):
-    """Log structured feedback with failure taxonomy stage (Atlan feedback loop)."""
+    """Log structured feedback with failure taxonomy stage."""
     req.session_id = str(session_id)
     req.message_id = str(message_id)
     return FeedbackTelemetryService.record_feedback(req)

@@ -753,7 +753,7 @@ export default function App() {
     broadcastSyncEvent,
   } = useAuth();
 
-  // Atlan Active Persona & User Ecosystem State
+  // Active Persona & User Ecosystem State
   const [personas, setPersonas] = useState(DEFAULT_ENTERPRISE_PERSONAS);
   const [activePersona, setActivePersona] = useState(DEFAULT_ENTERPRISE_PERSONAS[0]);
 
@@ -3285,18 +3285,6 @@ export default function App() {
                           }}
                         >
                           <span>{sub.label}</span>
-                          {sub.count !== null && (
-                            <span style={{
-                              fontSize: '0.68rem',
-                              fontWeight: 700,
-                              padding: '1px 5px',
-                              borderRadius: '10px',
-                              background: isSubActive ? '#FFEDD5' : '#F1F5F9',
-                              color: isSubActive ? '#EA580C' : '#64748B'
-                            }}>
-                              {sub.count}
-                            </span>
-                          )}
                         </button>
                       );
                     })}
@@ -3393,18 +3381,6 @@ export default function App() {
                           <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                             {sub.label}
                           </span>
-                          {typeof sub.count === 'number' && sub.count > 0 && (
-                            <span style={{
-                              fontSize: '0.64rem',
-                              fontWeight: 600,
-                              color: isSubActive ? '#2563EB' : '#94A3B8',
-                              background: isSubActive ? '#DBEAFE' : '#F1F5F9',
-                              padding: '1px 5px',
-                              borderRadius: '4px'
-                            }}>
-                              {sub.count}
-                            </span>
-                          )}
                         </button>
                       );
                     })}
@@ -3441,16 +3417,17 @@ export default function App() {
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                       {conflicts.length > 0 && (
-                        <span style={{
-                          fontSize: '0.65rem',
-                          padding: '1px 6px',
-                          borderRadius: '10px',
-                          background: '#FEE2E2',
-                          color: '#991B1B',
-                          fontWeight: 600
-                        }}>
-                          {conflicts.length}
-                        </span>
+                        <span
+                          aria-label="Pending notifications"
+                          style={{
+                            width: '7px',
+                            height: '7px',
+                            borderRadius: '50%',
+                            background: '#EF4444',
+                            display: 'inline-block',
+                            flexShrink: 0,
+                          }}
+                        />
                       )}
                       <ChevronDown
                         size={13}
@@ -3463,7 +3440,23 @@ export default function App() {
                     </div>
                   </>
                 ) : (
-                  <ShieldAlert size={16} strokeWidth={1.75} />
+                  <span style={{ position: 'relative', display: 'inline-flex' }}>
+                    <ShieldAlert size={16} strokeWidth={1.75} />
+                    {conflicts.length > 0 && (
+                      <span
+                        aria-label="Pending notifications"
+                        style={{
+                          position: 'absolute',
+                          top: '-2px',
+                          right: '-3px',
+                          width: '7px',
+                          height: '7px',
+                          borderRadius: '50%',
+                          background: '#EF4444',
+                        }}
+                      />
+                    )}
+                  </span>
                 )}
               </button>
 
@@ -3517,18 +3510,18 @@ export default function App() {
                           <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                             {sub.label}
                           </span>
-                          {sub.count && (
-                            <span style={{
-                              fontSize: '0.62rem',
-                              fontWeight: 600,
-                              color: sub.isAlert ? '#991B1B' : (isSubActive ? '#2563EB' : '#94A3B8'),
-                              background: sub.isAlert ? '#FEE2E2' : (isSubActive ? '#DBEAFE' : '#F1F5F9'),
-                              padding: '1px 5px',
-                              borderRadius: '4px',
-                              whiteSpace: 'nowrap'
-                            }}>
-                              {sub.count}
-                            </span>
+                          {sub.isAlert && (
+                            <span
+                              aria-label="Pending notifications"
+                              style={{
+                                width: '7px',
+                                height: '7px',
+                                borderRadius: '50%',
+                                background: '#EF4444',
+                                display: 'inline-block',
+                                flexShrink: 0,
+                              }}
+                            />
                           )}
                         </button>
                       );
@@ -4788,7 +4781,7 @@ export default function App() {
               );
             })()}
 
-            {/* VIEW: FULL PAGE CONNECT REAL ENTERPRISE DATA SOURCE (ATLAN ARCHITECTURE) */}
+            {/* VIEW: FULL PAGE CONNECT REAL ENTERPRISE DATA SOURCE */}
             {docExplorerView === 'connect' && (
               <div style={{
                 background: '#FAF8F5',
@@ -6572,7 +6565,7 @@ export default function App() {
         )}
 
         {/* ========================================================= */}
-        {/* DOCUMENTATION CENTER (ATLAN-STYLE)                        */}
+        {/* DOCUMENTATION CENTER                                    */}
         {/* ========================================================= */}
         {activeTab === 'docs' && (
           <TrulinDocsCenter
@@ -6593,16 +6586,10 @@ export default function App() {
           <div>
             <TeamAndActivityHub
               activeOrg={activeOrg}
-              activePersona={activePersona}
-              onSelectPersona={(p) => setActivePersona(p)}
               showToast={showToast}
               initialSubTab={teamSubTab}
               onSubTabChange={setTeamSubTab}
               onOpenRbacModal={() => setIsRbacModalOpen(true)}
-              onLaunchSetupWizard={(org) => {
-                setSetupWizardTargetOrg(org || activeOrg);
-                setIsSetupWizardOpen(true);
-              }}
             />
           </div>
         )}
@@ -7314,7 +7301,7 @@ export default function App() {
         }}
       />
 
-      {/* Atlan-Grade RBAC & Separation of Duties (SoD) Permissions Matrix Modal */}
+      {/* Enterprise RBAC & Separation of Duties (SoD) Permissions Matrix Modal */}
       <RbacMatrixModal
         isOpen={isRbacModalOpen}
         onClose={() => setIsRbacModalOpen(false)}

@@ -1,5 +1,5 @@
 """
-Tri-Variant Evaluation Benchmark (Atlan, Alation, Glean & Microsoft Comparative Pattern).
+Tri-Variant Evaluation Benchmark (Comparative Context Governance Pattern).
 
 Runs the exact same enterprise policy inquiries through three distinct architectures:
 - Variant A (Deterministic Baseline): Search, exact rules, forms, and templates without generative synthesis.

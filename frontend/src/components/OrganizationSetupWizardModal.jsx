@@ -328,7 +328,7 @@ export default function OrganizationSetupWizardModal({
               </h2>
             </div>
             <p style={{ margin: '4px 0 0 0', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-              Step {currentStep} of 5: {stepsMeta[currentStep - 1]?.label} — Establish deterministic context trust & Atlan-grade RBAC.
+              Step {currentStep} of 5: {stepsMeta[currentStep - 1]?.label} — Establish deterministic context trust & enterprise RBAC.
             </p>
           </div>
 
@@ -655,7 +655,7 @@ export default function OrganizationSetupWizardModal({
           )}
 
           {/* ========================================================= */}
-          {/* STEP 2: TEAM MEMBERS & ATLAN-GRADE RBAC ROLES             */}
+          {/* STEP 2: TEAM MEMBERS & ENTERPRISE RBAC ROLES             */}
           {/* ========================================================= */}
           {currentStep === 2 && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
