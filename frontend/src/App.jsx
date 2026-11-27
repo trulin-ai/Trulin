@@ -683,6 +683,7 @@ export default function App() {
   const [activeTab, setActiveTab] = useState(() => initialUrlState?.tab || 'home');
   const [expandedMenu, setExpandedMenu] = useState(() => initialUrlState?.tab || 'home');
   const [vaultSubTab, setVaultSubTab] = useState(() => initialUrlState?.vaultSubTab || 'claims');
+  const [returnToFileBrowserFromVault, setReturnToFileBrowserFromVault] = useState(false);
   const [openSidebarMenu, setOpenSidebarMenu] = useState(() => {
     if (initialUrlState?.tab === 'visual_lineage') return 'vault';
     if (initialUrlState?.tab === 'context_curator' || initialUrlState?.tab === 'conflicts') return 'curator';
@@ -3101,32 +3102,98 @@ export default function App() {
         <div style={{ display: 'flex', flexDirection: 'column', width: '100%', minHeight: 0 }}>
           {/* Brand Header + Icon-Only Open/Close Toggle Button */}
         {isSidebarOpen ? (
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px', marginBottom: '14px', padding: '2px 4px' }}>
-            <div
-              onClick={() => { setActiveTab('home'); setExpandedMenu('home'); }}
+          <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '4px', padding: '2px', minHeight: '44px' }}>
+            <label
+              title={activeOrg?.id ? `Click to upload square organization logo for ${activeOrg?.name || 'Organization'} (PNG/SVG 1:1)` : (activeOrg?.name || 'Organization')}
               style={{
+                width: '54px',
+                height: '54px',
+                borderRadius: '10px',
+                border: '1.5px solid #CBD5E1',
+                background: '#FFFFFF',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '8px',
-                cursor: 'pointer'
+                justifyContent: 'center',
+                padding: '0px',
+                boxSizing: 'border-box',
+                cursor: activeOrg?.id ? 'pointer' : 'default',
+                boxShadow: '0 1px 3px rgba(15, 23, 42, 0.06)',
+                overflow: 'hidden',
+                position: 'relative',
               }}
-              title="Trulin AI Decision & Context Trust Platform"
             >
-              <img
-                src="/Trulin-Main-NoBg.png"
-                alt="Trulin"
-                style={{ height: '24px', maxWidth: '120px', objectFit: 'contain' }}
-              />
-              <span style={{ fontSize: '0.62rem', padding: '1px 6px', background: '#F1F5F9', color: '#64748B', border: '1px solid #E2E8F0', borderRadius: '999px', fontWeight: 700 }}>
-                v1.0
-              </span>
-            </div>
+              {activeOrg?.governance_config?.logo_url ? (
+                <img
+                  src={activeOrg.governance_config.logo_url}
+                  alt={activeOrg?.name || 'Organization'}
+                  style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }}
+                />
+              ) : (
+                <img
+                  src="/Trulin-Main-NoBg.png"
+                  alt={activeOrg?.name || 'Trulin'}
+                  style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }}
+                />
+              )}
+              {activeOrg?.id && (
+                <input
+                  type="file"
+                  accept=".png,.svg,.webp,image/png,image/svg+xml,image/webp"
+                  style={{ display: 'none' }}
+                  onChange={async (e) => {
+                    const file = e.target.files?.[0];
+                    e.target.value = '';
+                    if (!file) return;
+                    const allowed = ['image/png', 'image/svg+xml', 'image/webp'];
+                    if (!allowed.includes(file.type)) {
+                      showToast?.('Please upload a PNG, SVG, or WebP logo.', 'error');
+                      return;
+                    }
+                    if (file.size > 512 * 1024) {
+                      showToast?.('Logo image must be under 512 KB.', 'error');
+                      return;
+                    }
+                    const reader = new FileReader();
+                    reader.onload = async () => {
+                      const dataUrl = String(reader.result || '');
+                      try {
+                        const token = authToken || localStorage.getItem('ctl_token');
+                        const res = await fetch(`/v1/organizations/${activeOrg.id}/settings`, {
+                          method: 'PATCH',
+                          headers: {
+                            'Content-Type': 'application/json',
+                            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+                          },
+                          body: JSON.stringify({
+                            governance_config: {
+                              ...(activeOrg?.governance_config || {}),
+                              logo_url: dataUrl,
+                            },
+                          }),
+                        });
+                        if (!res.ok) throw new Error('Failed to save organization logo');
+                        const updated = await res.json();
+                        setActiveOrg(updated);
+                        showToast?.('Organization logo updated', 'success');
+                      } catch (err) {
+                        showToast?.(err.message || 'Failed to upload logo', 'error');
+                      }
+                    };
+                    reader.readAsDataURL(file);
+                  }}
+                />
+              )}
+            </label>
 
             <button
               type="button"
               onClick={() => setIsSidebarOpen(false)}
               title="Collapse sidebar"
               style={{
+                position: 'absolute',
+                right: '2px',
+                top: '50%',
+                transform: 'translateY(-50%)',
                 width: '28px',
                 height: '28px',
                 borderRadius: '6px',
@@ -3338,6 +3405,7 @@ export default function App() {
                   <div className="sidebar-accordion-inner">
                     {[
                       { id: 'claims', label: 'Atomic Claims', count: dbClaims.length },
+                      { id: 'documents', label: '360° Studio', count: null },
                       { id: 'dag', label: 'Full Canvas DAG', count: null }
                     ].map(sub => {
                       const isSubActive = activeTab === 'visual_lineage' && vaultSubTab === sub.id;
@@ -3346,6 +3414,7 @@ export default function App() {
                           key={sub.id}
                           type="button"
                           onClick={() => {
+                            setReturnToFileBrowserFromVault(false);
                             setActiveTab('visual_lineage');
                             setVaultSubTab(sub.id);
                             setSelectedLineageAssetId(null);
@@ -6016,6 +6085,7 @@ export default function App() {
                     assetTitle: doc.title
                   })}
                   onViewClaims={(doc) => {
+                    setReturnToFileBrowserFromVault(true);
                     setSelectedLineageAssetId(doc.id);
                     setVaultSubTab('documents');
                     setActiveTab('visual_lineage');
@@ -6481,7 +6551,12 @@ export default function App() {
               onClaimChange={setSelectedLineageClaimId}
               initialSection={lineageSection}
               onSectionChange={setLineageSection}
-              onOpenFileBrowser={() => { setActiveTab('ingestion'); setDocExplorerView('folders'); }}
+              onOpenFileBrowser={() => {
+                setReturnToFileBrowserFromVault(false);
+                setActiveTab('ingestion');
+                setDocExplorerView('folders');
+              }}
+              returnToFileBrowser={returnToFileBrowserFromVault}
               onLocateSource={(cleanDocId) => {
                 if (cleanDocId) setDocExplorerTargetDocId(cleanDocId);
                 setDocExplorerView('folders');

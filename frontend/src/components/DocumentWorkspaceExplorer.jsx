@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
+import DocumentReader from './DocumentReader';
 import {
   Folder,
   FolderPlus,
@@ -138,18 +139,15 @@ const renderFormattedMarkdown = (text) => {
       flushList();
       const sub = trimmed.substring(3).trim();
       elements.push(
-        <div key={`h2-${i}`} style={{
-          fontSize: '0.92rem',
+        <h2 key={`h2-${i}`} style={{
+          fontSize: '0.90rem',
           fontWeight: 700,
-          color: '#1E293B',
-          margin: '8px 0 4px 0',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '6px'
+          color: '#111827',
+          margin: '14px 0 6px 0',
+          lineHeight: 1.35,
         }}>
-          <span style={{ width: '3px', height: '12px', background: '#3B82F6', display: 'inline-block' }} />
-          <span>{sub}</span>
-        </div>
+          {sub}
+        </h2>
       );
     }
     // Heading 3: ### Subtitle
@@ -157,14 +155,15 @@ const renderFormattedMarkdown = (text) => {
       flushList();
       const sub = trimmed.substring(4).trim();
       elements.push(
-        <div key={`h3-${i}`} style={{
-          fontSize: '0.84rem',
+        <h3 key={`h3-${i}`} style={{
+          fontSize: '0.83rem',
           fontWeight: 700,
-          color: '#334155',
-          margin: '6px 0 3px 0'
+          color: '#1F2937',
+          margin: '11px 0 5px 0',
+          lineHeight: 1.35,
         }}>
           {sub}
-        </div>
+        </h3>
       );
     }
     // Bullet item (- or *)
@@ -180,11 +179,11 @@ const renderFormattedMarkdown = (text) => {
       flushList();
       elements.push(
         <p key={`p-${i}`} style={{
-          fontSize: '0.82rem',
-          color: '#334155',
-          lineHeight: 1.5,
-          margin: '0 0 6px 0',
-          wordBreak: 'break-word'
+          fontSize: '0.79rem',
+          color: '#1F2937',
+          lineHeight: 1.62,
+          margin: '0 0 8px 0',
+          wordBreak: 'break-word',
         }}>
           {trimmed}
         </p>
@@ -1875,38 +1874,13 @@ export default function DocumentWorkspaceExplorer({
 
           return (
             <>
-              {/* Full Document Content & Ingestion Preview (Seamless white surface, edge-to-edge) */}
-              <div
-                style={{
-                  flex: 1,
-                  minHeight: 0,
-                  overflowY: 'auto',
-                  overflowX: 'hidden',
-                  background: '#FFFFFF',
-                  padding: '16px 24px 32px 24px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '8px',
-                  boxSizing: 'border-box'
-                }}
-              >
-                {loadingPreview ? (
-                  <div style={{ textAlign: 'center', padding: '40px 20px', color: 'var(--text-muted)', fontSize: '0.80rem' }}>
-                    <RefreshCw size={18} className="spin" style={{ margin: '0 auto 8px auto', display: 'block', color: '#2563EB' }} />
-                    <span>Loading policy document preview...</span>
-                  </div>
-                ) : (
-                  <div style={{ minHeight: '80px' }}>
-                    {rawReaderContent ? (
-                      renderFormattedMarkdown(rawReaderContent)
-                    ) : (
-                      <div style={{ padding: '20px 10px', textAlign: 'center', color: '#94A3B8', fontSize: '0.80rem' }}>
-                        No text content available for this document.
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
+              <DocumentReader
+                key={selectedDocDetails.id}
+                title={selectedDocDetails.title}
+                content={rawReaderContent}
+                loading={loadingPreview}
+                fileHref={`/v1/documents/${selectedDocDetails.id}/file`}
+              />
 
               {/* Bottom Metadata & Navigation Bridges to Curator and Vault */}
               <div
@@ -3156,6 +3130,44 @@ export default function DocumentWorkspaceExplorer({
                             </div>
                           </div>
                         </div>
+
+                        {/* Quick Section Jump Outline */}
+                        {(() => {
+                          const outline = String(readerContent || '')
+                            .split('\n')
+                            .map((line, idx) => ({ line: line.trim(), idx }))
+                            .filter((x) => x.line.startsWith('## ') && !/^##\s*page\s+\d+$/i.test(x.line));
+                          if (outline.length === 0) return null;
+                          return (
+                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '18px', padding: '10px 12px', background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '8px', alignItems: 'center' }}>
+                              <span style={{ fontSize: '0.66rem', fontWeight: 800, color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.06em', marginRight: '4px' }}>
+                                Sections
+                              </span>
+                              {outline.slice(0, 10).map((sec) => {
+                                const label = sec.line.substring(3).trim();
+                                return (
+                                  <button
+                                    key={sec.idx}
+                                    type="button"
+                                    onClick={() => document.getElementById(`doc-sec-${sec.idx}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+                                    style={{
+                                      fontSize: '0.72rem',
+                                      fontWeight: 600,
+                                      color: '#1E40AF',
+                                      background: '#FFFFFF',
+                                      border: '1px solid #DBEAFE',
+                                      borderRadius: '999px',
+                                      padding: '3px 10px',
+                                      cursor: 'pointer',
+                                    }}
+                                  >
+                                    {label}
+                                  </button>
+                                );
+                              })}
+                            </div>
+                          );
+                        })()}
 
                         {fullReaderSearch.trim() ? (
                           <div style={{ whiteSpace: 'pre-wrap', lineHeight: 1.65, fontSize: '0.84rem', color: '#334155' }}>

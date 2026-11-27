@@ -42,6 +42,7 @@ export default function WorkspaceSettingsStudio({
   // General & Domain Whitelist states
   const [orgName, setOrgName] = useState('');
   const [orgSlug, setOrgSlug] = useState('');
+  const [logoUrl, setLogoUrl] = useState('');
   const [domains, setDomains] = useState([]);
   const [newDomainInput, setNewDomainInput] = useState('');
   const [authMethods, setAuthMethods] = useState(['google']);
@@ -64,6 +65,7 @@ export default function WorkspaceSettingsStudio({
     setSuccessMsg(null);
     setOrgName(activeOrg.name || 'Trulin Trust Workspace');
     setOrgSlug(activeOrg.slug || 'demo');
+    setLogoUrl(activeOrg.governance_config?.logo_url || '');
     setDomains(activeOrg.domain_whitelist || ['trulin.ai', 'demo.com', 'gmail.com']);
     setAuthMethods(activeOrg.allowed_auth_methods?.length ? activeOrg.allowed_auth_methods : ['google']);
 
@@ -80,6 +82,7 @@ export default function WorkspaceSettingsStudio({
         const data = await res.json();
         setOrgName(data.name);
         setOrgSlug(data.slug);
+        setLogoUrl(data.governance_config?.logo_url || '');
         setDomains(data.domain_whitelist || []);
         if (data.allowed_auth_methods) setAuthMethods(data.allowed_auth_methods);
       }
@@ -166,7 +169,11 @@ export default function WorkspaceSettingsStudio({
         body: JSON.stringify({
           name: orgName.trim(),
           domain_whitelist: domains,
-          allowed_auth_methods: authMethods
+          allowed_auth_methods: authMethods,
+          governance_config: {
+            ...(activeOrg?.governance_config || {}),
+            logo_url: logoUrl.trim() || null
+          }
         })
       });
 
@@ -622,6 +629,76 @@ export default function WorkspaceSettingsStudio({
                     boxSizing: 'border-box'
                   }}
                 />
+              </div>
+              <div>
+                <label style={{ display: 'block', fontSize: '0.74rem', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '4px' }}>
+                  Organization Logo
+                </label>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  {logoUrl && (
+                    <img
+                      src={logoUrl}
+                      alt="Organization logo preview"
+                      style={{ width: '44px', height: '44px', objectFit: 'contain', borderRadius: '10px', border: '1.5px solid #CBD5E1', padding: '4px', background: '#FFFFFF', flexShrink: 0 }}
+                    />
+                  )}
+                  <input
+                    type="url"
+                    value={logoUrl}
+                    onChange={(e) => setLogoUrl(e.target.value)}
+                    placeholder="Paste PNG / SVG logo URL or upload..."
+                    style={{
+                      flex: 1,
+                      padding: '8px 10px',
+                      borderRadius: '8px',
+                      border: '1px solid var(--border-subtle)',
+                      backgroundColor: 'var(--bg-card)',
+                      color: 'var(--text-main)',
+                      fontSize: '0.78rem',
+                      boxSizing: 'border-box'
+                    }}
+                  />
+                  <label
+                    className="btn btn-secondary"
+                    style={{ padding: '7px 10px', fontSize: '0.74rem', fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap' }}
+                  >
+                    Upload
+                    <input
+                      type="file"
+                      accept=".png,.svg,.webp,image/png,image/svg+xml,image/webp"
+                      style={{ display: 'none' }}
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (!file) return;
+                        const allowed = ['image/png', 'image/svg+xml', 'image/webp'];
+                        if (!allowed.includes(file.type)) {
+                          setErrorMsg('Please upload a PNG, SVG, or WebP logo.');
+                          return;
+                        }
+                        if (file.size > 512 * 1024) {
+                          setErrorMsg('Logo image must be under 512 KB.');
+                          return;
+                        }
+                        const reader = new FileReader();
+                        reader.onload = () => setLogoUrl(String(reader.result || ''));
+                        reader.readAsDataURL(file);
+                      }}
+                    />
+                  </label>
+                  {logoUrl && (
+                    <button
+                      type="button"
+                      onClick={() => setLogoUrl('')}
+                      title="Remove logo"
+                      style={{ padding: '7px 9px', borderRadius: '6px', border: '1px solid #FECACA', background: '#FEF2F2', color: '#DC2626', fontSize: '0.72rem', cursor: 'pointer' }}
+                    >
+                      Clear
+                    </button>
+                  )}
+                </div>
+                <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)', marginTop: '4px' }}>
+                  Standard format: Square 1:1 PNG or SVG (128×128px, transparent background, max 512 KB).
+                </div>
               </div>
 
               <div>

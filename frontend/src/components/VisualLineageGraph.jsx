@@ -39,6 +39,7 @@ import {
 import { useAuth } from '../context/AuthContext';
 import VisualClaimExtractionStudio from './VisualClaimExtractionStudio';
 import SmartDocumentCanvas from './SmartDocumentCanvas';
+import DocumentReader from './DocumentReader';
 import ExecutiveDeleteModal from './ExecutiveDeleteModal';
 import AssetClaimsStudioPane from './AssetClaimsStudioPane';
 import AssetConflictsStudioPane from './AssetConflictsStudioPane';
@@ -60,9 +61,12 @@ export default function VisualLineageGraph({
   initialSection = 'summary',
   onSectionChange,
   onOpenFileBrowser,
+  returnToFileBrowser = false,
   onLocateSource
 }) {
-  const { user } = useAuth();
+  const { user, token: authToken } = useAuth();
+  const [docContentCache, setDocContentCache] = useState({});
+  const [docContentLoading, setDocContentLoading] = useState(false);
   const [deleteTargetAsset, setDeleteTargetAsset] = useState(null);
   const [graphData, setGraphData] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -2131,6 +2135,35 @@ export default function VisualLineageGraph({
     fetchBlastRadius(cid);
   }, [initialClaimId, graphData, selectedAsset360]);
 
+  // Fetch full document content for 360° DocumentReader when not embedded in graph node
+  useEffect(() => {
+    if (!selectedAsset360 || selectedAsset360.mode !== 'document') return;
+    const rawDocId = selectedAsset360.node.data?.doc_id || String(selectedAsset360.node.id || '').replace(/^doc_/, '');
+    if (!rawDocId || docContentCache[rawDocId] !== undefined) return;
+    const embedded = selectedAsset360.node.data?.content_uri || '';
+    if (embedded) {
+      setDocContentCache((prev) => ({ ...prev, [rawDocId]: embedded }));
+      return;
+    }
+    let cancelled = false;
+    setDocContentLoading(true);
+    const activeToken = authToken || localStorage.getItem('ctl_token');
+    fetch(`/v1/documents/${encodeURIComponent(rawDocId)}`, {
+      headers: activeToken ? { Authorization: `Bearer ${activeToken}` } : undefined,
+    })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((doc) => {
+        if (cancelled) return;
+        const text = doc?.versions?.[0]?.content_uri || '';
+        setDocContentCache((prev) => ({ ...prev, [rawDocId]: text }));
+      })
+      .catch(() => {})
+      .finally(() => {
+        if (!cancelled) setDocContentLoading(false);
+      });
+    return () => { cancelled = true; };
+  }, [selectedAsset360, docContentCache, authToken]);
+
   return (
     <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '8px' }}>
 
@@ -2929,6 +2962,10 @@ export default function VisualLineageGraph({
             <button
               type="button"
               onClick={() => {
+                if (returnToFileBrowser && onOpenFileBrowser) {
+                  onOpenFileBrowser();
+                  return;
+                }
                 setOpenedAssetId(null);
                 onAssetChange?.(null);
               }}
@@ -2948,7 +2985,7 @@ export default function VisualLineageGraph({
                 flexShrink: 0,
                 transition: 'all 0.18s cubic-bezier(0.16, 1, 0.3, 1)'
               }}
-              title={`Back to ${vaultSubTab === 'documents' ? 'Documents' : 'Connectors'} list`}
+              title={returnToFileBrowser ? 'Back to File Browser' : `Back to ${vaultSubTab === 'documents' ? 'Documents' : 'Connectors'} list`}
               onMouseEnter={e => {
                 e.currentTarget.style.background = '#FFF7ED';
                 e.currentTarget.style.borderColor = '#FED7AA';
@@ -3332,50 +3369,28 @@ export default function VisualLineageGraph({
 
               const renderDocPane = () => {
                 const rawDocId = selectedAsset360.node.data?.doc_id || String(selectedAsset360.node.id || '').replace(/^doc_/, '');
-                const rawOriginalText = selectedAsset360.node.data?.content_uri || '';
+                const rawOriginalText = docContentCache[rawDocId] ?? selectedAsset360.node.data?.content_uri ?? '';
 
                 return selectedAsset360.mode === 'document' ? (
-                  <SmartDocumentCanvas
-                    documentNode={selectedAsset360.node}
-                    documentId={rawDocId}
-                    claims={selectedAsset360.claims}
-                    conflicts={selectedAsset360.conflicts}
-                    rawOriginalText={rawOriginalText}
-                    onVisualizeInDag={(nodeId, label) => visualizeNodeInDag(nodeId, label)}
-                    onNavigateToTab={(tabName) => setVaultSubTab(tabName)}
-                    showToast={showToast}
-                    onDragStartHandle={() => setDraggedPane('doc')}
-                    onDragEndHandle={() => {
-                      setDraggedPane(null);
-                      setDragOverPane(null);
-                    }}
-                    onMinimize={() => {
-                      setIsFileViewerOpen(false);
-                      showToast?.("Document preview minimized");
-                    }}
-                    onSelectClaim={(claim) => {
-                      const cid = claim.cleanId || String(claim.id || '').replace(/^cl_/, '');
-                      const targetId = claim.id.startsWith('cl_') ? claim.id : `cl_${cid}`;
-                      const matchedNode = graphData?.nodes?.find(n => n.id === targetId || n.id === claim.id || n.id === `cl_${claim.id}`);
-                      const actualNodeId = matchedNode ? matchedNode.id : targetId;
-
-                      setActiveClaimInspector(claim);
-                      setIsDetailsOpen(true);
-                      setSelectedNodeId(actualNodeId);
-                      setInteractiveRootId(actualNodeId);
-                      setViewMode('interactive');
-                      setLineageGranularity('claim');
-                      setExpandedUpstreamSet(new Set([actualNodeId]));
-                      setExpandedDownstreamSet(new Set([actualNodeId]));
-                      setExpandedConflictClaimsSet(new Set());
-                      fetchBlastRadius(cid);
-                      setTimeout(() => handleFitView(), 120);
-                      setTimeout(() => handleFitView(), 320);
-                    }}
-                    selectedClaimId={activeClaimInspector?.cleanId || activeClaimInspector?.id}
-                    selectedClaim={activeClaimInspector}
-                    locateTarget={locateDocClaimTrigger}
-                  />
+                  <div style={{
+                    background: '#FFFFFF',
+                    border: '1px solid #E2E8F0',
+                    borderRadius: '10px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    height: 'calc(100vh - 108px)',
+                    maxHeight: 'calc(100vh - 108px)',
+                    minHeight: '380px',
+                    overflow: 'hidden',
+                  }}>
+                    <DocumentReader
+                      key={rawDocId}
+                      title={selectedAsset360.node.label}
+                      content={rawOriginalText}
+                      loading={docContentLoading && !rawOriginalText}
+                      fileHref={`/v1/documents/${rawDocId}/file`}
+                    />
+                  </div>
                 ) : (
                   <div style={{
                     background: '#FFFFFF',
